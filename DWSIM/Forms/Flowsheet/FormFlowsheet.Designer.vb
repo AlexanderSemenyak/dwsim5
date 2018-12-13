@@ -398,7 +398,7 @@ Partial Class FormFlowsheet
         '
         'PropriedadesDasSubstвnciasToolStripMenuItem
         '
-        resources.ApplyResources(Me.PropriedadesDasSubstвnciasToolStripMenuItem, "PropriedadesDasSubstânciasToolStripMenuItem")
+        resources.ApplyResources(Me.PropriedadesDasSubstânciasToolStripMenuItem, "PropriedadesDasSubstânciasToolStripMenuItem")
         Me.PropriedadesDasSubstânciasToolStripMenuItem.Image = Global.DWSIM.My.Resources.Resources.wi0124_16
         Me.PropriedadesDasSubstânciasToolStripMenuItem.MergeAction = System.Windows.Forms.MergeAction.Insert
         Me.PropriedadesDasSubstânciasToolStripMenuItem.MergeIndex = 5
