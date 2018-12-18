@@ -439,7 +439,7 @@
       <DependentUpon>SimulationObjectsPanel.vb</DependentUpon>
     </Compile>
     <Compile Include="Forms\Flowsheet Components\SimulationObjectsPanel.vb">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Forms\FormAddFlowsheetObject.Designer.vb">
       <DependentUpon>FormAddFlowsheetObject.vb</DependentUpon>
@@ -1006,6 +1006,9 @@
     <EmbeddedResource Include="Forms\AboutBox.es.resx">
       <DependentUpon>AboutBox.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AboutBox.ru.resx">
+      <DependentUpon>AboutBox.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Compound Creator\FormImportCompoundDataChemeo.de.resx">
       <DependentUpon>FormImportCompoundDataChemeo.vb</DependentUpon>
     </EmbeddedResource>
@@ -1249,6 +1252,9 @@
     <EmbeddedResource Include="Forms\FormUpgradeWarning.de.resx">
       <DependentUpon>FormUpgradeWarning.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormWelcome.ru.resx">
+      <DependentUpon>FormWelcome.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\LegacyEditors\frmProps.de.resx">
       <DependentUpon>frmProps.vb</DependentUpon>
     </EmbeddedResource>
@@ -1394,6 +1400,11 @@
     <EmbeddedResource Include="Forms\SplashScreen.de.resx">
       <DependentUpon>SplashScreen.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SplashScreen.ru.resx">
+      <DependentUpon>SplashScreen.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Languages\DWSIM.ru.resx" />
+    <EmbeddedResource Include="Languages\Tips.ru.resx" />
     <EmbeddedResource Include="Languages\Tips.de.resx" />
     <EmbeddedResource Include="Languages\Tips.en.resx" />
     <EmbeddedResource Include="Languages\Tips.es.resx">
