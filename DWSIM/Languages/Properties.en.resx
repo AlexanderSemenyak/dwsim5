@@ -130,7 +130,7 @@
     <comment>0</comment>
   </data>
   <data name="PROP_CL_0" xml:space="preserve">
-    <value>Pressure Drop</value>
+    <value>Падение давления</value>
     <comment>1</comment>
   </data>
   <data name="PROP_CL_1" xml:space="preserve">
@@ -138,7 +138,7 @@
     <comment>1</comment>
   </data>
   <data name="PROP_CL_2" xml:space="preserve">
-    <value>Outlet Temperature</value>
+    <value>Температура на выходе</value>
     <comment>1</comment>
   </data>
   <data name="PROP_CL_3" xml:space="preserve">
@@ -170,7 +170,7 @@
     <comment>0</comment>
   </data>
   <data name="PROP_CO_4" xml:space="preserve">
-    <value>Pressure</value>
+    <value>Давление</value>
     <comment>1</comment>
   </data>
   <data name="PROP_CP_0" xml:space="preserve">
@@ -178,15 +178,15 @@
     <comment>0</comment>
   </data>
   <data name="PROP_CR_0" xml:space="preserve">
-    <value>Pressure Drop</value>
+    <value>Падение давления</value>
     <comment>1</comment>
   </data>
   <data name="PROP_CS_0" xml:space="preserve">
-    <value>Pressure Drop</value>
+    <value>Падение давления</value>
     <comment>1</comment>
   </data>
   <data name="PROP_CS_01" xml:space="preserve">
-    <value>Pressure Drop</value>
+    <value>Падение давления</value>
     <comment>1</comment>
   </data>
   <data name="PROP_CS_1" xml:space="preserve">
@@ -202,7 +202,7 @@
     <value>Heat load</value>
   </data>
   <data name="PROP_CS_5" xml:space="preserve">
-    <value>Outlet Temperature</value>
+    <value>Температура на выходе</value>
   </data>
   <data name="PROP_DC_0" xml:space="preserve">
     <value>Condenser Pressure</value>
@@ -237,7 +237,7 @@
     <comment>0</comment>
   </data>
   <data name="PROP_EQ_0" xml:space="preserve">
-    <value>Pressure Drop</value>
+    <value>Падение давления</value>
     <comment>1</comment>
   </data>
   <data name="PROP_ER_0" xml:space="preserve">
@@ -281,15 +281,15 @@
     <value>Total Pressure Drop</value>
   </data>
   <data name="PROP_GR_0" xml:space="preserve">
-    <value>Pressure Drop</value>
+    <value>Падение давления</value>
     <comment>1</comment>
   </data>
   <data name="PROP_GR_1" xml:space="preserve">
-    <value>Outlet Temperature</value>
+    <value>Температура на выходе</value>
     <comment>1</comment>
   </data>
   <data name="PROP_HT_0" xml:space="preserve">
-    <value>Pressure Drop</value>
+    <value>Падение давления</value>
     <comment>1</comment>
   </data>
   <data name="PROP_HT_1" xml:space="preserve">
@@ -297,7 +297,7 @@
     <comment>1</comment>
   </data>
   <data name="PROP_HT_2" xml:space="preserve">
-    <value>Outlet Temperature</value>
+    <value>Температура на выходе</value>
     <comment>1</comment>
   </data>
   <data name="PROP_HT_3" xml:space="preserve">
@@ -403,11 +403,11 @@
     <value>[Shell and Tube] Baffle Spacing</value>
   </data>
   <data name="PROP_MS_0" xml:space="preserve">
-    <value>Temperature</value>
+    <value>Температура</value>
     <comment>1</comment>
   </data>
   <data name="PROP_MS_1" xml:space="preserve">
-    <value>Pressure</value>
+    <value>Давление</value>
     <comment>1</comment>
   </data>
   <data name="PROP_MS_10" xml:space="preserve">
@@ -431,7 +431,7 @@
     <comment>1</comment>
   </data>
   <data name="PROP_MS_104" xml:space="preserve">
-    <value>Molar Flow (Mixture)</value>
+    <value>Молярный поток (Смесь)</value>
     <comment>1</comment>
   </data>
   <data name="PROP_MS_105" xml:space="preserve">
@@ -483,11 +483,11 @@
     <comment>0</comment>
   </data>
   <data name="PROP_MS_116" xml:space="preserve">
-    <value>Molar Flow (Vapor Phase)</value>
+    <value>Молярный поток (паровая фаза)</value>
     <comment>0</comment>
   </data>
   <data name="PROP_MS_117" xml:space="preserve">
-    <value>Molar Flow (Overall Liquid Phase)</value>
+    <value>Молярный поток (общая жидкая фаза)</value>
     <comment>0</comment>
   </data>
   <data name="PROP_MS_118" xml:space="preserve">
@@ -589,7 +589,7 @@
     <value>Solid Phase Molar Flow</value>
   </data>
   <data name="PROP_MS_144" xml:space="preserve">
-    <value>Solid Phase Volumetric Flow</value>
+    <value>Объемный поток (Твердая фаза)</value>
   </data>
   <data name="PROP_MS_145" xml:space="preserve">
     <value>Solid Phase Compressibility Factor</value>
@@ -937,7 +937,7 @@
     <value>Molarity (Solid Phase)</value>
   </data>
   <data name="PROP_MS_25" xml:space="preserve">
-    <value>Vapor Phase Volumetric Flow</value>
+    <value>Объемный поток (Паровая фаза)</value>
     <comment>0</comment>
   </data>
   <data name="PROP_MS_26" xml:space="preserve">
@@ -957,7 +957,7 @@
     <comment>0</comment>
   </data>
   <data name="PROP_MS_3" xml:space="preserve">
-    <value>Molar Flow</value>
+    <value>Молярный поток</value>
     <comment>1</comment>
   </data>
   <data name="PROP_MS_30" xml:space="preserve">
@@ -1001,7 +1001,7 @@
     <comment>0</comment>
   </data>
   <data name="PROP_MS_4" xml:space="preserve">
-    <value>Volumetric Flow</value>
+    <value>Объемный поток</value>
     <comment>1</comment>
   </data>
   <data name="PROP_MS_40" xml:space="preserve">
@@ -1017,7 +1017,7 @@
     <comment>0</comment>
   </data>
   <data name="PROP_MS_43" xml:space="preserve">
-    <value>Liquid Phase (Mixture) Volumetric Flow</value>
+    <value>Объемный поток (жидкая фаза - смесь)</value>
     <comment>0</comment>
   </data>
   <data name="PROP_MS_44" xml:space="preserve">
@@ -1097,7 +1097,7 @@
     <comment>0</comment>
   </data>
   <data name="PROP_MS_61" xml:space="preserve">
-    <value>Liquid Phase (1) Volumetric Flow</value>
+    <value>Объемный поток (жидкая фаза (1))</value>
     <comment>0</comment>
   </data>
   <data name="PROP_MS_62" xml:space="preserve">
@@ -1173,7 +1173,7 @@
     <comment>0</comment>
   </data>
   <data name="PROP_MS_79" xml:space="preserve">
-    <value>Liquid Phase (2) Volumetric Flow</value>
+    <value>Объемный поток (жидкая фаза (2))</value>
     <comment>0</comment>
   </data>
   <data name="PROP_MS_8" xml:space="preserve">
@@ -1253,7 +1253,7 @@
     <comment>0</comment>
   </data>
   <data name="PROP_MS_97" xml:space="preserve">
-    <value>Aqueous Phase Volumetric Flow</value>
+    <value>Объемный поток (вода)</value>
     <comment>0</comment>
   </data>
   <data name="PROP_MS_98" xml:space="preserve">
@@ -1297,7 +1297,7 @@
     <comment>0</comment>
   </data>
   <data name="PROP_PF_0" xml:space="preserve">
-    <value>Pressure Drop</value>
+    <value>Падение давления</value>
     <comment>1</comment>
   </data>
   <data name="PROP_PF_1" xml:space="preserve">
@@ -1325,11 +1325,11 @@
     <value>Heat load</value>
   </data>
   <data name="PROP_PS_0" xml:space="preserve">
-    <value>Pressure Drop</value>
+    <value>Падение давления</value>
     <comment>0</comment>
   </data>
   <data name="PROP_PS_1" xml:space="preserve">
-    <value>Temperature Drop</value>
+    <value>Падение температуры</value>
     <comment>0</comment>
   </data>
   <data name="PROP_PS_2" xml:space="preserve">
@@ -1527,7 +1527,7 @@
     <comment>1</comment>
   </data>
   <data name="PROP_TK_0" xml:space="preserve">
-    <value>Pressure Drop</value>
+    <value>Падение давления</value>
     <comment>1</comment>
   </data>
   <data name="PROP_TK_1" xml:space="preserve">
@@ -1537,7 +1537,7 @@
     <value>Residence Time</value>
   </data>
   <data name="PROP_TU_0" xml:space="preserve">
-    <value>Pressure Drop</value>
+    <value>Падение давления</value>
     <comment>1</comment>
   </data>
   <data name="PROP_TU_1" xml:space="preserve">
@@ -1553,7 +1553,7 @@
     <comment>0</comment>
   </data>
   <data name="PROP_TU_4" xml:space="preserve">
-    <value>Pressure</value>
+    <value>Давление</value>
     <comment>1</comment>
   </data>
   <data name="PROP_VA_0" xml:space="preserve">
@@ -1561,7 +1561,7 @@
     <comment>1</comment>
   </data>
   <data name="PROP_VA_1" xml:space="preserve">
-    <value>Pressure Drop</value>
+    <value>Падение давления</value>
     <comment>1</comment>
   </data>
   <data name="PROP_VA_2" xml:space="preserve">
@@ -1569,7 +1569,7 @@
     <comment>1</comment>
   </data>
   <data name="PROP_VA_3" xml:space="preserve">
-    <value>Temperature Drop</value>
+    <value>Падение температуры</value>
     <comment>0</comment>
   </data>
   <data name="PROP_VA_4" xml:space="preserve">

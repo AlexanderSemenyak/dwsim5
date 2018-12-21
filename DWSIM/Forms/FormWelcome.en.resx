@@ -119,23 +119,26 @@
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="Label11.Size" type="System.Drawing.Size, System.Drawing">
-    <value>229, 14</value>
+    <value>279, 14</value>
   </data>
   <data name="Label11.Text" xml:space="preserve">
-    <value>Opens a new Data Regression Utility window.</value>
+    <value>Запустить утилиту исследования регрессии данных</value>
   </data>
   <data name="Label12.Size" type="System.Drawing.Size, System.Drawing">
-    <value>241, 16</value>
+    <value>334, 16</value>
   </data>
   <data name="Label12.Text" xml:space="preserve">
-    <value>Create a New Data Regression Study</value>
+    <value>Создать новое исследование регрессии данных </value>
+  </data>
+  <data name="ColumnHeader1.Text" xml:space="preserve">
+    <value>Файл</value>
   </data>
   <data name="ImageList1.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
     <value>
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAAD0
-        DwAAAk1TRnQBSQFMAgEBBQEAAeABAgHgAQIBEAEAARABAAT/AREBAAj/AUIBTQE2BwABNgMAASgDAAFA
+        DwAAAk1TRnQBSQFMAgEBBQEAASABAwEgAQMBEAEAARABAAT/AREBAAj/AUIBTQE2BwABNgMAASgDAAFA
         AwABIAMAAQEBAAEQBgABEP8AFQABeQF3ARMBcwFJAW4BJwFuAScBbgEnAW4BJwFuAScBbgEnAW4BJwFu
         AScBbgEnAW4BSAFuATUBc2QAAWoBbgG7AXsBdQF7AXMBewFyAXsBcQF7AVABewFPAXsBTwF7AU4BewFN
         AXsBLQF7AbgBfwFoAW5kAAFoAW4B/QF/AbQBfwGSAX8BkAF7AW4BewFsAXsBSgF7AUgBewFHAXsBJQF7
@@ -206,159 +209,141 @@
         AQMBwAEDCP8L
 </value>
   </data>
-  <data name="lvlatest.Size" type="System.Drawing.Size, System.Drawing">
-    <value>381, 348</value>
-  </data>
   <data name="Label6.Size" type="System.Drawing.Size, System.Drawing">
-    <value>239, 14</value>
+    <value>198, 14</value>
   </data>
   <data name="Label6.Text" xml:space="preserve">
-    <value>Opens a new Compound Creator Utility window.</value>
+    <value>Запустить утилиту создания смесей</value>
   </data>
   <data name="Label7.Size" type="System.Drawing.Size, System.Drawing">
-    <value>167, 16</value>
+    <value>151, 16</value>
   </data>
   <data name="Label7.Text" xml:space="preserve">
-    <value>Create a New Compound</value>
+    <value>Создать новую смесь</value>
   </data>
   <data name="Label10.Size" type="System.Drawing.Size, System.Drawing">
-    <value>196, 14</value>
+    <value>257, 14</value>
   </data>
   <data name="Label10.Text" xml:space="preserve">
-    <value>Creates a new steady-state simulation.</value>
+    <value>Создать новую модель (стационарные условия)</value>
   </data>
   <data name="Label9.Size" type="System.Drawing.Size, System.Drawing">
-    <value>298, 14</value>
+    <value>301, 14</value>
   </data>
   <data name="Label9.Text" xml:space="preserve">
-    <value>Opens an existing simulation, compound or regression case.</value>
+    <value>Открыть текущую модель, смесь или регрессию данных.</value>
   </data>
   <data name="Label4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>155, 16</value>
+    <value>161, 16</value>
   </data>
   <data name="Label4.Text" xml:space="preserve">
-    <value>Create New Simulation</value>
+    <value>Создать новую модель</value>
   </data>
   <data name="Label3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>70, 16</value>
+    <value>104, 16</value>
   </data>
   <data name="Label3.Text" xml:space="preserve">
-    <value>Open File</value>
+    <value>Открыть файл</value>
   </data>
   <data name="Label1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>54, 19</value>
+    <value>66, 19</value>
   </data>
   <data name="Label1.Text" xml:space="preserve">
-    <value>Tasks</value>
+    <value>Задачи</value>
   </data>
-  <data name="lvlatestfolders.Size" type="System.Drawing.Size, System.Drawing">
-    <value>381, 348</value>
+  <data name="ColumnHeader3.Text" xml:space="preserve">
+    <value>Файл</value>
   </data>
   <data name="Label14.Size" type="System.Drawing.Size, System.Drawing">
-    <value>236, 19</value>
+    <value>273, 19</value>
   </data>
   <data name="Label14.Text" xml:space="preserve">
-    <value>Mobile Versions (iOS/Android)</value>
+    <value>Мобильные версии (iOS/Android)</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="Label14.Visible" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
-  <data name="TabPage1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>387, 354</value>
-  </data>
   <data name="TabPage1.Text" xml:space="preserve">
-    <value>Recent Files</value>
+    <value>Последние файлы</value>
   </data>
-  <data name="lvsamples.Size" type="System.Drawing.Size, System.Drawing">
-    <value>381, 348</value>
-  </data>
-  <data name="TabPage2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>387, 354</value>
+  <data name="ColumnHeader2.Text" xml:space="preserve">
+    <value>Файл</value>
   </data>
   <data name="TabPage2.Text" xml:space="preserve">
-    <value>Samples</value>
+    <value>Примеры</value>
   </data>
-  <data name="Label8.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 112</value>
+  <data name="Label8.Size" type="System.Drawing.Size, System.Drawing">
+    <value>339, 16</value>
   </data>
-  <data name="Label5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>387, 48</value>
+  <data name="Label8.Text" xml:space="preserve">
+    <value>Рассчитанные карты технологических процессов</value>
   </data>
   <data name="Label5.Text" xml:space="preserve">
-    <value>FOSSEE, IIT Bombay, invites chemical engineering students, faculty and practitioners to the flowsheeting project using DWSIM. We want you to convert existing flowsheets into DWSIM and get honoraria and certificates.</value>
+    <value> </value>
   </data>
-  <data name="Button6.Location" type="System.Drawing.Point, System.Drawing">
-    <value>194, 77</value>
+  <data name="Label13.Size" type="System.Drawing.Size, System.Drawing">
+    <value>101, 24</value>
   </data>
-  <data name="Button4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>9, 77</value>
+  <data name="Label13.Text" xml:space="preserve">
+    <value>О программе</value>
   </data>
-  <data name="FOSSEEList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 137</value>
+  <data name="Button6.Text" xml:space="preserve">
+    <value>Подробнее о FOSSEE</value>
   </data>
-  <data name="FOSSEEList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>387, 217</value>
+  <data name="Button4.Text" xml:space="preserve">
+    <value>Отправить карту технологических процессов</value>
   </data>
-  <data name="TabPage5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>387, 354</value>
+  <data name="ColumnHeader4.Text" xml:space="preserve">
+    <value>Файл</value>
   </data>
   <data name="TabPage5.Text" xml:space="preserve">
-    <value>FOSSEE Flowsheets</value>
-  </data>
-  <data name="TabPage3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>387, 354</value>
+    <value>Карты технологических процессов в FOSSEE</value>
   </data>
   <data name="TabPage3.Text" xml:space="preserve">
-    <value>Recent Folders</value>
+    <value>Последние папки</value>
   </data>
   <data name="LinkLabel5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>158, 19</value>
+    <value>77, 19</value>
   </data>
   <data name="LinkLabel5.Text" xml:space="preserve">
-    <value>Discussion Forums</value>
+    <value>Форумы</value>
   </data>
   <data name="LinkLabel4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>104, 19</value>
+    <value>201, 19</value>
   </data>
   <data name="LinkLabel4.Text" xml:space="preserve">
-    <value>Official Page</value>
+    <value>Официальная страница</value>
   </data>
   <data name="LinkLabel3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>264, 19</value>
+    <value>411, 19</value>
   </data>
   <data name="LinkLabel3.Text" xml:space="preserve">
-    <value>Completed Flowsheets (FOSSEE)</value>
+    <value>Рассчитанные карты технологических процессов</value>
+  </data>
+  <data name="LinkLabel2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>199, 19</value>
   </data>
   <data name="LinkLabel2.Text" xml:space="preserve">
-    <value>Tutorials</value>
+    <value>Обучающие материалы</value>
   </data>
   <data name="LinkLabel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>200, 19</value>
+    <value>263, 19</value>
   </data>
   <data name="LinkLabel1.Text" xml:space="preserve">
-    <value>Official YouTube Channel</value>
-  </data>
-  <data name="TabPage4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>387, 354</value>
+    <value>Официальный канал в YouTube</value>
   </data>
   <data name="TabPage4.Text" xml:space="preserve">
-    <value>Resources</value>
-  </data>
-  <data name="TabControl1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>365, 40</value>
-  </data>
-  <data name="TabControl1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>395, 380</value>
-  </data>
-  <data name="Label2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>361, 9</value>
+    <value>Ресурсы</value>
   </data>
   <data name="Label2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>112, 19</value>
+    <value>146, 19</value>
   </data>
   <data name="Label2.Text" xml:space="preserve">
-    <value>Quick Access</value>
+    <value>Быстрый доступ</value>
+  </data>
+  <data name="Label2.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="Button7.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -451,11 +436,8 @@
         47NCvuszN8MPKQb+sj8Tc99RiNI3If4DNTOThcxa0PoAAAAASUVORK5CYII=
 </value>
   </data>
-  <data name="Button7.Size" type="System.Drawing.Size, System.Drawing">
-    <value>337, 78</value>
-  </data>
   <data name="Button7.Text" xml:space="preserve">
-    <value>If you've downloaded DWSIM for free, please consider purchasing a support ticket for USD10 or more and get unlimited priority support for this version and associated updates. No PayPal account required.</value>
+    <value> </value>
   </data>
   <data name="Button7.Visible" type="System.Boolean, mscorlib">
     <value>False</value>
@@ -466,10 +448,7 @@
   <data name="Button12.Visible" type="System.Boolean, mscorlib">
     <value>False</value>
   </data>
-  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>770, 433</value>
-  </data>
   <data name="$this.Text" xml:space="preserve">
-    <value>Welcome to DWSIM</value>
+    <value>АРМ Геолог (с калькулятором технологических процессов DWSIM)</value>
   </data>
 </root>

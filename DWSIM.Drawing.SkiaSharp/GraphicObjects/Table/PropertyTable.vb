@@ -37,7 +37,7 @@ Namespace GraphicObjects.Tables
 
         Public Property BorderColorDark As SKColor = SKColors.SteelBlue
 
-        Public Property HeaderText As String = "PROPERTIES TABLE"
+        Public Property HeaderText As String = "“¿¡À»÷¿ —¬Œ…—“¬"
 
         Public Property ClipboardData As String = ""
 

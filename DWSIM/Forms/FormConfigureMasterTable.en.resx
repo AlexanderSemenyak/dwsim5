@@ -122,7 +122,7 @@
     <value>61, 13</value>
   </data>
   <data name="Label1.Text" xml:space="preserve">
-    <value>Object type</value>
+    <value>Тип объекта</value>
   </data>
   <data name="cbObjectType.Location" type="System.Drawing.Point, System.Drawing">
     <value>117, 44</value>
@@ -134,10 +134,10 @@
     <value>101, 13</value>
   </data>
   <data name="Label2.Text" xml:space="preserve">
-    <value>Properties to display</value>
+    <value>Свойства к отображению</value>
   </data>
   <data name="ColumnHeader2.Text" xml:space="preserve">
-    <value>Property</value>
+    <value>Свойство</value>
   </data>
   <data name="Label3.Location" type="System.Drawing.Point, System.Drawing">
     <value>355, 47</value>
@@ -146,7 +146,7 @@
     <value>84, 13</value>
   </data>
   <data name="Label3.Text" xml:space="preserve">
-    <value>Order objects by</value>
+    <value>Упорядочить объекты по...</value>
   </data>
   <data name="cbOrderBy.Location" type="System.Drawing.Point, System.Drawing">
     <value>445, 44</value>
@@ -161,7 +161,7 @@
     <value>195, 281</value>
   </data>
   <data name="ColumnHeader1.Text" xml:space="preserve">
-    <value>Object</value>
+    <value>Объект</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="ColumnHeader1.Width" type="System.Int32, mscorlib">
@@ -171,7 +171,7 @@
     <value>10, 12</value>
   </data>
   <data name="Label4.Text" xml:space="preserve">
-    <value>Name</value>
+    <value>Название</value>
   </data>
   <data name="TextBox1.Location" type="System.Drawing.Point, System.Drawing">
     <value>117, 9</value>
@@ -189,9 +189,9 @@
     <value>33, 13</value>
   </data>
   <data name="lblOrder.Text" xml:space="preserve">
-    <value>Order</value>
+    <value>Порядок</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
-    <value>Configure Master Property Table</value>
+    <value>Настроить главную таблицу свойств</value>
   </data>
 </root>

@@ -189,7 +189,6 @@ Public Class FormMain
     End Sub
 
     Public Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-
         If GlobalSettings.Settings.OldUI Then
 
             calculatorassembly = My.Application.Info.LoadedAssemblies.Where(Function(x) x.FullName.Contains("DWSIM.Thermodynamics,")).FirstOrDefault
@@ -237,7 +236,7 @@ Public Class FormMain
 
         End If
 
-        Me.Text = DWSIM.App.GetLocalString("FormParent_FormText")
+        'Me.Text = DWSIM.App.GetLocalString("FormParent_FormText")
 
         GlobalSettings.Settings.DpiScale = Me.CreateGraphics.DpiX / 96.0
 
@@ -705,7 +704,7 @@ Public Class FormMain
     End Sub
 
     Sub CheckForUpdates()
-
+        Exit Sub
         ' check for updates
         Task.Factory.StartNew(Function()
                                   Dim updfile = AppDomain.CurrentDomain.BaseDirectory + Path.DirectorySeparatorChar + "version.info"

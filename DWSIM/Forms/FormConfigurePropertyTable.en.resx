@@ -118,14 +118,14 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ColumnHeader2.Text" xml:space="preserve">
-    <value>Property</value>
+    <value>Свойство</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="ColumnHeader2.Width" type="System.Int32, mscorlib">
     <value>266</value>
   </data>
   <data name="ColumnHeader1.Text" xml:space="preserve">
-    <value>Object</value>
+    <value>Объект</value>
   </data>
   <data name="ColumnHeader1.Width" type="System.Int32, mscorlib">
     <value>154</value>
@@ -135,7 +135,7 @@
     <value>27, 13</value>
   </data>
   <data name="Label1.Text" xml:space="preserve">
-    <value>Title</value>
+    <value>Заголовок</value>
   </data>
   <data name="TextBox1.Location" type="System.Drawing.Point, System.Drawing">
     <value>38, 10</value>
@@ -144,6 +144,6 @@
     <value>448, 20</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
-    <value>Configure Property Table</value>
+    <value>Настроить таблицу свойств</value>
   </data>
 </root>

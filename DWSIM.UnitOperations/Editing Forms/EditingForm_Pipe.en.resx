@@ -148,7 +148,7 @@
     <value>Tolerance of pressure in calculation loop</value>
   </data>
   <data name="Button1.ToolTip" xml:space="preserve">
-    <value>Click for more information</value>
+    <value>Щелкните для получения дополнительной информации</value>
   </data>
   <data name="btnConfigureFlashAlg.ToolTip" xml:space="preserve">
     <value>Configure</value>

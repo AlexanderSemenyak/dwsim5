@@ -10,12 +10,12 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("DWSIM")>
-<Assembly: AssemblyDescription("DWSIM Simulator (Windows Forms GUI)")> 
-<Assembly: AssemblyCompany("DWSIM Project")> 
-<Assembly: AssemblyProduct("DWSIM")>
-<Assembly: AssemblyCopyright("Copyright © 2007-2018 Daniel Medeiros and contributors")>
-<Assembly: AssemblyTrademark("DWSIM")> 
+<Assembly: AssemblyTitle("Симулятор термодинамики АРМ Геолог")>
+<Assembly: AssemblyDescription("Симулятор термодинамики АРМ Геолог")>
+<Assembly: AssemblyCompany("ПАО Газпром автоматизация")>
+<Assembly: AssemblyProduct("Симулятор термодинамики АРМ Геолог (+DWSIM)")>
+<Assembly: AssemblyCopyright("© 2018 ПАО Газпром автоматизация")>
+<Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(True)> 
 

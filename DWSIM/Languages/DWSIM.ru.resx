@@ -118,33 +118,1260 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="_Metanol" xml:space="preserve">
-    <value>Метанол (CH3OH)</value>
+    <value>Methanol</value>
   </data>
   <data name="_Metano" xml:space="preserve">
-    <value>Метан</value>
+    <value>Methane</value>
   </data>
   <data name="_iButano" xml:space="preserve">
-    <value>i-Бутан</value>
+    <value>Isobutane</value>
   </data>
   <data name="_Etano" xml:space="preserve">
-    <value>Этан</value>
+    <value>Ethane</value>
   </data>
   <data name="_Agua" xml:space="preserve">
-    <value>Вода</value>
+    <value>Water</value>
   </data>
   <data name="_Nitrogenio" xml:space="preserve">
-    <value>Азот</value>
+    <value>Nitrogen</value>
   </data>
   <data name="_Hidrogenio" xml:space="preserve">
-    <value>Водород</value>
+    <value>Hydrogen</value>
   </data>
   <data name="_nButano" xml:space="preserve">
-    <value>n-Бутан</value>
+    <value>n-Butane</value>
   </data>
   <data name="_nHeptano" xml:space="preserve">
-    <value>n-Гептан</value>
+    <value>n-Heptane</value>
   </data>
   <data name="_Propano" xml:space="preserve">
-    <value>Пропан</value>
+    <value>Propane</value>
+  </data>
+  <data name="FormTips_KryptonHeaderGroup1ValuesPrimaryHeading" xml:space="preserve">
+    <value>Welcome to DWSIM</value>
+  </data>
+  <data name="FormTips_KryptonLabel10Text" xml:space="preserve">
+    <value>Technical Manual *</value>
+  </data>
+  <data name="FormTips_KryptonLabel11Text" xml:space="preserve">
+    <value>Click to open an existing simulation</value>
+  </data>
+  <data name="FormTips_KryptonLabel11Text2" xml:space="preserve">
+    <value>on your computer.</value>
+  </data>
+  <data name="FormTips_KryptonLabel12Text" xml:space="preserve">
+    <value>Creates a new steady-state simulation.</value>
+  </data>
+  <data name="FormTips_KryptonLabel13Text" xml:space="preserve">
+    <value>Opens the Online Help file.</value>
+  </data>
+  <data name="FormTips_KryptonLabel14Text" xml:space="preserve">
+    <value>Opens the User's Guide.</value>
+  </data>
+  <data name="FormTips_KryptonLabel15Text" xml:space="preserve">
+    <value>Info about operations, utilities</value>
+  </data>
+  <data name="FormTips_KryptonLabel15Text2" xml:space="preserve">
+    <value>and their calculation principles.</value>
+  </data>
+  <data name="FormTips_KryptonLabel16Text" xml:space="preserve">
+    <value>DWSIM Simulation Basis</value>
+  </data>
+  <data name="FormTips_KryptonLabel16Text2" xml:space="preserve">
+    <value>(Thermodynamics and Properties Calculation).</value>
+  </data>
+  <data name="FormTips_KryptonLabel17Text" xml:space="preserve">
+    <value>* Adobe Reader is required to view the documentation (PDF files).</value>
+  </data>
+  <data name="FormTips_KryptonLabel1Text" xml:space="preserve">
+    <value>Select an option...</value>
+  </data>
+  <data name="FormTips_KryptonLabel2Text" xml:space="preserve">
+    <value>Simulations</value>
+  </data>
+  <data name="FormTips_KryptonLabel3Text" xml:space="preserve">
+    <value>Documentation and Help</value>
+  </data>
+  <data name="FormTips_KryptonLabel4Text" xml:space="preserve">
+    <value>Tips</value>
+  </data>
+  <data name="FormTips_KryptonLabel5Text" xml:space="preserve">
+    <value>Open an existing simulation</value>
+  </data>
+  <data name="FormTips_KryptonLabel6Text" xml:space="preserve">
+    <value>Create a new simulation</value>
+  </data>
+  <data name="FormTips_KryptonLabel7Text" xml:space="preserve">
+    <value>Online Help</value>
+  </data>
+  <data name="FormTips_KryptonLabel8Text" xml:space="preserve">
+    <value>User's Guide *</value>
+  </data>
+  <data name="FormTips_KryptonLabel9Text" xml:space="preserve">
+    <value>Operations and Utilities Guide *</value>
+  </data>
+  <data name="FormTips_Text" xml:space="preserve">
+    <value>Welcome to DWSIM</value>
+  </data>
+  <data name="Fraesdascorrentes2" xml:space="preserve">
+    <value>2. Stream Fractions</value>
+  </data>
+  <data name="FraodeLquido" xml:space="preserve">
+    <value>Liquid Fraction</value>
+  </data>
+  <data name="FraoMolar" xml:space="preserve">
+    <value>Molar Fraction -</value>
+  </data>
+  <data name="FraoMolar1" xml:space="preserve">
+    <value>Molar Fraction</value>
+  </data>
+  <data name="FraoMolar2" xml:space="preserve">
+    <value>Cumulative Molar Fraction</value>
+  </data>
+  <data name="FraomolardaPhase" xml:space="preserve">
+    <value>Phase Molar Fraction</value>
+  </data>
+  <data name="FraomolardaPhasePhaseL" xml:space="preserve">
+    <value>Phase molar fraction (Liquid Phase)</value>
+  </data>
+  <data name="FraomolardaPhasePhaseV" xml:space="preserve">
+    <value>Phase molar fraction (Vapor Phase)</value>
+  </data>
+  <data name="FraomolardaPhasenamis" xml:space="preserve">
+    <value>Phase molar fraction in the mixture</value>
+  </data>
+  <data name="FraomolarnaPhaseLquid" xml:space="preserve">
+    <value>Liquid Phase Molar Fraction</value>
+  </data>
+  <data name="FraomolarnaPhaseVapor" xml:space="preserve">
+    <value>Vapor Phase Molar Fraction</value>
+  </data>
+  <data name="FraomolarnaMistura" xml:space="preserve">
+    <value>Mixture Molar Fraction</value>
+  </data>
+  <data name="FraoMolarx" xml:space="preserve">
+    <value>Molar Fraction (x) -</value>
+  </data>
+  <data name="FraoMolarx1" xml:space="preserve">
+    <value>Molar Fraction (x) -</value>
+  </data>
+  <data name="FraoMolary" xml:space="preserve">
+    <value>Molar Fraction (y) -</value>
+  </data>
+  <data name="FraoMssica" xml:space="preserve">
+    <value>Mass Fraction</value>
+  </data>
+  <data name="FraomssicadaPhase" xml:space="preserve">
+    <value>Phase Mass Fraction</value>
+  </data>
+  <data name="FraomssicadaPhasePhase" xml:space="preserve">
+    <value>Phase mass fraction (Vapor Phase)</value>
+  </data>
+  <data name="FraomssicadaPhasePhase2" xml:space="preserve">
+    <value>Phase mass fraction (Liquid Phase)</value>
+  </data>
+  <data name="FraomssicadaPhasePhase3" xml:space="preserve">
+    <value>Phase mass fraction (Phase Steam)</value>
+  </data>
+  <data name="FraomssicadaPhasePhase4" xml:space="preserve">
+    <value>Phase mass fraction (Liquid Phase)</value>
+  </data>
+  <data name="FraomssicadaPhasenami" xml:space="preserve">
+    <value>Phase mass fraction in the mixture</value>
+  </data>
+  <data name="FraomssicanaPhaseLqui" xml:space="preserve">
+    <value>Liquid Phase Mass Fraction</value>
+  </data>
+  <data name="FraomssicanaPhaseVapo" xml:space="preserve">
+    <value>Vapor Phase Mass Fraction</value>
+  </data>
+  <data name="FraomssicanaMistura" xml:space="preserve">
+    <value>Mass Fraction in the mixture</value>
+  </data>
+  <data name="Geraodevapordgua" xml:space="preserve">
+    <value>Generation of water vapor</value>
+  </data>
+  <data name="Gerencioobjetos" xml:space="preserve">
+    <value>Manage objects</value>
+  </data>
+  <data name="Gradiente" xml:space="preserve">
+    <value>Gradient?</value>
+  </data>
+  <data name="Gradiente2" xml:space="preserve">
+    <value>Gradient</value>
+  </data>
+  <data name="GradientMode" xml:space="preserve">
+    <value>GradientMode</value>
+  </data>
+  <data name="Grfico" xml:space="preserve">
+    <value>Chart</value>
+  </data>
+  <data name="GruposUNIFACOK" xml:space="preserve">
+    <value>UNIFAC Groups - OK.</value>
+  </data>
+  <data name="Gs" xml:space="preserve">
+    <value>Gas</value>
+  </data>
+  <data name="Gsapenas" xml:space="preserve">
+    <value>Vapor Only</value>
+  </data>
+  <data name="GsLquidoBifsico" xml:space="preserve">
+    <value>Vapor + Liquid (Two-phase flow)</value>
+  </data>
+  <data name="gua" xml:space="preserve">
+    <value>Water</value>
+  </data>
+  <data name="guaH2O" xml:space="preserve">
+    <value>Water (H2O)</value>
+  </data>
+  <data name="HidratosI" xml:space="preserve">
+    <value>sI Hydrate</value>
+  </data>
+  <data name="HidratosII" xml:space="preserve">
+    <value>sII Hydrate</value>
+  </data>
+  <data name="Hipottico" xml:space="preserve">
+    <value>Hypothetical</value>
+  </data>
+  <data name="Hipotticocriadocomsu" xml:space="preserve">
+    <value>Hypothetical created successfully.</value>
+  </data>
+  <data name="Homogneo" xml:space="preserve">
+    <value>Homogeneous</value>
+  </data>
+  <data name="Horizontal" xml:space="preserve">
+    <value>Horizontal</value>
+  </data>
+  <data name="IgnorarLquidonaEntra" xml:space="preserve">
+    <value>Ignore Liquid in the input stream</value>
+  </data>
+  <data name="IgnorarVapornaEntrad" xml:space="preserve">
+    <value>Ignore Vapor in the input stream</value>
+  </data>
+  <data name="IgnorePhase" xml:space="preserve">
+    <value>IgnorePhase</value>
+  </data>
+  <data name="Imagem" xml:space="preserve">
+    <value>Image</value>
+  </data>
+  <data name="ImagemBitmap" xml:space="preserve">
+    <value>Bitmap Image</value>
+  </data>
+  <data name="ImagemBitmap1" xml:space="preserve">
+    <value>Bitmap Image</value>
+  </data>
+  <data name="Inativo" xml:space="preserve">
+    <value>Inactive</value>
+  </data>
+  <data name="Inclinaodatabelaemre" xml:space="preserve">
+    <value>Table rotation</value>
+  </data>
+  <data name="indefinido" xml:space="preserve">
+    <value>Undefined</value>
+  </data>
+  <data name="Indice" xml:space="preserve">
+    <value>Indice</value>
+  </data>
+  <data name="IndiceDESC" xml:space="preserve">
+    <value>Content DESC</value>
+  </data>
+  <data name="Informao" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="Intermitente" xml:space="preserve">
+    <value>Intermittent</value>
+  </data>
+  <data name="IsGradientBackground" xml:space="preserve">
+    <value>IsGradientBackground</value>
+  </data>
+  <data name="Istoirsalvartodasass" xml:space="preserve">
+    <value>This will save all open simulations in their current paths. Continue?</value>
+  </data>
+  <data name="Iter" xml:space="preserve">
+    <value>Iter.</value>
+  </data>
+  <data name="Iteracoes" xml:space="preserve">
+    <value>Iterations</value>
+  </data>
+  <data name="Iteraes" xml:space="preserve">
+    <value>Iterations</value>
+  </data>
+  <data name="Iteraesnecessrias" xml:space="preserve">
+    <value>Required iterations</value>
+  </data>
+  <data name="Iterao" xml:space="preserve">
+    <value>Iteration</value>
+  </data>
+  <data name="IterationsTaken" xml:space="preserve">
+    <value>IterationsTaken</value>
+  </data>
+  <data name="JaExisteObjetoNome" xml:space="preserve">
+    <value>An object with the name provided already exists in the PFD.</value>
+  </data>
+  <data name="JexisteumSistemadeUn" xml:space="preserve">
+    <value>There is already a unit system with that name.</value>
+  </data>
+  <data name="Jkmol" xml:space="preserve">
+    <value>J/kmol</value>
+  </data>
+  <data name="Joelhoem90" xml:space="preserve">
+    <value>Elbow 90°</value>
+  </data>
+  <data name="Largura" xml:space="preserve">
+    <value>Width</value>
+  </data>
+  <data name="Larguradafiguraempix" xml:space="preserve">
+    <value>Width of the picture (pixels)</value>
+  </data>
+  <data name="Larguradeimpresso" xml:space="preserve">
+    <value>Width of printing</value>
+  </data>
+  <data name="LeideRaoultGsSoluoId" xml:space="preserve">
+    <value>Raoult's Law</value>
+  </data>
+  <data name="LimitedeEstabilidade" xml:space="preserve">
+    <value>Stability Limit</value>
+  </data>
+  <data name="Limitesdavarivelmani" xml:space="preserve">
+    <value>Manipulated variable limits</value>
+  </data>
+  <data name="Limparlista" xml:space="preserve">
+    <value>Clear list</value>
+  </data>
+  <data name="LineColor" xml:space="preserve">
+    <value>LineColor</value>
+  </data>
+  <data name="LineWidth" xml:space="preserve">
+    <value>LineWidth</value>
+  </data>
+  <data name="LIQCondutividadetrmi" xml:space="preserve">
+    <value>LIQ Thermal Conductivity</value>
+  </data>
+  <data name="LIQEntalpiaEspecfica" xml:space="preserve">
+    <value>LIQ Specific Enthalpy</value>
+  </data>
+  <data name="LIQEntropiaEspecfica" xml:space="preserve">
+    <value>LIQ Specific Entropy</value>
+  </data>
+  <data name="LIQFraomolardaPhase" xml:space="preserve">
+    <value>LIQ Phase Molar Fraction</value>
+  </data>
+  <data name="LIQFraomssicadaPhase" xml:space="preserve">
+    <value>LIQ Phase Mass Fraction</value>
+  </data>
+  <data name="LIQMassaespecfica" xml:space="preserve">
+    <value>LIQ Density</value>
+  </data>
+  <data name="LIQMassamolar" xml:space="preserve">
+    <value>LIQ molar mass</value>
+  </data>
+  <data name="liquidholdup" xml:space="preserve">
+    <value>Liquid holdup</value>
+  </data>
+  <data name="Liquido" xml:space="preserve">
+    <value>Liquid</value>
+  </data>
+  <data name="LIQVazomssica" xml:space="preserve">
+    <value>LIQ mass flow rate</value>
+  </data>
+  <data name="LIQVazoTP" xml:space="preserve">
+    <value>LIQ flow rate @ T, P</value>
+  </data>
+  <data name="LIQViscosidadecinemt" xml:space="preserve">
+    <value>LIQ kinematic viscosity</value>
+  </data>
+  <data name="LIQViscosidadedinmic" xml:space="preserve">
+    <value>LIQ dynamic viscosity</value>
+  </data>
+  <data name="lquida" xml:space="preserve">
+    <value>Liquid</value>
+  </data>
+  <data name="Lquido" xml:space="preserve">
+    <value>Liquid</value>
+  </data>
+  <data name="Lquidoapenas" xml:space="preserve">
+    <value>Liquid only</value>
+  </data>
+  <data name="LquidoguaGseHidrato" xml:space="preserve">
+    <value>Liquid (water), Gas and Hydrate (</value>
+  </data>
+  <data name="LquidoguaGseHidrato2" xml:space="preserve">
+    <value>Liquid (water), Gas and Hydrate</value>
+  </data>
+  <data name="m3kmol" xml:space="preserve">
+    <value>m3/kmol</value>
+  </data>
+  <data name="Manipulada" xml:space="preserve">
+    <value>Manipulated</value>
+  </data>
+  <data name="ManipulatedObjectDat" xml:space="preserve">
+    <value>ManipulatedObjectData</value>
+  </data>
+  <data name="Massaespecfica" xml:space="preserve">
+    <value>Density</value>
+  </data>
+  <data name="MassaespecficadaPhase" xml:space="preserve">
+    <value>Density of vapor phase</value>
+  </data>
+  <data name="MassaespecficadaPhase2" xml:space="preserve">
+    <value>Density of liquid phase</value>
+  </data>
+  <data name="MassaEspecficadaPhase3" xml:space="preserve">
+    <value>Density of Liquid Phase: Rackett</value>
+  </data>
+  <data name="Massaespecficadamist" xml:space="preserve">
+    <value>Density of the mixture</value>
+  </data>
+  <data name="MassaespecficaPhaseLq" xml:space="preserve">
+    <value>Density (Liquid Phase)</value>
+  </data>
+  <data name="MassaespecficaPhaseVa" xml:space="preserve">
+    <value>Density (Vapor Phase)</value>
+  </data>
+  <data name="MassaespecficaMistur" xml:space="preserve">
+    <value>Density (mixture)</value>
+  </data>
+  <data name="Massamolar" xml:space="preserve">
+    <value>Molecular Weight</value>
+  </data>
+  <data name="MassamolardaPhaselqui" xml:space="preserve">
+    <value>Molecular Weight of the liquid phase</value>
+  </data>
+  <data name="MassamolardaPhasevapo" xml:space="preserve">
+    <value>Molecular Weight of the vapor phase</value>
+  </data>
+  <data name="Massamolardamistura" xml:space="preserve">
+    <value>Molecular Weight of the mixture</value>
+  </data>
+  <data name="MassamolarPhaseLquida" xml:space="preserve">
+    <value>Molecular Weight (Liquid Phase)</value>
+  </data>
+  <data name="MassamolarPhaseVapor" xml:space="preserve">
+    <value>Molecular Weight (Vapor Phase)</value>
+  </data>
+  <data name="MassamolarMistura" xml:space="preserve">
+    <value>Molecular Weight (mixture)</value>
+  </data>
+  <data name="MaximumIterations" xml:space="preserve">
+    <value>MaximumIterations</value>
+  </data>
+  <data name="MaxPressureIteration" xml:space="preserve">
+    <value>MaxPressureIterations</value>
+  </data>
+  <data name="MaxTemperatureIterat" xml:space="preserve">
+    <value>MaxTemperatureIterations</value>
+  </data>
+  <data name="MaxVal" xml:space="preserve">
+    <value>MaxVal</value>
+  </data>
+  <data name="Mensagem" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="Mensagemdeerro" xml:space="preserve">
+    <value>Error Message</value>
+  </data>
+  <data name="Mensagemretornadaqua" xml:space="preserve">
+    <value>Message to return in case of errors in calculation.</value>
+  </data>
+  <data name="Mensagens" xml:space="preserve">
+    <value> Messages</value>
+  </data>
+  <data name="Mensagens1" xml:space="preserve">
+    <value> Message</value>
+  </data>
+  <data name="minuto1" xml:space="preserve">
+    <value>1 minute</value>
+  </data>
+  <data name="minutos" xml:space="preserve">
+    <value>minutes</value>
+  </data>
+  <data name="MinVal" xml:space="preserve">
+    <value>MinVal</value>
+  </data>
+  <data name="Miscelnea2" xml:space="preserve">
+    <value>2. Miscellanea</value>
+  </data>
+  <data name="Miscelnea3" xml:space="preserve">
+    <value>3. Miscellanea</value>
+  </data>
+  <data name="Miscelnea4" xml:space="preserve">
+    <value>4. Miscellanea</value>
+  </data>
+  <data name="Miscelnea5" xml:space="preserve">
+    <value>5. Miscellanea</value>
+  </data>
+  <data name="MISTCondutividadetrm" xml:space="preserve">
+    <value>MIX Thermal Conductivity</value>
+  </data>
+  <data name="MISTEntalpiaEspecfic" xml:space="preserve">
+    <value>MIX Specific Enthalpy</value>
+  </data>
+  <data name="MISTEntropiaEspecfica" xml:space="preserve">
+    <value>MIX Specific Entropy</value>
+  </data>
+  <data name="MISTMassaespecfica" xml:space="preserve">
+    <value>MIX Density</value>
+  </data>
+  <data name="MISTMassamolar" xml:space="preserve">
+    <value>MIX Molar mass</value>
+  </data>
+  <data name="MISTTensosuperficial" xml:space="preserve">
+    <value>LIQ Surface Tension</value>
+  </data>
+  <data name="Mistura" xml:space="preserve">
+    <value>Mixture</value>
+  </data>
+  <data name="Misturador" xml:space="preserve">
+    <value>Mixer</value>
+  </data>
+  <data name="Misturadores" xml:space="preserve">
+    <value>Mixers</value>
+  </data>
+  <data name="MisturadoresMatEn" xml:space="preserve">
+    <value>Mixers Mat + En</value>
+  </data>
+  <data name="MisturadoresMatriaEn" xml:space="preserve">
+    <value>Pumps, Compressors and heaters.</value>
+  </data>
+  <data name="MisturadorMATEN" xml:space="preserve">
+    <value>Mixer MAT + EN</value>
+  </data>
+  <data name="molar" xml:space="preserve">
+    <value>Molar</value>
+  </data>
+  <data name="Mostraacomposiodafas" xml:space="preserve">
+    <value>Shows the composition of the vapor phase, in molar fractions</value>
+  </data>
+  <data name="Mostraacomposiodafas10" xml:space="preserve">
+    <value>Shows the composition of the liquid phase, in volumetric flow rates</value>
+  </data>
+  <data name="Mostraacomposiodafas2" xml:space="preserve">
+    <value>Shows the composition of the liquid phase, in molar fractions</value>
+  </data>
+  <data name="Mostraacomposiodafas3" xml:space="preserve">
+    <value>Shows the composition of the vapor phase, in mass fractions</value>
+  </data>
+  <data name="Mostraacomposiodafas4" xml:space="preserve">
+    <value>Shows the composition of the liquid phase, in mass fractions</value>
+  </data>
+  <data name="Mostraacomposiodafas5" xml:space="preserve">
+    <value>Shows the composition of the vapor phase, in mass flow rates</value>
+  </data>
+  <data name="Mostraacomposiodafas6" xml:space="preserve">
+    <value>Shows the composition of the liquid phase, in mass flow rates</value>
+  </data>
+  <data name="Mostraacomposiodafas7" xml:space="preserve">
+    <value>Shows the composition of the vapor phase, in molar flows</value>
+  </data>
+  <data name="Mostraacomposiodafas8" xml:space="preserve">
+    <value>Shows the composition of the liquid phase, in molar flow rates </value>
+  </data>
+  <data name="Mostraacomposiodafas9" xml:space="preserve">
+    <value>Shows the composition of the vapor phase, in volumetric flow rates</value>
+  </data>
+  <data name="Motivo" xml:space="preserve">
+    <value>Reason:</value>
+  </data>
+  <data name="mssica" xml:space="preserve">
+    <value>Mass</value>
+  </data>
+  <data name="Mtododeacelerao" xml:space="preserve">
+    <value>Convergence acceleration method</value>
+  </data>
+  <data name="Mtododeaceleraodacon" xml:space="preserve">
+    <value>Method for accelerating recycle convergence. </value>
+  </data>
+  <data name="Mximodeiteraesatingi" xml:space="preserve">
+    <value>Maximum iterations reached.</value>
+  </data>
+  <data name="MximodeIteraesemP" xml:space="preserve">
+    <value>Maximum Pressure Iterations</value>
+  </data>
+  <data name="MximodeIteraesemT" xml:space="preserve">
+    <value>Maximum Temperature Iterations</value>
+  </data>
+  <data name="N" xml:space="preserve">
+    <value>N</value>
+  </data>
+  <data name="N2" xml:space="preserve">
+    <value>N2</value>
+  </data>
+  <data name="NA" xml:space="preserve">
+    <value>N/A</value>
+  </data>
+  <data name="Naopodecopiardefaultset" xml:space="preserve">
+    <value>The Default Reaction Set cannot be copied.</value>
+  </data>
+  <data name="Naopodeexcluirdefaultset" xml:space="preserve">
+    <value>The Default Reaction Set cannot be removed.</value>
+  </data>
+  <data name="nButanonC4" xml:space="preserve">
+    <value>n-Butan (nC4)</value>
+  </data>
+  <data name="NC" xml:space="preserve">
+    <value>N/C</value>
+  </data>
+  <data name="ND" xml:space="preserve">
+    <value>N/A</value>
+  </data>
+  <data name="necessrioreiniciaroD" xml:space="preserve">
+    <value>You must restart DWSIM for the changes to take effect. Restart now?</value>
+  </data>
+  <data name="Nenhumselecionado" xml:space="preserve">
+    <value>None selected</value>
+  </data>
+  <data name="NestePacotedeProprie" xml:space="preserve">
+    <value>In this Property Package, Enthalpies, Entropies and Heat Capacity residuals are calculated from the model of Lee-Kesler.</value>
+  </data>
+  <data name="NFmodificado" xml:space="preserve">
+    <value>NF modified</value>
+  </data>
+  <data name="Nmerodeiteraesusadas" xml:space="preserve">
+    <value>Number of iterations used in the calculation.</value>
+  </data>
+  <data name="NmeroMximodeIteraes" xml:space="preserve">
+    <value>Maximum Number of Iterations</value>
+  </data>
+  <data name="Nmeromximodeiteraesa" xml:space="preserve">
+    <value>Maximum number of iterations to be used by Adjust Operation</value>
+  </data>
+  <data name="Nmeromximodeiteraesa2" xml:space="preserve">
+    <value>  -- Maximum number of iterations reached</value>
+  </data>
+  <data name="Nmeromximodeiteraesa3" xml:space="preserve">
+    <value>Maximum number of iterations reached.</value>
+  </data>
+  <data name="Nmeromximodeiteraesd" xml:space="preserve">
+    <value>Maximum number of iterations of recycle.</value>
+  </data>
+  <data name="nNonanonC9" xml:space="preserve">
+    <value>n-Nonane (nC9)</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="NoCalculado" xml:space="preserve">
+    <value>Not Calculated</value>
+  </data>
+  <data name="Noexisteguanacorrent" xml:space="preserve">
+    <value>There is no water in the stream selected.</value>
+  </data>
+  <data name="NoexistemPacotesdePr" xml:space="preserve">
+    <value>Please add and setup a Property Package to continue.</value>
+  </data>
+  <data name="Noexistemsimulaesase" xml:space="preserve">
+    <value>No simulations to be saved.</value>
+  </data>
+  <data name="Noexistemsimulaesati" xml:space="preserve">
+    <value>No active simulations.</value>
+  </data>
+  <data name="Noexistesoluonointer" xml:space="preserve">
+    <value>There is no solution in the specified range.</value>
+  </data>
+  <data name="Noforamencontradasco" xml:space="preserve">
+    <value>There were no conditions favorable to the formation of hydrates in the temperature of the stream.</value>
+  </data>
+  <data name="Noforamencontradasco1" xml:space="preserve">
+    <value>There were no conditions favorable to the formation of hydrates in the pressure of the stream.</value>
+  </data>
+  <data name="Nohcomponentesaadici" xml:space="preserve">
+    <value>No components to be added to the Material Stream.</value>
+  </data>
+  <data name="Nohcorrentedeenerg17" xml:space="preserve">
+    <value>No energy stream associated with the reactor.</value>
+  </data>
+  <data name="NohcorrentedeEnergyFlow" xml:space="preserve">
+    <value>No energy stream associated with the compressor.</value>
+  </data>
+  <data name="NohcorrentedeEnergyFlow2" xml:space="preserve">
+    <value>No energy stream associated with the heater.</value>
+  </data>
+  <data name="NohcorrentedeEnergyFlow3" xml:space="preserve">
+    <value>No energy stream associated with pipe.</value>
+  </data>
+  <data name="NohcorrentedeEnergyFlow4" xml:space="preserve">
+    <value>No energy stream associated with the pump.</value>
+  </data>
+  <data name="NohcorrentedeEnergyFlow5" xml:space="preserve">
+    <value>No energy stream associated with the turbine.</value>
+  </data>
+  <data name="Nohcorrentedematriac10" xml:space="preserve">
+    <value>No material stream connected to the inlet of the object.</value>
+  </data>
+  <data name="Nohcorrentedematriac11" xml:space="preserve">
+    <value>No material stream connected to the outlet of the object.</value>
+  </data>
+  <data name="Nohcorrentedematriac12" xml:space="preserve">
+    <value>No material stream connected to the outlet of the object.</value>
+  </data>
+  <data name="Nohcorrentedematriac13" xml:space="preserve">
+    <value>No material stream connected to the inlet of the object.</value>
+  </data>
+  <data name="Nohcorrentedematriac14" xml:space="preserve">
+    <value>No material stream connected to the outlet of the object.</value>
+  </data>
+  <data name="Nohcorrentedematriac15" xml:space="preserve">
+    <value>There is no material stream connected to the outlet port of the reactor.</value>
+  </data>
+  <data name="Nohcorrentedematriac16" xml:space="preserve">
+    <value>There is no material stream connected to the inlet port of the reactor.</value>
+  </data>
+  <data name="Nohcorrentedematriac6" xml:space="preserve">
+    <value>No material stream connected to the outlet of the mixer.</value>
+  </data>
+  <data name="Nohcorrentedematriac7" xml:space="preserve">
+    <value>No material stream connected to the outlet of recycling.</value>
+  </data>
+  <data name="Nohcorrentedematriac8" xml:space="preserve">
+    <value>No material stream connected to the outlet of the splitter.</value>
+  </data>
+  <data name="Nohcorrentedematriac9" xml:space="preserve">
+    <value>No material stream connected to the outlet of the mixer.</value>
+  </data>
+  <data name="Nohobjetosaseremcone" xml:space="preserve">
+    <value>No objects to be connected.</value>
+  </data>
+  <data name="Nohobjetosaseremdesc" xml:space="preserve">
+    <value>No objects to be disconnected from the selected object.</value>
+  </data>
+  <data name="Nome" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Nomedoobjeto" xml:space="preserve">
+    <value>Name of the object</value>
+  </data>
+  <data name="Nopossvelexcluirtabe" xml:space="preserve">
+    <value>Unable to delete tables</value>
+  </data>
+  <data name="Nopossvelrealizaress" xml:space="preserve">
+    <value>You can't make that kind of connection.</value>
+  </data>
+  <data name="NotequesemprequeoPac" xml:space="preserve">
+    <value>Note that, when the Property Package is changed, all objects lose their calculated properties.</value>
+  </data>
+  <data name="nPentanonC5" xml:space="preserve">
+    <value>n-Pentane (nC5)</value>
+  </data>
+  <data name="Nveldetransparnciada" xml:space="preserve">
+    <value>Level of transparency of the table. Enter a value between 0 (fully transparent) and 255 (fully opaque)</value>
+  </data>
+  <data name="O2" xml:space="preserve">
+    <value>O2</value>
+  </data>
+  <data name="Oajustenoencontrouum" xml:space="preserve">
+    <value>The adjustment has not found a solution within the limits informed for manipulated variable.</value>
+  </data>
+  <data name="Oarquivonoexisteoufo" xml:space="preserve">
+    <value>The file does not exist or has been removed from its original location.</value>
+  </data>
+  <data name="OarquivoXMLinformado" xml:space="preserve">
+    <value>The XML file information is invalid or corrupt.</value>
+  </data>
+  <data name="Objetonoencontrado" xml:space="preserve">
+    <value>Object not found.</value>
+  </data>
+  <data name="Objetonoencontrado1" xml:space="preserve">
+    <value>Object not found.</value>
+  </data>
+  <data name="Objetosnafiladeclcul" xml:space="preserve">
+    <value>Objects queued for calculating</value>
+  </data>
+  <data name="ObjetoUtilizadopor" xml:space="preserve">
+    <value>Object Used by</value>
+  </data>
+  <data name="ObjetoVariveldeRefer" xml:space="preserve">
+    <value>Object/Variable Reference</value>
+  </data>
+  <data name="ObjetoVariveldeRefer1" xml:space="preserve">
+    <value>  -- Object/Variable Reference</value>
+  </data>
+  <data name="Ocalculadorexcedeuon" xml:space="preserve">
+    <value>The calculator exceeded the number of iterations in pressure.</value>
+  </data>
+  <data name="Ocalculadorexcedeuon1" xml:space="preserve">
+    <value>The calculator exceeded the number of iterations in temperature.</value>
+  </data>
+  <data name="Ocalorretiradomaiorq" xml:space="preserve">
+    <value>The heat removed is higher than the specific enthalpy of the inlet stream.</value>
+  </data>
+  <data name="Ocorreuumerrodurante" xml:space="preserve">
+    <value>An error occurred during the regression of the data.</value>
+  </data>
+  <data name="Onmeromximodeiteraes" xml:space="preserve">
+    <value>The maximum number of iterations has been reached. Continue?</value>
+  </data>
+  <data name="Onmeromximodeiteraes1" xml:space="preserve">
+    <value>The maximum number of iterations has been reached. Continue?</value>
+  </data>
+  <data name="Opacidade0255" xml:space="preserve">
+    <value>Opacity (0-255)</value>
+  </data>
+  <data name="OPacotedePropriedade" xml:space="preserve">
+    <value>The Property Package was modified</value>
+  </data>
+  <data name="Operfilhidrulicodatu" xml:space="preserve">
+    <value>The hydraulic profile of the pipe is not set.</value>
+  </data>
+  <data name="Osvaloressoapagadosd" xml:space="preserve">
+    <value>The BIPs are erased from memory and cannot be recovered.</value>
+  </data>
+  <data name="Outros" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="Ovalorinformadonovli" xml:space="preserve">
+    <value>The given value is not valid.</value>
+  </data>
+  <data name="Ovalorinformadoparaa" xml:space="preserve">
+    <value>The given value is not valid.</value>
+  </data>
+  <data name="Ovalorinseridoinvlid" xml:space="preserve">
+    <value>The value added is not valid.</value>
+  </data>
+  <data name="PacotedePropriedades1" xml:space="preserve">
+    <value>Package Properties for exclusive use with water (H2O).</value>
+  </data>
+  <data name="PacotedePropriedades2" xml:space="preserve">
+    <value>Package Properties using the EE Peng-Robinson. Indicated for use with oil and non-condensable.</value>
+  </data>
+  <data name="PacotedePropriedades3" xml:space="preserve">
+    <value>Package Properties using the EE Redlich-Kwong modified by Soave. Indicated for use with oil and non-condensable.</value>
+  </data>
+  <data name="PacotedePropriedades4" xml:space="preserve">
+    <value>Package properties using the method of contribution Groups UNIFAC for modeling of the liquid phase. The Enthalpies, Entropies and Heat Capacity Residuals are calculated from the model of Lee-Kesler. The vapor phase is modeled by EDE Peng-Robinson.</value>
+  </data>
+  <data name="PacotedePropriedades5" xml:space="preserve">
+    <value>Package Properties of reference, where the thermodynamic equilibrium is calculated by the Raoult's Law. The Enthalpies, Entropies and Heat Capacity Wastes are considered equal to zero. The expression of Liquid Phase uses the values of Delta-H, Vaporization, experimental or calculated in the case of Pseudo-components/Hypotheticals.</value>
+  </data>
+  <data name="PaineldeControle" xml:space="preserve">
+    <value>Control Panel</value>
+  </data>
+  <data name="PaineldeControle1" xml:space="preserve">
+    <value>  -- Control Panel</value>
+  </data>
+  <data name="ParaclculodoELVdehid" xml:space="preserve">
+    <value>To calculate the ELV of hydrocarbons and/or non-condensables, use the EE PR or SRK.</value>
+  </data>
+  <data name="Paranovermaisesseavi" xml:space="preserve">
+    <value>If you don't want to see this warning, turn off the backup feature or select a valid directory for file backup.</value>
+  </data>
+  <data name="Paraocorretofunciona" xml:space="preserve">
+    <value>For the correct operation of DWSIM is necessary that the decimal separator is a comma (',').</value>
+  </data>
+  <data name="Parmetroinvlido" xml:space="preserve">
+    <value>Invalid parameter</value>
+  </data>
+  <data name="Parmetros2" xml:space="preserve">
+    <value>2. Parameters</value>
+  </data>
+  <data name="Parmetros3" xml:space="preserve">
+    <value>3. Parameters</value>
+  </data>
+  <data name="Parmetrosdeclculo2" xml:space="preserve">
+    <value>2. Calculation parameters</value>
+  </data>
+  <data name="Parmetrosdeconvergn3" xml:space="preserve">
+    <value>3. Convergence parameters</value>
+  </data>
+  <data name="ParmetrosdomtododeWe" xml:space="preserve">
+    <value>Wegstein parameters</value>
+  </data>
+  <data name="ParmetrosWegstein" xml:space="preserve">
+    <value>Parameters (Wegstein)</value>
+  </data>
+  <data name="Pbol" xml:space="preserve">
+    <value>Pbol (</value>
+  </data>
+  <data name="PC" xml:space="preserve">
+    <value>Pc</value>
+  </data>
+  <data name="Pedras" xml:space="preserve">
+    <value>Rocks</value>
+  </data>
+  <data name="PengRobinsonWongSand" xml:space="preserve">
+    <value>Peng-Robinson (Wong-Sandler)</value>
+  </data>
+  <data name="Perfil" xml:space="preserve">
+    <value>Perfil</value>
+  </data>
+  <data name="PerfildeConcentracoesnoReator" xml:space="preserve">
+    <value>PFR Properties Profile</value>
+  </data>
+  <data name="PerfilHidrulico" xml:space="preserve">
+    <value>Hydraulic Profile</value>
+  </data>
+  <data name="PerfilTrmico" xml:space="preserve">
+    <value>Thermal Profile</value>
+  </data>
+  <data name="Perfis2" xml:space="preserve">
+    <value>2. Profiles</value>
+  </data>
+  <data name="Pergunta" xml:space="preserve">
+    <value>Question</value>
+  </data>
+  <data name="Personalizado1BR" xml:space="preserve">
+    <value>Custom 1</value>
+  </data>
+  <data name="Personalizado2SC" xml:space="preserve">
+    <value>Custom 2</value>
+  </data>
+  <data name="Personalizado3CNTP" xml:space="preserve">
+    <value>Custom 3</value>
+  </data>
+  <data name="Pest" xml:space="preserve">
+    <value>Pest (</value>
+  </data>
+  <data name="PetalasAzizdll" xml:space="preserve">
+    <value>PetalasAziz.dll</value>
+  </data>
+  <data name="Plstico" xml:space="preserve">
+    <value>Plastic</value>
+  </data>
+  <data name="PontoCrtico" xml:space="preserve">
+    <value>Critical Point</value>
+  </data>
+  <data name="PontodeOperao" xml:space="preserve">
+    <value>Operation Point</value>
+  </data>
+  <data name="PontoNormaldeEbulio" xml:space="preserve">
+    <value>Normal Boiling Point</value>
+  </data>
+  <data name="PontosdeBolha" xml:space="preserve">
+    <value>Bubble Points</value>
+  </data>
+  <data name="PontosdeOrvalho" xml:space="preserve">
+    <value>Dew Points</value>
+  </data>
+  <data name="Porfavormodifiqueoet" xml:space="preserve">
+    <value>Please change it and try again then.</value>
+  </data>
+  <data name="Porfavorverifiquesen" xml:space="preserve">
+    <value>Please check if there isn't any blank textbox and try again.</value>
+  </data>
+  <data name="Porv" xml:space="preserve">
+    <value>Porv (</value>
+  </data>
+  <data name="Pot" xml:space="preserve">
+    <value>Pot</value>
+  </data>
+  <data name="Potncia" xml:space="preserve">
+    <value>Power</value>
+  </data>
+  <data name="Potnciagerada" xml:space="preserve">
+    <value>Power generated</value>
+  </data>
+  <data name="Potnciageradapelatur" xml:space="preserve">
+    <value>Power generated by the turbine</value>
+  </data>
+  <data name="Potnciarequerida" xml:space="preserve">
+    <value>Power required</value>
+  </data>
+  <data name="Potnciarequeridapela" xml:space="preserve">
+    <value>Power required by the pump</value>
+  </data>
+  <data name="Potnciarequeridapelo" xml:space="preserve">
+    <value>Power required by compressor</value>
+  </data>
+  <data name="PPmodificado" xml:space="preserve">
+    <value>PP modified</value>
+  </data>
+  <data name="Presso" xml:space="preserve">
+    <value>Pressure</value>
+  </data>
+  <data name="Pressoajusante" xml:space="preserve">
+    <value>Pressure downstream</value>
+  </data>
+  <data name="PressoCrtica" xml:space="preserve">
+    <value>Critical Pressure</value>
+  </data>
+  <data name="PressoCrtica2" xml:space="preserve">
+    <value>Critical Pressure (</value>
+  </data>
+  <data name="Pressodacorrente" xml:space="preserve">
+    <value>Stream pressure</value>
+  </data>
+  <data name="Pressodeseparao" xml:space="preserve">
+    <value>Separation pressure</value>
+  </data>
+  <data name="PressodeVapor" xml:space="preserve">
+    <value>Vapor Pressure</value>
+  </data>
+  <data name="Pressonegativadentro" xml:space="preserve">
+    <value>A negative pressure was calculated inside the pipe segment.</value>
+  </data>
+  <data name="PressoPa" xml:space="preserve">
+    <value>Pressure (Pa)</value>
+  </data>
+  <data name="PressovsEntalpia" xml:space="preserve">
+    <value>Pressure vs. Enthalpy</value>
+  </data>
+  <data name="PressovsTemperatura" xml:space="preserve">
+    <value>Pressure vs. Temperature</value>
+  </data>
+  <data name="PressovsVolume" xml:space="preserve">
+    <value>Pressure vs. Volume</value>
+  </data>
+  <data name="PressureCalculation" xml:space="preserve">
+    <value>PressureCalculation</value>
+  </data>
+  <data name="Problemasnaconvergnc" xml:space="preserve">
+    <value>Problems in convergence ...</value>
+  </data>
+  <data name="Procurandosubinterva" xml:space="preserve">
+    <value>Looking into the subinterval of the solution ...</value>
+  </data>
+  <data name="Produodetrabalhoemum" xml:space="preserve">
+    <value>Production of work in a turbine</value>
+  </data>
+  <data name="Proporosada1" xml:space="preserve">
+    <value>Split factor (outlet stream 1)</value>
+  </data>
+  <data name="Proporosada2" xml:space="preserve">
+    <value>Split factor (outlet stream 2)</value>
+  </data>
+  <data name="Proporosada3" xml:space="preserve">
+    <value>Split factor (outlet stream 3)</value>
+  </data>
+  <data name="PropPack_FlashError" xml:space="preserve">
+    <value>Phase equilibria calculation error.</value>
+  </data>
+  <data name="PropPack_FlashMaxIt" xml:space="preserve">
+    <value>PT/PV/TV Flash: Maximum number of iterations reached.</value>
+  </data>
+  <data name="PropPack_FlashMaxIt2" xml:space="preserve">
+    <value>PT/PV/TV Flash: Maximum number of iterations reached.</value>
+  </data>
+  <data name="PropPack_FlashPHInternalLoopError" xml:space="preserve">
+    <value>PH Flash: Error calculating equilibrium temperature.</value>
+  </data>
+  <data name="PropPack_FlashPHMaxExtIt" xml:space="preserve">
+    <value>PH Flash: Maximum number of external iterations reached.</value>
+  </data>
+  <data name="PropPack_FlashPHMaxIntIt" xml:space="preserve">
+    <value>PH Flash: Maximum number of internal iterations reached.</value>
+  </data>
+  <data name="PropPack_FlasHPHTempError" xml:space="preserve">
+    <value>PH Flash: Error calculating equilibrium temperature.</value>
+  </data>
+  <data name="PropPack_FlashPSInternalLoopError" xml:space="preserve">
+    <value>PS Flash: Error calculating equilibrium temperature.</value>
+  </data>
+  <data name="PropPack_FlashPSMaxExtIt" xml:space="preserve">
+    <value>PS Flash: Maximum number of external iterations reached.</value>
+  </data>
+  <data name="PropPack_FlashPSMaxIntIt" xml:space="preserve">
+    <value>PS Flash: Maximum number of internal iterations reached.</value>
+  </data>
+  <data name="PropPack_FlasHPSTempError" xml:space="preserve">
+    <value>PS Flash: Error calculating equilibrium temperature.</value>
+  </data>
+  <data name="PropPack_FlashTHNotSupported" xml:space="preserve">
+    <value>TH Flash is not supported by this Property Package.</value>
+  </data>
+  <data name="PropPack_FlashTPVapFracError" xml:space="preserve">
+    <value>PT Flash: Error calculating amount of the vapor phase in the mixture.</value>
+  </data>
+  <data name="PropPack_FlashTSNotSupported" xml:space="preserve">
+    <value>TS Flash is not supported.</value>
+  </data>
+  <data name="PropPack_ZError" xml:space="preserve">
+    <value>Error calculating compressibility factor.</value>
+  </data>
+  <data name="Propriedade" xml:space="preserve">
+    <value>Property</value>
+  </data>
+  <data name="Propriedades" xml:space="preserve">
+    <value>Properties</value>
+  </data>
+  <data name="Propriedades2" xml:space="preserve">
+    <value>2. Properties</value>
+  </data>
+  <data name="Propriedades3" xml:space="preserve">
+    <value>3. Properties</value>
+  </data>
+  <data name="PropriedadesdaPhaseLq" xml:space="preserve">
+    <value>Liquid Phase Properties</value>
+  </data>
+  <data name="PropriedadesdaPhaseva" xml:space="preserve">
+    <value>Vapor Phase Properties</value>
+  </data>
+  <data name="PropriedadesdaPhaseVa2" xml:space="preserve">
+    <value>Vapor Phase Properties</value>
+  </data>
+  <data name="Propriedadesdamistur" xml:space="preserve">
+    <value>Mixture Properties</value>
+  </data>
+  <data name="PropriedadesdaMistur2" xml:space="preserve">
+    <value>Mixture Properties</value>
+  </data>
+  <data name="PropriedadesOK" xml:space="preserve">
+    <value>Properties - OK.</value>
+  </data>
+  <data name="PseudoComponente" xml:space="preserve">
+    <value>Pseudo-component</value>
+  </data>
+  <data name="Pumpingdegua" xml:space="preserve">
+    <value>Water pumping</value>
+  </data>
+  <data name="Qmnimo" xml:space="preserve">
+    <value>Minimum Q</value>
+  </data>
+  <data name="Qmximo" xml:space="preserve">
+    <value>Maximum Q</value>
+  </data>
+  <data name="Quandoumasubstnciare" xml:space="preserve">
+    <value>When a component is removed, any binary interaction parameter related to it is lost.</value>
+  </data>
+  <data name="Quantidadedecalorced" xml:space="preserve">
+    <value>Quantity of heat transferred by heater</value>
+  </data>
+  <data name="Quantidadedecalortro" xml:space="preserve">
+    <value>Quantity of heat exchanged with the environment</value>
+  </data>
+  <data name="QuantidadedeEnergyFlowp" xml:space="preserve">
+    <value>Quantity of energy per unit of time in this stream</value>
+  </data>
+  <data name="Queda" xml:space="preserve">
+    <value>Decrease</value>
+  </data>
+  <data name="Quedadepresso" xml:space="preserve">
+    <value>Pressure drop</value>
+  </data>
+  <data name="Quedadepressoaplicad" xml:space="preserve">
+    <value>Pressure drop across the valve.</value>
+  </data>
+  <data name="Quedadepressoaplicad2" xml:space="preserve">
+    <value>Pressure drop across the turbine.</value>
+  </data>
+  <data name="Quedadepressoaplicad3" xml:space="preserve">
+    <value>Pressure drop across the heater.</value>
+  </data>
+  <data name="Quedadepressoaplicad4" xml:space="preserve">
+    <value>Pressure drop across the cooler.</value>
+  </data>
+  <data name="Quedadepressoaplicad5" xml:space="preserve">
+    <value>Pressure drop in the tank.</value>
+  </data>
+  <data name="Quedadepressoaplicad6" xml:space="preserve">
+    <value>Pressure drop in the reactor.</value>
+  </data>
+  <data name="Razoentreascapacidad" xml:space="preserve">
+    <value>Heat Capacity Ratio (Cp/Cv)</value>
+  </data>
+  <data name="RConvPGridItem1" xml:space="preserve">
+    <value>Reaction Set</value>
+  </data>
+  <data name="RConvPGridItem1Help" xml:space="preserve">
+    <value>Reaction Set used by the current reactor.</value>
+  </data>
+  <data name="RConvPGridItem2" xml:space="preserve">
+    <value>Operation Mode</value>
+  </data>
+  <data name="RConvPGridItem2Help" xml:space="preserve">
+    <value>Reactor operation mode (isothermic or adiabatic).</value>
+  </data>
+  <data name="RConvPGridItem3" xml:space="preserve">
+    <value>Heat Load</value>
+  </data>
+  <data name="RConvPGridItem3Help" xml:space="preserve">
+    <value>Show active reactions and their conversions, in percent (%).</value>
+  </data>
+  <data name="RConvPGridItem4Help" xml:space="preserve">
+    <value>Conversion of the selected reaction, in percent (%).</value>
+  </data>
+  <data name="RCSTRPGridItem1" xml:space="preserve">
+    <value>Reactor Volume</value>
+  </data>
+  <data name="RCSTRPGridItem1Help" xml:space="preserve">
+    <value>Reactor Volume</value>
+  </data>
+  <data name="RCSTRPGridItem2Help" xml:space="preserve">
+    <value>Show reactants and their conversions in the reactor.</value>
+  </data>
+  <data name="RCSTRPGridItem3Help" xml:space="preserve">
+    <value>Total conversion of the component, in percent (%)</value>
+  </data>
+  <data name="rea" xml:space="preserve">
+    <value>Area</value>
+  </data>
+  <data name="ReacaoJaAdicionada" xml:space="preserve">
+    <value>This reaction was already added to this set.</value>
+  </data>
+  <data name="ReacoesConversoes" xml:space="preserve">
+    <value>Reactions and Conversions (%)</value>
+  </data>
+  <data name="ReatorConversao" xml:space="preserve">
+    <value>Conversion Reactor</value>
+  </data>
+  <data name="ReatorCSTR" xml:space="preserve">
+    <value>CSTR</value>
+  </data>
+  <data name="ReatorEquilibrio" xml:space="preserve">
+    <value>Equilibrium Reactor</value>
+  </data>
+  <data name="ReatorGibbs" xml:space="preserve">
+    <value>Gibbs Reactor</value>
+  </data>
+  <data name="ReatorPFR" xml:space="preserve">
+    <value>PFR</value>
+  </data>
+  <data name="Recalcular" xml:space="preserve">
+    <value>&amp; Recalculate</value>
+  </data>
+  <data name="Reciclo" xml:space="preserve">
+    <value>Recycle</value>
+  </data>
+  <data name="Recomendadaparausoco" xml:space="preserve">
+    <value>Recommended for use with binary or ternary mixtures of components in polar high pressure and temperature.</value>
+  </data>
+  <data name="Recomendadoparausoco2" xml:space="preserve">
+    <value>Recommended for use with the Hypothetical Components.</value>
+  </data>
+  <data name="ReduoNormal21" xml:space="preserve">
+    <value>Reduction Normal 2:1</value>
+  </data>
+  <data name="ReduoNormal43" xml:space="preserve">
+    <value>Reduction Normal 4:3</value>
+  </data>
+  <data name="ReferencedObjectData" xml:space="preserve">
+    <value>ReferencedObjectData</value>
+  </data>
+  <data name="Regresso" xml:space="preserve">
+    <value>Regression</value>
+  </data>
+  <data name="RelatoriodaSimulacao" xml:space="preserve">
+    <value>Simulation Report</value>
+  </data>
+  <data name="Relatrio" xml:space="preserve">
+    <value>Report</value>
+  </data>
+  <data name="RelatriodaSimulao" xml:space="preserve">
+    <value>  -- Simulation Report</value>
+  </data>
+  <data name="RelatriodeexceodoDWS" xml:space="preserve">
+    <value>DWSIM Exception Report</value>
+  </data>
+  <data name="Relatrioenviadocomsu" xml:space="preserve">
+    <value>Report sent successfully.</value>
+  </data>
+  <data name="RemoverConjuntodeReacoesPergunta" xml:space="preserve">
+    <value>Confirm deletion of the selected reaction set?</value>
+  </data>
+  <data name="RemoverReacaodoConjuntoPergunta" xml:space="preserve">
+    <value>Confirm exclusion of the selected reaction from this reaction set?</value>
+  </data>
+  <data name="Resfriador" xml:space="preserve">
+    <value>Cooler</value>
+  </data>
+  <data name="Resfriadores" xml:space="preserve">
+    <value>Coolers</value>
+  </data>
+  <data name="Resultados" xml:space="preserve">
+    <value>Results</value>
+  </data>
+  <data name="Resultados3" xml:space="preserve">
+    <value>3. Results</value>
+  </data>
+  <data name="Resultados4" xml:space="preserve">
+    <value>4. Results</value>
   </data>
 </root>

@@ -43,7 +43,7 @@ namespace DWSIM.UI.Desktop.Editors.Tables
             Minimizable = false;
             WindowStyle = Eto.Forms.WindowStyle.Default;
 
-            Title = "Configure Master Property Table";
+            Title = "Настройки главной таблицы свойств";
 
             var container = new TableLayout();
 
@@ -57,16 +57,16 @@ namespace DWSIM.UI.Desktop.Editors.Tables
             btnOrderUp = new Button { Text = "˄", Width = 25 };
             btnOrderDown = new Button { Text = "˅", Width = 25 };
 
-            tableleft.Rows.Add(new TableRow(new Label { Text = "Show Objects/Properties:", VerticalAlignment = VerticalAlignment.Center }));
+            tableleft.Rows.Add(new TableRow(new Label { Text = "Показать объекты/свойства:", VerticalAlignment = VerticalAlignment.Center }));
             tableleft.Rows.Add(null);
-            tableleft.Rows.Add(new TableRow(new Label { Text = "Order objects", VerticalAlignment = VerticalAlignment.Center }, null, btnOrderUp, btnOrderDown));
+            tableleft.Rows.Add(new TableRow(new Label { Text = "Порядок объектов", VerticalAlignment = VerticalAlignment.Center }, null, btnOrderUp, btnOrderDown));
 
             lvObjects = new ListBox { Height = 300, Width = 150 };
             lvProps = new ListBox { Height = 300, Width = 150 };
             lvSelectObj = new ListBox { Height = 300, Width = 75 };
             lvSelectProp = new ListBox { Height = 300, Width = 75 };
 
-            btnOK = new Button { Text = "Close", Enabled = true };
+            btnOK = new Button { Text = "Закрыть", Enabled = true };
 
             btnOK.Click += (sender, e) => Close();
 
@@ -76,11 +76,11 @@ namespace DWSIM.UI.Desktop.Editors.Tables
             cbObjectType = new DropDown { Width = 300 };
             cbOrderBy = new DropDown { Width = 200 };
 
-            topcontainer2.Rows.Add(new TableRow(new Label { Text = "Show Objects of Type", VerticalAlignment = VerticalAlignment.Center }, cbObjectType, null, new Label { Text = "Order Objects By", VerticalAlignment = VerticalAlignment.Center }, cbOrderBy));
+            topcontainer2.Rows.Add(new TableRow(new Label { Text = "Показать объекты типа ", VerticalAlignment = VerticalAlignment.Center }, cbObjectType, null, new Label { Text = "Order Objects By", VerticalAlignment = VerticalAlignment.Center }, cbOrderBy));
             topcontainer2.Padding = new Padding(5, 5, 5, 5);
             topcontainer2.Spacing = new Size(10, 10);
 
-            topcontainer.Rows.Add(new TableRow(new Label { Text = "Table Header", VerticalAlignment = VerticalAlignment.Center }, header));
+            topcontainer.Rows.Add(new TableRow(new Label { Text = "Заголовок таблицы", VerticalAlignment = VerticalAlignment.Center }, header));
             topcontainer.Padding = new Padding(5, 5, 5, 5);
             topcontainer.Spacing = new Size(10, 10);
 

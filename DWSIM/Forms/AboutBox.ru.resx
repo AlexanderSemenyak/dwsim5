@@ -148,7 +148,7 @@
     <value>Веб-сайт</value>
   </data>
   <data name="Column6.HeaderText" xml:space="preserve">
-    <value>Лицензя</value>
+    <value>  </value>
   </data>
   <data name="Column7.HeaderText" xml:space="preserve">
     <value>Текст лицензии</value>
@@ -223,7 +223,7 @@
     <value>Права</value>
   </data>
   <data name="Label1.Text" xml:space="preserve">
-    <value>Симулятор АРМ Геолога (с калькулятором технологических процессов DWSIM)</value>
+    <value>Симулятор АРМ Геолога (с калькулятором технологических процессов)</value>
   </data>
   <data name="LinkLabel1.Text" xml:space="preserve">
     <value>  </value>

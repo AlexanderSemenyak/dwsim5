@@ -139,7 +139,7 @@
     <value>3-Methyl-1-Butanol</value>
   </data>
   <data name="_Agua" xml:space="preserve">
-    <value>Water</value>
+    <value>Вода</value>
   </data>
   <data name="_Benzeno" xml:space="preserve">
     <value>Benzene</value>
@@ -148,7 +148,7 @@
     <value>Carbon Dioxide</value>
   </data>
   <data name="_Etano" xml:space="preserve">
-    <value>Ethane</value>
+    <value>Этан</value>
   </data>
   <data name="_Etanol" xml:space="preserve">
     <value>Ethanol</value>
@@ -163,10 +163,10 @@
     <value>Glycerol</value>
   </data>
   <data name="_Hidrogenio" xml:space="preserve">
-    <value>Hydrogen</value>
+    <value>Водород</value>
   </data>
   <data name="_iButano" xml:space="preserve">
-    <value>Isobutane</value>
+    <value>i-Бутан</value>
   </data>
   <data name="_iPentano" xml:space="preserve">
     <value>Isopentane</value>
@@ -175,10 +175,10 @@
     <value>Isopropanol</value>
   </data>
   <data name="_Metano" xml:space="preserve">
-    <value>Methane</value>
+    <value>Метан</value>
   </data>
   <data name="_Metanol" xml:space="preserve">
-    <value>Methanol</value>
+    <value>Метанол (CH3OH)</value>
   </data>
   <data name="_MetilEtilCetona" xml:space="preserve">
     <value>Methyl-Ethyl-Ketone</value>
@@ -187,19 +187,19 @@
     <value>m-Xylene</value>
   </data>
   <data name="_nButano" xml:space="preserve">
-    <value>n-Butane</value>
+    <value>n-Бутан</value>
   </data>
   <data name="_nDecano" xml:space="preserve">
     <value>n-Decane</value>
   </data>
   <data name="_nHeptano" xml:space="preserve">
-    <value>n-Heptane</value>
+    <value>n-Гептан</value>
   </data>
   <data name="_nHexano" xml:space="preserve">
     <value>n-Hexane</value>
   </data>
   <data name="_Nitrogenio" xml:space="preserve">
-    <value>Nitrogen</value>
+    <value>Азот</value>
   </data>
   <data name="_nNonano" xml:space="preserve">
     <value>n-Nonane</value>
@@ -217,7 +217,7 @@
     <value>o-Xylene</value>
   </data>
   <data name="_Propano" xml:space="preserve">
-    <value>Propane</value>
+    <value>Пропан</value>
   </data>
   <data name="_Pxileno" xml:space="preserve">
     <value>p-Xylene</value>
@@ -502,7 +502,7 @@
     <value> loaded successfully.</value>
   </data>
   <data name="CarregandoNotcias" xml:space="preserve">
-    <value>Loading News ...</value>
+    <value>Загрузка новостей ...</value>
   </data>
   <data name="Cascalho" xml:space="preserve">
     <value>Gravel</value>
@@ -1426,7 +1426,7 @@
     <value>Error calculating temperature.</value>
   </data>
   <data name="Erroaocarregararquiv" xml:space="preserve">
-    <value>Error loading file:</value>
+    <value>Ошибка загрузки файла:</value>
   </data>
   <data name="Erroaocarregarnotcia" xml:space="preserve">
     <value>Error loading news.</value>
@@ -4526,7 +4526,7 @@ A modification to the attraction term in the Peng-Robinson equation of state pub
 PRSV2 is particularly advantageous for VLE calculations. While PRSV1 does offer an advantage over the Peng-Robinson model for describing thermodynamic behavior, it is still not accurate enough, in general, for phase equilibrium calculations.</value>
   </data>
   <data name="MasterTable" xml:space="preserve">
-    <value>Master Property Table</value>
+    <value>Главная таблица свойств</value>
   </data>
   <data name="MT_ObjectsToShow" xml:space="preserve">
     <value>Objects to Display</value>
@@ -5484,7 +5484,7 @@ In this model, chemical and physical equilibria of NH3, CO2, and H2S in sour wat
     <value>The selected column solver is not supported by this object.</value>
   </data>
   <data name="LoadingFile" xml:space="preserve">
-    <value>Loading file...</value>
+    <value>Загрузка файла...</value>
   </data>
   <data name="ObjectIsActive" xml:space="preserve">
     <value>Active (click to deactivate)</value>
@@ -5604,6 +5604,30 @@ In this model, chemical and physical equilibria of NH3, CO2, and H2S in sour wat
     <value>Headspace</value>
   </data>
   <data name="PFDTip" xml:space="preserve">
-    <value>If MultiSelect mode is enabled (check the flowsheet toolbar), press and hold SHIFT while dragging the left mouse button over the flowsheet drawing area to change the current view position.</value>
+    <value>Если включен режим MultiSelect (множественный выбо объектов, проверьте на панели инструментов, нажмите и держите клавишу SHIFT, когда двигаете курсором мыши с нажатой левой кнопкой мыши над областью отрисовки модели, чтобы изменить видимую область.</value>
+  </data>
+  <data name="Correntedeenergia" xml:space="preserve">
+    <value>Energy Stream</value>
+  </data>
+  <data name="nButanonC4" xml:space="preserve">
+    <value>n-Butan (nC4)</value>
+  </data>
+  <data name="Perfil" xml:space="preserve">
+    <value>Perfil</value>
+  </data>
+  <data name="ViscosidadedaPhaseVap" xml:space="preserve">
+    <value>Kinematic viscosity (Liquid Phase)Viscosidade da Fase Vapor: Método Jossi-Stiel-Thodos</value>
+  </data>
+  <data name="VerPerfil" xml:space="preserve">
+    <value>Verifique se você tem o nível de acesso requerido para criá-lo no local especificado.</value>
+  </data>
+  <data name="HXLMTDCorr" xml:space="preserve">
+    <value>Fator de Correção de média Logarítmica da Diferença de Temperaturas (MLDT)</value>
+  </data>
+  <data name="DBManagerNoFile" xml:space="preserve">
+    <value>No Component Creator Study file defined!</value>
+  </data>
+  <data name="UserDefined" xml:space="preserve">
+    <value>User defined</value>
   </data>
 </root>

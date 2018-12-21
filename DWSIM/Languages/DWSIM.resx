@@ -140,30 +140,41 @@
   </data>
   <data name="_Agua" xml:space="preserve">
     <value>Água (H2O)</value>
+    <comment>Вода</comment>
   </data>
   <data name="_Benzeno" xml:space="preserve">
     <value>Benzeno (C6H6)</value>
+    
   </data>
   <data name="_DioxidoDeCarbono" xml:space="preserve">
     <value>Dióxido de Carbono (CO2)</value>
+    
   </data>
   <data name="_Etano" xml:space="preserve">
     <value>Etano (C2)</value>
+    
+    <comment>Этан</comment>
   </data>
   <data name="_Etanol" xml:space="preserve">
     <value>Etanol (C2H5OH)</value>
+    
   </data>
   <data name="_Etilbenzeno" xml:space="preserve">
     <value>Etilbenzeno (C8H10)</value>
+    
   </data>
   <data name="_Fenol" xml:space="preserve">
     <value>Fenol (C6H6O)</value>
+    
   </data>
   <data name="_Glicerol" xml:space="preserve">
     <value>Glicerol (C3H8O3)</value>
+    
   </data>
   <data name="_iButano" xml:space="preserve">
     <value>Isobutano (iC4)</value>
+    
+    <comment>i-Бутан</comment>
   </data>
   <data name="_iPentano" xml:space="preserve">
     <value>Isopentano (iC5)</value>
@@ -173,9 +184,11 @@
   </data>
   <data name="_Metano" xml:space="preserve">
     <value>Metano (C1)</value>
+    <comment>Метан</comment>
   </data>
   <data name="_Metanol" xml:space="preserve">
     <value>Metanol (CH3OH)</value>
+    <comment>Метанол (CH3OH)</comment>
   </data>
   <data name="_MetilEtilCetona" xml:space="preserve">
     <value>Metil-Etil-Cetona (C3H8CO)</value>
@@ -185,18 +198,21 @@
   </data>
   <data name="_nButano" xml:space="preserve">
     <value>n-Butano (nC4)</value>
+    <comment>n-Бутан</comment>
   </data>
   <data name="_nDecano" xml:space="preserve">
     <value>n-Decano (nC10)</value>
   </data>
   <data name="_nHeptano" xml:space="preserve">
     <value>n-Heptano (nC7)</value>
+    <comment>n-Гептан</comment>
   </data>
   <data name="_nHexano" xml:space="preserve">
     <value>n-Hexano (nC6)</value>
   </data>
   <data name="_Nitrogenio" xml:space="preserve">
     <value>Nitrogênio (N2)</value>
+    <comment>Азот</comment>
   </data>
   <data name="_nNonano" xml:space="preserve">
     <value>n-Nonano (nC9)</value>
@@ -215,6 +231,7 @@
   </data>
   <data name="_Propano" xml:space="preserve">
     <value>Propano (C3)</value>
+    <comment>Пропан</comment>
   </data>
   <data name="_Pxileno" xml:space="preserve">
     <value>P-Xileno (C8H10)</value>
@@ -3978,6 +3995,7 @@ Tensão Superficial da Fase Líquida: Método Brock-Bird</value>
   </data>
   <data name="_Hidrogenio" xml:space="preserve">
     <value>Hidrogênio (H2)</value>
+    <comment>Водород</comment>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Tipo</value>

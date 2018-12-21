@@ -1480,7 +1480,7 @@
     <value>Delete Component</value>
   </data>
   <data name="Excluirobjeto" xml:space="preserve">
-    <value>Delete Object</value>
+    <value>Удалить объект</value>
   </data>
   <data name="Existemobjetosespera" xml:space="preserve">
     <value>There are objects waiting to be calculated. Do you wish to process these items now?</value>
@@ -2416,7 +2416,7 @@
     <value>The XML file information is invalid or corrupt.</value>
   </data>
   <data name="Objeto" xml:space="preserve">
-    <value>Object</value>
+    <value>Объект</value>
   </data>
   <data name="Objetonoencontrado" xml:space="preserve">
     <value>Object not found.</value>
@@ -2704,7 +2704,7 @@
     <value>PP modified</value>
   </data>
   <data name="Presso" xml:space="preserve">
-    <value>Pressure</value>
+    <value>Давление</value>
   </data>
   <data name="Pressoajusante" xml:space="preserve">
     <value>Pressure downstream</value>
@@ -2722,7 +2722,7 @@
     <value>Separation pressure</value>
   </data>
   <data name="PressodeVapor" xml:space="preserve">
-    <value>Vapor Pressure</value>
+    <value>Паровая фаза</value>
   </data>
   <data name="Pressonegativadentro" xml:space="preserve">
     <value>A negative pressure was calculated inside the pipe segment.</value>
@@ -2872,7 +2872,7 @@
     <value>Decrease</value>
   </data>
   <data name="Quedadepresso" xml:space="preserve">
-    <value>Pressure drop</value>
+    <value>Падение давления</value>
   </data>
   <data name="Quedadepressoaplicad" xml:space="preserve">
     <value>Pressure drop across the valve.</value>
@@ -3547,7 +3547,7 @@
     <value>Calculation Mode</value>
   </data>
   <data name="ValveOutletPressure" xml:space="preserve">
-    <value>Outlet Pressure</value>
+    <value>Наружное давление</value>
   </data>
   <data name="VAPCondutividadetrmi" xml:space="preserve">
     <value>VAP Thermal Conductivity</value>
@@ -5205,7 +5205,7 @@ In this model, chemical and physical equilibria of NH3, CO2, and H2S in sour wat
     <value>System of Units removed: {0}</value>
   </data>
   <data name="UndoRedo_Cut" xml:space="preserve">
-    <value>Cut objects</value>
+    <value>Вырезать объекты</value>
   </data>
   <data name="UndoRedo_Paste" xml:space="preserve">
     <value>Paste objects</value>

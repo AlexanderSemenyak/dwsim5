@@ -65,7 +65,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Se desejar que o Ajuste seja automaticamente resolvido pelo Calculador do DWSIM, defina a propriedade &quot;Ajuste Simultâneo&quot; para &quot;True&quot;. Assim você não precisará abrir o Painel de Controle e sua variável será ajustada automaticamente sempre que o fluxograma for calculado por completo. .
+        '''  Looks up a localized string similar to If you want the Adjust Op to be automatically solved by the calculator, set the &quot;Simultaneous Adjust&quot; property to &quot;True&quot;. This way you won&apos;t need to open the Control Panel and your variable will be adjusted automatically whenever the flowsheet is calculated..
         '''</summary>
         Friend Shared ReadOnly Property ADJT001() As String
             Get
@@ -74,7 +74,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Se você deseja adicionar algum dado experimental ao diagrama, insira os dados na tabela correspondente antes de solicitar o cálculo..
+        '''  Looks up a localized string similar to If you want to add some experimental data to the diagram, enter the data in the corresponding table before requesting the calculation..
         '''</summary>
         Friend Shared ReadOnly Property BENV001() As String
             Get
@@ -83,7 +83,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to A coluna de dados experimentais &quot;y&quot; só é utilizada nos diagramas x-y. Para mostrar ambos os pontos de bolha e orvalho em um diagrama T/P-xy, insira todas as frações molares na coluna de dados &quot;x&quot;..
+        '''  Looks up a localized string similar to The experimental data &quot;y&quot; column is used only in the xy diagrams. To show both experimental bubble and dew points in a T/P-xy diagram, enter all mole fractions in the &quot;x&quot; column..
         '''</summary>
         Friend Shared ReadOnly Property BENV002() As String
             Get
@@ -92,7 +92,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Os dados experimentais podem ser copiados e colados diretamente do Microsoft Excel..
+        '''  Looks up a localized string similar to The experimental data can be copied and pasted directly from Microsoft Excel..
         '''</summary>
         Friend Shared ReadOnly Property BENV003() As String
             Get
@@ -101,7 +101,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Ao carregar suas simulações contendo operações unitárias CAPE-OPEN em outros computadores, certifique-se de que esses componentes estejam instalados e corretamente registrados nos mesmos..
+        '''  Looks up a localized string similar to When running simulations containing CAPE-OPEN unit ops in another computer, make sure that these components are installed and registered properly on it..
         '''</summary>
         Friend Shared ReadOnly Property CAPE001() As String
             Get
@@ -110,7 +110,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Apenas reações do tipo cinética serão consideradas pelo CSTR..
+        '''  Looks up a localized string similar to Only kinetic type reactions will be considered by the CSTR..
         '''</summary>
         Friend Shared ReadOnly Property CSTR001() As String
             Get
@@ -119,7 +119,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Para obter ajuda com os scripts, consulte os exemplos de Membrana e Hidrociclone, localizados na pasta de amostras (samples) do DWSIM..
+        '''  Looks up a localized string similar to To get help with scripts, take a look at the examples of Membrane and Hydrocyclone Unit Operations, located in the samples folder..
         '''</summary>
         Friend Shared ReadOnly Property CSUO001() As String
             Get
@@ -128,7 +128,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Recomenda-se que as edições das propriedades da coluna sejam realizadas com o Calculador desativado..
+        '''  Looks up a localized string similar to It is recommended that the column propertiy editing be carried out with the calculator disabled..
         '''</summary>
         Friend Shared ReadOnly Property DCOL001() As String
             Get
@@ -137,7 +137,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Ao editar as conexões da coluna, lembre-se de clicar em alguma célula que não seja a que esteja em edição, para que as mudanças sejam reconhecidas pelo DWSIM..
+        '''  Looks up a localized string similar to When editing the column connections, remember to click any cell other than the one being edited, so that changes are recognized by DWSIM..
         '''</summary>
         Friend Shared ReadOnly Property DCOL002() As String
             Get
@@ -146,7 +146,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Lembre-se de configurar a pressão dos estágios intermediários da coluna..
+        '''  Looks up a localized string similar to Remember to set the pressure of the intermediate stages of the column..
         '''</summary>
         Friend Shared ReadOnly Property DCOL003() As String
             Get
@@ -155,7 +155,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Para calcular o fluxograma rapidamente, clique em qualquer área livre e pressione F5..
+        '''  Looks up a localized string similar to Press F5 on any area inside the flowsheet to start a full calculation..
         '''</summary>
         Friend Shared ReadOnly Property FLSH001() As String
             Get
@@ -164,7 +164,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Utilize a ferramenta de conexão rápida disponível na barra de ferramentas  para conectar rapidamente um objeto a outro enquanto pressiona a tecla CTRL..
+        '''  Looks up a localized string similar to Use the quick connection tool on the toolbar to quickly connect objects by pressing the CTRL key and dragging the cursor from the first to the second object..
         '''</summary>
         Friend Shared ReadOnly Property FLSH002() As String
             Get
@@ -173,7 +173,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Pressione SHIFT durante a inicialização do DWSIM para fazer com que as configurações voltem aos seus valores-padrão..
+        '''  Looks up a localized string similar to Hold SHIFT during DWSIM initialization to reset the settings to their default values..
         '''</summary>
         Friend Shared ReadOnly Property FLSH003() As String
             Get
@@ -182,7 +182,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Consulte a ajuda específica para o objeto sendo adicionado selecionando-o no fluxograma e pressionando a tecla F1. Os utilitários também possuem ajuda específica..
+        '''  Looks up a localized string similar to See some specific help for the object being added by selecting it in the flowsheet and pressing the F1 key. This also works for Utilities..
         '''</summary>
         Friend Shared ReadOnly Property FLSH004() As String
             Get
@@ -191,7 +191,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Para visualizar os resultados detalhados dos cálculos em tempo real, ative o redirecionamento do console e selecione um modo de depuração. É necessário reiniciar o DWSIM para que as alterações tenham efeito..
+        '''  Looks up a localized string similar to To view detailed results of the calculations in real time, enable console redirection and select a debug mode. You must restart DWSIM for the changes to take effect..
         '''</summary>
         Friend Shared ReadOnly Property FLSH005() As String
             Get
@@ -200,7 +200,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Alguns tipos de objetos exibem sua janela principal de edição de propriedades em resposta a um duplo clique no seu ícone no fluxograma..
+        '''  Looks up a localized string similar to Some object types display their main editing window when you do a double-click on them in the flowsheet..
         '''</summary>
         Friend Shared ReadOnly Property FLSH006() As String
             Get
@@ -209,7 +209,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Após finalizar as modificações nas conexões, recalcule o fluxograma por completo (F5)..
+        '''  Looks up a localized string similar to After finishing updating the object connections, call the flowsheet solver by pressing the F5 key..
         '''</summary>
         Friend Shared ReadOnly Property FLSH007() As String
             Get
@@ -218,7 +218,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Se algumas janelas nao forem exibidas corretamente, clique em Exibir &gt; Restaurar Layout..
+        '''  Looks up a localized string similar to If some windows are missing, click on &apos;View&apos; &gt; &apos;Restore Layout&apos;..
         '''</summary>
         Friend Shared ReadOnly Property FLSH008() As String
             Get
@@ -227,7 +227,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to A janela do otimizador também pode ser reposicionada livremente como as principais janelas da simulação..
+        '''  Looks up a localized string similar to The optimizer window can also be freely repositioned just like the flowsheet sub-windows..
         '''</summary>
         Friend Shared ReadOnly Property FOPT001() As String
             Get
@@ -236,7 +236,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to A janela da ferramenta para análise de sensibilidade também pode ser reposicionada livremente como as principais janelas da simulação..
+        '''  Looks up a localized string similar to The sensitivity analysis tool window can also be freely repositioned..
         '''</summary>
         Friend Shared ReadOnly Property FSAN001() As String
             Get
@@ -245,7 +245,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Você pode editar a composição de uma corrente de matéria através de um duplo clique com o botão esquerdo do mouse em seu objeto no fluxograma..
+        '''  Looks up a localized string similar to You can edit the composition of a material stream through a double click with the left mouse button..
         '''</summary>
         Friend Shared ReadOnly Property MSTR001() As String
             Get
@@ -254,7 +254,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to O menu de contexto da corrente no fluxograma oferece algumas ferramentas úteis para o gerenciamento dos dados de uma corrente, tais como a cópia dos dados de outra corrente, restauração dos dados originais, exportação dos dados para a área de transferência, etc..
+        '''  Looks up a localized string similar to The material stream context menu offers some useful tools for managing its data, such as copying data from another stream, restoring original data, exporting the data to the clipboard, etc..
         '''</summary>
         Friend Shared ReadOnly Property MSTR002() As String
             Get
@@ -263,7 +263,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Para evitar que a caixa de edição de composição da corrente de matéria apareça ao inserir uma no fluxograma, pressione SHIFTenquanto executa esta ação..
+        '''  Looks up a localized string similar to To prevent the composition edit window from showing after adding a material stream, hold the SHIFT key while dropping it in the flowsheet..
         '''</summary>
         Friend Shared ReadOnly Property MSTR003() As String
             Get
@@ -272,7 +272,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Ao solicitar o cálculo, todos os tipos de diagrama são calculados ao mesmo tempo. Para mudar o diagrama em exibição não é necessário solicitar o cálculo novamente..
+        '''  Looks up a localized string similar to When you request a calculation, all diagram types are calculated simultaneously. It isn&apos;t necessary to request another calculation if you want to see a different diagram on the screen..
         '''</summary>
         Friend Shared ReadOnly Property PENV001() As String
             Get
@@ -281,7 +281,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Apenas reações do tipo cinética serão consideradas pelo PFR..
+        '''  Looks up a localized string similar to Only kinetic-type reactions will be taken into account by the PFR..
         '''</summary>
         Friend Shared ReadOnly Property PFR001() As String
             Get
@@ -290,7 +290,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to As propriedades exibidas nesta ferramenta correspondem às informações dos componentes do DWSIM. Não serão exibidas propriedades dos componentes CAPE-OPEN aqui, caso esteja sendo utilizado um Pacote de Propriedades CAPE-OPEN..
+        '''  Looks up a localized string similar to The properties shown on this tool are for DWSIM compounds only. CAPE-OPEN compound properties are not displayed here..
         '''</summary>
         Friend Shared ReadOnly Property PURE001() As String
             Get
@@ -299,7 +299,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Somente as reações do tipo &quot;conversão&quot; serão consideradas pelo reator de conversão..
+        '''  Looks up a localized string similar to Only the conversion reactions will be considered by the conversion reactor..
         '''</summary>
         Friend Shared ReadOnly Property RCON001() As String
             Get
@@ -308,7 +308,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to É importante definir bem a localização do Reciclo no fluxograma, para evitar cálculos desnecessários. Insira-o o mais próximo do ponto onde o fluxo de cálculo retorna a um ponto já calculado..
+        '''  Looks up a localized string similar to It is important to properly define the location of the Recycle in the flowsheet, to avoid unnecessary calculations. Insert it into the nearest point where the calculation flow returns to an already calculated point..
         '''</summary>
         Friend Shared ReadOnly Property RECY001() As String
             Get
@@ -317,7 +317,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to O reator de equilíbrio é utilizado quando se tem conhecimento das reações que irão ocorrer. Quando não for o caso, utilize o reator de gibbs..
+        '''  Looks up a localized string similar to The equilibrium reactor is used wherever the user has knowledge of the reactions that will occur. When that is not the case, use the Gibbs reactor..
         '''</summary>
         Friend Shared ReadOnly Property REQL001() As String
             Get
