@@ -618,6 +618,9 @@
     <EmbeddedResource Include="Editing Forms\EditingForm_Column.resx">
       <DependentUpon>EditingForm_Column.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Editing Forms\EditingForm_Flowsheet.ru.resx">
+      <DependentUpon>EditingForm_Flowsheet.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Editing Forms\EditingForm_HeaterCooler.de.resx">
       <DependentUpon>EditingForm_HeaterCooler.vb</DependentUpon>
     </EmbeddedResource>
@@ -634,6 +637,9 @@
       <DependentUpon>EditingForm_OrificePlate.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Editing Forms\EditingForm_Pipe.de.resx">
+      <DependentUpon>EditingForm_Pipe.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editing Forms\EditingForm_Pipe.ru.resx">
       <DependentUpon>EditingForm_Pipe.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Editing Forms\EditingForm_Pump.de.resx">

@@ -118,64 +118,64 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ComboBox2.Items" xml:space="preserve">
-    <value>Length</value>
+    <value>Длина</value>
   </data>
   <data name="ComboBox2.Items1" xml:space="preserve">
-    <value>Pressure</value>
+    <value>Давление</value>
   </data>
   <data name="ComboBox2.Items2" xml:space="preserve">
-    <value>Temperature</value>
+    <value>Температура</value>
   </data>
   <data name="ComboBox2.Items3" xml:space="preserve">
-    <value>Liquid Velocity</value>
+    <value>Скорость жидкости</value>
   </data>
   <data name="ComboBox2.Items4" xml:space="preserve">
-    <value>Vapor Velocity</value>
+    <value>Скорость газовой фазы</value>
   </data>
   <data name="ComboBox2.Items5" xml:space="preserve">
-    <value>Heat Transferred</value>
+    <value>Теплообмен</value>
   </data>
   <data name="ComboBox2.Items6" xml:space="preserve">
-    <value>Liquid Holdup</value>
+    <value>Выпадение жидкости</value>
   </data>
   <data name="ComboBox2.Items7" xml:space="preserve">
-    <value>Heat Transfer Coefficient</value>
+    <value>Коэффициент теплообмена</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="Label2.Size" type="System.Drawing.Size, System.Drawing">
     <value>36, 13</value>
   </data>
   <data name="Label2.Text" xml:space="preserve">
-    <value>Y Axis</value>
+    <value>Ось Y</value>
   </data>
   <data name="ComboBox1.Items" xml:space="preserve">
-    <value>Length</value>
+    <value>Длина</value>
   </data>
   <data name="ComboBox1.Items1" xml:space="preserve">
-    <value>Pressure</value>
+    <value>Давление</value>
   </data>
   <data name="ComboBox1.Items2" xml:space="preserve">
-    <value>Temperature</value>
+    <value>Температура</value>
   </data>
   <data name="ComboBox1.Items3" xml:space="preserve">
-    <value>Liquid Velocity</value>
+    <value>Скорость жидкости</value>
   </data>
   <data name="ComboBox1.Items4" xml:space="preserve">
-    <value>Vapor Velocity</value>
+    <value>Скорость газовой фазы</value>
   </data>
   <data name="ComboBox1.Items5" xml:space="preserve">
-    <value>Heat Transferred</value>
+    <value>Теплообмен</value>
   </data>
   <data name="Label1.Size" type="System.Drawing.Size, System.Drawing">
     <value>36, 13</value>
   </data>
   <data name="Label1.Text" xml:space="preserve">
-    <value>X Axis</value>
+    <value>Ось X</value>
   </data>
   <data name="GroupBox1.Text" xml:space="preserve">
-    <value>Axis</value>
+    <value>Оси</value>
   </data>
   <data name="GroupBox2.Text" xml:space="preserve">
-    <value>Graph</value>
+    <value>График</value>
   </data>
 </root>

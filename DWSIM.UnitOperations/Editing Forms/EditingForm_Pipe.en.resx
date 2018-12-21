@@ -118,31 +118,31 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="chkActive.ToolTip" xml:space="preserve">
-    <value>Active/Inactive</value>
+    <value>Активно/неактивно</value>
   </data>
   <data name="Label13.Text" xml:space="preserve">
-    <value>Linked to</value>
+    <value>Присоединен к</value>
   </data>
   <data name="Label11.Text" xml:space="preserve">
-    <value>Object</value>
+    <value>Объект</value>
   </data>
   <data name="GroupBox5.Text" xml:space="preserve">
-    <value>General Info</value>
+    <value>Общая информация</value>
   </data>
   <data name="Label10.Text" xml:space="preserve">
-    <value>Flash Algorithm</value>
+    <value>Алгоритм</value>
   </data>
   <data name="Label9.Text" xml:space="preserve">
-    <value>Property Package</value>
+    <value>Модель</value>
   </data>
   <data name="Label4.Text" xml:space="preserve">
-    <value>Temperature Tolerance</value>
+    <value>Интервал доп-х температур</value>
   </data>
   <data name="Label4.ToolTip" xml:space="preserve">
     <value>Tolerance of temperature in calculation loop</value>
   </data>
   <data name="Label5.Text" xml:space="preserve">
-    <value>Pressure Tolerance</value>
+    <value>Интервал доп-х давлений</value>
   </data>
   <data name="Label5.ToolTip" xml:space="preserve">
     <value>Tolerance of pressure in calculation loop</value>
@@ -151,96 +151,105 @@
     <value>Щелкните для получения дополнительной информации</value>
   </data>
   <data name="btnConfigureFlashAlg.ToolTip" xml:space="preserve">
-    <value>Configure</value>
+    <value>Настроить</value>
   </data>
   <data name="chkIncludeJT.Text" xml:space="preserve">
-    <value>Include Joule-Thomson Effect</value>
+    <value>Включить эффект Джоуля — Томсона</value>
   </data>
   <data name="btnConfigurePP.ToolTip" xml:space="preserve">
-    <value>Configure</value>
+    <value>Настроить</value>
   </data>
   <data name="Label2.Text" xml:space="preserve">
-    <value>Calculation Mode</value>
+    <value>Режим вычислений</value>
   </data>
   <data name="cbCalcMode.Items" xml:space="preserve">
-    <value>Specify Length/Hydraulic Profile (Default)</value>
+    <value>Задать Длину/Гидравлический профиль (по умолчанию)</value>
   </data>
   <data name="cbCalcMode.Items1" xml:space="preserve">
-    <value>Specify Outlet Pressure</value>
+    <value>Задать давление на выходе</value>
   </data>
   <data name="cbCalcMode.Items2" xml:space="preserve">
-    <value>Specify Outlet Temperature</value>
+    <value>Задать температуру на выходе</value>
   </data>
   <data name="Label3.Text" xml:space="preserve">
-    <value>Outlet Temperature</value>
+    <value>Температура на выходе</value>
   </data>
   <data name="Label6.Text" xml:space="preserve">
-    <value>Pressure Drop Correlation</value>
+    <value>Корреляция падения давления</value>
   </data>
   <data name="Label1.Text" xml:space="preserve">
-    <value>Outlet Pressure</value>
+    <value>Давление на выходе</value>
   </data>
   <data name="TabPage4.Text" xml:space="preserve">
-    <value>General</value>
+    <value>Общие</value>
   </data>
   <data name="TabPage5.Text" xml:space="preserve">
-    <value>Hydraulic Profile</value>
+    <value>Гидроавлический профиль</value>
   </data>
   <data name="TabPage6.Text" xml:space="preserve">
-    <value>Thermal Profile</value>
+    <value>Температурный профиль</value>
   </data>
   <data name="GroupBox2.Text" xml:space="preserve">
-    <value>Calculation Parameters</value>
+    <value>Параметры расчета</value>
   </data>
   <data name="btnCreateAndConnectEnergy.ToolTip" xml:space="preserve">
-    <value>Create and Connect</value>
+    <value>Присоединить</value>
   </data>
   <data name="btnCreateAndConnectOutlet1.ToolTip" xml:space="preserve">
-    <value>Create and Connect</value>
+    <value>Присоединить</value>
   </data>
   <data name="btnCreateAndConnectInlet1.ToolTip" xml:space="preserve">
-    <value>Create and Connect</value>
+    <value>Присоединить</value>
   </data>
   <data name="btnDisconnectEnergy.ToolTip" xml:space="preserve">
-    <value>Disconnect</value>
+    <value>Отсоединить</value>
   </data>
   <data name="Label14.Text" xml:space="preserve">
-    <value>Energy Stream</value>
+    <value>Поток энергии</value>
   </data>
   <data name="btnDisconnectOutlet1.ToolTip" xml:space="preserve">
-    <value>Disconnect</value>
+    <value>Отсоединить</value>
   </data>
   <data name="btnDisconnect1.ToolTip" xml:space="preserve">
-    <value>Disconnect</value>
+    <value>Отсоединить</value>
   </data>
   <data name="Label7.Text" xml:space="preserve">
-    <value>Outlet Stream</value>
+    <value>Исходящий поток</value>
   </data>
   <data name="Label19.Text" xml:space="preserve">
-    <value>Inlet Stream</value>
+    <value>Входящий поток</value>
   </data>
   <data name="GroupBox1.Text" xml:space="preserve">
-    <value>Connections</value>
+    <value>Соединения</value>
   </data>
   <data name="DataGridViewTextBoxColumn1.HeaderText" xml:space="preserve">
-    <value>Property</value>
+    <value>Свойство</value>
   </data>
   <data name="DataGridViewTextBoxColumn2.HeaderText" xml:space="preserve">
-    <value>Value</value>
+    <value>Значение</value>
   </data>
   <data name="Column1.HeaderText" xml:space="preserve">
-    <value>Units</value>
+    <value>Единицы</value>
   </data>
   <data name="TabPage1.Text" xml:space="preserve">
-    <value>General</value>
+    <value>Общие</value>
   </data>
   <data name="TabPage2.Text" xml:space="preserve">
-    <value>Profile Data</value>
+    <value>Данные профиля</value>
   </data>
   <data name="TabPage3.Text" xml:space="preserve">
-    <value>Profile Graph</value>
+    <value>График профиля</value>
   </data>
   <data name="GroupBox6.Text" xml:space="preserve">
-    <value>Results</value>
+    <value>Результаты</value>
+  </data>
+  <data name="chkActive.ToolTip1" xml:space="preserve">
+    <value>Активно/неактивно</value>
+  </data>
+  <data name="lblConnectedTo.Text" xml:space="preserve">
+    <value>Объект</value>
+  </data>
+  <data name="lblStatus.Text" xml:space="preserve">
+    <value>Объект</value>
   </data>
 </root>

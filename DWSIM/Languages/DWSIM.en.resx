@@ -304,13 +304,13 @@
     <value>Notes</value>
   </data>
   <data name="AoCarbono" xml:space="preserve">
-    <value>Carbon Steel</value>
+    <value>Углеродистая сталь</value>
   </data>
   <data name="AoComum" xml:space="preserve">
-    <value>Raw Steel</value>
+    <value>Сырая сталь</value>
   </data>
   <data name="AoInoxidvel" xml:space="preserve">
-    <value>Steel</value>
+    <value>Сталь</value>
   </data>
   <data name="Aparncia2" xml:space="preserve">
     <value>2. Appearance</value>
@@ -937,7 +937,7 @@
     <value>Condenser Temperature (est.)</value>
   </data>
   <data name="DCCondenserType" xml:space="preserve">
-    <value>Condenser Type</value>
+    <value>Тип конденсатора</value>
   </data>
   <data name="DCCondenserVaporProduct" xml:space="preserve">
     <value>Condenser (Vapor Product)</value>
@@ -1225,7 +1225,7 @@
     <value>Distillation Column</value>
   </data>
   <data name="DistnciaHorizontalm" xml:space="preserve">
-    <value>Horizontal distance (m)</value>
+    <value>Горизонтальное расстояние (м)</value>
   </data>
   <data name="Distribudo" xml:space="preserve">
     <value>Distributed</value>
@@ -1324,7 +1324,7 @@
     <value>Pump overall isentropic efficiency</value>
   </data>
   <data name="Elevaom" xml:space="preserve">
-    <value>Elevation (m)</value>
+    <value>Подъем (м)</value>
   </data>
   <data name="en" xml:space="preserve">
     <value>en</value>
@@ -1468,7 +1468,7 @@
     <value>Pressure error</value>
   </data>
   <data name="Erronasecao" xml:space="preserve">
-    <value>Error in segment</value>
+    <value>Ошибки в сегменте</value>
   </data>
   <data name="Erronasintaxedaexpre" xml:space="preserve">
     <value>Expression error. Check syntax.</value>
@@ -1921,19 +1921,19 @@
     <value>UNIFAC Groups - OK.</value>
   </data>
   <data name="Gs" xml:space="preserve">
-    <value>Gas</value>
+    <value>Газ</value>
   </data>
   <data name="Gsapenas" xml:space="preserve">
-    <value>Vapor Only</value>
+    <value>Газовая фаза</value>
   </data>
   <data name="GsLquidoBifsico" xml:space="preserve">
-    <value>Vapor + Liquid (Two-phase flow)</value>
+    <value>Газ+жидкость (двухфазный поток)</value>
   </data>
   <data name="gua" xml:space="preserve">
-    <value>Water</value>
+    <value>Вода</value>
   </data>
   <data name="guaH2O" xml:space="preserve">
-    <value>Water (H2O)</value>
+    <value>Вода (H2O)</value>
   </data>
   <data name="HeaterCoolerCalcMode" xml:space="preserve">
     <value>Calculation Mode</value>
@@ -2056,7 +2056,7 @@
     <value>J/kmol</value>
   </data>
   <data name="Joelhoem90" xml:space="preserve">
-    <value>Elbow 90°</value>
+    <value>Угол 90°</value>
   </data>
   <data name="Largura" xml:space="preserve">
     <value>Width</value>
@@ -2971,7 +2971,7 @@
     <value>When a component is removed, any binary interaction parameter related to it is lost.</value>
   </data>
   <data name="Quantidade" xml:space="preserve">
-    <value>Quantity</value>
+    <value>Количество</value>
   </data>
   <data name="Quantidadedecalorced" xml:space="preserve">
     <value>Quantity of heat transferred by heater</value>
@@ -3205,7 +3205,7 @@
     <value>Condenser Pressure</value>
   </data>
   <data name="SCCondenserType" xml:space="preserve">
-    <value>Condenser Type</value>
+    <value>Тип конденсатора</value>
   </data>
   <data name="SCDistillate" xml:space="preserve">
     <value>Distillate</value>
@@ -3262,10 +3262,10 @@
     <value>Stripping Vapor</value>
   </data>
   <data name="Segmento" xml:space="preserve">
-    <value>Segment</value>
+    <value>Сегмент</value>
   </data>
   <data name="Segregado" xml:space="preserve">
-    <value>Segregated</value>
+    <value>Смесь</value>
   </data>
   <data name="SelecioLiquidrueparaapl" xml:space="preserve">
     <value>Select 'True' to apply a gradient color of the object</value>
@@ -3520,16 +3520,16 @@
     <value>Text to be displayed in the box</value>
   </data>
   <data name="Tipo" xml:space="preserve">
-    <value>Type</value>
+    <value>Тип</value>
   </data>
   <data name="TipodeFlash" xml:space="preserve">
-    <value>Flash Type</value>
+    <value>Алгоритм</value>
   </data>
   <data name="Tipodesuavizaoaplica" xml:space="preserve">
     <value>Type of smoothing applied to the text of the table</value>
   </data>
   <data name="TipodoObjeto" xml:space="preserve">
-    <value>Object Type</value>
+    <value>Тип объекта</value>
   </data>
   <data name="titulo" xml:space="preserve">
     <value>&lt;title&gt;</value>
@@ -3580,10 +3580,10 @@
     <value>Pipes, turbines and coolers.</value>
   </data>
   <data name="Tubulao" xml:space="preserve">
-    <value>Pipe Segment</value>
+    <value>Сегмент трубы</value>
   </data>
   <data name="Tubulaosimples" xml:space="preserve">
-    <value>Straight tube</value>
+    <value>Прямая труба</value>
   </data>
   <data name="TurbinaAdiabtica" xml:space="preserve">
     <value>Adiabatic Expander</value>
@@ -3595,7 +3595,7 @@
     <value>Turbulent</value>
   </data>
   <data name="Type" xml:space="preserve">
-    <value>Component Type</value>
+    <value>Тип компонента</value>
   </data>
   <data name="UDBAdded" xml:space="preserve">
     <value>You've added an user database. Changes will be effective for new simulations only.</value>
@@ -4096,7 +4096,7 @@
     <value>Condenser Specification</value>
   </data>
   <data name="DCCondenserSpecType" xml:space="preserve">
-    <value>Type</value>
+    <value>Тип</value>
   </data>
   <data name="DCCondenserSpecUnit" xml:space="preserve">
     <value>Unit</value>
@@ -4111,7 +4111,7 @@
     <value>Reboiler Specification</value>
   </data>
   <data name="DCReboilerSpecType" xml:space="preserve">
-    <value>Type</value>
+    <value>Тип</value>
   </data>
   <data name="DCReboilerSpecUnit" xml:space="preserve">
     <value>Unit</value>
@@ -4535,7 +4535,7 @@ PRSV2 is particularly advantageous for VLE calculations. While PRSV1 does offer 
     <value>Properties to Display</value>
   </data>
   <data name="MT_ObjectFamily" xml:space="preserve">
-    <value>Object Type</value>
+    <value>Тип объекта</value>
   </data>
   <data name="Fundo" xml:space="preserve">
     <value>3. Background</value>

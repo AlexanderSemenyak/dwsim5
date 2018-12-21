@@ -363,10 +363,10 @@ In this model, chemical and physical equilibria of NH3, CO2, and H2S in sour wat
     <value>Ignore Vapor Fraction bounds (0 &lt;= VF &lt;= 1) on flash calculations (0 = Disabled, 1 = Enabled)</value>
   </data>
   <data name="MSTR_Desc" xml:space="preserve">
-    <value>Contains information about compounds flowing at specified state conditions</value>
+    <value>Содержит информацию о смеси, протекающей в указанных термодинамических условиях</value>
   </data>
   <data name="MSTR_Name" xml:space="preserve">
-    <value>Material Stream</value>
+    <value>Поток флюида</value>
   </data>
   <data name="PP_POYNTING" xml:space="preserve">
     <value>Use Poynting Correction Factor for liquid phase compound fugacities (0 = Disable, 1 = Enable)</value>

@@ -15,11 +15,11 @@ Public Class EditingForm_FlowsheetUO
     Dim units As SharedClasses.SystemsOfUnits.Units
     Dim nf As String
 
-    Private Sub EditingForm_HeaterCooler_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Sub EditingForm_HeaterCooler_Load(sen1der As Object, e As EventArgs) Handles MyBase.Load
 
         Me.ShowHint = GlobalSettings.Settings.DefaultEditFormLocation
 
-         UpdateInfo()
+        UpdateInfo()
 
     End Sub
 
@@ -155,7 +155,7 @@ Public Class EditingForm_FlowsheetUO
             dgvoutputvars.Rows.Clear()
             For Each item In .OutputParams
                 If .Fsheet.SimulationObjects.ContainsKey(item.Value.ObjectID) Then
-                    dgvoutputvars.Rows.Add(New Object() {.Fsheet.SimulationObjects(item.Value.ObjectID).GraphicObject.Tag & ", " &
+                    dgvoutputvars.Rows.Add(New Object() { .Fsheet.SimulationObjects(item.Value.ObjectID).GraphicObject.Tag & ", " &
                                                         .FlowSheet.GetTranslatedString(item.Value.ObjectProperty),
                                                         .Fsheet.SimulationObjects(item.Value.ObjectID).GetPropertyValue(item.Value.ObjectProperty, .FlowSheet.FlowsheetOptions.SelectedUnitSystem),
                                                         .Fsheet.SimulationObjects(item.Value.ObjectID).GetPropertyUnit(item.Value.ObjectProperty, .FlowSheet.FlowsheetOptions.SelectedUnitSystem)})

@@ -125,13 +125,13 @@
     <value>51, 13</value>
   </data>
   <data name="Label13.Text" xml:space="preserve">
-    <value>Linked to</value>
+    <value>Присоединено к</value>
   </data>
   <data name="Label11.Text" xml:space="preserve">
-    <value>Object</value>
+    <value>Объект</value>
   </data>
   <data name="GroupBox5.Text" xml:space="preserve">
-    <value>General Info</value>
+    <value>Общая информация</value>
   </data>
   <data name="rtbAnnotations.Size" type="System.Drawing.Size, System.Drawing">
     <value>338, 214</value>
@@ -140,25 +140,25 @@
     <value>344, 233</value>
   </data>
   <data name="GroupBox4.Text" xml:space="preserve">
-    <value>Notes</value>
+    <value>Описание</value>
   </data>
   <data name="btnConfigureFlashAlg.ToolTip" xml:space="preserve">
-    <value>Configure</value>
+    <value>Настроить</value>
   </data>
   <data name="btnConfigurePP.ToolTip" xml:space="preserve">
-    <value>Configure</value>
+    <value>Настроить</value>
   </data>
   <data name="Label10.Text" xml:space="preserve">
-    <value>Flash Algorithm</value>
+    <value>Алгоритм</value>
   </data>
   <data name="Label9.Size" type="System.Drawing.Size, System.Drawing">
     <value>92, 13</value>
   </data>
   <data name="Label9.Text" xml:space="preserve">
-    <value>Property Package</value>
+    <value>Модель</value>
   </data>
   <data name="GroupBox3.Text" xml:space="preserve">
-    <value>Property Package Settings</value>
+    <value>Настройки модели</value>
   </data>
   <data name="cbIntPipeDiam.Location" type="System.Drawing.Point, System.Drawing">
     <value>248, 76</value>
@@ -173,7 +173,7 @@
     <value>111, 13</value>
   </data>
   <data name="Label14.Text" xml:space="preserve">
-    <value>Internal Pipe Diameter</value>
+    <value>Внутренний диаметр трубы</value>
   </data>
   <data name="tbOrificePDrop.Location" type="System.Drawing.Point, System.Drawing">
     <value>147, 128</value>
@@ -185,7 +185,7 @@
     <value>107, 13</value>
   </data>
   <data name="Label6.Text" xml:space="preserve">
-    <value>Orifice Pressure Drop</value>
+    <value>Падение давления на диафрагме</value>
   </data>
   <data name="tbOverallPDrop.Location" type="System.Drawing.Point, System.Drawing">
     <value>147, 154</value>
@@ -197,7 +197,7 @@
     <value>110, 13</value>
   </data>
   <data name="Label1.Text" xml:space="preserve">
-    <value>Overall Pressure Drop</value>
+    <value>Общее падение давления</value>
   </data>
   <data name="rbRadius.Location" type="System.Drawing.Point, System.Drawing">
     <value>272, 24</value>
@@ -218,7 +218,7 @@
     <value>107, 13</value>
   </data>
   <data name="Label5.Text" xml:space="preserve">
-    <value>Temperature Change</value>
+    <value>Изменение температуры</value>
   </data>
   <data name="tbCorrF.Location" type="System.Drawing.Point, System.Drawing">
     <value>147, 102</value>
@@ -230,7 +230,7 @@
     <value>88, 13</value>
   </data>
   <data name="Label4.Text" xml:space="preserve">
-    <value>Correction Factor</value>
+    <value>Коэффициент коррекции</value>
   </data>
   <data name="tbBeta.Location" type="System.Drawing.Point, System.Drawing">
     <value>147, 206</value>
@@ -242,7 +242,7 @@
     <value>90, 13</value>
   </data>
   <data name="Label2.Text" xml:space="preserve">
-    <value>Orifice Beta (d/D)</value>
+    <value>Соотношение диаметров (бэта) (д/Д)</value>
   </data>
   <data name="tbOrificeDiameter.Location" type="System.Drawing.Point, System.Drawing">
     <value>147, 50</value>
@@ -254,42 +254,42 @@
     <value>82, 13</value>
   </data>
   <data name="Label3.Text" xml:space="preserve">
-    <value>Orifice Diameter</value>
+    <value>Диаметр диафрагмы</value>
   </data>
   <data name="Label8.Size" type="System.Drawing.Size, System.Drawing">
     <value>95, 13</value>
   </data>
   <data name="Label8.Text" xml:space="preserve">
-    <value>Pressure Tappings</value>
+    <value>Отводы отбора давления</value>
   </data>
   <data name="GroupBox2.Text" xml:space="preserve">
-    <value>Calculation Parameters</value>
+    <value>Настройки расчета</value>
   </data>
   <data name="btnCreateAndConnectOutlet1.ToolTip" xml:space="preserve">
-    <value>Create and Connect</value>
+    <value>Присоединить</value>
   </data>
   <data name="btnCreateAndConnectInlet1.ToolTip" xml:space="preserve">
-    <value>Create and Connect</value>
+    <value>Присоединить</value>
   </data>
   <data name="btnDisconnectOutlet1.ToolTip" xml:space="preserve">
-    <value>Disconnect</value>
+    <value>Отсоединить</value>
   </data>
   <data name="btnDisconnect1.ToolTip" xml:space="preserve">
-    <value>Disconnect</value>
+    <value>Отсоединить</value>
   </data>
   <data name="Label7.Size" type="System.Drawing.Size, System.Drawing">
     <value>71, 13</value>
   </data>
   <data name="Label7.Text" xml:space="preserve">
-    <value>Outlet Stream</value>
+    <value>Исходящий поток</value>
   </data>
   <data name="Label19.Size" type="System.Drawing.Size, System.Drawing">
     <value>63, 13</value>
   </data>
   <data name="Label19.Text" xml:space="preserve">
-    <value>Inlet Stream</value>
+    <value>Входящий поток</value>
   </data>
   <data name="GroupBox1.Text" xml:space="preserve">
-    <value>Connections</value>
+    <value>Соединения</value>
   </data>
 </root>

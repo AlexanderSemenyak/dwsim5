@@ -146,7 +146,7 @@
     <value>159, 13</value>
   </data>
   <data name="Label26.Text" xml:space="preserve">
-    <value>Ambient Temperature / Gradient</value>
+    <value>Температура окружающей среды / Градиент</value>
   </data>
   <data name="Label28.Location" type="System.Drawing.Point, System.Drawing">
     <value>240, 251</value>
@@ -158,25 +158,25 @@
     <value>111, 13</value>
   </data>
   <data name="Label29.Text" xml:space="preserve">
-    <value>Velocity [or deepness]</value>
+    <value>Скорость [или глубина]</value>
   </data>
   <data name="ComboBoxMAMB.Items" xml:space="preserve">
-    <value>Air</value>
+    <value>Воздух</value>
   </data>
   <data name="ComboBoxMAMB.Items1" xml:space="preserve">
-    <value>Water</value>
+    <value>Вода</value>
   </data>
   <data name="ComboBoxMAMB.Items2" xml:space="preserve">
-    <value>Gravel</value>
+    <value>Гравий</value>
   </data>
   <data name="ComboBoxMAMB.Items3" xml:space="preserve">
-    <value>Stones</value>
+    <value>Камень</value>
   </data>
   <data name="ComboBoxMAMB.Items4" xml:space="preserve">
-    <value>Dry soil</value>
+    <value>Сухая почва</value>
   </data>
   <data name="ComboBoxMAMB.Items5" xml:space="preserve">
-    <value>Moist soil</value>
+    <value>Сырая почва</value>
   </data>
   <data name="ComboBoxMAMB.Location" type="System.Drawing.Point, System.Drawing">
     <value>170, 220</value>
@@ -188,7 +188,7 @@
     <value>66, 13</value>
   </data>
   <data name="Label30.Text" xml:space="preserve">
-    <value>Environment</value>
+    <value>Окружение</value>
   </data>
   <data name="Label31.Location" type="System.Drawing.Point, System.Drawing">
     <value>240, 165</value>
@@ -203,7 +203,7 @@
     <value>44, 13</value>
   </data>
   <data name="Label33.Text" xml:space="preserve">
-    <value>W / mK</value>
+    <value>Вт / мК</value>
   </data>
   <data name="TextBoxCTERM.Location" type="System.Drawing.Point, System.Drawing">
     <value>170, 136</value>
@@ -212,31 +212,31 @@
     <value>106, 13</value>
   </data>
   <data name="Label34.Text" xml:space="preserve">
-    <value>Thermal Conductivity</value>
+    <value>Коэффициент теплопроводности</value>
   </data>
   <data name="ComboBoxMAT.Items" xml:space="preserve">
-    <value>Asphalt</value>
+    <value>Асфальт</value>
   </data>
   <data name="ComboBoxMAT.Items1" xml:space="preserve">
-    <value>Concrete</value>
+    <value>Бетон</value>
   </data>
   <data name="ComboBoxMAT.Items2" xml:space="preserve">
-    <value>Polyurethane Foam</value>
+    <value>Пенополиуретан</value>
   </data>
   <data name="ComboBoxMAT.Items3" xml:space="preserve">
-    <value>Foam PVC</value>
+    <value>Вспененный ПВХ</value>
   </data>
   <data name="ComboBoxMAT.Items4" xml:space="preserve">
-    <value>Fiberglass</value>
+    <value>Стекловолокно</value>
   </data>
   <data name="ComboBoxMAT.Items5" xml:space="preserve">
-    <value>Plastic</value>
+    <value>Пластик</value>
   </data>
   <data name="ComboBoxMAT.Items6" xml:space="preserve">
-    <value>Glass</value>
+    <value>Стекло</value>
   </data>
   <data name="ComboBoxMAT.Items7" xml:space="preserve">
-    <value>User Defined</value>
+    <value>Пользовательские настройки</value>
   </data>
   <data name="ComboBoxMAT.Location" type="System.Drawing.Point, System.Drawing">
     <value>170, 109</value>
@@ -248,7 +248,7 @@
     <value>91, 13</value>
   </data>
   <data name="Label35.Text" xml:space="preserve">
-    <value>Insulation material</value>
+    <value>Изоляционный материал</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="CheckBoxICTE.AutoSize" type="System.Boolean, mscorlib">
@@ -258,7 +258,7 @@
     <value>126, 17</value>
   </data>
   <data name="CheckBoxICTE.Text" xml:space="preserve">
-    <value>Include external HTC</value>
+    <value>Включая внешний термоперенос (HTC)</value>
   </data>
   <data name="CheckBoxICTI.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -267,7 +267,7 @@
     <value>123, 17</value>
   </data>
   <data name="CheckBoxICTI.Text" xml:space="preserve">
-    <value>Include internal HTC</value>
+    <value>Включая внутренний термоперенос (HTC)</value>
   </data>
   <data name="CheckBoxII.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -276,7 +276,7 @@
     <value>108, 17</value>
   </data>
   <data name="CheckBoxII.Text" xml:space="preserve">
-    <value>Include insulation</value>
+    <value>Включая изоляцию</value>
   </data>
   <data name="CheckBoxIPT.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -285,10 +285,10 @@
     <value>110, 17</value>
   </data>
   <data name="CheckBoxIPT.Text" xml:space="preserve">
-    <value>Include pipe walls</value>
+    <value>Включая стенки трубы</value>
   </data>
   <data name="RadioButton8.Text" xml:space="preserve">
-    <value>Define the heat exchanged</value>
+    <value>Определить фактический теплообмен </value>
   </data>
   <data name="GroupBox8.Size" type="System.Drawing.Size, System.Drawing">
     <value>326, 39</value>
@@ -303,10 +303,10 @@
     <value>86, 13</value>
   </data>
   <data name="Label38.Text" xml:space="preserve">
-    <value>Heat exchanged</value>
+    <value>Фактический теплообмен </value>
   </data>
   <data name="RadioButton9.Text" xml:space="preserve">
-    <value>Define Overall Heat Transfer Coefficient</value>
+    <value>Задать полный коэффициент теплопередачи</value>
   </data>
   <data name="GroupBox9.Size" type="System.Drawing.Size, System.Drawing">
     <value>326, 80</value>
@@ -330,7 +330,7 @@
     <value>159, 13</value>
   </data>
   <data name="Label51.Text" xml:space="preserve">
-    <value>Ambient Temperature / Gradient</value>
+    <value>Температура окружающей среды / Градиент</value>
   </data>
   <data name="Label52.Location" type="System.Drawing.Point, System.Drawing">
     <value>221, 20</value>
@@ -342,7 +342,7 @@
     <value>65, 13</value>
   </data>
   <data name="Label53.Text" xml:space="preserve">
-    <value>Overall HTC</value>
+    <value>Общий теплообмен (HTC)</value>
   </data>
   <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
     <value>338, 483</value>
