@@ -271,7 +271,7 @@
     <value>Add objects to the flowsheet</value>
   </data>
   <data name="AdjustValue" xml:space="preserve">
-    <value>Adjust Value</value>
+    <value>Подстраиваемое значение</value>
   </data>
   <data name="AF" xml:space="preserve">
     <value>Acentric Factor</value>
@@ -433,25 +433,25 @@
     <value>Textbox</value>
   </data>
   <data name="Calculado" xml:space="preserve">
-    <value>Calculated</value>
+    <value>Рассчитано</value>
   </data>
   <data name="Calculadocomsucesso" xml:space="preserve">
-    <value>Calculated successfully.</value>
+    <value>Расчет успешно завершенy.</value>
   </data>
   <data name="Calculadorativado" xml:space="preserve">
-    <value>Calculator enabled</value>
+    <value>Калькулятор включен</value>
   </data>
   <data name="Calculadordesativado" xml:space="preserve">
-    <value>Calculator disabled</value>
+    <value>Калькулятор отключен</value>
   </data>
   <data name="CalculadorDesativado1" xml:space="preserve">
-    <value>Calculator Status: Disabled</value>
+    <value>Статус калькулятора: Отключен</value>
   </data>
   <data name="CalculadorOcioso" xml:space="preserve">
-    <value>Calculator Status: Idle</value>
+    <value>Статус калькулятора: Ожидание</value>
   </data>
   <data name="Calculando" xml:space="preserve">
-    <value>Calculating</value>
+    <value>Вычисляется</value>
   </data>
   <data name="Calcularobjetodestin" xml:space="preserve">
     <value>Calculate target object?</value>
@@ -1108,7 +1108,7 @@
     <value>Delta-P</value>
   </data>
   <data name="DeltaStepsize" xml:space="preserve">
-    <value>Step Size</value>
+    <value>Размер шага</value>
   </data>
   <data name="DeltaT" xml:space="preserve">
     <value>Delta-T</value>
@@ -2215,7 +2215,7 @@
     <value>Material</value>
   </data>
   <data name="MaximumIterations" xml:space="preserve">
-    <value>MaximumIterations</value>
+    <value>Макс. кол-во итераций</value>
   </data>
   <data name="MaxPressureIteration" xml:space="preserve">
     <value>MaxPressureIterations</value>
@@ -2224,7 +2224,7 @@
     <value>MaxTemperatureIterations</value>
   </data>
   <data name="MaxVal" xml:space="preserve">
-    <value>MaxVal</value>
+    <value>МаксЗнач</value>
   </data>
   <data name="Mensagem" xml:space="preserve">
     <value>Message</value>
@@ -2248,7 +2248,7 @@
     <value>minutes</value>
   </data>
   <data name="MinVal" xml:space="preserve">
-    <value>MinVal</value>
+    <value>МинЗнач</value>
   </data>
   <data name="Miscelnea2" xml:space="preserve">
     <value>2. Miscellanea</value>
@@ -2530,7 +2530,7 @@
     <value>The XML file information is invalid or corrupt.</value>
   </data>
   <data name="Objeto" xml:space="preserve">
-    <value>Object</value>
+    <value>Объект</value>
   </data>
   <data name="Objetonoencontrado" xml:space="preserve">
     <value>Object not found.</value>
@@ -2617,10 +2617,10 @@
     <value>Package Properties of reference, where the thermodynamic equilibrium is calculated by the Raoult's Law. The Enthalpies, Entropies and Heat Capacity Wastes are considered equal to zero. The expression of Liquid Phase uses the values of Delta-H, Vaporization, experimental or calculated in the case of Pseudo-components/Hypotheticals.</value>
   </data>
   <data name="PaineldeControle" xml:space="preserve">
-    <value>Control Panel</value>
+    <value>Панель настройки</value>
   </data>
   <data name="PaineldeControle1" xml:space="preserve">
-    <value>  -- Control Panel</value>
+    <value>  -- Панель настройки</value>
   </data>
   <data name="ParaclculodoELVdehid" xml:space="preserve">
     <value>To calculate the ELV of hydrocarbons and/or non-condensables, use the EE PR or SRK.</value>
@@ -3421,7 +3421,7 @@
     <value>SRK Volume Translation Coefficient</value>
   </data>
   <data name="StatusOcioso" xml:space="preserve">
-    <value>Status: Idle</value>
+    <value>Статус: Ожидание</value>
   </data>
   <data name="Compound" xml:space="preserve">
     <value>Component</value>
@@ -3544,7 +3544,7 @@
     <value>All connection points for the selected object are already occupied.</value>
   </data>
   <data name="Tolerncia" xml:space="preserve">
-    <value>Tolerance</value>
+    <value>Чувствительность</value>
   </data>
   <data name="Tolernciaparaadifere" xml:space="preserve">
     <value>Tolerance for the difference between the values of the temperature of the input/output streams.</value>
@@ -4930,7 +4930,7 @@ FPROPS is Copyright (C) 2011 - Carnegie Mellon University</value>
     <value>Flowsheet not initialized, click on the button on the left to initialize it.</value>
   </data>
   <data name="FlowsheetUOEditor" xml:space="preserve">
-    <value>Control panel</value>
+    <value>Панель настройки</value>
   </data>
   <data name="FlowsheetUOEditorDesc" xml:space="preserve">
     <value>Initialize the flowsheet, define material stream links, expose object properties and select the mass transfer mode between streams.</value>

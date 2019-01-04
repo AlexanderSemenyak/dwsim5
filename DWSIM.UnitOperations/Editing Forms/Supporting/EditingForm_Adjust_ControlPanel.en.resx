@@ -121,47 +121,47 @@
     <value>Stop</value>
   </data>
   <data name="btnIniciar.Text" xml:space="preserve">
-    <value>Start Adjust</value>
+    <value>Запустить поиск решения</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="rbSecante.Size" type="System.Drawing.Size, System.Drawing">
     <value>59, 17</value>
   </data>
   <data name="rbSecante.Text" xml:space="preserve">
-    <value>Secant</value>
+    <value>Сечения</value>
   </data>
   <data name="Label1.Size" type="System.Drawing.Size, System.Drawing">
     <value>78, 13</value>
   </data>
   <data name="Label1.Text" xml:space="preserve">
-    <value>Max/Min Limits</value>
+    <value>Макс/Мин границы</value>
   </data>
   <data name="KryptonLabel1.Size" type="System.Drawing.Size, System.Drawing">
     <value>109, 13</value>
   </data>
   <data name="KryptonLabel1.Text" xml:space="preserve">
-    <value>Convergence method</value>
+    <value>Метод сходимости</value>
   </data>
   <data name="Label5.Size" type="System.Drawing.Size, System.Drawing">
     <value>96, 13</value>
   </data>
   <data name="Label5.Text" xml:space="preserve">
-    <value>Maximum iterations</value>
+    <value>Максимальное количество итераций</value>
   </data>
   <data name="Label4.Size" type="System.Drawing.Size, System.Drawing">
     <value>55, 13</value>
   </data>
   <data name="Label4.Text" xml:space="preserve">
-    <value>Tolerance</value>
+    <value>Чувствительность</value>
   </data>
   <data name="Label3.Size" type="System.Drawing.Size, System.Drawing">
     <value>50, 13</value>
   </data>
   <data name="Label3.Text" xml:space="preserve">
-    <value>Step size</value>
+    <value>Размер шага</value>
   </data>
   <data name="GroupBox2.Text" xml:space="preserve">
-    <value>Parameters</value>
+    <value>Параметры</value>
   </data>
   <data name="GraphControl.Size" type="System.Drawing.Size, System.Drawing">
     <value>498, 246</value>
@@ -170,10 +170,10 @@
     <value>498, 246</value>
   </data>
   <data name="FaTabStripItem1.Title" xml:space="preserve">
-    <value>Graph</value>
+    <value>График</value>
   </data>
   <data name="FaTabStripItem2.Title" xml:space="preserve">
-    <value>Table</value>
+    <value>Таблица</value>
   </data>
   <data name="FaTabStrip1.Size" type="System.Drawing.Size, System.Drawing">
     <value>500, 267</value>
@@ -182,13 +182,13 @@
     <value>65, 13</value>
   </data>
   <data name="Label8.Text" xml:space="preserve">
-    <value>Current error</value>
+    <value>Текущая ошибка</value>
   </data>
   <data name="Label2.Size" type="System.Drawing.Size, System.Drawing">
     <value>65, 13</value>
   </data>
   <data name="Label2.Text" xml:space="preserve">
-    <value>Adjust value</value>
+    <value>Подстраиваемое значение</value>
   </data>
   <data name="GroupBox3.Location" type="System.Drawing.Point, System.Drawing">
     <value>7, 170</value>
@@ -197,42 +197,45 @@
     <value>514, 351</value>
   </data>
   <data name="GroupBox3.Text" xml:space="preserve">
-    <value>Results</value>
+    <value>Результаты</value>
   </data>
   <data name="ToolStripLabel1.Size" type="System.Drawing.Size, System.Drawing">
     <value>51, 25</value>
   </data>
   <data name="ToolStripLabel1.Text" xml:space="preserve">
-    <value>Docking</value>
+    <value>Расположение</value>
   </data>
   <data name="tsbDockingLeft.Text" xml:space="preserve">
-    <value>Left</value>
+    <value>Слева</value>
   </data>
   <data name="tsbDockingLeftAutoHide.Text" xml:space="preserve">
-    <value>Left Auto-Hide</value>
+    <value>Слева(автоскрываемое)</value>
   </data>
   <data name="tsbDockingRightAutoHide.Text" xml:space="preserve">
-    <value>Right Auto-Hide</value>
+    <value>Справа(автоскрываемое)</value>
   </data>
   <data name="tsbDockingRight.Text" xml:space="preserve">
-    <value>Right</value>
+    <value>Справа</value>
   </data>
   <data name="tsbDockingTop.Text" xml:space="preserve">
-    <value>Top</value>
+    <value>Сверху</value>
   </data>
   <data name="tsbDockingBottom.Text" xml:space="preserve">
-    <value>Bottom</value>
+    <value>Снизу</value>
   </data>
   <data name="tsbDockingDocument.Text" xml:space="preserve">
-    <value>Document</value>
+    <value>Документ</value>
   </data>
   <data name="tsbDockingFloat.Text" xml:space="preserve">
-    <value>Floating Window</value>
+    <value>Плавающее окно</value>
   </data>
   <data name="tsbClose.Size" type="System.Drawing.Size, System.Drawing">
     <value>56, 25</value>
   </data>
   <data name="tsbClose.Text" xml:space="preserve">
-    <value>Close</value>
+    <value>Закрыть</value>
+  </data>
+  <data name="rbBrent.Text" xml:space="preserve">
+    <value>Брента</value>
   </data>
 </root>
