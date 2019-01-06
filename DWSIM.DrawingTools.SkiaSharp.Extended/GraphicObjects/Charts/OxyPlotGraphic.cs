@@ -23,7 +23,7 @@ namespace DWSIM.Drawing.SkiaSharp.GraphicObjects.Charts
         public void Init()
         {
             this.ObjectType = DWSIM.Interfaces.Enums.GraphicObjects.ObjectType.GO_Chart;
-            this.Description = "Chart Object";
+            this.Description = "График";
             Width = 100;
             Height = 100;
         }

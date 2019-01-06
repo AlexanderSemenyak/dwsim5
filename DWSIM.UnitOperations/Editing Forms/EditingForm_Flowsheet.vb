@@ -474,7 +474,7 @@ Public Class EditingForm_FlowsheetUO
 
     Private Sub BtnSearch_Click(sender As Object, e As EventArgs) Handles BtnSearch.Click
         OpenFileDialog1.FileName = TbFileName.Text
-        OpenFileDialog1.Filter = "DWSIM Simulation files|*.dwxml; *.dwxmz"
+        OpenFileDialog1.Filter = "Файлы модели|*.armxml; *.armgz"
 
         OpenFileDialog1.ValidateNames = True
         OpenFileDialog1.CheckFileExists = True

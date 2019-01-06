@@ -436,7 +436,7 @@
     <value>Рассчитано</value>
   </data>
   <data name="Calculadocomsucesso" xml:space="preserve">
-    <value>Расчет успешно завершенy.</value>
+    <value>Расчет успешно завершен.</value>
   </data>
   <data name="Calculadorativado" xml:space="preserve">
     <value>Калькулятор включен</value>
@@ -2212,7 +2212,7 @@
     <value>Molecular Weight (mixture)</value>
   </data>
   <data name="Material" xml:space="preserve">
-    <value>Material</value>
+    <value>Материал</value>
   </data>
   <data name="MaximumIterations" xml:space="preserve">
     <value>Макс. кол-во итераций</value>
@@ -2227,7 +2227,7 @@
     <value>МаксЗнач</value>
   </data>
   <data name="Mensagem" xml:space="preserve">
-    <value>Message</value>
+    <value>Сообщение</value>
   </data>
   <data name="Mensagemdeerro" xml:space="preserve">
     <value>Error Message</value>
@@ -2236,16 +2236,16 @@
     <value>Message to return in case of errors in calculation.</value>
   </data>
   <data name="Mensagens" xml:space="preserve">
-    <value> Messages</value>
+    <value> Сообщения</value>
   </data>
   <data name="Mensagens1" xml:space="preserve">
-    <value> Message</value>
+    <value> Сообщение</value>
   </data>
   <data name="minuto1" xml:space="preserve">
-    <value>1 minute</value>
+    <value>1 минута</value>
   </data>
   <data name="minutos" xml:space="preserve">
-    <value>minutes</value>
+    <value>минут</value>
   </data>
   <data name="MinVal" xml:space="preserve">
     <value>МинЗнач</value>
@@ -2332,7 +2332,7 @@
     <value>Shows the composition of the vapor phase, in volumetric flow rates</value>
   </data>
   <data name="Motivo" xml:space="preserve">
-    <value>Reason:</value>
+    <value>Причина:</value>
   </data>
   <data name="mssica" xml:space="preserve">
     <value>Mass</value>
@@ -2410,10 +2410,10 @@
     <value>n-Nonane (nC9)</value>
   </data>
   <data name="No" xml:space="preserve">
-    <value>No</value>
+    <value>Нет</value>
   </data>
   <data name="NoCalculado" xml:space="preserve">
-    <value>Not Calculated</value>
+    <value>Не рассчитано</value>
   </data>
   <data name="Noexisteguanacorrent" xml:space="preserve">
     <value>There is no water in the stream selected.</value>
@@ -2422,10 +2422,10 @@
     <value>Please add and setup a Property Package to continue.</value>
   </data>
   <data name="Noexistemsimulaesase" xml:space="preserve">
-    <value>No simulations to be saved.</value>
+    <value>Нет расчетов к сохранению.</value>
   </data>
   <data name="Noexistemsimulaesati" xml:space="preserve">
-    <value>No active simulations.</value>
+    <value>Нет активных расчетов.</value>
   </data>
   <data name="Noexistesoluonointer" xml:space="preserve">
     <value>There is no solution in the specified range.</value>
@@ -3166,7 +3166,7 @@
     <value>Click on the button to view the PFR Properties Profile</value>
   </data>
   <data name="Runtime" xml:space="preserve">
-    <value>Last run execution time</value>
+    <value>Время последнего выполнения</value>
   </data>
   <data name="Rxn_DefaultSetDesc" xml:space="preserve">
     <value>Default Reaction Set</value>
@@ -4216,22 +4216,22 @@
     <value>Correction factor</value>
   </data>
   <data name="OPDeltaT" xml:space="preserve">
-    <value>Delta T</value>
+    <value>Дельта-T</value>
   </data>
   <data name="OPOrificeDiameter" xml:space="preserve">
-    <value>Orifice diameter</value>
+    <value>Диаметр диафрагмы</value>
   </data>
   <data name="OPOrificePressureDrop" xml:space="preserve">
-    <value>Orifice pressure drop</value>
+    <value>Падение давления на диафрагме</value>
   </data>
   <data name="OPOrificeType" xml:space="preserve">
     <value>Pressure tappings</value>
   </data>
   <data name="OPOverallPressureDrop" xml:space="preserve">
-    <value>Overall pressure drop</value>
+    <value>Общее падение давления</value>
   </data>
   <data name="OrificePlate" xml:space="preserve">
-    <value>Orifice Plate</value>
+    <value>Диафрагма</value>
   </data>
   <data name="RGFinalG" xml:space="preserve">
     <value>Final Gibbs Free Energy</value>
@@ -4993,13 +4993,13 @@ FPROPS is Copyright (C) 2011 - Carnegie Mellon University</value>
     <value>Errors occurred during the calculation of the flowsheet, please read the following messages for more details.</value>
   </data>
   <data name="FSfinishedsolvingok" xml:space="preserve">
-    <value>The flowsheet was calculated successfully.</value>
+    <value>Модель успешно рассчитана.</value>
   </data>
   <data name="FSstartedsolving" xml:space="preserve">
-    <value>The flowsheet is being calculated, please wait...</value>
+    <value>Модель рассчитывается, ожидайте...</value>
   </data>
   <data name="SolverTimeout" xml:space="preserve">
-    <value>The solver was unable to calculate the flowsheet within the specified timeout limit.</value>
+    <value>Калькулятор не смог рассчитать модель в заданный лимит времени.</value>
   </data>
   <data name="RecycleMaxItsReached" xml:space="preserve">
     <value>Recycle reached the maximum number of iterations without converging.</value>
@@ -5065,7 +5065,7 @@ FPROPS is Copyright (C) 2011 - Carnegie Mellon University</value>
     <value>Experimental data</value>
   </data>
   <data name="Dica" xml:space="preserve">
-    <value>Tip</value>
+    <value>Совет</value>
   </data>
   <data name="InputVariables" xml:space="preserve">
     <value>Input Variables</value>

@@ -12,7 +12,7 @@ Namespace GraphicObjects.Shapes
 
         Public Sub New()
             Me.ObjectType = DWSIM.Interfaces.Enums.GraphicObjects.ObjectType.OrificePlate
-            Me.Description = "Orifice Plate"
+            Me.Description = "Диафрагма"
         End Sub
 
         Public Sub New(ByVal graphicPosition As SKPoint)

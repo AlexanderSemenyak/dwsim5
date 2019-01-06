@@ -12,7 +12,7 @@ Namespace GraphicObjects.Shapes
 
         Public Sub New()
             Me.ObjectType = DWSIM.Interfaces.Enums.GraphicObjects.ObjectType.CompressorExpander
-            Me.Description = "Adiabatic Compressor/Expander"
+            Me.Description = "Адиабатический компрессор/декомпрессор"
         End Sub
 
         Public Sub New(ByVal graphicPosition As SKPoint)

@@ -486,7 +486,7 @@ Imports System.Dynamic
             Case ObjectType.OT_Adjust
 
                 Dim myNode As New AdjustGraphic(mpx, mpy, 40, 40)
-                myNode.Tag = "ADJ-" & SimulationObjects.Count.ToString("00#")
+                myNode.Tag = "ПОДСТР-" & SimulationObjects.Count.ToString("00#")
                 If tag <> "" Then myNode.Tag = tag
                 gObj = myNode
                 gObj.Name = Guid.NewGuid.ToString
@@ -499,10 +499,10 @@ Imports System.Dynamic
             Case ObjectType.OT_Spec
 
                 Dim myNode As New SpecGraphic(mpx, mpy, 40, 40)
-                myNode.Tag = "SPEC-" & SimulationObjects.Count.ToString("00#")
+                myNode.Tag = "ПРИСВ-" & SimulationObjects.Count.ToString("00#")
                 If tag <> "" Then myNode.Tag = tag
                 gObj = myNode
-                gObj.Name = "SPEC-" & Guid.NewGuid.ToString
+                gObj.Name = "ПРИСВ-" & Guid.NewGuid.ToString
                 If id <> "" Then gObj.Name = id
                 GraphicObjects.Add(gObj.Name, myNode)
                 Dim myADJ As Spec = New Spec(myNode.Name, "Especificao")
@@ -512,10 +512,10 @@ Imports System.Dynamic
             Case ObjectType.OT_Recycle
 
                 Dim myNode As New RecycleGraphic(mpx, mpy, 40, 40)
-                myNode.Tag = "REC-" & SimulationObjects.Count.ToString("00#")
+                myNode.Tag = "ПОВТИСП-" & SimulationObjects.Count.ToString("00#")
                 If tag <> "" Then myNode.Tag = tag
                 gObj = myNode
-                gObj.Name = "REC-" & Guid.NewGuid.ToString
+                gObj.Name = "ПОВТИСП-" & Guid.NewGuid.ToString
                 If id <> "" Then gObj.Name = id
                 GraphicObjects.Add(gObj.Name, myNode)
                 Dim myADJ As Recycle = New Recycle(myNode.Name, "")
@@ -525,10 +525,10 @@ Imports System.Dynamic
             Case ObjectType.OT_EnergyRecycle
 
                 Dim myNode As New EnergyRecycleGraphic(mpx, mpy, 40, 40)
-                myNode.Tag = "EREC-" & SimulationObjects.Count.ToString("00#")
+                myNode.Tag = "ЭПОВТИСП-" & SimulationObjects.Count.ToString("00#")
                 If tag <> "" Then myNode.Tag = tag
                 gObj = myNode
-                gObj.Name = "EREC-" & Guid.NewGuid.ToString
+                gObj.Name = "ЭПОВТИСП-" & Guid.NewGuid.ToString
                 If id <> "" Then gObj.Name = id
                 GraphicObjects.Add(gObj.Name, myNode)
                 Dim myADJ As EnergyRecycle = New EnergyRecycle(myNode.Name, "EnergyRecycle")

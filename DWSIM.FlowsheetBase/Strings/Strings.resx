@@ -3052,7 +3052,7 @@
     <value>Click on the button to view the PFR Properties Profile</value>
   </data>
   <data name="Runtime" xml:space="preserve">
-    <value>Last run execution time</value>
+    <value>Время последнего выполнения</value>
   </data>
   <data name="Rxn_DefaultSetDesc" xml:space="preserve">
     <value>Default Reaction Set</value>

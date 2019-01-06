@@ -32,6 +32,8 @@ Imports DWSIM.Interfaces.Enums.GraphicObjects
 Imports System.Windows.Forms
 Imports cv = DWSIM.SharedClasses.SystemsOfUnits.Converter
 Imports System.Globalization
+Imports CoolPropInterface.source
+Imports DWSIM.Interfaces.DWSIM.Interfaces
 
 Namespace Streams
 
@@ -3007,7 +3009,7 @@ Namespace Streams
             Dim f As Integer = 0
             Dim phs As PropertyPackages.Phase
             Select Case phase.ToLower
-                Case "overall"
+                Case PropertyNames.Phase.overall '"overall"
                     f = 0
                     phs = PropertyPackages.Phase.Mixture
                 Case Else
@@ -3020,10 +3022,10 @@ Namespace Streams
                     Next
             End Select
             Select Case [property].ToLower
-                Case "compressibilityfactor"
+                Case PropertyNames.MaterialStream.compressibilityfactor '"compressibilityfactor"
                     res.Add(Me.Phases(f).Properties.compressibilityFactor.GetValueOrDefault)
-                Case "heatofvaporization"
-                Case "heatcapacity", "heatcapacitycp"
+                Case PropertyNames.MaterialStream.heatofvaporization'"heatofvaporization"
+                Case PropertyNames.MaterialStream.heatcapacity, PropertyNames.MaterialStream.heatcapacitycp ' "heatcapacity", "heatcapacitycp"
                     Select Case basis
                         Case "Molar", "molar", "mole", "Mole"
                             res.Add(Me.Phases(f).Properties.heatCapacityCp * Me.PropertyPackage.AUX_MMM(phs))

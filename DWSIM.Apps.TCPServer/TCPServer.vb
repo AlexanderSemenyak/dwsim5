@@ -22,6 +22,7 @@ Imports System.Threading.Tasks
 Imports DWSIM
 Imports System.Reflection
 Imports System.Runtime.Serialization.Formatters.Binary
+Imports TCPServer.My.Resources
 
 Module TCPServer
 
@@ -37,11 +38,11 @@ Module TCPServer
         solutions = New Dictionary(Of String, Byte())
 
         Console.WriteLine()
-        Console.WriteLine("DWSIM - Open Source Process Simulator")
-        Console.WriteLine("Network TCP/IP Solver Server")
+        Console.WriteLine(locAbout)
+        Console.WriteLine("TCP/IP Server")
         Console.WriteLine(My.Application.Info.Copyright)
         Dim dt As DateTime = CType("01/01/2000", DateTime).AddDays(My.Application.Info.Version.Build).AddSeconds(My.Application.Info.Version.Revision * 2)
-        Console.WriteLine("Version " & My.Application.Info.Version.Major & "." & My.Application.Info.Version.Minor & _
+        Console.WriteLine("Version " & My.Application.Info.Version.Major & "." & My.Application.Info.Version.Minor &
         ", Build " & My.Application.Info.Version.Build & " (" & Format(dt, "dd/MM/yyyy HH:mm") & ")")
         If Type.GetType("Mono.Runtime") Is Nothing Then
             Console.WriteLine("Microsoft .NET Framework Runtime Version " & System.Runtime.InteropServices.RuntimeEnvironment.GetSystemVersion.ToString())
@@ -63,18 +64,18 @@ Module TCPServer
         If My.Application.CommandLineArgs.Count > 0 Then
             port = My.Application.CommandLineArgs(0)
         Else
-            Console.Write("Please enter the TCP Port Number to listen to: ")
+            Console.Write(locEnter_the_TCP_Port_Number_to_listen_to)
             port = Console.ReadLine()
         End If
 
         server.Start(port)
 
-        Console.WriteLine("[" & Date.Now.ToString & "] " & "Server IP Addresses:")
+        Console.WriteLine("[" & Date.Now.ToString & "] " & TCPServer_Main_Server_IP_Addresses)
         For Each adr In System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName()).AddressList()
             Console.WriteLine(adr.ToString)
         Next
         Console.WriteLine()
-        Console.WriteLine("[" & Date.Now.ToString & "] " & "Server is running and listening to incoming data on port " & port & "...")
+        Console.WriteLine("[" & Date.Now.ToString & "] " & locTCPServer_Main_Server_is_running_and_listening_to_incoming_data_on_port & port & "...")
 
         Dim icounter As Integer = 100
 
@@ -118,8 +119,8 @@ Module TCPServer
 
             Dim errmsg As String = ""
 
-            Console.WriteLine("[" & Date.Now.ToString & "] " & "Data received from " & server.GetSession(sessionID).machineId & ", flowsheet solving started!")
-            If Not server.SendText("Data received from " & server.GetSession(sessionID).machineId & ", flowsheet solving started!", 2, sessionID, errmsg) Then
+            Console.WriteLine("[" & Date.Now.ToString & "] " & TCPServer_Process_Data_received_from & server.GetSession(sessionID).machineId & TCPServer_Process_flowsheet_solving_started)
+            If Not server.SendText(TCPServer_Process_Data_received_from & server.GetSession(sessionID).machineId & TCPServer_Process_flowsheet_solving_started, 2, sessionID, errmsg) Then
                 Console.WriteLine(errmsg)
             End If
 
@@ -127,23 +128,23 @@ Module TCPServer
                                       ProcessData(bytes, sessionID, dataChannel)
                                   End Sub, ct, TaskCreationOptions.LongRunning).ContinueWith(Sub(t)
                                                                                                  If Not t.Exception Is Nothing Then
-                                                                                                     Console.WriteLine("[" & Date.Now.ToString & "] " & "Error solving flowsheet: " & t.Exception.ToString)
+                                                                                                     Console.WriteLine("[" & Date.Now.ToString & "] " & TCPServer_Process_Error_solving_flowsheet & t.Exception.ToString)
                                                                                                      errmsg = ""
-                                                                                                     If Not server.SendText("Error solving flowsheet: " & t.Exception.ToString, 3, sessionID, errmsg) Then
+                                                                                                     If Not server.SendText(TCPServer_Process_Error_solving_flowsheet & t.Exception.ToString, 3, sessionID, errmsg) Then
                                                                                                          Console.WriteLine(errmsg)
                                                                                                      End If
                                                                                                  ElseIf t.IsCanceled Then
-                                                                                                     Console.WriteLine("[" & Date.Now.ToString & "] " & "Calculation aborted.")
+                                                                                                     Console.WriteLine("[" & Date.Now.ToString & "] " & TCPServer_Process_Calculation_aborted)
                                                                                                      errmsg = ""
-                                                                                                     If Not server.SendText("Calculation aborted.", 2, sessionID, errmsg) Then
+                                                                                                     If Not server.SendText(TCPServer_Process_Calculation_aborted, 2, sessionID, errmsg) Then
                                                                                                          Console.WriteLine(errmsg)
                                                                                                      End If
                                                                                                  End If
                                                                                              End Sub,
                                                         TaskContinuationOptions.OnlyOnFaulted).ContinueWith(Sub()
-                                                                                                                Console.WriteLine("[" & Date.Now.ToString & "] " & "Closing current session with " & server.GetSession(sessionID).machineId & ".")
+                                                                                                                Console.WriteLine("[" & Date.Now.ToString & "] " & TCPServer_Process_Closing_current_session_with & server.GetSession(sessionID).machineId & ".")
                                                                                                                 errmsg = ""
-                                                                                                                If Not server.SendText("Closing current session with " & server.GetSession(sessionID).machineId & ".", 2, sessionID, errmsg) Then
+                                                                                                                If Not server.SendText(TCPServer_Process_Closing_current_session_with & server.GetSession(sessionID).machineId & ".", 2, sessionID, errmsg) Then
                                                                                                                     Console.WriteLine(errmsg)
                                                                                                                 End If
                                                                                                                 ts.Dispose()
@@ -188,7 +189,7 @@ Module TCPServer
                     End Using
                 End If
                 lat.SendArray(solutions(form.Options.Key), 100, sessionid, errmsg)
-                Console.WriteLine("[" & Date.Now.ToString & "] " & "Byte array length: " & solutions(form.Options.Key).Length)
+                Console.WriteLine("[" & Date.Now.ToString & "] " & TCPServer_ProcessData_Byte_array_length & solutions(form.Options.Key).Length)
             End Using
         End Using
     End Sub

@@ -454,6 +454,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Editing Forms\Material Stream\MaterialStreamEditor.resx">
       <DependentUpon>MaterialStreamEditor.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Editing Forms\Property Packages\FormConfigCAPEOPENPPackage.de.resx">
       <DependentUpon>FormConfigCAPEOPENPPackage.vb</DependentUpon>

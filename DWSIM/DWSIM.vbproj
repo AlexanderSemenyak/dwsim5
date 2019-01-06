@@ -1002,6 +1002,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AboutBox.de.resx">
       <DependentUpon>AboutBox.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AboutBox.en.resx">
       <DependentUpon>AboutBox.vb</DependentUpon>
@@ -1433,7 +1434,9 @@
     <EmbeddedResource Include="Languages\DWSIM.ru.resx" />
     <EmbeddedResource Include="Languages\Tips.ru.resx" />
     <EmbeddedResource Include="Languages\Tips.de.resx" />
-    <EmbeddedResource Include="Languages\Tips.en.resx" />
+    <EmbeddedResource Include="Languages\Tips.en.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Languages\Tips.es.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -2332,6 +2335,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Flowsheet\FormFlowsheet.en.resx">
       <DependentUpon>FormFlowsheet.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Flowsheet\FormFlowsheet.es.resx">
       <DependentUpon>FormFlowsheet.vb</DependentUpon>
@@ -2369,6 +2373,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AboutBox.resx">
       <DependentUpon>AboutBox.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormCapeOpenUnitSelector.en.resx">
       <DependentUpon>FormCapeOpenUnitSelector.vb</DependentUpon>
@@ -2519,7 +2524,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Languages\Properties.de.resx" />
-    <EmbeddedResource Include="Languages\Properties.en.resx" />
+    <EmbeddedResource Include="Languages\Properties.en.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Languages\Properties.es.resx" />
     <EmbeddedResource Include="Languages\Properties.resx">
       <SubType>Designer</SubType>

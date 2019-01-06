@@ -12,7 +12,7 @@ Namespace GraphicObjects.Shapes
 
         Public Sub New()
             Me.ObjectType = DWSIM.Interfaces.Enums.GraphicObjects.ObjectType.EnergyStream
-            Me.Description = "Energy Stream"
+            Me.Description = "Поток энергии"
             Me.IsEnergyStream = True
         End Sub
 

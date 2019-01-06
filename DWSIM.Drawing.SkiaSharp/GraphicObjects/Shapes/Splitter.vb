@@ -12,7 +12,7 @@ Namespace GraphicObjects.Shapes
 
         Public Sub New()
             Me.ObjectType = DWSIM.Interfaces.Enums.GraphicObjects.ObjectType.NodeOut
-            Me.Description = "Material Stream Splitter"
+            Me.Description = "Разделитель потока флюида"
         End Sub
 
         Public Sub New(ByVal graphicPosition As SKPoint)

@@ -46,7 +46,7 @@
     
     mimetype: application/x-microsoft.net.object.binary.base64
     value   : The object must be serialized with 
-            : System.Serialization.Formatters.Binary.BinaryFormatter
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
     
     mimetype: application/x-microsoft.net.object.soap.base64
@@ -60,6 +60,7 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
@@ -68,9 +69,10 @@
               <xsd:sequence>
                 <xsd:element name="value" type="xsd:string" minOccurs="0" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="name" use="required" type="xsd:string" />
               <xsd:attribute name="type" type="xsd:string" />
               <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
@@ -85,9 +87,10 @@
                 <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
                 <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
               <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
               <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
@@ -109,39 +112,9 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="locEnter_the_TCP_Port_Number_to_listen_to" xml:space="preserve">
-    <value>Введите TCP-порт для приема заданий:</value>
-  </data>
-  <data name="locAbout" xml:space="preserve">
-    <value>Симулятор АРМ Геолога (с калькулятором технологических процессов)</value>
-  </data>
-  <data name="locTCPServer_Main_Server_is_running_and_listening_to_incoming_data_on_port" xml:space="preserve">
-    <value>Server is running and listening to incoming data on port </value>
-  </data>
-  <data name="TCPServer_Process_Data_received_from" xml:space="preserve">
-    <value>Данные получены от</value>
-  </data>
-  <data name="TCPServer_Process_flowsheet_solving_started" xml:space="preserve">
-    <value>, расчет модели начался!</value>
-  </data>
-  <data name="TCPServer_Process_Error_solving_flowsheet" xml:space="preserve">
-    <value>Error solving flowsheet: </value>
-  </data>
-  <data name="TCPServer_Process_Calculation_aborted" xml:space="preserve">
-    <value>Calculation aborted.</value>
-  </data>
-  <data name="TCPServer_Process_Closing_current_session_with" xml:space="preserve">
-    <value>Closing current session with </value>
-  </data>
-  <data name="TCPServer_ProcessData_Byte_array_length" xml:space="preserve">
-    <value>Byte array length: </value>
-  </data>
-  <data name="TCPServer_Main_Server_IP_Addresses" xml:space="preserve">
-    <value>Server IP Addresses:</value>
-  </data>
 </root>

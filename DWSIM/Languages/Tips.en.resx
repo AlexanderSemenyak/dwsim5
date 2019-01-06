@@ -148,19 +148,19 @@
     <value>Remember to set the pressure of the intermediate stages of the column.</value>
   </data>
   <data name="FLSH001" xml:space="preserve">
-    <value>Press F5 on any area inside the flowsheet to start a full calculation.</value>
+    <value>Нажмите [F5] в любом месте модели чтобы запустить полный пересчет.</value>
   </data>
   <data name="FLSH002" xml:space="preserve">
-    <value>Use the quick connection tool on the toolbar to quickly connect objects by pressing the CTRL key and dragging the cursor from the first to the second object.</value>
+    <value>Используйте инструмент "быстрое соединение" в панели инструментов чтобы быстро соединить объекты - удерживая нажатой клавишу [Ctrl] перемещайте курсор с первого объекта ко второму.</value>
   </data>
   <data name="FLSH003" xml:space="preserve">
-    <value>Hold SHIFT during DWSIM initialization to reset the settings to their default values.</value>
+    <value>Удерживайте клавишу [Shift] при старте программы чтобы сбросить настройки в начальное состояние.</value>
   </data>
   <data name="FLSH004" xml:space="preserve">
     <value>See some specific help for the object being added by selecting it in the flowsheet and pressing the F1 key. This also works for Utilities.</value>
   </data>
   <data name="FLSH005" xml:space="preserve">
-    <value>To view detailed results of the calculations in real time, enable console redirection and select a debug mode. You must restart DWSIM for the changes to take effect.</value>
+    <value>Чтобы выдеть детальные результаты расчета в реальном времени, включите перенаправление консольного вывода и выбериет режим отладки. После этого необходимо перезапустить калькулятор для вступления изменений в силу.</value>
   </data>
   <data name="FLSH006" xml:space="preserve">
     <value>Some object types display their main editing window when you do a double-click on them in the flowsheet.</value>
@@ -169,7 +169,7 @@
     <value>After finishing updating the object connections, call the flowsheet solver by pressing the F5 key.</value>
   </data>
   <data name="FLSH008" xml:space="preserve">
-    <value>If some windows are missing, click on 'View' &gt; 'Restore Layout'.</value>
+    <value>Если некоторые окна отсутсвуют, щелкните в меню 'Окна' &gt; 'Восстановить расположение всех окон'.</value>
   </data>
   <data name="FOPT001" xml:space="preserve">
     <value>The optimizer window can also be freely repositioned just like the flowsheet sub-windows.</value>

@@ -12,7 +12,7 @@ Namespace GraphicObjects.Shapes
 
         Public Sub New()
             Me.ObjectType = DWSIM.Interfaces.Enums.GraphicObjects.ObjectType.FlowsheetUO
-            Me.Description = "Sub-Flowsheet Block"
+            Me.Description = "Блок вложенной модели"
         End Sub
 
         Public Sub New(ByVal graphicPosition As SKPoint)

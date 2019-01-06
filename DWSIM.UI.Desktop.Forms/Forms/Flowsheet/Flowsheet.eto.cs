@@ -75,7 +75,7 @@ namespace DWSIM.UI.Forms
 
             // setup backup timer
 
-            backupfilename = DateTime.Now.ToString().Replace('-', '_').Replace(':', '_').Replace(' ', '_').Replace('/', '_') + ".dwxmz";
+            backupfilename = DateTime.Now.ToString().Replace('-', '_').Replace(':', '_').Replace(' ', '_').Replace('/', '_') + ".armgz";
 
             var BackupTimer = new Timer(GlobalSettings.Settings.BackupInterval * 60 * 1000);
             BackupTimer.Elapsed += (sender, e) =>
@@ -264,8 +264,8 @@ namespace DWSIM.UI.Forms
             {
                 var dialog = new SaveFileDialog();
                 dialog.Title = "Save File".Localize();
-                dialog.Filters.Add(new FileFilter("XML Simulation File (Compressed)".Localize(), new[] { ".dwxmz" }));
-                dialog.Filters.Add(new FileFilter("Mobile XML Simulation File (Android/iOS)".Localize(), new[] { ".xml" }));
+                dialog.Filters.Add(new FileFilter("XML-файл модели (сжатый)".Localize(), new[] { ".armgz" }));
+                //dialog.Filters.Add(new FileFilter("Mobile XML Simulation File (Android/iOS)".Localize(), new[] { ".xml" }));
                 dialog.CurrentFilterIndex = 0;
                 if (dialog.ShowDialog(this) == DialogResult.Ok)
                 {
@@ -1109,13 +1109,12 @@ namespace DWSIM.UI.Forms
 
         void SaveSimulation(string path, bool backup = false)
         {
-
-
-            if (System.IO.Path.GetExtension(path).ToLower() == ".dwxmz")
+            var ext = System.IO.Path.GetExtension(path).ToLower();
+            if (ext == ".dwxmz" || ext == ".armgz")
             {
                 Application.Instance.Invoke(() => ScriptListControl.UpdateScripts());
 
-                path = Path.ChangeExtension(path, ".dwxmz");
+                path = Path.ChangeExtension(path, ".armgz");
 
                 string xmlfile = Path.ChangeExtension(Path.GetTempFileName(), "xml");
 
@@ -1161,7 +1160,7 @@ namespace DWSIM.UI.Forms
 
                 File.Delete(xmlfile);
             }
-            else if (System.IO.Path.GetExtension(path).ToLower() == ".xml")
+            else if (ext == ".xml")
             {
                 using (var fstream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                 {

@@ -31,31 +31,31 @@ namespace DWSIM.UI.Controls
             {
                 case "Material Stream":
                     objtype = ObjectType.MaterialStream;
-                    prep = "MSTR-";
+                    prep = "МАТП-";
                     break;
                 case "Energy Stream":
                     objtype = ObjectType.EnergyStream;
-                    prep = "ESTR-";
+                    prep = "ЭНРГ-";
                     break;
                 case "Vessel":
                     objtype = ObjectType.Vessel;
-                    prep = "SEP-";
+                    prep = "СЕП-";
                     break;
                 case "Mixer":
                     objtype = ObjectType.NodeIn;
-                    prep = "MIX-";
+                    prep = "СМЕСЬ-";
                     break;
                 case "Splitter":
                     objtype = ObjectType.NodeOut;
-                    prep = "SPL-";
+                    prep = "РАЗД-";
                     break;
                 case "Pump":
                     objtype = ObjectType.Pump;
-                    prep = "PUMP-";
+                    prep = "НАСОС-";
                     break;
                 case "Valve":
                     objtype = ObjectType.Valve;
-                    prep = "VALV-";
+                    prep = "КРАН-";
                     break;
                 case "Heat Exchanger":
                     objtype = ObjectType.HeatExchanger;
@@ -67,11 +67,11 @@ namespace DWSIM.UI.Controls
                     break;
                 case "Compressor/Expander":
                     objtype = ObjectType.CompressorExpander;
-                    prep = "CXR-";
+                    prep = "КМПР-";
                     break;
                 case "Recycle":
                     objtype = ObjectType.OT_Recycle;
-                    prep = "REC-";
+                    prep = "УТИЛ-";
                     break;
                 case "Shortcut Column":
                     objtype = ObjectType.ShortcutColumn;
@@ -79,7 +79,7 @@ namespace DWSIM.UI.Controls
                     break;
                 case "Compound Separator":
                     objtype = ObjectType.ComponentSeparator;
-                    prep = "CS-";
+                    prep = "СЕП-";
                     break;
                 case "Conversion Reactor":
                     objtype = ObjectType.RCT_Conversion;
@@ -111,11 +111,11 @@ namespace DWSIM.UI.Controls
                     break;
                 case "Pipe Segment":
                     objtype = ObjectType.Pipe;
-                    prep = "PIPE-";
+                    prep = "ТРУБА-";
                     break;
                 case "Adjust":
                     objtype = ObjectType.OT_Adjust;
-                    prep = "ADJ-";
+                    prep = "НАСТР-";
                     break;
                 case "Solids Separator":
                     objtype = ObjectType.SolidSeparator;

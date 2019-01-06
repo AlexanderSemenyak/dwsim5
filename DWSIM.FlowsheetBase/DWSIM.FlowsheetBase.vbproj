@@ -160,7 +160,9 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Strings\Properties.resx" />
+    <EmbeddedResource Include="Strings\Properties.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Strings\Strings.resx" />
   </ItemGroup>
   <ItemGroup>

@@ -1265,7 +1265,7 @@
     <comment>0</comment>
   </data>
   <data name="PROP_OP_0" xml:space="preserve">
-    <value>Отводы давления</value>
+    <value>Тип диафрагмы</value>
     <comment>1</comment>
   </data>
   <data name="PROP_OP_1" xml:space="preserve">
@@ -1273,7 +1273,7 @@
     <comment>1</comment>
   </data>
   <data name="PROP_OP_2" xml:space="preserve">
-    <value>Отношение диаметра трубопровода к отверстию (Бэта) (d/D)</value>
+    <value>Отношение диаметра трубы к отверстию (Бэта) (d/D)</value>
     <comment>1</comment>
   </data>
   <data name="PROP_OP_3" xml:space="preserve">

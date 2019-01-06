@@ -12,7 +12,7 @@ Namespace GraphicObjects.Shapes
 
         Public Sub New()
             Me.ObjectType = DWSIM.Interfaces.Enums.GraphicObjects.ObjectType.ComponentSeparator
-            Me.Description = "Compound Separator"
+            Me.Description = "Сепаратор компонентный"
         End Sub
 
         Public Sub New(ByVal graphicPosition As SKPoint)

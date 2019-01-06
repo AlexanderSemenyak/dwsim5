@@ -12,7 +12,7 @@ Namespace GraphicObjects.Shapes
 
         Public Sub New()
             Me.ObjectType = DWSIM.Interfaces.Enums.GraphicObjects.ObjectType.Heater
-            Me.Description = "Material Stream Heater"
+            Me.Description = "Нагреватель потока флюида"
         End Sub
 
         Public Sub New(ByVal graphicPosition As SKPoint)

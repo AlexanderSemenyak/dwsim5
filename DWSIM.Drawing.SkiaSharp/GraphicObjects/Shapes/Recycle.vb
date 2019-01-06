@@ -12,7 +12,7 @@ Namespace GraphicObjects.Shapes
 
         Public Sub New()
             Me.ObjectType = DWSIM.Interfaces.Enums.GraphicObjects.ObjectType.OT_Recycle
-            Me.Description = "Recycle Logical Op"
+            Me.Description = "Логическая операция повторного использования"
         End Sub
 
         Public Sub New(ByVal graphicPosition As SKPoint)

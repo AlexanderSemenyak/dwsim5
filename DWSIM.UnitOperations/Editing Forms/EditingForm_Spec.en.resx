@@ -121,16 +121,16 @@
     <value />
   </data>
   <data name="chkActive.ToolTip" xml:space="preserve">
-    <value>Active/Inactive</value>
+    <value>Активно/неактивно</value>
   </data>
   <data name="Label11.Text" xml:space="preserve">
-    <value>Object</value>
+    <value>Объект</value>
   </data>
   <data name="Label11.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="GroupBox5.Text" xml:space="preserve">
-    <value>General Info</value>
+    <value>Общая информация</value>
   </data>
   <data name="GroupBox5.ToolTip" xml:space="preserve">
     <value />
@@ -139,7 +139,7 @@
     <value />
   </data>
   <data name="GroupBox4.Text" xml:space="preserve">
-    <value>Notes</value>
+    <value>Примечание</value>
   </data>
   <data name="GroupBox4.ToolTip" xml:space="preserve">
     <value />
@@ -152,7 +152,7 @@
     <value>198, 13</value>
   </data>
   <data name="Label1.Text" xml:space="preserve">
-    <value>Y = Target Variable, X = Source Variable</value>
+    <value>Y = Переменная-назначение, X = Переменная-источник</value>
   </data>
   <data name="Label1.ToolTip" xml:space="preserve">
     <value />
@@ -164,7 +164,7 @@
     <value />
   </data>
   <data name="GroupBox2.Text" xml:space="preserve">
-    <value>Dependency Expression</value>
+    <value>Формула для зависимого значения</value>
   </data>
   <data name="GroupBox2.ToolTip" xml:space="preserve">
     <value />
@@ -179,7 +179,7 @@
     <value>68, 13</value>
   </data>
   <data name="Label6.Text" xml:space="preserve">
-    <value>Target Value</value>
+    <value>Целевое значение</value>
   </data>
   <data name="Label6.ToolTip" xml:space="preserve">
     <value />
@@ -188,7 +188,7 @@
     <value>71, 13</value>
   </data>
   <data name="Label5.Text" xml:space="preserve">
-    <value>Source Value</value>
+    <value>Значение источника</value>
   </data>
   <data name="Label5.ToolTip" xml:space="preserve">
     <value />
@@ -197,7 +197,7 @@
     <value>80, 13</value>
   </data>
   <data name="Label2.Text" xml:space="preserve">
-    <value>Target Property</value>
+    <value>Целевое свойство</value>
   </data>
   <data name="Label2.ToolTip" xml:space="preserve">
     <value />
@@ -212,7 +212,7 @@
     <value>72, 13</value>
   </data>
   <data name="Label4.Text" xml:space="preserve">
-    <value>Target Object</value>
+    <value>Целевой объект</value>
   </data>
   <data name="Label4.ToolTip" xml:space="preserve">
     <value />
@@ -221,7 +221,7 @@
     <value>83, 13</value>
   </data>
   <data name="Label7.Text" xml:space="preserve">
-    <value>Source Property</value>
+    <value>Свойство источника</value>
   </data>
   <data name="Label7.ToolTip" xml:space="preserve">
     <value />
@@ -236,13 +236,13 @@
     <value>75, 13</value>
   </data>
   <data name="Label19.Text" xml:space="preserve">
-    <value>Source Object</value>
+    <value>Источник</value>
   </data>
   <data name="Label19.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="GroupBox1.Text" xml:space="preserve">
-    <value>Linked Objects</value>
+    <value>Связанные объекты</value>
   </data>
   <data name="GroupBox1.ToolTip" xml:space="preserve">
     <value />

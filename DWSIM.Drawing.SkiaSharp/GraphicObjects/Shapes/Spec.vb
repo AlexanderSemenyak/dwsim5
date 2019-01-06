@@ -31,7 +31,7 @@ Namespace GraphicObjects.Shapes
 
         Public Sub New()
             Me.ObjectType = DWSIM.Interfaces.Enums.GraphicObjects.ObjectType.OT_Spec
-            Me.Description = "Spec Logical Op"
+            Me.Description = "Назначить через функцию (логическая операция)"
         End Sub
 
         Public Sub New(ByVal graphicPosition As SKPoint)

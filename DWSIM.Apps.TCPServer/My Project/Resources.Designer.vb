@@ -59,5 +59,95 @@ Namespace My.Resources
                 resourceCulture = value
             End Set
         End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Симулятор АРМ Геолога (с калькулятором технологических процессов).
+        '''</summary>
+        Friend ReadOnly Property locAbout() As String
+            Get
+                Return ResourceManager.GetString("locAbout", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Введите TCP-порт для приема заданий:.
+        '''</summary>
+        Friend ReadOnly Property locEnter_the_TCP_Port_Number_to_listen_to() As String
+            Get
+                Return ResourceManager.GetString("locEnter_the_TCP_Port_Number_to_listen_to", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Server is running and listening to incoming data on port .
+        '''</summary>
+        Friend ReadOnly Property locTCPServer_Main_Server_is_running_and_listening_to_incoming_data_on_port() As String
+            Get
+                Return ResourceManager.GetString("locTCPServer_Main_Server_is_running_and_listening_to_incoming_data_on_port", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Server IP Addresses:.
+        '''</summary>
+        Friend ReadOnly Property TCPServer_Main_Server_IP_Addresses() As String
+            Get
+                Return ResourceManager.GetString("TCPServer_Main_Server_IP_Addresses", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Calculation aborted..
+        '''</summary>
+        Friend ReadOnly Property TCPServer_Process_Calculation_aborted() As String
+            Get
+                Return ResourceManager.GetString("TCPServer_Process_Calculation_aborted", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Closing current session with .
+        '''</summary>
+        Friend ReadOnly Property TCPServer_Process_Closing_current_session_with() As String
+            Get
+                Return ResourceManager.GetString("TCPServer_Process_Closing_current_session_with", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Данные получены от.
+        '''</summary>
+        Friend ReadOnly Property TCPServer_Process_Data_received_from() As String
+            Get
+                Return ResourceManager.GetString("TCPServer_Process_Data_received_from", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Error solving flowsheet: .
+        '''</summary>
+        Friend ReadOnly Property TCPServer_Process_Error_solving_flowsheet() As String
+            Get
+                Return ResourceManager.GetString("TCPServer_Process_Error_solving_flowsheet", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to , расчет модели начался!.
+        '''</summary>
+        Friend ReadOnly Property TCPServer_Process_flowsheet_solving_started() As String
+            Get
+                Return ResourceManager.GetString("TCPServer_Process_flowsheet_solving_started", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Byte array length: .
+        '''</summary>
+        Friend ReadOnly Property TCPServer_ProcessData_Byte_array_length() As String
+            Get
+                Return ResourceManager.GetString("TCPServer_ProcessData_Byte_array_length", resourceCulture)
+            End Get
+        End Property
     End Module
 End Namespace

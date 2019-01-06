@@ -12,7 +12,7 @@ Namespace GraphicObjects.Shapes
 
         Public Sub New()
             Me.ObjectType = DWSIM.Interfaces.Enums.GraphicObjects.ObjectType.HeatExchanger
-            Me.Description = "Heat Exchanger"
+            Me.Description = "Теплообменник"
             CreateConnectors(2, 2)
         End Sub
 

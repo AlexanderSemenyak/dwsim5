@@ -87,7 +87,7 @@ Public Class FormMain
                         'Me.ToolStripStatusLabel1.Text = DWSIM.App.GetLocalString("Abrindosimulao") + " " + MyFiles(i) + "..."
                         Application.DoEvents()
                         Me.LoadXML(MyFiles(i), Nothing)
-                    Case ".dwxmz"
+                    Case ".dwxmz", ".armgz"
                         'Me.ToolStripStatusLabel1.Text = DWSIM.App.GetLocalString("Abrindosimulao") + " " + MyFiles(i) + "..."
                         Application.DoEvents()
                         Me.LoadAndExtractXMLZIP(MyFiles(i), Nothing)
@@ -665,7 +665,7 @@ Public Class FormMain
                                 'Me.LoadF(Me.filename)
                             Case ".dwxml"
                                 Me.LoadXML(Me.filename, Nothing)
-                            Case ".dwxmz"
+                            Case ".dwxmz", ".armgz"
                                 Me.LoadAndExtractXMLZIP(Me.filename, Nothing)
                             Case ".dwcsd"
                                 Dim NewMDIChild As New FormCompoundCreator()
@@ -2709,7 +2709,7 @@ Public Class FormMain
 
         xdoc.Save(path)
 
-        If IO.Path.GetExtension(simulationfilename).ToLower.Contains("dwxml") Or IO.Path.GetExtension(simulationfilename).ToLower.Contains("dwxmz") Then
+        If IO.Path.GetExtension(simulationfilename).ToLower.Contains("dwxml") Or IO.Path.GetExtension(simulationfilename).ToLower.Contains("dwxmz")Or IO.Path.GetExtension(simulationfilename).ToLower.Contains("armgz") Then
             Me.UIThread(New Action(Sub()
                                        Dim mypath As String = simulationfilename
                                        If mypath = "" Then mypath = [path]
@@ -2873,7 +2873,7 @@ Label_00CC:
                                                 Me.Invoke(Sub() floading.ProgressBar1.Value = x)
                                             End Sub)
                 End If
-            Case ".dwxmz"
+            Case ".dwxmz", ".armgz"
                 Dim myStream As System.IO.FileStream
                 myStream = File.OpenRead(fpath)
                 If Not (myStream Is Nothing) Then
@@ -3015,17 +3015,18 @@ Label_00CC:
                 If Not (myStream Is Nothing) Then
                     'Me.ToolStripStatusLabel1.Text = DWSIM.App.GetLocalString("Salvandosimulao") + " (" + Me.filename + ")"
                     Application.DoEvents()
-                    If Path.GetExtension(Me.filename).ToLower = ".dwxml" Then
+                    Dim ext  = Path.GetExtension(Me.filename).ToLower
+                    If ext = ".dwxml" Then
                         Task.Factory.StartNew(Sub() SaveXML(Me.filename, Me.ActiveMdiChild)).ContinueWith(Sub(t)
                                                                                                               'Me.ToolStripStatusLabel1.Text = ""
                                                                                                               If Not t.Exception Is Nothing Then form2.WriteToLog(DWSIM.App.GetLocalString("Erroaosalvararquivo") & t.Exception.ToString, Color.Red, MessageType.GeneralError)
                                                                                                           End Sub, TaskContinuationOptions.ExecuteSynchronously)
-                    ElseIf Path.GetExtension(Me.filename).ToLower = ".xml" Then
+                    ElseIf ext = ".xml" Then
                         Task.Factory.StartNew(Sub() SaveMobileXML(Me.filename, Me.ActiveMdiChild)).ContinueWith(Sub(t)
                                                                                                                     'Me.ToolStripStatusLabel1.Text = ""
                                                                                                                     If Not t.Exception Is Nothing Then form2.WriteToLog(DWSIM.App.GetLocalString("Erroaosalvararquivo") & t.Exception.ToString, Color.Red, MessageType.GeneralError)
                                                                                                                 End Sub, TaskContinuationOptions.ExecuteSynchronously)
-                    ElseIf Path.GetExtension(Me.filename).ToLower = ".dwxmz" Then
+                    ElseIf ext = ".dwxmz" or ext = ".armgz" Then
                         Task.Factory.StartNew(Sub() SaveXMLZIP(Me.filename, Me.ActiveMdiChild)).ContinueWith(Sub(t)
                                                                                                                  ' Me.ToolStripStatusLabel1.Text = ""
                                                                                                                  If Not t.Exception Is Nothing Then form2.WriteToLog(DWSIM.App.GetLocalString("Erroaosalvararquivo") & t.Exception.ToString, Color.Red, MessageType.GeneralError)
@@ -3196,7 +3197,7 @@ Label_00CC:
                             LoadXML(nome, Sub(x)
                                               Me.Invoke(Sub() floading.ProgressBar1.Value = x)
                                           End Sub)
-                        Case ".dwxmz"
+                        Case ".dwxmz", ".armgz"
                             LoadAndExtractXMLZIP(nome, Sub(x)
                                                            Me.Invoke(Sub() floading.ProgressBar1.Value = x)
                                                        End Sub)
@@ -3279,7 +3280,7 @@ Label_00CC:
                                 Task.Factory.StartNew(Sub() SaveMobileXML(form2.Options.FilePath, form2)).ContinueWith(Sub(t)
                                                                                                                            form2.WriteToLog(DWSIM.App.GetLocalString("Erroaosalvararquivo") & t.Exception.ToString, Color.Red, MessageType.GeneralError)
                                                                                                                        End Sub, TaskContinuationOptions.OnlyOnFaulted)
-                            ElseIf Path.GetExtension(form2.Options.FilePath).ToLower = ".dwxmz" Then
+                            ElseIf Path.GetExtension(form2.Options.FilePath).ToLower = ".dwxmz" or Path.GetExtension(form2.Options.FilePath).ToLower = ".armgz" Then
                                 Task.Factory.StartNew(Sub() SaveXMLZIP(form2.Options.FilePath, form2)).ContinueWith(Sub(t)
                                                                                                                         form2.WriteToLog(DWSIM.App.GetLocalString("Erroaosalvararquivo") & t.Exception.ToString, Color.Red, MessageType.GeneralError)
                                                                                                                     End Sub, TaskContinuationOptions.OnlyOnFaulted)
@@ -3308,7 +3309,7 @@ Label_00CC:
                                         Task.Factory.StartNew(Sub() SaveMobileXML(myStream.Name, form2)).ContinueWith(Sub(t)
                                                                                                                           form2.WriteToLog(DWSIM.App.GetLocalString("Erroaosalvararquivo") & t.Exception.ToString, Color.Red, MessageType.GeneralError)
                                                                                                                       End Sub, TaskContinuationOptions.OnlyOnFaulted)
-                                    ElseIf Path.GetExtension(myStream.Name).ToLower = ".dwxmz" Then
+                                    ElseIf Path.GetExtension(myStream.Name).ToLower = ".dwxmz" or Path.GetExtension(myStream.Name).ToLower = ".armgz" Then
                                         Task.Factory.StartNew(Sub() SaveXMLZIP(myStream.Name, form2)).ContinueWith(Sub(t)
                                                                                                                        form2.WriteToLog(DWSIM.App.GetLocalString("Erroaosalvararquivo") & t.Exception.ToString, Color.Red, MessageType.GeneralError)
                                                                                                                    End Sub, TaskContinuationOptions.OnlyOnFaulted)
@@ -3398,7 +3399,7 @@ Label_00CC:
                             SaveMobileXML(form2.Options.FilePath, form2)
                             'Me.ToolStripStatusLabel1.Text = ""
                         End If
-                    ElseIf Path.GetExtension(Me.filename).ToLower = ".dwxmz" Then
+                    ElseIf Path.GetExtension(Me.filename).ToLower = ".dwxmz" or Path.GetExtension(Me.filename).ToLower = ".armgz" Then
                         If saveasync Then
                             Task.Factory.StartNew(Sub() SaveXMLZIP(form2.Options.FilePath, form2)).ContinueWith(Sub(t)
                                                                                                                     'Me.ToolStripStatusLabel1.Text = ""
@@ -3436,7 +3437,7 @@ Label_00CC:
                                     SaveXML(myStream.Name, form2)
                                     'Me.ToolStripStatusLabel1.Text = ""
                                 End If
-                            ElseIf Path.GetExtension(Me.filename).ToLower = ".dwxmz" Then
+                            ElseIf Path.GetExtension(Me.filename).ToLower = ".dwxmz" or Path.GetExtension(Me.filename).ToLower = ".armgz"  Then
                                 If saveasync Then
                                     Task.Factory.StartNew(Sub() SaveXMLZIP(myStream.Name, form2)).ContinueWith(Sub(t)
                                                                                                                    form2.WriteToLog(DWSIM.App.GetLocalString("Erroaosalvararquivo") & t.Exception.ToString, Color.Red, MessageType.GeneralError)

@@ -12,7 +12,7 @@ Namespace GraphicObjects.Shapes
 
         Public Sub New()
             Me.ObjectType = DWSIM.Interfaces.Enums.GraphicObjects.ObjectType.Pipe
-            Me.Description = "Pipe Segment"
+            Me.Description = "Сегмент трубы"
         End Sub
 
         Public Sub New(ByVal graphicPosition As SKPoint)

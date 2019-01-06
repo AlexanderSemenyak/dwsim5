@@ -12,7 +12,7 @@ Namespace GraphicObjects.Shapes
 
         Public Sub New()
             Me.ObjectType = DWSIM.Interfaces.Enums.GraphicObjects.ObjectType.Filter
-            Me.Description = "Solids Filter"
+            Me.Description = "Фильтр твердых частиц"
         End Sub
 
         Public Sub New(ByVal graphicPosition As SKPoint)

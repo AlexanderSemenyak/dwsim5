@@ -513,13 +513,13 @@
     <value>Зарегистрировать CAPE-OPEN-компоненты</value>
   </data>
   <data name="OpenFileDialog1.Filter" xml:space="preserve">
-    <value>Steady-State Simulation (XML)|*.dwxml|Steady-State Simulation (Compressed XML)|*.dwxmz|Steady-State Simulation (Android/iOS)|*.xml|Compound Creator Study|*.dwcsd;*.dwcsd2|Data Regression Study|*.dwrsd;*.dwrsd2|UNIFAC IPs Regression Study|*.dwruf|All DWSIM Files|*.dwxml;*.dwxmz;*.dwcsd;*.dwcsd2;*.dwrsd;*.dwrsd2;*.dwruf;*.xml</value>
+    <value>Моделирование равновесных состояний (XML)|*.dwxml|Моделирование равновесных состояний (сжатый XML)|*.dwxmz|Compound Creator Study|*.dwcsd;*.dwcsd2|Data Regression Study|*.dwrsd;*.dwrsd2|UNIFAC IPs Regression Study|*.dwruf|Все форматы|*.armxml;*.armgz;*.dwcsd;*.dwcsd2;*.dwrsd;*.dwrsd2;*.dwruf;*.xml</value>
   </data>
   <data name="OpenFileDialog1.Title" xml:space="preserve">
     <value>Открыть существующий расчет</value>
   </data>
   <data name="SaveFileDialog1.Filter" xml:space="preserve">
-    <value>Steady-State simulation (XML) (*.dwxml)|*.dwxml|Steady-State simulation (Compressed XML) (*.dwxmz)|*.dwxmz|Steady-State simulation (Android/iOS) (*.xml)|*.xml</value>
+    <value>Моделирование равновесных состояний (XML) (*.armxml)|*.armxml|Моделирование равновесных состояний (сжатый XML) (*.armgz)|*.armgz</value>
   </data>
   <data name="SaveFileDialog1.Title" xml:space="preserve">
     <value>Сохранить текущую модель</value>

@@ -42,24 +42,24 @@ Partial Class LogPanel
         Me.DockTopAutoHideToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DockBottomAutoHideToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DocumentToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        CType(Me.Grid1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.ContextMenuStrip1.SuspendLayout()
-        Me.dckMenu.SuspendLayout()
-        Me.SuspendLayout()
+        CType(Me.Grid1,System.ComponentModel.ISupportInitialize).BeginInit
+        Me.ContextMenuStrip1.SuspendLayout
+        Me.dckMenu.SuspendLayout
+        Me.SuspendLayout
         '
         'Grid1
         '
         resources.ApplyResources(Me.Grid1, "Grid1")
-        Me.Grid1.AllowUserToAddRows = False
-        Me.Grid1.AllowUserToDeleteRows = False
+        Me.Grid1.AllowUserToAddRows = false
+        Me.Grid1.AllowUserToDeleteRows = false
         Me.Grid1.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells
         Me.Grid1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal
         Me.Grid1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.Grid1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Imagem, Me.Indice, Me.Data, Me.Tipo, Me.Mensagem, Me.Info})
         Me.Grid1.ContextMenuStrip = Me.ContextMenuStrip1
         Me.Grid1.Name = "Grid1"
-        Me.Grid1.ReadOnly = True
-        Me.Grid1.RowHeadersVisible = False
+        Me.Grid1.ReadOnly = true
+        Me.Grid1.RowHeadersVisible = false
         Me.Grid1.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.[False]
         Me.Grid1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         '
@@ -70,7 +70,7 @@ Partial Class LogPanel
         Me.Imagem.FillWeight = 84.94611!
         resources.ApplyResources(Me.Imagem, "Imagem")
         Me.Imagem.Name = "Imagem"
-        Me.Imagem.ReadOnly = True
+        Me.Imagem.ReadOnly = true
         Me.Imagem.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
         Me.Imagem.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
         '
@@ -80,21 +80,21 @@ Partial Class LogPanel
         Me.Indice.FillWeight = 75.12691!
         resources.ApplyResources(Me.Indice, "Indice")
         Me.Indice.Name = "Indice"
-        Me.Indice.ReadOnly = True
+        Me.Indice.ReadOnly = true
         '
         'Data
         '
         Me.Data.FillWeight = 49.39458!
         resources.ApplyResources(Me.Data, "Data")
         Me.Data.Name = "Data"
-        Me.Data.ReadOnly = True
+        Me.Data.ReadOnly = true
         '
         'Tipo
         '
         Me.Tipo.FillWeight = 37.04594!
         resources.ApplyResources(Me.Tipo, "Tipo")
         Me.Tipo.Name = "Tipo"
-        Me.Tipo.ReadOnly = True
+        Me.Tipo.ReadOnly = true
         Me.Tipo.Resizable = System.Windows.Forms.DataGridViewTriState.[True]
         '
         'Mensagem
@@ -104,17 +104,16 @@ Partial Class LogPanel
         Me.Mensagem.DefaultCellStyle = DataGridViewCellStyle1
         resources.ApplyResources(Me.Mensagem, "Mensagem")
         Me.Mensagem.Name = "Mensagem"
-        Me.Mensagem.ReadOnly = True
+        Me.Mensagem.ReadOnly = true
         '
         'Info
         '
         Me.Info.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells
         resources.ApplyResources(Me.Info, "Info")
         Me.Info.Name = "Info"
-        Me.Info.ReadOnly = True
+        Me.Info.ReadOnly = true
         Me.Info.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic
-        Me.Info.Text = "+ Info"
-        Me.Info.UseColumnTextForButtonValue = True
+        Me.Info.UseColumnTextForButtonValue = true
         '
         'ContextMenuStrip1
         '
@@ -188,18 +187,18 @@ Partial Class LogPanel
         '
         resources.ApplyResources(Me, "$this")
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.CloseButtonVisible = False
+        Me.CloseButtonVisible = false
         Me.Controls.Add(Me.Grid1)
-        Me.HideOnClose = True
+        Me.HideOnClose = true
         Me.Name = "LogPanel"
         Me.ShowHint = WeifenLuo.WinFormsUI.Docking.DockState.DockBottom
         Me.TabPageContextMenuStrip = Me.dckMenu
-        CType(Me.Grid1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.ContextMenuStrip1.ResumeLayout(False)
-        Me.dckMenu.ResumeLayout(False)
-        Me.ResumeLayout(False)
+        CType(Me.Grid1,System.ComponentModel.ISupportInitialize).EndInit
+        Me.ContextMenuStrip1.ResumeLayout(false)
+        Me.dckMenu.ResumeLayout(false)
+        Me.ResumeLayout(false)
 
-    End Sub
+End Sub
     Public WithEvents Grid1 As System.Windows.Forms.DataGridView
     Friend WithEvents dckMenu As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents FloatToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem

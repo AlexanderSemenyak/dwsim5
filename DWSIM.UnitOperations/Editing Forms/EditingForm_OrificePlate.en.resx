@@ -260,7 +260,7 @@
     <value>95, 13</value>
   </data>
   <data name="Label8.Text" xml:space="preserve">
-    <value>Отводы отбора давления</value>
+    <value>Тип диафрагмы</value>
   </data>
   <data name="GroupBox2.Text" xml:space="preserve">
     <value>Настройки расчета</value>
@@ -291,5 +291,8 @@
   </data>
   <data name="GroupBox1.Text" xml:space="preserve">
     <value>Соединения</value>
+  </data>
+  <data name="Label12.Text" xml:space="preserve">
+    <value>Статус</value>
   </data>
 </root>

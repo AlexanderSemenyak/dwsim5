@@ -13,7 +13,7 @@ Namespace GraphicObjects.Shapes
         Public Sub New()
             Me.ObjectType = DWSIM.Interfaces.Enums.GraphicObjects.ObjectType.AbsorptionColumn
             CreateConnectors(10, 10)
-            Me.Description = "Absorption Column"
+            Me.Description = "Абсорбционная колонна"
         End Sub
 
         Public Sub New(ByVal graphicPosition As SKPoint)

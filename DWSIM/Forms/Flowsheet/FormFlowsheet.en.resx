@@ -274,7 +274,7 @@
     <value>Результаты</value>
   </data>
   <data name="tsbRedo.Text" xml:space="preserve">
-    <value>Отменить</value>
+    <value>Повторить</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>Расчеты</value>

@@ -144,7 +144,7 @@ label0:
                         Do While True
                             count = stream.Read(buffer, 0, buffer.Length)
                             If (count <= 0) Then
-                                If Path.GetExtension(entry.Name).ToLower = ".dwxmz" Or Path.GetExtension(entry.Name).ToLower = ".dwxml" Then
+                                If Path.GetExtension(entry.Name).ToLower = ".armgz" Or Path.GetExtension(entry.Name).ToLower = ".dwxmz" Or Path.GetExtension(entry.Name).ToLower = ".dwxml" Then
                                     simname = Path.Combine(fpath2, Path.GetFileName(entry.Name))
                                 ElseIf Path.GetExtension(entry.Name).ToLower = ".pdf" Then
                                     abstractfile0 = Path.Combine(fpath2, Path.GetFileName(entry.Name))
@@ -161,7 +161,7 @@ label0:
 
         Dim xdoc As XDocument = Nothing
 
-        If Path.GetExtension(simname).ToLower = ".dwxmz" Then
+        If Path.GetExtension(simname).ToLower = ".dwxmz" or Path.GetExtension(simname).ToLower = ".armgz" Then
             xdoc = LoadZippedXML(simname)
         Else
             xdoc = XDocument.Load(simname)

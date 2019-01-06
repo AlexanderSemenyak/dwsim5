@@ -1,4 +1,5 @@
-﻿Imports System
+﻿Imports System.Resources
+Imports System
 Imports System.Reflection
 Imports System.Runtime.InteropServices
 
@@ -8,12 +9,12 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("DWSIM TCP/IP Solver Server")> 
-<Assembly: AssemblyDescription("DWSIM - Open Source Chemical Process Simulator")> 
-<Assembly: AssemblyCompany("DWSIM Project")> 
-<Assembly: AssemblyProduct("DWSIM")> 
-<Assembly: AssemblyCopyright("Copyright © 2007-2017 Daniel Medeiros")> 
-<Assembly: AssemblyTrademark("DWSIM")> 
+<Assembly: AssemblyTitle("DWSIM TCP/IP Solver Server")>
+<Assembly: AssemblyDescription("DWSIM - Open Source Chemical Process Simulator")>
+<Assembly: AssemblyCompany("DWSIM Project")>
+<Assembly: AssemblyProduct("DWSIM")>
+<Assembly: AssemblyCopyright("Copyright © 2007-2017 Daniel Medeiros")>
+<Assembly: AssemblyTrademark("DWSIM")>
 
 <Assembly: ComVisible(False)>
 
@@ -32,3 +33,4 @@ Imports System.Runtime.InteropServices
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
 <Assembly: AssemblyVersion("5.6.*")>
+<Assembly: NeutralResourcesLanguage("en")>

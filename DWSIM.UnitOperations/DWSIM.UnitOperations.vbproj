@@ -710,6 +710,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Editing Forms\EditingForm_Spec.en.resx">
       <DependentUpon>EditingForm_Spec.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Editing Forms\EditingForm_Spec.resx">
       <DependentUpon>EditingForm_Spec.vb</DependentUpon>
@@ -791,9 +792,11 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Editing Forms\EditingForm_OrificePlate.en.resx">
       <DependentUpon>EditingForm_OrificePlate.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Editing Forms\EditingForm_OrificePlate.resx">
       <DependentUpon>EditingForm_OrificePlate.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Editing Forms\EditingForm_Recycle.en.resx">
       <DependentUpon>EditingForm_Recycle.vb</DependentUpon>
@@ -1087,6 +1090,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Strings.ru.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>

@@ -108,8 +108,8 @@ namespace DWSIM.UI
             {
                 var dialog = new OpenFileDialog();
                 dialog.Title = "Open File".Localize();
-                dialog.Filters.Add(new FileFilter("XML Simulation File".Localize(), new[] { ".dwxml", ".dwxmz" }));
-                dialog.Filters.Add(new FileFilter("Mobile XML Simulation File (Android/iOS)", new[] { ".xml" }));
+                dialog.Filters.Add(new FileFilter("XML Simulation File".Localize(), new[] { ".armxml", ".armgz" }));
+                //dialog.Filters.Add(new FileFilter("Mobile XML Simulation File (Android/iOS)", new[] { ".xml" }));
                 dialog.MultiSelect = false;
                 dialog.CurrentFilterIndex = 0;
                 if (dialog.ShowDialog(this) == DialogResult.Ok)
@@ -228,7 +228,7 @@ namespace DWSIM.UI
                     var dialog = new OpenFileDialog();
                     dialog.Title = "Open File".Localize();
                     dialog.Directory = new Uri(FoldersList.SelectedKey);
-                    dialog.Filters.Add(new FileFilter("XML Simulation File".Localize(), new[] { ".dwxml", ".dwxmz" }));
+                    dialog.Filters.Add(new FileFilter("XML Simulation File".Localize(), new[] { ".armxml", ".armgz" }));
                     dialog.MultiSelect = false;
                     dialog.CurrentFilterIndex = 0;
                     if (dialog.ShowDialog(this) == DialogResult.Ok)
@@ -471,15 +471,16 @@ namespace DWSIM.UI
 
             Task.Factory.StartNew(() =>
             {
-                if (System.IO.Path.GetExtension(path).ToLower() == ".dwxmz")
+                var ext = System.IO.Path.GetExtension(path).ToLower();
+                if (ext == ".dwxmz" || ext == ".armgz")
                 {
                     var xdoc = form.FlowsheetObject.LoadZippedXML(path);
                 }
-                else if (System.IO.Path.GetExtension(path).ToLower() == ".dwxml")
+                else if (ext == ".dwxml")
                 {
                     form.FlowsheetObject.LoadFromXML(XDocument.Load(path));
                 }
-                else if (System.IO.Path.GetExtension(path).ToLower() == ".xml")
+                else if (ext == ".xml")
                 {
                     form.FlowsheetObject.LoadFromMXML(XDocument.Load(path));
                 }

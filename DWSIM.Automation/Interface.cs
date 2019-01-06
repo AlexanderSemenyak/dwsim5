@@ -32,7 +32,8 @@ namespace DWSIM.Automation
 
         public Interfaces.IFlowsheet LoadFlowsheet(string filepath)
         {
-            if (System.IO.Path.GetExtension(filepath).ToLower().Contains("dwxmz"))
+            var ext = System.IO.Path.GetExtension(filepath).ToLower();
+            if (ext.Contains("dwxmz") || ext.Contains("armgz") )
             {
                 return fm.LoadAndExtractXMLZIP(filepath, null, true);
             }

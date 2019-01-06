@@ -12,7 +12,7 @@ Namespace GraphicObjects.Shapes
 
         Public Sub New()
             Me.ObjectType = DWSIM.Interfaces.Enums.GraphicObjects.ObjectType.Tank
-            Me.Description = "Liquid Storage Tank"
+            Me.Description = "Емкость хранения жидкой фракции"
         End Sub
 
         Public Sub New(ByVal graphicPosition As SKPoint)

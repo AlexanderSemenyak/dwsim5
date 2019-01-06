@@ -547,7 +547,7 @@ Partial Class SettingsForm
         '
         'FolderBrowserDialog1
         '
-        Me.FolderBrowserDialog1.Description = "Select a folder..."
+        Me.FolderBrowserDialog1.Description = "Выберите папку..."
         '
         'SettingsForm
         '
