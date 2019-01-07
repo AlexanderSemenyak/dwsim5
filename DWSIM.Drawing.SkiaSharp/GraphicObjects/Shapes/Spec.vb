@@ -121,13 +121,13 @@ Namespace GraphicObjects.Shapes
             End With
 
             Dim trect As New SKRect(0, 0, 2, 2)
-            tpaint.GetTextPath("S", 0, 0).GetBounds(trect)
+            tpaint.GetTextPath("У", 0, 0).GetBounds(trect)
 
             Dim ax, ay As Integer
             ax = Me.X + (Me.Width - (trect.Right - trect.Left)) / 2
             ay = Me.Y + (Me.Height - (trect.Top - trect.Bottom)) / 2
 
-            canvas.DrawText("S", ax, ay, tpaint)
+            canvas.DrawText("У", ax, ay, tpaint)
 
 
         End Sub

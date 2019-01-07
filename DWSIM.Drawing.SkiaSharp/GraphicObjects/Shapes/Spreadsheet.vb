@@ -178,13 +178,13 @@ Namespace GraphicObjects.Shapes
             End With
 
             Dim trect As New SKRect(0, 0, 2, 2)
-            tpaint.GetTextPath("SPR", 0, 0).GetBounds(trect)
+            tpaint.GetTextPath("XLS", 0, 0).GetBounds(trect)
 
             Dim ax, ay As Integer
             ax = Me.X + (Me.Width - (trect.Right - trect.Left)) / 2
             ay = Me.Y + (Me.Height - (trect.Top - trect.Bottom)) / 2
 
-            canvas.DrawText("SPR", ax, ay, tpaint)
+            canvas.DrawText("XLS", ax, ay, tpaint)
 
         End Sub
 
