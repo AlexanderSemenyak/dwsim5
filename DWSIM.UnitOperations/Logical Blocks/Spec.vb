@@ -38,6 +38,7 @@ Namespace SpecialOps
         <NonSerialized> <Xml.Serialization.XmlIgnore> Public f As EditingForm_Spec
 
         Protected m_SourceObjectData As New SpecialOps.Helpers.SpecialOpObjectInfo
+        Protected m_SourceObjectData2 As New SpecialOps.Helpers.SpecialOpObjectInfo
         Protected m_TargetObjectData As New SpecialOps.Helpers.SpecialOpObjectInfo
 
         Protected m_CalculateTargetObject As Boolean = False
@@ -46,9 +47,11 @@ Namespace SpecialOps
         Protected m_MV_OK As Boolean = False
 
         Protected m_SourceObject As SharedClasses.UnitOperations.BaseClass
+        Protected m_SourceObject2 As SharedClasses.UnitOperations.BaseClass
         Protected m_TargetObject As SharedClasses.UnitOperations.BaseClass
 
         Protected m_SourceVariable As String = ""
+        Protected m_SourceVariable2 As String = ""
         Protected m_TargetVariable As String = ""
 
         Protected m_Expression As String = ""
@@ -148,6 +151,15 @@ Namespace SpecialOps
             End Set
         End Property
 
+        Public Property SourceObjectData2() As SpecialOps.Helpers.SpecialOpObjectInfo
+            Get
+                Return Me.m_SourceObjectData2
+            End Get
+            Set(ByVal value As SpecialOps.Helpers.SpecialOpObjectInfo)
+                Me.m_SourceObjectData2 = value
+            End Set
+        End Property
+
         Public Property TargetObjectData() As SpecialOps.Helpers.SpecialOpObjectInfo
             Get
                 Return Me.m_TargetObjectData
@@ -163,6 +175,15 @@ Namespace SpecialOps
             End Get
             Set(ByVal value As SharedClasses.UnitOperations.BaseClass)
                 Me.m_SourceObject = value
+            End Set
+        End Property
+
+        <Xml.Serialization.XmlIgnore()> Public Property SourceObject2() As SharedClasses.UnitOperations.BaseClass
+            Get
+                Return Me.m_SourceObject2
+            End Get
+            Set(ByVal value As SharedClasses.UnitOperations.BaseClass)
+                Me.m_SourceObject2 = value
             End Set
         End Property
 
@@ -196,6 +217,20 @@ Namespace SpecialOps
 
             End If
 
+            xel = (From xel2 As XElement In data Select xel2 Where xel2.Name = "SourceObjectData2").SingleOrDefault
+
+            If Not xel Is Nothing Then
+
+                With m_SourceObjectData2
+                    .ID = xel.@ID
+                    .Name = xel.@Name
+                    .PropertyName = xel.@Property
+                    .ObjectType = xel.@ObjectType
+                End With
+
+            End If
+
+
             xel = (From xel2 As XElement In data Select xel2 Where xel2.Name = "TargetObjectData").SingleOrDefault
 
             If Not xel Is Nothing Then
@@ -213,8 +248,14 @@ Namespace SpecialOps
                 Me.SourceObject = Me.FlowSheet.SimulationObjects(Me.SourceObjectData.ID)
                 If Not Me.SourceObject Is Nothing Then Me.SourceObject.IsSpecAttached = True
             Catch ex As Exception
-
             End Try
+
+            Try
+                Me.SourceObject2 = Me.FlowSheet.SimulationObjects(Me.SourceObjectData2.ID)
+                If Not Me.SourceObject2 Is Nothing Then Me.SourceObject2.IsSpecAttached = True
+            Catch ex As Exception
+            End Try
+
             Try
                 Me.TargetObject = Me.FlowSheet.SimulationObjects(Me.TargetObjectData.ID)
                 If Not Me.TargetObject Is Nothing Then Me.TargetObject.IsSpecAttached = True
@@ -236,6 +277,14 @@ Namespace SpecialOps
             If m_SourceObjectData.PropertyName = Nothing Then m_SourceObjectData.PropertyName = ""
             If m_SourceObjectData.ObjectType = Nothing Then m_SourceObjectData.ObjectType = ""
 
+            If m_SourceObjectData2 Is Nothing Then m_SourceObjectData2 = New Helpers.SpecialOpObjectInfo()
+
+            If m_SourceObjectData2.ID = Nothing Then m_SourceObjectData2.ID = ""
+            If m_SourceObjectData2.Name = Nothing Then m_SourceObjectData2.Name = ""
+            If m_SourceObjectData2.PropertyName = Nothing Then m_SourceObjectData2.PropertyName = ""
+            If m_SourceObjectData2.ObjectType = Nothing Then m_SourceObjectData2.ObjectType = ""
+
+
             If m_TargetObjectData Is Nothing Then m_TargetObjectData = New Helpers.SpecialOpObjectInfo()
 
             If m_TargetObjectData.ID = Nothing Then m_TargetObjectData.ID = ""
@@ -248,6 +297,10 @@ Namespace SpecialOps
                                   New XAttribute("Name", m_SourceObjectData.Name),
                                   New XAttribute("Property", m_SourceObjectData.PropertyName),
                                   New XAttribute("Type", m_SourceObjectData.ObjectType)))
+                .Add(New XElement("SourceObjectData2", New XAttribute("ID", m_SourceObjectData2.ID),
+                                  New XAttribute("Name", m_SourceObjectData2.Name),
+                                  New XAttribute("Property", m_SourceObjectData2.PropertyName),
+                                  New XAttribute("Type", m_SourceObjectData2.ObjectType)))
                 .Add(New XElement("TargetObjectData", New XAttribute("ID", m_TargetObjectData.ID),
                                   New XAttribute("Name", m_TargetObjectData.Name),
                                   New XAttribute("Property", m_TargetObjectData.PropertyName),
@@ -267,6 +320,7 @@ Namespace SpecialOps
             MyBase.CreateNew()
 
             m_SourceObjectData = New SpecialOps.Helpers.SpecialOpObjectInfo
+            m_SourceObjectData2 = New SpecialOps.Helpers.SpecialOpObjectInfo
             m_TargetObjectData = New SpecialOps.Helpers.SpecialOpObjectInfo
 
             m_eopt = New ExpressionContext
@@ -361,6 +415,34 @@ Namespace SpecialOps
             End If
         End Function
 
+        Public Function GetSourceVarValue2()
+
+            formC = Me.FlowSheet
+            Me.su = formC.FlowsheetOptions.SelectedUnitSystem
+            Me.nf = formC.FlowsheetOptions.NumberFormat
+
+            If Not Me.SourceObjectData2 Is Nothing Then
+
+                If formC.SimulationObjects.ContainsKey(Me.SourceObjectData2.ID) Then
+
+                    With Me.SourceObjectData2
+                        Return Me.formC.SimulationObjects(.ID).GetPropertyValue(.PropertyName, su)
+                    End With
+
+                Else
+
+                    Return Nothing
+
+                End If
+
+
+            Else
+
+                Return Nothing
+
+            End If
+        End Function
+
         Public Function SetTargetVarValue(ByVal val As Nullable(Of Double))
 
             formC = Me.FlowSheet
@@ -403,12 +485,19 @@ Namespace SpecialOps
 
         End Function
 
+        Public Function GetSourceVarUnit2()
+
+            Return Me.FlowSheet.SimulationObjects(Me.SourceObjectData2.ID).GetPropertyUnit(Me.SourceObjectData2.PropertyName, Me.FlowSheet.FlowsheetOptions.SelectedUnitSystem)
+
+        End Function
+
         Public Function ParseExpression() As Double
 
             Me.ExpContext = New Ciloci.Flee.ExpressionContext
             Me.ExpContext.Imports.AddType(GetType(System.Math))
 
             Me.ExpContext.Variables.Add("X", Double.Parse(Me.GetSourceVarValue))
+            Me.ExpContext.Variables.Add("X2", Double.Parse(Me.GetSourceVarValue2))
             Me.ExpContext.Variables.Add("Y", Double.Parse(Me.GetTargetVarValue))
             Me.Expr = Me.ExpContext.CompileGeneric(Of Double)(Me.Expression)
 
@@ -425,13 +514,15 @@ Namespace SpecialOps
 
                 If Not Me.GetSourceVarValue Is Nothing And Not Me.GetTargetVarValue Is Nothing Then
 
-                    With Me
+                    'With Me
+                        Me.ExpContext.Variables.Add("X", Double.Parse(Me.GetSourceVarValue))
+                        If Not Me.GetSourceVarValue2 Is Nothing
+                              Me.ExpContext.Variables.Add("X2", Double.Parse(Me.GetSourceVarValue2))
+                        end if
+                        Me.ExpContext.Variables.Add("Y", Double.Parse(Me.GetTargetVarValue))
+                        Me.Expr = Me.ExpContext.CompileGeneric(Of Double)(Me.Expression)
 
-                        .ExpContext.Variables.Add("X", Double.Parse(.GetSourceVarValue))
-                        .ExpContext.Variables.Add("Y", Double.Parse(.GetTargetVarValue))
-                        .Expr = .ExpContext.CompileGeneric(Of Double)(.Expression)
-
-                        Dim val = .Expr.Evaluate
+                        Dim val = Me.Expr.Evaluate
 
                         If Not Me.MaxVal.HasValue And Not Me.MinVal.HasValue Then
                             Me.SetTargetVarValue(val)
@@ -446,7 +537,7 @@ Namespace SpecialOps
                             Exit Sub
                         End If
 
-                    End With
+                    'End With
 
                     Me.GraphicObject.Calculated = True
 

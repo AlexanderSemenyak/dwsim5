@@ -7,7 +7,7 @@ Namespace GraphicObjects.Shapes
 
         Inherits ShapeGraphic
 
-      Protected m_svPT, m_tvPT, m_rvPT As GraphicObject
+      Protected m_svPT,m_svPT2, m_tvPT, m_rvPT As GraphicObject
 
         Public Property ConnectedToSv() As GraphicObject
             Get
@@ -17,6 +17,16 @@ Namespace GraphicObjects.Shapes
                 m_svPT = value
             End Set
         End Property
+
+      Public Property ConnectedToSv2() As GraphicObject
+          Get
+              Return m_svPT2
+          End Get
+          Set(ByVal value As GraphicObject)
+              m_svPT2 = value
+          End Set
+      End Property
+
 
         Public Property ConnectedToTv() As GraphicObject
             Get
@@ -86,6 +96,10 @@ Namespace GraphicObjects.Shapes
             If Not Me.ConnectedToSv Is Nothing Then
                 canvas.DrawPoints(SKPointMode.Polygon, New SKPoint() {New SKPoint(Me.X + Me.Width / 2, Me.Y + Me.Height / 2), New SKPoint(Me.m_svPT.X, Me.Y + Me.Height / 2), Me.m_svPT.GetPosition}, aPen)
             End If
+            If Not Me.ConnectedToSv2 Is Nothing Then
+                canvas.DrawPoints(SKPointMode.Polygon, New SKPoint() {New SKPoint(Me.X + Me.Width / 2, Me.Y + Me.Height / 2), New SKPoint(Me.m_svPT2.X, Me.Y + Me.Height / 2), Me.m_svPT2.GetPosition}, aPen)
+            End If
+
             If Not Me.ConnectedToTv Is Nothing Then
                 canvas.DrawPoints(SKPointMode.Polygon, New SKPoint() {New SKPoint(Me.X + Me.Width / 2, Me.Y + Me.Height / 2), New SKPoint(Me.m_tvPT.X, Me.Y + Me.Height / 2), Me.m_tvPT.GetPosition}, aPen)
             End If

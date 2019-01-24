@@ -229,7 +229,7 @@
     <value>Are you sure?</value>
   </data>
   <data name="Arquivo" xml:space="preserve">
-    <value>File </value>
+    <value>Файл </value>
   </data>
   <data name="Asfalto" xml:space="preserve">
     <value>Asphalt</value>
@@ -385,10 +385,10 @@
     <value>Heat Capacity at Constant Pressure (Ideal Gas)</value>
   </data>
   <data name="carregadocomsucesso" xml:space="preserve">
-    <value> loaded successfully.</value>
+    <value> загружен успешно.</value>
   </data>
   <data name="CarregandoNotcias" xml:space="preserve">
-    <value>Loading News ...</value>
+    <value>Загрузка новостей ...</value>
   </data>
   <data name="Cascalho" xml:space="preserve">
     <value>Gravel</value>
@@ -1807,22 +1807,22 @@
     <value>UNIFAC Groups - OK.</value>
   </data>
   <data name="Gs" xml:space="preserve">
-    <value>Gas</value>
+    <value>Газ</value>
   </data>
   <data name="Gsapenas" xml:space="preserve">
-    <value>Vapor Only</value>
+    <value>Паровая фаза</value>
   </data>
   <data name="GsLquidoBifsico" xml:space="preserve">
-    <value>Vapor + Liquid (Two-phase flow)</value>
+    <value>Паровая + Жидкая (двухфазный поток)</value>
   </data>
   <data name="gua" xml:space="preserve">
-    <value>Water</value>
+    <value>Вода</value>
   </data>
   <data name="guaH2O" xml:space="preserve">
-    <value>Water (H2O)</value>
+    <value>Вода (H2O)</value>
   </data>
   <data name="HeaterCoolerCalcMode" xml:space="preserve">
-    <value>Calculation Mode</value>
+    <value>Режим расчета</value>
   </data>
   <data name="HeaterCoolerOutletTemperature" xml:space="preserve">
     <value>Outlet Temperature</value>
@@ -3151,7 +3151,7 @@
     <value>Segment</value>
   </data>
   <data name="Segregado" xml:space="preserve">
-    <value>Segregated</value>
+    <value>Раздельный</value>
   </data>
   <data name="SelecioLiquidrueparaapl" xml:space="preserve">
     <value>Select 'True' to apply a gradient color of the object</value>
@@ -5238,7 +5238,7 @@ In this model, chemical and physical equilibria of NH3, CO2, and H2S in sour wat
     <value>Gradient color 2</value>
   </data>
   <data name="FileSaved" xml:space="preserve">
-    <value>File saved successfully.</value>
+    <value>Файл сохранен успешно.</value>
   </data>
   <data name="DownloadingUpdates" xml:space="preserve">
     <value>Downloading updates</value>

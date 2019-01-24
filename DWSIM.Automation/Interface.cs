@@ -30,6 +30,9 @@ namespace DWSIM.Automation
         /// <param name="tolerance">Допустимая погрешность</param>
         /// <returns></returns>
         bool Adjust(IFlowsheet sheet, Adjust adjust, double? minValue, double? maxValue, double? tolerance, out string errorText);
+
+        double ConvertFromSI(double d, string units);
+        double ConvertToSI(double d, string units);
     }
 
     [Guid("37437090-e541-4f2c-9856-d1e27df32ecb"), ClassInterface(ClassInterfaceType.None)]

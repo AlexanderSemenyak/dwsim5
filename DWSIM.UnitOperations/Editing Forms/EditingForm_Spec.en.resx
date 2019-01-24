@@ -250,4 +250,13 @@
   <data name="$this.ToolTip" xml:space="preserve">
     <value />
   </data>
+  <data name="lblSrcObj2.Text" xml:space="preserve">
+    <value>Источник2</value>
+  </data>
+  <data name="lblSrcProp2.Text" xml:space="preserve">
+    <value>Свойство источника2</value>
+  </data>
+  <data name="lblSrcVal2.Text" xml:space="preserve">
+    <value>Значение источника2</value>
+  </data>
 </root>

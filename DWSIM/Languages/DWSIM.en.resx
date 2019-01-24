@@ -343,7 +343,7 @@
     <value>Are you sure?</value>
   </data>
   <data name="Arquivo" xml:space="preserve">
-    <value>File </value>
+    <value>Файл </value>
   </data>
   <data name="Asfalto" xml:space="preserve">
     <value>Asphalt</value>
@@ -499,7 +499,7 @@
     <value>Heat Capacity at Constant Pressure (Ideal Gas)</value>
   </data>
   <data name="carregadocomsucesso" xml:space="preserve">
-    <value> loaded successfully.</value>
+    <value> загружен успешно.</value>
   </data>
   <data name="CarregandoNotcias" xml:space="preserve">
     <value>Загрузка новостей ...</value>
@@ -1090,28 +1090,28 @@
     <value>Vapor Product Flow Rate</value>
   </data>
   <data name="de" xml:space="preserve">
-    <value>of</value>
+    <value>для</value>
   </data>
   <data name="DefinaumnomeparaoSis" xml:space="preserve">
-    <value>Define a name for this Unit System</value>
+    <value>Назначить имя для системы единиц измерения</value>
   </data>
   <data name="Definidopelousurio" xml:space="preserve">
-    <value>User-defined</value>
+    <value>Пользовательская</value>
   </data>
   <data name="Definies" xml:space="preserve">
-    <value>Definitions</value>
+    <value>Назначения</value>
   </data>
   <data name="DeltaGRT" xml:space="preserve">
     <value>Delta-G/RT</value>
   </data>
   <data name="DeltaP" xml:space="preserve">
-    <value>Delta-P</value>
+    <value>Разность-P</value>
   </data>
   <data name="DeltaStepsize" xml:space="preserve">
     <value>Размер шага</value>
   </data>
   <data name="DeltaT" xml:space="preserve">
-    <value>Delta-T</value>
+    <value>Разность-T</value>
   </data>
   <data name="DeltaT2" xml:space="preserve">
     <value>Delta-T</value>
@@ -1666,10 +1666,10 @@
     <value>Acceleration frequency</value>
   </data>
   <data name="FerroBottomido" xml:space="preserve">
-    <value>Cast iron</value>
+    <value>Чугун</value>
   </data>
   <data name="Fibradevidro" xml:space="preserve">
-    <value>Fiberglass</value>
+    <value>Стекловолокно</value>
   </data>
   <data name="FIGURA" xml:space="preserve">
     <value>FIGURE -</value>
@@ -3187,10 +3187,10 @@
     <value>Vapor outlet</value>
   </data>
   <data name="Salvandosimulao" xml:space="preserve">
-    <value>Saving simulation ...</value>
+    <value>Сохранение модели ...</value>
   </data>
   <data name="salvocomsucesso" xml:space="preserve">
-    <value> saved successfully.</value>
+    <value> сохранен успешно.</value>
   </data>
   <data name="Sbol" xml:space="preserve">
     <value>Sbol (</value>
@@ -5355,7 +5355,7 @@ In this model, chemical and physical equilibria of NH3, CO2, and H2S in sour wat
     <value>Gradient color 2</value>
   </data>
   <data name="FileSaved" xml:space="preserve">
-    <value>File saved successfully.</value>
+    <value>Файл сохранен успешно.</value>
   </data>
   <data name="DownloadingUpdates" xml:space="preserve">
     <value>Downloading updates</value>

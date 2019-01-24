@@ -37,6 +37,12 @@ Partial Class EditingForm_Spec
         Me.Label3 = New System.Windows.Forms.Label()
         Me.tbExpression = New System.Windows.Forms.TextBox()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.cbSourceProp2 = New System.Windows.Forms.ComboBox()
+        Me.cbSourceObj2 = New System.Windows.Forms.ComboBox()
+        Me.lblSourceVal2 = New System.Windows.Forms.Label()
+        Me.lblSrcVal2 = New System.Windows.Forms.Label()
+        Me.lblSrcProp2 = New System.Windows.Forms.Label()
+        Me.lblSrcObj2 = New System.Windows.Forms.Label()
         Me.lblTargetVal = New System.Windows.Forms.Label()
         Me.lblSourceVal = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
@@ -50,11 +56,11 @@ Partial Class EditingForm_Spec
         Me.cbSourceObj = New System.Windows.Forms.ComboBox()
         Me.Label19 = New System.Windows.Forms.Label()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.GroupBox5.SuspendLayout()
-        Me.GroupBox4.SuspendLayout()
-        Me.GroupBox2.SuspendLayout()
-        Me.GroupBox1.SuspendLayout()
-        Me.SuspendLayout()
+        Me.GroupBox5.SuspendLayout
+        Me.GroupBox4.SuspendLayout
+        Me.GroupBox2.SuspendLayout
+        Me.GroupBox1.SuspendLayout
+        Me.SuspendLayout
         '
         'GroupBox5
         '
@@ -63,7 +69,7 @@ Partial Class EditingForm_Spec
         Me.GroupBox5.Controls.Add(Me.chkActive)
         Me.GroupBox5.Controls.Add(Me.Label11)
         Me.GroupBox5.Name = "GroupBox5"
-        Me.GroupBox5.TabStop = False
+        Me.GroupBox5.TabStop = false
         '
         'lblTag
         '
@@ -75,8 +81,9 @@ Partial Class EditingForm_Spec
         resources.ApplyResources(Me.chkActive, "chkActive")
         Me.chkActive.Image = Global.DWSIM.UnitOperations.My.Resources.Resources.bullet_tick
         Me.chkActive.Name = "chkActive"
-        Me.ToolTip1.SetToolTip(Me.chkActive, resources.GetString("chkActive.ToolTip"))
-        Me.chkActive.UseVisualStyleBackColor = True
+        Me.ToolTipValues.SetToolTip(Me.chkActive, resources.GetString("chkActive.ToolTip"))
+        Me.ToolTip1.SetToolTip(Me.chkActive, resources.GetString("chkActive.ToolTip1"))
+        Me.chkActive.UseVisualStyleBackColor = true
         '
         'Label11
         '
@@ -88,16 +95,16 @@ Partial Class EditingForm_Spec
         resources.ApplyResources(Me.GroupBox4, "GroupBox4")
         Me.GroupBox4.Controls.Add(Me.rtbAnnotations)
         Me.GroupBox4.Name = "GroupBox4"
-        Me.GroupBox4.TabStop = False
+        Me.GroupBox4.TabStop = false
         '
         'rtbAnnotations
         '
         resources.ApplyResources(Me.rtbAnnotations, "rtbAnnotations")
         Me.rtbAnnotations.Name = "rtbAnnotations"
-        Me.rtbAnnotations.Rtf = "{\rtf1\ansi\ansicpg1252\deff0\deflang1046{\fonttbl{\f0\fnil\fcharset0 Microsoft S" & _
-    "ans Serif;}}" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "\viewkind4\uc1\pard\f0\fs17\par" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "}" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
-        Me.rtbAnnotations.ShowRedo = False
-        Me.rtbAnnotations.ShowUndo = False
+        Me.rtbAnnotations.Rtf = "{\rtf1\ansi\ansicpg1252\deff0\deflang1046{\fonttbl{\f0\fnil\fcharset204 Microsoft"& _ 
+    " Sans Serif;}}"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"\viewkind4\uc1\pard\f0\fs17\par"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)&"}"&Global.Microsoft.VisualBasic.ChrW(13)&Global.Microsoft.VisualBasic.ChrW(10)
+        Me.rtbAnnotations.ShowRedo = false
+        Me.rtbAnnotations.ShowUndo = false
         '
         'GroupBox2
         '
@@ -107,7 +114,7 @@ Partial Class EditingForm_Spec
         Me.GroupBox2.Controls.Add(Me.Label3)
         Me.GroupBox2.Controls.Add(Me.tbExpression)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.TabStop = False
+        Me.GroupBox2.TabStop = false
         '
         'lblResult
         '
@@ -132,6 +139,12 @@ Partial Class EditingForm_Spec
         'GroupBox1
         '
         resources.ApplyResources(Me.GroupBox1, "GroupBox1")
+        Me.GroupBox1.Controls.Add(Me.cbSourceProp2)
+        Me.GroupBox1.Controls.Add(Me.cbSourceObj2)
+        Me.GroupBox1.Controls.Add(Me.lblSourceVal2)
+        Me.GroupBox1.Controls.Add(Me.lblSrcVal2)
+        Me.GroupBox1.Controls.Add(Me.lblSrcProp2)
+        Me.GroupBox1.Controls.Add(Me.lblSrcObj2)
         Me.GroupBox1.Controls.Add(Me.lblTargetVal)
         Me.GroupBox1.Controls.Add(Me.lblSourceVal)
         Me.GroupBox1.Controls.Add(Me.Label6)
@@ -145,7 +158,41 @@ Partial Class EditingForm_Spec
         Me.GroupBox1.Controls.Add(Me.cbSourceObj)
         Me.GroupBox1.Controls.Add(Me.Label19)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.TabStop = False
+        Me.GroupBox1.TabStop = false
+        '
+        'cbSourceProp2
+        '
+        resources.ApplyResources(Me.cbSourceProp2, "cbSourceProp2")
+        Me.cbSourceProp2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cbSourceProp2.FormattingEnabled = true
+        Me.cbSourceProp2.Name = "cbSourceProp2"
+        '
+        'cbSourceObj2
+        '
+        resources.ApplyResources(Me.cbSourceObj2, "cbSourceObj2")
+        Me.cbSourceObj2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cbSourceObj2.FormattingEnabled = true
+        Me.cbSourceObj2.Name = "cbSourceObj2"
+        '
+        'lblSourceVal2
+        '
+        resources.ApplyResources(Me.lblSourceVal2, "lblSourceVal2")
+        Me.lblSourceVal2.Name = "lblSourceVal2"
+        '
+        'lblSrcVal2
+        '
+        resources.ApplyResources(Me.lblSrcVal2, "lblSrcVal2")
+        Me.lblSrcVal2.Name = "lblSrcVal2"
+        '
+        'lblSrcProp2
+        '
+        resources.ApplyResources(Me.lblSrcProp2, "lblSrcProp2")
+        Me.lblSrcProp2.Name = "lblSrcProp2"
+        '
+        'lblSrcObj2
+        '
+        resources.ApplyResources(Me.lblSrcObj2, "lblSrcObj2")
+        Me.lblSrcObj2.Name = "lblSrcObj2"
         '
         'lblTargetVal
         '
@@ -176,14 +223,14 @@ Partial Class EditingForm_Spec
         '
         resources.ApplyResources(Me.cbTargetProp, "cbTargetProp")
         Me.cbTargetProp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cbTargetProp.FormattingEnabled = True
+        Me.cbTargetProp.FormattingEnabled = true
         Me.cbTargetProp.Name = "cbTargetProp"
         '
         'cbTargetObj
         '
         resources.ApplyResources(Me.cbTargetObj, "cbTargetObj")
         Me.cbTargetObj.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cbTargetObj.FormattingEnabled = True
+        Me.cbTargetObj.FormattingEnabled = true
         Me.cbTargetObj.Name = "cbTargetObj"
         '
         'Label4
@@ -200,14 +247,14 @@ Partial Class EditingForm_Spec
         '
         resources.ApplyResources(Me.cbSourceProp, "cbSourceProp")
         Me.cbSourceProp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cbSourceProp.FormattingEnabled = True
+        Me.cbSourceProp.FormattingEnabled = true
         Me.cbSourceProp.Name = "cbSourceProp"
         '
         'cbSourceObj
         '
         resources.ApplyResources(Me.cbSourceObj, "cbSourceObj")
         Me.cbSourceObj.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cbSourceObj.FormattingEnabled = True
+        Me.cbSourceObj.FormattingEnabled = true
         Me.cbSourceObj.Name = "cbSourceObj"
         '
         'Label19
@@ -224,16 +271,16 @@ Partial Class EditingForm_Spec
         Me.Controls.Add(Me.GroupBox4)
         Me.Controls.Add(Me.GroupBox2)
         Me.Name = "EditingForm_Spec"
-        Me.GroupBox5.ResumeLayout(False)
-        Me.GroupBox5.PerformLayout()
-        Me.GroupBox4.ResumeLayout(False)
-        Me.GroupBox2.ResumeLayout(False)
-        Me.GroupBox2.PerformLayout()
-        Me.GroupBox1.ResumeLayout(False)
-        Me.GroupBox1.PerformLayout()
-        Me.ResumeLayout(False)
+        Me.GroupBox5.ResumeLayout(false)
+        Me.GroupBox5.PerformLayout
+        Me.GroupBox4.ResumeLayout(false)
+        Me.GroupBox2.ResumeLayout(false)
+        Me.GroupBox2.PerformLayout
+        Me.GroupBox1.ResumeLayout(false)
+        Me.GroupBox1.PerformLayout
+        Me.ResumeLayout(false)
 
-    End Sub
+End Sub
     Public WithEvents GroupBox5 As System.Windows.Forms.GroupBox
     Public WithEvents chkActive As System.Windows.Forms.CheckBox
     Public WithEvents Label11 As System.Windows.Forms.Label
@@ -259,4 +306,10 @@ Partial Class EditingForm_Spec
     Public WithEvents Label6 As System.Windows.Forms.Label
     Public WithEvents Label5 As System.Windows.Forms.Label
     Public WithEvents lblResult As System.Windows.Forms.Label
+    Public WithEvents lblSourceVal2 As Label
+    Public WithEvents lblSrcVal2 As Label
+    Public WithEvents lblSrcProp2 As Label
+    Public WithEvents lblSrcObj2 As Label
+    Public WithEvents cbSourceObj2 As ComboBox
+    Public WithEvents cbSourceProp2 As ComboBox
 End Class

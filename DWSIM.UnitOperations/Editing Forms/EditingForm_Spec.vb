@@ -44,6 +44,10 @@ Public Class EditingForm_Spec
             cbSourceObj.Items.Clear()
             cbSourceObj.Items.AddRange(objlist)
 
+            cbSourceObj2.Items.Clear()
+            cbSourceObj2.Items.AddRange(objlist)
+
+
             cbTargetObj.Items.Clear()
             cbTargetObj.Items.AddRange(objlist)
 
@@ -55,6 +59,16 @@ Public Class EditingForm_Spec
                     cbSourceProp.SelectedItem = .FlowSheet.GetTranslatedString(.SourceObjectData.PropertyName)
                 End If
             End If
+
+            If .SourceObjectData2.ID <> "" Then
+                Dim obj = .GetFlowsheet.SimulationObjects.Values.Where(Function(x) x.Name = .SourceObjectData2.ID).SingleOrDefault
+                If Not obj Is Nothing Then
+                    .SourceObjectData2.Name = obj.GraphicObject.Tag
+                    cbSourceObj2.SelectedItem = .SourceObjectData2.Name
+                    cbSourceProp2.SelectedItem = .FlowSheet.GetTranslatedString(.SourceObjectData2.PropertyName)
+                End If
+            End If
+
             If .TargetObjectData.ID <> "" Then
                 Dim obj = .GetFlowsheet.SimulationObjects.Values.Where(Function(x) x.Name = .TargetObjectData.ID).SingleOrDefault
                 If Not obj Is Nothing Then
@@ -255,4 +269,60 @@ Public Class EditingForm_Spec
 
     End Sub
 
+    Private Sub cbInlet2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbSourceObj2.SelectedIndexChanged
+        If SimObject.FlowSheet.SimulationObjects.ContainsKey(SimObject.SourceObjectData2.ID) Then
+            With SimObject.FlowSheet.SimulationObjects(SimObject.SourceObjectData2.ID)
+                .IsSpecAttached = False
+                .AttachedSpecId = ""
+                .SpecVarType = Enums.SpecVarType.None
+            End With
+        End If
+
+        Dim obj = Me.SimObject.FlowSheet.SimulationObjects.Values.Where(Function(x) x.GraphicObject.Tag = cbSourceObj2.SelectedItem.ToString).FirstOrDefault
+
+        If Not obj Is Nothing Then
+
+            With Me.SimObject.SourceObjectData2
+                .ID = obj.Name
+                .Name = obj.GraphicObject.Tag
+            End With
+
+            With obj
+                .IsSpecAttached = True
+                .AttachedSpecId = SimObject.Name
+                .SpecVarType = Enums.SpecVarType.Source
+            End With
+
+            Dim props = obj.GetProperties(Enums.PropertyType.ALL)
+
+            cbSourceProp2.Items.Clear()
+            For Each p In props
+                cbSourceProp2.Items.Add(SimObject.FlowSheet.GetTranslatedString(p))
+            Next
+
+            SimObject.SourceObject2 = SimObject.FlowSheet.SimulationObjects(SimObject.SourceObjectData2.ID)
+            DirectCast(SimObject.GraphicObject, DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.SpecGraphic).ConnectedToSv2 = SimObject.SourceObject2.GraphicObject
+
+        End If
+    End Sub
+
+    Private Sub cbSourceProp2_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbSourceProp2.SelectedIndexChanged
+        Dim obj = Me.SimObject.FlowSheet.SimulationObjects.Values.Where(Function(x) x.GraphicObject.Tag = cbSourceObj2.SelectedItem.ToString).FirstOrDefault
+
+        If Not obj Is Nothing Then
+
+            Dim props = obj.GetProperties(Enums.PropertyType.WR)
+
+            For Each p In props
+                If SimObject.FlowSheet.GetTranslatedString(p) = cbSourceProp2.SelectedItem.ToString Then
+                    SimObject.SourceObjectData2.PropertyName = p
+                    lblSourceVal2.Text = obj.GetPropertyValue(p, units) & " " & obj.GetPropertyUnit(p, units)
+                    Exit For
+                End If
+            Next
+
+
+        End If
+
+    End Sub
 End Class

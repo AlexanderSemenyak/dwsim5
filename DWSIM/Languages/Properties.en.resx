@@ -890,51 +890,51 @@
     <value>Molar Высвобожденная энергия (Гельмгольц)(Твердая фаза)</value>
   </data>
   <data name="PROP_MS_232" xml:space="preserve">
-    <value>Molality (Смесь)</value>
+    <value>Моляльность (Смесь)</value>
   </data>
   <data name="PROP_MS_233" xml:space="preserve">
-    <value>Molality (газовая фаза)</value>
+    <value>Моляльность (газовая фаза)</value>
   </data>
   <data name="PROP_MS_234" xml:space="preserve">
-    <value>Molality (Общая жидкость)</value>
+    <value>Моляльность (Общая жидкость)</value>
   </data>
   <data name="PROP_MS_235" xml:space="preserve">
-    <value>Molality (Жидкая фаза 1)</value>
+    <value>Моляльность (Жидкая фаза 1)</value>
   </data>
   <data name="PROP_MS_236" xml:space="preserve">
-    <value>Molality (Жидкая фаза 2)</value>
+    <value>Моляльность (Жидкая фаза 2)</value>
   </data>
   <data name="PROP_MS_237" xml:space="preserve">
-    <value>Molality (Водная фаза)</value>
+    <value>Моляльность (Водная фаза)</value>
   </data>
   <data name="PROP_MS_238" xml:space="preserve">
-    <value>Molality (Твердая фаза)</value>
+    <value>Моляльность (Твердая фаза)</value>
   </data>
   <data name="PROP_MS_239" xml:space="preserve">
-    <value>Molarity (Смесь)</value>
+    <value>Молярность (Смесь)</value>
   </data>
   <data name="PROP_MS_24" xml:space="preserve">
     <value>Паровая фаза - Молярный поток</value>
     <comment>0</comment>
   </data>
   <data name="PROP_MS_240" xml:space="preserve">
-    <value>Molarity (газовая фаза)</value>
+    <value>Молярность (газовая фаза)</value>
   </data>
   <data name="PROP_MS_241" xml:space="preserve">
-    <value>Molarity (Общая жидкость)</value>
+    <value>Молярность (Общая жидкость)</value>
     <comment>0</comment>
   </data>
   <data name="PROP_MS_242" xml:space="preserve">
-    <value>Molarity (Жидкая фаза 1)</value>
+    <value>Молярность (Жидкая фаза 1)</value>
   </data>
   <data name="PROP_MS_243" xml:space="preserve">
-    <value>Molarity (Жидкая фаза 2)</value>
+    <value>Молярность (Жидкая фаза 2)</value>
   </data>
   <data name="PROP_MS_244" xml:space="preserve">
-    <value>Molarity (Водная фаза)</value>
+    <value>Молярность (Водная фаза)</value>
   </data>
   <data name="PROP_MS_245" xml:space="preserve">
-    <value>Molarity (Твердая фаза)</value>
+    <value>Молярность (Твердая фаза)</value>
   </data>
   <data name="PROP_MS_25" xml:space="preserve">
     <value>Паровая фаза - Объемный поток</value>

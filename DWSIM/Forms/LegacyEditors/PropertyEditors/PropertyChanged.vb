@@ -2695,7 +2695,12 @@ Public Class PropertyChanged
                         .SourceObject = Flowsheet.Collections.FlowsheetObjectCollection(.SourceObjectData.ID)
                         Dim gr As SpecGraphic = Flowsheet.Collections.FlowsheetObjectCollection(spec.Name).GraphicObject
                         gr.ConnectedToSv = .SourceObject.GraphicObject
+                    ElseIf e.ChangedItem.Label.Contains(DWSIM.App.GetLocalString("VarivelFonte2")) Then
+                        .SourceObject2 = Flowsheet.Collections.FlowsheetObjectCollection(.SourceObjectData2.ID)
+                        Dim gr As SpecGraphic = Flowsheet.Collections.FlowsheetObjectCollection(spec.Name).GraphicObject
+                        gr.ConnectedToSv2 = .SourceObject2.GraphicObject
                     End If
+
                 End With
 
             ElseIf sobj.ObjectType = ObjectType.Vessel Then

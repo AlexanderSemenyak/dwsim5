@@ -162,6 +162,11 @@ Imports System.Dynamic
                                 Me.SimulationObjects(specobj.SourceObjectData.ID).IsSpecAttached = False
                                 Me.SimulationObjects(specobj.SourceObjectData.ID).AttachedSpecId = ""
                             End If
+                            If Me.SimulationObjects.ContainsKey(specobj.SourceObjectData2.ID) Then
+                                Me.SimulationObjects(specobj.SourceObjectData2.ID).IsSpecAttached = False
+                                Me.SimulationObjects(specobj.SourceObjectData2.ID).AttachedSpecId = ""
+                            End If
+
                         ElseIf gobj.ObjectType = ObjectType.OT_Adjust Then
                             Dim adjobj As Adjust = CType(SimulationObjects(namesel), Adjust)
                             If Me.SimulationObjects.ContainsKey(adjobj.ManipulatedObjectData.ID) Then
@@ -1295,7 +1300,7 @@ Imports System.Dynamic
                 ShowMessage(ex.Message.ToString & ": " & ex.InnerException.ToString, IFlowsheet.MessageType.GeneralError)
             Next
         Else
-            ShowMessage("Data loaded successfully.", IFlowsheet.MessageType.Information)
+            ShowMessage("Данные загружены успешно.", IFlowsheet.MessageType.Information)
         End If
 
     End Sub
@@ -1654,6 +1659,11 @@ Imports System.Dynamic
                         so2.SourceObject = CType(SimulationObjects(so2.SourceObjectData.ID), SharedClasses.UnitOperations.BaseClass)
                         DirectCast(so2.GraphicObject, SpecGraphic).ConnectedToSv = CType(so2.SourceObject.GraphicObject, GraphicObject)
                     End If
+                    If SimulationObjects.ContainsKey(so2.SourceObjectData2.ID) Then
+                        so2.SourceObject2 = CType(SimulationObjects(so2.SourceObjectData2.ID), SharedClasses.UnitOperations.BaseClass)
+                        DirectCast(so2.GraphicObject, SpecGraphic).ConnectedToSv2 = CType(so2.SourceObject2.GraphicObject, GraphicObject)
+                    End If
+
                 End If
                 If TryCast(so, CapeOpenUO) IsNot Nothing Then
                     DirectCast(so, CapeOpenUO).UpdateConnectors2()

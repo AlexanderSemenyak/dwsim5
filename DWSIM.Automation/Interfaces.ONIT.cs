@@ -12,15 +12,15 @@ namespace DWSIM.Automation
         /// <summary>
         /// Выполнить подстройку
         /// </summary>
-        /// <param name="sheet"></param>
-        /// <param name="adjust">Регулятор</param>
+        /// <param name="formC"></param>
+        /// <param name="myADJ">Регулятор</param>
         /// <param name="minValue">Минимальная граница манипулируемого объекта</param>
         /// <param name="maxValue">Максимальная граница манипулируемого объекта</param>
         /// <param name="tolerance">Допустимая погрешность</param>
         /// <returns></returns>
         public bool Adjust(IFlowsheet formC, Adjust myADJ, double? minValue, double? maxValue, double? tolerance, out string errorText)
         {
-            var su = myADJ.FlowSheet.FlowsheetOptions.SelectedUnitSystem;
+            IUnitsOfMeasure su = myADJ.FlowSheet.FlowsheetOptions.SelectedUnitSystem;
             double? mvVal, rfVal = null;
             double cvVal, maxval, minval;
             if (formC.SimulationObjects[myADJ.ControlledObjectData.ID].GraphicObject.Calculated)
@@ -277,6 +277,16 @@ namespace DWSIM.Automation
             myADJ.GraphicObject.Calculated = true;
             errorText = null;
             return true;
+        }
+
+        public double ConvertFromSI(double d, string units)
+        {
+            return Converter.ConvertFromSI(units, d);
+        }
+
+        public double ConvertToSI(double d, string units)
+        {
+            return Converter.ConvertToSI(units, d);
         }
     }
 }

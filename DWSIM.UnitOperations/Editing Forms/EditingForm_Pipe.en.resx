@@ -136,16 +136,16 @@
     <value>Модель</value>
   </data>
   <data name="Label4.Text" xml:space="preserve">
-    <value>Интервал доп-х температур</value>
+    <value>Допустимая погрешность т-ры</value>
   </data>
   <data name="Label4.ToolTip" xml:space="preserve">
-    <value>Tolerance of temperature in calculation loop</value>
+    <value>Погрешность температуры в циклах вычислений</value>
   </data>
   <data name="Label5.Text" xml:space="preserve">
-    <value>Интервал доп-х давлений</value>
+    <value>Допустимая погрешность давл-я</value>
   </data>
   <data name="Label5.ToolTip" xml:space="preserve">
-    <value>Tolerance of pressure in calculation loop</value>
+    <value>Погрешность давления в циклах вычислений</value>
   </data>
   <data name="Button1.ToolTip" xml:space="preserve">
     <value>Щелкните для получения дополнительной информации</value>

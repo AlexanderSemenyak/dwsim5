@@ -335,6 +335,9 @@
   <data name="Label52.Location" type="System.Drawing.Point, System.Drawing">
     <value>221, 20</value>
   </data>
+  <data name="Label52.Text" xml:space="preserve">
+    <value>Вт/м².К</value>
+  </data>
   <data name="TextBoxCGTC.Location" type="System.Drawing.Point, System.Drawing">
     <value>169, 17</value>
   </data>

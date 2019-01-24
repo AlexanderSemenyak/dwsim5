@@ -1219,15 +1219,15 @@ Namespace UnitOperations
             'pipe wall rugosity in m
 
             Select Case material
-                Case FlowSheet.GetTranslatedString("AoComum"), "Steel"
+                Case FlowSheet.GetTranslatedString("AoComum"), "Raw Steel", "Steel"
                     epsilon = 0.0000457
-                Case FlowSheet.GetTranslatedString("AoCarbono"), "CarbonSteel"
+                Case FlowSheet.GetTranslatedString("AoCarbono"), "Carbon steel", "Carbon Steel", "CarbonSteel"
                     epsilon = 0.000045
-                Case FlowSheet.GetTranslatedString("FerroBottomido"), "CastIron"
+                Case FlowSheet.GetTranslatedString("FerroBottomido"), "Cast iron", "CastIron"
                     epsilon = 0.000259
-                Case FlowSheet.GetTranslatedString("AoInoxidvel"), "StainlessSteel"
+                Case FlowSheet.GetTranslatedString("AoInoxidvel"), "Stainless Steel", "StainlessSteel"
                     epsilon = 0.000045
-                Case "PVC"
+                Case FlowSheet.GetTranslatedString("AoInoxidvel"), "PVC"
                     epsilon = 0.0000015
                 Case "PVC+PFRV"
                     epsilon = 0.0000015
@@ -1246,13 +1246,13 @@ Namespace UnitOperations
             Dim kp As Double
 
             Select Case material
-                Case FlowSheet.GetTranslatedString("AoComum"), "Steel"
+                Case FlowSheet.GetTranslatedString("AoComum"), "Raw Steel", "Steel"
                     kp = -0.000000004 * T ^ 3 - 0.00002 * T ^ 2 + 0.021 * T + 33.743
-                Case FlowSheet.GetTranslatedString("AoCarbono"), "CarbonSteel"
+                Case FlowSheet.GetTranslatedString("AoCarbono"), "Carbon steel", "Carbon Steel", "CarbonSteel"
                     kp = 0.000000007 * T ^ 3 - 0.00002 * T ^ 2 - 0.0291 * T + 70.765
-                Case FlowSheet.GetTranslatedString("FerroBottomido"), "CastIron"
+                Case FlowSheet.GetTranslatedString("FerroBottomido"), "Cast iron", "CastIron"
                     kp = -0.00000008 * T ^ 3 + 0.0002 * T ^ 2 - 0.211 * T + 127.99
-                Case FlowSheet.GetTranslatedString("AoInoxidvel"), "StainlessSteel"
+                Case FlowSheet.GetTranslatedString("AoInoxidvel"), "Stainless Steel", "StainlessSteel"
                     kp = 14.6 + 0.0127 * (T - 273.15)
                 Case "PVC"
                     kp = 0.16

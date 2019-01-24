@@ -363,6 +363,11 @@ Label_00CC:
                             so2.SourceObject = fs.SimulationObjects(so2.SourceObjectData.ID)
                             DirectCast(so2.GraphicObject, SpecGraphic).ConnectedToSv = so2.SourceObject.GraphicObject
                         End If
+                        If fs.SimulationObjects.ContainsKey(so2.SourceObjectData2.ID) Then
+                            so2.SourceObject2 = fs.SimulationObjects(so2.SourceObjectData2.ID)
+                            DirectCast(so2.GraphicObject, SpecGraphic).ConnectedToSv2 = so2.SourceObject2.GraphicObject
+                        End If
+
                     End If
                     If TryCast(so, CapeOpenUO) IsNot Nothing Then
                         DirectCast(so, CapeOpenUO).UpdateConnectors2()

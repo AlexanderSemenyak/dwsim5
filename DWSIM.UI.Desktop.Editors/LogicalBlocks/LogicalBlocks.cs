@@ -294,7 +294,9 @@ namespace DWSIM.UI.Desktop.Editors.LogicalBlocks
             s.CreateAndAddLabelRow(container, "Source Object");
 
             DropDown spin1 = null, spin2 = null;
+            DropDown spin12 = null, spin22 = null;
             Label txtval1 = null, txtval2 = null;
+            Label txtval12 = null, txtval22 = null;
 
             spin1 = s.CreateAndAddDropDownRow(container, "Source Object", objlist, 0, (sender, e) =>
             {
