@@ -32,7 +32,6 @@ Imports OxyPlot.Axes
 Imports cv = DWSIM.SharedClasses.SystemsOfUnits.Converter
 
 Namespace UnitOperations
-
     Public Enum FlowPackage
         Beggs_Brill
         Lockhart_Martinelli
@@ -287,7 +286,10 @@ Namespace UnitOperations
                 If Me.Profile.Sections.Count > 1 Then
                     Throw New Exception(FlowSheet.GetTranslatedString("PipeOutletPressureRestriction"))
                 ElseIf Me.Profile.Sections.Count = 1 Then
-                    If Me.Profile.Sections(1).TipoSegmento <> "Tubulaosimples" Then
+                    If Me.Profile.Sections(1).TipoSegmento <> "Tubulaosimples" And
+                        Me.Profile.Sections(1).TipoSegmento <> "Straight Tube" And
+                        Me.Profile.Sections(1).TipoSegmento <> "Straight Tube Section" And
+                        Me.Profile.Sections(1).TipoSegmento <> "" Then
                         Throw New Exception(FlowSheet.GetTranslatedString("PipeOutletPressureRestriction"))
                     End If
                 End If
@@ -402,7 +404,7 @@ Namespace UnitOperations
 
                         IObj3?.Paragraphs.Add(String.Format("Calculating segment {0} ({1}/{2})...", segmento.Indice, iq, segmento.Quantidade))
 
-                        If segmento.TipoSegmento = "Tubulaosimples" Or segmento.TipoSegmento = "" Or segmento.TipoSegmento = "Straight Tube Section" Then
+                        If segmento.TipoSegmento = "Tubulaosimples" Or segmento.TipoSegmento = "" Or segmento.TipoSegmento = "Straight Tube Section" Or segmento.TipoSegmento = "Straight Tube" Then
 
                             IObj3?.Paragraphs.Add(String.Format("Segment type: {0}", segmento.TipoSegmento))
                             IObj3?.Paragraphs.Add(String.Format("Segment increments: {0}", segmento.Incrementos))
@@ -1752,6 +1754,22 @@ Final3:     T = bbb
                         value = cv.ConvertFromSI(su.temperature, Me.ThermalProfile.Temp_amb_definir)
                     Case 7
                         value = cv.ConvertFromSI(su.deltaT, Me.ThermalProfile.AmbientTemperatureGradient) / cv.ConvertFromSI(su.distance, 1.0#)
+                    Case 8
+                        Dim tval As Double = 0
+                        For Each section In Profile.Sections.Values
+                            If section.TipoSegmento = "" Or section.TipoSegmento.Contains("Straight Tube") Or section.TipoSegmento = "Tubulaosimples" Then
+                                tval += section.Comprimento
+                            End If
+                        Next
+                        value = cv.ConvertFromSI(su.distance, tval)
+                    Case 9
+                        Dim tval As Double = 0
+                        For Each section In Profile.Sections.Values
+                            If section.TipoSegmento = "" Or section.TipoSegmento.Contains("Straight Tube") Or section.TipoSegmento = "Tubulaosimples" Then
+                                tval += section.Elevacao
+                            End If
+                        Next
+                        value = cv.ConvertFromSI(su.distance, tval)
                 End Select
                 Return value
             Else
@@ -1882,7 +1900,7 @@ Final3:     T = bbb
         End Function
 
         Public Overrides Function GetDefaultProperties() As String()
-            Return New String() {"PROP_PS_0", "PROP_PS_1", "PROP_PS_2"}
+            Return New String() {"PROP_PS_0", "PROP_PS_1", "PROP_PS_2", "PROP_PS_8", "PROP_PS_9"}
         End Function
 
         Public Overloads Overrides Function GetProperties(ByVal proptype As Interfaces.Enums.PropertyType) As String()
@@ -1890,7 +1908,7 @@ Final3:     T = bbb
             Dim proplist As New ArrayList
             Dim basecol = MyBase.GetProperties(proptype)
             If basecol.Length > 0 Then proplist.AddRange(basecol)
-            For i = 0 To 7
+            For i = 0 To 9
                 proplist.Add("PROP_PS_" + CStr(i))
             Next
             For Each ps In Profile.Sections
@@ -2065,6 +2083,10 @@ Final3:     T = bbb
                         value = su.temperature
                     Case 7
                         value = su.deltaT & "/" & su.distance
+                    Case 8
+                        value = su.distance
+                    Case 9
+                        value = su.distance
                 End Select
                 Return value
             Else

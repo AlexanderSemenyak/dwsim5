@@ -14,7 +14,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("Симулятор термодинамики АРМ Геолог")>
 <Assembly: AssemblyCompany("ПАО Газпром автоматизация")>
 <Assembly: AssemblyProduct("Симулятор термодинамики АРМ Геолог (+DWSIM)")>
-<Assembly: AssemblyCopyright("© 2018 ПАО Газпром автоматизация")>
+<Assembly: AssemblyCopyright("© 2018-2019 ПАО Газпром автоматизация")>
 <Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(True)> 
