@@ -234,7 +234,7 @@ Public Class EditingForm_Spec
 
         If Not obj Is Nothing Then
 
-            Dim props = obj.GetProperties(Enums.PropertyType.WR)
+            Dim props = obj.GetProperties(Enums.PropertyType.ALL)
 
             For Each p In props
                 If SimObject.FlowSheet.GetTranslatedString(p) = cbSourceProp.SelectedItem.ToString Then
@@ -311,7 +311,7 @@ Public Class EditingForm_Spec
 
         If Not obj Is Nothing Then
 
-            Dim props = obj.GetProperties(Enums.PropertyType.WR)
+            Dim props = obj.GetProperties(Enums.PropertyType.ALL)
 
             For Each p In props
                 If SimObject.FlowSheet.GetTranslatedString(p) = cbSourceProp2.SelectedItem.ToString Then

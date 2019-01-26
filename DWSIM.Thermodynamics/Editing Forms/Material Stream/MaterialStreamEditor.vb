@@ -1,5 +1,7 @@
 ﻿Imports DWSIM.Interfaces.Enums.GraphicObjects
 Imports System.Windows.Forms
+Imports DotNumerics.ODE.Radau5
+Imports DWSIM.Interfaces
 Imports Converter = DWSIM.SharedClasses.SystemsOfUnits.Converter
 Imports WeifenLuo.WinFormsUI.Docking
 Imports su = DWSIM.SharedClasses.SystemsOfUnits
@@ -88,9 +90,14 @@ Public Class MaterialStreamEditor
 
             lblConnectedTo.Text = ""
 
-            If .IsSpecAttached Then lblConnectedTo.Text = .FlowSheet.SimulationObjects(.AttachedSpecId).GraphicObject.Tag
-            If .IsAdjustAttached Then lblConnectedTo.Text = .FlowSheet.SimulationObjects(.AttachedAdjustId).GraphicObject.Tag
+            dim so as ISimulationObject
+            If (.FlowSheet.SimulationObjects.TryGetValue(.AttachedSpecId, so)) then
+                  If .IsSpecAttached Then lblConnectedTo.Text = so.GraphicObject.Tag
+            End If
 
+            If (.FlowSheet.SimulationObjects.TryGetValue(.AttachedAdjustId, so)) then
+               If .IsAdjustAttached Then lblConnectedTo.Text = so.GraphicObject.Tag
+            end if
             'connections
 
             Dim objlist As String() = .FlowSheet.SimulationObjects.Values.Where(Function(x) TypeOf x Is SharedClasses.UnitOperations.BaseClass Or x.GraphicObject.ObjectType = ObjectType.OT_Recycle).Select(Function(m) m.GraphicObject.Tag).ToArray

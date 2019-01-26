@@ -28,6 +28,7 @@ Imports DWSIM.Interfaces.Interfaces2
 Imports System.Runtime.InteropServices
 Imports System.Dynamic
 Imports DWSIM.Drawing.SkiaSharp.GraphicObjects.Tables
+Imports DWSIM.SharedClasses.SystemsOfUnits
 Imports DWSIM.Thermodynamics.BaseClasses
 Imports DWSIM.Thermodynamics.PropertyPackages.Auxiliary
 
@@ -109,6 +110,11 @@ Public Class FormFlowsheet
 #Region "    Form Event Handlers "
 
     Public Sub New()
+
+        'Initialize Units From Automation
+        For Each pair As KeyValuePair(Of String,Units) In Units.PredefinedUserUnits
+            AddUnitSystemIfNotExists(pair.Value)
+        Next
 
         ' This call is required by the Windows Form Designer.
         InitializeComponent()
@@ -469,13 +475,24 @@ Public Class FormFlowsheet
 
     End Sub
 
-    Public Sub AddUnitSystem(ByVal su As SystemsOfUnits.Units)
-
+    ''' <summary>
+    ''' Add custom unit of systems if not exists
+    ''' </summary>
+    ''' <param name="su"></param>
+    ''' <returns></returns>
+    Public Function AddUnitSystemIfNotExists(ByVal su As SystemsOfUnits.Units) As Boolean
         If Not My.Application.UserUnitSystems.ContainsKey(su.Name) Then
             My.Application.UserUnitSystems.Add(su.Name, su)
             FormMain.AvailableUnitSystems.Add(su.Name, su)
             Me.FrmStSim1.ComboBox2.Items.Add(su.Name)
-        Else
+            Return True
+        End if
+
+        Return False
+    End Function
+
+    Public Sub AddUnitSystem(ByVal su As SystemsOfUnits.Units)
+        If Not AddUnitSystemIfNotExists(su) Then
             MessageBox.Show("Please input a different name for the unit system.")
         End If
 

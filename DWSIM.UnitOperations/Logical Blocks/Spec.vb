@@ -497,7 +497,9 @@ Namespace SpecialOps
             Me.ExpContext.Imports.AddType(GetType(System.Math))
 
             Me.ExpContext.Variables.Add("X", Double.Parse(Me.GetSourceVarValue))
-            Me.ExpContext.Variables.Add("X2", Double.Parse(Me.GetSourceVarValue2))
+            if (Not Me.GetSourceVarValue2 is Nothing) then
+               Me.ExpContext.Variables.Add("X2", Double.Parse(Me.GetSourceVarValue2))
+            end if
             Me.ExpContext.Variables.Add("Y", Double.Parse(Me.GetTargetVarValue))
             Me.Expr = Me.ExpContext.CompileGeneric(Of Double)(Me.Expression)
 
@@ -512,8 +514,8 @@ Namespace SpecialOps
                 Me.ExpContext = New Ciloci.Flee.ExpressionContext
                 Me.ExpContext.Imports.AddType(GetType(System.Math))
 
-                If Not Me.GetSourceVarValue Is Nothing And Not Me.GetTargetVarValue Is Nothing Then
-
+                'If Not Me.GetSourceVarValue Is Nothing And Not Me.GetTargetVarValue Is Nothing Then
+                If Not Me.GetTargetVarValue Is Nothing Then
                     'With Me
                         Me.ExpContext.Variables.Add("X", Double.Parse(Me.GetSourceVarValue))
                         If Not Me.GetSourceVarValue2 Is Nothing

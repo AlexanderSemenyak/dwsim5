@@ -28,6 +28,12 @@ Namespace SystemsOfUnits
 
         End Sub
 
+        ''' <summary>
+        ''' Units from Automation
+        ''' </summary>
+        ''' <returns></returns>
+        Public Shared Property PredefinedUserUnits As Dictionary(Of String, SystemsOfUnits.Units) = New Dictionary(Of String,Units)()
+
         Public Function LoadData(data As System.Collections.Generic.List(Of System.Xml.Linq.XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
             XMLSerializer.XMLSerializer.Deserialize(Me, data)
             Return True

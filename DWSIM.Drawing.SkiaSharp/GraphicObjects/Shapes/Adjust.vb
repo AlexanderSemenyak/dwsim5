@@ -83,65 +83,73 @@ Namespace GraphicObjects.Shapes
 
             MyBase.Draw(g)
 
-            Dim aPen As New SKPaint()
-            With aPen
-                .Color = SKColors.Red
-                .StrokeWidth = LineWidth
-                .IsStroke = True
-                .IsAntialias = GlobalSettings.Settings.DrawingAntiAlias
-                .PathEffect = SKPathEffect.CreateDash(New Single() {10.0F, 5.0F, 2.0F, 5.0F}, 2.0F)
-            End With
+            using aPen As New SKPaint(),aPenControlled As New SKPaint()
+                With aPenControlled
+                    .Color = SKColors.OrangeRed
+                    .StrokeWidth = LineWidth*2
+                    .IsStroke = True
+                    .IsAntialias = GlobalSettings.Settings.DrawingAntiAlias
+                    .PathEffect = SKPathEffect.CreateDash(New Single() {10.0F, 5.0F, 2.0F, 5.0F}, 2.0F)
+                End With
 
-            If Not Me.ConnectedToMv Is Nothing Then
-                canvas.DrawPoints(SKPointMode.Polygon, New SKPoint() {New SKPoint(Me.X + Me.Width / 2, Me.Y + Me.Height / 2), New SKPoint(Me.m_mvPT.X + Me.m_mvPT.Width / 2, Me.Y + Me.Height / 2), New SKPoint(Me.m_mvPT.X + Me.m_mvPT.Width / 2, Me.m_mvPT.Y + Me.m_mvPT.Height / 2)}, aPen)
-            End If
-            If Not Me.ConnectedToCv Is Nothing Then
-                canvas.DrawPoints(SKPointMode.Polygon, New SKPoint() {New SKPoint(Me.X + Me.Width / 2, Me.Y + Me.Height / 2), New SKPoint(Me.m_cvPT.X + Me.m_cvPT.Width / 2, Me.Y + Me.Height / 2), New SKPoint(Me.m_cvPT.X + Me.m_cvPT.Width / 2, Me.m_cvPT.Y + Me.m_cvPT.Height / 2)}, aPen)
-            End If
-            If Not Me.ConnectedToRv Is Nothing Then
-                canvas.DrawPoints(SKPointMode.Polygon, New SKPoint() {New SKPoint(Me.X + Me.Width / 2, Me.Y + Me.Height / 2), New SKPoint(Me.m_rvPT.X + Me.m_rvPT.Width / 2, Me.Y + Me.Height / 2), New SKPoint(Me.m_rvPT.X + Me.m_rvPT.Width / 2, Me.m_rvPT.Y + Me.m_rvPT.Height / 2)}, aPen)
-            End If
+                With aPen
+                    .Color = SKColors.Red
+                    .StrokeWidth = LineWidth
+                    .IsStroke = True
+                    .IsAntialias = GlobalSettings.Settings.DrawingAntiAlias
+                    .PathEffect = SKPathEffect.CreateDash(New Single() {10.0F, 5.0F, 2.0F, 5.0F}, 2.0F)
+                End With
 
-            Dim myPen As New SKPaint()
-            With myPen
-                .Color = SKColors.LightSalmon
-                .StrokeWidth = LineWidth
-                .IsStroke = False
-                .IsAntialias = GlobalSettings.Settings.DrawingAntiAlias
-            End With
+                If Not Me.ConnectedToMv Is Nothing Then
+                    canvas.DrawPoints(SKPointMode.Polygon, New SKPoint() {New SKPoint(Me.X + Me.Width / 2, Me.Y + Me.Height / 2), New SKPoint(Me.m_mvPT.X + Me.m_mvPT.Width / 2, Me.Y + Me.Height / 2), New SKPoint(Me.m_mvPT.X + Me.m_mvPT.Width / 2, Me.m_mvPT.Y + Me.m_mvPT.Height / 2)}, aPenControlled)
+                End If
+                If Not Me.ConnectedToCv Is Nothing Then
+                    canvas.DrawPoints(SKPointMode.Polygon, New SKPoint() {New SKPoint(Me.X + Me.Width / 2, Me.Y + Me.Height / 2), New SKPoint(Me.m_cvPT.X + Me.m_cvPT.Width / 2, Me.Y + Me.Height / 2), New SKPoint(Me.m_cvPT.X + Me.m_cvPT.Width / 2, Me.m_cvPT.Y + Me.m_cvPT.Height / 2)}, aPen)
+                End If
+                If Not Me.ConnectedToRv Is Nothing Then
+                    canvas.DrawPoints(SKPointMode.Polygon, New SKPoint() {New SKPoint(Me.X + Me.Width / 2, Me.Y + Me.Height / 2), New SKPoint(Me.m_rvPT.X + Me.m_rvPT.Width / 2, Me.Y + Me.Height / 2), New SKPoint(Me.m_rvPT.X + Me.m_rvPT.Width / 2, Me.m_rvPT.Y + Me.m_rvPT.Height / 2)}, aPen)
+                End If
 
-            canvas.DrawOval(New SKRect(X, Y, X + Width, Y + Height), myPen)
+                Dim myPen As New SKPaint()
+                With myPen
+                    .Color = SKColors.LightSalmon
+                    .StrokeWidth = LineWidth
+                    .IsStroke = False
+                    .IsAntialias = GlobalSettings.Settings.DrawingAntiAlias
+                End With
 
-            Dim myPen2 As New SKPaint()
-            With myPen2
-                .Color = SKColors.Red
-                .StrokeWidth = LineWidth
-                .IsStroke = True
-                .IsAntialias = GlobalSettings.Settings.DrawingAntiAlias
-            End With
+                canvas.DrawOval(New SKRect(X, Y, X + Width, Y + Height), myPen)
 
-            canvas.DrawOval(New SKRect(X, Y, X + Width, Y + Height), myPen2)
+                Dim myPen2 As New SKPaint()
+                With myPen2
+                    .Color = SKColors.Red
+                    .StrokeWidth = LineWidth
+                    .IsStroke = True
+                    .IsAntialias = GlobalSettings.Settings.DrawingAntiAlias
+                End With
 
-            Dim tpaint As New SKPaint()
+                canvas.DrawOval(New SKRect(X, Y, X + Width, Y + Height), myPen2)
 
-            With tpaint
-                .TextSize = 18.0#
-                .IsAntialias = GlobalSettings.Settings.DrawingAntiAlias
-                .Color = SKColors.Red
-                .IsStroke = False
-                .Typeface = DefaultTypeFace
-            End With
+                Dim tpaint As New SKPaint()
 
-            Dim trect As New SKRect(0, 0, 2, 2)
-            tpaint.GetTextPath("A", 0, 0).GetBounds(trect)
+                With tpaint
+                    .TextSize = 18.0#
+                    .IsAntialias = GlobalSettings.Settings.DrawingAntiAlias
+                    .Color = SKColors.Red
+                    .IsStroke = False
+                    .Typeface = DefaultTypeFace
+                End With
 
-            Dim ax, ay As Integer
-            ax = Me.X + (Me.Width - (trect.Right - trect.Left)) / 2
-            ay = Me.Y + (Me.Height - (trect.Top - trect.Bottom)) / 2
+                Dim trect As New SKRect(0, 0, 2, 2)
+                tpaint.GetTextPath("A", 0, 0).GetBounds(trect)
 
-            canvas.DrawText("Н", ax, ay, tpaint)
+                Dim ax, ay As Integer
+                ax = Me.X + (Me.Width - (trect.Right - trect.Left)) / 2
+                ay = Me.Y + (Me.Height - (trect.Top - trect.Bottom)) / 2
 
+                canvas.DrawText("Н", ax, ay, tpaint)
 
+            end using
         End Sub
 
     End Class

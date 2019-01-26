@@ -16,6 +16,12 @@ namespace DWSIM.Automation
     [Guid("ed615e8f-da69-4c24-80e2-bfe342168060")]
     public interface AutomationInterface
     {
+        /// <summary>
+        /// Add userdefined UOMs for automation
+        /// </summary>
+        /// <param name="serializedUnits"></param>
+        void AddUnits(byte[] serializedUnits);
+
         Interfaces.IFlowsheet LoadFlowsheet(string filepath);
         void SaveFlowsheet(IFlowsheet flowsheet, string filepath, bool compressed);
         void CalculateFlowsheet(IFlowsheet flowsheet, ISimulationObject sender);

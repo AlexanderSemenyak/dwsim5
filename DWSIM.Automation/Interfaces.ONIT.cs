@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using DWSIM.ExtensionMethods;
 using DWSIM.Interfaces;
 using DWSIM.SharedClasses.SystemsOfUnits;
@@ -9,6 +11,24 @@ namespace DWSIM.Automation
 {
     partial class Automation
     {
+        /// <summary>
+        /// Add userdefined UOMs for automation
+        /// </summary>
+        /// <param name="serializedUnits"></param>
+        public void AddUnits(byte[] serializedUnits)
+        {
+            using (var ms = new MemoryStream(serializedUnits))
+            {
+                var su = new Units();
+                var mySerializer = new BinaryFormatter(null, new System.Runtime.Serialization.StreamingContext());
+                su = (Units) mySerializer.Deserialize(ms);
+                if (su != null)
+                {
+                    Units.PredefinedUserUnits[su.Name] = su;
+                }
+            }
+        }
+
         /// <summary>
         /// Выполнить подстройку
         /// </summary>
