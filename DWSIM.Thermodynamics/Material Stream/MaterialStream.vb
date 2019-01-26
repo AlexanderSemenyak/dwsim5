@@ -5947,10 +5947,17 @@ Namespace Streams
         Public Function ShallowClone() As Streams.MaterialStream
 
             Dim ms As New MaterialStream("", "", FlowSheet, PropertyPackage)
+            CopyTo(ms)
+            Return ms
+
+        End Function
+
+        public Sub CopyTo(msDestination As MaterialStream)
+
             If Not FlowSheet Is Nothing Then
-                FlowSheet.AddCompoundsToMaterialStream(ms)
+                FlowSheet.AddCompoundsToMaterialStream(msDestination)
             Else
-                For Each phase As IPhase In ms.Phases.Values
+                For Each phase As IPhase In msDestination.Phases.Values
                     For Each comp In Me.Phases(0).Compounds.Values
                         With phase
                             .Compounds.Add(comp.Name, New Compound(comp.Name, ""))
@@ -5959,12 +5966,9 @@ Namespace Streams
                     Next
                 Next
             End If
-            ms.Assign(Me)
-            ms.AssignProps(Me)
-
-            Return ms
-
-        End Function
+            msDestination.Assign(Me)
+            msDestination.AssignProps(Me)
+        End Sub
 
         Public ReadOnly Property Flowsheet1 As IFlowsheet Implements IMaterialStream.Flowsheet
             Get

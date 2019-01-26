@@ -482,8 +482,12 @@ Public Class FormFlowsheet
     ''' <returns></returns>
     Public Function AddUnitSystemIfNotExists(ByVal su As SystemsOfUnits.Units) As Boolean
         If Not My.Application.UserUnitSystems.ContainsKey(su.Name) Then
-            My.Application.UserUnitSystems.Add(su.Name, su)
-            FormMain.AvailableUnitSystems.Add(su.Name, su)
+            My.Application.UserUnitSystems(su.Name) = su
+
+            If Not FormMain.AvailableUnitSystems.ContainsKey(su.Name) Then
+              FormMain.AvailableUnitSystems(su.Name) = su
+            end if
+
             Me.FrmStSim1.ComboBox2.Items.Add(su.Name)
             Return True
         End if
