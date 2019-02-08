@@ -24,7 +24,7 @@ namespace DWSIM.Automation
 
         Interfaces.IFlowsheet LoadFlowsheet(string filepath);
         void SaveFlowsheet(IFlowsheet flowsheet, string filepath, bool compressed);
-        void CalculateFlowsheet(IFlowsheet flowsheet, ISimulationObject sender);
+        List<Exception> CalculateFlowsheet(IFlowsheet flowsheet, ISimulationObject sender);
 
         /// <summary>
         /// Выполнить подстройку
@@ -78,7 +78,7 @@ namespace DWSIM.Automation
             }
         }
 
-        public void CalculateFlowsheet(IFlowsheet flowsheet, ISimulationObject sender)
+        public List<Exception> CalculateFlowsheet(IFlowsheet flowsheet, ISimulationObject sender)
         {
             GlobalSettings.Settings.SolverBreakOnException = true;
             GlobalSettings.Settings.SolverMode = 0;
@@ -86,14 +86,12 @@ namespace DWSIM.Automation
             GlobalSettings.Settings.EnableGPUProcessing = false;
             GlobalSettings.Settings.EnableParallelProcessing = true;
 
-            if ((sender != null))
+            if (sender != null)
             {
-                FlowsheetSolver.FlowsheetSolver.CalculateObject(flowsheet, sender.Name);
+                return FlowsheetSolver.FlowsheetSolver.CalculateObject(flowsheet, sender.Name);
             }
-            else
-            {
-                FlowsheetSolver.FlowsheetSolver.SolveFlowsheet(flowsheet, GlobalSettings.Settings.SolverMode);
-            }
+
+            return FlowsheetSolver.FlowsheetSolver.SolveFlowsheet(flowsheet, GlobalSettings.Settings.SolverMode);
         }
 
         private double GetRefVarValue(IFlowsheet formC, Adjust myADJ, IUnitsOfMeasure su)

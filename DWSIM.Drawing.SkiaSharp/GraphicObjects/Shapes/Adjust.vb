@@ -147,7 +147,7 @@ Namespace GraphicObjects.Shapes
                 ax = Me.X + (Me.Width - (trect.Right - trect.Left)) / 2
                 ay = Me.Y + (Me.Height - (trect.Top - trect.Bottom)) / 2
 
-                canvas.DrawText("Н", ax, ay, tpaint)
+                canvas.DrawText("К", ax, ay, tpaint)
 
             end using
         End Sub
