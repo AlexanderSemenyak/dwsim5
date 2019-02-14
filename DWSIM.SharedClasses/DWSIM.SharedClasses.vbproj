@@ -81,11 +81,11 @@
     <Reference Include="FileHelpers">
       <HintPath>..\DWSIM\References\FileHelpers.dll</HintPath>
     </Reference>
-    <Reference Include="HtmlAgilityPack, Version=1.8.9.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
-      <HintPath>..\packages\HtmlAgilityPack.1.8.9\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    <Reference Include="HtmlAgilityPack, Version=1.8.14.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.8.14\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=1.0.0.999, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpZipLib.1.0.0\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=1.1.0.145, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpZipLib.1.1.0\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -118,6 +118,18 @@
   <ItemGroup>
     <Compile Include="Base Class\FlowsheetBag.vb" />
     <Compile Include="Base Class\SimulationObjectBaseClasses.vb" />
+    <Compile Include="Editor\FormCustomCalcOrder.designer.vb">
+      <DependentUpon>FormCustomCalcOrder.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Editor\FormCustomCalcOrder.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Editor\ListViewWithReordering.designer.vb">
+      <DependentUpon>ListViewWithReordering.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Editor\ListViewWithReordering.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Editor\ObjectEditorForm.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -157,6 +169,9 @@
     <Compile Include="UpdateCheck\UpdateCheck.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Editor\FormCustomCalcOrder.resx">
+      <DependentUpon>FormCustomCalcOrder.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Editor\ObjectEditorForm.resx">
       <DependentUpon>ObjectEditorForm.vb</DependentUpon>
     </EmbeddedResource>
