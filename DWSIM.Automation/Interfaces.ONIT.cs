@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Windows.Forms;
 using DWSIM.ExtensionMethods;
 using DWSIM.Interfaces;
 using DWSIM.SharedClasses.SystemsOfUnits;
@@ -26,6 +27,23 @@ namespace DWSIM.Automation
                 {
                     Units.PredefinedUserUnits[su.Name] = su;
                 }
+            }
+        }
+
+        public void CloseWithoutSave(IFlowsheet flowsheet)
+        {
+            if (flowsheet == null) throw new ArgumentNullException(nameof(flowsheet));
+
+            flowsheet.Reset();
+            
+            if (flowsheet is FormFlowsheet ffs)
+            {
+                ffs.m_overrideCloseQuestion = true; //чтобы диалог о закрытии не появлялся 
+                ffs.Close();
+            }
+            else
+            {
+                throw new NotSupportedException("[Automation.CloseWithoutSave]flowsheet type = "+ flowsheet.GetType());
             }
         }
 

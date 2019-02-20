@@ -1,4 +1,5 @@
 ﻿Imports CapeOpen
+Imports DWSIM.Controls.PropertyGridEx
 Imports DWSIM.Drawing.SkiaSharp.GraphicObjects
 Imports DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes
 Imports DWSIM.Interfaces
@@ -6,7 +7,6 @@ Imports DWSIM.SharedClasses.SystemsOfUnits
 Imports DWSIM.Thermodynamics.BaseClasses
 Imports DWSIM.Thermodynamics.Streams
 Imports DWSIM.UnitOperations.UnitOperations.Auxiliary.SepOps
-Imports PropertyGridEx
 Imports System.Linq
 
 Public Class PropertyChanged

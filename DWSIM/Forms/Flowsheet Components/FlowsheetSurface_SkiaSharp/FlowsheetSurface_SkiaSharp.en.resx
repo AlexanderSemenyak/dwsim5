@@ -246,38 +246,20 @@
   <data name="tsbDisplayGrid.ToolTipText" xml:space="preserve">
     <value>Показать сетку</value>
   </data>
-  <data name="tsbMultiSelectMode.Text" xml:space="preserve">
-    <value>Включить режим выделения нескольких объектов</value>
-  </data>
   <data name="tsbPasteObj.Text" xml:space="preserve">
     <value>Вставить объекты</value>
-  </data>
-  <data name="tsbPrint.Text" xml:space="preserve">
-    <value>Просмотреть и распечатать модель</value>
   </data>
   <data name="tsbResizeMode.Text" xml:space="preserve">
     <value>Переключиться в/из режим изменения размера объектов</value>
   </data>
-  <data name="tsbResizeModeKeepAR.Text" xml:space="preserve">
-    <value>Сохранить пропорции при изменении размера</value>
-  </data>
   <data name="tsbSaveAsImage.Text" xml:space="preserve">
     <value>Сохранить как картинку</value>
-  </data>
-  <data name="tsbSnapObjectsToGrid.Text" xml:space="preserve">
-    <value>Привязать объекты к сетке</value>
   </data>
   <data name="tsbSnapObjectsToGrid.ToolTipText" xml:space="preserve">
     <value>Привязать объекты к сетке</value>
   </data>
-  <data name="TSBtabela.Text" xml:space="preserve">
-    <value>Вставить картинку</value>
-  </data>
   <data name="TSBtabela.ToolTipText" xml:space="preserve">
     <value>Вставить картинку</value>
-  </data>
-  <data name="TSBTexto.Text" xml:space="preserve">
-    <value>Вставить текст</value>
   </data>
   <data name="TSBTexto.ToolTipText" xml:space="preserve">
     <value>Вставить текст</value>

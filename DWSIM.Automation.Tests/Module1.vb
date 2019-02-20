@@ -8,11 +8,11 @@ Module Module1
 
         'create automation manager
         Dim interf As New DWSIM.Automation.Automation
-
+        dim errorText As String
         Dim sim As Interfaces.IFlowsheet
 
         'load Cavett's Problem simulation file
-        sim = interf.LoadFlowsheet("samples" & IO.Path.DirectorySeparatorChar & "Cavett's Problem.dwxml")
+        sim = interf.LoadFlowsheet("samples" & IO.Path.DirectorySeparatorChar & "Cavett's Problem.dwxml", errorText)
 
         'set a listener to catch solver messages
         sim.SetMessageListener(Sub(msg As String, type As IFlowsheet.MessageType)

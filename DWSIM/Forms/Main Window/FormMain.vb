@@ -72,6 +72,16 @@ Public Class FormMain
     Public SampleList As New List(Of String)
     Public FOSSEEList As New List(Of FOSSEEFlowsheet)
 
+    ''' <summary>
+    ''' ONIT Alexander  - send errorMessages to <see cref="m_LastError"/>
+    ''' </summary>
+    public m_SupressMessages As Boolean
+    public m_LastError As String
+
+    Sub SetLastError(errorText as String)
+        m_LastError = errorText
+    End Sub
+
 #Region "    Form Events"
 
     Private Sub FormMain_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles Me.DragDrop
@@ -660,6 +670,7 @@ Public Class FormMain
                     Try
                         'Me.ToolStripStatusLabel1.Text = DWSIM.App.GetLocalString("Abrindosimulao") + " (" + Me.filename + ")"
                         Application.DoEvents()
+                        SetLastError(Nothing)
                         Select Case Path.GetExtension(Me.filename).ToLower()
                             Case ".dwsim"
                                 'Me.LoadF(Me.filename)
@@ -687,7 +698,12 @@ Public Class FormMain
                                 NewMDIChild.LoadCase(NewMDIChild.currcase, False)
                         End Select
                     Catch ex As Exception
-                        MessageBox.Show(DWSIM.App.GetLocalString("Erroaoabrirarquivo") & " " & ex.Message, DWSIM.App.GetLocalString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        Dim errorText  = DWSIM.App.GetLocalString("Erroaoabrirarquivo") & " " & ex.Message
+                        SetLastError(errorText)
+                        If not m_SupressMessages Then
+                            MessageBox.Show(errorText, DWSIM.App.GetLocalString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
+
+                        End If
                     Finally
                         'Me.ToolStripStatusLabel1.Text = ""
                     End Try
@@ -2792,7 +2808,11 @@ Label_00CC:
             File.Delete(fullname)
             Return fs
         Catch ex As Exception
-            MessageBox.Show(ex.ToString, DWSIM.App.GetLocalString("Erroaoabrirarquivo"), MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Dim errorText  = ex.ToString
+            Me.SetLastError(errorText)
+            if not Me.m_SupressMessages then
+                MessageBox.Show(errorText, DWSIM.App.GetLocalString("Erroaoabrirarquivo"), MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End If
             Return Nothing
         End Try
 

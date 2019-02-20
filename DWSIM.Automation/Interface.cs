@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DWSIM.Interfaces;
 using DWSIM.FlowsheetSolver;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Windows.Forms;
 using DWSIM.ExtensionMethods;
 using DWSIM.UnitOperations.SpecialOps;
@@ -22,8 +23,10 @@ namespace DWSIM.Automation
         /// <param name="serializedUnits"></param>
         void AddUnits(byte[] serializedUnits);
 
-        Interfaces.IFlowsheet LoadFlowsheet(string filepath);
+        IFlowsheet LoadFlowsheet(string filepath, out string errorText);
         void SaveFlowsheet(IFlowsheet flowsheet, string filepath, bool compressed);
+        void CloseWithoutSave(IFlowsheet flowsheet);
+
         List<Exception> CalculateFlowsheet(IFlowsheet flowsheet, ISimulationObject sender);
 
         /// <summary>
@@ -51,19 +54,24 @@ namespace DWSIM.Automation
         {
             GlobalSettings.Settings.AutomationMode = true;
             fm = new FormMain();
+            fm.m_SupressMessages = true;
         }
 
-        public Interfaces.IFlowsheet LoadFlowsheet(string filepath)
+        public Interfaces.IFlowsheet LoadFlowsheet(string filepath, out string errorText)
         {
             var ext = System.IO.Path.GetExtension(filepath).ToLower();
+            IFlowsheet fs = null;
             if (ext.Contains("dwxmz") || ext.Contains("armgz"))
             {
-                return fm.LoadAndExtractXMLZIP(filepath, null, true);
+                fs = fm.LoadAndExtractXMLZIP(filepath, null, true);
             }
             else
             {
-                return fm.LoadXML(filepath, null, "", true);
+                fs = fm.LoadXML(filepath, null, "", true);
             }
+
+            errorText = fs == null ? fm.m_LastError : null;
+            return fs;
         }
 
         public void SaveFlowsheet(IFlowsheet flowsheet, string filepath, bool compressed)

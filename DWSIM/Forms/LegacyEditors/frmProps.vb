@@ -1,8 +1,8 @@
 ﻿Imports WeifenLuo.WinFormsUI.Docking
 Imports System.Text
-Imports PropertyGridEx
 Imports System.Linq
 Imports DWSIM.Interfaces
+Imports DWSIM.Controls.PropertyGridEx
 
 Public Class frmProps
 
