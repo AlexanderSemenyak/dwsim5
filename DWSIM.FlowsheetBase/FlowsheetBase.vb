@@ -1965,6 +1965,10 @@ Label_00CC:
         EUQPP.ComponentName = "Extended UNIQUAC (Aqueous Electrolytes)"
         AvailablePropertyPackages.Add(EUQPP.ComponentName.ToString, EUQPP)
 
+        Dim ENQPP As New ElectrolyteNRTLPropertyPackage()
+        ENQPP.ComponentName = "Electrolyte NRTL (Aqueous Electrolytes)"
+        AvailablePropertyPackages.Add(ENQPP.ComponentName.ToString, ENQPP)
+
         Dim BOPP As BlackOilPropertyPackage = New BlackOilPropertyPackage()
         BOPP.ComponentName = "Black Oil"
         AvailablePropertyPackages.Add(BOPP.ComponentName.ToString, BOPP)
