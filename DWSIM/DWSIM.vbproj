@@ -931,7 +931,7 @@
       <DependentUpon>FormReacManager.vb</DependentUpon>
     </Compile>
     <Compile Include="Tools\Reaction Subsystem Editors\FormReacManager.vb">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Tools\System of Units Creator\FormUnitGen.Designer.vb">
       <DependentUpon>FormUnitGen.vb</DependentUpon>
