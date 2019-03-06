@@ -109,39 +109,42 @@ Namespace GraphicObjects.Shapes
                 If Not Me.ConnectedToRv Is Nothing Then
                     canvas.DrawPoints(SKPointMode.Polygon, New SKPoint() {New SKPoint(Me.X + Me.Width / 2, Me.Y + Me.Height / 2), New SKPoint(Me.m_rvPT.X + Me.m_rvPT.Width / 2, Me.Y + Me.Height / 2), New SKPoint(Me.m_rvPT.X + Me.m_rvPT.Width / 2, Me.m_rvPT.Y + Me.m_rvPT.Height / 2)}, aPen)
                 End If
+            End Using
+            Dim myPen As New SKPaint()
+            With myPen
+                .Color = SKColors.LightSalmon
+                .StrokeWidth = LineWidth
+                .IsStroke = False
+                .IsAntialias = GlobalSettings.Settings.DrawingAntiAlias
+            End With
 
-                Dim myPen As New SKPaint()
-                With myPen
-                    .Color = SKColors.LightSalmon
-                    .StrokeWidth = LineWidth
-                    .IsStroke = False
-                    .IsAntialias = GlobalSettings.Settings.DrawingAntiAlias
-                End With
+            canvas.DrawOval(New SKRect(X, Y, X + Width, Y + Height), myPen)
 
-                canvas.DrawOval(New SKRect(X, Y, X + Width, Y + Height), myPen)
+            Dim myPen2 As New SKPaint()
+            With myPen2
+                .Color = SKColors.Red
+                .StrokeWidth = LineWidth
+                .IsStroke = True
+                .IsAntialias = GlobalSettings.Settings.DrawingAntiAlias
+            End With
 
-                Dim myPen2 As New SKPaint()
-                With myPen2
-                    .Color = SKColors.Red
-                    .StrokeWidth = LineWidth
-                    .IsStroke = True
-                    .IsAntialias = GlobalSettings.Settings.DrawingAntiAlias
-                End With
+            canvas.DrawOval(New SKRect(X, Y, X + Width, Y + Height), myPen2)
 
-                canvas.DrawOval(New SKRect(X, Y, X + Width, Y + Height), myPen2)
+            Dim tpaint As New SKPaint()
 
-                Dim tpaint As New SKPaint()
+            With tpaint
+                .TextSize = 18.0#
+                .IsAntialias = GlobalSettings.Settings.DrawingAntiAlias
+                .Color = SKColors.Red
+                .IsStroke = False
+                .Typeface = DefaultTypeFace
+            End With
 
-                With tpaint
-                    .TextSize = 18.0#
-                    .IsAntialias = GlobalSettings.Settings.DrawingAntiAlias
-                    .Color = SKColors.Red
-                    .IsStroke = False
-                    .Typeface = DefaultTypeFace
-                End With
-
-                Dim trect As New SKRect(0, 0, 2, 2)
-                tpaint.GetTextPath("A", 0, 0).GetBounds(trect)
+            Dim trect As New SKRect(0, 0, 2, 2)
+            tpaint.GetTextPath("A", 0, 0).GetBounds(trect)
+            Dim ax, ay As Integer
+            ax = Me.X + (Me.Width - (trect.Right - trect.Left)) / 2
+            ay = Me.Y + (Me.Height - (trect.Top - trect.Bottom)) / 2
 
             If FlippedH Or FlippedV Or Rotation <> 0 Then
 

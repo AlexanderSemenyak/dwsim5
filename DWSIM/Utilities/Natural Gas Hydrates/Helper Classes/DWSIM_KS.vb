@@ -32,7 +32,6 @@ Namespace DWSIM.Utilities.HYD
             unfPP = New PropertyPackages.UNIQUACPropertyPackage
 
             unfPP.CurrentMaterialStream = materialStream
-
         End Sub
 
         Function Cml_vdWP(ByVal estrutura As String, ByVal cela As Integer, ByVal id As Integer, ByVal T As Double)

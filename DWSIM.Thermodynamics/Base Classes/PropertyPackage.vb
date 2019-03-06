@@ -392,16 +392,16 @@ Namespace PropertyPackages
                 If Me.CurrentMaterialStream IsNot Nothing AndAlso
                     Me.CurrentMaterialStream.Flowsheet IsNot Nothing AndAlso
                     DirectCast(Me.CurrentMaterialStream, ISimulationObject).PreferredFlashAlgorithmTag <> "" Then
-
-                    Dim fa = Flowsheet.FlowsheetOptions.FlashAlgorithms.Where(Function(x) x.Tag = DirectCast(Me.CurrentMaterialStream, ISimulationObject).PreferredFlashAlgorithmTag).FirstOrDefault
-                    If Not fa Is Nothing Then Return fa.Clone Else Return Flowsheet.FlowsheetOptions.FlashAlgorithms(0).Clone
+                    dim fs = Me.CurrentMaterialStream.Flowsheet
+                    Dim fa = fs.FlowsheetOptions.FlashAlgorithms.Where(Function(x) x.Tag = DirectCast(Me.CurrentMaterialStream, ISimulationObject).PreferredFlashAlgorithmTag).FirstOrDefault
+                    If Not fa Is Nothing Then Return fa.Clone Else Return fs.FlowsheetOptions.FlashAlgorithms(0).Clone
 
                 Else
 
                     If Not FlashAlgorithm Is Nothing Then
                         Return FlashAlgorithm.Clone()
                     Else
-                        If Not Flowsheet Is Nothing Then
+                        If Not Me.Flowsheet Is Nothing Then
                             If Flowsheet.FlowsheetOptions.FlashAlgorithms.Count > 0 Then
                                 Return Flowsheet.FlowsheetOptions.FlashAlgorithms(0).Clone
                             Else
