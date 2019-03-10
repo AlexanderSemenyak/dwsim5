@@ -267,11 +267,17 @@
   <data name="InserirToolStripMenuItem.Text" xml:space="preserve">
     <value>Вставить</value>
   </data>
-  <data name="InspectorTSMI.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="AssistenteDeCriaçãoDeSubstânciasToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>328, 26</value>
   </data>
-  <data name="InspectorTSMI.Text" xml:space="preserve">
-    <value>Инспектор поиска решения</value>
+  <data name="AssistenteDeCriaçãoDeSubstânciasToolStripMenuItem.Text" xml:space="preserve">
+    <value>Помощник по созданию смесей</value>
+  </data>
+  <data name="PropriedadesDasSubstânciasToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>328, 26</value>
+  </data>
+  <data name="PropriedadesDasSubstânciasToolStripMenuItem.Text" xml:space="preserve">
+    <value>Просмотр характеристик базовых компонентов</value>
   </data>
   <data name="CaracterizacaoDePetroleosFracoesC7ToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>328, 26</value>
@@ -291,17 +297,11 @@
   <data name="GerenciadorDeAmostrasDePetroleoToolStripMenuItem.Text" xml:space="preserve">
     <value>Выполнить анализ нефти</value>
   </data>
-  <data name="PropriedadesDasSubstânciasToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="InspectorTSMI.Size" type="System.Drawing.Size, System.Drawing">
     <value>328, 26</value>
   </data>
-  <data name="PropriedadesDasSubstânciasToolStripMenuItem.Text" xml:space="preserve">
-    <value>Просмотр характеристик базовых компонентов</value>
-  </data>
-  <data name="AssistenteDeCriaçãoDeSubstânciasToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>328, 26</value>
-  </data>
-  <data name="AssistenteDeCriaçãoDeSubstânciasToolStripMenuItem.Text" xml:space="preserve">
-    <value>Помощник по созданию смесей</value>
+  <data name="InspectorTSMI.Text" xml:space="preserve">
+    <value>Инспектор поиска решения</value>
   </data>
   <data name="ToolStripSeparator15.Size" type="System.Drawing.Size, System.Drawing">
     <value>325, 6</value>
@@ -499,6 +499,9 @@
   <data name="$this.Text" xml:space="preserve">
     <value>Расчеты</value>
   </data>
+  <data name="PluginsToolStripMenuItem.Text" xml:space="preserve">
+    <value>Подключаемые модули</value>
+  </data>
   <data name="ScriptsToolStripMenuItem.Text" xml:space="preserve">
     <value>Скрипты</value>
   </data>
@@ -510,8 +513,5 @@
   </data>
   <data name="SaveFileDialog1.Title" xml:space="preserve">
     <value>Сохранить модель как картинку</value>
-  </data>
-  <data name="PluginsToolStripMenuItem.Text" xml:space="preserve">
-    <value>Подключаемые модули</value>
   </data>
 </root>

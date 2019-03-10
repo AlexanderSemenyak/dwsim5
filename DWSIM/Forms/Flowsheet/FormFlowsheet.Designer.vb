@@ -1,4 +1,4 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
 Partial Class FormFlowsheet
     Inherits System.Windows.Forms.Form
 
@@ -57,7 +57,7 @@ Partial Class FormFlowsheet
         Me.CaracterizacaoDePetroleosCurvasDeDestilacaoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GerenciadorDeAmostrasDePetroleoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.PropriedadesDasSubstanciasToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.AssistenteDeCriaçãoDeSubstânciasToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AssistenteDeCriacaoDeSubstanciasToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator15 = New System.Windows.Forms.ToolStripSeparator()
         Me.UtilitiesTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.TSMIAddUtility = New System.Windows.Forms.ToolStripMenuItem()
@@ -350,7 +350,7 @@ Partial Class FormFlowsheet
         'FerramentasToolStripMenuItem
         '
         resources.ApplyResources(Me.FerramentasToolStripMenuItem, "FerramentasToolStripMenuItem")
-        Me.FerramentasToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.InspectorTSMI, Me.CaracterizacaoDePetroleosFracoesC7ToolStripMenuItem, Me.CaracterizacaoDePetroleosCurvasDeDestilacaoToolStripMenuItem, Me.GerenciadorDeAmostrasDePetroleoToolStripMenuItem, Me.PropriedadesDasSubstanciasToolStripMenuItem, Me.AssistenteDeCriaçãoDeSubstânciasToolStripMenuItem, Me.ToolStripSeparator15})
+        Me.FerramentasToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AssistenteDeCria��oDeSubst�nciasToolStripMenuItem, Me.PropriedadesDasSubst�nciasToolStripMenuItem, Me.CaracterizacaoDePetroleosFracoesC7ToolStripMenuItem, Me.CaracterizacaoDePetroleosCurvasDeDestilacaoToolStripMenuItem, Me.GerenciadorDeAmostrasDePetroleoToolStripMenuItem, Me.InspectorTSMI, Me.ToolStripSeparator15})
         Me.FerramentasToolStripMenuItem.MergeAction = System.Windows.Forms.MergeAction.MatchOnly
         Me.FerramentasToolStripMenuItem.MergeIndex = 3
         Me.FerramentasToolStripMenuItem.Name = "FerramentasToolStripMenuItem"
@@ -395,13 +395,13 @@ Partial Class FormFlowsheet
         Me.PropriedadesDasSubstanciasToolStripMenuItem.MergeIndex = 5
         Me.PropriedadesDasSubstanciasToolStripMenuItem.Name = "PropriedadesDasSubstanciasToolStripMenuItem"
         '
-        'AssistenteDeCriaçãoDeSubstânciasToolStripMenuItem
+        'AssistenteDeCriacaoDeSubstanciasToolStripMenuItem
         '
-        resources.ApplyResources(Me.AssistenteDeCriaçãoDeSubstânciasToolStripMenuItem, "AssistenteDeCriaçãoDeSubstânciasToolStripMenuItem")
-        Me.AssistenteDeCriaçãoDeSubstânciasToolStripMenuItem.Image = Global.DWSIM.My.Resources.Resources.wand
-        Me.AssistenteDeCriaçãoDeSubstânciasToolStripMenuItem.MergeAction = System.Windows.Forms.MergeAction.Insert
-        Me.AssistenteDeCriaçãoDeSubstânciasToolStripMenuItem.MergeIndex = 6
-        Me.AssistenteDeCriaçãoDeSubstânciasToolStripMenuItem.Name = "AssistenteDeCriaçãoDeSubstânciasToolStripMenuItem"
+        resources.ApplyResources(Me.AssistenteDeCriacaoDeSubstanciasToolStripMenuItem, "AssistenteDeCriacaoDeSubstanciasToolStripMenuItem")
+        Me.AssistenteDeCriacaoDeSubstanciasToolStripMenuItem.Image = Global.DWSIM.My.Resources.Resources.wand
+        Me.AssistenteDeCriacaoDeSubstanciasToolStripMenuItem.MergeAction = System.Windows.Forms.MergeAction.Insert
+        Me.AssistenteDeCriacaoDeSubstanciasToolStripMenuItem.MergeIndex = 6
+        Me.AssistenteDeCriacaoDeSubstanciasToolStripMenuItem.Name = "AssistenteDeCriacaoDeSubstanciasToolStripMenuItem"
         '
         'ToolStripSeparator15
         '
@@ -857,7 +857,7 @@ Partial Class FormFlowsheet
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents GraficoToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents AssistenteDeCriaçãoDeSubstânciasToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents AssistenteDeCriacaoDeSubstanciasToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ConsoleOutputTSMI As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents InspectorTSMI As ToolStripMenuItem
     Friend WithEvents ToolStrip1 As ToolStrip
