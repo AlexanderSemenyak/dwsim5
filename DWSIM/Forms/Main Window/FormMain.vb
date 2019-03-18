@@ -394,8 +394,10 @@ Public Class FormMain
     End Function
 
     Private Sub UpdateMRUList()
-
-        'process MRU file list
+        If  GlobalSettings.Settings.AutomationMode Then
+            Exit Sub
+        End If
+            'process MRU file list
 
         If My.Settings.MostRecentFiles.Count > 10 Then
             My.Settings.MostRecentFiles.RemoveAt(0)
