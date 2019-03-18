@@ -1791,6 +1791,7 @@ Public Class FormFlowsheet
                     obj.LoadData(xel.Elements.ToList)
                     obj.UniqueID = pkey & obj.UniqueID
                     obj.Tag = obj.Tag & " (C)"
+                    obj.Flowsheet = Me
                     Me.Options.PropertyPackages.Add(obj.UniqueID, obj)
                 Catch ex As Exception
                     excs.Add(New Exception("Error Loading Property Package Information", ex))
@@ -1819,6 +1820,7 @@ Public Class FormFlowsheet
             Dim gobj As GraphicObject = (From go As GraphicObject In
                                 FormSurface.FlowsheetSurface.DrawingObjects Where go.Name = id).SingleOrDefault
             obj.GraphicObject = gobj
+            gobj.Owner = obj
             obj.SetFlowsheet(Me)
             If Not gobj Is Nothing Then
                 obj.LoadData(xel.Elements.ToList)
@@ -2733,10 +2735,10 @@ Public Class FormFlowsheet
 
     Public Property AvailableCompounds As Dictionary(Of String, ICompoundConstantProperties) Implements IFlowsheet.AvailableCompounds
         Get
-            Return Options.NotSelectedComponents
+            Return FormMain.AvailableComponents
         End Get
         Set(value As Dictionary(Of String, ICompoundConstantProperties))
-            Options.NotSelectedComponents = value
+            FormMain.AvailableComponents = value
         End Set
     End Property
 

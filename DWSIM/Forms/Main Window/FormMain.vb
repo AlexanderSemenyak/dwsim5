@@ -58,7 +58,7 @@ Public Class FormMain
 
     Private tmpform2 As FormFlowsheet
 
-    Public AvailableComponents As New Dictionary(Of String, BaseClasses.ConstantProperties)
+    Public AvailableComponents As New Dictionary(Of String, Interfaces.ICompoundConstantProperties)
     Public AvailableUnitSystems As New Dictionary(Of String, SystemsOfUnits.Units)
     Public PropertyPackages As New Dictionary(Of String, PropertyPackages.PropertyPackage)
     Public FlashAlgorithms As New Dictionary(Of String, Thermodynamics.PropertyPackages.Auxiliary.FlashAlgorithms.FlashAlgorithm)
@@ -588,6 +588,7 @@ Public Class FormMain
 
         Dim ENQPP As New ElectrolyteNRTLPropertyPackage()
         ENQPP.ComponentName = "Electrolyte NRTL (Aqueous Electrolytes)"
+        ENQPP.ComponentDescription = DWSIM.App.GetLocalString("DescENPP")
 
         PropertyPackages.Add(ENQPP.ComponentName.ToString, ENQPP)
 
@@ -964,8 +965,10 @@ Public Class FormMain
             Dim addedcomps = AvailableComponents.Keys.Select(Function(x) x.ToLower).ToList()
             For Each cp As BaseClasses.ConstantProperties In cpa
                 If Not addedcomps.Contains(cp.Name.ToLower) Then
-                    Me.AvailableComponents.Add(cp.Name, cp)
-                    Me.AvailableComponents(cp.Name).IsCOOLPROPSupported = True
+                    If AvailableComponents.Values.Where(Function(x) x.CAS_Number = cp.CAS_Number).Count = 0 Then
+                        Me.AvailableComponents.Add(cp.Name, cp)
+                        Me.AvailableComponents(cp.Name).IsCOOLPROPSupported = True
+                    End If
                 End If
             Next
         Catch ex As Exception
@@ -980,7 +983,11 @@ Public Class FormMain
         cpa = chedl.Transfer().ToArray()
         Dim addedcomps = AvailableComponents.Keys.Select(Function(x) x.ToLower).ToList()
         For Each cp As ConstantProperties In cpa
-            If Not addedcomps.Contains(cp.Name.ToLower) AndAlso Not AvailableComponents.ContainsKey(cp.Name) Then AvailableComponents.Add(cp.Name, cp)
+            If Not addedcomps.Contains(cp.Name.ToLower) AndAlso Not AvailableComponents.ContainsKey(cp.Name) Then
+                If AvailableComponents.Values.Where(Function(x) x.CAS_Number = cp.CAS_Number).Count = 0 Then
+                    AvailableComponents.Add(cp.Name, cp)
+                End If
+            End If
         Next
 
     End Sub
@@ -1643,7 +1650,7 @@ Public Class FormMain
                 Else
                     obj = pp.ReturnInstance(xel.Element("Type").Value)
                 End If
-                obj.LoadData(xel.Elements.ToList)
+                DirectCast(obj, Interfaces.ICustomXMLSerialization).LoadData(xel.Elements.ToList)
                 Dim newID As String = Guid.NewGuid.ToString
                 If form.Options.PropertyPackages.ContainsKey(obj.UniqueID) Then obj.UniqueID = newID
                 obj.Flowsheet = form
@@ -2115,7 +2122,7 @@ Public Class FormMain
                 Else
                     obj = pp.ReturnInstance(xel.Element("Type").Value)
                 End If
-                obj.LoadData(xel.Elements.ToList)
+                DirectCast(obj, Interfaces.ICustomXMLSerialization).LoadData(xel.Elements.ToList)
                 Dim newID As String = Guid.NewGuid.ToString
                 If form.Options.PropertyPackages.ContainsKey(obj.UniqueID) Then obj.UniqueID = newID
                 obj.Flowsheet = form
@@ -2651,7 +2658,7 @@ Public Class FormMain
                 createdms = True
             End If
             xel.Add(New XElement("PropertyPackage", {New XElement("ID", pp.Key),
-                                                     pp.Value.SaveData().ToArray()}))
+                                                     DirectCast(pp.Value, Interfaces.ICustomXMLSerialization).SaveData().ToArray()}))
             If createdms Then pp.Value.CurrentMaterialStream = Nothing
         Next
 
@@ -3584,7 +3591,7 @@ Label_00CC:
         System.Diagnostics.Process.Start("https://sourceforge.net/p/dwsim/tickets/")
     End Sub
 
-    Private Sub DonateToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DonateToolStripMenuItem.Click
+    Private Sub DonateToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) 
         System.Diagnostics.Process.Start("https://gumroad.com/products/PTljX")
     End Sub
 

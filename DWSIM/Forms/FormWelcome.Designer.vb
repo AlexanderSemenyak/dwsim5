@@ -60,7 +60,6 @@ Partial Class FormWelcome
         Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Button8 = New System.Windows.Forms.Button()
-        Me.Button7 = New System.Windows.Forms.Button()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Button5 = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
@@ -390,15 +389,10 @@ Partial Class FormWelcome
         'Button8
         '
         resources.ApplyResources(Me.Button8, "Button8")
-        Me.Button8.Image = Global.DWSIM.My.Resources.Resources.DWSIM_ico_64
+        Me.Button8.ForeColor = System.Drawing.Color.FromArgb(CType(CType(249, Byte), Integer), CType(CType(104, Byte), Integer), CType(CType(85, Byte), Integer))
+        Me.Button8.Image = Global.DWSIM.My.Resources.Resources.become_a_patron_button_2x
         Me.Button8.Name = "Button8"
-        Me.Button8.UseVisualStyleBackColor = True
-        '
-        'Button7
-        '
-        resources.ApplyResources(Me.Button7, "Button7")
-        Me.Button7.Name = "Button7"
-        Me.Button7.UseVisualStyleBackColor = True
+        Me.Button8.UseVisualStyleBackColor = False
         '
         'Button1
         '
@@ -446,7 +440,6 @@ Partial Class FormWelcome
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
         Me.Controls.Add(Me.Button8)
-        Me.Controls.Add(Me.Button7)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.TabControl1)
         Me.Controls.Add(Me.Label1)
@@ -519,6 +512,5 @@ Partial Class FormWelcome
     Friend WithEvents Button4 As Button
     Public WithEvents Label5 As Label
     Public WithEvents Label13 As Label
-    Friend WithEvents Button7 As Button
     Friend WithEvents Button8 As Button
 End Class

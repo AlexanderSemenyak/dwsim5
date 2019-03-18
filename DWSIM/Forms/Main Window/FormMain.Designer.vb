@@ -68,7 +68,6 @@ Partial Class FormMain
         Me.ForumToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.RastreamentoDeBugsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.PatronToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.DonateToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.NewToolStripButton = New System.Windows.Forms.ToolStripButton()
@@ -297,7 +296,7 @@ Partial Class FormMain
         '
         'HelpToolStripMenuItem
         '
-        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ContentsToolStripMenuItem, Me.DocumentacaoToolStripMenuItem, Me.toolStripSeparator5, Me.DWSIMNaInternetToolStripMenuItem, Me.PatronToolStripMenuItem, Me.DonateToolStripMenuItem, Me.AboutToolStripMenuItem})
+        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ContentsToolStripMenuItem, Me.DocumentacaoToolStripMenuItem, Me.toolStripSeparator5, Me.DWSIMNaInternetToolStripMenuItem, Me.PatronToolStripMenuItem, Me.AboutToolStripMenuItem})
         Me.HelpToolStripMenuItem.MergeAction = System.Windows.Forms.MergeAction.Insert
         Me.HelpToolStripMenuItem.MergeIndex = 102
         Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
@@ -359,11 +358,6 @@ Partial Class FormMain
         resources.ApplyResources(Me.PatronToolStripMenuItem, "PatronToolStripMenuItem")
         Me.PatronToolStripMenuItem.Image = Global.DWSIM.My.Resources.Resources.DWSIM_ico_64
         Me.PatronToolStripMenuItem.Name = "PatronToolStripMenuItem"
-        '
-        'DonateToolStripMenuItem
-        '
-        resources.ApplyResources(Me.DonateToolStripMenuItem, "DonateToolStripMenuItem")
-        Me.DonateToolStripMenuItem.Name = "DonateToolStripMenuItem"
         '
         'AboutToolStripMenuItem
         '
@@ -825,7 +819,6 @@ Partial Class FormMain
     Public WithEvents WikiToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Public WithEvents ForumToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Public WithEvents RastreamentoDeBugsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Public WithEvents DonateToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Public WithEvents ToolStripSeparator3 As System.Windows.Forms.ToolStripSeparator
     Public WithEvents ToolStripButton2 As System.Windows.Forms.ToolStripButton
     Public WithEvents ToolStripSeparator4 As System.Windows.Forms.ToolStripSeparator
