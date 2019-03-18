@@ -654,6 +654,8 @@ Partial Class FormMain
     Public WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
 
     Public Sub New()
+        'In nonVisual Mode умуте Form_Onload не вызывается и соответсвенно эта переменная не инициализируется
+        Me.dropdownlist = New ArrayList
 
         If DWSIM.App.IsRunningOnMono Or GlobalSettings.Settings.AutomationMode Then
 
@@ -672,7 +674,6 @@ Partial Class FormMain
                 Catch ex As Exception
 
                 End Try
-
             End If
 
             If GlobalSettings.Settings.OldUI Then

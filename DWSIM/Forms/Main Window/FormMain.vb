@@ -216,7 +216,6 @@ Public Class FormMain
                 Me.TimerBackup.Enabled = True
             End If
 
-            Me.dropdownlist = New ArrayList
             Me.UpdateMRUList()
 
             'load plugins from 'Plugins' folder
