@@ -394,7 +394,7 @@ Public Class FormMain
     End Function
 
     Private Sub UpdateMRUList()
-        If  GlobalSettings.Settings.AutomationMode Then
+        If  GlobalSettings.Settings.AutomationMode =true Then
             Exit Sub
         End If
             'process MRU file list
@@ -402,65 +402,69 @@ Public Class FormMain
         If My.Settings.MostRecentFiles.Count > 10 Then
             My.Settings.MostRecentFiles.RemoveAt(0)
         End If
-
-        Dim j As Integer = 0
-        For Each k As String In Me.dropdownlist
-            Dim tsmi As ToolStripItem = Me.FileToolStripMenuItem.DropDownItems(Convert.ToInt32(k - j))
-            If tsmi.DisplayStyle = ToolStripItemDisplayStyle.Text Or TypeOf tsmi Is ToolStripSeparator Then
-                Me.FileToolStripMenuItem.DropDownItems.Remove(tsmi)
-                j = j + 1
-            End If
-        Next
+        If  (GlobalSettings.Settings.AutomationMode =false)Then
+            Dim j As Integer = 0
+            For Each k As String In Me.dropdownlist
+                Dim tsmi As ToolStripItem = Me.FileToolStripMenuItem.DropDownItems(Convert.ToInt32(k - j))
+                If tsmi.DisplayStyle = ToolStripItemDisplayStyle.Text Or TypeOf tsmi Is ToolStripSeparator Then
+                    Me.FileToolStripMenuItem.DropDownItems.Remove(tsmi)
+                    j = j + 1
+                End If
+            Next
+        end if 
 
         Me.dropdownlist.Clear()
 
         Dim toremove As New ArrayList
 
-        If Not My.Settings.MostRecentFiles Is Nothing Then
-            For Each str As String In My.Settings.MostRecentFiles
-                If File.Exists(str) Then
-                    Dim tsmi As New ToolStripMenuItem
-                    With tsmi
-                        .Text = str
-                        .Tag = str
-                        .DisplayStyle = ToolStripItemDisplayStyle.Text
-                    End With
-                    Me.FileToolStripMenuItem.DropDownItems.Insert(Me.FileToolStripMenuItem.DropDownItems.Count - 1, tsmi)
+        If  (GlobalSettings.Settings.AutomationMode =false)Then
+
+            If (Not My.Settings.MostRecentFiles Is Nothing ) andalso (GlobalSettings.Settings.AutomationMode =false)Then
+                For Each str As String In My.Settings.MostRecentFiles
+                    If File.Exists(str) Then
+                        Dim tsmi As New ToolStripMenuItem
+                        With tsmi
+                            .Text = str
+                            .Tag = str
+                            .DisplayStyle = ToolStripItemDisplayStyle.Text
+                        End With
+                        Me.FileToolStripMenuItem.DropDownItems.Insert(Me.FileToolStripMenuItem.DropDownItems.Count - 1, tsmi)
+                        Me.dropdownlist.Add(Me.FileToolStripMenuItem.DropDownItems.Count - 2)
+                        AddHandler tsmi.Click, AddressOf Me.OpenRecent_click
+                    Else
+                        toremove.Add(str)
+                    End If
+                Next
+                For Each s As String In toremove
+                    My.Settings.MostRecentFiles.Remove(s)
+                Next
+                If My.Settings.MostRecentFiles.Count > 0 Then
+                    Me.FileToolStripMenuItem.DropDownItems.Insert(Me.FileToolStripMenuItem.DropDownItems.Count - 1, New ToolStripSeparator())
                     Me.dropdownlist.Add(Me.FileToolStripMenuItem.DropDownItems.Count - 2)
-                    AddHandler tsmi.Click, AddressOf Me.OpenRecent_click
-                Else
-                    toremove.Add(str)
+                End If
+            Else
+                My.Settings.MostRecentFiles = New System.Collections.Specialized.StringCollection
+            End If
+
+            Dim latestfolders As New List(Of String)
+
+            For Each f As String In My.Settings.MostRecentFiles
+                If File.Exists(f) And Path.GetExtension(f).ToLower <> ".dwbcs" Then
+                    If Not latestfolders.Contains(Path.GetDirectoryName(f)) Then latestfolders.Add(Path.GetDirectoryName(f))
                 End If
             Next
-            For Each s As String In toremove
-                My.Settings.MostRecentFiles.Remove(s)
-            Next
-            If My.Settings.MostRecentFiles.Count > 0 Then
-                Me.FileToolStripMenuItem.DropDownItems.Insert(Me.FileToolStripMenuItem.DropDownItems.Count - 1, New ToolStripSeparator())
+
+            For Each s In latestfolders
+                Dim tsmi As New ToolStripMenuItem With {.Text = s, .Tag = s, .DisplayStyle = ToolStripItemDisplayStyle.Text}
+                Me.FileToolStripMenuItem.DropDownItems.Insert(Me.FileToolStripMenuItem.DropDownItems.Count - 1, tsmi)
                 Me.dropdownlist.Add(Me.FileToolStripMenuItem.DropDownItems.Count - 2)
+                AddHandler tsmi.Click, AddressOf Me.OpenRecentFolder_click
+            Next
+
+            If latestfolders.Count > 0 Then
+                Me.FileToolStripMenuItem.DropDownItems.Insert(Me.FileToolStripMenuItem.DropDownItems.Count - 1, New ToolStripSeparator())
             End If
-        Else
-            My.Settings.MostRecentFiles = New System.Collections.Specialized.StringCollection
-        End If
-
-        Dim latestfolders As New List(Of String)
-
-        For Each f As String In My.Settings.MostRecentFiles
-            If File.Exists(f) And Path.GetExtension(f).ToLower <> ".dwbcs" Then
-                If Not latestfolders.Contains(Path.GetDirectoryName(f)) Then latestfolders.Add(Path.GetDirectoryName(f))
-            End If
-        Next
-
-        For Each s In latestfolders
-            Dim tsmi As New ToolStripMenuItem With {.Text = s, .Tag = s, .DisplayStyle = ToolStripItemDisplayStyle.Text}
-            Me.FileToolStripMenuItem.DropDownItems.Insert(Me.FileToolStripMenuItem.DropDownItems.Count - 1, tsmi)
-            Me.dropdownlist.Add(Me.FileToolStripMenuItem.DropDownItems.Count - 2)
-            AddHandler tsmi.Click, AddressOf Me.OpenRecentFolder_click
-        Next
-
-        If latestfolders.Count > 0 Then
-            Me.FileToolStripMenuItem.DropDownItems.Insert(Me.FileToolStripMenuItem.DropDownItems.Count - 1, New ToolStripSeparator())
-        End If
+       End If
 
     End Sub
 
@@ -2742,7 +2746,7 @@ Public Class FormMain
         File.Delete(myfile)
 
         xdoc.Save(path)
-
+    If Settings.AutomationMode = false then 
         If IO.Path.GetExtension(simulationfilename).ToLower.Contains("dwxml") Or IO.Path.GetExtension(simulationfilename).ToLower.Contains("dwxmz")Or IO.Path.GetExtension(simulationfilename).ToLower.Contains("armgz") Then
             Me.UIThread(New Action(Sub()
                                        Dim mypath As String = simulationfilename
@@ -2750,7 +2754,7 @@ Public Class FormMain
                                        'process recent files list
                                        If Not My.Settings.MostRecentFiles.Contains(mypath) Then
                                            My.Settings.MostRecentFiles.Add(mypath)
-                                           If Not My.Application.CommandLineArgs.Count > 1 Then Me.UpdateMRUList()
+                                           If (Not My.Application.CommandLineArgs.Count > 1) and (Settings.AutomationMode = false) Then Me.UpdateMRUList()
                                        End If
                                        form.Options.FilePath = Me.filename
                                        form.UpdateFormText()
@@ -2758,7 +2762,7 @@ Public Class FormMain
                                        'Me.ToolStripStatusLabel1.Text = ""
                                    End Sub))
         End If
-
+     end if
         If Not IO.Path.GetExtension(path).ToLower.Contains("dwbcs") Then
             form.ProcessScripts(Scripts.EventType.SimulationSaved, Scripts.ObjectType.Simulation, "")
         End If
@@ -2776,9 +2780,14 @@ Public Class FormMain
         End Using
     End Function
 
-    Function LoadAndExtractXMLZIP(ByVal caminho As String, ProgressFeedBack As Action(Of Integer), Optional ByVal forcommandline As Boolean = False) As Interfaces.IFlowsheet
+    Function LoadAndExtractXMLZIP(ByVal caminho As String, ProgressFeedBack As Action(Of Integer), Optional ByVal forcommandline As Boolean = False,Optional ByVal pathtosave As string = Nothing) As Interfaces.IFlowsheet
 
-        Dim pathtosave As String = My.Computer.FileSystem.SpecialDirectories.Temp + Path.DirectorySeparatorChar
+        if string.IsNullOrEmpty(pathtosave) then 
+            pathtosave = My.Computer.FileSystem.SpecialDirectories.Temp 
+        end if
+
+        pathtosave = pathtosave + Path.DirectorySeparatorChar
+
         Dim fullname As String = ""
 
         Dim pwd As String = Nothing

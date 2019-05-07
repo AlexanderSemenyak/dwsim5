@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Windows.Forms;
 using DWSIM.ExtensionMethods;
+using DWSIM.SharedClasses.SystemsOfUnits;
 using DWSIM.UnitOperations.SpecialOps;
 using cv = DWSIM.SharedClasses.SystemsOfUnits.Converter;
 namespace DWSIM.Automation
@@ -21,7 +23,7 @@ namespace DWSIM.Automation
         /// Add userdefined UOMs for automation
         /// </summary>
         /// <param name="serializedUnits"></param>
-        void AddUnits(byte[] serializedUnits);
+        Units AddUnits(byte[] serializedUnits);
 
         IFlowsheet LoadFlowsheet(string filepath, out string errorText);
         void SaveFlowsheet(IFlowsheet flowsheet, string filepath, bool compressed);
@@ -45,25 +47,27 @@ namespace DWSIM.Automation
     }
 
     [Guid("37437090-e541-4f2c-9856-d1e27df32ecb"), ClassInterface(ClassInterfaceType.None)]
-    public partial class Automation : AutomationInterface
+    public partial class Automation : AutomationInterface, IDisposable
     {
 
         FormMain fm = null;
 
         public Automation()
         {
-            GlobalSettings.Settings.AutomationMode = true;
+            SetupCalculationMode();
+
             fm = new FormMain();
             fm.m_SupressMessages = true;
         }
 
         public Interfaces.IFlowsheet LoadFlowsheet(string filepath, out string errorText)
         {
+            GlobalSettings.Settings.AutomationMode = true;
             var ext = System.IO.Path.GetExtension(filepath).ToLower();
             IFlowsheet fs = null;
             if (ext.Contains("dwxmz") || ext.Contains("armgz"))
             {
-                fs = fm.LoadAndExtractXMLZIP(filepath, null, true);
+                fs = fm.LoadAndExtractXMLZIP(filepath, null, true, Path.GetDirectoryName(filepath)/*for exclude blocking by parallel access*/);
             }
             else
             {
@@ -76,6 +80,7 @@ namespace DWSIM.Automation
 
         public void SaveFlowsheet(IFlowsheet flowsheet, string filepath, bool compressed)
         {
+            GlobalSettings.Settings.AutomationMode = true;
             if (compressed)
             {
                 fm.SaveXMLZIP(filepath, (FormFlowsheet) flowsheet);
@@ -88,11 +93,7 @@ namespace DWSIM.Automation
 
         public List<Exception> CalculateFlowsheet(IFlowsheet flowsheet, ISimulationObject sender)
         {
-            GlobalSettings.Settings.SolverBreakOnException = true;
-            GlobalSettings.Settings.SolverMode = 0;
-            GlobalSettings.Settings.SolverTimeoutSeconds = 220;
-            GlobalSettings.Settings.EnableGPUProcessing = false;
-            GlobalSettings.Settings.EnableParallelProcessing = true;
+            SetupCalculationMode();
 
             if (sender != null)
             {
@@ -100,6 +101,16 @@ namespace DWSIM.Automation
             }
 
             return FlowsheetSolver.FlowsheetSolver.SolveFlowsheet(flowsheet, GlobalSettings.Settings.SolverMode);
+        }
+
+        private static void SetupCalculationMode()
+        {
+            GlobalSettings.Settings.AutomationMode = true;
+            GlobalSettings.Settings.SolverBreakOnException = true;
+            GlobalSettings.Settings.SolverMode = 0;
+            GlobalSettings.Settings.SolverTimeoutSeconds = 360;
+            GlobalSettings.Settings.EnableGPUProcessing = false;
+            GlobalSettings.Settings.EnableParallelProcessing = true;
         }
 
         private double GetRefVarValue(IFlowsheet formC, Adjust myADJ, IUnitsOfMeasure su)
@@ -124,6 +135,11 @@ namespace DWSIM.Automation
         {
             var cod = myADJ.ControlledObjectData;
             return Convert.ToDouble(formC.SimulationObjects[cod.ID].GetPropertyValue(cod.PropertyName, su) ?? 0);
+        }
+
+        public void Dispose()
+        {
+            fm?.Dispose();
         }
     }
 }

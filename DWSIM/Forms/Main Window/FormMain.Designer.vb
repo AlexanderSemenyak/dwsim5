@@ -5,6 +5,7 @@ Imports System.Globalization
 Imports System.Linq
 Imports System.Runtime.Serialization.Formatters.Binary
 Imports System.Configuration
+Imports DWSIM.SharedClasses.SystemsOfUnits
 
 <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class FormMain
@@ -787,6 +788,13 @@ Partial Class FormMain
             .Add("C3", New SystemsOfUnits.SIUnits_Custom3)
             .Add("C4", New SystemsOfUnits.SIUnits_Custom4)
             .Add("C5", New SystemsOfUnits.SIUnits_Custom5)
+
+            Dim ms As MemoryStream = New MemoryStream(My.Resources.UOM_PHG)
+            Dim mySerializer = New BinaryFormatter(Nothing, New System.Runtime.Serialization.StreamingContext())
+            Dim su1 = CType(mySerializer.Deserialize(ms), Units)
+            'Units.PredefinedUserUnits(su1.Name) = su1
+
+            .Add(su1.Name, su1)
 
             If Not My.Application.UserUnitSystems Is Nothing Then
                 If My.Application.UserUnitSystems.Count > 0 Then

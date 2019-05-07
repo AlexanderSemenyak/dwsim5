@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms;
 using DWSIM.ExtensionMethods;
@@ -16,33 +18,50 @@ namespace DWSIM.Automation
         /// Add userdefined UOMs for automation
         /// </summary>
         /// <param name="serializedUnits"></param>
-        public void AddUnits(byte[] serializedUnits)
+        public Units AddUnits(byte[] serializedUnits)
         {
             using (var ms = new MemoryStream(serializedUnits))
             {
                 var su = new Units();
                 var mySerializer = new BinaryFormatter(null, new System.Runtime.Serialization.StreamingContext());
-                su = (Units) mySerializer.Deserialize(ms);
-                if (su != null)
+                mySerializer.Binder = UnitsVersionBinder.Instance;
+
+                try
                 {
-                    Units.PredefinedUserUnits[su.Name] = su;
+                    //Debugger.Break();
+                    su = (Units) mySerializer.Deserialize(ms);
+                    if (su != null)
+                    {
+                        Units.PredefinedUserUnits[su.Name] = su;
+                        return su;
+                    }
+                }
+                catch (Exception e)
+                {
+                    //Debugger.Break();
+
+                    throw;
                 }
             }
+
+            return null;
         }
 
         public void CloseWithoutSave(IFlowsheet flowsheet)
         {
+            GlobalSettings.Settings.AutomationMode = true;
             if (flowsheet == null) throw new ArgumentNullException(nameof(flowsheet));
 
-            flowsheet.Reset();
-            
+           
             if (flowsheet is FormFlowsheet ffs)
             {
+                //flowsheet.Reset(); - Not Implemented in this version of IFlowsheet
                 ffs.m_overrideCloseQuestion = true; //чтобы диалог о закрытии не появлялся 
                 ffs.Close();
             }
             else
             {
+                //flowsheet.Reset(); 
                 throw new NotSupportedException("[Automation.CloseWithoutSave]flowsheet type = "+ flowsheet.GetType());
             }
         }
@@ -58,6 +77,7 @@ namespace DWSIM.Automation
         /// <returns></returns>
         public bool Adjust(IFlowsheet formC, Adjust myADJ, double? minValue, double? maxValue, double? tolerance, out string errorText)
         {
+            GlobalSettings.Settings.AutomationMode = true;
             IUnitsOfMeasure su = myADJ.FlowSheet.FlowsheetOptions.SelectedUnitSystem;
             double? mvVal, rfVal = null;
             double cvVal, maxval, minval;

@@ -1644,6 +1644,7 @@
     <None Include="Resources\bullet_arrow_top.png" />
     <None Include="Resources\cog.png" />
     <None Include="Resources\anchor.png" />
+    <None Include="Resources\UOM_PHG.dwund" />
     <None Include="Resources\wrench_orange.png" />
     <None Include="Resources\arrow_rotate_clockwise.png" />
     <None Include="Resources\node_en copy.jpg" />
