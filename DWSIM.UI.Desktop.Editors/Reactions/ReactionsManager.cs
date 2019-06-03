@@ -12,18 +12,19 @@ using Eto.Forms;
 using s = DWSIM.UI.Shared.Common;
 using DWSIM.UI.Shared;
 using Eto.Drawing;
+using DWSIM.UI.Desktop.Shared;
 
 namespace DWSIM.UI.Desktop.Editors
 {
     public class ReactionsManager
     {
 
-        public IFlowsheet flowsheet;
+        public Flowsheet flowsheet;
         public DynamicLayout container;
 
         private DynamicLayout rxcontainer, rscontainer;
 
-        public ReactionsManager(IFlowsheet fs, DynamicLayout layout)
+        public ReactionsManager(Flowsheet fs, DynamicLayout layout)
         {
             flowsheet = fs;
             container = layout;
@@ -35,10 +36,7 @@ namespace DWSIM.UI.Desktop.Editors
 
             rxcontainer = new DynamicLayout();
             rscontainer = new DynamicLayout();
-
-            //rxcontainer.BackgroundColor = Colors.White;
-            //rscontainer.BackgroundColor = Colors.White;
-
+            
             if (flowsheet.ReactionSets.Count == 0) { flowsheet.ReactionSets.Add("DefaultSet", new ReactionSet("DefaultSet", "Default Set", "")); }
 
             container.CreateAndAddLabelRow("Reactions");
@@ -46,6 +44,8 @@ namespace DWSIM.UI.Desktop.Editors
             CreateReactionsList();
 
             container.CreateAndAddControlRow(rxcontainer);
+
+            container.CreateAndAddLabelRow("Add a Reaction");
 
             var btnAddConv = container.CreateAndAddLabelAndButtonRow("Add New Conversion Reaction", "New Conversion Reaction", null, (sender, e) =>
             {
@@ -96,7 +96,7 @@ namespace DWSIM.UI.Desktop.Editors
                 var _rx = new Reaction("NewKinReac", Guid.NewGuid().ToString(), "") { ReactionType = Interfaces.Enums.ReactionType.Kinetic };
                 var myview = s.GetDefaultContainer();
                 var cre = new KineticReaction(flowsheet, _rx, myview);
-                var alert = s.GetDefaultEditorForm("Add Kinetic Reaction", 500, 400, myview);
+                var alert = s.GetDefaultEditorForm("Add Kinetic Reaction", 850, 650, myview);
                 myview.CreateAndAddTwoButtonsRow("Cancel", null, "Add", null, (sender2, e2) => alert.Close(),
                 (sender2, e2) =>
                 {
@@ -106,8 +106,6 @@ namespace DWSIM.UI.Desktop.Editors
                     CreateReactionsList();
                     alert.Close();
                 });
-                myview.CreateAndAddEmptySpace();
-                myview.CreateAndAddEmptySpace();
                 alert.Shown += (s1, e1) => alert.Height = myview.Height;
                 alert.Topmost = true;
                 alert.Show();
@@ -118,7 +116,7 @@ namespace DWSIM.UI.Desktop.Editors
                 var _rx = new Reaction("NewHetCatReac", Guid.NewGuid().ToString(), "") { ReactionType = Interfaces.Enums.ReactionType.Heterogeneous_Catalytic };
                 var myview = s.GetDefaultContainer();
                 var cre = new HetCatReaction(flowsheet, _rx, myview);
-                var alert = s.GetDefaultEditorForm("Add Heterogeneous Catalytic Reaction", 500, 400, myview);
+                var alert = s.GetDefaultEditorForm("Add Heterogeneous Catalytic Reaction", 850, 650, myview);
                 myview.CreateAndAddTwoButtonsRow("Cancel", null, "Add", null, (sender2, e2) => alert.Close(),
                 (sender2, e2) =>
                 {
@@ -141,10 +139,13 @@ namespace DWSIM.UI.Desktop.Editors
 
             container.CreateAndAddControlRow(rscontainer);
 
+            container.CreateAndAddLabelRow("Add a Reaction Set");
+
             container.CreateAndAddLabelAndButtonRow("Add New Reaction Set", "New Reaction Set", null, (sender, e) =>
             {
                 var rsid = Guid.NewGuid().ToString();
                 flowsheet.ReactionSets.Add(rsid, new ReactionSet(rsid, "NewReactionSet", ""));
+                flowsheet.UpdateEditorPanels.Invoke();
                 CreateReactionSetsList();
             });
 
@@ -220,7 +221,7 @@ namespace DWSIM.UI.Desktop.Editors
                             case Interfaces.Enums.ReactionType.Kinetic:
                                 var myview3 = s.GetDefaultContainer();
                                 var cre3 = new KineticReaction(flowsheet, rx, myview3);
-                                var alert3 = s.GetDefaultEditorForm("Edit Kinetic Reaction", 500, 400, myview3);
+                                var alert3 = s.GetDefaultEditorForm("Edit Kinetic Reaction", 850, 650, myview3);
                                 myview3.CreateAndAddTwoButtonsRow("Cancel", null, "Update", null, (sender2, e2) => alert3.Close(),
                                 (sender2, e2) =>
                                 {
@@ -228,8 +229,8 @@ namespace DWSIM.UI.Desktop.Editors
                                     CreateReactionsList();
                                     alert3.Close();
                                 });
-                                myview3.CreateAndAddEmptySpace();
-                                myview3.CreateAndAddEmptySpace();
+                                //myview3.CreateAndAddEmptySpace();
+                                //myview3.CreateAndAddEmptySpace();
                                 alert3.Shown += (s1, e1) => alert3.Height = myview3.Height;
                                 alert3.Topmost = true;
                                 alert3.Show();
@@ -237,7 +238,7 @@ namespace DWSIM.UI.Desktop.Editors
                             case Interfaces.Enums.ReactionType.Heterogeneous_Catalytic:
                                 var myview4 = s.GetDefaultContainer();
                                 var cre4 = new HetCatReaction(flowsheet, rx, myview4);
-                                var alert4 = s.GetDefaultEditorForm("Edit Heterogeneous Reaction", 500, 400, myview4);
+                                var alert4 = s.GetDefaultEditorForm("Edit Heterogeneous Reaction", 850, 650, myview4);
                                 myview4.CreateAndAddTwoButtonsRow("Cancel", null, "Update", null, (sender2, e2) => alert4.Close(),
                                 (sender2, e2) =>
                                 {
@@ -296,7 +297,7 @@ namespace DWSIM.UI.Desktop.Editors
                         });
                         alert.Topmost = true;
                         alert.Show();
-
+                        flowsheet.UpdateEditorPanels.Invoke();
                     },
                     (sender, e) =>
                     {

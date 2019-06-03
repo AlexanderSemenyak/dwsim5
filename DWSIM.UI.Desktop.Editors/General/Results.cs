@@ -56,12 +56,12 @@ namespace DWSIM.UI.Desktop.Editors
             {
                 var pipe = (Pipe)SimObject;
                 string[] datatype = {"Length", "Inclination", "Pressure", "Temperature",
-					"Liquid Velocity", "Vapor Velocity", "Heat Flow", "Liquid Holdup",
-					"Overall HTC","Internal HTC","Wall k/L","Insulation k/L", "External HTC"};
+                    "Liquid Velocity", "Vapor Velocity", "Heat Flow", "Liquid Holdup",
+                    "Overall HTC","Internal HTC","Wall k/L","Insulation k/L", "External HTC"};
 
                 string[] units = { su.distance, "degrees", su.pressure, su.temperature, su.velocity, su.velocity,
-									su.heatflow, "", su.heat_transf_coeff, su.heat_transf_coeff, su.heat_transf_coeff,
-									su.heat_transf_coeff, su.heat_transf_coeff};
+                                    su.heatflow, "", su.heat_transf_coeff, su.heat_transf_coeff, su.heat_transf_coeff,
+                                    su.heat_transf_coeff, su.heat_transf_coeff};
 
                 var btn = new Button { Text = "View Pipe Properties Profile" };
                 container.Rows.Add(new TableRow(btn));
@@ -241,40 +241,81 @@ namespace DWSIM.UI.Desktop.Editors
                 }
             }
 
-            var txtcontrol = new TextArea { ReadOnly = true };
-            txtcontrol.Font = GlobalSettings.Settings.RunningPlatform() == GlobalSettings.Settings.Platform.Mac ? new Font("Menlo", GlobalSettings.Settings.ResultsReportFontSize) : Fonts.Monospace(GlobalSettings.Settings.ResultsReportFontSize);
-
-            container.Rows.Add(new TableRow(txtcontrol));
-
             var obj = (ISimulationObject)SimObject;
 
             try
             {
-                if (obj.Calculated)
+                var structreport = obj.GetStructuredReport();
+                if (structreport.Count > 0)
                 {
-                    txtcontrol.Text = "Object successfully calculated on " + obj.LastUpdated.ToString() + "\n\n";
-                    txtcontrol.Text += obj.GetReport(SimObject.GetFlowsheet().FlowsheetOptions.SelectedUnitSystem,
-                                               System.Globalization.CultureInfo.InvariantCulture,
-                                                SimObject.GetFlowsheet().FlowsheetOptions.NumberFormat);
+
+                    var containerd = UI.Shared.Common.GetDefaultContainer();
+                    container.Rows.Add(new TableRow(containerd));
+                    foreach (var item in structreport)
+                    {
+                        switch (item.Item1)
+                        {
+                            case Interfaces.Enums.ReportItemType.Label:
+                                containerd.CreateAndAddLabelRow(item.Item2[0]);
+                                break;
+                            case Interfaces.Enums.ReportItemType.Description:
+                                containerd.CreateAndAddDescriptionRow(item.Item2[0]);
+                                break;
+                            case Interfaces.Enums.ReportItemType.SingleColumn:
+                                containerd.CreateAndAddLabelRow2(item.Item2[0]);
+                                break;
+                            case Interfaces.Enums.ReportItemType.DoubleColumn:
+                                containerd.CreateAndAddThreeLabelsRow(item.Item2[0], item.Item2[1], "");
+                                break;
+                            case Interfaces.Enums.ReportItemType.TripleColumn:
+                                containerd.CreateAndAddThreeLabelsRow(item.Item2[0], item.Item2[1], item.Item2[2]);
+                                break;
+                        }
+                    }
                 }
                 else
                 {
-                    if (obj.ErrorMessage != "")
+                    var txtcontrol = new TextArea { ReadOnly = true };
+                    txtcontrol.Font = GlobalSettings.Settings.RunningPlatform() == GlobalSettings.Settings.Platform.Mac ? new Font("Menlo", GlobalSettings.Settings.ResultsReportFontSize) : Fonts.Monospace(GlobalSettings.Settings.ResultsReportFontSize);
+
+                    container.Rows.Add(new TableRow(txtcontrol));
+
+                    try
                     {
-                        txtcontrol.Text = "An error occured during the calculation of this object. Details:\n\n" + obj.ErrorMessage;
+                        if (obj.Calculated)
+                        {
+                            txtcontrol.Text = "Object successfully calculated on " + obj.LastUpdated.ToString() + "\n\n";
+                            txtcontrol.Text += obj.GetReport(SimObject.GetFlowsheet().FlowsheetOptions.SelectedUnitSystem,
+                                                       System.Globalization.CultureInfo.InvariantCulture,
+                                                        SimObject.GetFlowsheet().FlowsheetOptions.NumberFormat);
+                        }
+                        else
+                        {
+                            if (obj.ErrorMessage != "")
+                            {
+                                txtcontrol.Text = "An error occured during the calculation of this object. Details:\n\n" + obj.ErrorMessage;
+                            }
+                            else
+                            {
+                                txtcontrol.Text = "This object hasn't been calculated yet.";
+                            }
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        txtcontrol.Text = "This object hasn't been calculated yet.";
+                        txtcontrol.Text = "Report generation failed. Please recalculate the flowsheet and try again.";
+                        txtcontrol.Text += "\n\nError details: " + ex.ToString();
                     }
+
                 }
             }
-            catch (Exception ex)
-            {
-                txtcontrol.Text = "Report generation failed. Please recalculate the flowsheet and try again.";
+            catch (Exception ex) {
+                var txtcontrol = new TextArea { ReadOnly = true };
+                txtcontrol.Font = GlobalSettings.Settings.RunningPlatform() == GlobalSettings.Settings.Platform.Mac ? new Font("Menlo", GlobalSettings.Settings.ResultsReportFontSize) : Fonts.Monospace(GlobalSettings.Settings.ResultsReportFontSize);
+                container.Rows.Add(new TableRow(txtcontrol));
+                txtcontrol.Text = "Report generation failed.";
                 txtcontrol.Text += "\n\nError details: " + ex.ToString();
             }
-
         }
 
         List<double> PopulateData(Pipe pipe, int position)
@@ -300,7 +341,7 @@ namespace DWSIM.UI.Desktop.Editors
                     }
                     break;
                 case 1: //elevation
-                    
+
                     foreach (var sec in pipe.Profile.Sections.Values)
                     {
                         for (qi = 1; qi == 1; qi++)

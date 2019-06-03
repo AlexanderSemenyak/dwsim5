@@ -826,6 +826,30 @@ Namespace My
                 Me("FlowsheetAntiAliasing") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property ShowWebPanel() As Boolean
+            Get
+                Return CType(Me("ShowWebPanel"),Boolean)
+            End Get
+            Set
+                Me("ShowWebPanel") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property AutoCloseWelcomePanel() As Boolean
+            Get
+                Return CType(Me("AutoCloseWelcomePanel"),Boolean)
+            End Get
+            Set
+                Me("AutoCloseWelcomePanel") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

@@ -38,6 +38,8 @@ Imports DWSIM.Drawing.SkiaSharp.GraphicObjects.Tables
 Imports DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes
 Imports DWSIM.Drawing.SkiaSharp.GraphicObjects.Charts
 
+Imports Cefsharp.Winforms
+
 Public Class FormMain
 
     Inherits Form
@@ -49,6 +51,7 @@ Public Class FormMain
     Public pathsep As Char
 
     Public FrmOptions As FormOptions
+    Public FrmWelcome As FormWelcome
     Public FrmRec As FormRecoverFiles
 
     Private dropdownlist As ArrayList
@@ -83,6 +86,21 @@ Public Class FormMain
     End Sub
 
 #Region "    Form Events"
+
+    Public Sub InitializeChromium()
+        If My.Settings.ShowWebPanel And Not DWSIM.App.IsRunningOnMono Then
+            Try
+                Dim settings As CefSettings = New CefSettings
+                settings.IgnoreCertificateErrors = True
+                settings.PersistUserPreferences = True
+                settings.PersistSessionCookies = True
+                settings.CachePath = Path.Combine(My.Computer.FileSystem.SpecialDirectories.CurrentUserApplicationData, "BrowserDataCache")
+                CefSharp.CefSharpSettings.SubprocessExitIfParentProcessClosed = True
+                CefSharp.Cef.Initialize(settings)
+            Catch ex As Exception
+            End Try
+        End If
+    End Sub
 
     Private Sub FormMain_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles Me.DragDrop
         If e.Data.GetDataPresent(DataFormats.FileDrop) Then
@@ -172,6 +190,11 @@ Public Class FormMain
             Catch ex As Exception
             End Try
 
+            Try
+                If Not DWSIM.App.IsRunningOnMono Then CefSharp.Cef.Shutdown()
+            Catch ex As Exception
+            End Try
+
         End If
 
     End Sub
@@ -242,6 +265,140 @@ Public Class FormMain
             Me.FrmOptions.Dock = DockStyle.Fill
             Me.SettingsPanel.Controls.Add(Me.FrmOptions)
             Me.ButtonClose.BringToFront()
+
+            Me.FrmWelcome = New FormWelcome
+            Me.FrmWelcome.Owner = Me
+            Me.FrmWelcome.Dock = DockStyle.Fill
+            Me.WelcomePanel.Controls.Add(Me.FrmWelcome)
+            Me.ButtonClose2.BringToFront()
+
+            If My.Settings.ShowWebPanel Then
+
+                If DWSIM.App.IsRunningOnMono Then
+
+                    WebPanel.Visible = False
+
+                    'Try
+                    '    Dim c1, c2, c3, c4, c5 As WebBrowser
+                    '    Dim a1, a2, a3, a4, a5 As String
+
+                    '    a1 = "https://www.patreon.com/dwsim/posts"
+                    '    a2 = "https://sourceforge.net/p/dwsim/discussion/"
+                    '    a3 = "https://dwsim.fossee.in/forum"
+                    '    a4 = "https://www.youtube.com/channel/UCzzBQrycKoN5XbCeLV12y3Q/videos?view=0&sort=dd&flow=grid"
+                    '    a5 = "https://pernaletec.shinyapps.io/dwsim/"
+
+                    '    c1 = New WebBrowser() With {.Url = New Uri(a1), .Dock = DockStyle.Fill}
+                    '    c2 = New WebBrowser() With {.Url = New Uri(a2), .Dock = DockStyle.Fill}
+                    '    c3 = New WebBrowser() With {.Url = New Uri(a3), .Dock = DockStyle.Fill}
+                    '    c4 = New WebBrowser() With {.Url = New Uri(a4), .Dock = DockStyle.Fill}
+                    '    c5 = New WebBrowser() With {.Url = New Uri(a5), .Dock = DockStyle.Fill}
+
+                    '    frmweb.TabPageA.Controls.Add(c1)
+                    '    frmweb.TabPageB.Controls.Add(c2)
+                    '    frmweb.TabPageC.Controls.Add(c3)
+                    '    frmweb.TabPageD.Controls.Add(c4)
+                    '    frmweb.TabPageE.Controls.Add(c5)
+
+                    'Catch ex As Exception
+
+                    'End Try
+
+                Else
+
+                    Dim frmweb As New FormWebPanel
+                    frmweb.Dock = DockStyle.Fill
+
+                    Try
+
+                        Dim c1, c2, c3, c4, c5 As ChromiumWebBrowser
+                        Dim a1, a2, a3, a4, a5 As String
+
+                        a1 = "https://www.patreon.com/dwsim/posts"
+                        a2 = "https://sourceforge.net/p/dwsim/discussion/"
+                        a3 = "https://dwsim.fossee.in/forum"
+                        a4 = "https://www.youtube.com/channel/UCzzBQrycKoN5XbCeLV12y3Q/videos?view=0&sort=dd&flow=grid"
+                        a5 = "https://pernaletec.shinyapps.io/dwsim/"
+
+                        c1 = New ChromiumWebBrowser(a1) With {.Dock = DockStyle.Fill}
+                        c2 = New ChromiumWebBrowser(a2) With {.Dock = DockStyle.Fill}
+                        c3 = New ChromiumWebBrowser(a3) With {.Dock = DockStyle.Fill}
+                        c4 = New ChromiumWebBrowser(a4) With {.Dock = DockStyle.Fill}
+                        c5 = New ChromiumWebBrowser(a5) With {.Dock = DockStyle.Fill}
+
+                        frmweb.TabPageA.Controls.Add(c1)
+                        frmweb.TabPageB.Controls.Add(c2)
+                        frmweb.TabPageC.Controls.Add(c3)
+                        frmweb.TabPageD.Controls.Add(c4)
+                        frmweb.TabPageE.Controls.Add(c5)
+
+                        AddHandler WebPanel.VisibleChanged, Sub(sender2, e2)
+
+                                                                If Not WebPanel.Visible Then
+
+                                                                    Try
+                                                                        c1.GetBrowser.StopLoad()
+                                                                    Catch ex As Exception
+                                                                    End Try
+                                                                    Try
+                                                                        c2.GetBrowser.StopLoad()
+                                                                    Catch ex As Exception
+                                                                    End Try
+                                                                    Try
+                                                                        c3.GetBrowser.StopLoad()
+                                                                    Catch ex As Exception
+                                                                    End Try
+                                                                    Try
+                                                                        c4.GetBrowser.StopLoad()
+                                                                    Catch ex As Exception
+                                                                    End Try
+                                                                    Try
+                                                                        c5.GetBrowser.StopLoad()
+                                                                    Catch ex As Exception
+                                                                    End Try
+
+                                                                Else
+
+                                                                    Try
+                                                                        c1.GetBrowser.Reload()
+                                                                    Catch ex As Exception
+                                                                    End Try
+                                                                    Try
+                                                                        c2.GetBrowser.Reload()
+                                                                    Catch ex As Exception
+                                                                    End Try
+                                                                    Try
+                                                                        c3.GetBrowser.Reload()
+                                                                    Catch ex As Exception
+                                                                    End Try
+                                                                    Try
+                                                                        c4.GetBrowser.Reload()
+                                                                    Catch ex As Exception
+                                                                    End Try
+                                                                    Try
+                                                                        c5.GetBrowser.Reload()
+                                                                    Catch ex As Exception
+                                                                    End Try
+
+                                                                End If
+
+                                                            End Sub
+
+                    Catch ex As Exception
+
+                    End Try
+
+                    WebPanel.Controls.Add(frmweb)
+                    Me.ButtonCloseWeb.BringToFront()
+
+                End If
+
+            Else
+
+                WebPanel.Visible = False
+
+            End If
+
 
         End If
 
@@ -650,7 +807,12 @@ Public Class FormMain
     End Sub
 
     Private Sub FormParent_MdiChildActivate(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.MdiChildActivate
+
         If Me.MdiChildren.Length >= 1 Then
+
+            Me.WebPanel.Visible = False
+            Me.PainelDaWebToolStripMenuItem.Checked = False
+
             Me.ToolStripButton1.Enabled = True
             Me.SaveAllToolStripButton.Enabled = True
             Me.SaveToolStripButton.Enabled = True
@@ -667,7 +829,14 @@ Public Class FormMain
                 End If
             End If
 
+            ToolStripManager.RevertMerge(ToolStrip1)
+
+            If TypeOf Me.ActiveMdiChild Is FormFlowsheet Then
+                ToolStripManager.Merge(DirectCast(ActiveMdiChild, FormFlowsheet).ToolStrip1, ToolStrip1)
+            End If
+
         End If
+
     End Sub
 
     Private Sub FormParent_Shown(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Shown
@@ -754,15 +923,11 @@ Public Class FormMain
 
     Sub OpenWelcomeScreen()
 
+        Me.WelcomePanel.Visible = True
+
         If GlobalSettings.Settings.OldUI AndAlso My.Settings.BackupFiles.Count > 0 Then
             Me.FrmRec = New FormRecoverFiles
-            If Me.FrmRec.ShowDialog(Me) = Windows.Forms.DialogResult.Ignore Then
-                Dim frmw As New FormWelcome
-                frmw.ShowDialog(Me)
-            End If
-        Else
-            Dim frmw As New FormWelcome
-            frmw.ShowDialog(Me)
+            Me.FrmRec.ShowDialog(Me)
         End If
 
         UpdateFlowsheetLinks()
@@ -1840,6 +2005,63 @@ Public Class FormMain
             excs.Add(New Exception("Error Loading Spreadsheet Information", ex))
         End Try
 
+        If xdoc.Element("DWSIM_Simulation_Data").Element("Spreadsheet") IsNot Nothing Then
+
+            If xdoc.Element("DWSIM_Simulation_Data").Element("Spreadsheet").Element("CellStyles") IsNot Nothing Then
+                Try
+                    Dim value = xdoc.Element("DWSIM_Simulation_Data").Element("Spreadsheet").Element("CellStyles").Value
+                    value = SharedClasses.EncryptString.StringCipher.Decrypt(value, "dwsim")
+                    Dim i As Integer
+                    Dim c1x = XDocument.Parse(value)
+                    i = 0
+                    form.FormSpreadsheet.CellStyles.Clear()
+                    For Each x1 In c1x.Element("Styles").Elements
+                        form.FormSpreadsheet.CellStyles.Add(New List(Of DataGridViewCellStyle))
+                        For Each x2 In x1.Elements
+                            Dim xv = x2.Elements.ToList
+                            If xv.Count > 0 Then
+                                Dim style As New DataGridViewCellStyle
+                                style.Font = New Font(Font, Font.Size)
+                                XMLSerializer.XMLSerializer.Deserialize(style, xv)
+                                form.FormSpreadsheet.CellStyles(i).Add(style)
+                            Else
+                                form.FormSpreadsheet.CellStyles(i).Add(Nothing)
+                            End If
+                        Next
+                        i += 1
+                    Next
+                Catch ex As Exception
+                End Try
+            End If
+
+            If xdoc.Element("DWSIM_Simulation_Data").Element("Spreadsheet").Element("RowHeights") IsNot Nothing Then
+                Try
+                    Dim value = xdoc.Element("DWSIM_Simulation_Data").Element("Spreadsheet").Element("RowHeights").Value
+                    value = SharedClasses.EncryptString.StringCipher.Decrypt(value, "dwsim")
+                    form.FormSpreadsheet.RowHeights = Newtonsoft.Json.JsonConvert.DeserializeObject(Of List(Of Integer))(value)
+                Catch ex As Exception
+                End Try
+            End If
+
+            If xdoc.Element("DWSIM_Simulation_Data").Element("Spreadsheet").Element("ColumnWidths") IsNot Nothing Then
+                Try
+                    Dim value = xdoc.Element("DWSIM_Simulation_Data").Element("Spreadsheet").Element("ColumnWidths").Value
+                    value = SharedClasses.EncryptString.StringCipher.Decrypt(value, "dwsim")
+                    form.FormSpreadsheet.ColumnWidths = Newtonsoft.Json.JsonConvert.DeserializeObject(Of List(Of Integer))(value)
+                Catch ex As Exception
+                End Try
+            End If
+
+            If xdoc.Element("DWSIM_Simulation_Data").Element("Spreadsheet").Element("NumberFormats") IsNot Nothing Then
+                Try
+                    Dim value = xdoc.Element("DWSIM_Simulation_Data").Element("Spreadsheet").Element("NumberFormats").Value
+                    value = SharedClasses.EncryptString.StringCipher.Decrypt(value, "dwsim")
+                    form.FormSpreadsheet.NumberFormats = Newtonsoft.Json.JsonConvert.DeserializeObject(Of List(Of List(Of String)))(value)
+                Catch ex As Exception
+                End Try
+            End If
+        End If
+
         For Each obj In form.FormSurface.FlowsheetSurface.DrawingObjects
             If obj.ObjectType = ObjectType.GO_SpreadsheetTable Then
                 DirectCast(obj, SpreadsheetTableGraphic).Flowsheet = form
@@ -2736,6 +2958,40 @@ Public Class FormMain
         xdoc.Element("DWSIM_Simulation_Data").Element("Spreadsheet").Add(New XElement("Data2"))
         xdoc.Element("DWSIM_Simulation_Data").Element("Spreadsheet").Element("Data1").Value = form.FormSpreadsheet.CopyDT1ToString()
         xdoc.Element("DWSIM_Simulation_Data").Element("Spreadsheet").Element("Data2").Value = form.FormSpreadsheet.CopyDT2ToString()
+
+        Dim c1x = New XDocument()
+        c1x.Add(New XElement("Styles"))
+        For Each l1 In form.FormSpreadsheet.CellStyles
+            Dim x1l As New XElement("StyleRow")
+            For Each i1 In l1
+                Dim x1 As New XElement("Style")
+                If i1 IsNot Nothing Then
+                    If i1.Font Is Nothing Then i1.Font = New Font(Font, Font.Size)
+                    x1.Add(XMLSerializer.XMLSerializer.Serialize(i1))
+                Else
+                    x1.Add(Nothing)
+                End If
+                x1l.Add(x1)
+            Next
+            c1x.Element("Styles").Add(x1l)
+        Next
+
+        Dim c1 = c1x.ToString
+        Dim c2 = Newtonsoft.Json.JsonConvert.SerializeObject(form.FormSpreadsheet.RowHeights)
+        Dim c3 = Newtonsoft.Json.JsonConvert.SerializeObject(form.FormSpreadsheet.ColumnWidths)
+        Dim c4 = Newtonsoft.Json.JsonConvert.SerializeObject(form.FormSpreadsheet.NumberFormats)
+
+        xdoc.Element("DWSIM_Simulation_Data").Element("Spreadsheet").Add(New XElement("CellStyles"))
+        xdoc.Element("DWSIM_Simulation_Data").Element("Spreadsheet").Element("CellStyles").Value = SharedClasses.EncryptString.StringCipher.Encrypt(c1, "dwsim")
+
+        xdoc.Element("DWSIM_Simulation_Data").Element("Spreadsheet").Add(New XElement("RowHeights"))
+        xdoc.Element("DWSIM_Simulation_Data").Element("Spreadsheet").Element("RowHeights").Value = SharedClasses.EncryptString.StringCipher.Encrypt(c2, "dwsim")
+
+        xdoc.Element("DWSIM_Simulation_Data").Element("Spreadsheet").Add(New XElement("ColumnWidths"))
+        xdoc.Element("DWSIM_Simulation_Data").Element("Spreadsheet").Element("ColumnWidths").Value = SharedClasses.EncryptString.StringCipher.Encrypt(c3, "dwsim")
+
+        xdoc.Element("DWSIM_Simulation_Data").Element("Spreadsheet").Add(New XElement("NumberFormats"))
+        xdoc.Element("DWSIM_Simulation_Data").Element("Spreadsheet").Element("NumberFormats").Value = SharedClasses.EncryptString.StringCipher.Encrypt(c4, "dwsim")
 
         xdoc.Element("DWSIM_Simulation_Data").Add(New XElement("PanelLayout"))
         xel = xdoc.Element("DWSIM_Simulation_Data").Element("PanelLayout")
@@ -3759,6 +4015,32 @@ Label_00CC:
 
     Private Sub PatronToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles PatronToolStripMenuItem.Click
         System.Diagnostics.Process.Start("https://patreon.com/dwsim")
+    End Sub
+
+    Private Sub Button1_Click_1(sender As Object, e As EventArgs) Handles ButtonClose2.Click
+        Me.WelcomePanel.Visible = False
+        Me.PainelDeBoasvindasToolStripMenuItem.Checked = False
+    End Sub
+
+    Private Sub PainelDeBoasvindasToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles PainelDeBoasvindasToolStripMenuItem.Click
+        If Me.PainelDeBoasvindasToolStripMenuItem.Checked Then
+            Me.WelcomePanel.Visible = True
+        Else
+            Me.WelcomePanel.Visible = False
+        End If
+    End Sub
+
+    Private Sub ButtonCloseWeb_Click(sender As Object, e As EventArgs) Handles ButtonCloseWeb.Click
+        Me.WebPanel.Visible = False
+        Me.PainelDaWebToolStripMenuItem.Checked = False
+    End Sub
+
+    Private Sub PainelDaWebToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles PainelDaWebToolStripMenuItem.Click
+        If Me.PainelDaWebToolStripMenuItem.Checked Then
+            Me.WebPanel.Visible = True
+        Else
+            Me.WebPanel.Visible = False
+        End If
     End Sub
 
     Private Sub bgSaveBackup_RunWorkerCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.RunWorkerCompletedEventArgs) Handles bgSaveBackup.RunWorkerCompleted

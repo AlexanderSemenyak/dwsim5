@@ -1423,6 +1423,8 @@ Namespace SystemsOfUnits
                     Return value
                 Case "cP"
                     Return value / 1000
+                Case "lbm /[ft.h]"
+                    Return value / 2419.09
                 Case "kcal/h"
                     Return value / 859.845
                 Case "m"
@@ -1860,6 +1862,8 @@ Namespace SystemsOfUnits
                     Return value * 1000000.0
                 Case "Pa.s"
                     Return value
+                Case "lbm /[ft.h]"
+                    Return value * 2419.09
                 Case "cP"
                     Return value * 1000
                 Case "kcal/h"

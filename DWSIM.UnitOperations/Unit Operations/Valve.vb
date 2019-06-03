@@ -209,30 +209,33 @@ Namespace UnitOperations
             End If
 
             If CalcMode = CalculationMode.Kv_Liquid Then
-                P2 = Pi - 100 / rho * (Wi * 3600 / Kvc) ^ 2
+                P2 = Pi / 100000.0 - 100 / rho * (Wi * 3600 / Kvc) ^ 2
+                P2 = P2 * 100000.0
                 IObj?.Paragraphs.Add(String.Format("Calculated Outlet Pressure P2 = {0} Pa", P2))
             ElseIf CalcMode = CalculationMode.Kv_Gas Then
                 ims.PropertyPackage.CurrentMaterialStream = ims
                 rhog20 = ims.PropertyPackage.AUX_VAPDENS(273.15, 101325)
-                P2 = Pi * 0.7
+                P2 = Pi * 0.7 / 100000.0
                 icount = 0
                 Do
                     P2ant = P2
-                    P2 = Pi - Ti / rhog20 / P2ant * (519 * Kvc / Wi / 3600) ^ -2
+                    P2 = Pi - Ti / rhog20 / P2ant * (519 * Kvc / (Wi * 3600)) ^ -2
                     icount += 1
                     If icount > 1000 Then Throw New Exception("P2 did not converge in 1000 iterations.")
                 Loop Until Math.Abs(P2 - P2ant) < 0.0001
+                P2 = P2 * 100000.0
                 IObj?.Paragraphs.Add(String.Format("Calculated Outlet Pressure P2 = {0} Pa", P2))
             ElseIf CalcMode = CalculationMode.Kv_Steam Then
-                P2 = Pi * 0.7
+                P2 = Pi * 0.7 / 100000.0
                 icount = 0
                 Do
                     v2 = 1 / ims.PropertyPackage.AUX_VAPDENS(Ti, P2)
                     P2ant = P2
-                    P2 = Pi - v2 * (31.62 * Kvc / Wi / 3600) ^ -2
+                    P2 = Pi - v2 * (31.62 * Kvc / (Wi * 3600)) ^ -2
                     icount += 1
                     If icount > 1000 Then Throw New Exception("P2 did not converge in 1000 iterations.")
                 Loop Until Math.Abs(P2 - P2ant) < 0.0001
+                P2 = P2 * 100000.0
                 IObj?.Paragraphs.Add(String.Format("Calculated Outlet Pressure P2 = {0} Pa", P2))
             End If
 
@@ -573,6 +576,74 @@ Namespace UnitOperations
             str.AppendLine("    Temperature decrease: " & SystemsOfUnits.Converter.ConvertFromSI(su.deltaT, Me.DeltaT).ToString(numberformat, ci) & " " & su.deltaT)
 
             Return str.ToString
+
+        End Function
+
+        Public Overrides Function GetStructuredReport() As List(Of Tuple(Of ReportItemType, String()))
+
+            Dim su As IUnitsOfMeasure = GetFlowsheet().FlowsheetOptions.SelectedUnitSystem
+            Dim nf = GetFlowsheet().FlowsheetOptions.NumberFormat
+
+            Dim list As New List(Of Tuple(Of ReportItemType, String()))
+
+            list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.Label, New String() {"Results Report for Adiabatic Valve '" & Me.GraphicObject.Tag + "'"}))
+            list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.SingleColumn, New String() {"Calculated successfully on " & LastUpdated.ToString}))
+
+            list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.Label, New String() {"Calculation Parameters"}))
+
+            list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.DoubleColumn,
+                    New String() {"Calculation Mode",
+                    CalcMode.ToString}))
+
+            Select Case CalcMode
+                Case CalculationMode.DeltaP
+                    list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.TripleColumn,
+                            New String() {"Pressure Increase",
+                            Me.DeltaP.GetValueOrDefault.ConvertFromSI(su.deltaP).ToString(nf),
+                            su.deltaP}))
+                Case CalculationMode.OutletPressure
+                    list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.TripleColumn,
+                            New String() {"Outlet Pressure",
+                            Me.OutletPressure.GetValueOrDefault.ConvertFromSI(su.pressure).ToString(nf),
+                            su.pressure}))
+                Case Else
+                    list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.TripleColumn,
+                            New String() {"Kv (max)",
+                            Me.Kv.ToString(nf),
+                            ""}))
+            End Select
+
+            list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.Label, New String() {"Results"}))
+
+            Select Case CalcMode
+                Case CalculationMode.DeltaP
+                    list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.TripleColumn,
+                            New String() {"Outlet Pressure",
+                            Me.OutletPressure.GetValueOrDefault.ConvertFromSI(su.pressure).ToString(nf),
+                            su.pressure}))
+                Case CalculationMode.OutletPressure
+                    list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.TripleColumn,
+                            New String() {"Pressure Increase",
+                            Me.DeltaP.GetValueOrDefault.ConvertFromSI(su.deltaP).ToString(nf),
+                            su.deltaP}))
+            End Select
+
+            list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.TripleColumn,
+                            New String() {"Temperature Change",
+                            Me.DeltaT.GetValueOrDefault.ConvertFromSI(su.deltaT).ToString(nf),
+                            su.deltaT}))
+
+            list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.TripleColumn,
+                            New String() {"Inlet Enthalpy",
+                            Me.Hinlet.ConvertFromSI(su.enthalpy).ToString(nf),
+                            su.enthalpy}))
+
+            list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.TripleColumn,
+                            New String() {"Outlet Enthalpy",
+                            Me.Houtlet.ConvertFromSI(su.enthalpy).ToString(nf),
+                            su.enthalpy}))
+
+            Return list
 
         End Function
 

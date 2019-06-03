@@ -41,7 +41,7 @@ namespace DWSIM.UI.Desktop.Editors
 
         List<tmpcomp> tccol = new List<tmpcomp>();
 
-        public IFlowsheet flowsheet;
+        public Flowsheet flowsheet;
 
         private String assayname;
 
@@ -57,7 +57,7 @@ namespace DWSIM.UI.Desktop.Editors
 
         string decsep1, decsep2;
 
-        public DistCurvePCharacterization(IFlowsheet fs)
+        public DistCurvePCharacterization(Flowsheet fs)
             : base()
         {
             flowsheet = fs;
@@ -289,6 +289,7 @@ namespace DWSIM.UI.Desktop.Editors
                                 Application.Instance.Invoke(() =>
                                 {
                                     flowsheet.UpdateInterface();
+                                    flowsheet.UpdateEditorPanels.Invoke();
                                     flowsheet.ShowMessage("Material Stream '" + assayname + "' added successfully. " + ncomps.ToString() + " compounds created.", IFlowsheet.MessageType.Information);
 
                                     if (MessageBox.Show("Do you want to export the created compounds to a XML database?", "Petroleum C7+ Characterization", MessageBoxButtons.YesNo, MessageBoxType.Question, MessageBoxDefaultButton.Yes) == DialogResult.Yes)
@@ -341,6 +342,8 @@ namespace DWSIM.UI.Desktop.Editors
 
         Dictionary<string, Compound> GenerateCompounds(IUnitsOfMeasure su)
         {
+
+            var id = new Random().Next(1000, 9999);
 
             //generate pseudos from number or temperature cuts
 
@@ -551,7 +554,6 @@ namespace DWSIM.UI.Desktop.Editors
                 cprops.NBP = tc.tbpm;
                 cprops.OriginalDB = "Petroleum Assay: " + assayname;
                 cprops.CurrentDB = "Petroleum Assay: " + assayname;
-                cprops.Name = assayname + "_" + (i + 1).ToString();
 
                 //SG
                 if (!hassgc)
@@ -600,6 +602,12 @@ namespace DWSIM.UI.Desktop.Editors
                 }
 
                 cprops.Molar_Weight = cprops.PF_MM.GetValueOrDefault();
+
+                char[] trimchars = new char[] { ' ', '_', ',', ';', ':' };
+
+                cprops.Name = "C" + assayname.Trim(trimchars).ToString() + "_NBP_" + (cprops.NBP.GetValueOrDefault() - 273.15).ToString("N0");
+
+                cprops.CAS_Number = assayname.Trim(trimchars) + "-" + cprops.NBP.GetValueOrDefault().ToString("N0");
 
                 i += 1;
 
@@ -725,6 +733,8 @@ namespace DWSIM.UI.Desktop.Editors
                 cprops.IG_Enthalpy_of_Formation_25C = tmp[0];
                 cprops.IG_Entropy_of_Formation_25C = tmp[1];
                 cprops.IG_Gibbs_Energy_of_Formation_25C = tmp[0] - 298.15 * tmp[1];
+
+                cprops.Formula = "C" + Convert.ToDouble(tmp[2]).ToString("N2") + "H" + Convert.ToDouble(tmp[3]).ToString("N2");
 
                 DWSIM.Thermodynamics.Utilities.Hypos.Methods.HYP methods = new DWSIM.Thermodynamics.Utilities.Hypos.Methods.HYP();
 

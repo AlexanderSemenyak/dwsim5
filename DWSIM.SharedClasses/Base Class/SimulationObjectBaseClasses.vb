@@ -68,6 +68,16 @@ Namespace UnitOperations
 
         Public Overridable Property ComponentName() As String = ""
 
+        Public Overrides Function ToString() As String
+
+            If GraphicObject IsNot Nothing Then
+                Return GraphicObject.Tag
+            Else
+                Return MyBase.ToString()
+            End If
+
+        End Function
+
 #Region "    ISimulationObject"
 
         Public Overridable Function GetChartModel(name As String) As Object Implements ISimulationObject.GetChartModel
@@ -798,6 +808,10 @@ Namespace UnitOperations
         Public Sub SetFlowsheet(ByVal flowsheet As Object) Implements Interfaces.ISimulationObject.SetFlowsheet
             m_flowsheet = flowsheet
         End Sub
+
+        Public Overridable Function GetStructuredReport() As List(Of Tuple(Of ReportItemType, String())) Implements ISimulationObject.GetStructuredReport
+            Return New List(Of Tuple(Of ReportItemType, String()))
+        End Function
 
         ''' <summary>
         ''' Gets the current flowsheet where this object is located.

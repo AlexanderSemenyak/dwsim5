@@ -72,6 +72,14 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
 
         End Sub
 
+        Public Overrides Function ToString() As String
+            If Name <> "" Then
+                Return Name
+            Else
+                Return MyBase.ToString()
+            End If
+        End Function
+
         Public Shared Function GetDefaultSettings() As Dictionary(Of Interfaces.Enums.FlashSetting, String)
 
             Dim ci As Globalization.CultureInfo = Globalization.CultureInfo.InvariantCulture
@@ -103,6 +111,10 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
             settings(Interfaces.Enums.FlashSetting.ThreePhaseFlashStabTestSeverity) = 0
 
             settings(Interfaces.Enums.FlashSetting.ThreePhaseFlashStabTestCompIds) = ""
+
+            settings(Interfaces.Enums.FlashSetting.PVFlash_FixedDampingFactor) = 1.0.ToString(ci)
+            settings(Interfaces.Enums.FlashSetting.PVFlash_MaximumTemperatureChange) = 10.0.ToString(ci)
+            settings(Interfaces.Enums.FlashSetting.PVFlash_TemperatureDerivativeEpsilon) = 0.1.ToString(ci)
 
             Return settings
 
@@ -1064,7 +1076,7 @@ will converge to this solution.")
             Dim brent As New MathEx.BrentOpt.Brent
             brent.DefineFuncDelegate(AddressOf PIPressureF)
 
-            P = brent.BrentOpt(101325, Pest, 100, 0.001, 1000, New Object() {Vx, T, pp, eos})
+            P = brent.BrentOpt(1, Pest, 100, 0.001, 1000, New Object() {Vx, T, pp, eos})
 
             PIP = CalcPIP(Vx, P, T, pp, eos)(0)
 

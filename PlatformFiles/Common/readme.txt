@@ -1,6 +1,6 @@
 ﻿==================================================
 DWSIM - Open Source Process Simulator
-Version 5.7
+Version 5.7 Update 7
 Copyright (c) 2017-2019 Daniel Medeiros
 Copyright (c) 2008-2016 Daniel Medeiros, Gregor Reichert, Gustavo Leon
 ==================================================
@@ -62,11 +62,70 @@ VERSION HISTORY / CHANGELOG
 
 The full changelog, including code changes and their authors can be viewed at https://github.com/DanWBR/dwsim5/commits/windows
 
+Version 5.7 Update 7
+
+- [NEW] Enhanced Phase/Binary Envelopes in Cross-Platform UI
+- [FIX] Fixed compound adding by pressing ENTER on the search box (Classic UI)
+- [FIX] Fixed Phase Identification Parameter in Phase Envelope
+- [FIX] Fixed merged ToolStrips in Classic UI
+- [FIX] Minor bug fixes and tweaks in Cross-Platform UI
+
+Version 5.7 Update 6
+
+- [NEW] IronPython Script Debugging (Classic UI)
+- [CHG] Updated components info in about boxes
+- [FIX] Fixed Custom Calculation Order not working (Classic UI)
+- [FIX] Fixed Pressure units in Valve's Kv calculation mode
+- [FIX] Other minor bug fixes
+
+Version 5.7 Update 5
+
+- [NEW] Added Python standard libraries
+- [NEW] Enable/disable custom Touch Bar controls on macOS
+- [CHG] Electrolyte flash enhancements
+- [FIX] Fixed double conversion from string
+- [FIX] Fixed remaining CefSharp processes after shutdown (Classic UI)
+- [FIX] Fixed compound issues on Classic UI
+
+Version 5.7 Update 4
+
+- [NEW] New syntax-highlighting script editors on macOS and Linux (New UI)
+- [FIX] Fixed editors not updating on Compound and Property Package/Flash Algorithm changes (New UI)
+- [FIX] SLE-only Fixed binary envelope (Classic UI)
+
+Version 5.7 Update 3
+
+- [NEW] Spreadsheet cell formatting tools (Classic UI)
+- [FIX] Fixed importing of property units to spreadsheet (Classic UI)
+- [FIX] Fixed pressure drop on Gibbs and Equilibrium reactors
+
+Version 5.7 Update 2
+
+- [NEW] Structured object result reports (New UI)
+- [NEW] User-defined expressions for velocity constants (Kinetic Reactions)
+- [CHG] Redesigned reaction editors (New UI)
+- [CHG] Redesigned flowsheet analysis tools (New UI)
+- [FIX] Fixed PFD delayed connector drawing
+
+Version 5.7 Update 1
+
+- [NEW] Exposing additional reactor properties to tables and analysis tools
+- [NEW] Shortcut selection buttons on table editors (Classic UI)
+- [FIX] Fixed Electrolyte DB
+- [FIX] Fixed pressure drop on Gibbs and Equilibrium reactors
+
 Version 5.7
 
 - [NEW] Electrolyte NRTL model for Sour Gas and Amine systems
 - [NEW] Copy Flowsheet as image to clipboard
+- [NEW] New Web Panel (Classic UI)
+- [CHG] Redesigned Welcome Screen (Classic UI)
+- [CHG] Redesigned Compound Selector (Classic UI)
+- [CHG] Updated ChEDL Compound Database
 - [CHG] Restored 'print flowsheet' function (Classic UI)
+- [FIX] Fixed object cloning
+- [FIX] Fixed SLE flash
+- [FIX] Fixed english dynamic viscosity units
 - [FIX] Fixed mirrored characters on flowsheet objects
 - [FIX] Bug fixes
 

@@ -83,15 +83,15 @@ Public Class FormPropSelection
                     Next
                 Case 3
                     For Each obj In formC.Collections.GraphicObjectCollection.Values
-                        If obj.ObjectType = NodeIn Then .Add(obj.Name, obj.Tag).Tag = obj.Name
+                        If obj.ObjectType = NodeOut Then .Add(obj.Name, obj.Tag).Tag = obj.Name
                     Next
                 Case 4
                     For Each obj In formC.Collections.GraphicObjectCollection.Values
-                        If obj.ObjectType = NodeIn Then .Add(obj.Name, obj.Tag).Tag = obj.Name
+                        If obj.ObjectType = Pipe Then .Add(obj.Name, obj.Tag).Tag = obj.Name
                     Next
                 Case 5
                     For Each obj In formC.Collections.GraphicObjectCollection.Values
-                        If obj.ObjectType = NodeIn Then .Add(obj.Name, obj.Tag).Tag = obj.Name
+                        If obj.ObjectType = Valve Then .Add(obj.Name, obj.Tag).Tag = obj.Name
                     Next
                 Case 6
                     For Each obj In formC.Collections.GraphicObjectCollection.Values
@@ -260,7 +260,7 @@ Public Class FormPropSelection
                         Dim scell2 = ssheet.DataGridView1.Rows(scell.RowIndex).Cells(scell.ColumnIndex + 1)
                         cparams2 = scell2.Tag
                         cparams2.CellType = Spreadsheet.VarType.Unit
-                        cparams2.Expression = obj.GetPropertyUnit(Me.TreeView3.SelectedNode.Tag)
+                        cparams2.Expression = obj.GetPropertyUnit(Me.TreeView3.SelectedNode.Tag, formC.Options.SelectedUnitSystem)
                         ssheet.UpdateValue(scell2, cparams2.Expression)
                     End If
                 Else

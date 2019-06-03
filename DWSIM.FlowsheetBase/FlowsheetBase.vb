@@ -52,6 +52,10 @@ Imports System.Dynamic
 
     Public RetrieveSpreadsheetData As Func(Of String, List(Of String()))
 
+    Public Property ScriptKeywordsF As String = ""
+
+    Public Property ScriptKeywordsU As String = ""
+
     Public Sub AddCompoundsToMaterialStream(ms As IMaterialStream) Implements IFlowsheet.AddCompoundsToMaterialStream
         For Each phase As IPhase In ms.Phases.Values
             For Each comp In Me.Options.SelectedComponents.Values
@@ -1686,7 +1690,7 @@ Imports System.Dynamic
         AddPropPacks()
         AddFlashAlgorithms()
 
-        Dim fa As New Thermodynamics.PropertyPackages.Auxiliary.FlashAlgorithms.NestedLoopsSVLLE()
+        Dim fa As New Thermodynamics.PropertyPackages.Auxiliary.FlashAlgorithms.NestedLoops()
         fa.Tag = fa.Name & " (1)"
 
         Options.FlashAlgorithms.Add(fa)

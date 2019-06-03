@@ -1,9 +1,10 @@
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class FormWelcome
-    Inherits System.Windows.Forms.Form
+
+    Inherits UserControl
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,29 +21,20 @@ Partial Class FormWelcome
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormWelcome))
-        Me.Label11 = New System.Windows.Forms.Label()
-        Me.Label12 = New System.Windows.Forms.Label()
         Me.lvlatest = New System.Windows.Forms.ListView()
-        Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(),System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader1 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
-        Me.Label6 = New System.Windows.Forms.Label()
-        Me.Label7 = New System.Windows.Forms.Label()
-        Me.Label10 = New System.Windows.Forms.Label()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.Label4 = New System.Windows.Forms.Label()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.Label1 = New System.Windows.Forms.Label()
         Me.lvlatestfolders = New System.Windows.Forms.ListView()
-        Me.ColumnHeader3 = CType(New System.Windows.Forms.ColumnHeader(),System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader3 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
         Me.lvsamples = New System.Windows.Forms.ListView()
-        Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(),System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader2 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.TabPage5 = New System.Windows.Forms.TabPage()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
@@ -50,61 +42,42 @@ Partial Class FormWelcome
         Me.Button6 = New System.Windows.Forms.Button()
         Me.Button4 = New System.Windows.Forms.Button()
         Me.FOSSEEList = New System.Windows.Forms.ListView()
-        Me.ColumnHeader4 = CType(New System.Windows.Forms.ColumnHeader(),System.Windows.Forms.ColumnHeader)
+        Me.ColumnHeader4 = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.TabPage3 = New System.Windows.Forms.TabPage()
-        Me.TabPage4 = New System.Windows.Forms.TabPage()
-        Me.LinkLabel5 = New System.Windows.Forms.LinkLabel()
-        Me.LinkLabel4 = New System.Windows.Forms.LinkLabel()
-        Me.LinkLabel3 = New System.Windows.Forms.LinkLabel()
-        Me.LinkLabel2 = New System.Windows.Forms.LinkLabel()
-        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
+        Me.chkAutoClose = New System.Windows.Forms.CheckBox()
         Me.Button8 = New System.Windows.Forms.Button()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.Button5 = New System.Windows.Forms.Button()
         Me.Button3 = New System.Windows.Forms.Button()
         Me.Button2 = New System.Windows.Forms.Button()
-        Me.TabControl1.SuspendLayout
-        Me.TabPage1.SuspendLayout
-        Me.TabPage2.SuspendLayout
-        Me.TabPage5.SuspendLayout
-        Me.TabPage3.SuspendLayout
-        Me.TabPage4.SuspendLayout
-        Me.SuspendLayout
-        '
-        'Label11
-        '
-        resources.ApplyResources(Me.Label11, "Label11")
-        Me.Label11.BackColor = System.Drawing.Color.Transparent
-        Me.Label11.ForeColor = System.Drawing.Color.SteelBlue
-        Me.Label11.Name = "Label11"
-        '
-        'Label12
-        '
-        resources.ApplyResources(Me.Label12, "Label12")
-        Me.Label12.BackColor = System.Drawing.Color.Transparent
-        Me.Label12.ForeColor = System.Drawing.Color.SteelBlue
-        Me.Label12.Name = "Label12"
+        Me.TabControl1.SuspendLayout()
+        Me.TabPage1.SuspendLayout()
+        Me.TabPage2.SuspendLayout()
+        Me.TabPage5.SuspendLayout()
+        Me.TabPage3.SuspendLayout()
+        Me.SuspendLayout()
         '
         'lvlatest
         '
         Me.lvlatest.Activation = System.Windows.Forms.ItemActivation.OneClick
-        Me.lvlatest.AutoArrange = false
-        Me.lvlatest.BackColor = System.Drawing.Color.White
+        Me.lvlatest.AutoArrange = False
+        Me.lvlatest.BackColor = System.Drawing.Color.SteelBlue
         Me.lvlatest.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.lvlatest.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader1})
         resources.ApplyResources(Me.lvlatest, "lvlatest")
-        Me.lvlatest.ForeColor = System.Drawing.Color.SteelBlue
-        Me.lvlatest.FullRowSelect = true
+        Me.lvlatest.ForeColor = System.Drawing.Color.White
+        Me.lvlatest.FullRowSelect = True
         Me.lvlatest.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None
-        Me.lvlatest.HoverSelection = true
+        Me.lvlatest.HoverSelection = True
         Me.lvlatest.LargeImageList = Me.ImageList1
-        Me.lvlatest.MultiSelect = false
+        Me.lvlatest.MultiSelect = False
         Me.lvlatest.Name = "lvlatest"
-        Me.lvlatest.ShowGroups = false
+        Me.lvlatest.ShowGroups = False
         Me.lvlatest.SmallImageList = Me.ImageList1
         Me.lvlatest.TileSize = New System.Drawing.Size(320, 20)
-        Me.lvlatest.UseCompatibleStateImageBehavior = false
+        Me.lvlatest.UseCompatibleStateImageBehavior = False
         Me.lvlatest.View = System.Windows.Forms.View.Details
         '
         'ColumnHeader1
@@ -113,7 +86,7 @@ Partial Class FormWelcome
         '
         'ImageList1
         '
-        Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"),System.Windows.Forms.ImageListStreamer)
+        Me.ImageList1.ImageStream = CType(resources.GetObject("ImageList1.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
         Me.ImageList1.Images.SetKeyName(0, "DWSIM_BIN.png")
         Me.ImageList1.Images.SetKeyName(1, "DWSIM_CSD.png")
@@ -121,74 +94,25 @@ Partial Class FormWelcome
         Me.ImageList1.Images.SetKeyName(3, "DWSIM_XML.png")
         Me.ImageList1.Images.SetKeyName(4, "folder.png")
         '
-        'Label6
-        '
-        resources.ApplyResources(Me.Label6, "Label6")
-        Me.Label6.BackColor = System.Drawing.Color.Transparent
-        Me.Label6.ForeColor = System.Drawing.Color.SteelBlue
-        Me.Label6.Name = "Label6"
-        '
-        'Label7
-        '
-        resources.ApplyResources(Me.Label7, "Label7")
-        Me.Label7.BackColor = System.Drawing.Color.Transparent
-        Me.Label7.ForeColor = System.Drawing.Color.SteelBlue
-        Me.Label7.Name = "Label7"
-        '
-        'Label10
-        '
-        resources.ApplyResources(Me.Label10, "Label10")
-        Me.Label10.BackColor = System.Drawing.Color.Transparent
-        Me.Label10.ForeColor = System.Drawing.Color.SteelBlue
-        Me.Label10.Name = "Label10"
-        '
-        'Label9
-        '
-        resources.ApplyResources(Me.Label9, "Label9")
-        Me.Label9.BackColor = System.Drawing.Color.Transparent
-        Me.Label9.ForeColor = System.Drawing.Color.SteelBlue
-        Me.Label9.Name = "Label9"
-        '
-        'Label4
-        '
-        resources.ApplyResources(Me.Label4, "Label4")
-        Me.Label4.BackColor = System.Drawing.Color.Transparent
-        Me.Label4.ForeColor = System.Drawing.Color.SteelBlue
-        Me.Label4.Name = "Label4"
-        '
-        'Label3
-        '
-        resources.ApplyResources(Me.Label3, "Label3")
-        Me.Label3.BackColor = System.Drawing.Color.Transparent
-        Me.Label3.ForeColor = System.Drawing.Color.SteelBlue
-        Me.Label3.Name = "Label3"
-        '
-        'Label1
-        '
-        resources.ApplyResources(Me.Label1, "Label1")
-        Me.Label1.BackColor = System.Drawing.Color.Transparent
-        Me.Label1.ForeColor = System.Drawing.Color.SteelBlue
-        Me.Label1.Name = "Label1"
-        '
         'lvlatestfolders
         '
         Me.lvlatestfolders.Activation = System.Windows.Forms.ItemActivation.OneClick
-        Me.lvlatestfolders.AutoArrange = false
-        Me.lvlatestfolders.BackColor = System.Drawing.Color.White
+        Me.lvlatestfolders.AutoArrange = False
+        Me.lvlatestfolders.BackColor = System.Drawing.Color.SteelBlue
         Me.lvlatestfolders.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.lvlatestfolders.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader3})
         resources.ApplyResources(Me.lvlatestfolders, "lvlatestfolders")
-        Me.lvlatestfolders.ForeColor = System.Drawing.Color.SteelBlue
-        Me.lvlatestfolders.FullRowSelect = true
+        Me.lvlatestfolders.ForeColor = System.Drawing.Color.White
+        Me.lvlatestfolders.FullRowSelect = True
         Me.lvlatestfolders.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None
-        Me.lvlatestfolders.HoverSelection = true
+        Me.lvlatestfolders.HoverSelection = True
         Me.lvlatestfolders.LargeImageList = Me.ImageList1
-        Me.lvlatestfolders.MultiSelect = false
+        Me.lvlatestfolders.MultiSelect = False
         Me.lvlatestfolders.Name = "lvlatestfolders"
-        Me.lvlatestfolders.ShowGroups = false
+        Me.lvlatestfolders.ShowGroups = False
         Me.lvlatestfolders.SmallImageList = Me.ImageList1
         Me.lvlatestfolders.TileSize = New System.Drawing.Size(320, 20)
-        Me.lvlatestfolders.UseCompatibleStateImageBehavior = false
+        Me.lvlatestfolders.UseCompatibleStateImageBehavior = False
         Me.lvlatestfolders.View = System.Windows.Forms.View.Details
         '
         'ColumnHeader3
@@ -202,7 +126,6 @@ Partial Class FormWelcome
         Me.TabControl1.Controls.Add(Me.TabPage2)
         Me.TabControl1.Controls.Add(Me.TabPage5)
         Me.TabControl1.Controls.Add(Me.TabPage3)
-        Me.TabControl1.Controls.Add(Me.TabPage4)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
         '
@@ -211,34 +134,34 @@ Partial Class FormWelcome
         Me.TabPage1.Controls.Add(Me.lvlatest)
         resources.ApplyResources(Me.TabPage1, "TabPage1")
         Me.TabPage1.Name = "TabPage1"
-        Me.TabPage1.UseVisualStyleBackColor = true
+        Me.TabPage1.UseVisualStyleBackColor = True
         '
         'TabPage2
         '
         Me.TabPage2.Controls.Add(Me.lvsamples)
         resources.ApplyResources(Me.TabPage2, "TabPage2")
         Me.TabPage2.Name = "TabPage2"
-        Me.TabPage2.UseVisualStyleBackColor = true
+        Me.TabPage2.UseVisualStyleBackColor = True
         '
         'lvsamples
         '
         Me.lvsamples.Activation = System.Windows.Forms.ItemActivation.OneClick
-        Me.lvsamples.AutoArrange = false
-        Me.lvsamples.BackColor = System.Drawing.Color.White
+        Me.lvsamples.AutoArrange = False
+        Me.lvsamples.BackColor = System.Drawing.Color.SteelBlue
         Me.lvsamples.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.lvsamples.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader2})
         resources.ApplyResources(Me.lvsamples, "lvsamples")
-        Me.lvsamples.ForeColor = System.Drawing.Color.SteelBlue
-        Me.lvsamples.FullRowSelect = true
+        Me.lvsamples.ForeColor = System.Drawing.Color.White
+        Me.lvsamples.FullRowSelect = True
         Me.lvsamples.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None
-        Me.lvsamples.HoverSelection = true
+        Me.lvsamples.HoverSelection = True
         Me.lvsamples.LargeImageList = Me.ImageList1
-        Me.lvsamples.MultiSelect = false
+        Me.lvsamples.MultiSelect = False
         Me.lvsamples.Name = "lvsamples"
-        Me.lvsamples.ShowGroups = false
+        Me.lvsamples.ShowGroups = False
         Me.lvsamples.SmallImageList = Me.ImageList1
         Me.lvsamples.TileSize = New System.Drawing.Size(320, 20)
-        Me.lvsamples.UseCompatibleStateImageBehavior = false
+        Me.lvsamples.UseCompatibleStateImageBehavior = False
         Me.lvsamples.View = System.Windows.Forms.View.Details
         '
         'ColumnHeader2
@@ -247,6 +170,7 @@ Partial Class FormWelcome
         '
         'TabPage5
         '
+        Me.TabPage5.BackColor = System.Drawing.Color.SteelBlue
         Me.TabPage5.Controls.Add(Me.Label8)
         Me.TabPage5.Controls.Add(Me.Label5)
         Me.TabPage5.Controls.Add(Me.Label13)
@@ -255,61 +179,62 @@ Partial Class FormWelcome
         Me.TabPage5.Controls.Add(Me.FOSSEEList)
         resources.ApplyResources(Me.TabPage5, "TabPage5")
         Me.TabPage5.Name = "TabPage5"
-        Me.TabPage5.UseVisualStyleBackColor = true
         '
         'Label8
         '
         resources.ApplyResources(Me.Label8, "Label8")
         Me.Label8.BackColor = System.Drawing.Color.Transparent
-        Me.Label8.ForeColor = System.Drawing.Color.SteelBlue
+        Me.Label8.ForeColor = System.Drawing.Color.White
         Me.Label8.Name = "Label8"
         '
         'Label5
         '
         Me.Label5.BackColor = System.Drawing.Color.Transparent
         resources.ApplyResources(Me.Label5, "Label5")
-        Me.Label5.ForeColor = System.Drawing.Color.SteelBlue
+        Me.Label5.ForeColor = System.Drawing.Color.White
         Me.Label5.Name = "Label5"
         '
         'Label13
         '
         resources.ApplyResources(Me.Label13, "Label13")
         Me.Label13.BackColor = System.Drawing.Color.Transparent
-        Me.Label13.ForeColor = System.Drawing.Color.SteelBlue
+        Me.Label13.ForeColor = System.Drawing.Color.White
         Me.Label13.Name = "Label13"
         '
         'Button6
         '
-        Me.Button6.Image = Global.DWSIM.My.Resources.Resources.information
         resources.ApplyResources(Me.Button6, "Button6")
+        Me.Button6.ForeColor = System.Drawing.Color.White
+        Me.Button6.Image = Global.DWSIM.My.Resources.Resources.information
         Me.Button6.Name = "Button6"
-        Me.Button6.UseVisualStyleBackColor = true
+        Me.Button6.UseVisualStyleBackColor = False
         '
         'Button4
         '
+        Me.Button4.ForeColor = System.Drawing.Color.White
         Me.Button4.Image = Global.DWSIM.My.Resources.Resources.arrow_up1
         resources.ApplyResources(Me.Button4, "Button4")
         Me.Button4.Name = "Button4"
-        Me.Button4.UseVisualStyleBackColor = true
+        Me.Button4.UseVisualStyleBackColor = False
         '
         'FOSSEEList
         '
         Me.FOSSEEList.Activation = System.Windows.Forms.ItemActivation.OneClick
-        Me.FOSSEEList.AutoArrange = false
-        Me.FOSSEEList.BackColor = System.Drawing.Color.White
-        Me.FOSSEEList.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader4})
         resources.ApplyResources(Me.FOSSEEList, "FOSSEEList")
-        Me.FOSSEEList.ForeColor = System.Drawing.Color.SteelBlue
-        Me.FOSSEEList.FullRowSelect = true
+        Me.FOSSEEList.AutoArrange = False
+        Me.FOSSEEList.BackColor = System.Drawing.Color.SteelBlue
+        Me.FOSSEEList.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.ColumnHeader4})
+        Me.FOSSEEList.ForeColor = System.Drawing.Color.White
+        Me.FOSSEEList.FullRowSelect = True
         Me.FOSSEEList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None
-        Me.FOSSEEList.HoverSelection = true
+        Me.FOSSEEList.HoverSelection = True
         Me.FOSSEEList.LargeImageList = Me.ImageList1
-        Me.FOSSEEList.MultiSelect = false
+        Me.FOSSEEList.MultiSelect = False
         Me.FOSSEEList.Name = "FOSSEEList"
-        Me.FOSSEEList.ShowGroups = false
+        Me.FOSSEEList.ShowGroups = False
         Me.FOSSEEList.SmallImageList = Me.ImageList1
         Me.FOSSEEList.TileSize = New System.Drawing.Size(320, 20)
-        Me.FOSSEEList.UseCompatibleStateImageBehavior = false
+        Me.FOSSEEList.UseCompatibleStateImageBehavior = False
         Me.FOSSEEList.View = System.Windows.Forms.View.Details
         '
         'ColumnHeader4
@@ -321,172 +246,112 @@ Partial Class FormWelcome
         Me.TabPage3.Controls.Add(Me.lvlatestfolders)
         resources.ApplyResources(Me.TabPage3, "TabPage3")
         Me.TabPage3.Name = "TabPage3"
-        Me.TabPage3.UseVisualStyleBackColor = true
+        Me.TabPage3.UseVisualStyleBackColor = True
         '
-        'TabPage4
+        'Label1
         '
-        Me.TabPage4.Controls.Add(Me.LinkLabel5)
-        Me.TabPage4.Controls.Add(Me.LinkLabel4)
-        Me.TabPage4.Controls.Add(Me.LinkLabel3)
-        Me.TabPage4.Controls.Add(Me.LinkLabel2)
-        Me.TabPage4.Controls.Add(Me.LinkLabel1)
-        resources.ApplyResources(Me.TabPage4, "TabPage4")
-        Me.TabPage4.Name = "TabPage4"
-        Me.TabPage4.UseVisualStyleBackColor = true
-        '
-        'LinkLabel5
-        '
-        resources.ApplyResources(Me.LinkLabel5, "LinkLabel5")
-        Me.LinkLabel5.ForeColor = System.Drawing.Color.SteelBlue
-        Me.LinkLabel5.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel5.LinkColor = System.Drawing.Color.SteelBlue
-        Me.LinkLabel5.Name = "LinkLabel5"
-        Me.LinkLabel5.TabStop = true
-        '
-        'LinkLabel4
-        '
-        resources.ApplyResources(Me.LinkLabel4, "LinkLabel4")
-        Me.LinkLabel4.ForeColor = System.Drawing.Color.SteelBlue
-        Me.LinkLabel4.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel4.LinkColor = System.Drawing.Color.SteelBlue
-        Me.LinkLabel4.Name = "LinkLabel4"
-        Me.LinkLabel4.TabStop = true
-        '
-        'LinkLabel3
-        '
-        resources.ApplyResources(Me.LinkLabel3, "LinkLabel3")
-        Me.LinkLabel3.ForeColor = System.Drawing.Color.SteelBlue
-        Me.LinkLabel3.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel3.LinkColor = System.Drawing.Color.SteelBlue
-        Me.LinkLabel3.Name = "LinkLabel3"
-        Me.LinkLabel3.TabStop = true
-        '
-        'LinkLabel2
-        '
-        resources.ApplyResources(Me.LinkLabel2, "LinkLabel2")
-        Me.LinkLabel2.ForeColor = System.Drawing.Color.SteelBlue
-        Me.LinkLabel2.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel2.LinkColor = System.Drawing.Color.SteelBlue
-        Me.LinkLabel2.Name = "LinkLabel2"
-        Me.LinkLabel2.TabStop = true
-        '
-        'LinkLabel1
-        '
-        resources.ApplyResources(Me.LinkLabel1, "LinkLabel1")
-        Me.LinkLabel1.ForeColor = System.Drawing.Color.SteelBlue
-        Me.LinkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline
-        Me.LinkLabel1.LinkColor = System.Drawing.Color.SteelBlue
-        Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.TabStop = true
+        resources.ApplyResources(Me.Label1, "Label1")
+        Me.Label1.BackColor = System.Drawing.Color.Transparent
+        Me.Label1.ForeColor = System.Drawing.Color.White
+        Me.Label1.Name = "Label1"
         '
         'Label2
         '
         resources.ApplyResources(Me.Label2, "Label2")
         Me.Label2.BackColor = System.Drawing.Color.Transparent
-        Me.Label2.ForeColor = System.Drawing.Color.SteelBlue
+        Me.Label2.ForeColor = System.Drawing.Color.White
         Me.Label2.Name = "Label2"
+        '
+        'chkAutoClose
+        '
+        resources.ApplyResources(Me.chkAutoClose, "chkAutoClose")
+        Me.chkAutoClose.ForeColor = System.Drawing.Color.White
+        Me.chkAutoClose.Name = "chkAutoClose"
+        Me.chkAutoClose.UseVisualStyleBackColor = True
         '
         'Button8
         '
         resources.ApplyResources(Me.Button8, "Button8")
-        Me.Button8.ForeColor = System.Drawing.Color.FromArgb(CType(CType(249,Byte),Integer), CType(CType(104,Byte),Integer), CType(CType(85,Byte),Integer))
+        Me.Button8.BackColor = System.Drawing.Color.White
+        Me.Button8.ForeColor = System.Drawing.Color.FromArgb(CType(CType(249, Byte), Integer), CType(CType(104, Byte), Integer), CType(CType(85, Byte), Integer))
         Me.Button8.Image = Global.DWSIM.My.Resources.Resources.become_a_patron_button_2x
         Me.Button8.Name = "Button8"
-        Me.Button8.UseVisualStyleBackColor = false
+        Me.Button8.UseVisualStyleBackColor = False
         '
         'Button1
         '
-        Me.Button1.BackgroundImage = Global.DWSIM.My.Resources.Resources.document_open
         resources.ApplyResources(Me.Button1, "Button1")
-        Me.Button1.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(224,Byte),Integer), CType(CType(224,Byte),Integer), CType(CType(224,Byte),Integer))
+        Me.Button1.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
         Me.Button1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Silver
-        Me.Button1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(224,Byte),Integer), CType(CType(224,Byte),Integer), CType(CType(224,Byte),Integer))
+        Me.Button1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.Button1.ForeColor = System.Drawing.Color.White
+        Me.Button1.Image = Global.DWSIM.My.Resources.Resources.folder_add_48
         Me.Button1.Name = "Button1"
-        Me.Button1.UseVisualStyleBackColor = true
+        Me.Button1.UseVisualStyleBackColor = False
         '
         'Button5
         '
-        Me.Button5.BackgroundImage = Global.DWSIM.My.Resources.Resources.accessories_text_editor
         resources.ApplyResources(Me.Button5, "Button5")
-        Me.Button5.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(224,Byte),Integer), CType(CType(224,Byte),Integer), CType(CType(224,Byte),Integer))
+        Me.Button5.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
         Me.Button5.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Silver
-        Me.Button5.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(224,Byte),Integer), CType(CType(224,Byte),Integer), CType(CType(224,Byte),Integer))
+        Me.Button5.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.Button5.ForeColor = System.Drawing.Color.White
+        Me.Button5.Image = Global.DWSIM.My.Resources.Resources.app_48
         Me.Button5.Name = "Button5"
-        Me.Button5.UseVisualStyleBackColor = true
+        Me.Button5.UseVisualStyleBackColor = False
         '
         'Button3
         '
-        Me.Button3.BackgroundImage = Global.DWSIM.My.Resources.Resources.Lab_icon
         resources.ApplyResources(Me.Button3, "Button3")
-        Me.Button3.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(224,Byte),Integer), CType(CType(224,Byte),Integer), CType(CType(224,Byte),Integer))
+        Me.Button3.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
         Me.Button3.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Silver
-        Me.Button3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(224,Byte),Integer), CType(CType(224,Byte),Integer), CType(CType(224,Byte),Integer))
+        Me.Button3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.Button3.ForeColor = System.Drawing.Color.White
+        Me.Button3.Image = Global.DWSIM.My.Resources.Resources.beer_48
         Me.Button3.Name = "Button3"
-        Me.Button3.UseVisualStyleBackColor = true
+        Me.Button3.UseVisualStyleBackColor = False
         '
         'Button2
         '
-        Me.Button2.BackgroundImage = Global.DWSIM.My.Resources.Resources.document_new
         resources.ApplyResources(Me.Button2, "Button2")
-        Me.Button2.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(224,Byte),Integer), CType(CType(224,Byte),Integer), CType(CType(224,Byte),Integer))
+        Me.Button2.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
         Me.Button2.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Silver
-        Me.Button2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(224,Byte),Integer), CType(CType(224,Byte),Integer), CType(CType(224,Byte),Integer))
+        Me.Button2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        Me.Button2.ForeColor = System.Drawing.Color.White
+        Me.Button2.Image = Global.DWSIM.My.Resources.Resources.paper_pencil_48
         Me.Button2.Name = "Button2"
-        Me.Button2.UseVisualStyleBackColor = true
+        Me.Button2.UseVisualStyleBackColor = False
         '
         'FormWelcome
         '
         resources.ApplyResources(Me, "$this")
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.BackColor = System.Drawing.Color.White
-        Me.Controls.Add(Me.Button8)
+        Me.BackColor = System.Drawing.Color.SteelBlue
+        Me.Controls.Add(Me.chkAutoClose)
         Me.Controls.Add(Me.Label2)
-        Me.Controls.Add(Me.TabControl1)
         Me.Controls.Add(Me.Label1)
+        Me.Controls.Add(Me.Button8)
+        Me.Controls.Add(Me.TabControl1)
         Me.Controls.Add(Me.Button2)
         Me.Controls.Add(Me.Button3)
         Me.Controls.Add(Me.Button5)
-        Me.Controls.Add(Me.Label11)
         Me.Controls.Add(Me.Button1)
-        Me.Controls.Add(Me.Label12)
-        Me.Controls.Add(Me.Label3)
-        Me.Controls.Add(Me.Label4)
-        Me.Controls.Add(Me.Label9)
-        Me.Controls.Add(Me.Label10)
-        Me.Controls.Add(Me.Label6)
-        Me.Controls.Add(Me.Label7)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow
-        Me.MaximizeBox = false
-        Me.MinimizeBox = false
         Me.Name = "FormWelcome"
-        Me.ShowIcon = false
-        Me.ShowInTaskbar = false
-        Me.TabControl1.ResumeLayout(false)
-        Me.TabPage1.ResumeLayout(false)
-        Me.TabPage2.ResumeLayout(false)
-        Me.TabPage5.ResumeLayout(false)
-        Me.TabPage5.PerformLayout
-        Me.TabPage3.ResumeLayout(false)
-        Me.TabPage4.ResumeLayout(false)
-        Me.TabPage4.PerformLayout
-        Me.ResumeLayout(false)
-        Me.PerformLayout
+        Me.TabControl1.ResumeLayout(False)
+        Me.TabPage1.ResumeLayout(False)
+        Me.TabPage2.ResumeLayout(False)
+        Me.TabPage5.ResumeLayout(False)
+        Me.TabPage5.PerformLayout()
+        Me.TabPage3.ResumeLayout(False)
+        Me.ResumeLayout(False)
+        Me.PerformLayout()
 
-End Sub
-    Public WithEvents Label10 As System.Windows.Forms.Label
-    Public WithEvents Label9 As System.Windows.Forms.Label
-    Public WithEvents Label4 As System.Windows.Forms.Label
-    Public WithEvents Label3 As System.Windows.Forms.Label
+    End Sub
     Public WithEvents Button1 As System.Windows.Forms.Button
     Friend WithEvents lvlatest As System.Windows.Forms.ListView
-    Public WithEvents Label6 As System.Windows.Forms.Label
-    Public WithEvents Label7 As System.Windows.Forms.Label
-    Public WithEvents Label11 As System.Windows.Forms.Label
-    Public WithEvents Label12 As System.Windows.Forms.Label
     Public WithEvents Button5 As System.Windows.Forms.Button
     Public WithEvents Button3 As System.Windows.Forms.Button
     Public WithEvents Button2 As System.Windows.Forms.Button
-    Public WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents lvlatestfolders As System.Windows.Forms.ListView
     Friend WithEvents ImageList1 As System.Windows.Forms.ImageList
     Friend WithEvents ColumnHeader1 As System.Windows.Forms.ColumnHeader
@@ -497,13 +362,6 @@ End Sub
     Friend WithEvents lvsamples As System.Windows.Forms.ListView
     Friend WithEvents ColumnHeader2 As System.Windows.Forms.ColumnHeader
     Friend WithEvents TabPage3 As System.Windows.Forms.TabPage
-    Public WithEvents Label2 As System.Windows.Forms.Label
-    Friend WithEvents TabPage4 As System.Windows.Forms.TabPage
-    Friend WithEvents LinkLabel5 As System.Windows.Forms.LinkLabel
-    Friend WithEvents LinkLabel4 As System.Windows.Forms.LinkLabel
-    Friend WithEvents LinkLabel3 As System.Windows.Forms.LinkLabel
-    Friend WithEvents LinkLabel2 As System.Windows.Forms.LinkLabel
-    Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
     Friend WithEvents TabPage5 As TabPage
     Friend WithEvents FOSSEEList As ListView
     Friend WithEvents ColumnHeader4 As ColumnHeader
@@ -513,4 +371,7 @@ End Sub
     Public WithEvents Label5 As Label
     Public WithEvents Label13 As Label
     Friend WithEvents Button8 As Button
+    Friend WithEvents Label1 As Label
+    Friend WithEvents Label2 As Label
+    Friend WithEvents chkAutoClose As CheckBox
 End Class

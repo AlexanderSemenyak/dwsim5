@@ -62,7 +62,7 @@ namespace DWSIM.UI.Forms
         private double sf = s.UIScalingFactor;
 
         private CheckToolItem btnmSnapToGrid, btnmDrawGrid, btnmMultiSelect;
-
+        
         void InitializeComponent()
         {
 
@@ -199,16 +199,21 @@ namespace DWSIM.UI.Forms
 
             // actions
 
+            FlowsheetObject.UpdateEditorPanels = () => UpdateEditorPanels();
+
             ActComps = () =>
             {
                 var cont = new TableLayout();
-                new DWSIM.UI.Desktop.Editors.Compounds(FlowsheetObject, cont);
+                var editor = new DWSIM.UI.Desktop.Editors.Compounds(FlowsheetObject, cont);
                 cont.Tag = "Simulation Compounds";
 
                 var cont2 = new Desktop.Editors.CompoundTools(FlowsheetObject);
                 cont2.Tag = "Compound Tools";
 
                 var form = UI.Shared.Common.GetDefaultTabbedForm("Compounds", (int)(sf * 920), (int)(sf * 500), new Control[] { cont, cont2 });
+
+                editor.listcontainer.CellEdited += (sender, e) => UpdateEditorPanels();
+
                 form.Show();
             };
 
@@ -424,14 +429,14 @@ namespace DWSIM.UI.Forms
             btnUtilities_BinaryEnvelope.Click += (sender, e) =>
             {
                 var bpe = new Desktop.Editors.Utilities.BinaryEnvelopeView(FlowsheetObject);
-                var form = Common.GetDefaultEditorForm("Binary Phase Envelope", (int)(sf * 500), (int)(sf * 750), bpe);
+                var form = Common.GetDefaultEditorForm("Binary Phase Envelope", (int)(sf * 1024), (int)(sf * 540), bpe, false);
                 form.Show();
             };
 
             btnUtilities_PhaseEnvelope.Click += (sender, e) =>
             {
                 var pe = new Desktop.Editors.Utilities.PhaseEnvelopeView(FlowsheetObject);
-                var form = Common.GetDefaultEditorForm("Phase Envelope", (int)(sf * 500), (int)(sf * 650), pe);
+                var form = Common.GetDefaultEditorForm("Phase Envelope", (int)(sf * 1024), (int)(sf * 500), pe, false);
                 form.Show();
             };
 
@@ -459,14 +464,14 @@ namespace DWSIM.UI.Forms
             btnSensAnalysis.Click += (sender, e) =>
             {
                 var saeditor = new Desktop.Editors.SensAnalysisView(FlowsheetObject);
-                var form = Common.GetDefaultEditorForm("Sensitivity Analysis", (int)(sf * 500), (int)(sf * 700), saeditor);
+                var form = Common.GetDefaultEditorForm("Sensitivity Analysis", (int)(sf * 750), (int)(sf * 520), saeditor);
                 form.Show();
             };
 
             btnOptimization.Click += (sender, e) =>
             {
                 var foeditor = new Desktop.Editors.OptimizerView(FlowsheetObject);
-                var form = Common.GetDefaultEditorForm("Flowsheet Optimizer", (int)(sf * 500), (int)(sf * 700), foeditor);
+                var form = Common.GetDefaultEditorForm("Flowsheet Optimizer", (int)(sf * 800), (int)(sf * 600), foeditor);
                 form.Show();
             };
 
@@ -1191,6 +1196,7 @@ namespace DWSIM.UI.Forms
 
             var calculatorassembly = System.Reflection.Assembly.LoadFile(Path.Combine(dir, "DWSIM.Thermodynamics.dll"));
             var unitopassembly = System.Reflection.Assembly.LoadFile(Path.Combine(dir, "DWSIM.UnitOperations.dll"));
+            var fsolverassembly = System.Reflection.Assembly.LoadFile(Path.Combine(dir, "DWSIM.FlowsheetSolver.dll"));
             List<Type> availableTypes = new List<Type>();
 
             availableTypes.AddRange(calculatorassembly.GetTypes().Where(x => x.GetInterface("DWSIM.Interfaces.ISimulationObject") != null ? true : false));
@@ -1207,6 +1213,73 @@ namespace DWSIM.UI.Forms
                 }
             }
 
+            string netprops = "";
+
+            PropertyInfo[] props = calculatorassembly.GetType("DWSIM.Thermodynamics.Streams.MaterialStream").GetProperties();
+
+            foreach (var p in props)
+            {
+                netprops = (netprops + (p.Name + " "));
+            }
+
+            MethodInfo[] methods = calculatorassembly.GetType("DWSIM.Thermodynamics.Streams.MaterialStream").GetMethods();
+            foreach (var m in methods)
+            {
+                netprops = (netprops + (m.Name + " "));
+            }
+
+            props = unitopassembly.GetType("DWSIM.UnitOperations.Streams.EnergyStream").GetProperties();
+            foreach (var p in props)
+            {
+                netprops = (netprops + (p.Name + " "));
+            }
+
+            methods = unitopassembly.GetType("DWSIM.UnitOperations.Streams.EnergyStream").GetMethods();
+            foreach (var m in methods)
+            {
+                netprops = (netprops + (m.Name + " "));
+            }
+
+            props = calculatorassembly.GetType("DWSIM.Thermodynamics.PropertyPackages.PropertyPackage").GetProperties();
+            foreach (var p in props)
+            {
+                if ((p.PropertyType.Namespace != "System.Windows.Forms"))
+                {
+                    netprops = (netprops + (p.Name + " "));
+                }
+            }
+
+            methods = calculatorassembly.GetType("DWSIM.Thermodynamics.PropertyPackages.PropertyPackage").GetMethods();
+            foreach (var m in methods)
+            {
+                netprops = (netprops + (m.Name + " "));
+            }
+
+            string objects = "";
+
+            objects = "ims1 ims2 ims3 ims4 ims5 ims6 ies1 oms1 oms2 oms3 oms4 oms5 oms6 oes1 Flowsheet Spreadsheet Plugins Solver Me DWSIM";
+
+            this.FlowsheetObject.ScriptKeywordsU = netprops + objects;
+
+            // editor is being used at flowsheet level.
+            props = fsolverassembly.GetType("DWSIM.FlowsheetSolver.FlowsheetSolver").GetProperties();
+            foreach (var p in props)
+            {
+                if ((p.PropertyType.Namespace != "System.Windows.Forms"))
+                {
+                    netprops = (netprops + (p.Name + " "));
+                }
+            }
+
+            methods = fsolverassembly.GetType("DWSIM.FlowsheetSolver.FlowsheetSolver").GetMethods();
+            foreach (var m in methods)
+            {
+                netprops = (netprops + (m.Name + " "));
+            }
+
+            objects = "MaterialStream EnergyStream PropertyPackage UnitOp Flowsheet Plugins Solver DWSIM";
+
+            this.FlowsheetObject.ScriptKeywordsF = netprops + objects;
         }
 
         Eto.Forms.Container SetupLogWindow()
@@ -1512,15 +1585,17 @@ namespace DWSIM.UI.Forms
                 };
                 item0.Items.Add(menuitem);
             }
-            
+
             var item1 = new ButtonMenuItem { Text = "Zoom All", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-zoom_to_extents.png")) };
             var item2 = new ButtonMenuItem { Text = "Default Zoom", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-zoom_to_actual_size_filled.png")) };
 
-            item1.Click += (sender, e) => {
+            item1.Click += (sender, e) =>
+            {
                 ActZoomFit.Invoke();
             };
 
-            item2.Click += (sender, e) => {
+            item2.Click += (sender, e) =>
+            {
                 ActZoomDefault.Invoke();
             };
 
@@ -1773,7 +1848,7 @@ namespace DWSIM.UI.Forms
 
         }
 
-        private void UpdateEditorPanels()
+        public void UpdateEditorPanels()
         {
             foreach (DocumentPage item in EditorHolder.Pages)
             {
@@ -1781,7 +1856,7 @@ namespace DWSIM.UI.Forms
             }
         }
 
-        private void UpdateEditorConnectionsPanel()
+        public void UpdateEditorConnectionsPanel()
         {
             foreach (DocumentPage item in EditorHolder.Pages)
             {

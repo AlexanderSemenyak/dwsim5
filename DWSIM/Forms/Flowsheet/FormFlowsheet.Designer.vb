@@ -52,12 +52,12 @@ Partial Class FormFlowsheet
         Me.RectangleToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GraficoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.FerramentasToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.InspectorTSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CompoundCreatorWizardTSMI = New System.Windows.Forms.ToolStripMenuItem()
+        Me.PropriedadesDasSubstânciasToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CaracterizacaoDePetroleosFracoesC7ToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.CaracterizacaoDePetroleosCurvasDeDestilacaoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.GerenciadorDeAmostrasDePetroleoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.PropriedadesDasSubstânciasToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.AssistenteDeCriaçãoDeSubstânciasToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.InspectorTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator15 = New System.Windows.Forms.ToolStripSeparator()
         Me.UtilitiesTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.TSMIAddUtility = New System.Windows.Forms.ToolStripMenuItem()
@@ -350,18 +350,26 @@ Partial Class FormFlowsheet
         'FerramentasToolStripMenuItem
         '
         resources.ApplyResources(Me.FerramentasToolStripMenuItem, "FerramentasToolStripMenuItem")
-        Me.FerramentasToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AssistenteDeCriaçãoDeSubstânciasToolStripMenuItem, Me.AssistenteDeCriaçãoDeSubstânciasToolStripMenuItem, Me.CaracterizacaoDePetroleosFracoesC7ToolStripMenuItem, Me.CaracterizacaoDePetroleosCurvasDeDestilacaoToolStripMenuItem, Me.GerenciadorDeAmostrasDePetroleoToolStripMenuItem, Me.InspectorTSMI, Me.ToolStripSeparator15})
+        Me.FerramentasToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CompoundCreatorWizardTSMI, Me.PropriedadesDasSubstânciasToolStripMenuItem, Me.CaracterizacaoDePetroleosFracoesC7ToolStripMenuItem, Me.CaracterizacaoDePetroleosCurvasDeDestilacaoToolStripMenuItem, Me.GerenciadorDeAmostrasDePetroleoToolStripMenuItem, Me.InspectorTSMI, Me.ToolStripSeparator15})
         Me.FerramentasToolStripMenuItem.MergeAction = System.Windows.Forms.MergeAction.MatchOnly
         Me.FerramentasToolStripMenuItem.MergeIndex = 3
         Me.FerramentasToolStripMenuItem.Name = "FerramentasToolStripMenuItem"
         '
-        'InspectorTSMI
+        'CompoundCreatorWizardTSMI
         '
-        resources.ApplyResources(Me.InspectorTSMI, "InspectorTSMI")
-        Me.InspectorTSMI.Image = Global.DWSIM.My.Resources.Resources.icons8_spy_filled
-        Me.InspectorTSMI.MergeAction = System.Windows.Forms.MergeAction.Insert
-        Me.InspectorTSMI.MergeIndex = 0
-        Me.InspectorTSMI.Name = "InspectorTSMI"
+        resources.ApplyResources(Me.CompoundCreatorWizardTSMI, "CompoundCreatorWizardTSMI")
+        Me.CompoundCreatorWizardTSMI.Image = Global.DWSIM.My.Resources.Resources.wand
+        Me.CompoundCreatorWizardTSMI.MergeAction = System.Windows.Forms.MergeAction.Insert
+        Me.CompoundCreatorWizardTSMI.MergeIndex = 6
+        Me.CompoundCreatorWizardTSMI.Name = "CompoundCreatorWizardTSMI"
+        '
+        'PropriedadesDasSubstânciasToolStripMenuItem
+        '
+        resources.ApplyResources(Me.PropriedadesDasSubstânciasToolStripMenuItem, "PropriedadesDasSubstânciasToolStripMenuItem")
+        Me.PropriedadesDasSubstânciasToolStripMenuItem.Image = Global.DWSIM.My.Resources.Resources.wi0124_16
+        Me.PropriedadesDasSubstânciasToolStripMenuItem.MergeAction = System.Windows.Forms.MergeAction.Insert
+        Me.PropriedadesDasSubstânciasToolStripMenuItem.MergeIndex = 5
+        Me.PropriedadesDasSubstânciasToolStripMenuItem.Name = "PropriedadesDasSubstânciasToolStripMenuItem"
         '
         'CaracterizacaoDePetroleosFracoesC7ToolStripMenuItem
         '
@@ -387,21 +395,13 @@ Partial Class FormFlowsheet
         Me.GerenciadorDeAmostrasDePetroleoToolStripMenuItem.MergeIndex = 3
         Me.GerenciadorDeAmostrasDePetroleoToolStripMenuItem.Name = "GerenciadorDeAmostrasDePetroleoToolStripMenuItem"
         '
-        'PropriedadesDasSubstânciasToolStripMenuItem
+        'InspectorTSMI
         '
-        resources.ApplyResources(Me.PropriedadesDasSubstânciasToolStripMenuItem, "PropriedadesDasSubstânciasToolStripMenuItem")
-        Me.PropriedadesDasSubstânciasToolStripMenuItem.Image = Global.DWSIM.My.Resources.Resources.wi0124_16
-        Me.PropriedadesDasSubstânciasToolStripMenuItem.MergeAction = System.Windows.Forms.MergeAction.Insert
-        Me.PropriedadesDasSubstânciasToolStripMenuItem.MergeIndex = 5
-        Me.PropriedadesDasSubstânciasToolStripMenuItem.Name = "PropriedadesDasSubstânciasToolStripMenuItem"
-        '
-        'AssistenteDeCriaçãoDeSubstânciasToolStripMenuItem
-        '
-        resources.ApplyResources(Me.AssistenteDeCriaçãoDeSubstânciasToolStripMenuItem, "AssistenteDeCriaçãoDeSubstânciasToolStripMenuItem")
-        Me.AssistenteDeCriaçãoDeSubstânciasToolStripMenuItem.Image = Global.DWSIM.My.Resources.Resources.wand
-        Me.AssistenteDeCriaçãoDeSubstânciasToolStripMenuItem.MergeAction = System.Windows.Forms.MergeAction.Insert
-        Me.AssistenteDeCriaçãoDeSubstânciasToolStripMenuItem.MergeIndex = 6
-        Me.AssistenteDeCriaçãoDeSubstânciasToolStripMenuItem.Name = "AssistenteDeCriaçãoDeSubstânciasToolStripMenuItem"
+        resources.ApplyResources(Me.InspectorTSMI, "InspectorTSMI")
+        Me.InspectorTSMI.Image = Global.DWSIM.My.Resources.Resources.icons8_spy_filled
+        Me.InspectorTSMI.MergeAction = System.Windows.Forms.MergeAction.Insert
+        Me.InspectorTSMI.MergeIndex = 0
+        Me.InspectorTSMI.Name = "InspectorTSMI"
         '
         'ToolStripSeparator15
         '
@@ -683,7 +683,7 @@ Partial Class FormFlowsheet
         'ToolStrip1
         '
         resources.ApplyResources(Me.ToolStrip1, "ToolStrip1")
-        Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(20, 20)
+        Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.ToolStripSeparator1, Me.tsbAtivar, Me.tsbCalcF, Me.tsbCalc, Me.tsbAbortCalc, Me.tsbSimultAdjustSolver, Me.ToolStripSeparator2, Me.tsbUndo, Me.tsbRedo})
         Me.ToolStrip1.Name = "ToolStrip1"
         '
@@ -857,7 +857,7 @@ Partial Class FormFlowsheet
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents GraficoToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents AssistenteDeCriaçãoDeSubstânciasToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents CompoundCreatorWizardTSMI As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ConsoleOutputTSMI As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents InspectorTSMI As ToolStripMenuItem
     Friend WithEvents ToolStrip1 As ToolStrip

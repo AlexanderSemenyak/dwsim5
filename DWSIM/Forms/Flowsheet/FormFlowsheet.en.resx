@@ -122,13 +122,13 @@
     <value>245, 22</value>
   </data>
   <data name="CloseToolStripMenuItem.Text" xml:space="preserve">
-    <value>Закрыть активный расчет</value>
+    <value>Close Active Simulation</value>
   </data>
   <data name="ArquivoToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>37, 20</value>
   </data>
   <data name="ArquivoToolStripMenuItem.Text" xml:space="preserve">
-    <value>Файл</value>
+    <value>&amp;File</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="tsmiUndo.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
@@ -138,7 +138,7 @@
     <value>266, 22</value>
   </data>
   <data name="tsmiUndo.Text" xml:space="preserve">
-    <value>Отменить</value>
+    <value>Undo</value>
   </data>
   <data name="tsmiRedo.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
     <value>None</value>
@@ -147,7 +147,7 @@
     <value>266, 22</value>
   </data>
   <data name="tsmiRedo.Text" xml:space="preserve">
-    <value>Повторить</value>
+    <value>Redo</value>
   </data>
   <data name="ToolStripSeparator14.Size" type="System.Drawing.Size, System.Drawing">
     <value>263, 6</value>
@@ -156,43 +156,43 @@
     <value>266, 22</value>
   </data>
   <data name="tsmiCut.Text" xml:space="preserve">
-    <value>Вырезать выбранный объект</value>
+    <value>Cut selected objects</value>
   </data>
   <data name="tsmiCopy.Size" type="System.Drawing.Size, System.Drawing">
     <value>266, 22</value>
   </data>
   <data name="tsmiCopy.Text" xml:space="preserve">
-    <value>Копировать выбранные объекты</value>
+    <value>Copy selected objects</value>
   </data>
   <data name="tsmiPaste.Size" type="System.Drawing.Size, System.Drawing">
     <value>266, 22</value>
   </data>
   <data name="tsmiPaste.Text" xml:space="preserve">
-    <value>Вставить объекты</value>
+    <value>Paste objects</value>
   </data>
   <data name="tsmiRemoveSelected.Size" type="System.Drawing.Size, System.Drawing">
     <value>266, 22</value>
   </data>
   <data name="tsmiRemoveSelected.Text" xml:space="preserve">
-    <value>Удалить выбранные объекты</value>
+    <value>Remove selected objects</value>
   </data>
   <data name="tsmiCloneSelected.Size" type="System.Drawing.Size, System.Drawing">
     <value>266, 22</value>
   </data>
   <data name="tsmiCloneSelected.Text" xml:space="preserve">
-    <value>Клонировать выбранные объекты</value>
+    <value>Clone selected objects</value>
   </data>
   <data name="tsmiRecalc.Size" type="System.Drawing.Size, System.Drawing">
     <value>266, 22</value>
   </data>
   <data name="tsmiRecalc.Text" xml:space="preserve">
-    <value>Пересчитать объект</value>
+    <value>Recalculate object</value>
   </data>
   <data name="tsmiExportData.Size" type="System.Drawing.Size, System.Drawing">
     <value>266, 22</value>
   </data>
   <data name="tsmiExportData.Text" xml:space="preserve">
-    <value>Экспортировать данные в буфер обмена</value>
+    <value>Export data to Clipboard</value>
   </data>
   <data name="ToolStripSeparator18.Size" type="System.Drawing.Size, System.Drawing">
     <value>263, 6</value>
@@ -201,19 +201,19 @@
     <value>266, 22</value>
   </data>
   <data name="tsmiConfigSimulation.Text" xml:space="preserve">
-    <value>Настройки расчетов</value>
+    <value>Simulation Settings</value>
   </data>
   <data name="EditarToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>39, 20</value>
   </data>
   <data name="EditarToolStripMenuItem.Text" xml:space="preserve">
-    <value>Редактировать</value>
+    <value>E&amp;dit</value>
   </data>
   <data name="BlocoDeSimulacaoToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>207, 22</value>
   </data>
   <data name="BlocoDeSimulacaoToolStripMenuItem.Text" xml:space="preserve">
-    <value>Модель</value>
+    <value>Flowsheet Object</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="BlocoDeSimulacaoToolStripMenuItem.Visible" type="System.Boolean, mscorlib">
@@ -223,109 +223,109 @@
     <value>207, 22</value>
   </data>
   <data name="TabelaDePropriedadesToolStripMenuItem.Text" xml:space="preserve">
-    <value>Таблица характеристик</value>
+    <value>Property Table</value>
   </data>
   <data name="TabelaDePropriedatesMestraToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>207, 22</value>
   </data>
   <data name="TabelaDePropriedatesMestraToolStripMenuItem.Text" xml:space="preserve">
-    <value>Главная таблица</value>
+    <value>Master Property Table</value>
   </data>
   <data name="TabelaDePropriedadesPlanilhaToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>207, 22</value>
   </data>
   <data name="TabelaDePropriedadesPlanilhaToolStripMenuItem.Text" xml:space="preserve">
-    <value>Связанная страница расчетов</value>
+    <value>Linked Spreadsheet Table</value>
   </data>
   <data name="FiguraToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>207, 22</value>
   </data>
   <data name="FiguraToolStripMenuItem.Text" xml:space="preserve">
-    <value>Изображение</value>
+    <value>Image</value>
   </data>
   <data name="TextoToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>207, 22</value>
   </data>
   <data name="TextoToolStripMenuItem.Text" xml:space="preserve">
-    <value>Название</value>
+    <value>Text</value>
   </data>
   <data name="RectangleToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>207, 22</value>
   </data>
   <data name="RectangleToolStripMenuItem.Text" xml:space="preserve">
-    <value>Прямоугольник</value>
+    <value>Rectangle</value>
   </data>
   <data name="GraficoToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>207, 22</value>
   </data>
   <data name="GraficoToolStripMenuItem.Text" xml:space="preserve">
-    <value>График</value>
+    <value>Chart</value>
   </data>
   <data name="InserirToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>48, 20</value>
   </data>
   <data name="InserirToolStripMenuItem.Text" xml:space="preserve">
-    <value>Вставить</value>
+    <value>&amp;Insert</value>
   </data>
-  <data name="AssistenteDeCriaçãoDeSubstânciasToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>328, 26</value>
+  <data name="CompoundCreatorWizardTSMI.Size" type="System.Drawing.Size, System.Drawing">
+    <value>324, 22</value>
   </data>
-  <data name="AssistenteDeCriaçãoDeSubstânciasToolStripMenuItem.Text" xml:space="preserve">
-    <value>Помощник по созданию смесей</value>
+  <data name="CompoundCreatorWizardTSMI.Text" xml:space="preserve">
+    <value>Compound Creator Wizard</value>
   </data>
   <data name="PropriedadesDasSubstânciasToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>328, 26</value>
+    <value>324, 22</value>
   </data>
   <data name="PropriedadesDasSubstânciasToolStripMenuItem.Text" xml:space="preserve">
-    <value>Просмотр характеристик базовых компонентов</value>
+    <value>Pure Compound Property Viewer/Editor</value>
   </data>
   <data name="CaracterizacaoDePetroleosFracoesC7ToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>328, 26</value>
+    <value>324, 22</value>
   </data>
   <data name="CaracterizacaoDePetroleosFracoesC7ToolStripMenuItem.Text" xml:space="preserve">
-    <value>Характеристики нефти (Смесь C7+)</value>
+    <value>Petroleum Characterization (Bulk C7+)</value>
   </data>
   <data name="CaracterizacaoDePetroleosCurvasDeDestilacaoToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>328, 26</value>
+    <value>324, 22</value>
   </data>
   <data name="CaracterizacaoDePetroleosCurvasDeDestilacaoToolStripMenuItem.Text" xml:space="preserve">
-    <value>Характеристики нефти (Кривые дистилляции)</value>
+    <value>Petroleum Characterization (Distillation Curves)</value>
   </data>
   <data name="GerenciadorDeAmostrasDePetroleoToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>328, 26</value>
+    <value>324, 22</value>
   </data>
   <data name="GerenciadorDeAmostrasDePetroleoToolStripMenuItem.Text" xml:space="preserve">
-    <value>Выполнить анализ нефти</value>
+    <value>Petroleum Assay Manager</value>
   </data>
   <data name="InspectorTSMI.Size" type="System.Drawing.Size, System.Drawing">
-    <value>328, 26</value>
+    <value>324, 22</value>
   </data>
   <data name="InspectorTSMI.Text" xml:space="preserve">
-    <value>Инспектор поиска решения</value>
+    <value>Solution Inspector</value>
   </data>
   <data name="ToolStripSeparator15.Size" type="System.Drawing.Size, System.Drawing">
-    <value>325, 6</value>
+    <value>321, 6</value>
   </data>
   <data name="FerramentasToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>47, 20</value>
   </data>
   <data name="FerramentasToolStripMenuItem.Text" xml:space="preserve">
-    <value>Инструменты</value>
+    <value>&amp;Tools</value>
   </data>
   <data name="TSMIAddUtility.Size" type="System.Drawing.Size, System.Drawing">
     <value>130, 22</value>
   </data>
   <data name="TSMIAddUtility.Text" xml:space="preserve">
-    <value>Добавить утилиту</value>
+    <value>Add Utility</value>
   </data>
   <data name="TSMIAddUtility.ToolTipText" xml:space="preserve">
-    <value>Добавить утилиту</value>
+    <value>Add Utility</value>
   </data>
   <data name="UtilitiesTSMI.Size" type="System.Drawing.Size, System.Drawing">
     <value>58, 20</value>
   </data>
   <data name="UtilitiesTSMI.Text" xml:space="preserve">
-    <value>Утилиты</value>
+    <value>&amp;Utilities</value>
   </data>
   <data name="UtilitiesTSMI.ToolTipText" xml:space="preserve">
     <value>Displays a list of Utilities currently attached to Flowsheet Objects.</value>
@@ -334,64 +334,64 @@
     <value>192, 22</value>
   </data>
   <data name="AnaliseDeSensibilidadeToolStripMenuItem.Text" xml:space="preserve">
-    <value>Анализ чувствительности</value>
+    <value>Sensitivity Analysis</value>
   </data>
   <data name="MultivariateOptimizerToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>192, 22</value>
   </data>
   <data name="MultivariateOptimizerToolStripMenuItem.Text" xml:space="preserve">
-    <value>Многовариантная оптимизация</value>
+    <value>Multivariate Optimizer</value>
   </data>
   <data name="OtimizaToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>88, 20</value>
   </data>
   <data name="OtimizaToolStripMenuItem.Text" xml:space="preserve">
-    <value>Оптимизация</value>
+    <value>&amp;Optimization</value>
   </data>
   <data name="IronRubyToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>195, 22</value>
   </data>
   <data name="IronRubyToolStripMenuItem.Text" xml:space="preserve">
-    <value>Управление скриптами</value>
+    <value>Script Manager</value>
   </data>
   <data name="GerarRelatorioToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>146, 22</value>
   </data>
   <data name="GerarRelatorioToolStripMenuItem.Text" xml:space="preserve">
-    <value>Построить отчет</value>
+    <value>Create Report</value>
   </data>
   <data name="ResultadosToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>56, 20</value>
   </data>
   <data name="ResultadosToolStripMenuItem.Text" xml:space="preserve">
-    <value>Результаты</value>
+    <value>&amp;Results</value>
   </data>
   <data name="CAPEOPENFlowsheetMonitoringObjectsMOsToolStripMenuItem.Text" xml:space="preserve">
-    <value>Подключаемые модули CAPE-OPEN</value>
+    <value>CAPE-OPEN Plugins</value>
   </data>
   <data name="ExibirListaDeItensACalcularToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>265, 22</value>
   </data>
   <data name="ExibirListaDeItensACalcularToolStripMenuItem.Text" xml:space="preserve">
-    <value>Очередь расчетов</value>
+    <value>Calculation Queue</value>
   </data>
   <data name="varpaneltsmi.Size" type="System.Drawing.Size, System.Drawing">
     <value>265, 22</value>
   </data>
   <data name="varpaneltsmi.Text" xml:space="preserve">
-    <value>Панель предпросмотра</value>
+    <value>Watch Panel</value>
   </data>
   <data name="COObjTSMI.Size" type="System.Drawing.Size, System.Drawing">
     <value>265, 22</value>
   </data>
   <data name="COObjTSMI.Text" xml:space="preserve">
-    <value>Отчеты CAPE-OPEN-объекта</value>
+    <value>CAPE-OPEN Object Reports</value>
   </data>
   <data name="ConsoleOutputTSMI.Size" type="System.Drawing.Size, System.Drawing">
     <value>265, 22</value>
   </data>
   <data name="ConsoleOutputTSMI.Text" xml:space="preserve">
-    <value>Вывод в консоль</value>
+    <value>Console Output</value>
   </data>
   <data name="ToolStripSeparator10.Size" type="System.Drawing.Size, System.Drawing">
     <value>262, 6</value>
@@ -400,13 +400,13 @@
     <value>265, 22</value>
   </data>
   <data name="showflowsheettoolstripmenuitem.Text" xml:space="preserve">
-    <value>Показывать меню модели</value>
+    <value>Flowsheet Toolstrip</value>
   </data>
   <data name="showunitstoolstripmenuitem.Size" type="System.Drawing.Size, System.Drawing">
     <value>265, 22</value>
   </data>
   <data name="showunitstoolstripmenuitem.Text" xml:space="preserve">
-    <value>Меню единиц измерения</value>
+    <value>Unit Systems Toolstrip</value>
   </data>
   <data name="ToolStripSeparator11.Size" type="System.Drawing.Size, System.Drawing">
     <value>262, 6</value>
@@ -415,19 +415,19 @@
     <value>265, 22</value>
   </data>
   <data name="RestoreLayoutTSMI.Text" xml:space="preserve">
-    <value>Восстановить расположение всех окон</value>
+    <value>Restore Layout of all Docking Panels</value>
   </data>
   <data name="tsmiCloseOpenedEditors.Size" type="System.Drawing.Size, System.Drawing">
     <value>265, 22</value>
   </data>
   <data name="tsmiCloseOpenedEditors.Text" xml:space="preserve">
-    <value>Закрыть открытые редакторы объектов</value>
+    <value>Close Opened Object Editors</value>
   </data>
   <data name="ExibirToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>44, 20</value>
   </data>
   <data name="ExibirToolStripMenuItem.Text" xml:space="preserve">
-    <value>&amp;Вид</value>
+    <value>&amp;View</value>
   </data>
   <data name="ToolStripMenuItem3.Text" xml:space="preserve">
     <value>This.toolStripMenuItem3</value>
@@ -436,7 +436,7 @@
     <value>9</value>
   </data>
   <data name="Button2.Text" xml:space="preserve">
-    <value>Больше информации</value>
+    <value>More Information</value>
   </data>
   <data name="Label1.Size" type="System.Drawing.Size, System.Drawing">
     <value>306, 13</value>
@@ -445,37 +445,61 @@
     <value>This simulation is currently running in Mobile Compatibility Mode.</value>
   </data>
   <data name="ToolStripButton1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>73, 24</value>
+    <value>69, 22</value>
   </data>
   <data name="ToolStripButton1.Text" xml:space="preserve">
-    <value>Настройки</value>
+    <value>Settings</value>
+  </data>
+  <data name="ToolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>6, 25</value>
+  </data>
+  <data name="tsbAtivar.Size" type="System.Drawing.Size, System.Drawing">
+    <value>23, 22</value>
   </data>
   <data name="tsbAtivar.Text" xml:space="preserve">
-    <value>Расчет модели активен (F6)</value>
+    <value>Flowsheet Calculator Active (F6)</value>
+  </data>
+  <data name="tsbCalcF.Size" type="System.Drawing.Size, System.Drawing">
+    <value>23, 22</value>
   </data>
   <data name="tsbCalcF.ToolTipText" xml:space="preserve">
-    <value>Принудительно рассчитать (Shift+F5)</value>
+    <value>Force Solve (Shift+F5)</value>
   </data>
   <data name="tsbCalc.Size" type="System.Drawing.Size, System.Drawing">
-    <value>138, 24</value>
+    <value>134, 22</value>
   </data>
   <data name="tsbCalc.Text" xml:space="preserve">
-    <value>Рассчитать модель (F5)</value>
+    <value>Solve Flowsheet (F5)</value>
   </data>
   <data name="tsbAbortCalc.Size" type="System.Drawing.Size, System.Drawing">
-    <value>172, 24</value>
+    <value>168, 22</value>
   </data>
   <data name="tsbAbortCalc.Text" xml:space="preserve">
-    <value>Прервать расчет (пауза/отмена)</value>
+    <value>Abort Solver (Pause/Break)</value>
+  </data>
+  <data name="tsbSimultAdjustSolver.Size" type="System.Drawing.Size, System.Drawing">
+    <value>23, 22</value>
   </data>
   <data name="tsbSimultAdjustSolver.Text" xml:space="preserve">
-    <value>Подстройка расчетов активна (F7)</value>
+    <value>Simultaneous Adjust Solver Active (F7)</value>
+  </data>
+  <data name="ToolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>6, 25</value>
+  </data>
+  <data name="tsbUndo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>29, 22</value>
   </data>
   <data name="tsbUndo.Text" xml:space="preserve">
-    <value>Отменить</value>
+    <value>Undo</value>
+  </data>
+  <data name="tsbRedo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>29, 22</value>
   </data>
   <data name="tsbRedo.Text" xml:space="preserve">
-    <value>Повторить</value>
+    <value>Redo</value>
+  </data>
+  <data name="ToolStrip1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>951, 25</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -497,21 +521,6 @@
 </value>
   </data>
   <data name="$this.Text" xml:space="preserve">
-    <value>Расчеты</value>
-  </data>
-  <data name="PluginsToolStripMenuItem.Text" xml:space="preserve">
-    <value>Подключаемые модули</value>
-  </data>
-  <data name="ScriptsToolStripMenuItem.Text" xml:space="preserve">
-    <value>Скрипты</value>
-  </data>
-  <data name="SaveFileDialog1.Filter" xml:space="preserve">
-    <value>картинка-PNG|*.png</value>
-  </data>
-  <data name="GerenciadorDeReacoesToolStripMenuItem.Text" xml:space="preserve">
-    <value>Управление реакциями</value>
-  </data>
-  <data name="SaveFileDialog1.Title" xml:space="preserve">
-    <value>Сохранить модель как картинку</value>
+    <value>Simulation</value>
   </data>
 </root>

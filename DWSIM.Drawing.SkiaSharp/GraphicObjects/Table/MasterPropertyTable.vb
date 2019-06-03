@@ -157,6 +157,12 @@ Namespace GraphicObjects.Tables
             End Get
         End Property
 
+        Public ReadOnly Property NodeItems As Dictionary(Of String, List(Of NodeItem))
+            Get
+                Return m_items
+            End Get
+        End Property
+
         Public ReadOnly Property PropertyList() As Dictionary(Of String, Boolean)
             Get
                 Return m_propertylist
@@ -219,7 +225,9 @@ Namespace GraphicObjects.Tables
                         Dim myobj As SharedClasses.UnitOperations.BaseClass = Flowsheet.GetFlowsheetSimulationObject(kvp.Key)
                         If myobj.GraphicObject.ObjectType = Enums.GraphicObjects.ObjectType.MaterialStream Then
                             For Each kvp2 As KeyValuePair(Of String, Boolean) In m_propertylist
-                                If kvp2.Value = True AndAlso myobj.GetPropertyValue(kvp2.Key).Equals(Double.MinValue) Then
+                                Dim pval = myobj.GetPropertyValue(kvp2.Key)
+                                If pval Is Nothing Then pval = Double.MinValue
+                                If kvp2.Value = True AndAlso pval.Equals(Double.MinValue) Then
                                     propstoremove.Add(kvp2.Key)
                                 End If
                             Next

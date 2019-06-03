@@ -27,6 +27,7 @@ Imports System.Linq
 Imports System.Reflection
 Imports System.Globalization
 Imports DWSIM.Interfaces.Enums
+Imports DWSIM.Interfaces
 
 Namespace BaseClasses
 
@@ -41,6 +42,15 @@ Namespace BaseClasses
             Me.ComponentDescription = description
 
         End Sub
+
+        Public Overrides Function ToString() As String
+            If Name <> "" Then
+                Return Name
+            Else
+                Return MyBase.ToString()
+            End If
+        End Function
+
 
         Public Function LoadData(data As System.Collections.Generic.List(Of System.Xml.Linq.XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
             Return XMLSerializer.XMLSerializer.Deserialize(Me, data)
@@ -108,6 +118,14 @@ Namespace BaseClasses
             Me.ComponentDescription = description
 
         End Sub
+
+        Public Overrides Function ToString() As String
+            If Name <> "" Then
+                Return Name
+            Else
+                Return MyBase.ToString()
+            End If
+        End Function
 
         Public Function LoadData(data As System.Collections.Generic.List(Of System.Xml.Linq.XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
 
@@ -179,7 +197,7 @@ Namespace BaseClasses
     End Class
 
 
-    <System.Serializable()> <XmlRoot(ElementName:="Reaction")> _
+    <System.Serializable()> <XmlRoot(ElementName:="Reaction")>
     Public Class Reaction
 
         Implements ICloneable, Interfaces.ICustomXMLSerialization
@@ -277,6 +295,14 @@ Namespace BaseClasses
 
 #End Region
 
+        Public Overrides Function ToString() As String
+            If Name <> "" Then
+                Return Name
+            Else
+                Return MyBase.ToString()
+            End If
+        End Function
+
         Public Function LoadData(data As System.Collections.Generic.List(Of System.Xml.Linq.XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
 
             XMLSerializer.XMLSerializer.Deserialize(Me, data)
@@ -373,6 +399,14 @@ Namespace BaseClasses
 
         Public Property VelUnit As String = "" Implements Interfaces.IReaction.VelUnit
 
+        Public Property ReactionKinFwdType As ReactionKineticType = ReactionKineticType.Arrhenius Implements IReaction.ReactionKinFwdType
+
+        Public Property ReactionKinRevType As ReactionKineticType = ReactionKineticType.Arrhenius Implements IReaction.ReactionKinRevType
+
+        Public Property ReactionKinFwdExpression As String = "" Implements IReaction.ReactionKinFwdExpression
+
+        Public Property ReactionKinRevExpression As String = "" Implements IReaction.ReactionKinRevExpression
+
         Public Function EvaluateK1(T As Double, PP As Interfaces.IPropertyPackage) As Double Implements Interfaces.IReaction.EvaluateK
             Return EvaluateK(T, PP)
         End Function
@@ -428,6 +462,14 @@ Namespace BaseClasses
             Me.Name = name
             Me.Description = description
         End Sub
+
+        Public Overrides Function ToString() As String
+            If Name <> "" Then
+                Return Name
+            Else
+                Return MyBase.ToString()
+            End If
+        End Function
 
         Public Function Clone() As Object Implements System.ICloneable.Clone
 
@@ -1250,6 +1292,15 @@ Namespace BaseClasses
         Public Sub New()
 
         End Sub
+
+        Public Overrides Function ToString() As String
+            If Name <> "" Then
+                Return Name
+            Else
+                Return MyBase.ToString()
+            End If
+        End Function
+
 
         Public Function Clone() As Object Implements System.ICloneable.Clone
 

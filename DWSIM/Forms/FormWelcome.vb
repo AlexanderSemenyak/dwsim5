@@ -23,11 +23,17 @@ Imports System.Text
 
 Public Class FormWelcome
 
+    Inherits UserControl
+
     Dim index As Integer = 0
 
     Dim fslist As New Dictionary(Of String, SharedClasses.FOSSEEFlowsheet)
 
+    Public Property Owner As FormMain
+
     Private Sub FormTips_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+
+        chkAutoClose.Checked = My.Settings.AutoCloseWelcomePanel
 
         If DWSIM.App.IsRunningOnMono Then Me.BackgroundImageLayout = ImageLayout.Stretch
 
@@ -111,30 +117,27 @@ Public Class FormWelcome
 
     Private Sub KryptonButton5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
 
-        Me.Hide()
-        Me.Close()
         Application.DoEvents()
         Application.DoEvents()
+        Me.Parent.Visible = Not chkAutoClose.Checked
         FormMain.NewToolStripButton_Click(sender, e)
 
     End Sub
 
     Private Sub KryptonButton4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
-        Me.Hide()
-        Me.Close()
         Application.DoEvents()
         Application.DoEvents()
+        Me.Parent.Visible = Not chkAutoClose.Checked
         Call FormMain.LoadFileDialog()
     End Sub
 
     Private Sub lvlatest_ItemActivate(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lvlatest.ItemActivate, lvsamples.ItemActivate
 
+        Me.Parent.Visible = Not chkAutoClose.Checked
+
         Dim lview = DirectCast(sender, ListView)
 
-
         If File.Exists(lview.SelectedItems(0).Tag) Then
-
-            Me.Hide()
 
             Dim floading As New FormLoadingSimulation
 
@@ -224,8 +227,6 @@ Public Class FormWelcome
 
             floading.Close()
 
-            Me.Close()
-
         Else
 
             Throw New FileNotFoundException("File not found.", lview.SelectedItems(0).Tag.ToString)
@@ -236,9 +237,9 @@ Public Class FormWelcome
 
     Private Sub lvlatestfolders_ItemActivate(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lvlatestfolders.ItemActivate
 
-        Me.Close()
         Application.DoEvents()
         Application.DoEvents()
+        Me.Parent.Visible = Not chkAutoClose.Checked
         FormMain.OpenFileDialog1.InitialDirectory = Me.lvlatestfolders.SelectedItems(0).Tag
         Call FormMain.LoadFileDialog()
 
@@ -250,8 +251,7 @@ Public Class FormWelcome
         NewMDIChild.MdiParent = Me.Owner
         'Display the new form.
         NewMDIChild.Text = "CompoundCreator" & FormMain.m_childcount
-        Me.Hide()
-        Me.Close()
+        Me.Parent.Visible = Not chkAutoClose.Checked
         Application.DoEvents()
         Application.DoEvents()
         NewMDIChild.Show()
@@ -264,8 +264,7 @@ Public Class FormWelcome
         NewMDIChild.MdiParent = Me.Owner
         'Display the new form.
         NewMDIChild.Text = "DataRegression" & FormMain.m_childcount
-        Me.Hide()
-        Me.Close()
+        Me.Parent.Visible = Not chkAutoClose.Checked
         Application.DoEvents()
         Application.DoEvents()
         NewMDIChild.Show()
@@ -280,12 +279,6 @@ Public Class FormWelcome
         ' Do nothing here!
     End Sub
 
-    'Protected Overrides Sub OnPaintBackground(ByVal pevent As System.Windows.Forms.PaintEventArgs)
-
-    '    pevent.Graphics.DrawImage(My.Resources.splashWelcome_Background, New Rectangle(0, 0, Me.Width, Me.Height))
-
-    'End Sub
-
     Private Sub Button12_Click(sender As Object, e As EventArgs)
         Process.Start("https://itunes.apple.com/us/app/dwsim-simulator/id1162110266?ls=1&mt=8")
     End Sub
@@ -294,23 +287,23 @@ Public Class FormWelcome
         Process.Start("https://play.google.com/store/apps/details?id=com.danielmedeiros.dwsim_simulator")
     End Sub
 
-    Private Sub LinkLabel4_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel4.LinkClicked
+    Private Sub LinkLabel4_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs)
         Process.Start("http://dwsim.inforside.com.br/wiki/index.php?title=Main_Page")
     End Sub
 
-    Private Sub LinkLabel5_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel5.LinkClicked
+    Private Sub LinkLabel5_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs)
         Process.Start("https://sourceforge.net/p/dwsim/discussion/?source=navbar")
     End Sub
 
-    Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
+    Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs)
         Process.Start("https://www.youtube.com/channel/UCzzBQrycKoN5XbCeLV12y3Q")
     End Sub
 
-    Private Sub LinkLabel2_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel2.LinkClicked
+    Private Sub LinkLabel2_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs)
         Process.Start("http://dwsim.inforside.com.br/wiki/index.php?title=Category:Tutorials")
     End Sub
 
-    Private Sub LinkLabel3_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel3.LinkClicked
+    Private Sub LinkLabel3_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs)
         Process.Start("http://dwsim.fossee.in/flowsheeting-project/completed-flowsheet")
     End Sub
 
@@ -345,6 +338,7 @@ Public Class FormWelcome
                                                                          Else
                                                                              Dim xdoc = SharedClasses.FOSSEEFlowsheets.LoadFlowsheet(tk.Result)
                                                                              Me.UIThread(Sub()
+                                                                                             Me.Parent.Visible = Not chkAutoClose.Checked
                                                                                              floading.Label1.Text = DWSIM.App.GetLocalString("LoadingFile") & vbCrLf & "(" & item.Title & ")"
                                                                                              floading.Show()
                                                                                              Application.DoEvents()
@@ -352,7 +346,6 @@ Public Class FormWelcome
                                                                                                  FormMain.LoadXML2(xdoc, Sub(x)
                                                                                                                              Me.Invoke(Sub() floading.ProgressBar1.Value = x)
                                                                                                                          End Sub)
-                                                                                                 Me.Close()
                                                                                              Catch ex As Exception
                                                                                                  MessageBox.Show(tk.Exception, "Error loading file", MessageBoxButtons.OK, MessageBoxIcon.Error)
                                                                                              Finally
@@ -380,5 +373,9 @@ Public Class FormWelcome
 
     Private Sub Button8_Click_1(sender As Object, e As EventArgs) Handles Button8.Click
         Process.Start("https://patreon.com/dwsim")
+    End Sub
+
+    Private Sub chkAutoClose_CheckedChanged(sender As Object, e As EventArgs) Handles chkAutoClose.CheckedChanged
+        My.Settings.AutoCloseWelcomePanel = chkAutoClose.Checked
     End Sub
 End Class

@@ -45,6 +45,8 @@
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.btnRun = New System.Windows.Forms.ToolStripButton()
         Me.btnRunAsync = New System.Windows.Forms.ToolStripButton()
+        Me.btnRunDebug = New System.Windows.Forms.ToolStripButton()
+        Me.btnStopDebug = New System.Windows.Forms.ToolStripButton()
         Me.toolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.HelpToolStripButton = New System.Windows.Forms.ToolStripButton()
         Me.APIHelptsbutton = New System.Windows.Forms.ToolStripButton()
@@ -83,7 +85,7 @@
         'ToolStrip1
         '
         resources.ApplyResources(Me.ToolStrip1, "ToolStrip1")
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewToolStripButton, Me.SaveToolStripButton, Me.PrintToolStripButton, Me.toolStripSeparator, Me.CutToolStripButton, Me.CopyToolStripButton, Me.PasteToolStripButton, Me.toolStripSeparator1, Me.btnUndo, Me.btnRedo, Me.btnComment, Me.btnUncomment, Me.ToolStripSeparator4, Me.btnIdent, Me.btnIdentRemove, Me.ToolStripSeparator6, Me.tscb1, Me.tscb2, Me.ToolStripSeparator2, Me.btnRun, Me.btnRunAsync, Me.toolStripSeparator5, Me.HelpToolStripButton, Me.APIHelptsbutton, Me.ToolStripSeparator3, Me.ToolStripLabel1, Me.tsTextBoxRename})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewToolStripButton, Me.SaveToolStripButton, Me.PrintToolStripButton, Me.toolStripSeparator, Me.CutToolStripButton, Me.CopyToolStripButton, Me.PasteToolStripButton, Me.toolStripSeparator1, Me.btnUndo, Me.btnRedo, Me.btnComment, Me.btnUncomment, Me.ToolStripSeparator4, Me.btnIdent, Me.btnIdentRemove, Me.ToolStripSeparator6, Me.tscb1, Me.tscb2, Me.ToolStripSeparator2, Me.btnRun, Me.btnRunAsync, Me.btnRunDebug, Me.btnStopDebug, Me.toolStripSeparator5, Me.HelpToolStripButton, Me.APIHelptsbutton, Me.ToolStripSeparator3, Me.ToolStripLabel1, Me.tsTextBoxRename})
         Me.ToolStrip1.Name = "ToolStrip1"
         '
         'NewToolStripButton
@@ -217,6 +219,20 @@
         Me.btnRunAsync.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.btnRunAsync.Image = Global.DWSIM.My.Resources.Resources.control_play_blue
         Me.btnRunAsync.Name = "btnRunAsync"
+        '
+        'btnRunDebug
+        '
+        resources.ApplyResources(Me.btnRunDebug, "btnRunDebug")
+        Me.btnRunDebug.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.btnRunDebug.Image = Global.DWSIM.My.Resources.Resources.play_blue
+        Me.btnRunDebug.Name = "btnRunDebug"
+        '
+        'btnStopDebug
+        '
+        resources.ApplyResources(Me.btnStopDebug, "btnStopDebug")
+        Me.btnStopDebug.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.btnStopDebug.Image = Global.DWSIM.My.Resources.Resources._stop
+        Me.btnStopDebug.Name = "btnStopDebug"
         '
         'toolStripSeparator5
         '
@@ -456,4 +472,6 @@
     Friend WithEvents btnIdentRemove As System.Windows.Forms.ToolStripButton
     Friend WithEvents ToolStripSeparator4 As System.Windows.Forms.ToolStripSeparator
     Public WithEvents btnRunAsync As System.Windows.Forms.ToolStripButton
+    Public WithEvents btnRunDebug As ToolStripButton
+    Public WithEvents btnStopDebug As ToolStripButton
 End Class

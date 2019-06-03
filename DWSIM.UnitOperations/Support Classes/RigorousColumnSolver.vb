@@ -966,6 +966,7 @@ Namespace UnitOperations.Auxiliary.SepOps.SolvingMethods
 
             If ik Or ih Then
                 _ppr = New PropertyPackages.RaoultPropertyPackage
+                _ppr.Flowsheet = pp.Flowsheet
                 _ppr.CurrentMaterialStream = pp.CurrentMaterialStream
             End If
 
@@ -1885,13 +1886,7 @@ Namespace UnitOperations.Auxiliary.SepOps.SolvingMethods
 
                 IObj2?.Close()
 
-            Loop Until Abs(el_err) < tol(1)
-
-            il_err = FunctionValue(xvar)
-
-            If Abs(il_err) > tol(0) And Not IdealK And Not IdealH Then
-                Throw New Exception(pp.CurrentMaterialStream.Flowsheet.GetTranslatedString("DCErrorStillHigh"))
-            End If
+            Loop Until Abs(el_err) < tol(1) And Abs(il_err) < tol(0)
 
             ' finished, de-normalize and return arrays
 
@@ -2062,6 +2057,7 @@ Namespace UnitOperations.Auxiliary.SepOps.SolvingMethods
 
             If IdealK Or IdealH Then
                 ppr = New PropertyPackages.RaoultPropertyPackage
+                ppr.Flowsheet = pp.Flowsheet
                 ppr.CurrentMaterialStream = pp.CurrentMaterialStream
             End If
 
@@ -2767,6 +2763,7 @@ Namespace UnitOperations.Auxiliary.SepOps.SolvingMethods
 
             If IdealK Or IdealH Then
                 ppr = New PropertyPackages.RaoultPropertyPackage
+                ppr.Flowsheet = pp.Flowsheet
                 ppr.CurrentMaterialStream = pp.CurrentMaterialStream
             End If
 
@@ -3889,6 +3886,7 @@ Namespace UnitOperations.Auxiliary.SepOps.SolvingMethods
 
             If ik Or ih Then
                 _ppr = New PropertyPackages.RaoultPropertyPackage
+                _ppr.Flowsheet = pp.Flowsheet
                 _ppr.CurrentMaterialStream = pp.CurrentMaterialStream
             End If
 

@@ -66,7 +66,7 @@ Namespace DWSIM.Flowsheet
 
         Public AvailableUnitSystems As New Dictionary(Of String, SystemsOfUnits.Units)
 
-        Public PropertyPackages As Dictionary(Of String, IPropertyPackage)
+        <Xml.Serialization.XmlIgnore()> Public PropertyPackages As Dictionary(Of String, IPropertyPackage)
 
         Public ReadOnly Property SelectedPropertyPackage() As IPropertyPackage
             Get
@@ -188,7 +188,7 @@ Namespace DWSIM.Flowsheet
 
         Public Property SimulationComments As String = "" Implements Interfaces.IFlowsheetOptions.SimulationComments
 
-        Public Property SimulationName As String = "" Implements Interfaces.IFlowsheetOptions.SimulationName
+        Public Property SimulationName As String = "MySimulation_" & Date.Now.Second.ToString() Implements Interfaces.IFlowsheetOptions.SimulationName
 
         Public Property UsePassword As Boolean = False Implements Interfaces.IFlowsheetOptions.UsePassword
 

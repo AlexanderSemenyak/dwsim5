@@ -16,6 +16,7 @@
 '    You should have received a copy of the GNU General Public License
 '    along with DWSIM.  If not, see <http://www.gnu.org/licenses/>.
 
+Imports System.Globalization
 Imports System.Math
 
 Imports DWSIM.MathOps.MathEx
@@ -1784,7 +1785,7 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
 
             Dim i, n, ecount As Integer
             Dim d1, d2 As Date, dt As TimeSpan
-            Dim L, Lf, Vf, T, Tf, deltaT As Double
+            Dim L, Lf, Vf, T, Tf, deltaT, epsilon, df, maxdT As Double
             Dim e1 As Double
 
             d1 = Date.Now
@@ -1793,6 +1794,12 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
             maxit_e = Me.FlashSettings(Interfaces.Enums.FlashSetting.PTFlash_Maximum_Number_Of_External_Iterations)
             itol = Me.FlashSettings(Interfaces.Enums.FlashSetting.PTFlash_Internal_Loop_Tolerance).ToDoubleFromInvariant
             maxit_i = Me.FlashSettings(Interfaces.Enums.FlashSetting.PTFlash_Maximum_Number_Of_Internal_Iterations)
+
+            'alexander 2019 fix not exists settings keys
+            FlashAlgorithmConfig.FixNotExistsKeys(Me.FlashSettings)
+            epsilon = Me.FlashSettings(Interfaces.Enums.FlashSetting.PVFlash_TemperatureDerivativeEpsilon).ToDoubleFromInvariant
+            df = Me.FlashSettings(Interfaces.Enums.FlashSetting.PVFlash_FixedDampingFactor).ToDoubleFromInvariant
+            maxdT = Me.FlashSettings(Interfaces.Enums.FlashSetting.PVFlash_MaximumTemperatureChange).ToDoubleFromInvariant
 
             n = Vz.Length - 1
 
@@ -1986,9 +1993,9 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
                     IObj?.SetCurrent
                     K1 = PP.DW_CalcKvalue(Vx, Vy, T, P)
                     IObj?.SetCurrent
-                    K2 = PP.DW_CalcKvalue(Vx, Vy, T + 0.1, P)
+                    K2 = PP.DW_CalcKvalue(Vx, Vy, T + epsilon, P)
 
-                    dKdT = K2.SubtractY(K1).MultiplyConstY(1 / 0.1)
+                    dKdT = K2.SubtractY(K1).MultiplyConstY(1 / epsilon)
 
                     IObj2?.Paragraphs.Add(String.Format("K: {0}", Ki.ToMathArrayString))
 
@@ -2010,14 +2017,14 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
                     Loop Until i = n + 1
 
                     Tant = T
-                    deltaT = -fval / dFdT
+                    deltaT = -df * fval / dFdT
 
                     IObj2?.Paragraphs.Add(String.Format("Temperature error: {0} K", deltaT))
 
                     If Abs(deltaT) < etol / 1000 And ecount > 5 Then Exit Do
 
-                    If Abs(deltaT) > 0.1 * T And ecount < 5 Then
-                        T = T + 0.05 * deltaT
+                    If Abs(deltaT) > maxdT Then
+                        T = T + Sign(deltaT) * maxdT
                     Else
                         T = T + deltaT
                     End If
@@ -2096,9 +2103,9 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
 
                         IObj2?.SetCurrent
 
-                        K2 = PP.DW_CalcKvalue(Vx, Vy, T + 0.01, P)
+                        K2 = PP.DW_CalcKvalue(Vx, Vy, T + epsilon, P)
 
-                        dKdT = K2.SubtractY(K1).MultiplyConstY(1 / 0.01)
+                        dKdT = K2.SubtractY(K1).MultiplyConstY(1 / epsilon)
 
                         dFdT = Vx.MultiplyY(dKdT).SumY
 
@@ -2116,9 +2123,9 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
 
                         IObj2?.SetCurrent
 
-                        K2 = PP.DW_CalcKvalue(Vx, Vy, T + 0.01, P)
+                        K2 = PP.DW_CalcKvalue(Vx, Vy, T + epsilon, P)
 
-                        dKdT = K2.SubtractY(K1).MultiplyConstY(1 / 0.01)
+                        dKdT = K2.SubtractY(K1).MultiplyConstY(1 / epsilon)
 
                         dFdT = -Vy.DivideY(Ki).DivideY(Ki).MultiplyY(dKdT).SumY
 
@@ -2132,14 +2139,14 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
 
                     Tant = T
 
-                    deltaT = -fval / dFdT
+                    deltaT = -df * fval / dFdT
 
                     IObj2?.Paragraphs.Add(String.Format("Temperature error: {0} K", deltaT))
 
                     If Abs(deltaT) < etol / 1000 And ecount > 5 Then Exit Do
 
-                    If Abs(deltaT) > 0.1 * T And ecount < 5 Then
-                        T = T + Sign(deltaT) * 0.1 * T
+                    If Abs(deltaT) > maxdT Then
+                        T = T + Sign(deltaT) * maxdT
                     Else
                         T = T + deltaT
                     End If

@@ -738,17 +738,55 @@ Namespace Reactors
                 If su Is Nothing Then su = New SystemsOfUnits.SI
                 Dim cv As New SystemsOfUnits.Converter
                 Dim value As Double = 0
-                Dim propidx As Integer = Convert.ToInt32(prop.Split("_")(2))
 
-                Select Case propidx
+                If prop.Contains("_") Then
 
-                    Case 0
-                        'PROP_HT_0    Pressure Drop
-                        value = SystemsOfUnits.Converter.ConvertFromSI(su.deltaP, Me.DeltaP.GetValueOrDefault)
+                    Dim propidx As Integer = Convert.ToInt32(prop.Split("_")(2))
 
-                End Select
+                    Select Case propidx
+
+                        Case 0
+                            'PROP_HT_0    Pressure Drop
+                            value = SystemsOfUnits.Converter.ConvertFromSI(su.deltaP, Me.DeltaP.GetValueOrDefault)
+
+                    End Select
+
+                Else
+
+                    Select Case prop
+                        Case "Calculation Mode"
+                            Select Case ReactorOperationMode
+                                Case OperationMode.Adiabatic
+                                    Return "Adiabatic"
+                                Case OperationMode.Isothermic
+                                    Return "Isothermic"
+                                Case OperationMode.OutletTemperature
+                                    Return "Defined Temperature"
+                            End Select
+                        Case Else
+                            If prop.Contains("Conversion") Then
+                                Dim comp = prop.Split(": ")(0)
+                                If ComponentConversions.ContainsKey(comp) Then
+                                    value = ComponentConversions(comp) * 100
+                                Else
+                                    value = 0.0
+                                End If
+                            End If
+                            If prop.Contains("Extent") Then
+                                Dim rx = prop.Split(": ")(0)
+                                Dim rx2 = FlowSheet.Reactions.Values.Where(Function(x) x.Name = rx).FirstOrDefault
+                                If rx2 IsNot Nothing AndAlso Conversions.ContainsKey(rx2.ID) Then
+                                    value = Conversions(rx2.ID) * 100
+                                Else
+                                    value = 0.0
+                                End If
+                            End If
+                    End Select
+
+                End If
 
                 Return value
+
             End If
 
         End Function
@@ -770,6 +808,13 @@ Namespace Reactors
                 Case PropertyType.ALL
                     For i = 0 To 0
                         proplist.Add("PROP_CR_" + CStr(i))
+                    Next
+                    proplist.Add("Calculation Mode")
+                    For Each item In Conversions
+                        proplist.Add(FlowSheet.Reactions(item.Key).Name + ": Extent")
+                    Next
+                    For Each item In ComponentConversions
+                        proplist.Add(item.Key + ": Conversion")
                     Next
             End Select
             Return proplist.ToArray(GetType(System.String))
@@ -803,17 +848,33 @@ Namespace Reactors
                 If su Is Nothing Then su = New SystemsOfUnits.SI
                 Dim cv As New SystemsOfUnits.Converter
                 Dim value As String = ""
-                Dim propidx As Integer = Convert.ToInt32(prop.Split("_")(2))
 
-                Select Case propidx
+                If prop.Contains("_") Then
 
-                    Case 0
-                        'PROP_HT_0	Pressure Drop
-                        value = su.deltaP
+                    Dim propidx As Integer = Convert.ToInt32(prop.Split("_")(2))
 
-                End Select
+                    Select Case propidx
+
+                        Case 0
+                            'PROP_HT_0	Pressure Drop
+                            value = su.deltaP
+
+                    End Select
+
+                Else
+
+                    Select Case prop
+                        Case "Calculation Mode"
+                            Return ""
+                        Case Else
+                            If prop.Contains("Conversion") Then value = "%"
+                            If prop.Contains("Extent") Then value = "%"
+                    End Select
+
+                End If
 
                 Return value
+
             End If
         End Function
 
@@ -910,6 +971,62 @@ Namespace Reactors
                 str.AppendLine("    " & dbl.Key & ": " & (dbl.Value * 100).ToString(numberformat, ci) & "%")
             Next
             Return str.ToString
+
+        End Function
+
+        Public Overrides Function GetStructuredReport() As List(Of Tuple(Of ReportItemType, String()))
+
+            Dim su As IUnitsOfMeasure = GetFlowsheet().FlowsheetOptions.SelectedUnitSystem
+            Dim nf = GetFlowsheet().FlowsheetOptions.NumberFormat
+
+            Dim list As New List(Of Tuple(Of ReportItemType, String()))
+
+            list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.Label, New String() {"Results Report for Conversion Reactor '" & Me.GraphicObject.Tag + "'"}))
+            list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.SingleColumn, New String() {"Calculated successfully on " & LastUpdated.ToString}))
+
+
+            list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.Label, New String() {"Calculation Parameters"}))
+
+            list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.DoubleColumn, New String() {"Calculation Mode", ReactorOperationMode.ToString}))
+            list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.TripleColumn, New String() {"Pressure Drop", SystemsOfUnits.Converter.ConvertFromSI(su.pressure, Me.DeltaP.GetValueOrDefault).ToString(nf), su.deltaP}))
+
+            list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.Label, New String() {"Results"}))
+
+            Select Case Me.ReactorOperationMode
+                Case OperationMode.Adiabatic
+                    list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.TripleColumn,
+                            New String() {"Outlet Temperature",
+                            Me.OutletTemperature.ConvertFromSI(su.temperature).ToString(nf), su.temperature}))
+                Case OperationMode.Isothermic
+                    list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.TripleColumn,
+                            New String() {"Heat Added/Removed",
+                            Me.DeltaQ.GetValueOrDefault.ConvertFromSI(su.heatflow).ToString(nf), su.heatflow}))
+                Case OperationMode.OutletTemperature
+                    list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.TripleColumn,
+                            New String() {"Outlet Temperature",
+                            Me.OutletTemperature.ConvertFromSI(su.temperature).ToString(nf), su.temperature}))
+                    list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.TripleColumn,
+                            New String() {"Heat Added/Removed",
+                            Me.DeltaQ.GetValueOrDefault.ConvertFromSI(su.heatflow).ToString(nf), su.heatflow}))
+            End Select
+
+            list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.Label, New String() {"Reaction Conversions"}))
+            If Not Me.Conversions Is Nothing Then
+                For Each dbl As KeyValuePair(Of String, Double) In Me.Conversions
+                    list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.TripleColumn,
+                            New String() {Me.GetFlowsheet.Reactions(dbl.Key).Name,
+                            (dbl.Value * 100).ToString(nf), "%"}))
+                Next
+            End If
+
+            list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.Label, New String() {"Compound Conversions"}))
+            For Each dbl As KeyValuePair(Of String, Double) In Me.ComponentConversions
+                If dbl.Value >= 0 Then list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.TripleColumn,
+                            New String() {dbl.Key,
+                            (dbl.Value * 100).ToString(nf), "%"}))
+            Next
+
+            Return list
 
         End Function
 

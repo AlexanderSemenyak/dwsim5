@@ -244,6 +244,10 @@ Namespace Enums
 
         NL_FastMode = 17
 
+        PVFlash_TemperatureDerivativeEpsilon = 18
+        PVFlash_MaximumTemperatureChange = 19
+        PVFlash_FixedDampingFactor = 20
+
     End Enum
 
     Public Enum FlashCalculationType
@@ -332,6 +336,11 @@ Namespace Enums
         PartialPress
     End Enum
 
+    Public Enum ReactionKineticType
+        Arrhenius = 0
+        UserDefined = 1
+    End Enum
+
     Public Enum KOpt
         Gibbs
         Expression
@@ -372,6 +381,23 @@ Namespace Enums
 
     End Enum
 
+    Public Enum ReportItemType
+
+        Label = 0
+        Description = 1
+        TripleColumn = 2
+        DoubleColumn = 3
+        SingleColumn = 4
+
+    End Enum
+
+    Public Enum ReportType
+
+        PlainText = 0
+        RichText = 1
+        Structured = 2
+
+    End Enum
 
 End Namespace
 

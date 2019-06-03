@@ -215,8 +215,47 @@ Namespace Reactors
 
                 If rxn.ReactionType = ReactionType.Kinetic Then
 
-                    Dim kxf As Double = rxn.A_Forward * Exp(-rxn.E_Forward / (8.314 * T))
-                    Dim kxr As Double = rxn.A_Reverse * Exp(-rxn.E_Reverse / (8.314 * T))
+                    'calculate reaction constants
+
+                    Dim kxf, kxr As Double
+
+                    If rxn.ReactionKinFwdType = ReactionKineticType.Arrhenius Then
+
+                        kxf = rxn.A_Forward * Exp(-rxn.E_Forward / (8.314 * T))
+
+                    Else
+
+                        rxn.ExpContext = New Ciloci.Flee.ExpressionContext
+                        rxn.ExpContext.Imports.AddType(GetType(System.Math))
+
+                        rxn.ExpContext.Variables.Clear()
+                        rxn.ExpContext.Variables.Add("T", ims.Phases(0).Properties.temperature.GetValueOrDefault)
+                        rxn.ExpContext.Options.ParseCulture = Globalization.CultureInfo.InvariantCulture
+
+                        rxn.Expr = rxn.ExpContext.CompileGeneric(Of Double)(rxn.ReactionKinFwdExpression)
+
+                        kxf = rxn.Expr.Evaluate
+
+                    End If
+
+                    If rxn.ReactionKinRevType = ReactionKineticType.Arrhenius Then
+
+                        kxr = rxn.A_Reverse * Exp(-rxn.E_Reverse / (8.314 * T))
+
+                    Else
+
+                        rxn.ExpContext = New Ciloci.Flee.ExpressionContext
+                        rxn.ExpContext.Imports.AddType(GetType(System.Math))
+
+                        rxn.ExpContext.Variables.Clear()
+                        rxn.ExpContext.Variables.Add("T", ims.Phases(0).Properties.temperature.GetValueOrDefault)
+                        rxn.ExpContext.Options.ParseCulture = Globalization.CultureInfo.InvariantCulture
+
+                        rxn.Expr = rxn.ExpContext.CompileGeneric(Of Double)(rxn.ReactionKinRevExpression)
+
+                        kxr = rxn.Expr.Evaluate
+
+                    End If
 
                     If T < rxn.Tmin Or T > rxn.Tmax Then
                         kxf = 0.0#
@@ -969,31 +1008,88 @@ Namespace Reactors
                 If su Is Nothing Then su = New SystemsOfUnits.SI
                 Dim cv As New SystemsOfUnits.Converter
                 Dim value As Double = 0
-                Dim propidx As Integer = Convert.ToInt32(prop.Split("_")(2))
 
-                Select Case propidx
-                    Case 0
-                        value = SystemsOfUnits.Converter.ConvertFromSI(su.deltaP, Me.DeltaP.GetValueOrDefault)
-                    Case 1
-                        value = SystemsOfUnits.Converter.ConvertFromSI(su.time, Me.ResidenceTime)
-                    Case 2
-                        value = SystemsOfUnits.Converter.ConvertFromSI(su.volume, Me.Volume)
-                    Case 3
-                        value = SystemsOfUnits.Converter.ConvertFromSI(su.distance, Me.Length)
-                    Case 4
-                        value = SystemsOfUnits.Converter.ConvertFromSI(su.density, Me.CatalystLoading)
-                    Case 5
-                        value = SystemsOfUnits.Converter.ConvertFromSI(su.diameter, Me.CatalystParticleDiameter)
-                    Case 6
-                        value = CatalystVoidFraction
-                    Case 7
-                        value = SystemsOfUnits.Converter.ConvertFromSI(su.deltaT, Me.DeltaT.GetValueOrDefault)
-                    Case 8
-                        value = SystemsOfUnits.Converter.ConvertFromSI(su.heatflow, Me.DeltaQ.GetValueOrDefault)
-                End Select
+                If prop.Contains("_") Then
+
+                    Dim propidx As Integer = Convert.ToInt32(prop.Split("_")(2))
+
+                    Select Case propidx
+                        Case 0
+                            value = SystemsOfUnits.Converter.ConvertFromSI(su.deltaP, Me.DeltaP.GetValueOrDefault)
+                        Case 1
+                            value = SystemsOfUnits.Converter.ConvertFromSI(su.time, Me.ResidenceTime)
+                        Case 2
+                            value = SystemsOfUnits.Converter.ConvertFromSI(su.volume, Me.Volume)
+                        Case 3
+                            value = SystemsOfUnits.Converter.ConvertFromSI(su.distance, Me.Length)
+                        Case 4
+                            value = SystemsOfUnits.Converter.ConvertFromSI(su.density, Me.CatalystLoading)
+                        Case 5
+                            value = SystemsOfUnits.Converter.ConvertFromSI(su.diameter, Me.CatalystParticleDiameter)
+                        Case 6
+                            value = CatalystVoidFraction
+                        Case 7
+                            value = SystemsOfUnits.Converter.ConvertFromSI(su.deltaT, Me.DeltaT.GetValueOrDefault)
+                        Case 8
+                            value = SystemsOfUnits.Converter.ConvertFromSI(su.heatflow, Me.DeltaQ.GetValueOrDefault)
+                    End Select
+
+                Else
+
+                    Select Case prop
+                        Case "Calculation Mode"
+                            Select Case ReactorOperationMode
+                                Case OperationMode.Adiabatic
+                                    Return "Adiabatic"
+                                Case OperationMode.Isothermic
+                                    Return "Isothermic"
+                                Case OperationMode.OutletTemperature
+                                    Return "Defined Temperature"
+                            End Select
+                        Case Else
+                            If prop.Contains("Conversion") Then
+                                Dim comp = prop.Split(": ")(0)
+                                If ComponentConversions.ContainsKey(comp) Then
+                                    value = ComponentConversions(comp) * 100
+                                Else
+                                    value = 0.0
+                                End If
+                            End If
+                            If prop.Contains("Extent") Then
+                                Dim rx = prop.Split(": ")(0)
+                                Dim rx2 = FlowSheet.Reactions.Values.Where(Function(x) x.Name = rx).FirstOrDefault
+                                If rx2 IsNot Nothing AndAlso Rxi.ContainsKey(rx2.ID) Then
+                                    value = SystemsOfUnits.Converter.ConvertFromSI(su.molarflow, RxiT(rx2.ID))
+                                Else
+                                    value = 0.0
+                                End If
+                            End If
+                            If prop.Contains("Rate") Then
+                                Dim rx = prop.Split(": ")(0)
+                                Dim rx2 = FlowSheet.Reactions.Values.Where(Function(x) x.Name = rx).FirstOrDefault
+                                If rx2 IsNot Nothing AndAlso Rxi.ContainsKey(rx2.ID) Then
+                                    value = SystemsOfUnits.Converter.ConvertFromSI(su.reac_rate, RxiT(rx2.ID) / Volume)
+                                Else
+                                    value = 0.0
+                                End If
+                            End If
+                            If prop.Contains("Heat") Then
+                                Dim rx = prop.Split(": ")(0)
+                                Dim rx2 = FlowSheet.Reactions.Values.Where(Function(x) x.Name = rx).FirstOrDefault
+                                If rx2 IsNot Nothing AndAlso DHRi.ContainsKey(rx2.ID) Then
+                                    value = SystemsOfUnits.Converter.ConvertFromSI(su.heatflow, DHRi(rx2.ID))
+                                Else
+                                    value = 0.0
+                                End If
+                            End If
+                    End Select
+
+                End If
 
                 Return value
+
             End If
+
         End Function
 
         Public Overloads Overrides Function GetProperties(ByVal proptype As Interfaces.Enums.PropertyType) As String()
@@ -1013,6 +1109,19 @@ Namespace Reactors
                 Case PropertyType.ALL
                     For i = 0 To 8
                         proplist.Add("PROP_PF_" + CStr(i))
+                    Next
+                    proplist.Add("Calculation Mode")
+                    For Each item In ComponentConversions
+                        proplist.Add(item.Key + ": Conversion")
+                    Next
+                    For Each dbl As KeyValuePair(Of String, Double) In RxiT
+                        proplist.Add(FlowSheet.Reactions(dbl.Key).Name + ": Reaction Extent")
+                    Next
+                    For Each dbl As KeyValuePair(Of String, Double) In RxiT
+                        proplist.Add(FlowSheet.Reactions(dbl.Key).Name + ": Reaction Rate")
+                    Next
+                    For Each dbl As KeyValuePair(Of String, Double) In DHRi
+                        proplist.Add(FlowSheet.Reactions(dbl.Key).Name + ": Reaction Heat")
                     Next
             End Select
             Return proplist.ToArray(GetType(System.String))
@@ -1058,31 +1167,50 @@ Namespace Reactors
                 If su Is Nothing Then su = New SystemsOfUnits.SI
                 Dim cv As New SystemsOfUnits.Converter
                 Dim value As String = ""
-                Dim propidx As Integer = Convert.ToInt32(prop.Split("_")(2))
 
-                Select Case propidx
-                    Case 0
-                        value = su.deltaP
-                    Case 1
-                        value = su.time
-                    Case 2
-                        value = su.volume
-                    Case 3
-                        value = su.distance
-                    Case 4
-                        value = su.density
-                    Case 5
-                        value = su.diameter
-                    Case 6
-                        value = ""
-                    Case 7
-                        value = su.deltaT
-                    Case 8
-                        value = su.heatflow
-                End Select
+                If prop.Contains("_") Then
+
+                    Dim propidx As Integer = Convert.ToInt32(prop.Split("_")(2))
+
+                    Select Case propidx
+                        Case 0
+                            value = su.deltaP
+                        Case 1
+                            value = su.time
+                        Case 2
+                            value = su.volume
+                        Case 3
+                            value = su.distance
+                        Case 4
+                            value = su.density
+                        Case 5
+                            value = su.diameter
+                        Case 6
+                            value = ""
+                        Case 7
+                            value = su.deltaT
+                        Case 8
+                            value = su.heatflow
+                    End Select
+
+                Else
+
+                    Select Case prop
+                        Case "Calculation Mode"
+                            Return ""
+                        Case Else
+                            If prop.Contains("Conversion") Then value = "%"
+                            If prop.Contains("Rate") Then value = su.reac_rate
+                            If prop.Contains("Extent") Then value = su.molarflow
+                            If prop.Contains("Heat") Then value = su.heatflow
+                    End Select
+
+                End If
 
                 Return value
+
             End If
+
         End Function
 
         Public Overrides Sub DisplayEditForm()
@@ -1196,6 +1324,85 @@ Namespace Reactors
 
         End Function
 
+        Public Overrides Function GetStructuredReport() As List(Of Tuple(Of ReportItemType, String()))
+
+            Dim su As IUnitsOfMeasure = GetFlowsheet().FlowsheetOptions.SelectedUnitSystem
+            Dim nf = GetFlowsheet().FlowsheetOptions.NumberFormat
+
+            Dim list As New List(Of Tuple(Of ReportItemType, String()))
+
+            list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.Label, New String() {"Results Report for Plug Flow Reactor '" & Me.GraphicObject.Tag + "'"}))
+            list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.SingleColumn, New String() {"Calculated successfully on " & LastUpdated.ToString}))
+
+
+            list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.Label, New String() {"Calculation Parameters"}))
+
+            list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.DoubleColumn, New String() {"Calculation Mode", ReactorOperationMode.ToString}))
+
+            list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.Label, New String() {"Results"}))
+
+            Select Case Me.ReactorOperationMode
+                Case OperationMode.Adiabatic
+                    list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.TripleColumn,
+                            New String() {"Outlet Temperature",
+                            Me.OutletTemperature.ConvertFromSI(su.temperature).ToString(nf), su.temperature}))
+                Case OperationMode.Isothermic
+                    list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.TripleColumn,
+                            New String() {"Heat Added/Removed",
+                            Me.DeltaQ.GetValueOrDefault.ConvertFromSI(su.heatflow).ToString(nf), su.heatflow}))
+                Case OperationMode.OutletTemperature
+                    list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.TripleColumn,
+                            New String() {"Outlet Temperature",
+                            Me.OutletTemperature.ConvertFromSI(su.temperature).ToString(nf), su.temperature}))
+                    list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.TripleColumn,
+                            New String() {"Heat Added/Removed",
+                            Me.DeltaQ.GetValueOrDefault.ConvertFromSI(su.heatflow).ToString(nf), su.heatflow}))
+            End Select
+
+            list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.TripleColumn, New String() {"Pressure Drop", SystemsOfUnits.Converter.ConvertFromSI(su.pressure, Me.DeltaP.GetValueOrDefault).ToString(nf), su.deltaP}))
+
+            list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.TripleColumn,
+                    New String() {"Residence Time",
+                    ResidenceTime.ConvertFromSI(su.time).ToString(nf),
+                    su.time}))
+
+            list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.Label, New String() {"Reaction Extents"}))
+            If Not Me.Conversions Is Nothing Then
+                For Each dbl As KeyValuePair(Of String, Double) In Me.RxiT
+                    list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.TripleColumn,
+                            New String() {Me.GetFlowsheet.Reactions(dbl.Key).Name,
+                            (dbl.Value).ConvertFromSI(su.molarflow).ToString(nf), su.molarflow}))
+                Next
+            End If
+
+            list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.Label, New String() {"Reaction Rates"}))
+            If Not Me.Conversions Is Nothing Then
+                For Each dbl As KeyValuePair(Of String, Double) In Me.RxiT
+                    list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.TripleColumn,
+                            New String() {Me.GetFlowsheet.Reactions(dbl.Key).Name,
+                            (dbl.Value / Volume).ConvertFromSI(su.reac_rate).ToString(nf), su.reac_rate}))
+                Next
+            End If
+
+            list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.Label, New String() {"Reaction Heats"}))
+            If Not Me.Conversions Is Nothing Then
+                For Each dbl As KeyValuePair(Of String, Double) In Me.DHRi
+                    list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.TripleColumn,
+                            New String() {Me.GetFlowsheet.Reactions(dbl.Key).Name,
+                            (dbl.Value).ConvertFromSI(su.heatflow).ToString(nf), su.heatflow}))
+                Next
+            End If
+
+            list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.Label, New String() {"Compound Conversions"}))
+            For Each dbl As KeyValuePair(Of String, Double) In Me.ComponentConversions
+                If dbl.Value >= 0 Then list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.TripleColumn,
+                            New String() {dbl.Key,
+                            (dbl.Value * 100).ToString(nf), "%"}))
+            Next
+
+            Return list
+
+        End Function
         Public Overrides Function GetPropertyDescription(p As String) As String
             If p.Equals("Calculation Mode") Then
                 Return "Select the calculation mode of this reactor."

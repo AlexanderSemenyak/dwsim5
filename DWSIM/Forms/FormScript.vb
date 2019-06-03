@@ -10,6 +10,7 @@ Imports System.Threading
 Imports Python.Runtime
 Imports System.Threading.Tasks
 Imports DWSIM.SharedClasses.DWSIM.Flowsheet
+Imports IronPython.Hosting
 
 <System.Serializable()> Public Class FormScript
 
@@ -17,6 +18,10 @@ Imports DWSIM.SharedClasses.DWSIM.Flowsheet
 
     Public fc As FormFlowsheet
     Private reader As Jolt.XmlDocCommentReader
+
+    Private CurrentlyDebugging As Boolean = False
+    Private DebuggingPaused As Boolean = False
+    Private CancelDebugToken As CancellationTokenSource
 
     Private Sub FormVBScript_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Me.Load
 
@@ -95,7 +100,7 @@ Imports DWSIM.SharedClasses.DWSIM.Flowsheet
                 Dim script = DirectCast(Me.TabStripScripts.SelectedItem.Controls(0).Controls(0), ScriptEditorControlMono).txtScript.Text
                 Dim interp = DirectCast(Me.TabStripScripts.SelectedItem.Controls(0).Controls(0), ScriptEditorControlMono).cbPythonEngine.SelectedIndex
                 If interp = 0 Then
-                    RunScript_IronPython(script, fc)
+                    RunScript_IronPython(script, fc, Nothing)
                 Else
                     RunScript_PythonNET(script, fc)
                 End If
@@ -103,7 +108,7 @@ Imports DWSIM.SharedClasses.DWSIM.Flowsheet
                 Dim script = DirectCast(Me.TabStripScripts.SelectedItem.Controls(0).Controls(0), ScriptEditorControl).txtScript.Text
                 Dim interp = DirectCast(Me.TabStripScripts.SelectedItem.Controls(0).Controls(0), ScriptEditorControl).cbPythonEngine.SelectedIndex
                 If interp = 0 Then
-                    RunScript_IronPython(script, fc)
+                    RunScript_IronPython(script, fc, Nothing)
                 Else
                     RunScript_PythonNET(script, fc)
                 End If
@@ -112,24 +117,34 @@ Imports DWSIM.SharedClasses.DWSIM.Flowsheet
 
     End Sub
 
-    Public Shared Sub RunScript_IronPython(scripttext As String, fsheet As FormFlowsheet)
+    Public Shared Sub RunScript_IronPython(scripttext As String, fsheet As FormFlowsheet, debuggingstep As Action(Of IronPython.Runtime.Exceptions.TraceBackFrame))
 
         Dim scope As Microsoft.Scripting.Hosting.ScriptScope
         Dim engine As Microsoft.Scripting.Hosting.ScriptEngine
 
         Dim opts As New Dictionary(Of String, Object)()
+
         opts("Frames") = Microsoft.Scripting.Runtime.ScriptingRuntimeHelpers.True
+
+        If debuggingstep IsNot Nothing Then
+            opts("Debug") = Microsoft.Scripting.Runtime.ScriptingRuntimeHelpers.True
+        End If
+
         engine = IronPython.Hosting.Python.CreateEngine(opts)
+
         Dim paths(My.Settings.ScriptPaths.Count - 1) As String
+
         My.Settings.ScriptPaths.CopyTo(paths, 0)
         Try
             engine.SetSearchPaths(paths)
         Catch ex As Exception
         End Try
+
         engine.Runtime.LoadAssembly(GetType(System.String).Assembly)
         engine.Runtime.LoadAssembly(GetType(Thermodynamics.BaseClasses.ConstantProperties).Assembly)
         engine.Runtime.LoadAssembly(GetType(Drawing.SkiaSharp.GraphicObjects.GraphicObject).Assembly)
         engine.Runtime.LoadAssembly(GetType(Drawing.SkiaSharp.GraphicsSurface).Assembly)
+
         If My.Application.CommandLineMode Then
             engine.Runtime.IO.SetOutput(Console.OpenStandardOutput, Console.OutputEncoding)
         Else
@@ -139,13 +154,44 @@ Imports DWSIM.SharedClasses.DWSIM.Flowsheet
         scope.SetVariable("Plugins", My.Application.UtilityPlugins)
         scope.SetVariable("Flowsheet", fsheet)
         scope.SetVariable("Spreadsheet", fsheet.FormSpreadsheet)
+
         Dim Solver As New FlowsheetSolver.FlowsheetSolver
+
         scope.SetVariable("Solver", Solver)
         For Each obj As SharedClasses.UnitOperations.BaseClass In fsheet.Collections.FlowsheetObjectCollection.Values
             scope.SetVariable(obj.GraphicObject.Tag.Replace("-", "_"), obj)
         Next
+
         Dim txtcode As String = scripttext
+
         Dim source As Microsoft.Scripting.Hosting.ScriptSource = engine.CreateScriptSourceFromString(txtcode, Microsoft.Scripting.SourceCodeKind.Statements)
+
+        If debuggingstep IsNot Nothing Then
+
+            'enable debugging
+
+            Dim vars As New List(Of Object)
+            Dim names As New List(Of String)
+
+            For Each variable In scope.GetVariableNames
+                vars.Add(scope.GetVariable(variable))
+                names.Add(variable)
+            Next
+
+            Dim var As IronPython.Runtime.Exceptions.TracebackDelegate = Nothing
+
+            var = Function(frame As IronPython.Runtime.Exceptions.TraceBackFrame, result As String, payload As Object)
+
+                      debuggingstep.Invoke(frame)
+
+                      Return var
+
+                  End Function
+
+            engine.SetTrace(var)
+
+        End If
+
         Try
             source.Execute(scope)
         Catch ex As Exception
@@ -743,7 +789,7 @@ Imports DWSIM.SharedClasses.DWSIM.Flowsheet
                 Dim script = DirectCast(Me.TabStripScripts.SelectedItem.Controls(0).Controls(0), ScriptEditorControlMono).txtScript.Text
                 Dim interp = DirectCast(Me.TabStripScripts.SelectedItem.Controls(0).Controls(0), ScriptEditorControlMono).cbPythonEngine.SelectedIndex
                 If interp = 0 Then
-                    Task.Factory.StartNew(Sub() RunScript_IronPython(script, fc))
+                    Task.Factory.StartNew(Sub() RunScript_IronPython(script, fc, Nothing))
                 Else
                     Task.Factory.StartNew(Sub() RunScript_PythonNET(script, fc))
                 End If
@@ -751,12 +797,125 @@ Imports DWSIM.SharedClasses.DWSIM.Flowsheet
                 Dim script = DirectCast(Me.TabStripScripts.SelectedItem.Controls(0).Controls(0), ScriptEditorControl).txtScript.Text
                 Dim interp = DirectCast(Me.TabStripScripts.SelectedItem.Controls(0).Controls(0), ScriptEditorControl).cbPythonEngine.SelectedIndex
                 If interp = 0 Then
-                    Task.Factory.StartNew(Sub() RunScript_IronPython(script, fc))
+                    Task.Factory.StartNew(Sub() RunScript_IronPython(script, fc, Nothing))
                 Else
                     Task.Factory.StartNew(Sub() RunScript_PythonNET(script, fc))
                 End If
             End If
         End If
+
+    End Sub
+
+    Private Sub btnRunDebug_Click(sender As Object, e As EventArgs) Handles btnRunDebug.Click
+
+        If CurrentlyDebugging Then
+
+            DebuggingPaused = False
+
+        Else
+
+            Dim scripteditor = DirectCast(Me.TabStripScripts.SelectedItem.Controls(0).Controls(0), ScriptEditorControl)
+
+            Dim script = scripteditor.txtScript.Text
+
+            Dim interp = scripteditor.cbPythonEngine.SelectedIndex
+
+            If interp = 0 Then
+
+                Dim tv = scripteditor.tvVariables
+
+                scripteditor.SplitContainer1.Panel2Collapsed = False
+
+                CurrentlyDebugging = True
+                btnRunDebug.ToolTipText = "Continue Debugging"
+                btnStopDebug.Enabled = True
+
+                CancelDebugToken = New CancellationTokenSource()
+
+                Dim t = Task.Factory.StartNew(Sub() RunScript_IronPython(script, fc, Sub(frame)
+
+                                                                                         Dim breakpoints As New List(Of Integer)
+
+                                                                                         Me.UIThreadInvoke(Sub() breakpoints = scripteditor.txtScript.GetBookmarks)
+
+                                                                                         If breakpoints.Contains(frame.f_lineno) Then
+
+                                                                                             DebuggingPaused = True
+
+                                                                                             Me.UIThreadInvoke(Sub()
+
+                                                                                                                   scripteditor.txtScript.Lines(frame.f_lineno - 1).MarkerAdd(4)
+                                                                                                                   scripteditor.txtScript.Lines(frame.f_lineno - 1).MarkerAdd(5)
+                                                                                                                   scripteditor.txtScript.Lines(frame.f_lineno - 1).Goto()
+
+                                                                                                                   Dim vars As New List(Of Object)
+                                                                                                                   Dim names As New List(Of String)
+                                                                                                                   For Each item In frame.f_globals
+                                                                                                                       names.Add(item.Key)
+                                                                                                                       vars.Add(item.Value)
+                                                                                                                   Next
+
+                                                                                                                   tv.Model = New TypeBrowserModel(vars, names)
+
+                                                                                                               End Sub)
+
+                                                                                             While DebuggingPaused
+
+                                                                                                 If CancelDebugToken.IsCancellationRequested Then
+
+                                                                                                     Me.UIThreadInvoke(Sub()
+
+                                                                                                                           scripteditor.txtScript.Lines(frame.f_lineno - 1).MarkerDelete(4)
+                                                                                                                           scripteditor.txtScript.Lines(frame.f_lineno - 1).MarkerDelete(5)
+
+                                                                                                                           tv.Model = Nothing
+
+                                                                                                                       End Sub)
+
+                                                                                                     Throw New TaskCanceledException()
+
+                                                                                                 End If
+
+                                                                                                 Thread.Sleep(100)
+
+                                                                                             End While
+
+                                                                                             Me.UIThreadInvoke(Sub()
+
+                                                                                                                   scripteditor.txtScript.Lines(frame.f_lineno - 1).MarkerDelete(4)
+                                                                                                                   scripteditor.txtScript.Lines(frame.f_lineno - 1).MarkerDelete(5)
+
+                                                                                                                   tv.Model = Nothing
+
+                                                                                                               End Sub)
+
+                                                                                         End If
+
+                                                                                     End Sub), CancelDebugToken)
+
+                t.ContinueWith(Sub()
+                                   UIThread(Sub()
+                                                CurrentlyDebugging = False
+                                                btnRunDebug.ToolTipText = "Debug Script (Async)"
+                                                scripteditor.SplitContainer1.Panel2Collapsed = True
+                                                btnStopDebug.Enabled = False
+                                            End Sub)
+                               End Sub)
+
+            Else
+
+                MessageBox.Show("Python.NET script debugging is not supported.")
+
+            End If
+
+        End If
+
+
+    End Sub
+
+    Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles btnStopDebug.Click
+
+        CancelDebugToken.Cancel()
 
     End Sub
 

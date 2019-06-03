@@ -317,8 +317,13 @@ Namespace Utilities.PetroleumCharacterization
 
                     .Molar_Weight = dMW(i)
                     .IsPF = 1
+
                     Dim trimchars As Char() = New Char() {" "c, "_"c, ","c, ";"c, ":"c}
-                    .Name = prefix.Trim(trimchars) + "_NBP" + .NBP.GetValueOrDefault.ToString("N0")
+
+                    .Name = prefix.Trim(trimchars) + "_NBP_" + (.NBP.GetValueOrDefault - 273.15).ToString("N0")
+
+                    .CAS_Number = prefix.Trim(trimchars) & "-" & .NBP.GetValueOrDefault().ToString("N0")
+
                     .PF_Watson_K = (1.8 * .NBP.GetValueOrDefault) ^ (1 / 3) / .PF_SG.GetValueOrDefault
                     .Critical_Compressibility = PROPS.Zc1(.Acentric_Factor)
                     .Critical_Volume = 8314 * .Critical_Compressibility * .Critical_Temperature / .Critical_Pressure
@@ -330,6 +335,8 @@ Namespace Utilities.PetroleumCharacterization
                     .IG_Enthalpy_of_Formation_25C = tmp(0)
                     .IG_Entropy_of_Formation_25C = tmp(1)
                     .IG_Gibbs_Energy_of_Formation_25C = tmp(0) - 298.15 * tmp(1)
+
+                    .Formula = "C" & CDbl(tmp(2)).ToString("N2") & "H" & CDbl(tmp(3)).ToString("N2")
 
                     Dim methods As New Utilities.Hypos.Methods.HYP
 

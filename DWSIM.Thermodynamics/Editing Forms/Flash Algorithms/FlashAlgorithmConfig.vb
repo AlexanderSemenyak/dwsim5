@@ -150,6 +150,11 @@ Public Class FlashAlgorithmConfig
             tbPTExtTol.Text = Double.Parse(Settings(Interfaces.Enums.FlashSetting.PTFlash_External_Loop_Tolerance), ci).ToString
             tbPTintMaxIt.Text = Integer.Parse(Settings(Interfaces.Enums.FlashSetting.PTFlash_Maximum_Number_Of_Internal_Iterations), ci).ToString
             tbPTIntTol.Text = Double.Parse(Settings(Interfaces.Enums.FlashSetting.PTFlash_Internal_Loop_Tolerance), ci).ToString
+            FixNotExistsKeys(Me.Settings)
+
+            tbPV_DampingFactor.Text = Double.Parse(Settings(Interfaces.Enums.FlashSetting.PVFlash_FixedDampingFactor), ci).ToString
+            tbPV_EpsilonT.Text = Double.Parse(Settings(Interfaces.Enums.FlashSetting.PVFlash_TemperatureDerivativeEpsilon), ci).ToString
+            tbPV_MaxDT.Text = Double.Parse(Settings(Interfaces.Enums.FlashSetting.PVFlash_MaximumTemperatureChange), ci).ToString
 
             chkFastModeNL.Checked = Settings(Interfaces.Enums.FlashSetting.NL_FastMode)
 
@@ -203,6 +208,24 @@ Public Class FlashAlgorithmConfig
 
     End Sub
 
+
+    Public Shared Sub FixNotExistsKeys(settingsLocal As Dictionary(Of Interfaces.Enums.FlashSetting, String))
+
+        Dim ci = Globalization.CultureInfo.InvariantCulture
+        'alexander 2019 fix key Not found to default value assign
+        If (Not settingsLocal.ContainsKey(Interfaces.Enums.FlashSetting.PVFlash_FixedDampingFactor)) Then
+            settingsLocal(Interfaces.Enums.FlashSetting.PVFlash_FixedDampingFactor) = 1.0.ToString(ci)
+        End If
+
+        If (Not settingsLocal.ContainsKey(Interfaces.Enums.FlashSetting.PVFlash_MaximumTemperatureChange)) Then
+            settingsLocal(Interfaces.Enums.FlashSetting.PVFlash_MaximumTemperatureChange) = 10.0.ToString(ci)
+        End If
+
+        If (Not settingsLocal.ContainsKey(Interfaces.Enums.FlashSetting.PVFlash_TemperatureDerivativeEpsilon)) Then
+            settingsLocal(Interfaces.Enums.FlashSetting.PVFlash_TemperatureDerivativeEpsilon) = 0.1.ToString(ci)
+        End If
+    End Sub
+
     Private Sub SetupKeyCompounds()
 
         Dim selected As Array
@@ -246,6 +269,10 @@ Public Class FlashAlgorithmConfig
             If tbPTExtTol.Text <> "" Then Settings(Interfaces.Enums.FlashSetting.PTFlash_External_Loop_Tolerance) = Double.Parse(tbPTExtTol.Text).ToString(ci)
             If tbPTintMaxIt.Text <> "" Then Settings(Interfaces.Enums.FlashSetting.PTFlash_Maximum_Number_Of_Internal_Iterations) = Integer.Parse(tbPTintMaxIt.Text).ToString(ci)
             If tbPTIntTol.Text <> "" Then Settings(Interfaces.Enums.FlashSetting.PTFlash_Internal_Loop_Tolerance) = Double.Parse(tbPTIntTol.Text).ToString(ci)
+
+            If tbPV_MaxDT.Text <> "" Then Settings(Interfaces.Enums.FlashSetting.PVFlash_MaximumTemperatureChange) = Double.Parse(tbPV_MaxDT.Text).ToString(ci)
+            If tbPV_DampingFactor.Text <> "" Then Settings(Interfaces.Enums.FlashSetting.PVFlash_FixedDampingFactor) = Double.Parse(tbPV_DampingFactor.Text).ToString(ci)
+            If tbPV_EpsilonT.Text <> "" Then Settings(Interfaces.Enums.FlashSetting.PVFlash_TemperatureDerivativeEpsilon) = Double.Parse(tbPV_EpsilonT.Text).ToString(ci)
 
             Settings(Interfaces.Enums.FlashSetting.NL_FastMode) = chkFastModeNL.Checked
 

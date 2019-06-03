@@ -395,7 +395,6 @@ Public Class DCCharacterizationWizard
 
                 .NBP = tc.tbpm
                 .OriginalDB = "DWSIM"
-                .Name = "PSE_" & id & "_" & i + 1
 
                 'VISC
                 If Not Me.ComboBoxViscM.Enabled Then
@@ -471,6 +470,11 @@ Public Class DCCharacterizationWizard
 
                 .Molar_Weight = .PF_MM
 
+                .NBP = tc.tbpm
+
+                .Name = "C_" & id & "_NBP_" & (.NBP.GetValueOrDefault - 273.15).ToString("N0")
+                .CAS_Number = id.ToString() & "-" & .NBP.GetValueOrDefault().ToString("N0")
+
             End With
 
             i += 1
@@ -512,15 +516,13 @@ Public Class DCCharacterizationWizard
         End If
 
         i = 0
+
         For Each subst As Compound In ccol.Values
 
             Dim cprops As ConstantProperties = subst.ConstantProperties
 
             With cprops
 
-                Dim tc As tmpcomp = tccol(i)
-
-                .NBP = tc.tbpm
                 .OriginalDB = "DWSIM"
 
                 'Tc
@@ -563,6 +565,8 @@ Public Class DCCharacterizationWizard
                 .IG_Enthalpy_of_Formation_25C = tmp(0)
                 .IG_Entropy_of_Formation_25C = tmp(1)
                 .IG_Gibbs_Energy_of_Formation_25C = tmp(0) - 298.15 * tmp(1)
+
+                .Formula = "C" & CDbl(tmp(2)).ToString("N2") & "H" & CDbl(tmp(3)).ToString("N2")
 
                 Dim methods As New Utilities.Hypos.Methods.HYP
 
@@ -677,11 +681,12 @@ Public Class DCCharacterizationWizard
         nbpfit = Nothing
         tms = Nothing
 
-        Me.TextBoxStreamName.Text = "OIL_" & rnd.Next(1000, 9999)
+        Me.TextBoxStreamName.Text = "OIL_" & id
 
         Dim nm, fm, nbp, sg, mm, ct, cp, af, visc1, visc2, prvs, srkvs As String
 
         Me.DataGridView2.Rows.Clear()
+
         For Each subst As Compound In ccol.Values
             With subst
                 nm = .Name
@@ -724,7 +729,7 @@ Public Class DCCharacterizationWizard
             tmpcomp = subst.ConstantProperties
             form.Options.NotSelectedComponents.Add(tmpcomp.Name, tmpcomp)
             idx = form.FrmStSim1.AddCompToGrid(tmpcomp)
-            form.FrmStSim1.AddCompToSimulation(idx)
+            form.FrmStSim1.AddCompToSimulation(tmpcomp.Name)
         Next
 
         Dim ms As New Streams.MaterialStream("", "")

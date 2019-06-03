@@ -172,7 +172,7 @@
   <PropertyGroup>
     <PostBuildEvent>if "$(ConfigurationName)"=="Release" (
 
-xcopy "$(SolutionDir)$(ProjectName)\bin\Release\*" "$(SolutionDir)DistPackages\Windows\" /E /Y /F /D
+xcopy "$(SolutionDir)$(ProjectName)\bin\Release\*" "$(SolutionDir)DistPackages\Windows\" /E /Y /F
 xcopy "$(SolutionDir)$(ProjectName)\bin\Release\*" "$(SolutionDir)DistPackages\Windows_32\" /E /Y /F /D
 xcopy "$(SolutionDir)$(ProjectName)\bin\Release\*" "$(SolutionDir)DistPackages\Linux\" /E /Y /F /D
 

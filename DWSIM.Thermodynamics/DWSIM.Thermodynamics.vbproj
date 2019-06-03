@@ -27,7 +27,7 @@
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42353,42354,42355</NoWarn>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
     <Optimize>false</Optimize>
-    <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
     <RegisterForComInterop>false</RegisterForComInterop>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <Prefer32Bit>false</Prefer32Bit>
@@ -80,6 +80,9 @@
     <PlatformTarget>x64</PlatformTarget>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="CapeOpen">
       <HintPath>..\DWSIM\References\CapeOpen.dll</HintPath>
@@ -96,7 +99,7 @@
       <HintPath>..\DWSIM\References\Cureos.Numerics.dll</HintPath>
     </Reference>
     <Reference Include="Eto, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Eto.Forms.2.5.0-ci-10149\lib\netstandard1.0\Eto.dll</HintPath>
+      <HintPath>..\packages\Eto.Forms.2.5.0-ci-10191\lib\netstandard1.0\Eto.dll</HintPath>
     </Reference>
     <Reference Include="ExcelDna.Integration, Version=0.34.6373.42344, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ExcelDna.Integration.0.34.6\lib\ExcelDna.Integration.dll</HintPath>
@@ -110,11 +113,17 @@
       <HintPath>..\DWSIM\References\Interop.CAPEOPEN110.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="IronPython">
-      <HintPath>..\DWSIM\References\IronPython.dll</HintPath>
+    <Reference Include="IronPython, Version=2.7.9.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\IronPython.2.7.9\lib\net45\IronPython.dll</HintPath>
     </Reference>
-    <Reference Include="IronPython.Modules">
-      <HintPath>..\DWSIM\References\IronPython.Modules.dll</HintPath>
+    <Reference Include="IronPython.Modules, Version=2.7.9.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\IronPython.2.7.9\lib\net45\IronPython.Modules.dll</HintPath>
+    </Reference>
+    <Reference Include="IronPython.SQLite, Version=2.7.9.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\IronPython.2.7.9\lib\net45\IronPython.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="IronPython.Wpf, Version=2.7.9.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\IronPython.2.7.9\lib\net45\IronPython.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="Mapack">
       <HintPath>..\DWSIM\References\Mapack.dll</HintPath>
@@ -123,11 +132,17 @@
     <Reference Include="MathNet.Numerics, Version=4.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MathNet.Numerics.4.7.0\lib\net461\MathNet.Numerics.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Scripting">
-      <HintPath>..\DWSIM\References\Microsoft.Scripting.dll</HintPath>
+    <Reference Include="Microsoft.Dynamic, Version=1.2.2.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamicLanguageRuntime.1.2.2\lib\net45\Microsoft.Dynamic.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Scripting.Metadata">
-      <HintPath>..\DWSIM\References\Microsoft.Scripting.Metadata.dll</HintPath>
+    <Reference Include="Microsoft.Scripting, Version=1.2.2.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamicLanguageRuntime.1.2.2\lib\net45\Microsoft.Scripting.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Scripting.Metadata, Version=1.2.2.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\DynamicLanguageRuntime.1.2.2\lib\net45\Microsoft.Scripting.Metadata.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Posix.NETStandard, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mono.Posix.NETStandard.1.0.0\lib\net40\Mono.Posix.NETStandard.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -314,19 +329,19 @@
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
     <Compile Include="Material Stream\MaterialStream.vb" />
-    <Compile Include="Models\ElectrolyteNRTL.vb" />
-    <Compile Include="Models\PCSAFT.vb" />
-    <Compile Include="Models\TrueCriticalPoint.vb" />
+    <Compile Include="Property Packages\Models\ElectrolyteNRTL.vb" />
+    <Compile Include="Property Packages\Models\PCSAFT.vb" />
+    <Compile Include="Property Packages\Models\TrueCriticalPoint.vb" />
     <Compile Include="Base Classes\PropertyMethods.vb" />
     <Compile Include="Main\Calculator.vb" />
     <Compile Include="Helper Classes\ChemSepIDConverter.vb" />
-    <Compile Include="Base Classes\ActivityCoefficientBase.vb" />
+    <Compile Include="Property Packages\ActivityCoefficientBase.vb" />
     <Compile Include="Base Classes\ElectrolyteProperties.vb" />
-    <Compile Include="Base Classes\ElectrolyteBase.vb" />
-    <Compile Include="Models\Hypotheticals.vb" />
+    <Compile Include="Property Packages\ElectrolyteBase.vb" />
+    <Compile Include="Property Packages\Models\Hypotheticals.vb" />
     <Compile Include="Base Classes\MichelsenBase.vb" />
-    <Compile Include="Base Classes\PropertyPackage.vb" />
-    <Compile Include="Models\FluidProperties.vb" />
+    <Compile Include="Property Packages\PropertyPackage.vb" />
+    <Compile Include="Property Packages\Models\FluidProperties.vb" />
     <Compile Include="Base Classes\FlashAlgorithmBase.vb" />
     <Compile Include="Flash Algorithms\BlackOil.vb" />
     <Compile Include="Flash Algorithms\BostonBrittInsideOut.vb" />
@@ -355,7 +370,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Models\BlackOilProperties.vb" />
+    <Compile Include="Property Packages\Models\BlackOilProperties.vb" />
     <Compile Include="PetroleumCharacterization\CurveConversion.vb" />
     <Compile Include="PetroleumCharacterization\Fitting.vb" />
     <Compile Include="PetroleumCharacterization\GenerateCompounds.vb" />
@@ -369,47 +384,47 @@
     <Compile Include="Property Packages\CAPEOPENSocket.vb" />
     <Compile Include="Property Packages\ChaoSeader.vb" />
     <Compile Include="Property Packages\CoolProp.vb" />
-    <Compile Include="Models\ChaoSeader.vb" />
-    <Compile Include="Models\ExtendedUNIQUAC.vb" />
+    <Compile Include="Property Packages\Models\ChaoSeader.vb" />
+    <Compile Include="Property Packages\Models\ExtendedUNIQUAC.vb" />
     <Compile Include="Property Packages\CoolPropIncompressibleMixture.vb" />
     <Compile Include="Property Packages\CoolPropIncompressiblePure.vb" />
     <Compile Include="Property Packages\ElectrolyteNRTL.vb" />
     <Compile Include="Property Packages\ExtendedUNIQUAC.vb" />
     <Compile Include="Property Packages\GraysonStreed.vb" />
-    <Compile Include="Models\GraysonStreed.vb" />
-    <Compile Include="Models\SteamTables_IAPWS_IF97.vb" />
-    <Compile Include="Models\Ideal.vb" />
-    <Compile Include="Models\LIQUAC2.vb" />
-    <Compile Include="Models\LeeKesler.vb" />
-    <Compile Include="Models\LeeKeslerPlocker.vb" />
+    <Compile Include="Property Packages\Models\GraysonStreed.vb" />
+    <Compile Include="Property Packages\Models\SteamTables_IAPWS_IF97.vb" />
+    <Compile Include="Property Packages\Models\Ideal.vb" />
+    <Compile Include="Property Packages\Models\LIQUAC2.vb" />
+    <Compile Include="Property Packages\Models\LeeKesler.vb" />
+    <Compile Include="Property Packages\Models\LeeKeslerPlocker.vb" />
     <Compile Include="Property Packages\LeeKeslerPlocker.vb" />
-    <Compile Include="Models\MODFAC.vb" />
+    <Compile Include="Property Packages\Models\MODFAC.vb" />
     <Compile Include="Property Packages\MODFAC.vb" />
-    <Compile Include="Models\NISTMFAC.vb" />
+    <Compile Include="Property Packages\Models\NISTMFAC.vb" />
     <Compile Include="Property Packages\NISTMFAC.vb" />
-    <Compile Include="Models\NRTL.vb" />
+    <Compile Include="Property Packages\Models\NRTL.vb" />
     <Compile Include="Property Packages\NRTL.vb" />
-    <Compile Include="Models\PengRobinson.vb" />
+    <Compile Include="Property Packages\Models\PengRobinson.vb" />
     <Compile Include="Property Packages\PengRobinson.vb" />
-    <Compile Include="Models\PengRobinson2.vb" />
+    <Compile Include="Property Packages\Models\PengRobinson2.vb" />
     <Compile Include="Property Packages\PengRobinsonLeeKesler.vb" />
-    <Compile Include="Models\PRSV2-VL.vb" />
-    <Compile Include="Models\PRSV2.vb" />
+    <Compile Include="Property Packages\Models\PRSV2-VL.vb" />
+    <Compile Include="Property Packages\Models\PRSV2.vb" />
     <Compile Include="Property Packages\PengRobinsonStryjekVera2.vb" />
     <Compile Include="Property Packages\PengRobinsonStryjekVera2VL.vb" />
     <Compile Include="Property Packages\Ideal.vb" />
-    <Compile Include="Models\Seawater.vb" />
+    <Compile Include="Property Packages\Models\Seawater.vb" />
     <Compile Include="Property Packages\SeaWater.vb" />
     <Compile Include="Property Packages\SourWater.vb" />
-    <Compile Include="Models\SoaveRedlichKwong.vb" />
-    <Compile Include="Models\SoaveRedlichKwong2.vb" />
+    <Compile Include="Property Packages\Models\SoaveRedlichKwong.vb" />
+    <Compile Include="Property Packages\Models\SoaveRedlichKwong2.vb" />
     <Compile Include="Property Packages\SoaveRedlichKwong.vb" />
-    <Compile Include="Models\Steam67.vb" />
+    <Compile Include="Property Packages\Models\Steam67.vb" />
     <Compile Include="Property Packages\SteamTables.vb" />
-    <Compile Include="Models\UNIFAC.vb" />
+    <Compile Include="Property Packages\Models\UNIFAC.vb" />
     <Compile Include="Property Packages\UNIFACLL.vb" />
     <Compile Include="Property Packages\UNIFAC.vb" />
-    <Compile Include="Models\UNIQUAC.vb" />
+    <Compile Include="Property Packages\Models\UNIQUAC.vb" />
     <Compile Include="Property Packages\UNIQUAC.vb" />
   </ItemGroup>
   <ItemGroup>
@@ -799,7 +814,7 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-    <Error Condition="!Exists('..\packages\Eto.Forms.2.5.0-ci-10149\build\Eto.Forms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Eto.Forms.2.5.0-ci-10149\build\Eto.Forms.targets'))" />
+    <Error Condition="!Exists('..\packages\Eto.Forms.2.5.0-ci-10191\build\Eto.Forms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Eto.Forms.2.5.0-ci-10191\build\Eto.Forms.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -820,5 +835,5 @@
     </ItemGroup>
     <Message Importance="normal" Text="Adding back DesignTimeFacades from ReferencePath now that SGen has run." />
   </Target>
-  <Import Project="..\packages\Eto.Forms.2.5.0-ci-10149\build\Eto.Forms.targets" Condition="Exists('..\packages\Eto.Forms.2.5.0-ci-10149\build\Eto.Forms.targets')" />
+  <Import Project="..\packages\Eto.Forms.2.5.0-ci-10191\build\Eto.Forms.targets" Condition="Exists('..\packages\Eto.Forms.2.5.0-ci-10191\build\Eto.Forms.targets')" />
 </Project>
