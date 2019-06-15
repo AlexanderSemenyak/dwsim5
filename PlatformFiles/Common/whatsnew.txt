@@ -1,11 +1,6 @@
-Version 5.7 Update 9
+Version 5.7 Update 11
 
-- [CHG] Changed Welcome Panel button icons (Classic UI)
-- [FIX] Fixed ChemSep column mass/energy balance warnings
-- [FIX] Restored GUI language selection (Classic UI)
-- [FIX] Compound search textbox crash (Classic UI)
-- [FIX] eNRTL fix
-- [FIX] Electrolyte Flash warning message
-- [FIX] Fixed Advanced Property Package Settings window not on top (Classic UI)
-- [FIX] Fixed units mismatch on assay manager (Classic UI)
-- [FIX] Other bug fixes
+- [FIX] Fixed PR/SRK volume translation correction for C1-C10, H2S, N2 and CO2
+- [FIX] Restored Eto packages to v2.4.1 for Linux compatibility
+- [FIX] Fixed splitter split ratio trackbar precision / added editable textboxes (Classic UI)
+- [FIX] Fixed Flowsheet.AddObject() not working in automation mode
