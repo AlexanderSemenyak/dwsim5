@@ -4532,6 +4532,7 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
                                     py1.Add(Test1)
                                 Catch ex As Exception
                                     py1.Add(Double.NaN)
+                                    SharedClasses.ExceptionProcessing.ExceptionParser.ProcessAndDisplayException(Flowsheet, ex)
                                 End Try
                                 Try
                                     tmp2 = MyFlash.Flash_PV(New Double() {i * dx, 1 - i * dx}, P, 1.0#, 0.0#, Me)
@@ -4541,6 +4542,7 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
                                     py2.Add(Test2)
                                 Catch ex As Exception
                                     py2.Add(Double.NaN)
+                                    SharedClasses.ExceptionProcessing.ExceptionParser.ProcessAndDisplayException(Flowsheet, ex)
                                 End Try
                             Else
                                 Try
@@ -4551,6 +4553,7 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
                                     py1.Add(calcT)
                                 Catch ex As Exception
                                     py1.Add(Double.NaN)
+                                    SharedClasses.ExceptionProcessing.ExceptionParser.ProcessAndDisplayException(Flowsheet, ex)
                                 End Try
                                 Try
                                     tmp2 = MyFlash.Flash_PV(New Double() {i * dx, 1 - i * dx}, P, 1.0#, Test2, Me)
@@ -4560,6 +4563,7 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
                                     py2.Add(calcT)
                                 Catch ex As Exception
                                     py2.Add(Double.NaN)
+                                    SharedClasses.ExceptionProcessing.ExceptionParser.ProcessAndDisplayException(Flowsheet, ex)
                                 End Try
                             End If
 
@@ -4627,6 +4631,38 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
 
                     End If
 
+                    'replace missing data with interpolated values
+
+                    'VLE
+
+                    Dim data As Tuple(Of Double(), Double()) = New Tuple(Of Double(), Double())(px.ToDoubleArray, py1.ToDoubleArray)
+
+                    Dim validdata = data.ReturnValidSets()
+
+                    Dim interpolator As New MathNet.Numerics.Interpolation.NevillePolynomialInterpolation(validdata.Item1, validdata.Item2)
+
+                    i = 0
+                    For Each d As Double In py1.Clone
+                        If Double.IsNaN(d) Then
+                            py1(i) = interpolator.Interpolate(px(i))
+                        End If
+                        i += 1
+                    Next
+
+                    data = New Tuple(Of Double(), Double())(px.ToDoubleArray, py2.ToDoubleArray)
+
+                    validdata = data.ReturnValidSets()
+
+                    interpolator = New MathNet.Numerics.Interpolation.NevillePolynomialInterpolation(validdata.Item1, validdata.Item2)
+
+                    i = 0
+                    For Each d As Double In py2.Clone
+                        If Double.IsNaN(d) Then
+                            py2(i) = interpolator.Interpolate(px(i))
+                        End If
+                        i += 1
+                    Next
+
                     If SLE Then
 
                         Dim nlsle As New Auxiliary.FlashAlgorithms.NestedLoopsSLE
@@ -4658,6 +4694,7 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
                                 pxs1.Add(x)
                                 pys1.Add(y1)
                             Catch ex As Exception
+                                SharedClasses.ExceptionProcessing.ExceptionParser.ProcessAndDisplayException(Flowsheet, ex)
                             End Try
                             i = i + 1
                         Loop Until (i - 1) * dx >= 1
@@ -4679,6 +4716,7 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
                                 pxs2.Add(x)
                                 pys2.Add(y2)
                             Catch ex As Exception
+                                SharedClasses.ExceptionProcessing.ExceptionParser.ProcessAndDisplayException(Flowsheet, ex)
                             End Try
                             i = i + 1
                         Loop Until (i - 1) * dx >= 1
@@ -4735,6 +4773,7 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
                                     pyc.Add(TCR)
                                 End If
                             Catch ex As Exception
+                                SharedClasses.ExceptionProcessing.ExceptionParser.ProcessAndDisplayException(Flowsheet, ex)
                             End Try
                             i = i + 1
                         Loop Until (i - 1) * dx >= 1
@@ -4789,6 +4828,7 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
                                     py1(py1.Count - 1) = up(0)
                                 End If
                             Catch ex As Exception
+                                SharedClasses.ExceptionProcessing.ExceptionParser.ProcessAndDisplayException(Flowsheet, ex)
                             End Try
                             i = i + 1
                         Loop Until (i - 1) * dx >= 1
@@ -11566,6 +11606,7 @@ Final3:
                                                      End Sub)
 
             Dim form = sui.GetDefaultTabbedForm("Advanced Property Package Settings", 700, 600, {container1, container2})
+            form.Topmost = True
             form.Show()
 
         End Sub

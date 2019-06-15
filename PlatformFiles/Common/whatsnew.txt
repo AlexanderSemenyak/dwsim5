@@ -1,7 +1,11 @@
-Version 5.7 Update 7
+Version 5.7 Update 9
 
-- [NEW] Enhanced Phase/Binary Envelopes in Cross-Platform UI
-- [FIX] Fixed compound adding by pressing ENTER on the search box (Classic UI)
-- [FIX] Fixed Phase Identification Parameter in Phase Envelope
-- [FIX] Fixed merged ToolStrips in Classic UI
-- [FIX] Minor bug fixes and tweaks in Cross-Platform UI
+- [CHG] Changed Welcome Panel button icons (Classic UI)
+- [FIX] Fixed ChemSep column mass/energy balance warnings
+- [FIX] Restored GUI language selection (Classic UI)
+- [FIX] Compound search textbox crash (Classic UI)
+- [FIX] eNRTL fix
+- [FIX] Electrolyte Flash warning message
+- [FIX] Fixed Advanced Property Package Settings window not on top (Classic UI)
+- [FIX] Fixed units mismatch on assay manager (Classic UI)
+- [FIX] Other bug fixes

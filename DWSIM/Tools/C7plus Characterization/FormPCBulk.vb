@@ -362,8 +362,13 @@ Public Class FormPCBulk
                 .Molar_Weight = dMW(i)
                 .IsPF = 1
 
-                .Name = "C_" & id & "_NBP_" & (.NBP.GetValueOrDefault - 273.15).ToString("N0")
-                .CAS_Number = id.ToString() & "-" & .NBP.GetValueOrDefault().ToString("N0")
+                If Not Double.IsNaN(.NBP.GetValueOrDefault) Then
+                    .Name = "C_" & id & "_NBP_" & CInt(.NBP.GetValueOrDefault - 273.15).ToString
+                    .CAS_Number = id.ToString() & "-" & CInt(.NBP.GetValueOrDefault()).ToString()
+                Else
+                    .Name = "C_" & id & "_NBP_" & i.ToString()
+                    .CAS_Number = id.ToString() & "-" & i.ToString()
+                End If
 
                 .PF_Watson_K = (1.8 * .NBP.GetValueOrDefault) ^ (1 / 3) / .PF_SG.GetValueOrDefault
                 .Critical_Compressibility = PROPS.Zc1(.Acentric_Factor)
@@ -827,7 +832,7 @@ Public Class FormPCBulk
         'salvar ensaio
 
         Try
-            Dim myassay As SharedClasses.Utilities.PetroleumCharacterization.Assay.Assay = New SharedClasses.Utilities.PetroleumCharacterization.Assay.Assay(tb_mw.Text, tb_sg.Text, tb_wk.Text, SystemsOfUnits.Converter.ConvertToSI("C", tb_t1.Text), SystemsOfUnits.Converter.ConvertToSI("C", tb_t2.Text), SystemsOfUnits.Converter.ConvertToSI("cSt", tb_v1.Text), SystemsOfUnits.Converter.ConvertToSI("cSt", tb_v2.Text))
+            Dim myassay As SharedClasses.Utilities.PetroleumCharacterization.Assay.Assay = New SharedClasses.Utilities.PetroleumCharacterization.Assay.Assay(tb_mw.Text, tb_sg.Text, tb_wk.Text, SystemsOfUnits.Converter.ConvertToSI(su.temperature, tb_t1.Text), SystemsOfUnits.Converter.ConvertToSI(su.temperature, tb_t2.Text), SystemsOfUnits.Converter.ConvertToSI(su.cinematic_viscosity, tb_v1.Text), SystemsOfUnits.Converter.ConvertToSI(su.cinematic_viscosity, tb_v2.Text))
             myassay.Name = Me.TextBox1.Text
             frm.Options.PetroleumAssays.Add(Guid.NewGuid().ToString, myassay)
             MessageBox.Show("Assay data was saved succesfully.", "DWSIM", MessageBoxButtons.OK, MessageBoxIcon.Information)

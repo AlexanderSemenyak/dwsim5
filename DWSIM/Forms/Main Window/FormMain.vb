@@ -51,7 +51,7 @@ Public Class FormMain
     Public pathsep As Char
 
     Public FrmOptions As FormOptions
-    Public FrmWelcome As FormWelcome
+    'Public FrmWelcome As FormWelcome
     Public FrmRec As FormRecoverFiles
 
     Private dropdownlist As ArrayList
@@ -266,10 +266,10 @@ Public Class FormMain
             Me.SettingsPanel.Controls.Add(Me.FrmOptions)
             Me.ButtonClose.BringToFront()
 
-            Me.FrmWelcome = New FormWelcome
-            Me.FrmWelcome.Owner = Me
-            Me.FrmWelcome.Dock = DockStyle.Fill
-            Me.WelcomePanel.Controls.Add(Me.FrmWelcome)
+            'Me.FrmWelcome = New FormWelcome
+            'Me.FrmWelcome.Owner = Me
+            'Me.FrmWelcome.Dock = DockStyle.Fill
+            'Me.WelcomePanel.Controls.Add(Me.FrmWelcome)
             Me.ButtonClose2.BringToFront()
 
             If My.Settings.ShowWebPanel Then
@@ -844,7 +844,7 @@ Public Class FormMain
         Dim cmdLine() As String = System.Environment.GetCommandLineArgs()
 
         If UBound(cmdLine) = 1 Then
-            If Not cmdLine(0).StartsWith("-") And Not cmdLine(1).Contains("DWSIM.exe") Then
+            If Not cmdLine(0).StartsWith("-") And Not cmdLine(1).Contains("ArmGeolog.Thermodynamics.exe") Then
                 Try
                     Me.filename = cmdLine(1)
                     Try
@@ -878,9 +878,9 @@ Public Class FormMain
                                 NewMDIChild.LoadCase(NewMDIChild.currcase, False)
                         End Select
                     Catch ex As Exception
-                        Dim errorText  = DWSIM.App.GetLocalString("Erroaoabrirarquivo") & " " & ex.Message
+                        Dim errorText = DWSIM.App.GetLocalString("Erroaoabrirarquivo") & " " & ex.Message
                         SetLastError(errorText)
-                        If not m_SupressMessages Then
+                        If Not m_SupressMessages Then
                             MessageBox.Show(errorText, DWSIM.App.GetLocalString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
 
                         End If
@@ -891,10 +891,10 @@ Public Class FormMain
                     MessageBox.Show(ex.Message, DWSIM.App.GetLocalString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End Try
             Else
-                OpenWelcomeScreen()
+                'OpenWelcomeScreen()
             End If
         Else
-            OpenWelcomeScreen()
+            'OpenWelcomeScreen()
         End If
 
     End Sub

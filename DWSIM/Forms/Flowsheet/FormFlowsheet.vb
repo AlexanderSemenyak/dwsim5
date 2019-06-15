@@ -570,7 +570,7 @@ Public Class FormFlowsheet
         Dim gObj As GraphicObject = Nothing
         Dim gObj2 As GraphicObject = Nothing
         For Each gObj In Me.FormSurface.FlowsheetSurface.DrawingObjects
-            If gObj.Tag.ToString = tag Then
+            If gObj.Tag.ToString.ToLower = tag.ToLower And Not gObj.IsConnector Then
                 gObj2 = gObj
                 Exit For
             End If
@@ -653,7 +653,10 @@ Public Class FormFlowsheet
                                                              frlog.Grid1.Rows(0).Cells("Info").Tag = exceptionID
                                                              frlog.Grid1.Rows(0).Cells("Mensagem").Style.ForeColor = cor
                                                              frlog.Grid1.ClearSelection()
-                                                             frlog.Grid1.FirstDisplayedScrollingRowIndex = 0
+                                                             Try
+                                                                 frlog.Grid1.FirstDisplayedScrollingRowIndex = 0
+                                                             Catch ex As Exception
+                                                             End Try
                                                          End If
 
                                                      End If
@@ -2691,7 +2694,26 @@ Public Class FormFlowsheet
 
     Public Property SelectedCompounds As Dictionary(Of String, ICompoundConstantProperties) Implements IFlowsheet.SelectedCompounds, IFlowsheetBag.Compounds
         Get
-            Return Options.SelectedComponents
+            Select Case Options.CompoundOrderingMode
+                Case CompoundOrdering.CAS_ASC
+                    Return Options.SelectedComponents.OrderBy(Function(c) c.Value.CAS_Number).ToDictionary(Of String, ICompoundConstantProperties)(Function(k) k.Key, Function(k) k.Value)
+                Case CompoundOrdering.CAS_DESC
+                    Return Options.SelectedComponents.OrderByDescending(Function(c) c.Value.CAS_Number).ToDictionary(Of String, ICompoundConstantProperties)(Function(k) k.Key, Function(k) k.Value)
+                Case CompoundOrdering.MW_ASC
+                    Return Options.SelectedComponents.OrderBy(Function(c) c.Value.Molar_Weight).ToDictionary(Of String, ICompoundConstantProperties)(Function(k) k.Key, Function(k) k.Value)
+                Case CompoundOrdering.MW_DESC
+                    Return Options.SelectedComponents.OrderByDescending(Function(c) c.Value.Molar_Weight).ToDictionary(Of String, ICompoundConstantProperties)(Function(k) k.Key, Function(k) k.Value)
+                Case CompoundOrdering.Name_ASC
+                    Return Options.SelectedComponents.OrderBy(Function(c) c.Value.Name).ToDictionary(Of String, ICompoundConstantProperties)(Function(k) k.Key, Function(k) k.Value)
+                Case CompoundOrdering.Name_DESC
+                    Return Options.SelectedComponents.OrderByDescending(Function(c) c.Value.Name).ToDictionary(Of String, ICompoundConstantProperties)(Function(k) k.Key, Function(k) k.Value)
+                Case CompoundOrdering.NBP_ASC
+                    Return Options.SelectedComponents.OrderBy(Function(c) c.Value.NBP.GetValueOrDefault).ToDictionary(Of String, ICompoundConstantProperties)(Function(k) k.Key, Function(k) k.Value)
+                Case CompoundOrdering.NBP_DESC
+                    Return Options.SelectedComponents.OrderByDescending(Function(c) c.Value.NBP.GetValueOrDefault).ToDictionary(Of String, ICompoundConstantProperties)(Function(k) k.Key, Function(k) k.Value)
+                Case Else
+                    Return Options.SelectedComponents
+            End Select
         End Get
         Set(value As Dictionary(Of String, ICompoundConstantProperties))
             Options.SelectedComponents = value

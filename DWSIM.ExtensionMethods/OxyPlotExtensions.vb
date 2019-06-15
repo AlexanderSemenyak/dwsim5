@@ -79,13 +79,131 @@ Public Module OxyPlot
     <System.Runtime.CompilerServices.Extension>
     Public Sub AddLineSeries(model As PlotModel, xSeries As IEnumerable(Of Double), ySeries As IEnumerable(Of Double), color As OxyColor, Optional ByVal title As String = Nothing)
 
-        Dim lineSeries As LineSeries = New LineSeries With {.Title = title}
+        Dim lineSeries As LineSeries = New LineSeries With {.Title = title, .Color = color}
 
         For i As Integer = 0 To xSeries.Count - 1
             LineSeries.Points.Add(New DataPoint(xSeries(i), ySeries(i)))
         Next
 
         model.Series.Add(LineSeries)
+    End Sub
+
+    <System.Runtime.CompilerServices.Extension>
+    Public Sub AddAreaSeries(model As PlotModel, xSeries As IEnumerable(Of Double), ySeries As IEnumerable(Of Double), ySeries2 As IEnumerable(Of Double), color As OxyColor, ByVal title As String, ByVal displaylabel As Boolean)
+
+        Dim areaseries As AreaSeries = New AreaSeries
+
+        With areaseries
+            .Fill = color
+            .StrokeThickness = 0.0
+            .Title = title
+            .LineStyle = LineStyle.None
+            '.InterpolationAlgorithm = InterpolationAlgorithms.UniformCatmullRomSpline
+            .Color = OxyColors.Transparent
+            .Color2 = OxyColors.Transparent
+            .MinimumSegmentLength = 0.01
+        End With
+
+        For i As Integer = 0 To xSeries.Count - 1
+            areaseries.Points.Add(New DataPoint(xSeries(i), ySeries(i)))
+            areaseries.Points2.Add(New DataPoint(xSeries(i), ySeries2(i)))
+        Next
+
+        model.Series.Add(areaseries)
+
+        If displaylabel Then
+            model.Annotations.Add(New Annotations.TextAnnotation() With {.TextPosition = New DataPoint((xSeries.Min + xSeries.Max) / 2, (ySeries.Average + ySeries2.Average) / 2), .Text = title, .TextColor = OxyColors.Black, .FontSize = 10, .Background = OxyColors.Transparent, .StrokeThickness = 0.0})
+        End If
+
+    End Sub
+
+    <System.Runtime.CompilerServices.Extension>
+    Public Sub AddAreaSeries(model As PlotModel, xSeries As IEnumerable(Of Double), ySeries As IEnumerable(Of Double), xSeries2 As IEnumerable(Of Double), ySeries2 As IEnumerable(Of Double), color As OxyColor, ByVal title As String, ByVal displaylabel As Boolean)
+
+        Dim areaseries As AreaSeries = New AreaSeries
+
+        With areaseries
+            .Fill = color
+            .StrokeThickness = 0.0
+            .Title = title
+            .LineStyle = LineStyle.None
+            '.InterpolationAlgorithm = InterpolationAlgorithms.UniformCatmullRomSpline
+            .Color = OxyColors.Transparent
+            .Color2 = OxyColors.Transparent
+            .MinimumSegmentLength = 0.01
+        End With
+
+        For i As Integer = 0 To xSeries.Count - 1
+            areaseries.Points.Add(New DataPoint(xSeries(i), ySeries(i)))
+        Next
+        For i As Integer = 0 To xSeries2.Count - 1
+            areaseries.Points2.Add(New DataPoint(xSeries2(i), ySeries2(i)))
+        Next
+
+        model.Series.Add(areaseries)
+
+        If displaylabel Then
+            model.Annotations.Add(New Annotations.TextAnnotation() With {.TextPosition = New DataPoint((xSeries.Min + xSeries.Max) / 2, (ySeries.Average + ySeries2.Average) / 2), .Text = title, .TextColor = OxyColors.Black, .FontSize = 10, .Background = OxyColors.Transparent, .StrokeThickness = 0.0})
+        End If
+
+    End Sub
+
+    <System.Runtime.CompilerServices.Extension>
+    Public Sub AddAreaSeriesBeyond(model As PlotModel, xSeries As IEnumerable(Of Double), ySeries As IEnumerable(Of Double), color As OxyColor, ByVal title As String, ByVal displaylabel As Boolean)
+
+        Dim areaseries As AreaSeries = New AreaSeries
+
+        With areaseries
+            .Fill = color
+            .StrokeThickness = 0.0
+            .Title = title
+            .LineStyle = LineStyle.None
+            '.InterpolationAlgorithm = InterpolationAlgorithms.UniformCatmullRomSpline
+            .Color = OxyColors.Transparent
+            .Color2 = OxyColors.Transparent
+            .MinimumSegmentLength = 0.01
+        End With
+
+        For i As Integer = 0 To xSeries.Count - 1
+            areaseries.Points.Add(New DataPoint(xSeries(i), 0.0))
+            areaseries.Points2.Add(New DataPoint(xSeries(i), ySeries(i)))
+        Next
+
+        model.Series.Add(areaseries)
+
+        If displaylabel Then
+            model.Annotations.Add(New Annotations.TextAnnotation() With {.TextPosition = New DataPoint((xSeries.Min + xSeries.Max) / 2, ySeries.Average / 2), .Text = title, .TextColor = OxyColors.Black, .FontSize = 10, .Background = OxyColors.Transparent, .StrokeThickness = 0.0})
+        End If
+
+    End Sub
+
+    <System.Runtime.CompilerServices.Extension>
+    Public Sub AddAreaSeriesAbove(model As PlotModel, xSeries As IEnumerable(Of Double), ySeries As IEnumerable(Of Double), maxvalue As Double, color As OxyColor, ByVal title As String, ByVal displaylabel As Boolean)
+
+        Dim areaseries As AreaSeries = New AreaSeries
+
+        With areaseries
+            .Fill = color
+            .StrokeThickness = 0.0
+            .Title = title
+            .LineStyle = LineStyle.None
+            '.InterpolationAlgorithm = InterpolationAlgorithms.UniformCatmullRomSpline
+            .Color = OxyColors.Transparent
+            .Color2 = OxyColors.Transparent
+            .MinimumSegmentLength = 0.01
+        End With
+
+        For i As Integer = 0 To xSeries.Count - 1
+            areaseries.Points.Add(New DataPoint(xSeries(i), ySeries(i)))
+            areaseries.Points2.Add(New DataPoint(xSeries(i), maxvalue))
+        Next
+
+        model.Series.Add(areaseries)
+
+        If displaylabel Then
+            model.Annotations.Add(New Annotations.TextAnnotation() With {.TextPosition = New DataPoint((xSeries.Min + xSeries.Max) / 2, (maxvalue + ySeries.Average) / 2), .Text = title, .TextColor = OxyColors.Black, .FontSize = 10, .Background = OxyColors.Transparent, .StrokeThickness = 0.0})
+        End If
+
     End Sub
 
     <System.Runtime.CompilerServices.Extension>

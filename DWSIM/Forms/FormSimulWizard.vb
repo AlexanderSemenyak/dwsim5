@@ -53,6 +53,11 @@ Public Class FormSimulWizard
         Dim comp As BaseClasses.ConstantProperties
         If Not loaded Or reset Then
 
+            colAdd.ValueType = True.GetType()
+            colAdd.FalseValue = False
+            colAdd.TrueValue = True
+            colAdd.IndeterminateValue = False
+
             ACSC1 = New AutoCompleteStringCollection
 
             For Each comp In Me.FrmChild.Options.SelectedComponents.Values
@@ -198,15 +203,18 @@ Public Class FormSimulWizard
             ogc1.Rows(ogc1.Rows.GetFirstRow(DataGridViewElementStates.Visible)).Selected = True
         End If
         If TextBox1.Text = "" Then
-            ogc1.FirstDisplayedScrollingRowIndex = 0
             For Each r As DataGridViewRow In ogc1.Rows
                 r.Selected = False
                 r.Visible = True
             Next
+            ogc1.ResumeLayout()
+            ogc1.FirstDisplayedScrollingRowIndex = 0
+            Application.DoEvents()
             ogc1.Sort(colAdd, System.ComponentModel.ListSortDirection.Descending)
+        Else
+            ogc1.ResumeLayout()
         End If
 
-        ogc1.ResumeLayout()
 
     End Sub
 
@@ -826,8 +834,14 @@ Public Class FormSimulWizard
     End Sub
 
     Private Sub btnInfoLeft_Click(sender As Object, e As EventArgs) Handles btnInfoLeft.Click
-        Dim f As New FormPureComp() With {.Flowsheet = FrmChild, .Added = False, .MyCompound = Me.FrmChild.AvailableCompounds(ogc1.SelectedRows(0).Cells(0).Value)}
-        f.ShowDialog(Me)
+
+        If ogc1.SelectedRows.Count > 0 Then
+            Dim f As New FormPureComp() With {.Flowsheet = FrmChild, .Added = False, .MyCompound = Me.FrmChild.AvailableCompounds(ogc1.SelectedRows(0).Cells(0).Value)}
+            f.ShowDialog(Me)
+        Else
+            MessageBox.Show(DWSIM.App.GetLocalString("Error! No component selected!"), "DWSIM", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End If
+
     End Sub
 
     Private Sub LinkLabel2_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel2.LinkClicked

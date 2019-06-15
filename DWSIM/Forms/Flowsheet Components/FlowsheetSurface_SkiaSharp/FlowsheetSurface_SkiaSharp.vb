@@ -48,8 +48,6 @@ Public Class FlowsheetSurface_SkiaSharp
 
     Private Sub frmSurface_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
-        Me.PanelSearch.Location = New Point(Me.PanelSearch.Location.X, Me.Height - Me.PanelSearch.Height - 20)
-
         If TypeOf Me.ParentForm Is FormFlowsheet Then
             Flowsheet = Me.ParentForm
         ElseIf Flowsheet Is Nothing Then
@@ -251,10 +249,35 @@ Public Class FlowsheetSurface_SkiaSharp
                         For Each mstr As Thermodynamics.Streams.MaterialStream In Flowsheet.Collections.FlowsheetObjectCollection.Values.Where(Function(x) TypeOf x Is Thermodynamics.Streams.MaterialStream)
                             If mstr.GraphicObject.Tag <> obj.GraphicObject.Tag Then
                                 Dim newtsmi As New ToolStripMenuItem(mstr.GraphicObject.Tag)
-                                If mstr.GraphicObject.Calculated Then CopyFromTSMI.DropDownItems.Add(newtsmi)
+                                CopyFromTSMI.DropDownItems.Add(newtsmi)
                             End If
                         Next
                     End If
+
+                ElseIf FlowsheetSurface.SelectedObject.ObjectType = ObjectType.EnergyStream Then
+
+                    Dim cancopy As Boolean
+
+                    If Not obj.GraphicObject.InputConnectors(0).IsAttached Then
+                        cancopy = True
+                    Else
+                        If obj.GraphicObject.InputConnectors(0).AttachedConnector.AttachedFrom.ObjectType = ObjectType.OT_EnergyRecycle Then
+                            cancopy = True
+                        Else
+                            cancopy = False
+                        End If
+                    End If
+
+                    If cancopy Then
+                        Me.CopyFromTSMI.Visible = True
+                        For Each estr As UnitOperations.Streams.EnergyStream In Flowsheet.Collections.FlowsheetObjectCollection.Values.Where(Function(x) TypeOf x Is UnitOperations.Streams.EnergyStream)
+                            If estr.GraphicObject.Tag <> obj.GraphicObject.Tag Then
+                                Dim newtsmi As New ToolStripMenuItem(estr.GraphicObject.Tag)
+                                CopyFromTSMI.DropDownItems.Add(newtsmi)
+                            End If
+                        Next
+                    End If
+
 
                 End If
 
@@ -2344,21 +2367,6 @@ Public Class FlowsheetSurface_SkiaSharp
         End If
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        If Me.PanelSearch.Width = 36 Then
-            Me.PanelSearch.Width = 299
-        ElseIf Me.PanelSearch.Width = 299 Then
-            Me.PanelSearch.Width = 36
-        End If
-        Me.PanelSearch.Location = New Point(Me.PanelSearch.Location.X, Me.Height - Me.PanelSearch.Height - 20)
-    End Sub
-
-    Private Sub tbSearch_MouseClick(sender As Object, e As MouseEventArgs) Handles tbSearch.MouseClick
-        Dim acsc As New AutoCompleteStringCollection()
-        acsc.AddRange(FlowsheetSurface.DrawingObjects.ToArray.Select(Function(x) x.Tag).ToArray)
-        tbSearch.AutoCompleteCustomSource = acsc
-    End Sub
-
     Private Sub AtivadoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AtivadoToolStripMenuItem.Click
         FlowsheetSurface.SelectedObject.Active = Me.AtivadoToolStripMenuItem.Checked
         Me.Flowsheet.UpdateOpenEditForms()
@@ -2370,6 +2378,7 @@ Public Class FlowsheetSurface_SkiaSharp
             My.Application.PushUndoRedoAction = False
             Dim stream = FlowsheetSurface.SelectedObject
             Dim newstream = CloneObject(stream)
+            newstream.CreateConnectors(1, 1)
             newstream.Status = stream.Status
 
             Dim objfrom As GraphicObject, fromidx As Integer
@@ -2379,6 +2388,9 @@ Public Class FlowsheetSurface_SkiaSharp
                 Flowsheet.DisconnectObjects(objfrom, stream)
                 Flowsheet.ConnectObject(objfrom, newstream, fromidx)
             End If
+
+            newstream.FlippedH = stream.FlippedH
+
         Catch ex As Exception
         Finally
             My.Application.PushUndoRedoAction = True
@@ -2743,6 +2755,66 @@ Public Class FlowsheetSurface_SkiaSharp
         FlowsheetSurface.Zoom = prevzoom
     End Sub
 
+    Private Sub SplitAndInsertRecycleMenuItem_Click(sender As Object, e As EventArgs) Handles SplitAndInsertRecycleMenuItem.Click
+
+        Try
+
+            My.Application.PushUndoRedoAction = False
+
+            Dim stream = FlowsheetSurface.SelectedObject
+            Dim newstream = CloneObject(stream)
+            newstream.CreateConnectors(1, 1)
+            newstream.Status = stream.Status
+
+            Dim x = stream.X
+            Dim y = stream.Y
+
+            Dim objfrom As GraphicObject, fromidx As Integer
+
+            If stream.InputConnectors(0).IsAttached Then
+                objfrom = stream.InputConnectors(0).AttachedConnector.AttachedFrom
+                fromidx = stream.InputConnectors(0).AttachedConnector.AttachedFromConnectorIndex
+                Flowsheet.DisconnectObjects(objfrom, stream)
+                Flowsheet.ConnectObject(objfrom, newstream, fromidx)
+            End If
+
+            Dim id As String, obj As GraphicObject
+
+            If stream.ObjectType = ObjectType.MaterialStream Then
+                id = AddObjectToSurface(ObjectType.OT_Recycle, x, y, False)
+            Else
+                id = AddObjectToSurface(ObjectType.OT_EnergyRecycle, x, y, False)
+            End If
+            obj = Flowsheet.SimulationObjects(id).GraphicObject
+            obj.CreateConnectors(1, 1)
+            obj.Calculated = True
+            obj.Owner.Calculated = True
+
+            Flowsheet.ConnectObjects(newstream, obj, 0, 0)
+            Flowsheet.ConnectObjects(obj, stream, 0, 0)
+
+            If Not stream.FlippedH Then
+                newstream.X = x - 50
+                newstream.Y = y
+                stream.X = x + 50
+                stream.Y = y
+            Else
+                newstream.X = x + 50
+                newstream.Y = y
+                newstream.FlippedH = True
+                stream.X = x - 50
+                stream.Y = y
+                obj.FlippedH = True
+            End If
+
+        Catch ex As Exception
+
+        Finally
+            My.Application.PushUndoRedoAction = True
+        End Try
+
+    End Sub
+
     Private Sub EditarAparênciaToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles EditAppearanceToolStripMenuItem.Click
 
         If FlowsheetSurface.SelectedObject.Editor Is Nothing OrElse DirectCast(FlowsheetSurface.SelectedObject.Editor, Form).IsDisposed Then
@@ -2755,4 +2827,27 @@ Public Class FlowsheetSurface_SkiaSharp
 
     End Sub
 
+    Private Sub tstbSearch_TextChanged(sender As Object, e As EventArgs) Handles tstbSearch.TextChanged
+
+        Dim obj = Flowsheet.GetFlowsheetGraphicObject(tstbSearch.Text)
+        If Not obj Is Nothing Then
+            Try
+                Dim center As Point = New Point(SplitContainer1.Panel1.Width / 2, SplitContainer1.Panel1.Height / 2)
+                FlowsheetSurface.OffsetAll(center.X / FlowsheetSurface.Zoom - obj.X, center.Y / FlowsheetSurface.Zoom - obj.Y)
+                FlowsheetSurface.SelectedObject = obj
+                FControl.Invalidate()
+                FControl.Invalidate()
+            Catch ex As Exception
+            End Try
+        End If
+
+    End Sub
+
+    Private Sub tstbSearch_GotFocus(sender As Object, e As EventArgs) Handles tstbSearch.GotFocus
+
+        tstbSearch.AutoCompleteCustomSource = New AutoCompleteStringCollection()
+        tstbSearch.AutoCompleteCustomSource.Clear()
+        tstbSearch.AutoCompleteCustomSource.AddRange(Flowsheet.GraphicObjects.Select(Function(x) x.Value.Tag).ToArray)
+
+    End Sub
 End Class

@@ -826,16 +826,16 @@ Namespace My
                 Me("FlowsheetAntiAliasing") = value
             End Set
         End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+
+        <Global.System.Configuration.UserScopedSettingAttribute(),
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>
         Public Property ShowWebPanel() As Boolean
             Get
-                Return CType(Me("ShowWebPanel"),Boolean)
+                Return False ' CType(Me("ShowWebPanel"),Boolean)
             End Get
             Set
-                Me("ShowWebPanel") = value
+                ' Me("ShowWebPanel") = value
             End Set
         End Property
         
