@@ -11449,6 +11449,24 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Usar Fugacidade de Líquido Ideal para Cálculo de Fugacidade de Sólido.
+        '''</summary>
+        Friend Shared ReadOnly Property PP_USE_IDEAL_LIQUID_FUGACITY_FOR_SOLID_FUGACITY_CALC() As String
+            Get
+                Return ResourceManager.GetString("PP_USE_IDEAL_LIQUID_FUGACITY_FOR_SOLID_FUGACITY_CALC", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Usar Fugacidade Ideal para Sólidos.
+        '''</summary>
+        Friend Shared ReadOnly Property PP_USE_IDEAL_SOLID_FUGACITY() As String
+            Get
+                Return ResourceManager.GetString("PP_USE_IDEAL_SOLID_FUGACITY", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Usar Curva Experimental para Cálculo da Densidade (Líquido) (0 = Desativar, 1 = Ativar).
         '''</summary>
         Friend Shared ReadOnly Property PP_USEEXPLIQDENS() As String
@@ -12327,6 +12345,15 @@ Namespace My.Resources
         Friend Shared ReadOnly Property ReactionHeats() As String
             Get
                 Return ResourceManager.GetString("ReactionHeats", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Propriedade de Reação.
+        '''</summary>
+        Friend Shared ReadOnly Property ReactionProperty() As String
+            Get
+                Return ResourceManager.GetString("ReactionProperty", resourceCulture)
             End Get
         End Property
         
