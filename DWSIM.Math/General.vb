@@ -16,6 +16,7 @@
 '    You should have received a copy of the GNU General Public License
 '    along with DWSIM.  If not, see <http://www.gnu.org/licenses/>.
 Imports System.Linq
+Imports System.Runtime.CompilerServices
 
 Namespace MathEx
 
@@ -110,7 +111,7 @@ Namespace MathEx
             End If
 
         End Function
-
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Shared Function Min(ByVal Vv As Array)
 
             Dim n = UBound(Vv)
@@ -142,10 +143,29 @@ Namespace MathEx
 
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Shared Function Sum(ByVal vx() As Double) As Double
             If vx.Length = 0 Then Return 0
 
             Return vx.Sum()
+
+        End Function
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Shared Function Sum(ByVal vx() As Double, count As Double) As Double
+            If vx.Length = 0 Then Return 0
+
+            'Alexander
+            Dim num1 As Double = 0.0
+            Dim iStart As Integer = LBound(vx)
+            Dim iEnd As Integer = UBound(vx)
+            iEnd = Math.Min(iEnd, iStart + count - 1)
+
+            For i As Integer = iStart To iEnd Step 1
+                Dim d As Double = vx(i)
+                num1 += d
+            Next
+            Return num1 ' vx.Sum()
 
         End Function
 

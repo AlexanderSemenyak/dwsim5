@@ -16,6 +16,7 @@
 '    You should have received a copy of the GNU General Public License
 '    along with DWSIM.  If not, see <http://www.gnu.org/licenses/>.
 
+Imports System.Buffers
 Imports System.Runtime.Serialization.Formatters.Binary
 Imports System.Runtime.Serialization
 Imports System.IO
@@ -33,6 +34,7 @@ Imports DWSIM.Thermodynamics.PropertyPackages.Auxiliary.FlashAlgorithms
 Imports DWSIM.Interfaces
 Imports DWSIM.Interfaces.Interfaces2
 Imports System.Reflection
+Imports System.Runtime.CompilerServices
 Imports System.Runtime.InteropServices
 Imports DWSIM.Thermodynamics.Streams
 
@@ -414,7 +416,7 @@ Namespace PropertyPackages
                 If Me.CurrentMaterialStream IsNot Nothing AndAlso
                     Me.CurrentMaterialStream.Flowsheet IsNot Nothing AndAlso
                     DirectCast(Me.CurrentMaterialStream, ISimulationObject).PreferredFlashAlgorithmTag <> "" Then
-                    dim fs = Me.CurrentMaterialStream.Flowsheet
+                    Dim fs = Me.CurrentMaterialStream.Flowsheet
                     Dim fa = fs.FlowsheetOptions.FlashAlgorithms.Where(Function(x) x.Tag = DirectCast(Me.CurrentMaterialStream, ISimulationObject).PreferredFlashAlgorithmTag).FirstOrDefault
                     If Not fa Is Nothing Then Return fa.Clone Else Return fs.FlowsheetOptions.FlashAlgorithms(0).Clone
 
@@ -5532,94 +5534,96 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
 
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overridable Function AUX_CPi(ByVal sub1 As String, ByVal T As Double) As Double
 
-            If Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.IsPF = 1 Then
+            Dim compoundConstantProperties As ICompoundConstantProperties = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties
+            If compoundConstantProperties.IsPF = 1 Then
 
-                With Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties
+                With compoundConstantProperties
                     Return Auxiliary.PROPS.Cpig_lk(.PF_Watson_K, .Acentric_Factor, T) '* .Molar_Weight
                 End With
 
             Else
 
-                If Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.OriginalDB = "DWSIM" Or
-                Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.OriginalDB = "" Then
+                If String.Equals(compoundConstantProperties.OriginalDB, "DWSIM", StringComparison.Ordinal) Or
+                compoundConstantProperties.OriginalDB = "" Then
                     Dim A, B, C, D, E, result As Double
-                    A = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
-                    B = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
-                    C = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
-                    D = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
-                    E = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
+                    A = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
+                    B = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
+                    C = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
+                    D = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
+                    E = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
                     'Cp = A + B*T + C*T^2 + D*T^3 + E*T^4 where Cp in kJ/kg-mol , T in K 
                     result = A + B * T + C * T ^ 2 + D * T ^ 3 + E * T ^ 4
-                    Return result / Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Molar_Weight 'kJ/kg.K
-                ElseIf Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.OriginalDB = "CheResources" Then
+                    Return result / compoundConstantProperties.Molar_Weight 'kJ/kg.K
+                ElseIf String.Equals(compoundConstantProperties.OriginalDB = "CheResources", StringComparison.Ordinal) Then
                     Dim A, B, C, D, E, result As Double
-                    A = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
-                    B = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
-                    C = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
-                    D = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
-                    E = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
+                    A = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
+                    B = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
+                    C = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
+                    D = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
+                    E = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
                     'CAL/MOL.K [CP=A+(B*T)+(C*T^2)+(D*T^3)], T in K
                     result = A + B * T + C * T ^ 2 + D * T ^ 3
-                    Return result / Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Molar_Weight * 4.1868 'kJ/kg.K
-                ElseIf Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.OriginalDB = "ChemSep" Or
-                Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.OriginalDB = "ChEDL Thermo" Or
-                Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.OriginalDB = "User" Then
+                    Return result / compoundConstantProperties.Molar_Weight * 4.1868 'kJ/kg.K
+                ElseIf String.Equals(compoundConstantProperties.OriginalDB = "ChemSep", StringComparison.Ordinal) Or
+                        String.Equals(compoundConstantProperties.OriginalDB = "ChEDL Thermo", StringComparison.Ordinal) Or
+                        String.Equals(compoundConstantProperties.OriginalDB = "User", StringComparison.Ordinal) Then
                     Dim A, B, C, D, E, result As Double
-                    Dim eqno As String = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.IdealgasCpEquation
-                    Dim mw As Double = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Molar_Weight
-                    A = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
-                    B = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
-                    C = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
-                    D = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
-                    E = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
+                    Dim eqno As String = compoundConstantProperties.IdealgasCpEquation
+                    Dim mw As Double = compoundConstantProperties.Molar_Weight
+                    A = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
+                    B = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
+                    C = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
+                    D = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
+                    E = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
                     If Integer.TryParse(eqno, New Integer) Then
                         result = Me.CalcCSTDepProp(eqno, A, B, C, D, E, T, 0) / 1000 / mw 'kJ/kg.K
                     Else
                         result = Me.ParseEquation(eqno, A, B, C, D, E, T) / mw
                     End If
                     If result = 0.0 Then Return 3.5 * 8.314 / mw Else Return result
-                ElseIf Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.OriginalDB = "ChEDL Thermo" Then
+                ElseIf String.Equals(compoundConstantProperties.OriginalDB = "ChEDL Thermo", StringComparison.Ordinal) Then
                     Dim A, B, C, D, E, result As Double
-                    Dim eqno As String = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.IdealgasCpEquation
-                    A = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
-                    B = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
-                    C = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
-                    D = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
-                    E = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
+                    Dim eqno As String = compoundConstantProperties.IdealgasCpEquation
+                    A = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
+                    B = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
+                    C = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
+                    D = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
+                    E = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
                     result = Me.CalcCSTDepProp(eqno, A, B, C, D, E, T, 0) 'kJ/kg.K
                     Return result
-                ElseIf Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.OriginalDB = "CoolProp" Then
+                ElseIf String.Equals(compoundConstantProperties.OriginalDB = "CoolProp", StringComparison.Ordinal) Then
                     Dim A, B, C, D, E, result As Double
-                    Dim eqno As String = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.IdealgasCpEquation
-                    Dim mw As Double = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Molar_Weight
-                    A = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
-                    B = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
-                    C = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
-                    D = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
-                    E = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
+                    Dim eqno As String = compoundConstantProperties.IdealgasCpEquation
+                    Dim mw As Double = compoundConstantProperties.Molar_Weight
+                    A = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
+                    B = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
+                    C = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
+                    D = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
+                    E = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
                     result = Me.CalcCSTDepProp(eqno, A, B, C, D, E, T, 0) 'kJ/kg.K
                     Return result
-                ElseIf Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.OriginalDB = "Biodiesel" Then
+                ElseIf String.Equals(compoundConstantProperties.OriginalDB = "Biodiesel", StringComparison.Ordinal) Then
                     Dim A, B, C, D, E, result As Double
-                    Dim eqno As String = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.IdealgasCpEquation
-                    A = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
-                    B = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
-                    C = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
-                    D = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
-                    E = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
+                    Dim eqno As String = compoundConstantProperties.IdealgasCpEquation
+                    A = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
+                    B = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
+                    C = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
+                    D = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
+                    E = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
                     result = Me.CalcCSTDepProp(eqno, A, B, C, D, E, T, 0) 'kJ/kg.K
                     Return result
-                ElseIf Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.OriginalDB = "KDB" Then
+                ElseIf String.Equals(compoundConstantProperties.OriginalDB = "KDB", StringComparison.Ordinal) Then
                     Dim A, B, C, D, E As Double
-                    Dim eqno As String = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.IdealgasCpEquation
-                    A = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
-                    B = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
-                    C = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
-                    D = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
-                    E = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
-                    Dim mw As Double = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Molar_Weight
+                    Dim eqno As String = compoundConstantProperties.IdealgasCpEquation
+                    A = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
+                    B = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
+                    C = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
+                    D = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
+                    E = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
+                    Dim mw As Double = compoundConstantProperties.Molar_Weight
                     Return Me.ParseEquation(eqno, A, B, C, D, E, T) / mw
                 Else
                     Return 0
@@ -6922,13 +6926,21 @@ Final3:
                 Dim Ti As Double
 
                 Ti = T1 + deltaT / 2
-
-                Dim integrals(nsteps - 1) As Double
+                'Using filestr As Stream = Assembly.GetAssembly(t0).GetManifestResourceStream("DWSIM.Thermodynamics.henry.txt")
+                ' Using ArrayPool(Of Double).Shared.Rent(nsteps - 1)
+                ' alexander speed of memory allocation https://adamsitnik.com/Array-Pool/
+                'alexander grab array from pool
+                Dim samePool = ArrayPool(Of Double).Shared
+                Dim integrals = samePool.Rent(nsteps - 1)
+                ' Dim integrals(nsteps - 1) As Double
                 Parallel.For(0, nsteps, Sub(ii)
                                             integrals(ii) = AUX_CPi(subst, Ti + ii * deltaT)
                                         End Sub)
 
-                Dim outval = integrals.SumY * deltaT
+                Dim outval = integrals.SumY(nsteps - 1) * deltaT
+
+                'alexander release array to pool
+                samePool.Return(integrals)
 
                 Return outval
 
@@ -8001,6 +8013,7 @@ Final3:
 
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Function CalcCSTDepProp(ByVal eqno As String, ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double) As Double
 
             Dim Tr As Double = T / Tc
@@ -8090,6 +8103,7 @@ Final3:
 
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Function ParseEquation(ByVal expression As String, ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double) As Double
 
             If expression = "" Then Return 0.0

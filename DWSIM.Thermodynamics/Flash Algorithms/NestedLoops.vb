@@ -24,6 +24,7 @@ Imports DWSIM.MathOps.MathEx.Common
 
 Imports System.Threading.Tasks
 Imports System.Linq
+Imports System.Runtime.CompilerServices
 
 Namespace PropertyPackages.Auxiliary.FlashAlgorithms
 
@@ -2190,6 +2191,7 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
 
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Function OBJ_FUNC_PH_FLASH(ByVal Type As String, ByVal X As Double, ByVal P As Double, ByVal Vz() As Double, ByVal PP As PropertyPackages.PropertyPackage) As Object
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
@@ -2201,7 +2203,8 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
             IObj?.SetCurrent()
 
             Dim n As Integer = Vz.Length - 1
-            Dim L, V, Vx(), Vy(), _Hl, _Hv, T As Double
+            Dim L, V, _Hl, _Hv, T As Double
+            Dim Vx(), Vy() As Double
 
             If Type = "PT" Then
                 Dim tmp = Me.Flash_PT(Vz, P, X, PP)
@@ -2255,8 +2258,9 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
 
             IObj?.Close()
 
-            WriteDebugInfo("PH Flash [NL]: Current T = " & T & ", Current H Error = " & herr)
-
+            If 1 <= Settings.DebugLevel Then
+                WriteDebugInfo("PH Flash [NL]: Current T = " & T & ", Current H Error = " & herr)
+            End If
             If Not PP.CurrentMaterialStream.Flowsheet Is Nothing Then PP.CurrentMaterialStream.Flowsheet.CheckStatus()
 
         End Function
@@ -2328,7 +2332,7 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
             If Not PP.CurrentMaterialStream.Flowsheet Is Nothing Then PP.CurrentMaterialStream.Flowsheet.CheckStatus()
 
         End Function
-
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Function Herror(ByVal type As String, ByVal X As Double, ByVal P As Double, ByVal Vz() As Double, ByVal PP As PropertyPackages.PropertyPackage) As Object
             Return OBJ_FUNC_PH_FLASH(type, X, P, Vz, PP)
         End Function

@@ -23,6 +23,7 @@ Imports Cudafy.Host
 Imports System.Math
 Imports System.Threading.Tasks
 Imports System.Linq
+Imports System.Runtime.CompilerServices
 Imports DWSIM.MathOps.MathEx.PolySolve
 
 Namespace PropertyPackages.ThermoPlugs
@@ -63,6 +64,7 @@ Namespace PropertyPackages.ThermoPlugs
 
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Shared Function Calc_SUM1(n As Integer, ai As Double(), vkij As Double(,))
 
             Dim a(n, n) As Double
@@ -91,6 +93,7 @@ Namespace PropertyPackages.ThermoPlugs
 
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Shared Function Calc_SUM2(n As Integer, Vx As Double(), a As Double(,)) As Object
 
             Dim saml, aml(n), aml2(n) As Double
@@ -725,6 +728,7 @@ Namespace PropertyPackages.ThermoPlugs
 
         End Sub
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Shared Function CalcZ(ByVal T As Double, ByVal P As Double, ByVal Vx As Double(), ByVal VKij As Double(,), ByVal VTc As Double(), ByVal VPc As Double(), ByVal Vw As Double()) As List(Of Double)
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()

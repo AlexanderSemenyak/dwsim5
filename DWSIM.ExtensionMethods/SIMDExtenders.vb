@@ -1,4 +1,5 @@
-﻿Imports DWSIM.GlobalSettings
+﻿Imports System.Runtime.CompilerServices
+Imports DWSIM.GlobalSettings
 Imports DWSIM.MathOps
 
 Public Module SIMDExtenders
@@ -85,12 +86,32 @@ Public Module SIMDExtenders
     ''' <param name="vector"></param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    <System.Runtime.CompilerServices.Extension()> Public Function SumY(vector As Double()) As Double
+    <System.Runtime.CompilerServices.Extension()>
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
+    Public Function SumY(vector As Double()) As Double
 
         If Settings.UseSIMDExtensions Then
             Return Yeppp.Core.Sum_V64f_S64f(vector, 0, vector.Length)
         Else
             Return MathEx.Common.Sum(vector)
+        End If
+
+    End Function
+
+    ''' <summary>
+    ''' Alexander -> Sum of the vector elements.
+    ''' </summary>
+    ''' <param name="vector"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    <System.Runtime.CompilerServices.Extension()>
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
+    Public Function SumY(vector As Double(), count As Integer) As Double
+
+        If Settings.UseSIMDExtensions Then
+            Return Yeppp.Core.Sum_V64f_S64f(vector, 0, count) 'vector.Length)
+        Else
+            Return MathEx.Common.Sum(vector, count)
         End If
 
     End Function

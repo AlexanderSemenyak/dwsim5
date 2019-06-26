@@ -22,6 +22,9 @@
 Imports DWSIM.Interfaces.Enums
 Imports DWSIM.Thermodynamics.PropertyPackages
 Imports System.Math
+Imports System.Runtime.CompilerServices
+Imports DWSIM.Interfaces
+Imports DWSIM.Thermodynamics.PropertyPackages.Auxiliary
 
 Namespace PropertyPackages
 
@@ -83,15 +86,19 @@ Namespace PropertyPackages
         End Sub
 
 #Region "    DWSIM Functions"
-
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function RET_KIJ(ByVal id1 As String, ByVal id2 As String) As Double
-            If Me.m_pr.InteractionParameters.ContainsKey(id1) Then
-                If Me.m_pr.InteractionParameters(id1).ContainsKey(id2) Then
-                    Return m_pr.InteractionParameters(id1)(id2).kij
+            Dim interactionParameters = Me.m_pr.InteractionParameters
+            Dim child As Dictionary(Of String, PR_IPData)
+            Dim reslt As PR_IPData
+
+            If interactionParameters.TryGetValue(id1, child) Then
+                If child.TryGetValue(id2, reslt) Then
+                    Return reslt.kij
                 Else
-                    If Me.m_pr.InteractionParameters.ContainsKey(id2) Then
-                        If Me.m_pr.InteractionParameters(id2).ContainsKey(id1) Then
-                            Return m_pr.InteractionParameters(id2)(id1).kij
+                    If interactionParameters.TryGetValue(id2, child) Then
+                        If child.TryGetValue(id1, reslt) Then
+                            Return reslt.kij
                         Else
                             Return 0
                         End If
@@ -104,16 +111,19 @@ Namespace PropertyPackages
             End If
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function RET_VKij() As Double(,)
 
-            Dim val(Me.CurrentMaterialStream.Phases(0).Compounds.Count - 1, Me.CurrentMaterialStream.Phases(0).Compounds.Count - 1) As Double
+            Dim compounds = Me.CurrentMaterialStream.Phases(0).Compounds
+
+            Dim val(compounds.Count - 1, compounds.Count - 1) As Double
             Dim i As Integer = 0
             Dim l As Integer = 0
 
             i = 0
-            For Each cp As Interfaces.ICompound In Me.CurrentMaterialStream.Phases(0).Compounds.Values
+            For Each cp As Interfaces.ICompound In compounds.Values
                 l = 0
-                For Each cp2 As Interfaces.ICompound In Me.CurrentMaterialStream.Phases(0).Compounds.Values
+                For Each cp2 As Interfaces.ICompound In compounds.Values
                     val(i, l) = Me.RET_KIJ(cp.Name, cp2.Name)
                     l = l + 1
                 Next
@@ -767,6 +777,7 @@ Namespace PropertyPackages
 
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function DW_CalcEntropyDeparture(ByVal Vx As System.Array, ByVal T As Double, ByVal P As Double, ByVal st As State) As Double
             Dim S As Double
 
@@ -781,12 +792,14 @@ Namespace PropertyPackages
             Return S
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overrides Function DW_CalcFugCoeff(ByVal Vx As System.Array, ByVal T As Double, ByVal P As Double, ByVal st As State) As Double()
 
-            Calculator.WriteToConsole(Me.ComponentName & " fugacity coefficient calculation for phase '" & st.ToString & "' requested at T = " & T & " K and P = " & P & " Pa.", 2)
-            Calculator.WriteToConsole("Compounds: " & Me.RET_VNAMES.ToArrayString, 2)
-            Calculator.WriteToConsole("Mole fractions: " & Vx.ToArrayString(), 2)
-
+            If 2 <= Settings.DebugLevel Then
+                Calculator.WriteToConsole(Me.ComponentName & " fugacity coefficient calculation for phase '" & st.ToString & "' requested at T = " & T & " K and P = " & P & " Pa.", 2)
+                Calculator.WriteToConsole("Compounds: " & Me.RET_VNAMES.ToArrayString, 2)
+                Calculator.WriteToConsole("Mole fractions: " & Vx.ToArrayString(), 2)
+            End If
             Dim prn As New PropertyPackages.ThermoPlugs.PR
 
             Dim lnfug As Object
@@ -805,7 +818,9 @@ Namespace PropertyPackages
                 fugcoeff(i) = Exp(lnfug(i))
             Next
 
-            Calculator.WriteToConsole("Result: " & fugcoeff.ToArrayString(), 2)
+            If 2 <= Settings.DebugLevel Then
+                Calculator.WriteToConsole("Result: " & fugcoeff.ToArrayString(), 2)
+            End If
 
             Return fugcoeff
 
