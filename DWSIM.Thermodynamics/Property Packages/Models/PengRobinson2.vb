@@ -16,6 +16,7 @@
 '    You should have received a copy of the GNU General Public License
 '    along with DWSIM.  If not, see <http://www.gnu.org/licenses/>.
 
+Imports System.Collections.Concurrent
 Imports DWSIM.MathOps.MathEx
 Imports Cudafy
 Imports Cudafy.Translator
@@ -40,12 +41,12 @@ Namespace PropertyPackages.ThermoPlugs
             aux1 = -8.314 / 2 * (0.45724 / T) ^ 0.5
 
             If Settings.EnableParallelProcessing Then
-                Dim poptions As New ParallelOptions() With {.MaxDegreeOfParallelism = Settings.MaxDegreeOfParallelism, .TaskScheduler = Settings.AppTaskScheduler}
-                Parallel.For(0, n + 1, poptions, Sub(k)
-                                                     For l As Integer = 0 To n
-                                                         auxtmp(k) += Vz(k) * Vz(l) * (1 - VKij(k, l)) * (ci(l) * (ai(k) * Tc(l) / Pc(l)) ^ 0.5 + ci(k) * (ai(l) * Tc(k) / Pc(k)) ^ 0.5)
-                                                     Next
-                                                 End Sub)
+                'Dim poptions As New ParallelOptions() With {.MaxDegreeOfParallelism = Settings.MaxDegreeOfParallelism, .TaskScheduler = Settings.AppTaskScheduler}
+                Parallel.For(0, n + 1, Settings.poptions, Sub(k)
+                                                              For l As Integer = 0 To n
+                                                                  auxtmp(k) += Vz(k) * Vz(l) * (1 - VKij(k, l)) * (ci(l) * (ai(k) * Tc(l) / Pc(l)) ^ 0.5 + ci(k) * (ai(l) * Tc(k) / Pc(k)) ^ 0.5)
+                                                              Next
+                                                          End Sub)
                 aux2 = auxtmp.SumY
             Else
                 Dim i, j As Integer
@@ -70,12 +71,12 @@ Namespace PropertyPackages.ThermoPlugs
             Dim a(n, n) As Double
 
             If Settings.EnableParallelProcessing Then
-                Dim poptions As New ParallelOptions() With {.MaxDegreeOfParallelism = Settings.MaxDegreeOfParallelism, .TaskScheduler = Settings.AppTaskScheduler}
-                Parallel.For(0, n + 1, poptions, Sub(k)
-                                                     For j As Integer = 0 To n
-                                                         a(k, j) = (ai(k) * ai(j)) ^ 0.5 * (1 - vkij(k, j))
-                                                     Next
-                                                 End Sub)
+                'Dim poptions As New ParallelOptions() With {.MaxDegreeOfParallelism = Settings.MaxDegreeOfParallelism, .TaskScheduler = Settings.AppTaskScheduler}
+                Parallel.For(0, n + 1, Settings.poptions, Sub(k)
+                                                              For j As Integer = 0 To n
+                                                                  a(k, j) = (ai(k) * ai(j)) ^ 0.5 * (1 - vkij(k, j))
+                                                              Next
+                                                          End Sub)
             Else
                 Dim i, j As Integer
                 i = 0
@@ -96,16 +97,20 @@ Namespace PropertyPackages.ThermoPlugs
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Shared Function Calc_SUM2(n As Integer, Vx As Double(), a As Double(,)) As Object
 
-            Dim saml, aml(n), aml2(n) As Double
+            Dim saml, aml2(n) As Double
 
             If Settings.EnableParallelProcessing Then
-                Dim poptions As New ParallelOptions() With {.MaxDegreeOfParallelism = Settings.MaxDegreeOfParallelism, .TaskScheduler = Settings.AppTaskScheduler}
-                Parallel.For(0, n + 1, poptions, Sub(k)
-                                                     For j As Integer = 0 To n
-                                                         aml(k) += Vx(k) * Vx(j) * a(k, j)
-                                                         aml2(k) += Vx(j) * a(j, k)
-                                                     Next
-                                                 End Sub)
+                Dim aml(n) As Double
+
+                ' Dim rangePartitioner = Partitioner.Create(0, source.Length);
+
+                'Dim poptions As New ParallelOptions() With {.MaxDegreeOfParallelism = Settings.MaxDegreeOfParallelism, .TaskScheduler = Settings.AppTaskScheduler}
+                Parallel.For(0, n + 1, Settings.poptions, Sub(k)
+                                                              For j As Integer = 0 To n
+                                                                  aml(k) += Vx(k) * Vx(j) * a(k, j)
+                                                                  aml2(k) += Vx(j) * a(j, k)
+                                                              Next
+                                                          End Sub)
                 saml = aml.SumY
             Else
                 Dim i, j As Integer
@@ -248,13 +253,13 @@ Namespace PropertyPackages.ThermoPlugs
             Loop Until i = n + 1
 
             If Settings.EnableParallelProcessing Then
-                Dim poptions As New ParallelOptions() With {.MaxDegreeOfParallelism = Settings.MaxDegreeOfParallelism, .TaskScheduler = Settings.AppTaskScheduler}
-                Parallel.For(0, n + 1, poptions, Sub(ii)
-                                                     alpha(ii) = (1 + (0.37464 + 1.54226 * w(ii) - 0.26992 * w(ii) ^ 2) * (1 - (T / Tc(ii)) ^ 0.5)) ^ 2
-                                                     ai(ii) = 0.45724 * alpha(ii) * R ^ 2 * Tc(ii) ^ 2 / Pc(ii)
-                                                     bi(ii) = 0.0778 * R * Tc(ii) / Pc(ii)
-                                                     ci(ii) = 0.37464 + 1.54226 * w(ii) - 0.26992 * w(ii) ^ 2
-                                                 End Sub)
+                'Dim poptions As New ParallelOptions() With {.MaxDegreeOfParallelism = Settings.MaxDegreeOfParallelism, .TaskScheduler = Settings.AppTaskScheduler}
+                Parallel.For(0, n + 1, Settings.poptions, Sub(ii)
+                                                              alpha(ii) = (1 + (0.37464 + 1.54226 * w(ii) - 0.26992 * w(ii) ^ 2) * (1 - (T / Tc(ii)) ^ 0.5)) ^ 2
+                                                              ai(ii) = 0.45724 * alpha(ii) * R ^ 2 * Tc(ii) ^ 2 / Pc(ii)
+                                                              bi(ii) = 0.0778 * R * Tc(ii) / Pc(ii)
+                                                              ci(ii) = 0.37464 + 1.54226 * w(ii) - 0.26992 * w(ii) ^ 2
+                                                          End Sub)
             Else
                 i = 0
                 Do
@@ -358,55 +363,56 @@ Namespace PropertyPackages.ThermoPlugs
 
             Inspector.Host.CheckAndAdd(IObj, "", "CalcLnFugCPU", "Peng-Robinson EOS Fugacity Coefficient (CPU)", "Peng-Robinson EOS Fugacity Coefficient Calculation Routine")
 
-            IObj?.Paragraphs.Add("The Peng-Robinson equation is a cubic Equation of State (characteristic related to the exponent of the molar volume) 
+            If Not IObj Is Nothing Then
+                IObj.Paragraphs.Add("The Peng-Robinson equation is a cubic Equation of State (characteristic related to the exponent of the molar volume) 
                                     which relates temperature, pressure And molar volume of a pure component or a mixture of components at equilibrium. The cubic 
                                     equations are, in fact, The simplest equations capable of representing The behavior of liquid And vapor phases simultaneously.
                                     The Peng-Robinson EOS is written in the following form")
-            IObj?.Paragraphs.Add("<math>P=\frac{RT}{(V-b)}-\frac{a(T)}{V(V+b)+b(V-b)}<math>")
-            IObj?.Paragraphs.Add("where")
-            IObj?.Paragraphs.Add("<math_inline>P</math_inline> pressure")
-            IObj?.Paragraphs.Add("<math_inline>R</math_inline> ideal gas universal constant")
-            IObj?.Paragraphs.Add("<math_inline>v</math_inline> molar volume")
-            IObj?.Paragraphs.Add("<math_inline>b</math_inline> parameter related to hard-sphere volume")
-            IObj?.Paragraphs.Add("<math_inline>a</math_inline> parameter related to intermolecular forces")
-            IObj?.Paragraphs.Add("For pure substances, the a and b parameters are given by:")
-            IObj?.Paragraphs.Add("<math>a(T)=[1+(0.37464+1.54226\omega-0.26992\omega^{2})(1-T_{r}^{(1/2)})]^{2}0.45724(R^{2}T_{c}^{2})/P_{c}</math>")
-            IObj?.Paragraphs.Add("<math>b=0.07780(RT_{c})/P_{c}</math>")
-            IObj?.Paragraphs.Add("where")
-            IObj?.Paragraphs.Add("<math_inline>\omega</math_inline> acentric factor")
-            IObj?.Paragraphs.Add("<math_inline>T_{c}</math_inline> critical temperature ")
-            IObj?.Paragraphs.Add("<math_inline>P_{c}</math_inline> critical pressure")
-            IObj?.Paragraphs.Add("<math_inline>T_{r}</math_inline> reduced temperature, T/Tc")
-            IObj?.Paragraphs.Add("For mixtures, the above equation can be used, replacing a and b by mixture-representative values. Mixture a and b values are normally given by the basic mixing rule,")
-            IObj?.Paragraphs.Add("<math>a_{m}=\sum_{i}\sum_{j}x_{i}x_{j}\sqrt{(a_{i}a_{j})}(1-k_{ij})</math>")
-            IObj?.Paragraphs.Add("<math>b_{m}=\sum_{i}x_{i}b_{i}</math>")
-            IObj?.Paragraphs.Add("where")
-            IObj?.Paragraphs.Add("<math_inline>x_{i,j}</math_inline> molar fraction of the i Or j component in the phase (liquid Or vapor)")
-            IObj?.Paragraphs.Add("<math_inline>a_{i,j}</math_inline> i Or j component a constant ")
-            IObj?.Paragraphs.Add("<math_inline>b_{i,j}</math_inline> i Or j component b constant")
-            IObj?.Paragraphs.Add("<math_inline>k_{ij}</math_inline> binary interaction parameter which characterizes the i-j pair")
-            IObj?.Paragraphs.Add("The fugacity coefficient obtained with the Peng-Robinson EOS in given by")
-            IObj?.Paragraphs.Add("<math>\ln\frac{f_{i}}{x_{i}P}=\frac{b_{i}}{b_{m}}\left(Z-1\right)-\ln\left(Z-B\right)-\frac{A}{2\sqrt{2}B}\left(\frac{\sum_{k}x_{k}a_{ki}}{a_{m}}-\frac{b_{i}}{b_{m}}\right)\ln\left(\frac{Z+2,414B}{Z-0,414B}\right),</math>")
-            IObj?.Paragraphs.Add("where Z Is the phase compressibility factor (liquid or vapor) and can be obtained from the equation")
-            IObj?.Paragraphs.Add("<math>Z^ {3} - (1 - b)Z^{2}+(A-3B^{2}-2B)Z-(AB-B^{2}-2B)=0,</math>")
-            IObj?.Paragraphs.Add("<math>A =\frac{a_{m}P}{R^{2}T^{2}}</math>")
-            IObj?.Paragraphs.Add("<math>B =\frac{b_{m}P}{RT}</math>")
-            IObj?.Paragraphs.Add("<math>Z =\frac{PV}{RT}</math>")
+                IObj.Paragraphs.Add("<math>P=\frac{RT}{(V-b)}-\frac{a(T)}{V(V+b)+b(V-b)}<math>")
+                IObj.Paragraphs.Add("where")
+                IObj.Paragraphs.Add("<math_inline>P</math_inline> pressure")
+                IObj.Paragraphs.Add("<math_inline>R</math_inline> ideal gas universal constant")
+                IObj.Paragraphs.Add("<math_inline>v</math_inline> molar volume")
+                IObj.Paragraphs.Add("<math_inline>b</math_inline> parameter related to hard-sphere volume")
+                IObj.Paragraphs.Add("<math_inline>a</math_inline> parameter related to intermolecular forces")
+                IObj.Paragraphs.Add("For pure substances, the a and b parameters are given by:")
+                IObj.Paragraphs.Add("<math>a(T)=[1+(0.37464+1.54226\omega-0.26992\omega^{2})(1-T_{r}^{(1/2)})]^{2}0.45724(R^{2}T_{c}^{2})/P_{c}</math>")
+                IObj.Paragraphs.Add("<math>b=0.07780(RT_{c})/P_{c}</math>")
+                IObj.Paragraphs.Add("where")
+                IObj.Paragraphs.Add("<math_inline>\omega</math_inline> acentric factor")
+                IObj.Paragraphs.Add("<math_inline>T_{c}</math_inline> critical temperature ")
+                IObj.Paragraphs.Add("<math_inline>P_{c}</math_inline> critical pressure")
+                IObj.Paragraphs.Add("<math_inline>T_{r}</math_inline> reduced temperature, T/Tc")
+                IObj.Paragraphs.Add("For mixtures, the above equation can be used, replacing a and b by mixture-representative values. Mixture a and b values are normally given by the basic mixing rule,")
+                IObj.Paragraphs.Add("<math>a_{m}=\sum_{i}\sum_{j}x_{i}x_{j}\sqrt{(a_{i}a_{j})}(1-k_{ij})</math>")
+                IObj.Paragraphs.Add("<math>b_{m}=\sum_{i}x_{i}b_{i}</math>")
+                IObj.Paragraphs.Add("where")
+                IObj.Paragraphs.Add("<math_inline>x_{i,j}</math_inline> molar fraction of the i Or j component in the phase (liquid Or vapor)")
+                IObj.Paragraphs.Add("<math_inline>a_{i,j}</math_inline> i Or j component a constant ")
+                IObj.Paragraphs.Add("<math_inline>b_{i,j}</math_inline> i Or j component b constant")
+                IObj.Paragraphs.Add("<math_inline>k_{ij}</math_inline> binary interaction parameter which characterizes the i-j pair")
+                IObj.Paragraphs.Add("The fugacity coefficient obtained with the Peng-Robinson EOS in given by")
+                IObj.Paragraphs.Add("<math>\ln\frac{f_{i}}{x_{i}P}=\frac{b_{i}}{b_{m}}\left(Z-1\right)-\ln\left(Z-B\right)-\frac{A}{2\sqrt{2}B}\left(\frac{\sum_{k}x_{k}a_{ki}}{a_{m}}-\frac{b_{i}}{b_{m}}\right)\ln\left(\frac{Z+2,414B}{Z-0,414B}\right),</math>")
+                IObj.Paragraphs.Add("where Z Is the phase compressibility factor (liquid or vapor) and can be obtained from the equation")
+                IObj.Paragraphs.Add("<math>Z^ {3} - (1 - b)Z^{2}+(A-3B^{2}-2B)Z-(AB-B^{2}-2B)=0,</math>")
+                IObj.Paragraphs.Add("<math>A =\frac{a_{m}P}{R^{2}T^{2}}</math>")
+                IObj.Paragraphs.Add("<math>B =\frac{b_{m}P}{RT}</math>")
+                IObj.Paragraphs.Add("<math>Z =\frac{PV}{RT}</math>")
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
+                IObj.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
 
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
-            IObj?.Paragraphs.Add(String.Format("Pressure: {0} Pa", P))
-            IObj?.Paragraphs.Add(String.Format("Mole Fractions: {0}", Vx.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Interaction Parameters: {0}", VKij.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Critical Temperatures: {0} K", Tc.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Critical Pressures: {0} Pa", Pc.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Acentric Factors: {0} ", w.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("State: {0}", forcephase))
+                IObj.Paragraphs.Add(String.Format("Temperature: {0} K", T))
+                IObj.Paragraphs.Add(String.Format("Pressure: {0} Pa", P))
+                IObj.Paragraphs.Add(String.Format("Mole Fractions: {0}", Vx.ToMathArrayString))
+                IObj.Paragraphs.Add(String.Format("Interaction Parameters: {0}", VKij.ToMathArrayString))
+                IObj.Paragraphs.Add(String.Format("Critical Temperatures: {0} K", Tc.ToMathArrayString))
+                IObj.Paragraphs.Add(String.Format("Critical Pressures: {0} Pa", Pc.ToMathArrayString))
+                IObj.Paragraphs.Add(String.Format("Acentric Factors: {0} ", w.ToMathArrayString))
+                IObj.Paragraphs.Add(String.Format("State: {0}", forcephase))
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Calculated Intermediate Parameters</h2>"))
-
-            Dim n As Integer, R, coeff(3) As Double
+                IObj.Paragraphs.Add(String.Format("<h2>Calculated Intermediate Parameters</h2>"))
+            End If
+            Dim n As Integer, R As Double
             Dim Vant(0, 4) As Double
             Dim criterioOK As Boolean = False
             Dim AG, BG, aml, bml As Double
@@ -429,12 +435,12 @@ Namespace PropertyPackages.ThermoPlugs
 
 
             If Settings.EnableParallelProcessing Then
-                Dim poptions As New ParallelOptions() With {.MaxDegreeOfParallelism = Settings.MaxDegreeOfParallelism, .TaskScheduler = Settings.AppTaskScheduler}
-                Parallel.For(0, n + 1, poptions, Sub(ii)
-                                                     alpha(ii) = (1 + (0.37464 + 1.54226 * w(ii) - 0.26992 * w(ii) ^ 2) * (1 - (T / Tc(ii)) ^ 0.5)) ^ 2
-                                                     ai(ii) = 0.45724 * alpha(ii) * R ^ 2 * Tc(ii) ^ 2 / Pc(ii)
-                                                     bi(ii) = 0.0778 * R * Tc(ii) / Pc(ii)
-                                                 End Sub)
+                ' Dim poptions As New ParallelOptions() With {.MaxDegreeOfParallelism = Settings.MaxDegreeOfParallelism, .TaskScheduler = Settings.AppTaskScheduler}
+                Parallel.For(0, n + 1, Settings.poptions, Sub(ii)
+                                                              alpha(ii) = (1 + (0.37464 + 1.54226 * w(ii) - 0.26992 * w(ii) ^ 2) * (1 - (T / Tc(ii)) ^ 0.5)) ^ 2
+                                                              ai(ii) = 0.45724 * alpha(ii) * R ^ 2 * Tc(ii) ^ 2 / Pc(ii)
+                                                              bi(ii) = 0.0778 * R * Tc(ii) / Pc(ii)
+                                                          End Sub)
             Else
                 i = 0
                 Do
@@ -494,17 +500,17 @@ Namespace PropertyPackages.ThermoPlugs
             Dim Pcorr As Double = P
 
             If Settings.EnableParallelProcessing Then
-                Dim poptions As New ParallelOptions() With {.MaxDegreeOfParallelism = Settings.MaxDegreeOfParallelism, .TaskScheduler = Settings.AppTaskScheduler}
-                Parallel.For(0, n + 1, poptions, Sub(ii)
-                                                     Dim t1, t2, t3, t4, t5 As Double
-                                                     t1 = bi(ii) * (Z - 1) / bml
-                                                     t2 = -Math.Log(Z - BG)
-                                                     t3 = AG * (2 * aml2(ii) / aml - bi(ii) / bml)
-                                                     t4 = Math.Log((Z + (1 + 2 ^ 0.5) * BG) / (Z + (1 - 2 ^ 0.5) * BG))
-                                                     t5 = 2 * 2 ^ 0.5 * BG
-                                                     LN_CF(ii) = t1 + t2 - (t3 * t4 / t5)
-                                                     LN_CF(ii) = LN_CF(ii) + Math.Log(Pcorr / P)
-                                                 End Sub)
+                'Dim poptions As New ParallelOptions() With {.MaxDegreeOfParallelism = Settings.MaxDegreeOfParallelism, .TaskScheduler = Settings.AppTaskScheduler}
+                Parallel.For(0, n + 1, Settings.poptions, Sub(ii)
+                                                              Dim t1, t2, t3, t4, t5 As Double
+                                                              t1 = bi(ii) * (Z - 1) / bml
+                                                              t2 = -Math.Log(Z - BG)
+                                                              t3 = AG * (2 * aml2(ii) / aml - bi(ii) / bml)
+                                                              t4 = Math.Log((Z + (1 + 2 ^ 0.5) * BG) / (Z + (1 - 2 ^ 0.5) * BG))
+                                                              t5 = 2 * 2 ^ 0.5 * BG
+                                                              LN_CF(ii) = t1 + t2 - (t3 * t4 / t5)
+                                                              LN_CF(ii) = LN_CF(ii) + Math.Log(Pcorr / P)
+                                                          End Sub)
             Else
                 Dim t1, t2, t3, t4, t5 As Double
                 i = 0
@@ -519,13 +525,13 @@ Namespace PropertyPackages.ThermoPlugs
                     i = i + 1
                 Loop Until i = n + 1
             End If
+            If Not IObj Is Nothing Then
+                IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
+                IObj?.Paragraphs.Add(String.Format("Fugacity Coefficients: {0}", LN_CF.ExpY().ToMathArrayString))
 
-            IObj?.Paragraphs.Add(String.Format("Fugacity Coefficients: {0}", LN_CF.ExpY().ToMathArrayString))
-
-            IObj?.Close()
-
+                IObj?.Close()
+            End If
             Return LN_CF
 
         End Function
@@ -775,12 +781,12 @@ Namespace PropertyPackages.ThermoPlugs
             Loop Until i = n + 1
 
             If Settings.EnableParallelProcessing Then
-                Dim poptions As New ParallelOptions() With {.MaxDegreeOfParallelism = Settings.MaxDegreeOfParallelism, .TaskScheduler = Settings.AppTaskScheduler}
-                Parallel.For(0, n + 1, poptions, Sub(ii)
-                                                     alpha(ii) = (1 + (0.37464 + 1.54226 * W(ii) - 0.26992 * W(ii) ^ 2) * (1 - (T / Tc(ii)) ^ 0.5)) ^ 2
-                                                     ai(ii) = 0.45724 * alpha(ii) * R ^ 2 * Tc(ii) ^ 2 / Pc(ii)
-                                                     bi(ii) = 0.0778 * R * Tc(ii) / Pc(ii)
-                                                 End Sub)
+                'Dim poptions As New ParallelOptions() With {.MaxDegreeOfParallelism = Settings.MaxDegreeOfParallelism, .TaskScheduler = Settings.AppTaskScheduler}
+                Parallel.For(0, n + 1, Settings.poptions, Sub(ii)
+                                                              alpha(ii) = (1 + (0.37464 + 1.54226 * W(ii) - 0.26992 * W(ii) ^ 2) * (1 - (T / Tc(ii)) ^ 0.5)) ^ 2
+                                                              ai(ii) = 0.45724 * alpha(ii) * R ^ 2 * Tc(ii) ^ 2 / Pc(ii)
+                                                              bi(ii) = 0.0778 * R * Tc(ii) / Pc(ii)
+                                                          End Sub)
             Else
                 i = 0
                 Do
