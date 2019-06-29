@@ -5557,6 +5557,17 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
                     'Cp = A + B*T + C*T^2 + D*T^3 + E*T^4 where Cp in kJ/kg-mol , T in K 
                     result = A + B * T + C * T ^ 2 + D * T ^ 3 + E * T ^ 4
                     Return result / compoundConstantProperties.Molar_Weight 'kJ/kg.K
+                ElseIf String.Equals(compoundConstantProperties.OriginalDB = "CoolProp", StringComparison.Ordinal) Then
+                    Dim A, B, C, D, E, result As Double
+                    Dim eqno As String = compoundConstantProperties.IdealgasCpEquation
+                    Dim mw As Double = compoundConstantProperties.Molar_Weight
+                    A = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
+                    B = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
+                    C = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
+                    D = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
+                    E = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
+                    result = Me.CalcCSTDepProp(eqno, A, B, C, D, E, T, 0) 'kJ/kg.K
+                    Return result
                 ElseIf String.Equals(compoundConstantProperties.OriginalDB = "CheResources", StringComparison.Ordinal) Then
                     Dim A, B, C, D, E, result As Double
                     A = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
@@ -5594,17 +5605,7 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
                     E = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
                     result = Me.CalcCSTDepProp(eqno, A, B, C, D, E, T, 0) 'kJ/kg.K
                     Return result
-                ElseIf String.Equals(compoundConstantProperties.OriginalDB = "CoolProp", StringComparison.Ordinal) Then
-                    Dim A, B, C, D, E, result As Double
-                    Dim eqno As String = compoundConstantProperties.IdealgasCpEquation
-                    Dim mw As Double = compoundConstantProperties.Molar_Weight
-                    A = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
-                    B = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
-                    C = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
-                    D = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
-                    E = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
-                    result = Me.CalcCSTDepProp(eqno, A, B, C, D, E, T, 0) 'kJ/kg.K
-                    Return result
+
                 ElseIf String.Equals(compoundConstantProperties.OriginalDB = "Biodiesel", StringComparison.Ordinal) Then
                     Dim A, B, C, D, E, result As Double
                     Dim eqno As String = compoundConstantProperties.IdealgasCpEquation
