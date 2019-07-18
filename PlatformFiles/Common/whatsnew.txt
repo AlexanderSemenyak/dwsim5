@@ -1,7 +1,10 @@
-Version 5.7 Update 12
+Version 5.7 Update 13
 
-- [NEW] Added the ability to work with reaction parameters in optimization and sensitivity analysis tools (Classic UI)
-- [NEW] Added the ability to load external Property Packages
-- [NEW] Added solid fugacity config options to Property Packages
-- [FIX] Fixed sorting of optimizer variable properties (Classic UI)
-- [FIX] Fixed textbox text color on Property Package config editor (Cross-Platform UI)
+- [NEW] Insert IronPython Script Snippets (Classic UI)
+- [CHG] Restored Reference Object functionality to Controller/Adjust Logical Block
+- [CHG] Restored Maximum Iterations editor to Recycle Logical Block
+- [CHG] Optimized Isothermal Compressibility calculation
+- [FIX] Fixed layout of object editors (Classic UI)
+- [FIX] Fixed Thermo library registration
+- [FIX] Fixed Molar Volume value in Material Stream report
+- [FIX] Minor bug fixes

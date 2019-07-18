@@ -106,6 +106,8 @@ Public Class EditingForm_Recycle
 
             If .AccelerationMethod = Enums.AccelMethod.GlobalBroyden Then chkGlobalBroyden.Checked = True Else chkGlobalBroyden.Checked = False
 
+            tbMaxIts.Text = .MaximumIterations
+
         End With
 
         Loaded = True
@@ -113,13 +115,9 @@ Public Class EditingForm_Recycle
     End Sub
 
     Private Sub lblTag_TextChanged(sender As Object, e As EventArgs) Handles lblTag.TextChanged
-        If Loaded Then SimObject.GraphicObject.Tag = lblTag.Text
-        Me.Text = SimObject.GraphicObject.Tag & " (" & SimObject.GetDisplayName() & ")"
-        If Loaded Then SimObject.FlowSheet.UpdateOpenEditForms()
-        DirectCast(SimObject.FlowSheet, Interfaces.IFlowsheetGUI).UpdateInterface()
-        lblTag.Focus()
-        lblTag.SelectionStart = Math.Max(0, lblTag.Text.Length)
-        lblTag.SelectionLength = 0
+
+        If Loaded Then ToolTipChangeTag.Show("Press ENTER to commit changes.", lblTag, New System.Drawing.Point(0, lblTag.Height + 3), 3000)
+
     End Sub
 
     Private Sub btnDisconnect1_Click(sender As Object, e As EventArgs) Handles btnDisconnect1.Click
@@ -141,6 +139,7 @@ Public Class EditingForm_Recycle
         If sender Is tbTT Then SimObject.ConvergenceParameters.Temperatura = su.Converter.ConvertToSI(cbT.SelectedItem.ToString, tbTT.Text.ParseExpressionToDouble)
         If sender Is tbWT Then SimObject.ConvergenceParameters.VazaoMassica = su.Converter.ConvertToSI(cbW.SelectedItem.ToString, tbWT.Text.ParseExpressionToDouble)
         If sender Is tbPT Then SimObject.ConvergenceParameters.Pressao = su.Converter.ConvertToSI(cbP.SelectedItem.ToString, tbPT.Text.ParseExpressionToDouble)
+        If sender Is tbMaxIts Then SimObject.MaximumIterations = Integer.Parse(tbMaxIts.Text)
 
     End Sub
 
@@ -150,7 +149,7 @@ Public Class EditingForm_Recycle
 
     End Sub
 
-    Private Sub tb_TextChanged(sender As Object, e As EventArgs) Handles tbWT.TextChanged, tbTT.TextChanged, tbPT.TextChanged
+    Private Sub tb_TextChanged(sender As Object, e As EventArgs) Handles tbWT.TextChanged, tbTT.TextChanged, tbPT.TextChanged, tbMaxIts.TextChanged
 
         Dim tbox = DirectCast(sender, TextBox)
 
@@ -162,7 +161,7 @@ Public Class EditingForm_Recycle
 
     End Sub
 
-    Private Sub TextBoxKeyDown(sender As Object, e As KeyEventArgs) Handles tbWT.KeyDown, tbTT.KeyDown, tbPT.KeyDown
+    Private Sub TextBoxKeyDown(sender As Object, e As KeyEventArgs) Handles tbWT.KeyDown, tbTT.KeyDown, tbPT.KeyDown, tbMaxIts.KeyDown
 
         If e.KeyCode = Keys.Enter And Loaded And DirectCast(sender, TextBox).ForeColor = System.Drawing.Color.Blue Then
 
@@ -279,6 +278,19 @@ Public Class EditingForm_Recycle
         If Loaded Then
             If chkGlobalBroyden.Checked Then SimObject.AccelerationMethod = Enums.AccelMethod.GlobalBroyden Else SimObject.AccelerationMethod = Enums.AccelMethod.None
         End If
+    End Sub
+
+    Private Sub lblTag_KeyPress(sender As Object, e As KeyEventArgs) Handles lblTag.KeyUp
+
+        If e.KeyCode = Keys.Enter Then
+
+            If Loaded Then SimObject.GraphicObject.Tag = lblTag.Text
+            If Loaded Then SimObject.FlowSheet.UpdateOpenEditForms()
+            Me.Text = SimObject.GraphicObject.Tag & " (" & SimObject.GetDisplayName() & ")"
+            DirectCast(SimObject.FlowSheet, Interfaces.IFlowsheetGUI).UpdateInterface()
+
+        End If
+
     End Sub
 
 End Class
