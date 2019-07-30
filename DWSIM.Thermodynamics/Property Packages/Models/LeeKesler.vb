@@ -479,7 +479,7 @@ Namespace PropertyPackages.Auxiliary
 
         End Function
 
-        Function ESTIMAR_Vr2(ByVal TIPO As String, ByVal Pr As Double, ByVal Tr As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal c4 As Double, ByVal beta As Double, ByVal gamma As Double)
+        Function ESTIMAR_Vr2(ByVal TIPO, ByVal Pr, ByVal Tr, ByVal B, ByVal C, ByVal D, ByVal c4, ByVal beta, ByVal gamma)
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
@@ -517,14 +517,13 @@ Namespace PropertyPackages.Auxiliary
             delta_T = (Tsup - Tinf) / nsub
 
             i = 0
-            Dim a1 = c4 / Tr ^ 3
             Do
                 i = i + 1
                 Vr = Tinf
-                fT = Pr * Vr / Tr - (1 + B / Vr + C / Vr ^ 2 + D / Vr ^ 5 + a1 / Vr ^ 2 * (beta + gamma / Vr ^ 2) * Math.Exp(-gamma / Vr ^ 2))
+                fT = Pr * Vr / Tr - (1 + B / Vr + C / Vr ^ 2 + D / Vr ^ 5 + c4 / Tr ^ 3 / Vr ^ 2 * (beta + gamma / Vr ^ 2) * Math.Exp(-gamma / Vr ^ 2))
                 Tinf = Tinf + delta_T
                 Vr = Tinf
-                fT_inf = Pr * Vr / Tr - (1 + B / Vr + C / Vr ^ 2 + D / Vr ^ 5 + a1 / Vr ^ 2 * (beta + gamma / Vr ^ 2) * Math.Exp(-gamma / Vr ^ 2))
+                fT_inf = Pr * Vr / Tr - (1 + B / Vr + C / Vr ^ 2 + D / Vr ^ 5 + c4 / Tr ^ 3 / Vr ^ 2 * (beta + gamma / Vr ^ 2) * Math.Exp(-gamma / Vr ^ 2))
             Loop Until fT * fT_inf < 0 Or i >= 1000
             Tsup = Tinf
             Tinf = Tinf - delta_T
@@ -539,8 +538,8 @@ Namespace PropertyPackages.Auxiliary
             bbb = Tsup
             ccc = Tsup
 
-            faa = Pr * aaa / Tr - (1 + B / aaa + C / aaa ^ 2 + D / aaa ^ 5 + a1 / aaa ^ 2 * (beta + gamma / aaa ^ 2) * Math.Exp(-gamma / aaa ^ 2))
-            fbb = Pr * bbb / Tr - (1 + B / bbb + C / bbb ^ 2 + D / bbb ^ 5 + a1 / bbb ^ 2 * (beta + gamma / bbb ^ 2) * Math.Exp(-gamma / bbb ^ 2))
+            faa = Pr * aaa / Tr - (1 + B / aaa + C / aaa ^ 2 + D / aaa ^ 5 + c4 / Tr ^ 3 / aaa ^ 2 * (beta + gamma / aaa ^ 2) * Math.Exp(-gamma / aaa ^ 2))
+            fbb = Pr * bbb / Tr - (1 + B / bbb + C / bbb ^ 2 + D / bbb ^ 5 + c4 / Tr ^ 3 / bbb ^ 2 * (beta + gamma / bbb ^ 2) * Math.Exp(-gamma / bbb ^ 2))
             fcc = fbb
             iter2 = 0
             Do
@@ -598,7 +597,7 @@ Namespace PropertyPackages.Auxiliary
                 Else
                     bbb += Math.Sign(xmm) * tol11
                 End If
-                fbb = Pr * bbb / Tr - (1 + B / bbb + C / bbb ^ 2 + D / bbb ^ 5 + a1 / bbb ^ 2 * (beta + gamma / bbb ^ 2) * Math.Exp(-gamma / bbb ^ 2))
+                fbb = Pr * bbb / Tr - (1 + B / bbb + C / bbb ^ 2 + D / bbb ^ 5 + c4 / Tr ^ 3 / bbb ^ 2 * (beta + gamma / bbb ^ 2) * Math.Exp(-gamma / bbb ^ 2))
                 iter2 += 1
             Loop Until iter2 = ITMAX2
 

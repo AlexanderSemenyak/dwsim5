@@ -2,7 +2,6 @@
 Imports System.Threading
 Imports Nini.Config
 Imports System.IO
-Imports System.Xml.Serialization
 
 Public Class Settings
 
@@ -43,15 +42,7 @@ Public Class Settings
 
     Public Shared Property FlowsheetRenderer As SkiaCanvasRenderer = SkiaCanvasRenderer.CPU
 
-    Public Shared Property AppTaskScheduler As TaskScheduler
-        Get
-            Return _AppTaskScheduler
-        End Get
-        Set
-            _AppTaskScheduler = Value
-            poptions = New ParallelOptions() With {.MaxDegreeOfParallelism = _maxDegreeOfParallelism1, .TaskScheduler = Value}
-        End Set
-    End Property
+    Public Shared Property AppTaskScheduler As TaskScheduler = Tasks.TaskScheduler.Default
 
     Public Shared Property gpu As Cudafy.Host.GPGPU
     Public Shared Property gpumod As CudafyModule
@@ -69,23 +60,7 @@ Public Class Settings
     End Property
     Public Shared Property CAPEOPENMode As Boolean = False
     Public Shared Property ExcelMode As Boolean = False
-
-    '<summary>
-    'cache alexander for speed
-    '</summary>
-    <XmlIgnore>
-    Public Shared poptions As New ParallelOptions() With {.MaxDegreeOfParallelism = 4, .TaskScheduler = Settings.AppTaskScheduler}
-
-    Public Shared Property MaxDegreeOfParallelism As Integer
-        Get
-            Return _maxDegreeOfParallelism1
-        End Get
-        Set
-            _maxDegreeOfParallelism1 = Value
-            poptions = New ParallelOptions() With {.MaxDegreeOfParallelism = _maxDegreeOfParallelism1, .TaskScheduler = Settings.AppTaskScheduler}
-        End Set
-    End Property
-
+    Public Shared Property MaxDegreeOfParallelism As Integer = -1
     Public Shared Property UseSIMDExtensions As Boolean = False
     Public Shared Property EnableParallelProcessing As Boolean = True
     Public Shared Property EnableGPUProcessing As Boolean = False
@@ -158,8 +133,6 @@ Public Class Settings
 
 
     Public Shared CurrentRunningVersion As String = ""
-    Private Shared _maxDegreeOfParallelism1 As Integer = -1
-    Private Shared _AppTaskScheduler As TaskScheduler = Tasks.TaskScheduler.Default
 
     Public Shared Property CalculationRequestID As String = ""
 

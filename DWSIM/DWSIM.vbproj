@@ -24,8 +24,9 @@
     <SignManifests>false</SignManifests>
     <ApplicationIcon>DWSIM_ico.ico</ApplicationIcon>
     <TargetZone>LocalIntranet</TargetZone>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\StrongNameKey.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
     <OptionStrict>Off</OptionStrict>
     <OptionCompare>Binary</OptionCompare>
     <FileUpgradeFlags>
@@ -1472,7 +1473,6 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
-    <None Include="StrongName.key.snk" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Report Files\report_en-US.mr6" />
