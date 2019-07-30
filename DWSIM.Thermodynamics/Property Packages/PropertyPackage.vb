@@ -686,7 +686,7 @@ Namespace PropertyPackages
 
         Public Overridable Function CalcIsothermalCompressibility(p As IPhase) As Double
 
-            Dim Z, P0, P1, T, Z1 As Double
+            Dim Z, P0, T, Z1 As Double
 
             If Not p.Properties.molarfraction.HasValue Then Return 0.0
 
@@ -698,28 +698,43 @@ Namespace PropertyPackages
             P0 = CurrentMaterialStream.Phases(0).Properties.pressure.GetValueOrDefault
             Z = p.Properties.compressibilityFactor.GetValueOrDefault
 
-            IObj?.SetCurrent
+            Dim cms0, cmst As MaterialStream
 
-            P1 = P0 + 100
+            cms0 = CurrentMaterialStream
+
+            cmst = DirectCast(CurrentMaterialStream, MaterialStream).ShallowClone
+
+            CurrentMaterialStream = cmst
+
+            cmst.Phases(0).Properties.pressure = P0 + 0.0001
+
+            IObj?.SetCurrent
 
             Select Case p.Name
                 Case "Mixture"
-                    Return 0.0#
+                    'DW_CalcPhaseProps(Phase.Mixture)
                 Case "Vapor"
-                    Z1 = AUX_Z(RET_VMOL(Phase.Vapor), T, P1, PhaseName.Vapor)
+                    DW_CalcPhaseProps(Phase.Vapor)
                 Case "OverallLiquid"
-                    Return 0.0#
+                    'DW_CalcPhaseProps(Phase.Liquid)
                 Case "Liquid1"
-                    Z1 = AUX_Z(RET_VMOL(Phase.Liquid1), T, P1, PhaseName.Liquid)
+                    DW_CalcPhaseProps(Phase.Liquid1)
                 Case "Liquid2"
-                    Z1 = AUX_Z(RET_VMOL(Phase.Liquid2), T, P1, PhaseName.Liquid)
+                    DW_CalcPhaseProps(Phase.Liquid2)
                 Case "Liquid3"
-                    Z1 = AUX_Z(RET_VMOL(Phase.Liquid3), T, P1, PhaseName.Liquid)
+                    DW_CalcPhaseProps(Phase.Liquid3)
                 Case "Aqueous"
-                    Z1 = AUX_Z(RET_VMOL(Phase.Aqueous), T, P1, PhaseName.Liquid)
+                    DW_CalcPhaseProps(Phase.Aqueous)
                 Case "Solid"
-                    Return 0.0#
+                    DW_CalcPhaseProps(Phase.Solid)
             End Select
+
+            Z1 = cmst.GetPhase(p.Name).Properties.compressibilityFactor.GetValueOrDefault
+
+            cmst.Dispose()
+            cmst = Nothing
+
+            CurrentMaterialStream = cms0
 
             Dim K As Double = 1 / P0 - 1 / Z * (Z1 - Z) / 0.0001
 
@@ -5542,17 +5557,6 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
                     'Cp = A + B*T + C*T^2 + D*T^3 + E*T^4 where Cp in kJ/kg-mol , T in K 
                     result = A + B * T + C * T ^ 2 + D * T ^ 3 + E * T ^ 4
                     Return result / compoundConstantProperties.Molar_Weight 'kJ/kg.K
-                ElseIf String.Equals(compoundConstantProperties.OriginalDB = "CoolProp", StringComparison.Ordinal) Then
-                    Dim A, B, C, D, E, result As Double
-                    Dim eqno As String = compoundConstantProperties.IdealgasCpEquation
-                    Dim mw As Double = compoundConstantProperties.Molar_Weight
-                    A = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
-                    B = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
-                    C = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
-                    D = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
-                    E = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
-                    result = Me.CalcCSTDepProp(eqno, A, B, C, D, E, T, 0) 'kJ/kg.K
-                    Return result
                 ElseIf String.Equals(compoundConstantProperties.OriginalDB = "CheResources", StringComparison.Ordinal) Then
                     Dim A, B, C, D, E, result As Double
                     A = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
@@ -5590,7 +5594,17 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
                     E = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
                     result = Me.CalcCSTDepProp(eqno, A, B, C, D, E, T, 0) 'kJ/kg.K
                     Return result
-
+                ElseIf String.Equals(compoundConstantProperties.OriginalDB = "CoolProp", StringComparison.Ordinal) Then
+                    Dim A, B, C, D, E, result As Double
+                    Dim eqno As String = compoundConstantProperties.IdealgasCpEquation
+                    Dim mw As Double = compoundConstantProperties.Molar_Weight
+                    A = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
+                    B = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
+                    C = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
+                    D = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
+                    E = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
+                    result = Me.CalcCSTDepProp(eqno, A, B, C, D, E, T, 0) 'kJ/kg.K
+                    Return result
                 ElseIf String.Equals(compoundConstantProperties.OriginalDB = "Biodiesel", StringComparison.Ordinal) Then
                     Dim A, B, C, D, E, result As Double
                     Dim eqno As String = compoundConstantProperties.IdealgasCpEquation
