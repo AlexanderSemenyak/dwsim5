@@ -14,6 +14,7 @@ Module Extensions
 
     End Function
 
+
     <System.Runtime.CompilerServices.Extension()>
     Public Function ToArrayString(vector As Double(), ByVal ci As System.Globalization.CultureInfo) As String
 

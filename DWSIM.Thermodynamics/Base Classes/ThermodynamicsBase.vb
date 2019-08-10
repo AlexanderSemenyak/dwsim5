@@ -183,7 +183,7 @@ Namespace BaseClasses
         Public Property ComponentDescription As String = "" Implements Interfaces.IPhase.ComponentDescription
 
         Public Property ComponentName As String = "" Implements Interfaces.IPhase.ComponentName
-
+        '(StringComparer.Ordinal)
         Public Property Compounds As Dictionary(Of String, Interfaces.ICompound) = New Dictionary(Of String, Interfaces.ICompound) Implements Interfaces.IPhase.Compounds
 
         Public Property Name As String = "" Implements Interfaces.IPhase.Name

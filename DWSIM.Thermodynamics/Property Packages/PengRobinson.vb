@@ -22,7 +22,10 @@ Imports DWSIM.Thermodynamics.PropertyPackages.Auxiliary.FlashAlgorithms
 
 Imports System.Threading.Tasks
 Imports System.Linq
+Imports System.Runtime.CompilerServices
+Imports DWSIM.Interfaces
 Imports DWSIM.Interfaces.Enums
+Imports DWSIM.Thermodynamics.PropertyPackages.Auxiliary
 
 Namespace PropertyPackages
 
@@ -545,15 +548,19 @@ Namespace PropertyPackages
 
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function RET_KIJ(ByVal id1 As String, ByVal id2 As String) As Double
+            Dim interactionParameters = Me.m_pr.InteractionParameters
+            Dim child As Dictionary(Of String, PR_IPData)
+            Dim reslt As PR_IPData
 
-            If Me.m_pr.InteractionParameters.ContainsKey(id1) Then
-                If Me.m_pr.InteractionParameters(id1).ContainsKey(id2) Then
-                    Return m_pr.InteractionParameters(id1)(id2).kij
+            If interactionParameters.TryGetValue(id1, child) Then
+                If child.TryGetValue(id2, reslt) Then
+                    Return reslt.kij
                 Else
-                    If Me.m_pr.InteractionParameters.ContainsKey(id2) Then
-                        If Me.m_pr.InteractionParameters(id2).ContainsKey(id1) Then
-                            Return m_pr.InteractionParameters(id2)(id1).kij
+                    If interactionParameters.TryGetValue(id2, child) Then
+                        If child.TryGetValue(id1, reslt) Then
+                            Return reslt.kij
                         Else
                             Return 0
                         End If
@@ -564,8 +571,32 @@ Namespace PropertyPackages
             Else
                 Return 0
             End If
-
         End Function
+
+        'Public Function RET_KIJ(ByVal id1 As String, ByVal id2 As String) As Double
+        '    Dim interactionParameters As Dictionary(Of String,Dictionary(Of String,PR_IPData)) = Me.m_pr.InteractionParameters
+        '    Dim child As Dictionary(Of String, PR_IPData)
+        '    Dim reslt As PR_IPData
+
+        '    If interactionParameters.ContainsKey(id1) Then
+        '        If interactionParameters(id1).ContainsKey(id2) Then
+        '            Return m_pr.InteractionParameters(id1)(id2).kij
+        '        Else
+        '            If interactionParameters.ContainsKey(id2) Then
+        '                If interactionParameters(id2).ContainsKey(id1) Then
+        '                    Return m_pr.InteractionParameters(id2)(id1).kij
+        '                Else
+        '                    Return 0
+        '                End If
+        '            Else
+        '                Return 0
+        '            End If
+        '        End If
+        '    Else
+        '        Return 0
+        '    End If
+
+        'End Function
 
         Public Overrides Function RET_VKij() As Double(,)
 
@@ -576,7 +607,8 @@ Namespace PropertyPackages
 
             'If ip_changed Then
 
-            Dim val(Me.CurrentMaterialStream.Phases(0).Compounds.Count - 1, Me.CurrentMaterialStream.Phases(0).Compounds.Count - 1) As Double
+            Dim phases0  = Me.CurrentMaterialStream.Phases(0)
+            Dim val(phases0.Compounds.Count - 1, phases0.Compounds.Count - 1) As Double
             Dim i As Integer = 0
             Dim l As Integer = 0
 

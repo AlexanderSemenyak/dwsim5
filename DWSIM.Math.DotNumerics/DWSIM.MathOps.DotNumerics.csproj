@@ -328,6 +328,7 @@
     <Compile Include="LinearAlgebra\TridiagonalMatrix.cs" />
     <Compile Include="LinearAlgebra\Types.cs" />
     <Compile Include="LinearAlgebra\Vector.cs" />
+    <Compile Include="ONIT.ExtensionMethods.cs" />
     <Compile Include="Optimization\Cobyla\cobyla.cs" />
     <Compile Include="Optimization\Cobyla\CobylaDriver.cs" />
     <Compile Include="Optimization\LBFGSB\Active.cs" />

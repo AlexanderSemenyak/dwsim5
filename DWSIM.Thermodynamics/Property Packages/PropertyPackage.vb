@@ -46,6 +46,7 @@ Imports Microsoft.Scripting.Hosting
 Imports sui = DWSIM.UI.Shared.Common
 Imports DWSIM.UI.Shared
 Imports DWSIM.Interfaces.Enums
+Imports Sysytem
 
 Namespace PropertyPackages
 
@@ -5546,8 +5547,41 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
 
             Else
 
-                If String.Equals(compoundConstantProperties.OriginalDB, "DWSIM", StringComparison.Ordinal) Or
-                compoundConstantProperties.OriginalDB = "" Then
+                Dim originalDb  = compoundConstantProperties.OriginalDB
+                If String.Equals(originalDb, "CoolProp", StringComparison.Ordinal) Then
+                    Dim A, B, C, D, E, result As Double
+                    Dim eqno As String = compoundConstantProperties.IdealgasCpEquation
+                    Dim mw As Double = compoundConstantProperties.Molar_Weight
+                    A = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
+                    B = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
+                    C = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
+                    D = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
+                    E = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
+                    result = Me.CalcCSTDepProp(eqno, A, B, C, D, E, T, 0) 'kJ/kg.K
+                    Return result
+                ElseIf String.Equals(originalDb, "ChemSep", StringComparison.Ordinal) Or
+                        String.Equals(originalDb, "ChEDL Thermo", StringComparison.Ordinal) Or
+                        String.Equals(originalDb, "User", StringComparison.Ordinal) Then
+                    Dim A, B, C, D, E, result As Double
+                    Dim eqno As String = compoundConstantProperties.IdealgasCpEquation
+                    Dim mw As Double = compoundConstantProperties.Molar_Weight
+                    A = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
+                    B = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
+                    C = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
+                    D = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
+                    E = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
+                    'If Integer.TryParse(eqno, New Integer) Then
+                    If eqno.IsDigitsOnly() Then
+                        result = Me.CalcCSTDepProp(eqno, A, B, C, D, E, T, 0) / 1000 / mw 'kJ/kg.K
+                    Else
+                        result = Me.ParseEquation(eqno, A, B, C, D, E, T) / mw
+                    End If
+                    If result = 0.0 Then Return 3.5 * 8.314 / mw Else Return result
+                ElseIf String.Equals(originalDb, "Electrolytes", StringComparison.Ordinal) Then
+                    ' alexander - For speed up comparison 
+                    Return 0
+                ElseIf String.Equals(originalDb, "DWSIM", StringComparison.Ordinal) Or
+                originalDb = "" Then
                     Dim A, B, C, D, E, result As Double
                     A = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
                     B = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
@@ -5557,7 +5591,7 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
                     'Cp = A + B*T + C*T^2 + D*T^3 + E*T^4 where Cp in kJ/kg-mol , T in K 
                     result = A + B * T + C * T ^ 2 + D * T ^ 3 + E * T ^ 4
                     Return result / compoundConstantProperties.Molar_Weight 'kJ/kg.K
-                ElseIf String.Equals(compoundConstantProperties.OriginalDB = "CheResources", StringComparison.Ordinal) Then
+                ElseIf String.Equals(originalDb, "CheResources", StringComparison.Ordinal) Then
                     Dim A, B, C, D, E, result As Double
                     A = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
                     B = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
@@ -5567,24 +5601,7 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
                     'CAL/MOL.K [CP=A+(B*T)+(C*T^2)+(D*T^3)], T in K
                     result = A + B * T + C * T ^ 2 + D * T ^ 3
                     Return result / compoundConstantProperties.Molar_Weight * 4.1868 'kJ/kg.K
-                ElseIf String.Equals(compoundConstantProperties.OriginalDB = "ChemSep", StringComparison.Ordinal) Or
-                        String.Equals(compoundConstantProperties.OriginalDB = "ChEDL Thermo", StringComparison.Ordinal) Or
-                        String.Equals(compoundConstantProperties.OriginalDB = "User", StringComparison.Ordinal) Then
-                    Dim A, B, C, D, E, result As Double
-                    Dim eqno As String = compoundConstantProperties.IdealgasCpEquation
-                    Dim mw As Double = compoundConstantProperties.Molar_Weight
-                    A = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
-                    B = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
-                    C = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
-                    D = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
-                    E = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
-                    If Integer.TryParse(eqno, New Integer) Then
-                        result = Me.CalcCSTDepProp(eqno, A, B, C, D, E, T, 0) / 1000 / mw 'kJ/kg.K
-                    Else
-                        result = Me.ParseEquation(eqno, A, B, C, D, E, T) / mw
-                    End If
-                    If result = 0.0 Then Return 3.5 * 8.314 / mw Else Return result
-                ElseIf String.Equals(compoundConstantProperties.OriginalDB = "ChEDL Thermo", StringComparison.Ordinal) Then
+                ElseIf String.Equals(originalDb, "ChEDL Thermo", StringComparison.Ordinal) Then
                     Dim A, B, C, D, E, result As Double
                     Dim eqno As String = compoundConstantProperties.IdealgasCpEquation
                     A = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
@@ -5594,18 +5611,7 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
                     E = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
                     result = Me.CalcCSTDepProp(eqno, A, B, C, D, E, T, 0) 'kJ/kg.K
                     Return result
-                ElseIf String.Equals(compoundConstantProperties.OriginalDB = "CoolProp", StringComparison.Ordinal) Then
-                    Dim A, B, C, D, E, result As Double
-                    Dim eqno As String = compoundConstantProperties.IdealgasCpEquation
-                    Dim mw As Double = compoundConstantProperties.Molar_Weight
-                    A = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
-                    B = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
-                    C = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
-                    D = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
-                    E = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
-                    result = Me.CalcCSTDepProp(eqno, A, B, C, D, E, T, 0) 'kJ/kg.K
-                    Return result
-                ElseIf String.Equals(compoundConstantProperties.OriginalDB = "Biodiesel", StringComparison.Ordinal) Then
+                ElseIf String.Equals(originalDb, "Biodiesel", StringComparison.Ordinal) Then
                     Dim A, B, C, D, E, result As Double
                     Dim eqno As String = compoundConstantProperties.IdealgasCpEquation
                     A = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
@@ -5615,7 +5621,7 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
                     E = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
                     result = Me.CalcCSTDepProp(eqno, A, B, C, D, E, T, 0) 'kJ/kg.K
                     Return result
-                ElseIf String.Equals(compoundConstantProperties.OriginalDB = "KDB", StringComparison.Ordinal) Then
+                ElseIf String.Equals(originalDb, "KDB", StringComparison.Ordinal) Then
                     Dim A, B, C, D, E As Double
                     Dim eqno As String = compoundConstantProperties.IdealgasCpEquation
                     A = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
@@ -8013,93 +8019,208 @@ Final3:
 
         End Function
 
+        ''' <summary>
+        ''' Alexander spped up select Function
+        ''' </summary>
+        ''' <param name="A"></param>
+        ''' <param name="B"></param>
+        ''' <param name="C"></param>
+        ''' <param name="D"></param>
+        ''' <param name="E"></param>
+        ''' <param name="T"></param>
+        ''' <param name="Tc"></param>
+        ''' <returns></returns>
+        Delegate Function CalcCSTDepPropFunc(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) As Double
+
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        private shared Function CalcCSTDepPropFuncZero(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) as Double
+           return 0
+        End function
+
+
+        shared CalcCSTDepPropFuncCache() as CalcCSTDepPropFunc
+        ''' <summary>
+        ''' alexander static constructor
+        ''' </summary>
+        shared sub New()
+            CalcCSTDepPropFuncCache = new CalcCSTDepPropFunc(232){}
+
+            ''Init default
+            For i As Integer = 1 To 232 Step 1
+                CalcCSTDepPropFuncCache(i)=AddressOf CalcCSTDepPropFuncZero
+            Next
+
+            CalcCSTDepPropFuncCache(1)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) A
+            CalcCSTDepPropFuncCache(2)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) A + B * T
+            CalcCSTDepPropFuncCache(3)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) A + B * T + C * T ^ 2
+            CalcCSTDepPropFuncCache(4)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) A + B * T + C * T ^ 2 + D * T ^ 3
+            CalcCSTDepPropFuncCache(5)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) A + B * T + C * T ^ 2 + D * T ^ 3 + E * T ^ 4
+            CalcCSTDepPropFuncCache(6)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) A + B * T + C * T ^ 2 + D * T ^ 3 + E / T ^ 2
+            CalcCSTDepPropFuncCache(10)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) Exp(A - B / (T + C))
+            CalcCSTDepPropFuncCache(11)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) Exp(A)
+            CalcCSTDepPropFuncCache(12)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) Exp(A + B * T)
+            CalcCSTDepPropFuncCache(13)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) Exp(A + B * T + C * T ^ 2)
+            CalcCSTDepPropFuncCache(14)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) Exp(A + B * T + C * T ^ 2 + D * T ^ 3)
+            CalcCSTDepPropFuncCache(15)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) Exp(A + B * T + C * T ^ 2 + D * T ^ 3 + E * T ^ 4)
+            CalcCSTDepPropFuncCache(16)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) A + Exp(B / T + C + D * T + E * T ^ 2)
+            CalcCSTDepPropFuncCache(17)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) A + Exp(B + C * T + D * T ^ 2 + E * T ^ 3)
+            CalcCSTDepPropFuncCache(45)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) A * T + B * T ^ 2 / 2 + C * T ^ 3 / 3 + D * T ^ 4 / 4 + E * T ^ 5 / 5
+            CalcCSTDepPropFuncCache(75)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) B + 2 * C * T + 3 * D * T ^ 2 + 4 * E * T ^ 3
+            CalcCSTDepPropFuncCache(100)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) A + B * T + C * T ^ 2 + D * T ^ 3 + E * T ^ 4
+            CalcCSTDepPropFuncCache(101)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) Exp(A + B / T + C * Log(T) + D * T ^ E)
+            CalcCSTDepPropFuncCache(102)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) A * T ^ B / (1 + C / T + D / T ^ 2)
+            CalcCSTDepPropFuncCache(103)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) A + B * Exp(-C / (T ^ D))
+            CalcCSTDepPropFuncCache(104)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) A + B / T + C / T ^ 2 + D / T ^ 8 + E / T ^ 9
+            CalcCSTDepPropFuncCache(105)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) A / (B ^ (1 + (1 - T / C) ^ D))
+            CalcCSTDepPropFuncCache(106)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) A * (1 - Tr) ^ (B + C * Tr + D * Tr ^ 2 + E * Tr ^ 3)
+            CalcCSTDepPropFuncCache(107)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) A + B * (C / T / Sinh(C / T)) ^ 2 + D * (E / T / Cosh(E / T)) ^ 2
+            CalcCSTDepPropFuncCache(114)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) A * T + B * T ^ 2 / 2 + C * T ^ 3 / 3 + D * T ^ 4 / 4
+            CalcCSTDepPropFuncCache(115)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) Exp(A + B / T + C * Log(T) + D * T ^ 2 + E / T ^ 2)
+            CalcCSTDepPropFuncCache(116)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) A + B * (1 - Tr) ^ 0.35 + C * (1 - Tr) ^ (2 / 3) + D * (1 - Tr) + E * (1 - Tr) ^ (4 / 3)
+            CalcCSTDepPropFuncCache(117)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) A * T + B * (C / T) / Tanh(C / T) - D * (E / T) / Tanh(E / T)
+            CalcCSTDepPropFuncCache(119)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) Exp(A / T + B + C * T + D * T ^ 2 + E * Log(T))
+            CalcCSTDepPropFuncCache(207)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) Exp(A - B / (T + C))
+            CalcCSTDepPropFuncCache(208)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) 10 ^ (A - B / (T + C))
+            CalcCSTDepPropFuncCache(209)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) 10 ^ (A * (1 / T - 1 / B))
+            CalcCSTDepPropFuncCache(210)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) 10 ^ (A + B / T + C * T + D * T ^ 2)
+            CalcCSTDepPropFuncCache(211)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) A * ((B - T) / (B - C)) ^ D
+            CalcCSTDepPropFuncCache(212)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) Exp((E / T) * (A * (1 - T / E) + B * (1 - T / E) ^ 1.5 + C * (1 - T / E) ^ 3 + D * (1 - T / E) ^ 6))
+            CalcCSTDepPropFuncCache(213)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) (E / T) * (A * (1 - T / E) + B * (1 - T / E) ^ 1.5 + C * (1 - T / E) ^ 3 + D * (1 - T / E) ^ 6)
+            CalcCSTDepPropFuncCache(221)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) -B / T ^ 2 + C / T + D * E * T ^ (E - 1)
+            CalcCSTDepPropFuncCache(230)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) -B / T ^ 2 + C / T + D - 2 * E / T ^ 3
+            CalcCSTDepPropFuncCache(231)= Function(ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double, ByVal Tr as Double) B - C / (T - D) ^ 2
+
+        End sub
         <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Function CalcCSTDepProp(ByVal eqno As String, ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double) As Double
 
-            Dim Tr As Double = T / Tc
+            'dim eqNoInt = eqno.ToInt32Fast()
+            'if eqNoInt>231 then Return 0.0#
 
-            Select Case eqno
-                Case "1"
-                    Return A
-                Case "2"
-                    Return A + B * T
-                Case "3"
-                    Return A + B * T + C * T ^ 2
-                Case "4"
-                    Return A + B * T + C * T ^ 2 + D * T ^ 3
-                Case "5"
-                    Return A + B * T + C * T ^ 2 + D * T ^ 3 + E * T ^ 4
-                Case "6"
-                    Return A + B * T + C * T ^ 2 + D * T ^ 3 + E / T ^ 2
-                Case "10"
-                    Return Exp(A - B / (T + C))
-                Case "11"
-                    Return Exp(A)
-                Case "12"
-                    Return Exp(A + B * T)
-                Case "13"
-                    Return Exp(A + B * T + C * T ^ 2)
-                Case "14"
-                    Return Exp(A + B * T + C * T ^ 2 + D * T ^ 3)
-                Case "15"
-                    Return Exp(A + B * T + C * T ^ 2 + D * T ^ 3 + E * T ^ 4)
-                Case "16"
+            'return CalcCSTDepPropFuncCache(eqNoInt)(A,B,C,D,E,T,Tc,Tr)
+            if string.Equals(eqno,"16", StringComparison.Ordinal) then
+                'Case "16"
                     Return A + Exp(B / T + C + D * T + E * T ^ 2)
-                Case "17"
-                    Return A + Exp(B + C * T + D * T ^ 2 + E * T ^ 3)
-                Case "45"
-                    Return A * T + B * T ^ 2 / 2 + C * T ^ 3 / 3 + D * T ^ 4 / 4 + E * T ^ 5 / 5
-                Case "75"
-                    Return B + 2 * C * T + 3 * D * T ^ 2 + 4 * E * T ^ 3
-                Case "100"
+            elseif string.Equals(eqno,"5", StringComparison.Ordinal) then
+                'Case "5"
                     Return A + B * T + C * T ^ 2 + D * T ^ 3 + E * T ^ 4
-                Case "101"
+            elseif string.Equals(eqno,"3", StringComparison.Ordinal) then
+                'Case "3"
+                    Return A + B * T + C * T ^ 2
+            elseif string.Equals(eqno,"101", StringComparison.Ordinal) then
+                'Case "101"
                     Return Exp(A + B / T + C * Log(T) + D * T ^ E)
-                Case "102"
+            elseif string.Equals(eqno,"102", StringComparison.Ordinal) then
+                'Case "102"
                     Return A * T ^ B / (1 + C / T + D / T ^ 2)
-                Case "103"
-                    Return A + B * Exp(-C / (T ^ D))
-                Case "104"
-                    Return A + B / T + C / T ^ 2 + D / T ^ 8 + E / T ^ 9
-                Case "105"
-                    Return A / (B ^ (1 + (1 - T / C) ^ D))
-                Case "106"
-                    Return A * (1 - Tr) ^ (B + C * Tr + D * Tr ^ 2 + E * Tr ^ 3)
-                Case "107"
-                    Return A + B * (C / T / Sinh(C / T)) ^ 2 + D * (E / T / Cosh(E / T)) ^ 2
-                Case "114"
-                    Return A * T + B * T ^ 2 / 2 + C * T ^ 3 / 3 + D * T ^ 4 / 4
-                Case "115"
-                    Return Exp(A + B / T + C * Log(T) + D * T ^ 2 + E / T ^ 2)
-                Case "116"
-                    Return A + B * (1 - Tr) ^ 0.35 + C * (1 - Tr) ^ (2 / 3) + D * (1 - Tr) + E * (1 - Tr) ^ (4 / 3)
-                Case "117"
-                    Return A * T + B * (C / T) / Tanh(C / T) - D * (E / T) / Tanh(E / T)
-                Case "119"
-                    Return Exp(A / T + B + C * T + D * T ^ 2 + E * Log(T))
-                Case "207"
+            elseif string.Equals(eqno,"1", StringComparison.Ordinal) then
+                'Case "1"
+                    Return A
+            elseif string.Equals(eqno,"2", StringComparison.Ordinal) then
+                'Case "2"
+                    Return A + B * T
+            elseif string.Equals(eqno,"4", StringComparison.Ordinal) then
+                'Case "4"
+                    Return A + B * T + C * T ^ 2 + D * T ^ 3
+            elseif string.Equals(eqno,"6", StringComparison.Ordinal) then
+                'Case "6"
+                    Return A + B * T + C * T ^ 2 + D * T ^ 3 + E / T ^ 2
+            elseif string.Equals(eqno,"10", StringComparison.Ordinal) then
+                'Case "10"
                     Return Exp(A - B / (T + C))
-                Case "208"
+            elseif string.Equals(eqno,"11", StringComparison.Ordinal) then
+                'Case "11"
+                    Return Exp(A)
+            elseif string.Equals(eqno,"12", StringComparison.Ordinal) then
+                'Case "12"
+                    Return Exp(A + B * T)
+            elseif string.Equals(eqno,"13", StringComparison.Ordinal) then
+                'Case "13"
+                    Return Exp(A + B * T + C * T ^ 2)
+            elseif string.Equals(eqno,"14", StringComparison.Ordinal) then
+                'Case "14"
+                    Return Exp(A + B * T + C * T ^ 2 + D * T ^ 3)
+            elseif string.Equals(eqno,"15", StringComparison.Ordinal) then
+                'Case "15"
+                    Return Exp(A + B * T + C * T ^ 2 + D * T ^ 3 + E * T ^ 4)
+            elseif string.Equals(eqno,"17", StringComparison.Ordinal) then
+                'Case "17"
+                    Return A + Exp(B + C * T + D * T ^ 2 + E * T ^ 3)
+            elseif string.Equals(eqno,"45", StringComparison.Ordinal) then
+                'Case "45"
+                    Return A * T + B * T ^ 2 / 2 + C * T ^ 3 / 3 + D * T ^ 4 / 4 + E * T ^ 5 / 5
+            elseif string.Equals(eqno,"75", StringComparison.Ordinal) then
+                'Case "75"
+                    Return B + 2 * C * T + 3 * D * T ^ 2 + 4 * E * T ^ 3
+            elseif string.Equals(eqno,"100", StringComparison.Ordinal) then
+                'Case "100"
+                    Return A + B * T + C * T ^ 2 + D * T ^ 3 + E * T ^ 4
+            elseif string.Equals(eqno,"103", StringComparison.Ordinal) then
+                'Case "103"
+                    Return A + B * Exp(-C / (T ^ D))
+            elseif string.Equals(eqno,"104", StringComparison.Ordinal) then
+                'Case "104"
+                    Return A + B / T + C / T ^ 2 + D / T ^ 8 + E / T ^ 9
+            elseif string.Equals(eqno,"105", StringComparison.Ordinal) then
+                'Case "105"
+                    Return A / (B ^ (1 + (1 - T / C) ^ D))
+            elseif string.Equals(eqno,"106", StringComparison.Ordinal) then
+                'Case "106"
+                    Dim Tr As Double = T / Tc
+                    Return A * (1 - Tr) ^ (B + C * Tr + D * Tr ^ 2 + E * Tr ^ 3)
+            elseif string.Equals(eqno,"107", StringComparison.Ordinal) then
+                'Case "107"
+                    Return A + B * (C / T / Sinh(C / T)) ^ 2 + D * (E / T / Cosh(E / T)) ^ 2
+            elseif string.Equals(eqno,"114", StringComparison.Ordinal) then
+                'Case "114"
+                    Return A * T + B * T ^ 2 / 2 + C * T ^ 3 / 3 + D * T ^ 4 / 4
+            elseif string.Equals(eqno,"115", StringComparison.Ordinal) then
+                'Case "115"
+                    Return Exp(A + B / T + C * Log(T) + D * T ^ 2 + E / T ^ 2)
+            elseif string.Equals(eqno,"116", StringComparison.Ordinal) then
+                'Case "116"
+                    Dim Tr As Double = T / Tc
+                    Return A + B * (1 - Tr) ^ 0.35 + C * (1 - Tr) ^ (2 / 3) + D * (1 - Tr) + E * (1 - Tr) ^ (4 / 3)
+            elseif string.Equals(eqno,"117", StringComparison.Ordinal) then
+                'Case "117"
+                    Return A * T + B * (C / T) / Tanh(C / T) - D * (E / T) / Tanh(E / T)
+            elseif string.Equals(eqno,"119", StringComparison.Ordinal) then
+                'Case "119"
+                    Return Exp(A / T + B + C * T + D * T ^ 2 + E * Log(T))
+            elseif string.Equals(eqno,"207", StringComparison.Ordinal) then
+                'Case "207"
+                    Return Exp(A - B / (T + C))
+            elseif string.Equals(eqno,"208", StringComparison.Ordinal) then
+                'Case "208"
                     Return 10 ^ (A - B / (T + C))
-                Case "209"
+            elseif string.Equals(eqno,"209", StringComparison.Ordinal) then
+                'Case "209"
                     Return 10 ^ (A * (1 / T - 1 / B))
-                Case "210"
+            elseif string.Equals(eqno,"210", StringComparison.Ordinal) then
+                'Case "210"
                     Return 10 ^ (A + B / T + C * T + D * T ^ 2)
-                Case "211"
+            elseif string.Equals(eqno,"211", StringComparison.Ordinal) then
+                'Case "211"
                     Return A * ((B - T) / (B - C)) ^ D
-                Case "212"
+            elseif string.Equals(eqno,"212", StringComparison.Ordinal) then
+                'Case "212"
                     Return Exp((E / T) * (A * (1 - T / E) + B * (1 - T / E) ^ 1.5 + C * (1 - T / E) ^ 3 + D * (1 - T / E) ^ 6))
-                Case "213"
+            elseif string.Equals(eqno,"213", StringComparison.Ordinal) then
+                'Case "213"
                     Return (E / T) * (A * (1 - T / E) + B * (1 - T / E) ^ 1.5 + C * (1 - T / E) ^ 3 + D * (1 - T / E) ^ 6)
-                Case "221"
+            elseif string.Equals(eqno,"221", StringComparison.Ordinal) then
+                'Case "221"
                     Return -B / T ^ 2 + C / T + D * E * T ^ (E - 1)
-                Case "230"
+            elseif string.Equals(eqno,"230", StringComparison.Ordinal) then
+                'Case "230"
                     Return -B / T ^ 2 + C / T + D - 2 * E / T ^ 3
-                Case "231"
+            elseif string.Equals(eqno,"231", StringComparison.Ordinal) then
+                'Case "231"
                     Return B - C / (T - D) ^ 2
-                Case Else
-                    Return 0.0#
-            End Select
+            end if
+                'Case Else
+                  Return 0.0#
+            'End Select
 
         End Function
 
