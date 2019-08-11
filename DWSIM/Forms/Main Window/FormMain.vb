@@ -61,12 +61,12 @@ Public Class FormMain
 
     Private tmpform2 As FormFlowsheet
 
-    Public AvailableComponents As New Dictionary(Of String, Interfaces.ICompoundConstantProperties)
-    Public AvailableUnitSystems As New Dictionary(Of String, SystemsOfUnits.Units)
-    Public PropertyPackages As New Dictionary(Of String, PropertyPackages.PropertyPackage)
-    Public FlashAlgorithms As New Dictionary(Of String, Thermodynamics.PropertyPackages.Auxiliary.FlashAlgorithms.FlashAlgorithm)
+    Public AvailableComponents As New Dictionary(Of String, Interfaces.ICompoundConstantProperties)(StringComparer.Ordinal)
+    Public AvailableUnitSystems As New Dictionary(Of String, SystemsOfUnits.Units)(StringComparer.Ordinal)
+    Public PropertyPackages As New Dictionary(Of String, PropertyPackages.PropertyPackage)(StringComparer.Ordinal)
+    Public FlashAlgorithms As New Dictionary(Of String, Thermodynamics.PropertyPackages.Auxiliary.FlashAlgorithms.FlashAlgorithm)(StringComparer.Ordinal)
 
-    Public COMonitoringObjects As New Dictionary(Of String, UnitOperations.UnitOperations.Auxiliary.CapeOpen.CapeOpenUnitOpInfo)
+    Public COMonitoringObjects As New Dictionary(Of String, UnitOperations.UnitOperations.Auxiliary.CapeOpen.CapeOpenUnitOpInfo)(StringComparer.Ordinal)
     Public WithEvents timer1 As New Timer
 
     Public calculatorassembly, unitopassembly As Assembly
@@ -1562,9 +1562,9 @@ Public Class FormMain
 
         End If
 
-        form.ScriptCollection = New Dictionary(Of String, Interfaces.IScript)
+        form.ScriptCollection = New Dictionary(Of String, Interfaces.IScript)(StringComparer.Ordinal)
 
-        form.Options.NotSelectedComponents = New Dictionary(Of String, Interfaces.ICompoundConstantProperties)
+        form.Options.NotSelectedComponents = New Dictionary(Of String, Interfaces.ICompoundConstantProperties)(StringComparer.Ordinal)
 
         Dim tmpc As BaseClasses.ConstantProperties
         For Each tmpc In Me.AvailableComponents.Values
@@ -1973,7 +1973,7 @@ Public Class FormMain
 
         End If
 
-        form.ScriptCollection = New Dictionary(Of String, Interfaces.IScript)
+        form.ScriptCollection = New Dictionary(Of String, Interfaces.IScript)(StringComparer.Ordinal)
 
         If xdoc.Element("DWSIM_Simulation_Data").Element("ScriptItems") IsNot Nothing Then
 
@@ -2070,7 +2070,7 @@ Public Class FormMain
             End If
         Next
 
-        form.Options.NotSelectedComponents = New Dictionary(Of String, Interfaces.ICompoundConstantProperties)
+        form.Options.NotSelectedComponents = New Dictionary(Of String, Interfaces.ICompoundConstantProperties)(StringComparer.Ordinal)
 
         Dim tmpc As BaseClasses.ConstantProperties
         For Each tmpc In Me.AvailableComponents.Values
@@ -2504,7 +2504,7 @@ Public Class FormMain
 
         End If
 
-        form.ScriptCollection = New Dictionary(Of String, Interfaces.IScript)
+        form.ScriptCollection = New Dictionary(Of String, Interfaces.IScript)(StringComparer.Ordinal)
 
         If xdoc.Element("DWSIM_Simulation_Data").Element("ScriptItems") IsNot Nothing Then
 
@@ -2544,7 +2544,7 @@ Public Class FormMain
             End If
         Next
 
-        form.Options.NotSelectedComponents = New Dictionary(Of String, Interfaces.ICompoundConstantProperties)
+        form.Options.NotSelectedComponents = New Dictionary(Of String, Interfaces.ICompoundConstantProperties)(StringComparer.Ordinal)
 
         Dim tmpc As BaseClasses.ConstantProperties
         For Each tmpc In Me.AvailableComponents.Values
@@ -2932,7 +2932,7 @@ Public Class FormMain
         xdoc.Element("DWSIM_Simulation_Data").Add(New XElement("PetroleumAssays"))
         xel = xdoc.Element("DWSIM_Simulation_Data").Element("PetroleumAssays")
 
-        If form.Options.PetroleumAssays Is Nothing Then form.Options.PetroleumAssays = New Dictionary(Of String, Utilities.PetroleumCharacterization.Assay.Assay)
+        If form.Options.PetroleumAssays Is Nothing Then form.Options.PetroleumAssays = New Dictionary(Of String, Utilities.PetroleumCharacterization.Assay.Assay)(StringComparer.Ordinal)
 
         For Each pp As KeyValuePair(Of String, Utilities.PetroleumCharacterization.Assay.Assay) In form.Options.PetroleumAssays
             xel.Add(New XElement("Assay", pp.Value.SaveData().ToArray()))

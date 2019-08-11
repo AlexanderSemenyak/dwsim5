@@ -44,9 +44,9 @@ Namespace DWSIM.Flowsheet
 
             'Creates all the graphic collections.
 
-            GraphicObjectCollection = New Dictionary(Of String, IGraphicObject)
+            GraphicObjectCollection = New Dictionary(Of String, IGraphicObject)(StringComparer.Ordinal)
 
-            FlowsheetObjectCollection = New Dictionary(Of String, SharedClasses.UnitOperations.BaseClass)
+            FlowsheetObjectCollection = New Dictionary(Of String, SharedClasses.UnitOperations.BaseClass)(StringComparer.Ordinal)
 
             OPT_SensAnalysisCollection = New List(Of Optimization.SensitivityAnalysisCase)
 
@@ -64,7 +64,7 @@ Namespace DWSIM.Flowsheet
 
         Public Property FlashAlgorithms As New List(Of Interfaces.IFlashAlgorithm) Implements Interfaces.IFlowsheetOptions.FlashAlgorithms
 
-        Public AvailableUnitSystems As New Dictionary(Of String, SystemsOfUnits.Units)
+        Public AvailableUnitSystems As New Dictionary(Of String, SystemsOfUnits.Units)(StringComparer.Ordinal)
 
         <Xml.Serialization.XmlIgnore()> Public PropertyPackages As Dictionary(Of String, IPropertyPackage)
 
@@ -96,14 +96,14 @@ Namespace DWSIM.Flowsheet
 
         Sub New()
 
-            SelectedComponents = New Dictionary(Of String, Interfaces.ICompoundConstantProperties)
-            NotSelectedComponents = New Dictionary(Of String, Interfaces.ICompoundConstantProperties)
+            SelectedComponents = New Dictionary(Of String, Interfaces.ICompoundConstantProperties)(StringComparer.Ordinal)
+            NotSelectedComponents = New Dictionary(Of String, Interfaces.ICompoundConstantProperties)(StringComparer.Ordinal)
             SelectedUnitSystem = New SystemsOfUnits.SI()
-            Reactions = New Dictionary(Of String, Interfaces.IReaction)
-            ReactionSets = New Dictionary(Of String, Interfaces.IReactionSet)
-            Databases = New Dictionary(Of String, String())
-            PropertyPackages = New Dictionary(Of String, IPropertyPackage)
-            PetroleumAssays = New Dictionary(Of String, Utilities.PetroleumCharacterization.Assay.Assay)
+            Reactions = New Dictionary(Of String, Interfaces.IReaction)(StringComparer.Ordinal)
+            ReactionSets = New Dictionary(Of String, Interfaces.IReactionSet)(StringComparer.Ordinal)
+            Databases = New Dictionary(Of String, String())(StringComparer.Ordinal)
+            PropertyPackages = New Dictionary(Of String, IPropertyPackage)(StringComparer.Ordinal)
+            PetroleumAssays = New Dictionary(Of String, Utilities.PetroleumCharacterization.Assay.Assay)(StringComparer.Ordinal)
 
             'With ReactionSets
             '    .Add("DefaultSet", New ReactionSet("DefaultSet", DWSIM.App.GetLocalString("Rxn_DefaultSetName"), DWSIM.App.GetLocalString("Rxn_DefaultSetDesc")))
@@ -201,7 +201,7 @@ Namespace DWSIM.Flowsheet
             End Set
         End Property
 
-        Public Property VisibleProperties As New Dictionary(Of String, List(Of String)) Implements Interfaces.IFlowsheetOptions.VisibleProperties
+        Public Property VisibleProperties As New Dictionary(Of String, List(Of String))(StringComparer.Ordinal) Implements Interfaces.IFlowsheetOptions.VisibleProperties
 
         Public Property SimultaneousAdjustSolverEnabled As Boolean = True Implements Interfaces.IFlowsheetOptions.SimultaneousAdjustSolverEnabled
 

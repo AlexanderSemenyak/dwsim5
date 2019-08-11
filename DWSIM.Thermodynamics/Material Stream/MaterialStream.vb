@@ -5930,7 +5930,7 @@ Namespace Streams
 
 #End Region
 
-        Public Property InputComposition As Dictionary(Of String, Double) = New Dictionary(Of String, Double) Implements IMaterialStream.InputComposition
+        Public Property InputComposition As Dictionary(Of String, Double) = New Dictionary(Of String, Double)(StringComparer.Ordinal) Implements IMaterialStream.InputComposition
 
         Public Property IsElectrolyteStream As Boolean = False Implements IMaterialStream.IsElectrolyteStream
 
@@ -7391,9 +7391,9 @@ Namespace Streams
         Public Property Language As String = "en"
 
         Sub New()
-            Data = New Dictionary(Of String, List(Of Double))
-            DataUnits = New Dictionary(Of String, String)
-            CompoundData = New Dictionary(Of String, Object)
+            Data = New Dictionary(Of String, List(Of Double))(StringComparer.Ordinal)
+            DataUnits = New Dictionary(Of String, String)(StringComparer.Ordinal)
+            CompoundData = New Dictionary(Of String, Object)(StringComparer.Ordinal)
             Units = New SystemsOfUnits.SI
         End Sub
 

@@ -825,10 +825,10 @@ Partial Class FormMain
 
         pathsep = Path.DirectorySeparatorChar
 
+        AddPropPacks()
         If Not Settings.CAPEOPENMode AndAlso Not Settings.AutomationMode Then
-            AddPropPacks()
-            AddFlashAlgorithms()
-            GetComponents()
+                AddFlashAlgorithms()
+                GetComponents()
         End If
 
         With Me.AvailableUnitSystems

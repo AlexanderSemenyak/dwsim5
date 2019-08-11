@@ -183,8 +183,8 @@ Namespace BaseClasses
         Public Property ComponentDescription As String = "" Implements Interfaces.IPhase.ComponentDescription
 
         Public Property ComponentName As String = "" Implements Interfaces.IPhase.ComponentName
-        '(StringComparer.Ordinal)
-        Public Property Compounds As Dictionary(Of String, Interfaces.ICompound) = New Dictionary(Of String, Interfaces.ICompound) Implements Interfaces.IPhase.Compounds
+
+        Public Property Compounds As Dictionary(Of String, Interfaces.ICompound) = New Dictionary(Of String, Interfaces.ICompound)(StringComparer.Ordinal) Implements Interfaces.IPhase.Compounds
 
         Public Property Name As String = "" Implements Interfaces.IPhase.Name
 
@@ -252,7 +252,7 @@ Namespace BaseClasses
         'Initializers
 
         Public Sub New()
-            Me._Components = New Dictionary(Of String, Interfaces.IReactionStoichBase)
+            Me._Components = New Dictionary(Of String, Interfaces.IReactionStoichBase)(StringComparer.Ordinal)
             ExpContext = New Ciloci.Flee.ExpressionContext
             ExpContext.Imports.AddType(GetType(System.Math))
             ExpContext.Variables.Add("T", 0.0#)
@@ -508,7 +508,7 @@ Namespace BaseClasses
 
         Sub New()
             MyBase.New()
-            Me.m_reactionset = New Dictionary(Of String, Interfaces.IReactionSetBase)
+            Me.m_reactionset = New Dictionary(Of String, Interfaces.IReactionSetBase)(StringComparer.Ordinal)
         End Sub
 
         Sub New(ByVal id As String, ByVal name As String, ByVal description As String)
@@ -937,7 +937,7 @@ Namespace BaseClasses
                             Case "reactionrate"
 
                                 Dim ims As Streams.MaterialStream = Me.m_str
-                                Dim co As New Dictionary(Of String, Double)
+                                Dim co As New Dictionary(Of String, Double)(StringComparer.Ordinal)
 
                                 'initial mole flows
 
@@ -1300,7 +1300,7 @@ Namespace BaseClasses
         Public Parameters As Dictionary(Of String, Object)
 
         Public Sub New()
-            Parameters = New Dictionary(Of String, Object)
+            Parameters = New Dictionary(Of String, Object)(StringComparer.Ordinal)
         End Sub
 
         Public Function Clone() As Object Implements System.ICloneable.Clone
