@@ -209,7 +209,7 @@ Public Class FormOptions
     Private Sub KryptonCheckBox6_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles KryptonCheckBox6.CheckedChanged
         My.Settings.BackupActivated = Me.KryptonCheckBox6.Checked
         If Me.KryptonCheckBox6.Checked Then
-            FormMain.TimerBackup.Enabled = True
+            My.MyProject.Forms.FormMain.TimerBackup.Enabled = True
             Me.KryptonButton1.Enabled = True
             Me.KryptonTextBox1.Enabled = True
             Me.TrackBar1.Enabled = True

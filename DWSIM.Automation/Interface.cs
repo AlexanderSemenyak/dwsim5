@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using DWSIM.Interfaces;
@@ -65,14 +66,21 @@ namespace DWSIM.Automation
     [Guid("37437090-e541-4f2c-9856-d1e27df32ecb"), ClassInterface(ClassInterfaceType.None)]
     public partial class Automation : AutomationInterface, IDisposable
     {
-
         FormMain fm = null;
 
         public Automation()
         {
             SetupCalculationMode();
 
-            fm = new FormMain();
+            var asm = typeof(FormMain).Assembly;
+            var myProjectType = asm.GetType("DWSIM.My.MyProject");
+            PropertyInfo pForms = myProjectType.GetProperty("Forms", BindingFlags.Static | BindingFlags.NonPublic);
+            var myForms = pForms.GetValue(null);
+            //DWSIM.My.MyProject.MyForms
+            var myForms_pMainForm = myForms.GetType().GetProperty("FormMain");
+            fm= (FormMain)myForms_pMainForm.GetValue(myForms); //(!) так мы инстанцируем форму аналогично как при старте VB.NET-проекта - т.е. без повторного ее создания в коде DWSIM
+            //fm = new FormMain();
+
             fm.m_SupressMessages = true;
         }
 

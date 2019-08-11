@@ -3,6 +3,7 @@ Imports Nini.Config
 Imports Cudafy
 Imports DWSIM.UI.Controls
 Imports DWSIM.UI.Desktop
+Imports Eto.Wpf.Forms
 
 '    Shared Functions
 '    Copyright 2008-2014 Daniel Wagner O. de Medeiros
@@ -36,6 +37,8 @@ Namespace DWSIM
                 etoinst.Attach()
             Else
                 Dim platform As New Eto.Wpf.Platform()
+                ApplicationHandler.EnableCustomThemes = false
+                ApplicationHandler.EnableVisualStyles = false
                 platform.Add(Of CodeEditorControl.ICodeEditor)(Function() New WPF.CodeEditorControlHandler())
                 Dim etoinst = New Eto.Forms.Application(platform)
                 etoinst.Attach()

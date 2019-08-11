@@ -58,9 +58,9 @@ Public Class FormFlowsheet
     <Xml.Serialization.XmlIgnore> Public Property MasterUnitOp As ISimulationObject = Nothing Implements IFlowsheet.MasterUnitOp
     Public Property RedirectMessages As Boolean = False Implements IFlowsheet.RedirectMessages
 
-    Public FrmStSim1 As New FormSimulSettings
-    Public FrmPCBulk As New FormPCBulk
-    Public FrmReport As New FormReportConfig
+    Public FrmStSim1 As FormSimulSettings
+    Public FrmPCBulk As FormPCBulk
+    Public FrmReport As FormReportConfig
 
     Public FrmReacMan As FormReacManager
 
@@ -77,8 +77,8 @@ Public Class FormFlowsheet
     Public FormCOReports As New COReportsPanel
     Public FormWatch As New WatchPanel
 
-    Public FormSensAnalysis0 As New FormSensAnalysis
-    Public FormOptimization0 As New FormOptimization
+    Public FormSensAnalysis0 As FormSensAnalysis
+    Public FormOptimization0 As FormOptimization
 
     Public WithEvents Options As New SharedClasses.DWSIM.Flowsheet.FlowsheetVariables
 
@@ -112,6 +112,16 @@ Public Class FormFlowsheet
 #Region "    Form Event Handlers "
 
     Public Sub New()
+
+        'alexander speedup loading FlowSheet in automation mode
+        If  GlobalSettings.Settings.AutomationMode =False Then
+            Me.FrmStSim1 = new FormSimulSettings
+            Me.FrmPCBulk = new FormPCBulk
+            Me.FrmReport  = new FormReportConfig
+
+            Me.FormSensAnalysis0  = new FormSensAnalysis
+            Me.FormOptimization0 = new FormOptimization
+        end if
 
         'Initialize Units From Automation
         For Each pair As KeyValuePair(Of String,Units) In Units.PredefinedUserUnits
@@ -503,7 +513,7 @@ Public Class FormFlowsheet
               FormMain.AvailableUnitSystems(su.Name) = su
             end if
 
-            Me.FrmStSim1.ComboBox2.Items.Add(su.Name)
+            Me.FrmStSim1?.ComboBox2.Items.Add(su.Name)
             Return True
         End if
 
@@ -795,7 +805,7 @@ Public Class FormFlowsheet
 
     Private Sub AssistenteDeCriacaoDeSubstânciasToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CompoundCreatorWizardTSMI.Click
 
-        FrmStSim1.loaded = False
+        if not FrmStSim1 Is Nothing then FrmStSim1.loaded = False
 
         Dim wform As New UI.Desktop.Editors.CompoundCreatorWizard(Me)
         wform.SetupAndDisplayPage(1)
@@ -2258,7 +2268,7 @@ Public Class FormFlowsheet
                     If undo Then
                         Me.Options.AvailableUnitSystems.Add(su.Name, su)
                     Else
-                        Me.FrmStSim1.ComboBox2.SelectedIndex = 0
+                        if not FrmStSim1 Is Nothing then Me.FrmStSim1.ComboBox2.SelectedIndex = 0
                         Me.Options.AvailableUnitSystems.Remove(su.Name)
                     End If
 
@@ -2270,7 +2280,7 @@ Public Class FormFlowsheet
                     Dim method As FieldInfo = sobj.GetType().GetField(act.ObjID2)
                     method.SetValue(sobj, pval)
 
-                    FrmStSim1.ComboBox2_SelectedIndexChanged(Me, New EventArgs)
+                    if not FrmStSim1 Is Nothing then FrmStSim1.ComboBox2_SelectedIndexChanged(Me, New EventArgs)
 
                 Case UndoRedoActionType.CutObjects
 

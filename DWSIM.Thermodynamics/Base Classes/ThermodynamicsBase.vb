@@ -1382,27 +1382,32 @@ Namespace BaseClasses
 
             XMLSerializer.XMLSerializer.Deserialize(Me, data)
 
-            Dim unif As New PropertyPackages.Auxiliary.Unifac
-            Dim modf As New PropertyPackages.Auxiliary.Modfac
+            'Alexander - disable not used slow load data
+            If  GlobalSettings.Settings.AutomationMode = false Then
+                Dim unif As New PropertyPackages.Auxiliary.Unifac
+                Dim modf As New PropertyPackages.Auxiliary.Modfac
 
-            For Each xel2 As XElement In (From xel As XElement In data Select xel Where xel.Name = "UNIFACGroups").Elements
-                If xel2.@Name Is Nothing Then
-                    Me.UNIFACGroups.Add(xel2.@GroupID.ToString, xel2.@Value)
-                Else
-                    Dim id As Integer = unif.Group2ID(xel2.@Name)
-                    Me.UNIFACGroups.Add(id.ToString, xel2.@Value)
-                End If
-            Next
+                For Each xel2 As XElement In (From xel As XElement In data Select xel Where xel.Name = "UNIFACGroups").Elements
+                    If xel2.@Name Is Nothing Then
+                        Me.UNIFACGroups.Add(xel2.@GroupID.ToString, xel2.@Value)
+                    Else
+                        Dim id As Integer = unif.Group2ID(xel2.@Name)
+                        Me.UNIFACGroups.Add(id.ToString, xel2.@Value)
+                    End If
+                Next
 
-            For Each xel2 As XElement In (From xel As XElement In data Select xel Where xel.Name = "MODFACGroups").Elements
-                If xel2.@Name Is Nothing Then
-                    Me.MODFACGroups.Add(xel2.@GroupID.ToString, xel2.@Value)
-                Else
-                    Dim id As Integer = modf.Group2ID(xel2.@Name)
-                    Me.MODFACGroups.Add(id.ToString, xel2.@Value)
-                End If
-            Next
+                For Each xel2 As XElement In (From xel As XElement In data Select xel Where xel.Name = "MODFACGroups").Elements
+                    If xel2.@Name Is Nothing Then
+                        Me.MODFACGroups.Add(xel2.@GroupID.ToString, xel2.@Value)
+                    Else
+                        Dim id As Integer = modf.Group2ID(xel2.@Name)
+                        Me.MODFACGroups.Add(id.ToString, xel2.@Value)
+                    End If
+                Next
 
+                unif = Nothing
+                modf = Nothing
+            end if
             For Each xel2 As XElement In (From xel As XElement In data Select xel Where xel.Name = "NISTMODFACGroups").Elements
                 Me.NISTMODFACGroups.Add(xel2.@GroupID.ToString, xel2.@Value)
             Next
@@ -1411,8 +1416,6 @@ Namespace BaseClasses
                 Me.Elements.Add(xel2.@Name, xel2.@Value)
             Next
 
-            unif = Nothing
-            modf = Nothing
 
             Return True
 
