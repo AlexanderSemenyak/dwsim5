@@ -50,17 +50,17 @@ Namespace PropertyPackages.Auxiliary
 
         Dim m_pr As New PropertyPackages.Auxiliary.PROPS
 
-        Private _ip As Dictionary(Of String, Dictionary(Of String, LKP_IPData))
+        public readonly InteractionParameters As Dictionary(Of String, Dictionary(Of String, LKP_IPData))
 
-        Public ReadOnly Property InteractionParameters() As Dictionary(Of String, Dictionary(Of String, LKP_IPData))
-            Get
-                Return _ip
-            End Get
-        End Property
+        'Public ReadOnly Property InteractionParameters() As Dictionary(Of String, Dictionary(Of String, LKP_IPData))
+        '    Get
+        '        Return _ip
+        '    End Get
+        'End Property
 
         Sub New()
 
-            _ip = New Dictionary(Of String, Dictionary(Of String, LKP_IPData))
+            Me.InteractionParameters = New Dictionary(Of String, Dictionary(Of String, LKP_IPData))(StringComparer.Ordinal)
 
             Dim pathsep As Char = System.IO.Path.DirectorySeparatorChar
 
@@ -80,7 +80,7 @@ Namespace PropertyPackages.Auxiliary
                         Me.InteractionParameters((lkpip.ID1)).Add((lkpip.ID2), lkpip.Clone)
                     End If
                 Else
-                    Me.InteractionParameters.Add((lkpip.ID1), New Dictionary(Of String, LKP_IPData))
+                    Me.InteractionParameters.Add((lkpip.ID1), New Dictionary(Of String, LKP_IPData)(StringComparer.Ordinal))
                     Me.InteractionParameters((lkpip.ID1)).Add((lkpip.ID2), lkpip.Clone)
                 End If
             Next

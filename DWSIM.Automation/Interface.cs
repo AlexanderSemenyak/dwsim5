@@ -25,7 +25,23 @@ namespace DWSIM.Automation
         /// <param name="serializedUnits"></param>
         Units AddUnits(byte[] serializedUnits);
 
+        /// <summary>
+        /// Загрузить из потока не сохраняя на диск
+        /// </summary>
+        /// <param name="fsFlowsheet"></param>
+        /// <param name="filepathVirtual"></param>
+        /// <param name="errorText"></param>
+        /// <returns></returns>
+        IFlowsheet LoadFlowsheet(Stream fsFlowsheet, string filepathVirtual, out string errorText);
+
+        /// <summary>
+        /// Загрузить модель из файла
+        /// </summary>
+        /// <param name="filepath"></param>
+        /// <param name="errorText"></param>
+        /// <returns></returns>
         IFlowsheet LoadFlowsheet(string filepath, out string errorText);
+
         void SaveFlowsheet(IFlowsheet flowsheet, string filepath, bool compressed);
         void CloseWithoutSave(IFlowsheet flowsheet);
 
@@ -62,16 +78,28 @@ namespace DWSIM.Automation
 
         public Interfaces.IFlowsheet LoadFlowsheet(string filepath, out string errorText)
         {
+            return this.LoadFlowsheet(null, filepath, out errorText);
+        }
+
+        /// <summary>
+        /// Загрузить из потока не создавая промежуточный файл
+        /// </summary>
+        /// <param name="fsFlowsheet"></param>
+        /// <param name="filepath"></param>
+        /// <param name="errorText"></param>
+        /// <returns></returns>
+        public Interfaces.IFlowsheet LoadFlowsheet(Stream fsFlowsheet, string filepath, out string errorText)
+        {
             GlobalSettings.Settings.AutomationMode = true;
             var ext = System.IO.Path.GetExtension(filepath).ToLower();
             IFlowsheet fs = null;
             if (ext.Contains("dwxmz") || ext.Contains("armgz"))
             {
-                fs = fm.LoadAndExtractXMLZIP(filepath, null, true, Path.GetDirectoryName(filepath)/*for exclude blocking by parallel access*/);
+                fs = fm.LoadAndExtractXMLZIP(fsFlowsheet, filepath, null, true, Path.GetDirectoryName(filepath)/*for exclude blocking by parallel access*/);
             }
             else
             {
-                fs = fm.LoadXML(filepath, null, "", true);
+                fs = fm.LoadXML(fsFlowsheet, filepath, null, "", true);
             }
 
             errorText = fs == null ? fm.m_LastError : null;

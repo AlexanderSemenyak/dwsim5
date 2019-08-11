@@ -34,7 +34,7 @@ Namespace PropertyPackages
 
         Public Shadows Const ClassId As String = "1F5B0263-E936-40d5-BA5B-FFAB11595E43"
 
-        Public CompoundAliases As New Dictionary(Of String, List(Of String))
+        Public CompoundAliases As New Dictionary(Of String, List(Of String))(StringComparer.Ordinal)
 
         Private _IObj As InspectorItem
 

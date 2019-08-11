@@ -24,16 +24,16 @@ Namespace PropertyPackages.Auxiliary
     <System.Serializable()> Public Class SRK
 
         Dim m_pr As New PROPS
-        Private _ip As Dictionary(Of String, Dictionary(Of String, PR_IPData))
+        Public ReadOnly InteractionParameters As Dictionary(Of String, Dictionary(Of String, PR_IPData))
 
-        Public ReadOnly Property InteractionParameters() As Dictionary(Of String, Dictionary(Of String, PR_IPData))
-            Get
-                Return _ip
-            End Get
-        End Property
+        'Public ReadOnly Property InteractionParameters() As Dictionary(Of String, Dictionary(Of String, PR_IPData))
+        '    Get
+        '        Return _ip
+        '    End Get
+        'End Property
 
         Sub New()
-            _ip = New Dictionary(Of String, Dictionary(Of String, PR_IPData))
+            Me.InteractionParameters = New Dictionary(Of String, Dictionary(Of String, PR_IPData))(StringComparer.Ordinal)
 
             Dim pathsep As Char = System.IO.Path.DirectorySeparatorChar
 
@@ -55,7 +55,7 @@ Namespace PropertyPackages.Auxiliary
                         Me.InteractionParameters(csdb.GetDWSIMName(srkip.ID1)).Add(csdb.GetDWSIMName(srkip.ID2), srkip.Clone)
                     End If
                 Else
-                    Me.InteractionParameters.Add(csdb.GetDWSIMName(srkip.ID1), New Dictionary(Of String, PR_IPData))
+                    Me.InteractionParameters.Add(csdb.GetDWSIMName(srkip.ID1), New Dictionary(Of String, PR_IPData)(StringComparer.Ordinal))
                     Me.InteractionParameters(csdb.GetDWSIMName(srkip.ID1)).Add(csdb.GetDWSIMName(srkip.ID2), srkip.Clone)
                 End If
             Next
@@ -66,7 +66,7 @@ Namespace PropertyPackages.Auxiliary
                         Me.InteractionParameters(csdb.GetCSName(srkip.ID1)).Add(csdb.GetCSName(srkip.ID2), srkip.Clone)
                     End If
                 Else
-                    Me.InteractionParameters.Add(csdb.GetCSName(srkip.ID1), New Dictionary(Of String, PR_IPData))
+                    Me.InteractionParameters.Add(csdb.GetCSName(srkip.ID1), New Dictionary(Of String, PR_IPData)(StringComparer.Ordinal))
                     Me.InteractionParameters(csdb.GetCSName(srkip.ID1)).Add(csdb.GetCSName(srkip.ID2), srkip.Clone)
                 End If
             Next

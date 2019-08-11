@@ -1641,7 +1641,19 @@ Public Class FormMain
 
     End Sub
 
+    ''' <summary>
+    ''' Alexander - For load FlowSheet without save on disk
+    ''' </summary>
+    ''' <param name="path"></param>
+    ''' <param name="ProgressFeedBack"></param>
+    ''' <param name="simulationfilename"></param>
+    ''' <param name="forcommandline"></param>
+    ''' <returns></returns>
     Public Function LoadXML(ByVal path As String, ProgressFeedBack As Action(Of Integer), Optional ByVal simulationfilename As String = "", Optional ByVal forcommandline As Boolean = False) As Interfaces.IFlowsheet
+        Return LoadXML(Nothing, path , ProgressFeedBack , simulationfilename, forcommandline)
+    end function
+
+    Public Function LoadXML(ByVal fs as Stream, ByVal path As String, ProgressFeedBack As Action(Of Integer), Optional ByVal simulationfilename As String = "", Optional ByVal forcommandline As Boolean = False) As Interfaces.IFlowsheet
 
         My.Application.PushUndoRedoAction = False
 
@@ -1651,7 +1663,7 @@ Public Class FormMain
 
         Dim xdoc As XDocument = Nothing
 
-        Using fstr As Stream = File.OpenRead(path)
+        Using fstr As Stream = If(fs, File.OpenRead(path))
             xdoc = XDocument.Load(fstr)
         End Using
 
@@ -3033,61 +3045,84 @@ Public Class FormMain
 
     Shared Function IsZipFilePasswordProtected(ByVal ZipFile As String) As Boolean
         Using fsIn As New FileStream(ZipFile, FileMode.Open, FileAccess.Read)
-            Using zipInStream As New ZipInputStream(fsIn)
-                Dim zEntry As ZipEntry = zipInStream.GetNextEntry()
-                Return zEntry.IsCrypted
-            End Using
+            return IsZipFilePasswordProtected(fsIn)
+        End Using
+    End Function
+    Shared Function IsZipFilePasswordProtected(ByVal ZipFile As Stream) As Boolean
+        Using zipInStream As New ZipInputStream(ZipFile)
+            Dim zEntry As ZipEntry = zipInStream.GetNextEntry()
+            Return zEntry.IsCrypted
         End Using
     End Function
 
-    Function LoadAndExtractXMLZIP(ByVal caminho As String, ProgressFeedBack As Action(Of Integer), Optional ByVal forcommandline As Boolean = False,Optional ByVal pathtosave As string = Nothing) As Interfaces.IFlowsheet
+    Function LoadAndExtractXMLZIP(ByVal path As String, ProgressFeedBack As Action(Of Integer), Optional ByVal forcommandline As Boolean = False,Optional ByVal pathtosave As string = Nothing) As Interfaces.IFlowsheet
+        return LoadAndExtractXMLZIP(Nothing, path , ProgressFeedBack , forcommandline, pathtosave)
+    end function
+
+    Function LoadAndExtractXMLZIP(fsForPath as Stream, ByVal path As String, ProgressFeedBack As Action(Of Integer), Optional ByVal forcommandline As Boolean = False,Optional ByVal pathtosave As string = Nothing) As Interfaces.IFlowsheet
 
         if string.IsNullOrEmpty(pathtosave) then 
             pathtosave = My.Computer.FileSystem.SpecialDirectories.Temp 
         end if
 
-        pathtosave = pathtosave + Path.DirectorySeparatorChar
+        pathtosave = pathtosave + IO.Path.DirectorySeparatorChar
 
-        Dim fullname As String = ""
+        'Dim fullname As String = ""
+        dim lastBody As Byte() = Nothing
+        dim lastFileName As String = ""
 
         Dim pwd As String = Nothing
-        If IsZipFilePasswordProtected(caminho) Then
-            Dim fp As New FormPassword
-            If fp.ShowDialog() = Windows.Forms.DialogResult.OK Then
-                pwd = fp.tbPassword.Text
+        If (fsForPath is Nothing) Then
+            If (IsZipFilePasswordProtected(path)) Then
+                Dim fp As New FormPassword
+                If fp.ShowDialog() = Windows.Forms.DialogResult.OK Then
+                    pwd = fp.tbPassword.Text
+                End If
             End If
         End If
 
         Try
-            Using stream As ZipInputStream = New ZipInputStream(File.OpenRead(caminho))
+            Using stream As ZipInputStream = New ZipInputStream(If (fsForPath,File.OpenRead(path)))
                 stream.Password = pwd
                 Dim entry As ZipEntry
 Label_00CC:
                 entry = stream.GetNextEntry()
                 Do While (Not entry Is Nothing)
-                    Dim fileName As String = Path.GetFileName(entry.Name)
+                    Dim fileName As String = IO.Path.GetFileName(entry.Name)
                     If (fileName <> String.Empty) Then
-                        Using stream2 As FileStream = File.Create(pathtosave + Path.GetFileName(entry.Name))
-                            Dim count As Integer = 2048
-                            Dim buffer As Byte() = New Byte(2048) {}
+                        Dim fullDstFilename  = pathtosave + IO.Path.GetFileName(entry.Name)
+                        Using stream2 As MemoryStream = new MemoryStream()'File.Create(fullDstFilename)
+                            'Dim count As Integer = 2048
+                            Dim buffer As Byte() = New Byte(50000) {}
                             Do While True
-                                count = stream.Read(buffer, 0, buffer.Length)
+                                Dim count = stream.Read(buffer, 0, buffer.Length)
                                 If (count <= 0) Then
-                                    fullname = pathtosave + Path.GetFileName(entry.Name)
+                                    'fullname = fullDstFilename
+                                    stream2.Flush()
+                                    'alexander write to stream without write file
+                                    lastBody = stream2.ToArray()
+                                    lastFileName = fullDstFilename
                                     GoTo Label_00CC
                                 End If
+                                'alexander write to stream without write file
                                 stream2.Write(buffer, 0, count)
                             Loop
                         End Using
+                        
                     End If
                     entry = stream.GetNextEntry
                 Loop
             End Using
+
             Dim fs As Interfaces.IFlowsheet
-            fs = LoadXML(fullname, ProgressFeedBack, caminho, forcommandline)
-            fs.FilePath = caminho
-            fs.Options.FilePath = caminho
-            File.Delete(fullname)
+            'fs = LoadXML(fullname, ProgressFeedBack, path, forcommandline)
+           ' alexander - load from Stream
+            using fsStream = new MemoryStream(lastBody)
+                fs = LoadXML(fsStream, lastFileName, ProgressFeedBack, path, forcommandline)
+            End Using
+            fs.FilePath = path
+            fs.Options.FilePath = path
+            'File.Delete(fullname)
             Return fs
         Catch ex As Exception
             Dim errorText  = ex.ToString

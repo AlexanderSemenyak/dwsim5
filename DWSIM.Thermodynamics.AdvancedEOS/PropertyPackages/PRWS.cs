@@ -15,8 +15,8 @@ namespace DWSIM.Thermodynamics.AdvancedEOS
     public class PRWSPropertyPackage : AdvEOSPropertyPackageBase
     {
 
-        public Dictionary<string, Dictionary<string, PHSC_IP>> InteractionParameters = new Dictionary<string, Dictionary<string, PHSC_IP>>();
-        public Dictionary<string, Dictionary<string, NRTL_IPData>> InteractionParametersNRTL = new Dictionary<string, Dictionary<string, NRTL_IPData>>();
+        public Dictionary<string, Dictionary<string, PHSC_IP>> InteractionParameters = new Dictionary<string, Dictionary<string, PHSC_IP>>(StringComparer.Ordinal);
+        public Dictionary<string, Dictionary<string, NRTL_IPData>> InteractionParametersNRTL = new Dictionary<string, Dictionary<string, NRTL_IPData>>(StringComparer.Ordinal);
 
         public PRWSPropertyPackage()
         {
