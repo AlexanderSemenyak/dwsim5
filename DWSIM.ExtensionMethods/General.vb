@@ -143,23 +143,37 @@ Public Module General
 
     <System.Runtime.CompilerServices.Extension()> _
     Public Function IsValidDouble(obj As Object) As Boolean
-
-        Return Double.TryParse(obj.ToString, New Double)
+        Return obj.ToString.IsValidDouble()
 
     End Function
 
     <System.Runtime.CompilerServices.Extension()> _
     Public Function IsValidDouble(str As String) As Boolean
+        Dim dbl As Double = Nothing
+        Return str.IsValidDouble(dbl)
+    End Function
 
-        Return Double.TryParse(str, New Double)
+    <System.Runtime.CompilerServices.Extension()> _
+    Public Function IsValidDouble(str As String, byref dbl As Double) As Boolean
+
+        If Double.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, dbl) Then
+            Return true
+        ElseIf Double.TryParse(str, dbl) Then
+            Return true
+        Else 
+            Return false
+        End If
 
     End Function
 
     <System.Runtime.CompilerServices.Extension()>
     Public Function IsValidDoubleExpression(str As String) As Boolean
 
-        If Double.TryParse(str, New Double) Then
-            Return True
+        Dim dbl As Double = Nothing
+        If Double.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, dbl) Then
+            Return true
+        ElseIf Double.TryParse(str, dbl) Then
+            Return true
         Else
             Try
                 If Not SharedClasses.ExpressionParser.ParserInitialized Then SharedClasses.ExpressionParser.InitializeExpressionParser()
@@ -175,13 +189,18 @@ Public Module General
 
     <System.Runtime.CompilerServices.Extension()>
     Public Function ParseExpressionToDouble(str As String) As Double
-        If Not SharedClasses.ExpressionParser.ParserInitialized Then SharedClasses.ExpressionParser.InitializeExpressionParser()
-        Try
-            Dim Expr = SharedClasses.ExpressionParser.ExpContext.CompileGeneric(Of Double)(str)
-            Return Expr.Evaluate()
-        Catch ex As Exception
-            Return Convert.ToDouble(str)
-        End Try
+        Dim dbl As Double = Nothing
+        If str.IsValidDouble(dbl) Then
+            Return dbl
+        Else
+            If Not SharedClasses.ExpressionParser.ParserInitialized Then SharedClasses.ExpressionParser.InitializeExpressionParser()
+            Try
+                Dim Expr = SharedClasses.ExpressionParser.ExpContext.CompileGeneric(Of Double)(str)
+                Return Expr.Evaluate()
+            Catch ex As Exception
+                Throw New Exception("Error parsing the math expression '" & str & "'. Make sure to use the dot as the decimal separator for numbers in math expressions, and refrain from using thousands separators to avoid parsing errors.", ex)
+            End Try
+        End If
     End Function
 
     <System.Runtime.CompilerServices.Extension()> _
@@ -216,8 +235,10 @@ Public Module General
             Dim values() As String = text.Split(",")
             Dim myarr As New ArrayList
 
+            Dim dbl As Double = Nothing
             For Each s As String In values
-                If Double.TryParse(s, New Double) Then
+
+                If Double.TryParse(s, NumberStyles.Any,ci, dbl) Then
                     myarr.Add(Double.Parse(s, ci))
                 Else
                     myarr.Add(s)
@@ -266,17 +287,19 @@ Public Module General
     <System.Runtime.CompilerServices.Extension()> _
     Public Function GetValue(control As System.Windows.Forms.GridItem) As Double
         Dim istring As Object
+        Dim dbl As double
+
         If control.Value.ToString().Split(" ").Length > 1 Then
             istring = control.Value.ToString().Split(" ")(0)
-            If Double.TryParse(istring.ToString, New Double) Then
-                Return Convert.ToDouble(istring)
+            If istring.ToString().IsValidDouble(dbl) Then
+                Return dbl
             Else
                 Return Double.NaN
             End If
         ElseIf control.Value.ToString().Split(" ").Length = 1 Then
             istring = control.Value
-            If Double.TryParse(istring.ToString, New Double) Then
-                Return Convert.ToDouble(control.Value)
+            If istring.ToString().IsValidDouble(dbl) Then
+                Return dbl
             Else
                 Return Double.NaN
             End If
@@ -401,8 +424,9 @@ Public Module General
     <System.Runtime.CompilerServices.Extension()>
     Public Function ToDoubleWithSeparator(s As String, sep As String) As Double
         Dim nstring As String = s.Replace(sep, ".")
-        If Double.TryParse(nstring, Globalization.NumberStyles.Any, Globalization.CultureInfo.InvariantCulture, New Double) Then
-            Return Double.Parse(nstring, Globalization.CultureInfo.InvariantCulture)
+        Dim dbl As double
+        If nstring.IsValidDouble(dbl) Then
+            Return dbl
         Else
             Return 0.0#
         End If
@@ -422,8 +446,9 @@ Public Module General
 
         Dim ci As CultureInfo = CultureInfo.CurrentCulture
 
-        If Double.TryParse(s, NumberStyles.Any, ci, New Double) Then
-            Return Double.Parse(s, ci)
+        Dim dbl As double
+        If Double.TryParse(s, NumberStyles.Any, ci, dbl) Then
+            Return dbl
         Else
             Return 0.0
         End If
