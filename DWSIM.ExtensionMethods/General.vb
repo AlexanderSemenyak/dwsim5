@@ -2,6 +2,7 @@
 Imports System.Globalization
 Imports DWSIM.Interfaces.Enums
 Imports System.Linq
+Imports DWSIM.SharedClasses.SystemsOfUnits
 
 Public Module General
 
@@ -156,7 +157,7 @@ Public Module General
     <System.Runtime.CompilerServices.Extension()> _
     Public Function IsValidDouble(str As String, byref dbl As Double) As Boolean
 
-        If Double.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, dbl) Then
+        If Double.TryParse(str, Units.NumberStyleAnyWithoutAllowThousands, CultureInfo.InvariantCulture, dbl) Then
             Return true
         ElseIf Double.TryParse(str, dbl) Then
             Return true
@@ -170,7 +171,7 @@ Public Module General
     Public Function IsValidDoubleExpression(str As String) As Boolean
 
         Dim dbl As Double = Nothing
-        If Double.TryParse(str, NumberStyles.Any, CultureInfo.InvariantCulture, dbl) Then
+        If Double.TryParse(str, Units.NumberStyleAnyWithoutAllowThousands, CultureInfo.InvariantCulture, dbl) Then
             Return true
         ElseIf Double.TryParse(str, dbl) Then
             Return true
@@ -238,7 +239,7 @@ Public Module General
             Dim dbl As Double = Nothing
             For Each s As String In values
 
-                If Double.TryParse(s, NumberStyles.Any,ci, dbl) Then
+                If Double.TryParse(s, Units.NumberStyleAnyWithoutAllowThousands,ci, dbl) Then
                     myarr.Add(Double.Parse(s, ci))
                 Else
                     myarr.Add(s)
@@ -447,7 +448,7 @@ Public Module General
         Dim ci As CultureInfo = CultureInfo.CurrentCulture
 
         Dim dbl As double
-        If Double.TryParse(s, NumberStyles.Any, ci, dbl) Then
+        If Double.TryParse(s, Units.NumberStyleAnyWithoutAllowThousands, ci, dbl) Then
             Return dbl
         Else
             Return 0.0

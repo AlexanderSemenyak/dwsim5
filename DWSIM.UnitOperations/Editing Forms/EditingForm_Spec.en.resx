@@ -135,48 +135,32 @@
   <data name="GroupBox5.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="rtbAnnotations.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="GroupBox4.Text" xml:space="preserve">
     <value>Примечание</value>
-  </data>
-  <data name="GroupBox4.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lblResult.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="Label1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>198, 13</value>
-  </data>
-  <data name="Label1.Text" xml:space="preserve">
-    <value>Y = Переменная-назначение, X = Переменная-источник</value>
-  </data>
-  <data name="Label1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Label3.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="tbExpression.ToolTip" xml:space="preserve">
-    <value />
   </data>
   <data name="GroupBox2.Text" xml:space="preserve">
     <value>Формула для зависимого значения</value>
   </data>
-  <data name="GroupBox2.ToolTip" xml:space="preserve">
+  <data name="lblResult.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="lblTargetVal.ToolTip" xml:space="preserve">
+  <data name="Label1.Text" xml:space="preserve">
+    <value>Y = Переменная-назначение, X = Переменная-источник</value>
+  </data>
+  <data name="tbExpression.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="lblSourceVal.ToolTip" xml:space="preserve">
-    <value />
+  <data name="GroupBox1.Text" xml:space="preserve">
+    <value>Связанные объекты</value>
   </data>
-  <data name="Label6.Size" type="System.Drawing.Size, System.Drawing">
-    <value>68, 13</value>
+  <data name="lblSrcVal2.Text" xml:space="preserve">
+    <value>Значение источника2</value>
+  </data>
+  <data name="lblSrcProp2.Text" xml:space="preserve">
+    <value>Свойство источника2</value>
+  </data>
+  <data name="lblSrcObj2.Text" xml:space="preserve">
+    <value>Источник2</value>
   </data>
   <data name="Label6.Text" xml:space="preserve">
     <value>Целевое значение</value>
@@ -184,47 +168,17 @@
   <data name="Label6.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="Label5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>71, 13</value>
-  </data>
   <data name="Label5.Text" xml:space="preserve">
     <value>Значение источника</value>
-  </data>
-  <data name="Label5.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Label2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>80, 13</value>
   </data>
   <data name="Label2.Text" xml:space="preserve">
     <value>Целевое свойство</value>
   </data>
-  <data name="Label2.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="cbTargetProp.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="cbTargetObj.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Label4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>72, 13</value>
-  </data>
   <data name="Label4.Text" xml:space="preserve">
     <value>Целевой объект</value>
   </data>
-  <data name="Label4.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="Label7.Size" type="System.Drawing.Size, System.Drawing">
-    <value>83, 13</value>
-  </data>
   <data name="Label7.Text" xml:space="preserve">
     <value>Свойство источника</value>
-  </data>
-  <data name="Label7.ToolTip" xml:space="preserve">
-    <value />
   </data>
   <data name="cbSourceProp.ToolTip" xml:space="preserve">
     <value />
@@ -232,31 +186,10 @@
   <data name="cbSourceObj.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="Label19.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 13</value>
-  </data>
   <data name="Label19.Text" xml:space="preserve">
     <value>Источник</value>
   </data>
   <data name="Label19.ToolTip" xml:space="preserve">
     <value />
-  </data>
-  <data name="GroupBox1.Text" xml:space="preserve">
-    <value>Связанные объекты</value>
-  </data>
-  <data name="GroupBox1.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="$this.ToolTip" xml:space="preserve">
-    <value />
-  </data>
-  <data name="lblSrcObj2.Text" xml:space="preserve">
-    <value>Источник2</value>
-  </data>
-  <data name="lblSrcProp2.Text" xml:space="preserve">
-    <value>Свойство источника2</value>
-  </data>
-  <data name="lblSrcVal2.Text" xml:space="preserve">
-    <value>Значение источника2</value>
   </data>
 </root>

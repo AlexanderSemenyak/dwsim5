@@ -15,6 +15,7 @@
 '
 '    You should have received a copy of the GNU General Public License
 '    along with DWSIM.  If not, see <http://www.gnu.org/licenses/>.
+Imports System.Globalization
 
 Namespace SystemsOfUnits
 
@@ -23,6 +24,11 @@ Namespace SystemsOfUnits
         Implements Interfaces.ICustomXMLSerialization
 
         Implements Interfaces.IUnitsOfMeasure
+
+        ''' <summary>
+        ''' Alexander => Replace NumberStyles.Any for Units.NumberStyleAnyWithoutAllowThousands
+        ''' </summary>
+        Public Shared NumberStyleAnyWithoutAllowThousands as NumberStyles = NumberStyles.Any - NumberStyles.AllowThousands
 
         Public Sub New()
 
