@@ -61,19 +61,6 @@ Namespace PropertyPackages
 
         Public Overrides Sub ConfigParameters()
 
-            m_par = New System.Collections.Generic.Dictionary(Of String, Double)
-
-            With Me.Parameters
-                .Clear()
-                .Add("PP_USEEXPLIQDENS", 0)
-                .Add("PP_USE_EOS_LIQDENS", 1)
-                .Add("PP_USE_EOS_VOLUME_SHIFT", 1)
-                .Add("PP_EXP_LIQDENS_PCORRECTION", 1)
-                .Add("PP_LIQVISC_PCORRECTION", 1)
-                .Add("PP_USE_IDEAL_LIQUID_FUGACITY_FOR_SOLID_FUGACITY_CALC", 0)
-                .Add("PP_USE_IDEAL_SOLID_FUGACITY", 0)
-            End With
-
         End Sub
 
         Public Overrides Sub DisplayEditingForm()
@@ -267,7 +254,7 @@ Namespace PropertyPackages
                     CalcAdditionalPhaseProperties(phaseID)
                 Case "compressibilityfactor"
                     result = m_pr.Z_PR(T, P, RET_VMOL(phase), RET_VKij(), RET_VTC, RET_VPC, RET_VW, sstate)
-                    If Convert.ToInt32(Me.Parameters("PP_USE_EOS_VOLUME_SHIFT")) = 1 Then
+                    If LiquidDensity_UsePenelouxVolumeTranslation Then
                         result -= Me.AUX_CM(phase) / 8.314 / T * P
                     End If
                     Me.CurrentMaterialStream.Phases(phaseID).Properties.compressibilityFactor = result
@@ -406,8 +393,6 @@ Namespace PropertyPackages
 
             End If
 
-            If Not Me.Parameters.ContainsKey("PP_USE_EOS_VOLUME_SHIFT") Then Me.Parameters.Add("PP_USE_EOS_VOLUME_SHIFT", 0)
-
             Dim z, dens, h, s, mw, tc, visc As Double
 
             If phaseID = 3 Or phaseID = 4 Or phaseID = 5 Or phaseID = 6 Then
@@ -432,7 +417,7 @@ Namespace PropertyPackages
 
                 IObj?.SetCurrent
                 z = Me.m_pr.Z_PR(T, P, RET_VMOL(dwpl), RET_VKij(), RET_VTC, RET_VPC, RET_VW, "L")
-                If Convert.ToInt32(Me.Parameters("PP_USE_EOS_VOLUME_SHIFT")) = 1 Then
+                If LiquidDensity_UsePenelouxVolumeTranslation Then
                     z -= Me.AUX_CM(dwpl) / 8.314 / T * P
                 End If
                 Me.CurrentMaterialStream.Phases(phaseID).Properties.compressibilityFactor = z
@@ -472,7 +457,7 @@ Namespace PropertyPackages
 
                 IObj?.SetCurrent
                 z = Me.m_pr.Z_PR(T, P, RET_VMOL(Phase.Vapor), RET_VKij, RET_VTC, RET_VPC, RET_VW, "V")
-                If Convert.ToInt32(Me.Parameters("PP_USE_EOS_VOLUME_SHIFT")) = 1 Then
+                If LiquidDensity_UsePenelouxVolumeTranslation Then
                     z -= Me.AUX_CM(Phase.Vapor) / 8.314 / T * P
                 End If
                 Me.CurrentMaterialStream.Phases(phaseID).Properties.compressibilityFactor = z
@@ -860,12 +845,10 @@ Namespace PropertyPackages
             Dim key As String = "0"
             Dim i As Integer = 0
 
-            If Not Me.Parameters.ContainsKey("PP_USE_EOS_LIQDENS") Then Me.Parameters.Add("PP_USE_EOS_LIQDENS", 0)
-
             Select Case phase
                 Case Phase.Liquid
                     key = "1"
-                    If Convert.ToInt32(Me.Parameters("PP_USE_EOS_LIQDENS")) = 1 Then
+                    If LiquidDensityCalculationMode_Subcritical = LiquidDensityCalcMode.EOS Then
                         partvol = Me.m_pr.CalcPartialVolume(T, P, RET_VMOL(phase), RET_VKij(), RET_VTC(), RET_VPC(), RET_VW(), RET_VTB(), "L", 0.01)
                     Else
                         partvol = New ArrayList
@@ -875,7 +858,7 @@ Namespace PropertyPackages
                     End If
                 Case Phase.Aqueous
                     key = "6"
-                    If Convert.ToInt32(Me.Parameters("PP_USE_EOS_LIQDENS")) = 1 Then
+                    If LiquidDensityCalculationMode_Subcritical = LiquidDensityCalcMode.EOS Then
                         partvol = Me.m_pr.CalcPartialVolume(T, P, RET_VMOL(phase), RET_VKij(), RET_VTC(), RET_VPC(), RET_VW(), RET_VTB(), "L", 0.01)
                     Else
                         partvol = New ArrayList
@@ -885,7 +868,7 @@ Namespace PropertyPackages
                     End If
                 Case Phase.Liquid1
                     key = "3"
-                    If Convert.ToInt32(Me.Parameters("PP_USE_EOS_LIQDENS")) = 1 Then
+                    If LiquidDensityCalculationMode_Subcritical = LiquidDensityCalcMode.EOS Then
                         partvol = Me.m_pr.CalcPartialVolume(T, P, RET_VMOL(phase), RET_VKij(), RET_VTC(), RET_VPC(), RET_VW(), RET_VTB(), "L", 0.01)
                     Else
                         partvol = New ArrayList
@@ -895,7 +878,7 @@ Namespace PropertyPackages
                     End If
                 Case Phase.Liquid2
                     key = "4"
-                    If Convert.ToInt32(Me.Parameters("PP_USE_EOS_LIQDENS")) = 1 Then
+                    If LiquidDensityCalculationMode_Subcritical = LiquidDensityCalcMode.EOS Then
                         partvol = Me.m_pr.CalcPartialVolume(T, P, RET_VMOL(phase), RET_VKij(), RET_VTC(), RET_VPC(), RET_VW(), RET_VTB(), "L", 0.01)
                     Else
                         partvol = New ArrayList
@@ -905,7 +888,7 @@ Namespace PropertyPackages
                     End If
                 Case Phase.Liquid3
                     key = "5"
-                    If Convert.ToInt32(Me.Parameters("PP_USE_EOS_LIQDENS")) = 1 Then
+                    If LiquidDensityCalculationMode_Subcritical = LiquidDensityCalcMode.EOS Then
                         partvol = Me.m_pr.CalcPartialVolume(T, P, RET_VMOL(phase), RET_VKij(), RET_VTC(), RET_VPC(), RET_VW(), RET_VTB(), "L", 0.01)
                     Else
                         partvol = New ArrayList
@@ -946,7 +929,7 @@ Namespace PropertyPackages
             IObj?.Paragraphs.Add(String.Format("Vapor Phase Compressibility Factor: {0}", val))
 
             val = (8.314 * val * T / P)
-            If Convert.ToInt32(Me.Parameters("PP_USE_EOS_VOLUME_SHIFT")) = 1 Then
+            If LiquidDensity_UsePenelouxVolumeTranslation Then
                 val -= Me.AUX_CM(Phase.Vapor)
             End If
             val = 1 / val * Me.AUX_MMM(Phase.Vapor) / 1000
@@ -1101,7 +1084,7 @@ Namespace PropertyPackages
             End If
 
             val = (8.314 * val * T / P)
-            If Convert.ToInt32(Me.Parameters("PP_USE_EOS_VOLUME_SHIFT")) = 1 Then
+            If LiquidDensity_UsePenelouxVolumeTranslation Then
                 val -= Me.AUX_CM(Vx)
             End If
             val = P * val / (8.314 * T)

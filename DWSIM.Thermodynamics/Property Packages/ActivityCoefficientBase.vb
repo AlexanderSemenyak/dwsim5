@@ -49,20 +49,7 @@ Namespace PropertyPackages
         End Sub
 
         Public Overrides Sub ConfigParameters()
-            m_par = New System.Collections.Generic.Dictionary(Of String, Double)
-            With Me.Parameters
-                .Clear()
-                .Add("PP_USEEXPLIQDENS", 1)
-                .Add("PP_USE_EOS_LIQDENS", 0)
-                .Add("PP_EXP_LIQDENS_PCORRECTION", 1)
-                .Add("PP_IDEAL_VAPOR_PHASE_FUG", 1)
-                .Add("PP_ENTH_CP_CALC_METHOD", 1)
-                .Add("PP_POYNTING", 1)
-                .Add("PP_LIQVISC_PCORRECTION", 1)
-                .Add("PP_IGNORE_MISSING_IPS", 0)
-                .Add("PP_USE_IDEAL_LIQUID_FUGACITY_FOR_SOLID_FUGACITY_CALC", 0)
-                .Add("PP_USE_IDEAL_SOLID_FUGACITY", 0)
-            End With
+
         End Sub
 
         Public Overrides Function SupportsComponent(ByVal comp As Interfaces.ICompoundConstantProperties) As Boolean
@@ -103,8 +90,7 @@ Namespace PropertyPackages
 
             Dim val As Double
             Dim Z As Double = 1.0#
-            If Not Me.Parameters.ContainsKey("PP_IDEAL_VAPOR_PHASE_FUG") Then Me.Parameters.Add("PP_IDEAL_VAPOR_PHASE_FUG", 0)
-            If Me.Parameters("PP_IDEAL_VAPOR_PHASE_FUG") = 1 Then
+            If VaporPhaseFugacityCalculationMode = VaporPhaseFugacityCalcMode.Ideal Then
                 IObj?.Paragraphs.Add("Ideal Gas Vapor Phase assumption is enabled.")
                 Z = 1.0#
             Else
@@ -128,40 +114,62 @@ Namespace PropertyPackages
         End Function
 
         Public Overloads Overrides Sub DW_CalcCompPartialVolume(ByVal phase As Phase, ByVal T As Double, ByVal P As Double)
-            Dim pi As Integer = 0
-            Select Case phase
-                Case Phase.Liquid
-                Case Phase.Aqueous
-                    pi = 6
-                Case Phase.Liquid1
-                    pi = 3
-                Case Phase.Liquid2
-                    pi = 4
-                Case Phase.Liquid3
-                    pi = 5
-                Case Phase.Vapor
-                    If Not Me.Parameters.ContainsKey("PP_IDEAL_VAPOR_PHASE_FUG") Then Me.Parameters.Add("PP_IDEAL_VAPOR_PHASE_FUG", 0)
-                    If Me.Parameters("PP_IDEAL_VAPOR_PHASE_FUG") = 1 Then
-                        Dim vapdens = AUX_VAPDENS(T, P)
-                        For Each subst As Interfaces.ICompound In Me.CurrentMaterialStream.Phases(2).Compounds.Values
-                            subst.PartialVolume = subst.ConstantProperties.Molar_Weight / vapdens
+
+            Dim i As Integer
+
+            For j As Integer = 1 To 7
+
+                    If j <> 2 Then
+
+                        Dim Vx = RET_VMOL(RET_PHASECODE(j))
+                        Dim n As Integer = Vx.Length - 1
+
+                        Dim constprop = DW_GetConstantProperties()
+
+                        Dim ativ(n), poy1(n), poy2(n), vex(n) As Double
+
+                        ativ = m_act.CalcActivityCoefficients(T, Vx, Me.GetArguments())
+
+                        Dim P2 As Double = P + 1
+
+                        Dim Psati, vli As Double
+                        For i = 0 To n
+                            vli = 1 / AUX_LIQDENSi(constprop(i), T) * constprop(i).Molar_Weight
+                            If Double.IsNaN(vli) Then
+                                vli = 1 / AUX_LIQDENSi(constprop(i), constprop(i).Normal_Boiling_Point) * constprop(i).Molar_Weight
+                            End If
+                            Psati = AUX_PVAPi(i, T)
+                            poy1(i) = Math.Exp(vli * Abs(P - Psati) / (8314.47 * T))
+                            poy2(i) = Math.Exp(vli * Abs(P2 - Psati) / (8314.47 * T))
+                            vex(i) = (Log(poy2(i)) - Log(poy1(i))) * 8.314 * T * 1000 'm3/kmol
                         Next
-                    Else
-                        Dim partvol As New Object
-                        Dim i As Integer = 0
-                        partvol = Me.m_pr.CalcPartialVolume(T, P, RET_VMOL(phase), RET_VKij(), RET_VTC(), RET_VPC(), RET_VW(), RET_VTB(), "V", 0.0001)
+
                         i = 0
-                        For Each subst As Interfaces.ICompound In Me.CurrentMaterialStream.Phases(2).Compounds.Values
-                            subst.PartialVolume = partvol(i)
+                        For Each subst As Interfaces.ICompound In Me.CurrentMaterialStream.Phases(j).Compounds.Values
+                            subst.PartialVolume = vex(i)
                             i += 1
                         Next
+
+                    Else
+
+                        If VaporPhaseFugacityCalculationMode = VaporPhaseFugacityCalcMode.Ideal Then
+                            Dim vapdens = AUX_VAPDENS(T, P)
+                            For Each subst As Interfaces.ICompound In Me.CurrentMaterialStream.Phases(2).Compounds.Values
+                                subst.PartialVolume = subst.ConstantProperties.Molar_Weight / vapdens
+                            Next
+                        Else
+                            Dim partvol As New Object
+                            partvol = Me.m_pr.CalcPartialVolume(T, P, RET_VMOL(2), RET_VKij(), RET_VTC(), RET_VPC(), RET_VW(), RET_VTB(), "V", 0.0001)
+                            i = 0
+                            For Each subst As Interfaces.ICompound In Me.CurrentMaterialStream.Phases(2).Compounds.Values
+                                subst.PartialVolume = partvol(i)
+                                i += 1
+                            Next
+                        End If
+
                     End If
-            End Select
-            If pi <> 0 Then
-                For Each subst As Interfaces.ICompound In Me.CurrentMaterialStream.Phases(pi).Compounds.Values
-                    subst.PartialVolume = subst.ConstantProperties.Molar_Weight / AUX_LIQDENSi(subst, T)
+
                 Next
-            End If
 
         End Sub
 
@@ -350,7 +358,7 @@ Namespace PropertyPackages
                 Dim H As Double
 
                 If st = State.Liquid Then
-                    Select Case Me.Parameters("PP_ENTH_CP_CALC_METHOD")
+                    Select Case EnthalpyEntropyCpCvCalculationMode
                         Case 0 'LK
                             H = Me.m_lk.H_LK_MIX("L", T, P, Vx, RET_VKij(), RET_VTC, RET_VPC, RET_VW, RET_VMM, Me.RET_Hid(298.15, T, Vx))
                         Case 1 'Ideal
@@ -361,7 +369,7 @@ Namespace PropertyPackages
                             H = AUX_INT_CPDTm_L(298.15, T, Me.AUX_CONVERT_MOL_TO_MASS(Vx)) + P / 1000 / Me.AUX_LIQDENS(T, Vx)
                     End Select
                 ElseIf st = State.Vapor Then
-                    Select Case Me.Parameters("PP_ENTH_CP_CALC_METHOD")
+                    Select Case EnthalpyEntropyCpCvCalculationMode
                         Case 0 'LK
                             H = Me.m_lk.H_LK_MIX("V", T, P, Vx, RET_VKij(), RET_VTC, RET_VPC, RET_VW, RET_VMM, Me.RET_Hid(298.15, T, Vx))
                         Case 1 'Ideal
@@ -372,7 +380,7 @@ Namespace PropertyPackages
                             H = AUX_INT_CPDTm_L(298.15, T, Me.AUX_CONVERT_MOL_TO_MASS(Vx)) + P / 1000 / Me.AUX_LIQDENS(T, Vx) + Me.RET_HVAPM(Me.AUX_CONVERT_MOL_TO_MASS(Vx), T)
                     End Select
                 ElseIf st = State.Solid Then
-                    Select Case Me.Parameters("PP_ENTH_CP_CALC_METHOD")
+                    Select Case EnthalpyEntropyCpCvCalculationMode
                         Case 0 'LK
                             H = Me.m_lk.H_LK_MIX("L", T, P, Vx, RET_VKij(), RET_VTC, RET_VPC, RET_VW, RET_VMM, Me.RET_Hid(298.15, T, Vx)) - RET_HFUSM(Me.AUX_CONVERT_MOL_TO_MASS(Vx), T)
                         Case 1 'Ideal
@@ -396,7 +404,7 @@ Namespace PropertyPackages
             Dim H As Double
 
             If st = State.Liquid Then
-                Select Case Me.Parameters("PP_ENTH_CP_CALC_METHOD")
+                Select Case EnthalpyEntropyCpCvCalculationMode
                     Case 0 'LK
                         H = Me.m_lk.H_LK_MIX("L", T, P, Vx, RET_VKij(), RET_VTC, RET_VPC, RET_VW, RET_VMM, 0)
                     Case 1 'Ideal
@@ -405,7 +413,7 @@ Namespace PropertyPackages
                         H = Me.m_act.CalcExcessEnthalpy(T, Vx, Me.GetArguments()) / Me.AUX_MMM(Vx)
                 End Select
             Else
-                Select Case Me.Parameters("PP_ENTH_CP_CALC_METHOD")
+                Select Case EnthalpyEntropyCpCvCalculationMode
                     Case 0 'LK
                         H = Me.m_lk.H_LK_MIX("V", T, P, Vx, RET_VKij(), RET_VTC, RET_VPC, RET_VW, RET_VMM, 0)
                     Case 1 'Ideal
@@ -436,7 +444,7 @@ Namespace PropertyPackages
                 Dim S As Double
 
                 If st = State.Liquid Then
-                    Select Case Me.Parameters("PP_ENTH_CP_CALC_METHOD")
+                    Select Case EnthalpyEntropyCpCvCalculationMode
                         Case 0 'LK
                             S = Me.m_lk.S_LK_MIX("L", T, P, Vx, RET_VKij(), RET_VTC, RET_VPC, RET_VW, RET_VMM, Me.RET_Sid(298.15, T, P, Vx))
                         Case 1 'Ideal
@@ -447,7 +455,7 @@ Namespace PropertyPackages
                             S = AUX_INT_CPDTm_L(298.15, T, Me.AUX_CONVERT_MOL_TO_MASS(Vx)) / T + P / 1000 / Me.AUX_LIQDENS(T, Vx) / T
                     End Select
                 ElseIf st = State.Vapor Then
-                    Select Case Me.Parameters("PP_ENTH_CP_CALC_METHOD")
+                    Select Case EnthalpyEntropyCpCvCalculationMode
                         Case 0 'LK
                             S = Me.m_lk.S_LK_MIX("V", T, P, Vx, RET_VKij(), RET_VTC, RET_VPC, RET_VW, RET_VMM, Me.RET_Sid(298.15, T, P, Vx))
                         Case 1 'Ideal
@@ -458,7 +466,7 @@ Namespace PropertyPackages
                             S = AUX_INT_CPDTm_L(298.15, T, Me.AUX_CONVERT_MOL_TO_MASS(Vx)) / T + Me.RET_HVAPM(Me.AUX_CONVERT_MOL_TO_MASS(Vx), T) / T + P / 1000 / Me.AUX_LIQDENS(T, Vx) / T
                     End Select
                 ElseIf st = State.Solid Then
-                    Select Case Me.Parameters("PP_ENTH_CP_CALC_METHOD")
+                    Select Case EnthalpyEntropyCpCvCalculationMode
                         Case 0 'LK
                             S = Me.m_lk.S_LK_MIX("L", T, P, Vx, RET_VKij(), RET_VTC, RET_VPC, RET_VW, RET_VMM, Me.RET_Sid(298.15, T, P, Vx)) - Me.RET_HFUSM(Me.AUX_CONVERT_MOL_TO_MASS(Vx), T) / T
                         Case 1 'Ideal
@@ -482,7 +490,7 @@ Namespace PropertyPackages
             Dim S As Double
 
             If st = State.Liquid Then
-                Select Case Me.Parameters("PP_ENTH_CP_CALC_METHOD")
+                Select Case EnthalpyEntropyCpCvCalculationMode
                     Case 0 'LK
                         S = Me.m_lk.S_LK_MIX("L", T, P, Vx, RET_VKij(), RET_VTC, RET_VPC, RET_VW, RET_VMM, 0)
                     Case 1 'Ideal
@@ -491,7 +499,7 @@ Namespace PropertyPackages
                         S = (Me.m_act.CalcExcessEnthalpy(T, Vx, Me.GetArguments()) / Me.AUX_MMM(Vx)) / T
                 End Select
             Else
-                Select Case Me.Parameters("PP_ENTH_CP_CALC_METHOD")
+                Select Case EnthalpyEntropyCpCvCalculationMode
                     Case 0 'LK
                         S = Me.m_lk.S_LK_MIX("V", T, P, Vx, RET_VKij(), RET_VTC, RET_VPC, RET_VW, RET_VMM, 0)
                     Case 1 'Ideal
@@ -525,11 +533,7 @@ Namespace PropertyPackages
             IObj?.Paragraphs.Add(String.Format("Mole Fractions: {0}", DirectCast(Vx, Double()).ToMathArrayString))
             IObj?.Paragraphs.Add(String.Format("State: {0}", [Enum].GetName(st.GetType, st)))
 
-            If Not Me.Parameters.ContainsKey("PP_IGNORE_MISSING_IPS") Then
-                Me.Parameters.Add("PP_IGNORE_MISSING_IPS", 0)
-            End If
-
-            If Me.Parameters("PP_IGNORE_MISSING_IPS") = 0 Then
+            If Not ActivityCoefficientModels_IgnoreMissingInteractionParameters Then
                 CheckMissingInteractionParameters(Vx)
             End If
 
@@ -544,8 +548,7 @@ Namespace PropertyPackages
             Dim Tr As Double
             If st = State.Liquid Then
 
-                If Not Me.Parameters.ContainsKey("PP_POYNTING") Then Me.Parameters.Add("PP_POYNTING", 1)
-                If Me.Parameters("PP_POYNTING") = 1 Then
+                If LiquidFugacity_UsePoyntingCorrectionFactor Then
                     IObj?.Paragraphs.Add(String.Format("<h2>Poynting Correction</h2>"))
                     IObj?.Paragraphs.Add(String.Format("Poynting Correction Factor calculation is enabled."))
                     IObj?.Paragraphs.Add("The Poynting factor is a correction factor for the liquid phase vapor pressure. 
@@ -611,8 +614,7 @@ Namespace PropertyPackages
 
             Else
 
-                If Not Me.Parameters.ContainsKey("PP_IDEAL_VAPOR_PHASE_FUG") Then Me.Parameters.Add("PP_IDEAL_VAPOR_PHASE_FUG", 0)
-                If Me.Parameters("PP_IDEAL_VAPOR_PHASE_FUG") = 1 Then
+                If VaporPhaseFugacityCalculationMode = VaporPhaseFugacityCalcMode.Ideal Then
                     For i = 0 To n
                         lnfug(i) = 0.0#
                     Next
@@ -695,7 +697,7 @@ Namespace PropertyPackages
                         resultObj = Me.m_lk.CpCvR_LK(state, T, P, RET_VMOL(phase), RET_VKij(), RET_VMAS(phase), RET_VTC(), RET_VPC(), RET_VCP(T), RET_VMM(), RET_VW(), RET_VZRa())
                         result = resultObj(1)
                     Else
-                        Select Case Me.Parameters("PP_ENTH_CP_CALC_METHOD")
+                        Select Case EnthalpyEntropyCpCvCalculationMode
                             Case 0 'LK
                                 resultObj = Me.m_lk.CpCvR_LK(state, T, P, RET_VMOL(phase), RET_VKij(), RET_VMAS(phase), RET_VTC(), RET_VPC(), RET_VCP(T), RET_VMM(), RET_VW(), RET_VZRa())
                                 result = resultObj(1)
@@ -711,7 +713,7 @@ Namespace PropertyPackages
                         resultObj = Me.m_lk.CpCvR_LK(state, T, P, RET_VMOL(phase), RET_VKij(), RET_VMAS(phase), RET_VTC(), RET_VPC(), RET_VCP(T), RET_VMM(), RET_VW(), RET_VZRa())
                         result = resultObj(2)
                     Else
-                        Select Case Me.Parameters("PP_ENTH_CP_CALC_METHOD")
+                        Select Case EnthalpyEntropyCpCvCalculationMode
                             Case 0 'LK
                                 resultObj = Me.m_lk.CpCvR_LK(state, T, P, RET_VMOL(phase), RET_VKij(), RET_VMAS(phase), RET_VTC(), RET_VPC(), RET_VCP(T), RET_VMM(), RET_VW(), RET_VZRa())
                                 result = resultObj(2)
@@ -870,7 +872,7 @@ Namespace PropertyPackages
                 result = Me.m_lk.Z_LK("L", T / Me.AUX_TCM(dwpl), P / Me.AUX_PCM(dwpl), Me.AUX_WM(dwpl))(0)
                 Me.CurrentMaterialStream.Phases(phaseID).Properties.compressibilityFactor = result
                 IObj?.SetCurrent
-                Select Case Me.Parameters("PP_ENTH_CP_CALC_METHOD")
+                Select Case EnthalpyEntropyCpCvCalculationMode
                     Case 0 'LK
                         resultObj = Me.m_lk.CpCvR_LK("L", T, P, RET_VMOL(dwpl), RET_VKij(), RET_VMAS(dwpl), RET_VTC(), RET_VPC(), RET_VCP(T), RET_VMM(), RET_VW(), RET_VZRa())
                         Me.CurrentMaterialStream.Phases(phaseID).Properties.heatCapacityCp = resultObj(1)

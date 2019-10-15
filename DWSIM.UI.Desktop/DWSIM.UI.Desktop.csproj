@@ -7,7 +7,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>DWSIM.UI.Desktop</RootNamespace>
     <AssemblyName>DWSIM.UI.Desktop</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <DoNotCopyLocalIfInGac>true</DoNotCopyLocalIfInGac>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -85,13 +85,12 @@
       <HintPath>..\DWSIM\References\Cudafy.NET.dll</HintPath>
     </Reference>
     <Reference Include="Eto, Version=2.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Eto.Forms.2.4.1\lib\netstandard1.0\Eto.dll</HintPath>
-    </Reference>
-    <Reference Include="Eto.Direct2D, Version=2.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Eto.Platform.Direct2D.2.4.1\lib\net45\Eto.Direct2D.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DWSIM\References\Eto.Forms\Release\net45\Eto.dll</HintPath>
     </Reference>
     <Reference Include="Eto.Gtk2, Version=2.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Eto.Platform.Gtk2.2.4.1\lib\net45\Eto.Gtk2.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DWSIM\References\Eto.Forms\Release\net45\Eto.Gtk2.dll</HintPath>
     </Reference>
     <Reference Include="Eto.OxyPlot, Version=1.0.5911.41864, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Eto.OxyPlot.1.2.0-beta\lib\net45\Eto.OxyPlot.dll</HintPath>
@@ -102,13 +101,16 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Eto.WinForms, Version=2.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Eto.Platform.Windows.2.4.1\lib\net45\Eto.WinForms.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DWSIM\References\Eto.Forms\Release\net45\Eto.WinForms.dll</HintPath>
     </Reference>
     <Reference Include="Eto.Wpf, Version=2.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Eto.Platform.Wpf.2.4.1\lib\net45\Eto.Wpf.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DWSIM\References\Eto.Forms\Release\net45\Eto.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="Eto.XamMac2, Version=2.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Eto.Platform.XamMac2.2.4.1\lib\net45\Eto.XamMac2.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DWSIM\References\Eto.Forms\Release\modern\Eto.XamMac2.dll</HintPath>
     </Reference>
     <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -152,6 +154,7 @@
     </Reference>
     <Reference Include="OxyPlot, Version=2.0.0.0, Culture=neutral, PublicKeyToken=638079a8f0bd61e9, processorArchitecture=MSIL">
       <HintPath>..\packages\OxyPlot.Core.2.0.0-unstable1035\lib\net45\OxyPlot.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="OxyPlot.Wpf, Version=2.0.0.0, Culture=neutral, PublicKeyToken=75e952ba404cdbb0, processorArchitecture=MSIL">
       <HintPath>..\packages\OxyPlot.Wpf.2.0.0-unstable1035\lib\net452\OxyPlot.Wpf.dll</HintPath>
@@ -168,6 +171,18 @@
     </Reference>
     <Reference Include="Scintilla.Eto.Shared">
       <HintPath>..\DWSIM\References\Eto.Scintilla\Scintilla.Eto.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="Scintilla.Eto.WinForms">
+      <HintPath>..\DWSIM\References\Eto.Scintilla\Scintilla.Eto.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Scintilla.Eto.WPF">
+      <HintPath>..\DWSIM\References\Eto.Scintilla\Scintilla.Eto.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="ScintillaNET, Version=3.6.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\jacobslusser.ScintillaNET.3.6.3\lib\net40\ScintillaNET.dll</HintPath>
+    </Reference>
+    <Reference Include="ScintillaNetPrinting">
+      <HintPath>..\DWSIM\References\Eto.Scintilla\ScintillaNetPrinting.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpDX.4.0.1\lib\net45\SharpDX.dll</HintPath>
@@ -192,12 +207,11 @@
       <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Runtime.Serialization.Primitives">
-      <HintPath>..\packages\System.Runtime.Serialization.Primitives.4.3.0\lib\net46\System.Runtime.Serialization.Primitives.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
+    <Reference Include="unvell.ReoScript">
+      <HintPath>..\DWSIM\References\ReoGrid.WinForms\unvell.ReoScript.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="Xamarin.Mac">
       <HintPath>..\DWSIM\References\Xamarin.Mac.dll</HintPath>
@@ -281,8 +295,6 @@
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
     <Error Condition="!Exists('..\packages\SkiaSharp.1.60.0\build\net45\SkiaSharp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SkiaSharp.1.60.0\build\net45\SkiaSharp.targets'))" />
-    <Error Condition="!Exists('..\packages\Eto.Forms.2.4.1\build\Eto.Forms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Eto.Forms.2.4.1\build\Eto.Forms.targets'))" />
-    <Error Condition="!Exists('..\packages\Eto.Platform.XamMac2.2.4.1\build\Eto.Platform.XamMac2.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Eto.Platform.XamMac2.2.4.1\build\Eto.Platform.XamMac2.targets'))" />
   </Target>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <PropertyGroup>
@@ -320,52 +332,52 @@ xcopy "$(SolutionDir)DWSIM\bin\Release\PropertyGridEx.dll" "$(SolutionDir)DistPa
 xcopy "$(SolutionDir)DWSIM\bin\Release\DWSIM.exe" "$(SolutionDir)DistPackages\Raspberry\" /E /Y /F /D
 xcopy "$(SolutionDir)DWSIM\bin\Release\PropertyGridEx.dll" "$(SolutionDir)DistPackages\Raspberry\" /E /Y /F /D
 
-rmdir /S /Q "$(SolutionDir)DistPackages\Windows\DWSIM.UI.Desktop.app"
-rmdir /S /Q "$(SolutionDir)DistPackages\Windows\x64"
-rmdir /S /Q "$(SolutionDir)DistPackages\Windows\x86"
-rmdir /S /Q "$(SolutionDir)DistPackages\Windows\ECE"
+rd /S /Q "$(SolutionDir)DistPackages\Windows\DWSIM.UI.Desktop.app" 1&gt;nul 4&gt;nul
+rd /S /Q "$(SolutionDir)DistPackages\Windows\x64" 1&gt;nul 4&gt;nul
+rd /S /Q "$(SolutionDir)DistPackages\Windows\x86" 1&gt;nul 4&gt;nul
+rd /S /Q "$(SolutionDir)DistPackages\Windows\ECE" 1&gt;nul 4&gt;nul
 
-rmdir /S /Q "$(SolutionDir)DistPackages\Linux\DWSIM.UI.Desktop.app"
-rmdir /S /Q "$(SolutionDir)DistPackages\Linux\x64"
-rmdir /S /Q "$(SolutionDir)DistPackages\Linux\x86"
-rmdir /S /Q "$(SolutionDir)DistPackages\Linux\ECE"
+rd /S /Q "$(SolutionDir)DistPackages\Linux\DWSIM.UI.Desktop.app" 1&gt;nul 4&gt;nul
+rd /S /Q "$(SolutionDir)DistPackages\Linux\x64" 1&gt;nul 4&gt;nul
+rd /S /Q "$(SolutionDir)DistPackages\Linux\x86" 1&gt;nul 4&gt;nul
+rd /S /Q "$(SolutionDir)DistPackages\Linux\ECE" 1&gt;nul 4&gt;nul
 
-rmdir /S /Q "$(SolutionDir)DistPackages\macOS\DWSIM.UI.Desktop.app"
-rmdir /S /Q "$(SolutionDir)DistPackages\macOS\data\unifac"
-rmdir /S /Q "$(SolutionDir)DistPackages\macOS\x64"
-rmdir /S /Q "$(SolutionDir)DistPackages\macOS\x86"
-rmdir /S /Q "$(SolutionDir)DistPackages\macOS\de"
-rmdir /S /Q "$(SolutionDir)DistPackages\macOS\docs"
-rmdir /S /Q "$(SolutionDir)DistPackages\macOS\es"
-rmdir /S /Q "$(SolutionDir)DistPackages\macOS\help"
-rmdir /S /Q "$(SolutionDir)DistPackages\macOS\de"
-rmdir /S /Q "$(SolutionDir)DistPackages\macOS\pt"
-rmdir /S /Q "$(SolutionDir)DistPackages\macOS\pt-BR"
-rmdir /S /Q "$(SolutionDir)DistPackages\macOS\ECE"
+rd /S /Q "$(SolutionDir)DistPackages\macOS\DWSIM.UI.Desktop.app" 1&gt;nul 4&gt;nul
+rd /S /Q "$(SolutionDir)DistPackages\macOS\data\unifac" 1&gt;nul 4&gt;nul
+rd /S /Q "$(SolutionDir)DistPackages\macOS\x64" 1&gt;nul 4&gt;nul
+rd /S /Q "$(SolutionDir)DistPackages\macOS\x86" 1&gt;nul 4&gt;nul
+rd /S /Q "$(SolutionDir)DistPackages\macOS\de" 1&gt;nul 4&gt;nul
+rd /S /Q "$(SolutionDir)DistPackages\macOS\docs" 1&gt;nul 4&gt;nul
+rd /S /Q "$(SolutionDir)DistPackages\macOS\es" 1&gt;nul 4&gt;nul
+rd /S /Q "$(SolutionDir)DistPackages\macOS\help" 1&gt;nul 4&gt;nul
+rd /S /Q "$(SolutionDir)DistPackages\macOS\de" 1&gt;nul 4&gt;nul
+rd /S /Q "$(SolutionDir)DistPackages\macOS\pt" 1&gt;nul 4&gt;nul
+rd /S /Q "$(SolutionDir)DistPackages\macOS\pt-BR" 1&gt;nul 4&gt;nul
+rd /S /Q "$(SolutionDir)DistPackages\macOS\ECE" 1&gt;nul 4&gt;nul
 
-rmdir /S /Q "$(SolutionDir)DistPackages\Raspberry\DWSIM.UI.Desktop.app"
-rmdir /S /Q "$(SolutionDir)DistPackages\Raspberry\data\unifac"
-rmdir /S /Q "$(SolutionDir)DistPackages\Raspberry\x64"
-rmdir /S /Q "$(SolutionDir)DistPackages\Raspberry\x86"
-rmdir /S /Q "$(SolutionDir)DistPackages\Raspberry\de"
-rmdir /S /Q "$(SolutionDir)DistPackages\Raspberry\docs"
-rmdir /S /Q "$(SolutionDir)DistPackages\Raspberry\es"
-rmdir /S /Q "$(SolutionDir)DistPackages\Raspberry\help"
-rmdir /S /Q "$(SolutionDir)DistPackages\Raspberry\de"
-rmdir /S /Q "$(SolutionDir)DistPackages\Raspberry\pt"
-rmdir /S /Q "$(SolutionDir)DistPackages\Raspberry\pt-BR"
-rmdir /S /Q "$(SolutionDir)DistPackages\Raspberry\ECE"
+rd /S /Q "$(SolutionDir)DistPackages\Raspberry\DWSIM.UI.Desktop.app" 1&gt;nul 4&gt;nul
+rd /S /Q "$(SolutionDir)DistPackages\Raspberry\data\unifac" 1&gt;nul 4&gt;nul
+rd /S /Q "$(SolutionDir)DistPackages\Raspberry\x64" 1&gt;nul 4&gt;nul
+rd /S /Q "$(SolutionDir)DistPackages\Raspberry\x86" 1&gt;nul 4&gt;nul
+rd /S /Q "$(SolutionDir)DistPackages\Raspberry\de" 1&gt;nul 4&gt;nul
+rd /S /Q "$(SolutionDir)DistPackages\Raspberry\docs" 1&gt;nul 4&gt;nul
+rd /S /Q "$(SolutionDir)DistPackages\Raspberry\es" 1&gt;nul 4&gt;nul
+rd /S /Q "$(SolutionDir)DistPackages\Raspberry\help" 1&gt;nul 4&gt;nul
+rd /S /Q "$(SolutionDir)DistPackages\Raspberry\de" 1&gt;nul 4&gt;nul
+rd /S /Q "$(SolutionDir)DistPackages\Raspberry\pt 1&gt;nul 4&gt;nul
+rd /S /Q "$(SolutionDir)DistPackages\Raspberry\pt-BR" 1&gt;nul 4&gt;nul
+rd /S /Q "$(SolutionDir)DistPackages\Raspberry\ECE" 1&gt;nul 4&gt;nul
 
-del "$(SolutionDir)DistPackages\Linux\libSkiaSharp.dll"
-del "$(SolutionDir)DistPackages\Raspberry\libSkiaSharp.dll"
-del "$(SolutionDir)DistPackages\macOS\libSkiaSharp.dll"
+erase /S /Q "$(SolutionDir)DistPackages\Linux\libSkiaSharp.dll" 2&gt;nul 1&gt;nul 4&gt;nul
+erase /S /Q "$(SolutionDir)DistPackages\Raspberry\libSkiaSharp.dll" 2&gt;nul 1&gt;nul 4&gt;nul
+erase /S /Q "$(SolutionDir)DistPackages\macOS\libSkiaSharp.dll" 2&gt;nul 1&gt;nul 4&gt;nul
 
-del "$(SolutionDir)DistPackages\Windows\*vshost*"
-del "$(SolutionDir)DistPackages\Linux\*vshost*"
-del "$(SolutionDir)DistPackages\Raspberry\*vshost*"
-del "$(SolutionDir)DistPackages\macOS\*vshost*"
+erase /S /Q"$(SolutionDir)DistPackages\Windows\*vshost*.*" 2&gt;nul 1&gt;nul 4&gt;nul
+erase /S /Q "$(SolutionDir)DistPackages\Linux\*vshost*.*" 2&gt;nul 1&gt;nul 4&gt;nul
+erase /S /Q "$(SolutionDir)DistPackages\Raspberry\*vshost*.*" 2&gt;nul 1&gt;nul 4&gt;nul
+erase /S /Q "$(SolutionDir)DistPackages\macOS\*vshost*.*" 2&gt;nul 1&gt;nul 4&gt;nul
 
-del "$(SolutionDir)DistPackages\Linux\*-sharp.*"
+erase /S "$(SolutionDir)DistPackages\Linux\*-sharp.*" 2&gt;nul 1&gt;nul 4&gt;nul
 
 ) else if "$(PlatformName)" == "x86" (
 
@@ -379,16 +391,14 @@ xcopy "$(SolutionDir)PlatformFiles\Windows_32\*" "$(SolutionDir)DistPackages\Win
 
 xcopy "$(SolutionDir)DWSIM\bin\Release\plugins\*" "$(SolutionDir)DistPackages\Windows_32\plugins\" /E /Y /F /D
 
-rmdir /S /Q "$(SolutionDir)DistPackages\Windows_32\DWSIM.UI.Desktop.app"
-rmdir /S /Q "$(SolutionDir)DistPackages\Windows_32\x64"
-rmdir /S /Q "$(SolutionDir)DistPackages\Windows_32\x86"
-rmdir /S /Q "$(SolutionDir)DistPackages\Windows_32\ECE"
+rd /S /Q "$(SolutionDir)DistPackages\Windows_32\DWSIM.UI.Desktop.app" 1&gt;nul 4&gt;nul
+rd /S /Q "$(SolutionDir)DistPackages\Windows_32\x64" 1&gt;nul 4&gt;nul
+rd /S /Q "$(SolutionDir)DistPackages\Windows_32\x86" 1&gt;nul 4&gt;nul
+rd /S /Q "$(SolutionDir)DistPackages\Windows_32\ECE" 1&gt;nul 4&gt;nul
 
-del "$(SolutionDir)DistPackages\Windows_32\*vshost*"
+erase /S /Q "$(SolutionDir)DistPackages\Windows_32\*vshost*" 2&gt;nul 1&gt;nul 4&gt;nul
 
 )</PostBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\SkiaSharp.1.60.0\build\net45\SkiaSharp.targets" Condition="Exists('..\packages\SkiaSharp.1.60.0\build\net45\SkiaSharp.targets')" />
-  <Import Project="..\packages\Eto.Forms.2.4.1\build\Eto.Forms.targets" Condition="Exists('..\packages\Eto.Forms.2.4.1\build\Eto.Forms.targets')" />
-  <Import Project="..\packages\Eto.Platform.XamMac2.2.4.1\build\Eto.Platform.XamMac2.targets" Condition="Exists('..\packages\Eto.Platform.XamMac2.2.4.1\build\Eto.Platform.XamMac2.targets')" />
 </Project>

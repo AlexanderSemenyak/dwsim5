@@ -32,14 +32,14 @@ Namespace DWSIM
             'initialize Eto.Forms
             If IsRunningOnMono() Then
                 Dim platform As New Eto.WinForms.Platform()
-                platform.Add(Of CodeEditorControl.ICodeEditor)(Function() New WinForms.CodeEditorControlHandler())
+                platform.Add(Of Eto.Forms.Controls.Scintilla.Shared.ScintillaControl.IScintillaControl)(Function() New Eto.Forms.Controls.Scintilla.WinForms.ScintillaControlHandler())
                 Dim etoinst = New Eto.Forms.Application(platform)
                 etoinst.Attach()
             Else
                 Dim platform As New Eto.Wpf.Platform()
                 ApplicationHandler.EnableCustomThemes = false
                 ApplicationHandler.EnableVisualStyles = false
-                platform.Add(Of CodeEditorControl.ICodeEditor)(Function() New WPF.CodeEditorControlHandler())
+                platform.Add(Of Eto.Forms.Controls.Scintilla.Shared.ScintillaControl.IScintillaControl)(Function() New Eto.Forms.Controls.Scintilla.WPF.ScintillaControlHandler())
                 Dim etoinst = New Eto.Forms.Application(platform)
                 etoinst.Attach()
             End If

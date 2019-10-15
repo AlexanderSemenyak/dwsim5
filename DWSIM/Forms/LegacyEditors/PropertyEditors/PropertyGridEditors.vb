@@ -11,7 +11,7 @@ Imports DWSIM.UnitOperations.UnitOperations.Auxiliary.SepOps
 Imports DWSIM.UnitOperations.UnitOperations.Column
 
 Imports DWSIM.Drawing.SkiaSharp.GraphicObjects
-Imports DWSIM.Controls
+Imports Controls
 
 Public Class PropertyGridEditors
 
@@ -4582,8 +4582,6 @@ Public Class PropertyGridEditors
             .PropertySort = PropertySort.Categorized
             .ShowCustomProperties = True
             .Item.Clear()
-
-
 
             Dim ent, saida1, saida2 As String
             If uo.GraphicObject.InputConnectors(0).IsAttached = True Then

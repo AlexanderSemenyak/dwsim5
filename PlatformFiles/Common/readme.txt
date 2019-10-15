@@ -1,6 +1,6 @@
 ﻿==================================================
 DWSIM - Open Source Process Simulator
-Version 5.7 Update 14
+Version 5.8 Update 1
 Copyright (c) 2017-2019 Daniel Medeiros
 Copyright (c) 2008-2016 Daniel Medeiros, Gregor Reichert, Gustavo Leon
 ==================================================
@@ -33,7 +33,7 @@ macOS: 10.7 (OS X Lion) or newer
 
 Software:
 
-Microsoft .NET Framework 4.7.1 or newer (Windows) 
+Microsoft .NET Framework 4.6.1 or newer (Windows) 
 Mono Framework 5.14.0 or newer (Linux)
 
 CPU:			
@@ -61,6 +61,30 @@ VERSION HISTORY / CHANGELOG
 ==================================================
 
 The full changelog, including code changes and their authors can be viewed at https://github.com/DanWBR/dwsim5/commits/windows
+
+Version 5.8 Update 1
+
+- [CHG] Changed target .NET Framework version to 4.6.1 on Windows
+- [CHG] Reduced the size of the User Guide PDF file
+- [FIX] Fixed Automation feature
+- [FIX] Fixed some issues with ReoGrid formula parsing
+- [FIX] Enhanced reliability of liquid phase instability detection
+
+Version 5.8
+
+- [NEW] Enhanced Spreadsheet Tool
+- [NEW] 2D Charts Tool
+- [NEW] Enhanced Script Editor (Cross-Platform UI)
+- [NEW] Dynamic Script Snippets
+- [CHG] Redesigned Cross-Platform UI
+- [CHG] Redesigned Property Package editors
+- [FIX] Fixed some unit conversions for reaction basis
+- [FIX] Fixed text to number conversions
+- [FIX] Fixed flowsheet dragging while zoomed
+- [FIX] Fixed PFR heat balance
+- [FIX] Fixed liquid phase viscosity calculation for supercritical compounds
+- [FIX] Fixed Splitter ratios calculation mode
+- [FIX] Workaround for math expression parsing errors
 
 Version 5.7 Update 14
 

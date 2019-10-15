@@ -1,6 +1,7 @@
-Version 5.7 Update 14
+Version 5.8 Update 1
 
-- [CHG] Added 'This' to python vars (Python Script UO)
-- [FIX] Fixed flowsheet dragging while zoomed
-- [FIX] Fixed exception when launching the Script Editor (Classic UI)
-- [FIX] Fixed Energy Stream connection editors for Python Script UO (Classic UI)
+- [CHG] Changed target .NET Framework version to 4.6.1 on Windows
+- [CHG] Reduced the size of the User Guide PDF file
+- [FIX] Fixed Automation feature
+- [FIX] Fixed some issues with ReoGrid formula parsing
+- [FIX] Enhanced reliability of liquid phase instability detection

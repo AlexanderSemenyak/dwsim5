@@ -248,6 +248,8 @@ Namespace Enums
         PVFlash_MaximumTemperatureChange = 19
         PVFlash_FixedDampingFactor = 20
 
+        ST_Number_of_Random_Tries = 21
+
     End Enum
 
     Public Enum FlashCalculationType
@@ -410,6 +412,22 @@ Namespace Enums
         MW_DESC = 6
         CAS_ASC = 7
         CAS_DESC = 8
+
+    End Enum
+
+    Public Enum ChartType
+
+        TwoDimensionalScatter = 0
+        Pie = 1
+        HorizontalBars = 2
+        VerticalBars = 3
+
+    End Enum
+
+    Public Enum ChartSource
+
+        SpreadsheetRange = 0
+        FlowsheetObject = 1
 
     End Enum
 

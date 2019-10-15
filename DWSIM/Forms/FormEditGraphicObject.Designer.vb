@@ -1,5 +1,4 @@
-﻿Imports DWSIM.Controls
-
+﻿
 <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class FormEditGraphicObject
     Inherits WeifenLuo.WinFormsUI.Docking.DockContent
@@ -37,7 +36,7 @@ Partial Class FormEditGraphicObject
         Me.tsbDockingDocument = New System.Windows.Forms.ToolStripButton()
         Me.tsbDockingFloat = New System.Windows.Forms.ToolStripButton()
         Me.tsbClose = New System.Windows.Forms.ToolStripButton()
-        Me.PGEx2 = New PropertyGridEx.PropertyGridEx()
+        Me.PGEx2 = New Controls.PropertyGridEx.PropertyGridEx()
         Me.ToolStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -230,5 +229,5 @@ Partial Class FormEditGraphicObject
     Friend WithEvents tsbDockingDocument As System.Windows.Forms.ToolStripButton
     Friend WithEvents tsbDockingFloat As System.Windows.Forms.ToolStripButton
     Friend WithEvents tsbClose As System.Windows.Forms.ToolStripButton
-    Public WithEvents PGEx2 As PropertyGridEx.PropertyGridEx
+    Public WithEvents PGEx2 As Controls.PropertyGridEx.PropertyGridEx
 End Class
