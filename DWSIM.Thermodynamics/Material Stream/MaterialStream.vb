@@ -498,8 +498,8 @@ Namespace Streams
                         IObj?.Paragraphs.Add(String.Format("Specified Volumetric Flow: {0} m3/s", QV.GetValueOrDefault))
 
                         IObj?.Paragraphs.Add(String.Format("Calculated Mixture Density: {0} kg/m3", Phases(0).Properties.density.GetValueOrDefault))
-
                         Me.Phases(0).Properties.massflow = QV.GetValueOrDefault * Me.Phases(0).Properties.density.GetValueOrDefault
+                        'Me.Phases(0).Properties.massflow = ConvertToSI(QV.GetValueOrDefault * Me.Phases(0).Properties.density.GetValueOrDefault,units.molarflow)
 
                         If DebugMode Then AppendDebugLine(String.Format("Calculated mass flow: {0} kg/s", Me.Phases(0).Properties.massflow.GetValueOrDefault))
 

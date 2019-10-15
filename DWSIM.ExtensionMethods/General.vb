@@ -2,6 +2,8 @@
 Imports System.Globalization
 Imports DWSIM.Interfaces.Enums
 Imports System.Linq
+Imports System.Runtime.CompilerServices
+Imports System.Text
 Imports DWSIM.SharedClasses.SystemsOfUnits
 
 Public Module General
@@ -142,18 +144,21 @@ Public Module General
 
     End Sub
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     <System.Runtime.CompilerServices.Extension()> _
     Public Function IsValidDouble(obj As Object) As Boolean
         Return obj.ToString.IsValidDouble()
 
     End Function
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     <System.Runtime.CompilerServices.Extension()> _
     Public Function IsValidDouble(str As String) As Boolean
         Dim dbl As Double = Nothing
         Return str.IsValidDouble(dbl)
     End Function
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     <System.Runtime.CompilerServices.Extension()> _
     Public Function IsValidDouble(str As String, byref dbl As Double) As Boolean
 
@@ -167,6 +172,7 @@ Public Module General
 
     End Function
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     <System.Runtime.CompilerServices.Extension()>
     Public Function IsValidDoubleExpression(str As String) As Boolean
 
@@ -188,6 +194,7 @@ Public Module General
 
     End Function
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     <System.Runtime.CompilerServices.Extension()>
     Public Function ParseExpressionToDouble(str As String) As Double
         Dim dbl As Double = Nothing
@@ -204,6 +211,7 @@ Public Module General
         End If
     End Function
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     <System.Runtime.CompilerServices.Extension()> _
     Public Function ToString(sourcearray As String(), ci As CultureInfo) As String
 
@@ -229,6 +237,7 @@ Public Module General
 
     End Function
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     <System.Runtime.CompilerServices.Extension()> _
     Public Function ToArray(ByVal text As String, ci As CultureInfo, arraytype As Type) As Array
 
@@ -253,6 +262,7 @@ Public Module General
 
     End Function
 
+
     <System.Runtime.CompilerServices.Extension()> _
     Public Sub UIThread(control As Control, code As Action)
         If control.InvokeRequired Then
@@ -275,7 +285,7 @@ Public Module General
     'Public Function ToDTPoint(pt As System.Drawing.Point) As DrawingTools.Point
     '    Return New DrawingTools.Point(pt.X, pt.Y)
     'End Function
-
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     <System.Runtime.CompilerServices.Extension()> _
     Public Function GetUnits(control As System.Windows.Forms.GridItem) As String
         If control.Value.ToString().Split(" ").Length > 1 Then
@@ -345,6 +355,7 @@ Public Module General
 
     End Function
 
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     <System.Runtime.CompilerServices.Extension()>
     Public Function ToMathArrayString(vector As Double()) As String
 
@@ -421,7 +432,7 @@ Public Module General
         Return retstr
 
     End Function
-
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     <System.Runtime.CompilerServices.Extension()>
     Public Function ToDoubleWithSeparator(s As String, sep As String) As Double
         Dim nstring As String = s.Replace(sep, ".")
@@ -432,7 +443,7 @@ Public Module General
             Return 0.0#
         End If
     End Function
-
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     <System.Runtime.CompilerServices.Extension()>
     Public Function ToDoubleFromInvariant(s As String) As Double
 
@@ -441,7 +452,7 @@ Public Module General
         Return Double.Parse(s, ci)
 
     End Function
-
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
     <System.Runtime.CompilerServices.Extension()>
     Public Function ToDoubleFromCurrent(s As String) As Double
 
@@ -500,42 +511,72 @@ Public Module General
     <System.Runtime.CompilerServices.Extension()> _
     Public Function ToArrayString(vector As String()) As String
 
-        Dim retstr As String = "{ "
+        Dim retstr = new StringBuilder("{ ")
         For Each s In vector
-            retstr += s + ", "
+            retstr.Append(s)
+            retstr.Append( ", ")
         Next
-        retstr.TrimEnd(",")
-        retstr += "}"
+        if vector.Length>0 then
+           retstr.Remove(retstr.Length-2,2) 'alexander remove last ", "
+        end if
+        retstr.Append("}")
 
-        Return retstr
+        Return retstr.ToString()
 
     End Function
 
     <System.Runtime.CompilerServices.Extension()> _
     Public Function ToArrayString(vector As Object()) As String
 
-        Dim retstr As String = "{ "
+        Dim retstr = new StringBuilder("{ ")
         For Each d In vector
-            If Not d Is Nothing Then retstr += d.ToString + ", "
+            If Not d Is Nothing Then 
+                retstr.Append(d)
+                retstr.Append( ", ")
+            end if
         Next
-        retstr.TrimEnd(",")
-        retstr += "}"
+        if vector.Length>0 then
+            retstr.Remove(retstr.Length-2,2) 'alexander remove last ", "
+        end if
+        retstr.Append("}")
 
-        Return retstr
+        Return retstr.ToString()
+
+        'Dim retstr As String = "{ "
+        'For Each d In vector
+        '    If Not d Is Nothing Then retstr += d.ToString + ", "
+        'Next
+        'retstr.TrimEnd(",")
+        'retstr += "}"
+
+        'Return retstr
 
     End Function
 
     <System.Runtime.CompilerServices.Extension()> _
     Public Function ToArrayString(vector As Array) As String
 
-        Dim retstr As String = "{ "
+        Dim retstr = new StringBuilder("{ ")
         For Each d In vector
-            If Not d Is Nothing Then retstr += d.ToString + ", "
+            If Not d Is Nothing Then 
+                retstr.Append(d)
+                retstr.Append( ", ")
+            end if
         Next
-        retstr.TrimEnd(",")
-        retstr += "}"
+        if vector.Length>0 then
+            retstr.Remove(retstr.Length-2,2) 'alexander remove last ", "
+        end if
+        retstr.Append("}")
 
-        Return retstr
+        Return retstr.ToString()
+        'Dim retstr As String = "{ "
+        'For Each d In vector
+        '    If Not d Is Nothing Then retstr += d.ToString + ", "
+        'Next
+        'retstr.TrimEnd(",")
+        'retstr += "}"
+
+        'Return retstr
 
     End Function
 
