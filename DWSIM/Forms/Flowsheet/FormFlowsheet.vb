@@ -2878,6 +2878,7 @@ Public Class FormFlowsheet
     Public Function GetNewInstance() As IFlowsheet Implements IFlowsheet.GetNewInstance
         Dim fs As New FormFlowsheet()
         fs.Options.VisibleProperties = Me.Options.VisibleProperties
+        fs.FormSpreadsheet.Initialize()
         Return fs
     End Function
 

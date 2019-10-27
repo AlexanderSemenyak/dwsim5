@@ -249,12 +249,14 @@ Public Class FormMain
                 My.Application.UtilityPlugins.Add(ip.UniqueID, ip)
             Next
 
+#If Not WINE32 Then
             'load external property packages from 'propertypackages' folder, if there is any
             Dim epplist As List(Of PropertyPackage) = GetExternalPPs(LoadExternalPPs())
 
             For Each pp As PropertyPackage In epplist
                 PropertyPackages.Add(pp.ComponentName, pp)
             Next
+#End If
 
             'Search and populate CAPE-OPEN Flowsheet Monitoring Object collection
             'SearchCOMOs() 'doing this only when the user hovers the mouse over the plugins toolstrip menu item
@@ -1418,11 +1420,13 @@ Public Class FormMain
             xdoc = XDocument.Load(fstr)
         End Using
 
-        For Each xel1 As XElement In xdoc.Descendants
-            SharedClasses.Utility.UpdateElementForMobileXMLLoading(xel1)
-        Next
+        Parallel.ForEach(xdoc.Descendants, Sub(xel1)
+                                               SharedClasses.Utility.UpdateElementForMobileXMLLoading_CrossPlatformUI(xel1)
+                                           End Sub)
 
         Dim form As FormFlowsheet = New FormFlowsheet() With {.MobileCompatibilityMode = True}
+        form.FormSpreadsheet = New FormNewSpreadsheet() With {.Flowsheet = form}
+        form.FormSpreadsheet.Initialize()
         form.PanelMobileCompatMode.Visible = True
 
         Settings.CAPEOPENMode = False
@@ -2816,9 +2820,9 @@ Public Class FormMain
             xel.Add(New XElement("SensitivityAnalysisCase", {pp.SaveData().ToArray()}))
         Next
 
-        For Each xel1 As XElement In xdoc.Descendants
-            SharedClasses.Utility.UpdateElementForMobileXMLSaving(xel1)
-        Next
+        Parallel.ForEach(xdoc.Descendants, Sub(xel1)
+                                               SharedClasses.Utility.UpdateElementForMobileXMLSaving_CrossPlatformUI(xel1)
+                                           End Sub)
 
         xdoc.Save(path)
 
