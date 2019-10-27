@@ -54,7 +54,7 @@ Public Class FormMain
     'Public FrmWelcome As FormWelcome
     Public FrmRec As FormRecoverFiles
 
-    Private dropdownlist As ArrayList
+    Private dropdownlist As ArrayList =new ArrayList()
 
     Private dlok As Boolean = False
     Public CancelClosing As Boolean = False
@@ -88,18 +88,18 @@ Public Class FormMain
 #Region "    Form Events"
 
     Public Sub InitializeChromium()
-        If My.Settings.ShowWebPanel And Not DWSIM.App.IsRunningOnMono Then
-            Try
-                Dim settings As CefSettings = New CefSettings
-                settings.IgnoreCertificateErrors = True
-                settings.PersistUserPreferences = True
-                settings.PersistSessionCookies = True
-                settings.CachePath = Path.Combine(My.Computer.FileSystem.SpecialDirectories.CurrentUserApplicationData, "BrowserDataCache")
-                CefSharp.CefSharpSettings.SubprocessExitIfParentProcessClosed = True
-                CefSharp.Cef.Initialize(settings)
-            Catch ex As Exception
-            End Try
-        End If
+        'If My.Settings.ShowWebPanel And Not DWSIM.App.IsRunningOnMono Then
+        '    Try
+        '        Dim settings As CefSettings = New CefSettings
+        '        settings.IgnoreCertificateErrors = True
+        '        settings.PersistUserPreferences = True
+        '        settings.PersistSessionCookies = True
+        '        settings.CachePath = Path.Combine(My.Computer.FileSystem.SpecialDirectories.CurrentUserApplicationData, "BrowserDataCache")
+        '        CefSharp.CefSharpSettings.SubprocessExitIfParentProcessClosed = True
+        '        CefSharp.Cef.Initialize(settings)
+        '    Catch ex As Exception
+        '    End Try
+        'End If
     End Sub
 
     Private Sub FormMain_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles Me.DragDrop
@@ -272,132 +272,132 @@ Public Class FormMain
             'Me.WelcomePanel.Controls.Add(Me.FrmWelcome)
             Me.ButtonClose2.BringToFront()
 
-            If My.Settings.ShowWebPanel Then
+            'If My.Settings.ShowWebPanel Then
 
-                If DWSIM.App.IsRunningOnMono Then
+            '    If DWSIM.App.IsRunningOnMono Then
 
-                    WebPanel.Visible = False
+            '        WebPanel.Visible = False
 
-                    'Try
-                    '    Dim c1, c2, c3, c4, c5 As WebBrowser
-                    '    Dim a1, a2, a3, a4, a5 As String
+            '        'Try
+            '        '    Dim c1, c2, c3, c4, c5 As WebBrowser
+            '        '    Dim a1, a2, a3, a4, a5 As String
 
-                    '    a1 = "https://www.patreon.com/dwsim/posts"
-                    '    a2 = "https://sourceforge.net/p/dwsim/discussion/"
-                    '    a3 = "https://dwsim.fossee.in/forum"
-                    '    a4 = "https://www.youtube.com/channel/UCzzBQrycKoN5XbCeLV12y3Q/videos?view=0&sort=dd&flow=grid"
-                    '    a5 = "https://pernaletec.shinyapps.io/dwsim/"
+            '        '    a1 = "https://www.patreon.com/dwsim/posts"
+            '        '    a2 = "https://sourceforge.net/p/dwsim/discussion/"
+            '        '    a3 = "https://dwsim.fossee.in/forum"
+            '        '    a4 = "https://www.youtube.com/channel/UCzzBQrycKoN5XbCeLV12y3Q/videos?view=0&sort=dd&flow=grid"
+            '        '    a5 = "https://pernaletec.shinyapps.io/dwsim/"
 
-                    '    c1 = New WebBrowser() With {.Url = New Uri(a1), .Dock = DockStyle.Fill}
-                    '    c2 = New WebBrowser() With {.Url = New Uri(a2), .Dock = DockStyle.Fill}
-                    '    c3 = New WebBrowser() With {.Url = New Uri(a3), .Dock = DockStyle.Fill}
-                    '    c4 = New WebBrowser() With {.Url = New Uri(a4), .Dock = DockStyle.Fill}
-                    '    c5 = New WebBrowser() With {.Url = New Uri(a5), .Dock = DockStyle.Fill}
+            '        '    c1 = New WebBrowser() With {.Url = New Uri(a1), .Dock = DockStyle.Fill}
+            '        '    c2 = New WebBrowser() With {.Url = New Uri(a2), .Dock = DockStyle.Fill}
+            '        '    c3 = New WebBrowser() With {.Url = New Uri(a3), .Dock = DockStyle.Fill}
+            '        '    c4 = New WebBrowser() With {.Url = New Uri(a4), .Dock = DockStyle.Fill}
+            '        '    c5 = New WebBrowser() With {.Url = New Uri(a5), .Dock = DockStyle.Fill}
 
-                    '    frmweb.TabPageA.Controls.Add(c1)
-                    '    frmweb.TabPageB.Controls.Add(c2)
-                    '    frmweb.TabPageC.Controls.Add(c3)
-                    '    frmweb.TabPageD.Controls.Add(c4)
-                    '    frmweb.TabPageE.Controls.Add(c5)
+            '        '    frmweb.TabPageA.Controls.Add(c1)
+            '        '    frmweb.TabPageB.Controls.Add(c2)
+            '        '    frmweb.TabPageC.Controls.Add(c3)
+            '        '    frmweb.TabPageD.Controls.Add(c4)
+            '        '    frmweb.TabPageE.Controls.Add(c5)
 
-                    'Catch ex As Exception
+            '        'Catch ex As Exception
 
-                    'End Try
+            '        'End Try
 
-                Else
+            '    Else
 
-                    Dim frmweb As New FormWebPanel
-                    frmweb.Dock = DockStyle.Fill
+            '        'Dim frmweb As New FormWebPanel
+            '        'frmweb.Dock = DockStyle.Fill
 
-                    Try
+            '        'Try
 
-                        Dim c1, c2, c3, c4, c5 As ChromiumWebBrowser
-                        Dim a1, a2, a3, a4, a5 As String
+            '            'Dim c1, c2, c3, c4, c5 As ChromiumWebBrowser
+            '            'Dim a1, a2, a3, a4, a5 As String
 
-                        a1 = "https://www.patreon.com/dwsim/posts"
-                        a2 = "https://sourceforge.net/p/dwsim/discussion/"
-                        a3 = "https://dwsim.fossee.in/forum"
-                        a4 = "https://www.youtube.com/channel/UCzzBQrycKoN5XbCeLV12y3Q/videos?view=0&sort=dd&flow=grid"
-                        a5 = "https://pernaletec.shinyapps.io/dwsim/"
+            '            'a1 = "https://www.patreon.com/dwsim/posts"
+            '            'a2 = "https://sourceforge.net/p/dwsim/discussion/"
+            '            'a3 = "https://dwsim.fossee.in/forum"
+            '            'a4 = "https://www.youtube.com/channel/UCzzBQrycKoN5XbCeLV12y3Q/videos?view=0&sort=dd&flow=grid"
+            '            'a5 = "https://pernaletec.shinyapps.io/dwsim/"
 
-                        c1 = New ChromiumWebBrowser(a1) With {.Dock = DockStyle.Fill}
-                        c2 = New ChromiumWebBrowser(a2) With {.Dock = DockStyle.Fill}
-                        c3 = New ChromiumWebBrowser(a3) With {.Dock = DockStyle.Fill}
-                        c4 = New ChromiumWebBrowser(a4) With {.Dock = DockStyle.Fill}
-                        c5 = New ChromiumWebBrowser(a5) With {.Dock = DockStyle.Fill}
+            '            'c1 = New ChromiumWebBrowser(a1) With {.Dock = DockStyle.Fill}
+            '            'c2 = New ChromiumWebBrowser(a2) With {.Dock = DockStyle.Fill}
+            '            'c3 = New ChromiumWebBrowser(a3) With {.Dock = DockStyle.Fill}
+            '            'c4 = New ChromiumWebBrowser(a4) With {.Dock = DockStyle.Fill}
+            '            'c5 = New ChromiumWebBrowser(a5) With {.Dock = DockStyle.Fill}
 
-                        frmweb.TabPageA.Controls.Add(c1)
-                        frmweb.TabPageB.Controls.Add(c2)
-                        frmweb.TabPageC.Controls.Add(c3)
-                        frmweb.TabPageD.Controls.Add(c4)
-                        frmweb.TabPageE.Controls.Add(c5)
+            '            'frmweb.TabPageA.Controls.Add(c1)
+            '            'frmweb.TabPageB.Controls.Add(c2)
+            '            'frmweb.TabPageC.Controls.Add(c3)
+            '            'frmweb.TabPageD.Controls.Add(c4)
+            '            'frmweb.TabPageE.Controls.Add(c5)
 
-                        AddHandler WebPanel.VisibleChanged, Sub(sender2, e2)
+            '        '    AddHandler WebPanel.VisibleChanged, Sub(sender2, e2)
 
-                                                                If Not WebPanel.Visible Then
+            '        '                                            If Not WebPanel.Visible Then
 
-                                                                    Try
-                                                                        c1.GetBrowser.StopLoad()
-                                                                    Catch ex As Exception
-                                                                    End Try
-                                                                    Try
-                                                                        c2.GetBrowser.StopLoad()
-                                                                    Catch ex As Exception
-                                                                    End Try
-                                                                    Try
-                                                                        c3.GetBrowser.StopLoad()
-                                                                    Catch ex As Exception
-                                                                    End Try
-                                                                    Try
-                                                                        c4.GetBrowser.StopLoad()
-                                                                    Catch ex As Exception
-                                                                    End Try
-                                                                    Try
-                                                                        c5.GetBrowser.StopLoad()
-                                                                    Catch ex As Exception
-                                                                    End Try
+            '        '                                                Try
+            '        '                                                    c1.GetBrowser.StopLoad()
+            '        '                                                Catch ex As Exception
+            '        '                                                End Try
+            '        '                                                Try
+            '        '                                                    c2.GetBrowser.StopLoad()
+            '        '                                                Catch ex As Exception
+            '        '                                                End Try
+            '        '                                                Try
+            '        '                                                    c3.GetBrowser.StopLoad()
+            '        '                                                Catch ex As Exception
+            '        '                                                End Try
+            '        '                                                Try
+            '        '                                                    c4.GetBrowser.StopLoad()
+            '        '                                                Catch ex As Exception
+            '        '                                                End Try
+            '        '                                                Try
+            '        '                                                    c5.GetBrowser.StopLoad()
+            '        '                                                Catch ex As Exception
+            '        '                                                End Try
 
-                                                                Else
+            '        '                                            Else
 
-                                                                    Try
-                                                                        c1.GetBrowser.Reload()
-                                                                    Catch ex As Exception
-                                                                    End Try
-                                                                    Try
-                                                                        c2.GetBrowser.Reload()
-                                                                    Catch ex As Exception
-                                                                    End Try
-                                                                    Try
-                                                                        c3.GetBrowser.Reload()
-                                                                    Catch ex As Exception
-                                                                    End Try
-                                                                    Try
-                                                                        c4.GetBrowser.Reload()
-                                                                    Catch ex As Exception
-                                                                    End Try
-                                                                    Try
-                                                                        c5.GetBrowser.Reload()
-                                                                    Catch ex As Exception
-                                                                    End Try
+            '        '                                                Try
+            '        '                                                    c1.GetBrowser.Reload()
+            '        '                                                Catch ex As Exception
+            '        '                                                End Try
+            '        '                                                Try
+            '        '                                                    c2.GetBrowser.Reload()
+            '        '                                                Catch ex As Exception
+            '        '                                                End Try
+            '        '                                                Try
+            '        '                                                    c3.GetBrowser.Reload()
+            '        '                                                Catch ex As Exception
+            '        '                                                End Try
+            '        '                                                Try
+            '        '                                                    c4.GetBrowser.Reload()
+            '        '                                                Catch ex As Exception
+            '        '                                                End Try
+            '        '                                                Try
+            '        '                                                    c5.GetBrowser.Reload()
+            '        '                                                Catch ex As Exception
+            '        '                                                End Try
 
-                                                                End If
+            '        '                                            End If
 
-                                                            End Sub
+            '        '                                        End Sub
 
-                    Catch ex As Exception
+            '        'Catch ex As Exception
 
-                    End Try
+            '        'End Try
 
-                    WebPanel.Controls.Add(frmweb)
-                    Me.ButtonCloseWeb.BringToFront()
+            '        'WebPanel.Controls.Add(frmweb)
+            '        'Me.ButtonCloseWeb.BringToFront()
 
-                End If
+            '    End If
 
-            Else
+            'Else
 
                 WebPanel.Visible = False
 
-            End If
+            'End If
 
 
         End If
