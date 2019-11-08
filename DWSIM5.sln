@@ -923,8 +923,8 @@ Global
 		{77040ECC-07B9-4B21-8B1F-7E45764E35F0}.Release WinMac|Any CPU.Build.0 = Release|Any CPU
 		{77040ECC-07B9-4B21-8B1F-7E45764E35F0}.Release WinMac|wine32.ActiveCfg = Release|Any CPU
 		{77040ECC-07B9-4B21-8B1F-7E45764E35F0}.Release WinMac|wine32.Build.0 = Release|Any CPU
-		{77040ECC-07B9-4B21-8B1F-7E45764E35F0}.Release WinMac|x64.ActiveCfg = Release|Any CPU
-		{77040ECC-07B9-4B21-8B1F-7E45764E35F0}.Release WinMac|x64.Build.0 = Release|Any CPU
+		{77040ECC-07B9-4B21-8B1F-7E45764E35F0}.Release WinMac|x64.ActiveCfg = Debug|Any CPU
+		{77040ECC-07B9-4B21-8B1F-7E45764E35F0}.Release WinMac|x64.Build.0 = Debug|Any CPU
 		{77040ECC-07B9-4B21-8B1F-7E45764E35F0}.Release WinMac|x86.ActiveCfg = Release|Any CPU
 		{77040ECC-07B9-4B21-8B1F-7E45764E35F0}.Release WinMac|x86.Build.0 = Release|Any CPU
 		{77040ECC-07B9-4B21-8B1F-7E45764E35F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -1469,8 +1469,8 @@ Global
 		{A58EB237-F703-45CF-89F9-E8B91BFF76C1}.Release WinMac|Any CPU.Build.0 = Release|Any CPU
 		{A58EB237-F703-45CF-89F9-E8B91BFF76C1}.Release WinMac|wine32.ActiveCfg = Release|Any CPU
 		{A58EB237-F703-45CF-89F9-E8B91BFF76C1}.Release WinMac|wine32.Build.0 = Release|Any CPU
-		{A58EB237-F703-45CF-89F9-E8B91BFF76C1}.Release WinMac|x64.ActiveCfg = Release|Any CPU
-		{A58EB237-F703-45CF-89F9-E8B91BFF76C1}.Release WinMac|x64.Build.0 = Release|Any CPU
+		{A58EB237-F703-45CF-89F9-E8B91BFF76C1}.Release WinMac|x64.ActiveCfg = Debug|Any CPU
+		{A58EB237-F703-45CF-89F9-E8B91BFF76C1}.Release WinMac|x64.Build.0 = Debug|Any CPU
 		{A58EB237-F703-45CF-89F9-E8B91BFF76C1}.Release WinMac|x86.ActiveCfg = Release|Any CPU
 		{A58EB237-F703-45CF-89F9-E8B91BFF76C1}.Release WinMac|x86.Build.0 = Release|Any CPU
 		{A58EB237-F703-45CF-89F9-E8B91BFF76C1}.Release|Any CPU.ActiveCfg = Release|Any CPU

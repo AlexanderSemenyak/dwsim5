@@ -14,7 +14,7 @@
     <OutputType>WinExe</OutputType>
     <StartupObject>DWSIM.My.MyApplication</StartupObject>
     <RootNamespace>DWSIM</RootNamespace>
-    <AssemblyName>DWSIM</AssemblyName>
+    <AssemblyName>ArmGeolog.Thermodynamics</AssemblyName>
     <MyType>WindowsForms</MyType>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <ManifestCertificateThumbprint>9811384C174DFC8254FB98B174DA65366428B233</ManifestCertificateThumbprint>
@@ -62,7 +62,7 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>false</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>DWSIM.xml</DocumentationFile>
+    <DocumentationFile>ArmGeolog.Thermodynamics.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42353,42354,42355</NoWarn>
     <WarningsAsErrors>
     </WarningsAsErrors>
@@ -78,7 +78,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>DWSIM.xml</DocumentationFile>
+    <DocumentationFile>ArmGeolog.Thermodynamics.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42353,42354,42355</NoWarn>
     <WarningsAsErrors>
     </WarningsAsErrors>
@@ -93,7 +93,7 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>false</DefineTrace>
     <OutputPath>bin\x86\Debug\</OutputPath>
-    <DocumentationFile>DWSIM.xml</DocumentationFile>
+    <DocumentationFile>ArmGeolog.Thermodynamics.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42353,42354,42355</NoWarn>
     <DebugType>Full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
@@ -105,7 +105,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DefineTrace>false</DefineTrace>
     <OutputPath>bin\x86\Release\</OutputPath>
-    <DocumentationFile>DWSIM.xml</DocumentationFile>
+    <DocumentationFile>ArmGeolog.Thermodynamics.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42353,42354,42355</NoWarn>
     <DebugType>Full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
@@ -119,7 +119,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\x86\</OutputPath>
-    <DocumentationFile>DWSIM.xml</DocumentationFile>
+    <DocumentationFile>ArmGeolog.Thermodynamics.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42353,42354,42355</NoWarn>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -130,7 +130,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'x86|x86' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\x86\</OutputPath>
-    <DocumentationFile>DWSIM.xml</DocumentationFile>
+    <DocumentationFile>ArmGeolog.Thermodynamics.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42353,42354,42355</NoWarn>
     <DebugType>Full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
@@ -150,7 +150,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x64\Debug\</OutputPath>
-    <DocumentationFile>DWSIM.xml</DocumentationFile>
+    <DocumentationFile>ArmGeolog.Thermodynamics.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42353,42354,42355</NoWarn>
     <DebugType>Full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -162,7 +162,7 @@
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\x64\Release\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
-    <DocumentationFile>DWSIM.xml</DocumentationFile>
+    <DocumentationFile>ArmGeolog.Thermodynamics.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42353,42354,42355</NoWarn>
     <DebugType>Full</DebugType>
@@ -175,7 +175,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\x64\x86\</OutputPath>
-    <DocumentationFile>DWSIM.xml</DocumentationFile>
+    <DocumentationFile>ArmGeolog.Thermodynamics.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42353,42354,42355</NoWarn>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -186,7 +186,7 @@
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\x64\Release Linux\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
-    <DocumentationFile>DWSIM.xml</DocumentationFile>
+    <DocumentationFile>ArmGeolog.Thermodynamics.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42353,42354,42355</NoWarn>
     <DebugType>Full</DebugType>
@@ -200,7 +200,7 @@
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Release Linux\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
-    <DocumentationFile>DWSIM.xml</DocumentationFile>
+    <DocumentationFile>ArmGeolog.Thermodynamics.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42353,42354,42355</NoWarn>
     <DebugType>Full</DebugType>
@@ -211,7 +211,7 @@
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Release Linux\</OutputPath>
     <RemoveIntegerChecks>true</RemoveIntegerChecks>
-    <DocumentationFile>DWSIM.xml</DocumentationFile>
+    <DocumentationFile>ArmGeolog.Thermodynamics.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42353,42354,42355</NoWarn>
     <DebugType>Full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
@@ -221,7 +221,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\x64\wine32\</OutputPath>
-    <DocumentationFile>DWSIM.xml</DocumentationFile>
+    <DocumentationFile>ArmGeolog.Thermodynamics.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42353,42354,42355</NoWarn>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -232,7 +232,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\wine32\</OutputPath>
-    <DocumentationFile>DWSIM.xml</DocumentationFile>
+    <DocumentationFile>ArmGeolog.Thermodynamics.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42353,42354,42355</NoWarn>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -241,7 +241,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'wine32|x86'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\wine32\</OutputPath>
-    <DocumentationFile>DWSIM.xml</DocumentationFile>
+    <DocumentationFile>ArmGeolog.Thermodynamics.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42353,42354,42355</NoWarn>
     <DebugType>Full</DebugType>
     <PlatformTarget>x86</PlatformTarget>

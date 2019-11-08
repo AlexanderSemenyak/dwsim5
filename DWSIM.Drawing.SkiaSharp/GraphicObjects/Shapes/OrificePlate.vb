@@ -1,6 +1,8 @@
-﻿Imports DWSIM.Drawing.SkiaSharp.GraphicObjects
+﻿Imports System.IO
+Imports DWSIM.Drawing.SkiaSharp.GraphicObjects
 Imports DWSIM.Interfaces.Enums.GraphicObjects
 Imports DWSIM.DrawingTools.Point
+Imports SkiaSharp.Extended.Svg
 
 Namespace GraphicObjects.Shapes
 
@@ -84,6 +86,15 @@ Namespace GraphicObjects.Shapes
 
         End Sub
 
+        Shared Dim svg As SKSvg
+        Shared Sub New()
+            'alexander load SVG template
+            svg = New SKSvg()
+            Using svgMs = New MemoryStream(My.Resources.item_orificePlate)
+              svg.Load(svgMs)
+            End using
+        End Sub
+
         Public Overrides Sub Draw(ByVal g As Object)
 
             Dim canvas As SKCanvas = DirectCast(g, SKCanvas)
@@ -136,6 +147,23 @@ Namespace GraphicObjects.Shapes
                 canvas.DrawOval(rect2, bgpen)
                 canvas.DrawOval(rect2, myPen2)
 
+
+                'set aspect ratio from SVG to orifice bounds
+                Dim boundsSvg = svg.CanvasSize
+                Dim xRatio = rect.Width / boundsSvg.Width
+                Dim yRatio = rect.Height / boundsSvg.Height
+                Dim ratio = Math.Min(xRatio, yRatio)
+
+                'save canvas state
+                canvas.Save()
+
+                'draw SVG
+                canvas.Translate(rect.Left, rect.Top)
+                canvas.Scale(ratio)
+                canvas.DrawPicture(svg.Picture)', rect.Left, rect.Top)
+
+                'restore canvas state
+                canvas.Restore()
             End If
 
         End Sub
