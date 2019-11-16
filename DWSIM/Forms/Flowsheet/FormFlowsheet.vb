@@ -27,6 +27,7 @@ Imports DWSIM.Interfaces
 Imports DWSIM.Interfaces.Interfaces2
 Imports System.Runtime.InteropServices
 Imports System.Dynamic
+Imports System.Runtime.Serialization.Formatters.Binary
 Imports DWSIM.Drawing.SkiaSharp.GraphicObjects.Tables
 Imports DWSIM.SharedClasses.SystemsOfUnits
 Imports DWSIM.Thermodynamics.BaseClasses
@@ -126,6 +127,9 @@ Public Class FormFlowsheet
             Me.FormOptimization0 = new FormOptimization
         end if
 
+        'Add UOM_PHG
+        AddPredefinedUnits()
+
         'Initialize Units From Automation
         For Each pair As KeyValuePair(Of String,Units) In Units.PredefinedUserUnits
             AddUnitSystemIfNotExists(pair.Value)
@@ -152,6 +156,27 @@ Public Class FormFlowsheet
         Options.FlashAlgorithms.Add(fa)
 
     End Sub
+
+    public sub AddPredefinedUnits()
+        dim serializedUnits As Byte() = My.Resources.UOM_PHG
+        Using ms = New MemoryStream(serializedUnits)
+            Dim su = New Units()
+            Dim mySerializer = New BinaryFormatter(Nothing, New System.Runtime.Serialization.StreamingContext())
+            mySerializer.Binder = UnitsVersionBinder.Instance
+
+            Try
+                su = CType(mySerializer.Deserialize(ms), Units)
+
+                If su IsNot Nothing Then
+                    Units.PredefinedUserUnits(su.Name) = su
+                    'Return su
+                End If
+
+            Catch e As Exception
+                Throw
+            End Try
+        End Using
+    End sub
 
     Public Sub SetActive()
 

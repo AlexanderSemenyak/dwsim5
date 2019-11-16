@@ -6,7 +6,7 @@ static class Module1
     public static void Main()
     {
 
-        System.IO.Directory.SetCurrentDirectory("C:/Program Files/DWSIM5"); // replace with DWSIM's installation directory on your computer
+        System.IO.Directory.SetCurrentDirectory("d:/developer/dwsim_AlexanderSemenyak/DWSIM/bin/x64/Release"); // replace with DWSIM's installation directory on your computer
 
         //create automation manager
         DWSIM.Automation.Automation interf = new DWSIM.Automation.Automation();
@@ -14,7 +14,7 @@ static class Module1
         DWSIM.Interfaces.IFlowsheet sim;
 
         //load Cavett's Problem simulation file
-        sim = interf.LoadFlowsheet("samples" + System.IO.Path.DirectorySeparatorChar + "Cavett's Problem.dwxml");
+        sim = interf.LoadFlowsheet(null,"samples" + System.IO.Path.DirectorySeparatorChar + "Cavett's Problem.dwxml", out _);
 
         //use CAPE-OPEN interfaces to manipulate objects
         CapeOpen.ICapeThermoMaterialObject feed, vap_out, liq_out;
