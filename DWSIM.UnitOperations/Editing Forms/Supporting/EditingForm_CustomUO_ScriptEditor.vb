@@ -33,12 +33,10 @@ Imports System.Drawing
 
     Public language As Integer
     Public includes As String()
-    Public highlightspaces As Boolean = False
     Public scripttext As String = ""
 
     Public FontSize As Integer = 10
     Public FontName As String = ""
-
     Private reader As New List(Of Jolt.XmlDocCommentReader)
 
     Public CAPEOPEN As Boolean = False
@@ -48,9 +46,15 @@ Imports System.Drawing
     Private loaded As Boolean = False
 #End Region
 
-    Private Sub ScriptEditorForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
-        If Not CAPEOPEN Then ScriptUO.ScriptText = txtScript.Text Else scripttext = txtScript.Text
-    End Sub
+    Public Property HighlightSpaces As Boolean
+    Get
+        Return btnHighlightSpaces.Checked
+    End Get
+    Set
+        btnHighlightSpaces.Checked = value
+    End Set
+    End Property
+
 
     Private Sub ScriptEditorForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
@@ -99,7 +103,7 @@ Imports System.Drawing
 
         tscb2.Items.AddRange(New Object() {6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16})
 
-        btnHighlightSpaces.Checked = highlightspaces
+        btnHighlightSpaces.Checked = ScriptUO.HighlightSpaces
 
         If CAPEOPEN Then
             tscb1.SelectedItem = FontName
@@ -293,7 +297,8 @@ Imports System.Drawing
             txtScript.ShowToolTip(reader, CAPEOPEN)
         Catch ex As Exception
         End Try
-        If Not CAPEOPEN Then ScriptUO.ScriptText = txtScript.Text
+
+        If Not CAPEOPEN Then ScriptUO.ScriptText = txtScript.Text Else scripttext = txtScript.Text
 
     End Sub
 
@@ -306,8 +311,8 @@ Imports System.Drawing
     End Sub
 
     Private Sub btnHighlightSpaces_Click(sender As Object, e As EventArgs) Handles btnHighlightSpaces.CheckedChanged
-        highlightspaces = btnHighlightSpaces.Checked
-        If loaded Then txtScript.SetEditorStyle(tscb1.SelectedItem.ToString, tscb2.SelectedItem.ToString, highlightspaces, CAPEOPEN)
+        ScriptUO.HighlightSpaces = btnHighlightSpaces.Checked
+        If loaded Then txtScript.SetEditorStyle(tscb1.SelectedItem.ToString, tscb2.SelectedItem.ToString, ScriptUO.HighlightSpaces, CAPEOPEN)
     End Sub
 
 End Class

@@ -86,13 +86,13 @@ Namespace GraphicObjects.Shapes
 
         End Sub
 
-        Shared Dim svg As SKSvg
+        'Shared Dim svg As SKSvg
         Shared Sub New()
             'alexander load SVG template
-            svg = New SKSvg()
-            Using svgMs = New MemoryStream(My.Resources.item_orificePlate)
-              svg.Load(svgMs)
-            End using
+            'svg = New SKSvg()
+            'Using svgMs = New MemoryStream(My.Resources.item_orificePlate)
+            '  svg.Load(svgMs)
+            'End using
         End Sub
 
         Public Overrides Sub Draw(ByVal g As Object)
@@ -148,22 +148,22 @@ Namespace GraphicObjects.Shapes
                 canvas.DrawOval(rect2, myPen2)
 
 
-                'set aspect ratio from SVG to orifice bounds
-                Dim boundsSvg = svg.CanvasSize
-                Dim xRatio = rect.Width / boundsSvg.Width
-                Dim yRatio = rect.Height / boundsSvg.Height
-                Dim ratio = Math.Min(xRatio, yRatio)
+                ''set aspect ratio from SVG to orifice bounds
+                'Dim boundsSvg = svg.CanvasSize
+                'Dim xRatio = rect.Width / boundsSvg.Width
+                'Dim yRatio = rect.Height / boundsSvg.Height
+                'Dim ratio = Math.Min(xRatio, yRatio)
 
-                'save canvas state
-                canvas.Save()
+                ''save canvas state
+                'canvas.Save()
 
-                'draw SVG
-                canvas.Translate(rect.Left, rect.Top)
-                canvas.Scale(ratio)
-                canvas.DrawPicture(svg.Picture)', rect.Left, rect.Top)
+                ''draw SVG
+                'canvas.Translate(rect.Left, rect.Top)
+                'canvas.Scale(ratio)
+                'canvas.DrawPicture(svg.Picture)', rect.Left, rect.Top)
 
-                'restore canvas state
-                canvas.Restore()
+                ''restore canvas state
+                'canvas.Restore()
             End If
 
         End Sub

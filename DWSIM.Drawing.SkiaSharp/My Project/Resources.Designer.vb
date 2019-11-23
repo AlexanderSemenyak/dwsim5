@@ -69,5 +69,35 @@ Namespace My.Resources
                 Return CType(obj,Byte())
             End Get
         End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Byte[].
+        '''</summary>
+        Friend ReadOnly Property item_PipeSegment_center() As Byte()
+            Get
+                Dim obj As Object = ResourceManager.GetObject("item_PipeSegment_center", resourceCulture)
+                Return CType(obj,Byte())
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Byte[].
+        '''</summary>
+        Friend ReadOnly Property item_PipeSegment_left() As Byte()
+            Get
+                Dim obj As Object = ResourceManager.GetObject("item_PipeSegment_left", resourceCulture)
+                Return CType(obj,Byte())
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Byte[].
+        '''</summary>
+        Friend ReadOnly Property item_PipeSegment_right() As Byte()
+            Get
+                Dim obj As Object = ResourceManager.GetObject("item_PipeSegment_right", resourceCulture)
+                Return CType(obj,Byte())
+            End Get
+        End Property
     End Module
 End Namespace

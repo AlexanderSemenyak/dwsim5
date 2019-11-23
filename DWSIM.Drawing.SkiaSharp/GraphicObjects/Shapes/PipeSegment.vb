@@ -1,6 +1,8 @@
-﻿Imports DWSIM.Drawing.SkiaSharp.GraphicObjects
+﻿Imports System.IO
+Imports DWSIM.Drawing.SkiaSharp.GraphicObjects
 Imports DWSIM.Interfaces.Enums.GraphicObjects
 Imports DWSIM.DrawingTools.Point
+Imports SkiaSharp.Extended.Svg
 
 Namespace GraphicObjects.Shapes
 
@@ -84,6 +86,29 @@ Namespace GraphicObjects.Shapes
 
         End Sub
 
+        Shared Dim svgLeft As SKSvg
+        Shared Dim svgCenter As SKSvg
+        Shared Dim svgRight As SKSvg
+
+        Shared Sub New()
+            'alexander load SVG template
+            svgLeft = New SKSvg()
+            svgCenter = New SKSvg()
+            svgRight = New SKSvg()
+            Using svgMs = New MemoryStream(My.Resources.item_PipeSegment_left)
+                svgLeft.Load(svgMs)
+            End using
+
+            Using svgMs = New MemoryStream(My.Resources.item_PipeSegment_center)
+                svgCenter.Load(svgMs)
+            End using            
+            
+            Using svgMs = New MemoryStream(My.Resources.item_PipeSegment_right)
+                svgRight.Load(svgMs)
+            End using
+        End Sub
+
+
         Public Overrides Sub Draw(ByVal g As Object)
 
             Dim canvas As SKCanvas = DirectCast(g, SKCanvas)
@@ -101,11 +126,10 @@ Namespace GraphicObjects.Shapes
                 .StrokeWidth = LineWidth
             End With
 
-            Dim rect1 As New SKRect(X + 0.05 * Width, Y, X + 0.95 * Width, Y + Height)
-            Dim rect0 As New SKRect(X, Y, X + 0.1 * Width, Y + Height)
-            Dim rect2 As New SKRect(X + 0.9 * Width, Y, X + Width, Y + Height)
+            Dim rect1 As New SKRect(X , Y, X + Width, Y + Height)
+            Dim rect0 As New SKRect(X, Y, X + 0.1 * Width, Y + Height) 'left oval
+            Dim rect2 As New SKRect(X + 0.9 * Width, Y, X + Width, Y + Height) 'right oval
 
-            canvas.DrawRect(rect1, myPen2)
             canvas.DrawOval(rect0, myPen2)
             canvas.DrawOval(rect2, myPen2)
 
@@ -129,6 +153,57 @@ Namespace GraphicObjects.Shapes
 
             End If
 
+            'set bounds from SVG
+            'Dim boundsSvgLeft = svgLeft.CanvasSize
+            'Dim boundsSvgRight = svgRight.CanvasSize
+            'Dim boundsSvgCenter = svgCenter.CanvasSize
+
+            'Dim yRatio = Height / boundsSvgLeft.Height
+            'Dim widthInSvgCoords = Width/yRatio
+
+            'Dim centerWidthInSvgCoord = widthInSvgCoords - boundsSvgLeft.Width - boundsSvgRight.Width
+            'Dim allWidthInSvgCoord = centerWidthInSvgCoord + boundsSvgLeft.Width + boundsSvgRight.Width
+            'Dim cnterZoom  = centerWidthInSvgCoord/boundsSvgCenter.Width
+
+            'Dim xRatio = Width*0.95 / allWidthInSvgCoord
+
+            'Dim leftXRatio = xRatio
+            'Dim rightXRatio = xRatio
+            'Dim centerXRatio = cnterZoom * xRatio
+
+            'Dim leftX = X + Width*0.05
+            'Dim rightX = X - Width*0.05 + Width-xRatio*boundsSvgRight.Width
+            'Dim centerX = X+Width*0.05 + leftXRatio * boundsSvgLeft.Width
+
+            ''save canvas state
+            'canvas.Save()
+            ''draw SVG Left
+            'canvas.Translate(leftX, Y)
+            'canvas.Scale(leftXRatio, yRatio)
+            'canvas.DrawPicture(svgLeft.Picture)
+            ''restore canvas state
+            'canvas.Restore()
+
+            ''save canvas state
+            'canvas.Save()
+            ''draw SVG Right
+            'canvas.Translate(rightX, Y)
+            'canvas.Scale(rightXRatio, yRatio)
+            'canvas.DrawPicture(svgRight.Picture)
+            ''restore canvas state
+            'canvas.Restore()
+
+            ''save canvas state
+            'canvas.Save()
+            ''draw SVG center
+            'canvas.Translate(centerX, Y)
+            'canvas.Scale(centerXRatio, yRatio)
+            'canvas.DrawPicture(svgCenter.Picture)
+            ''restore canvas state
+            'canvas.Restore()
+
+            'canvas.DrawRect(rect1, myPen2)
+            myPen2.Dispose()
         End Sub
 
     End Class
