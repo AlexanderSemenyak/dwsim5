@@ -3206,6 +3206,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Uma nova janela do Criador de compostos será exibida e este assistente será fechado. Após inserir todos os dados necessários, exporte o composto para um arquivo JSON, abra o painel Configurações de Simulação para esta Flowsheet e carregue o arquivo JSON salvo. Clique em &apos;Sim&apos; para continuar..
+        '''</summary>
+        Friend Shared ReadOnly Property CreateFromUNIFACWarning() As String
+            Get
+                Return ResourceManager.GetString("CreateFromUNIFACWarning", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Este utilitário só pode ser utilizado com os Pacotes de Propriedades &apos;Peng-Robinson&apos; e &apos;SRK&apos;..
         '''</summary>
         Friend Shared ReadOnly Property CritptPRSRKOnly() As String
@@ -8137,6 +8146,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to O Inspetor está desativado..
+        '''</summary>
+        Friend Shared ReadOnly Property inspectordisabled() As String
+            Get
+                Return ResourceManager.GetString("inspectordisabled", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Intermitente.
         '''</summary>
         Friend Shared ReadOnly Property Intermitente() As String
@@ -10059,6 +10077,15 @@ Namespace My.Resources
         Friend Shared ReadOnly Property NoRegressionAvailable() As String
             Get
                 Return ResourceManager.GetString("NoRegressionAvailable", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Nenhum relatório encontrado..
+        '''</summary>
+        Friend Shared ReadOnly Property noreportsavailable() As String
+            Get
+                Return ResourceManager.GetString("noreportsavailable", resourceCulture)
             End Get
         End Property
         
@@ -12741,6 +12768,15 @@ Namespace My.Resources
         Friend Shared ReadOnly Property RemoveScriptQuestion() As String
             Get
                 Return ResourceManager.GetString("RemoveScriptQuestion", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to {0} relatório(s) disponível(is)..
+        '''</summary>
+        Friend Shared ReadOnly Property reportsavailable() As String
+            Get
+                Return ResourceManager.GetString("reportsavailable", resourceCulture)
             End Get
         End Property
         

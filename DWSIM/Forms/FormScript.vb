@@ -204,6 +204,7 @@ Imports IronPython.Hosting
         scope = engine.CreateScope()
         scope.SetVariable("Plugins", My.Application.UtilityPlugins)
         scope.SetVariable("Flowsheet", fsheet)
+        scope.SetVariable("Application", fsheet.GetApplicationObject())
         scope.SetVariable("Spreadsheet", fsheet.FormSpreadsheet.Spreadsheet)
 
         Dim Solver As New FlowsheetSolver.FlowsheetSolver

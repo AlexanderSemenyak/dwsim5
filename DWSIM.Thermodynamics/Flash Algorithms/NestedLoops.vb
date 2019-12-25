@@ -1799,7 +1799,6 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
             itol = Me.FlashSettings(Interfaces.Enums.FlashSetting.PTFlash_Internal_Loop_Tolerance).ToDoubleFromInvariant
             maxit_i = Me.FlashSettings(Interfaces.Enums.FlashSetting.PTFlash_Maximum_Number_Of_Internal_Iterations)
 
-            'alexander 2019 fix not exists settings keys
             FlashAlgorithmConfig.FixNotExistsKeys(Me.FlashSettings)
             epsilon = Me.FlashSettings(Interfaces.Enums.FlashSetting.PVFlash_TemperatureDerivativeEpsilon).ToDoubleFromInvariant
             df = Me.FlashSettings(Interfaces.Enums.FlashSetting.PVFlash_FixedDampingFactor).ToDoubleFromInvariant

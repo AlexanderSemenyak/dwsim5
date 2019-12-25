@@ -43,6 +43,28 @@ Namespace My
 
         Public Property UserUnitSystems As Dictionary(Of String, SystemsOfUnits.Units)
 
+        Public Sub Invoke(code As Object)
+            'My.Application.Invoke()
+            if Me.MainForm.InvokeRequired Then
+                Me.MainForm.Invoke(code)
+            Else
+                code.Invoke()
+            End If
+        End Sub
+
+        ''' <summary>
+        ''' ONIT - support Invoke from Windows interface
+        ''' </summary>
+        ''' <param name="code"></param>
+        Public Sub Invoke(code As Action)
+            'My.Application.Invoke()
+            if Me.MainForm.InvokeRequired Then
+                Me.MainForm.Invoke(code)
+            Else
+                code.Invoke()
+            End If
+        End Sub
+
         Private Sub MyApplication_Shutdown(sender As Object, e As EventArgs) Handles Me.Shutdown
 
             'save user unit systems

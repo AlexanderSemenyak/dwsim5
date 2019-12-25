@@ -43,11 +43,11 @@ Partial Class MaterialStreamEditor
         Dim DataGridViewCellStyle16 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim DataGridViewCellStyle17 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.GroupBox5 = New System.Windows.Forms.GroupBox()
+        Me.lblStatus = New System.Windows.Forms.TextBox()
         Me.btnUtils = New System.Windows.Forms.Button()
         Me.lblTag = New System.Windows.Forms.TextBox()
         Me.chkActive = New System.Windows.Forms.CheckBox()
         Me.lblConnectedTo = New System.Windows.Forms.Label()
-        Me.lblStatus = New System.Windows.Forms.Label()
         Me.Label13 = New System.Windows.Forms.Label()
         Me.Label12 = New System.Windows.Forms.Label()
         Me.Label11 = New System.Windows.Forms.Label()
@@ -268,16 +268,22 @@ Partial Class MaterialStreamEditor
         'GroupBox5
         '
         resources.ApplyResources(Me.GroupBox5, "GroupBox5")
+        Me.GroupBox5.Controls.Add(Me.lblStatus)
         Me.GroupBox5.Controls.Add(Me.btnUtils)
         Me.GroupBox5.Controls.Add(Me.lblTag)
         Me.GroupBox5.Controls.Add(Me.chkActive)
         Me.GroupBox5.Controls.Add(Me.lblConnectedTo)
-        Me.GroupBox5.Controls.Add(Me.lblStatus)
         Me.GroupBox5.Controls.Add(Me.Label13)
         Me.GroupBox5.Controls.Add(Me.Label12)
         Me.GroupBox5.Controls.Add(Me.Label11)
         Me.GroupBox5.Name = "GroupBox5"
         Me.GroupBox5.TabStop = False
+        '
+        'lblStatus
+        '
+        resources.ApplyResources(Me.lblStatus, "lblStatus")
+        Me.lblStatus.Name = "lblStatus"
+        Me.lblStatus.ReadOnly = True
         '
         'btnUtils
         '
@@ -302,11 +308,6 @@ Partial Class MaterialStreamEditor
         '
         resources.ApplyResources(Me.lblConnectedTo, "lblConnectedTo")
         Me.lblConnectedTo.Name = "lblConnectedTo"
-        '
-        'lblStatus
-        '
-        resources.ApplyResources(Me.lblStatus, "lblStatus")
-        Me.lblStatus.Name = "lblStatus"
         '
         'Label13
         '
@@ -704,8 +705,9 @@ Partial Class MaterialStreamEditor
         '
         resources.ApplyResources(Me.rtbAnnotations, "rtbAnnotations")
         Me.rtbAnnotations.Name = "rtbAnnotations"
-        Me.rtbAnnotations.Rtf = "{\rtf1\ansi\ansicpg1252\deff0\deflang1046{\fonttbl{\f0\fnil\fcharset0 Microsoft S" &
-    "ans Serif;}}" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "\viewkind4\uc1\pard\f0\fs17\par" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "}" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        Me.rtbAnnotations.Rtf = "{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1046{\fonttbl{\f0\fnil Microsoft " &
+    "Sans Serif;}}" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "{\*\generator Riched20 10.0.18362}\viewkind4\uc1 " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "\pard\f0\fs17\" &
+    "par" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "}" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         Me.rtbAnnotations.ShowOpen = False
         Me.rtbAnnotations.ShowSave = False
         Me.rtbAnnotations.ToolbarVisible = False
@@ -1561,7 +1563,6 @@ Partial Class MaterialStreamEditor
     Public WithEvents GroupBox5 As System.Windows.Forms.GroupBox
     Public WithEvents chkActive As System.Windows.Forms.CheckBox
     Public WithEvents lblConnectedTo As System.Windows.Forms.Label
-    Public WithEvents lblStatus As System.Windows.Forms.Label
     Public WithEvents lblObject As System.Windows.Forms.Label
     Public WithEvents Label13 As System.Windows.Forms.Label
     Public WithEvents Label12 As System.Windows.Forms.Label
@@ -1725,4 +1726,5 @@ Partial Class MaterialStreamEditor
     Friend WithEvents compname As DataGridViewTextBoxColumn
     Friend WithEvents compamount As DataGridViewTextBoxColumn
     Friend WithEvents ToolTipChangeTag As ToolTip
+    Public WithEvents lblStatus As TextBox
 End Class

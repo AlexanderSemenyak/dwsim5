@@ -14,6 +14,7 @@ using DWSIM.Thermodynamics.BaseClasses;
 using DWSIM.Interfaces;
 using System.Reflection;
 using System.Text;
+using DWSIM.SharedClasses;
 using s = DWSIM.GlobalSettings.Settings;
 using c = DWSIM.UI.Shared.Common;
 
@@ -200,13 +201,25 @@ namespace DWSIM.UI
                 {
                     var li = new TreeGridItem();
                     var data = new Dictionary<string, string>();
-                    if (Path.GetExtension(item).ToLower() == ".dwxmz")
+                    if (Path.GetExtension(item).ToLower() == ".dwxmz" || Path.GetExtension(item).ToLower() == ".armgz")
                     {
                         data = SharedClasses.Utility.GetSimulationFileDetails(FlowsheetBase.FlowsheetBase.LoadZippedXMLDoc(item));
                     }
                     else
                     {
-                        data = SharedClasses.Utility.GetSimulationFileDetails(XDocument.Load(item));
+#if DEBUG
+                        try
+                        {
+#endif
+                            data = Utility.GetSimulationFileDetails(XDocument.Load(item));
+#if DEBUG
+                        }
+                        catch (Exception e)
+                        {
+                            
+                            throw;
+                        }
+#endif
                     }
                     li.Tag = data;
                     data.Add("Path", item);
@@ -540,8 +553,8 @@ namespace DWSIM.UI
                         ClientSize = new Size((int)(s.UIScalingFactor * 700), (int)(s.UIScalingFactor * 400));
                         break;
                 }
-                var splash = new SplashScreen { MainFrm = this };
-                splash.Show();
+                //var splash = new SplashScreen { MainFrm = this };
+                //splash.Show();
             });
 
         }
@@ -602,7 +615,7 @@ namespace DWSIM.UI
                         var ds = (TreeGridItemCollection)MostRecentList.DataStore;
                         var li = new TreeGridItem();
                         var data = new Dictionary<string, string>();
-                        if (Path.GetExtension(path).ToLower() == ".dwxmz")
+                        if (Path.GetExtension(path).ToLower() == ".dwxmz" || Path.GetExtension(path).ToLower() == ".armgz")
                         {
                             data = SharedClasses.Utility.GetSimulationFileDetails(FlowsheetBase.FlowsheetBase.LoadZippedXMLDoc(path));
                         }
