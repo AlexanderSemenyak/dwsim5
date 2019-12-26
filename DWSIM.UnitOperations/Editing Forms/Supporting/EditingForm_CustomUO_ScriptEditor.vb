@@ -24,6 +24,7 @@ Imports System.Xml.Linq
 Imports System.Linq
 Imports System.Windows.Forms
 Imports System.Drawing
+Imports Jolt
 
 <System.Serializable()> Public Class EditingForm_CustomUO_ScriptEditor
 
@@ -59,7 +60,7 @@ Imports System.Drawing
     Private Sub ScriptEditorForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
 
         If CAPEOPEN Then
-            Me.Text = "Script Editor"
+            Me.Text = "Редактор скриптов"
         Else
             Me.Text = ScriptUO.GraphicObject.Tag & " - " & Me.Text
         End If
@@ -70,10 +71,14 @@ Imports System.Drawing
             Dim unitopassembly = My.Application.Info.LoadedAssemblies.Where(Function(x) x.FullName.Contains("DWSIM.UnitOperations,")).FirstOrDefault
             Dim fsolverassembly = My.Application.Info.LoadedAssemblies.Where(Function(x) x.FullName.Contains("DWSIM.FlowsheetSolver,")).FirstOrDefault
 
-            reader.Add(New Jolt.XmlDocCommentReader(Assembly.GetExecutingAssembly()))
-            reader.Add(New Jolt.XmlDocCommentReader(calculatorassembly))
-            reader.Add(New Jolt.XmlDocCommentReader(unitopassembly))
-            reader.Add(New Jolt.XmlDocCommentReader(fsolverassembly))
+            'alexander - fix not default work directory for find xmldocs
+            Dim settings = new XmlDocCommentReaderSettings(new String() { Path.GetDirectoryName(Me.GetType().Assembly.Location)})
+            Dim policy As Func(Of String,IXmlDocCommentReadPolicy) = GetType(XmlDocCommentReader).GetField("CreateDefaultReadPolicy",BindingFlags.Static Or BindingFlags.GetField Or BindingFlags.NonPublic).GetValue(Nothing)
+
+            reader.Add(New Jolt.XmlDocCommentReader(Assembly.GetExecutingAssembly(),settings,policy))
+            reader.Add(New Jolt.XmlDocCommentReader(calculatorassembly,settings,policy))
+            reader.Add(New Jolt.XmlDocCommentReader(unitopassembly,settings,policy))
+            reader.Add(New Jolt.XmlDocCommentReader(fsolverassembly,settings,policy))
 
         Else
 
@@ -314,7 +319,7 @@ Imports System.Drawing
         if Not ScriptUO is nothing then
             ScriptUO.HighlightSpaces = btnHighlightSpaces.Checked
         End If
-        If loaded Then txtScript.SetEditorStyle(Convert.ToString(tscb1.SelectedItem), Convert.ToString(tscb2.SelectedItem), ScriptUO.HighlightSpaces, CAPEOPEN)
+        If loaded Then txtScript.SetEditorStyle(System.Convert.ToString(tscb1.SelectedItem), System.Convert.ToString(tscb2.SelectedItem), ScriptUO.HighlightSpaces, CAPEOPEN)
     End Sub
 
 End Class
