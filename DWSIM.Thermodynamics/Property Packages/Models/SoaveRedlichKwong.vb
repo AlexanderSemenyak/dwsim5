@@ -471,7 +471,7 @@ Namespace PropertyPackages.Auxiliary
             Dim DSres = R * Math.Log((Z - BG1) / Z) + R * Math.Log(Z) - 1 / ((uu ^ 2 - 4 * ww) ^ 0.5 * bm) * dadT * Math.Log((2 * Z + BG1 * (uu - (uu ^ 2 - 4 * ww) ^ 0.5)) / (2 * Z + BG1 * (uu + (uu ^ 2 - 4 * ww) ^ 0.5)))
             Dim DHres = DAres + T * (DSres) + R * T * (Z - 1)
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
 
             IObj?.Paragraphs.Add(String.Format("Calculated Enthalpy Departure: {0} kJ/kmol", DHres))
             IObj?.Paragraphs.Add(String.Format("Calculated Enthalpy Departure: {0} kJ/kg", DHres / MMm))
@@ -724,7 +724,7 @@ Namespace PropertyPackages.Auxiliary
             'Dim DSres = R * Math.Log((Z - BG1) / Z) + R * Math.Log(V * 101325 / (R * 298.15)) - 1 / ((uu ^ 2 - 4 * ww) ^ 0.5 * bm) * dadT * Math.Log((2 * Z + BG1 * (uu - (uu ^ 2 - 4 * ww) ^ 0.5)) / (2 * Z + BG1 * (uu + (uu ^ 2 - 4 * ww) ^ 0.5)))
             Dim DSres = R * Math.Log((Z - BG1) / Z) + R * Math.Log(Z) - 1 / ((uu ^ 2 - 4 * ww) ^ 0.5 * bm) * dadT * Math.Log((2 * Z + BG1 * (uu - (uu ^ 2 - 4 * ww) ^ 0.5)) / (2 * Z + BG1 * (uu + (uu ^ 2 - 4 * ww) ^ 0.5)))
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
 
             IObj?.Paragraphs.Add(String.Format("Calculated Entropy Departure: {0} kJ/kmol", DSres))
             IObj?.Paragraphs.Add(String.Format("Calculated Entropy Departure: {0} kJ/kg", DSres / MMm))

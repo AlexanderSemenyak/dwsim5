@@ -26,6 +26,7 @@ namespace DWSIM.UI.Desktop.Editors.Tables
         public Button btnOK, btnOrderDown, btnOrderUp;
         public ListBox lvObjects, lvProps, lvSelectObj, lvSelectProp;
         public DropDown cbObjectType, cbOrderBy;
+        public NumericStepper nsNumberOfLines;
 
         public MasterPropertyTableEditor()
         {
@@ -52,7 +53,7 @@ namespace DWSIM.UI.Desktop.Editors.Tables
             var centercontainer = new TableLayout();
             var bottomcontainer = new TableLayout();
 
-            var tableleft = new TableLayout {Width = 200 };
+            var tableleft = new TableLayout { Width = 200 };
 
             btnOrderUp = new Button { Text = "˄", Width = 25 };
             btnOrderDown = new Button { Text = "˅", Width = 25 };
@@ -80,7 +81,15 @@ namespace DWSIM.UI.Desktop.Editors.Tables
             topcontainer2.Padding = new Padding(5, 5, 5, 5);
             topcontainer2.Spacing = new Size(10, 10);
 
-            topcontainer.Rows.Add(new TableRow(new Label { Text = "Заголовок таблицы", VerticalAlignment = VerticalAlignment.Center }, header));
+            nsNumberOfLines = new NumericStepper { MinValue = 1, MaxValue = 10, Value = 1, DecimalPlaces = 0, Increment = 1.0 };
+
+            nsNumberOfLines.ValueChanged += (s, e) =>
+            {
+                if (Table != null) Table.NumberOfLines = (int)nsNumberOfLines.Value;
+            };
+
+            topcontainer.Rows.Add(new TableRow(new Label { Text = "Заголовок таблицы", VerticalAlignment = VerticalAlignment.Center }, header, new Label { Text = "Количество сгруппированных строк", VerticalAlignment = VerticalAlignment.Center }, nsNumberOfLines));
+            topcontainer.Rows[0].Cells[1].ScaleWidth = true;
             topcontainer.Padding = new Padding(5, 5, 5, 5);
             topcontainer.Spacing = new Size(10, 10);
 
@@ -117,7 +126,7 @@ namespace DWSIM.UI.Desktop.Editors.Tables
 
             cbOrderBy.SelectedIndexChanged += (sender, e) =>
             {
-                if (cbOrderBy.SelectedIndex < 0) return; 
+                if (cbOrderBy.SelectedIndex < 0) return;
                 Table.SortBy = cbOrderBy.SelectedValue.ToString();
                 if (Table.SortBy == "Custom")
                 {
@@ -258,6 +267,8 @@ namespace DWSIM.UI.Desktop.Editors.Tables
 
                 cbObjectType.SelectedIndex = names.ToList().IndexOf(Table.ObjectFamily.ToString());
                 cbOrderBy.SelectedIndex = sitems.ToList().IndexOf(Table.SortBy);
+
+                nsNumberOfLines.Value = Table.NumberOfLines;
 
             };
 

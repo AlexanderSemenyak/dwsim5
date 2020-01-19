@@ -633,9 +633,9 @@ Namespace PropertyPackages
 
             Calculator.WriteToConsole("Result: " & fugcoeff.ToArrayString(), 2)
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
 
-            IObj?.Paragraphs.Add(String.Format("Fugacity Coefficients: {0}", fugcoeff.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Fugacity_Coefficients_0, fugcoeff.ToMathArrayString))
 
             IObj?.Close()
 

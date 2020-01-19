@@ -217,7 +217,7 @@ Namespace UnitOperations
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-            Inspector.Host.CheckAndAdd(IObj, "", "Calculate", If(GraphicObject IsNot Nothing, GraphicObject.Tag, "Temporary Object") & " (" & GetDisplayName() & ")", GetDisplayName() & " Calculation Routine", True)
+            Inspector.Host.CheckAndAdd(IObj, "", "Calculate", If(GraphicObject IsNot Nothing, GraphicObject.Tag, SolutionInspector.Temporary_Object) & " (" & GetDisplayName() & ")", GetDisplayName() & SolutionInspector.Calculation_Routine, True)
 
             IObj?.SetCurrent()
 
@@ -373,14 +373,14 @@ Namespace UnitOperations
 
                         Dim IObj3 As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-                        Inspector.Host.CheckAndAdd(IObj3, "", "Calculate", String.Format("Segment #{0} ({1}/{2})", segmento.Indice, iq, segmento.Quantidade), "", True)
+                        Inspector.Host.CheckAndAdd(IObj3, "", "Calculate", String.Format(SolutionInspector.Segment_0_1_2, segmento.Indice, iq, segmento.Quantidade), "", True)
 
-                        IObj3?.Paragraphs.Add(String.Format("Calculating segment {0} ({1}/{2})...", segmento.Indice, iq, segmento.Quantidade))
+                        IObj3?.Paragraphs.Add(String.Format(SolutionInspector.Calculating_segment_0_1_2, segmento.Indice, iq, segmento.Quantidade))
 
                         If segmento.TipoSegmento = "Tubulaosimples" Or segmento.TipoSegmento = "" Or segmento.TipoSegmento = "Straight Tube Section" Or segmento.TipoSegmento = "Straight Tube" Then
 
-                            IObj3?.Paragraphs.Add(String.Format("Segment type: {0}", segmento.TipoSegmento))
-                            IObj3?.Paragraphs.Add(String.Format("Segment increments: {0}", segmento.Incrementos))
+                            IObj3?.Paragraphs.Add(String.Format(SolutionInspector.Segment_type_0, segmento.TipoSegmento))
+                            IObj3?.Paragraphs.Add(String.Format(SolutionInspector.Segment_increments_0, segmento.Incrementos))
 
                             j = 0
                             nseg = segmento.Incrementos
@@ -414,9 +414,9 @@ Namespace UnitOperations
 
                                 Dim IObj4 As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-                                Inspector.Host.CheckAndAdd(IObj4, "", "Calculate", String.Format("Increment #{0}", j + 1), "", True)
+                                Inspector.Host.CheckAndAdd(IObj4, "", "Calculate", String.Format(SolutionInspector.Increment_0, j + 1), "", True)
 
-                                IObj4?.Paragraphs.Add(String.Format("Calculating increment {0}...", j + 1))
+                                IObj4?.Paragraphs.Add(String.Format(SolutionInspector.Calculating_increment_0, j + 1))
 
                                 If Text > Tin Then
                                     Tout = Tin * 1.005
@@ -435,9 +435,9 @@ Namespace UnitOperations
 
                                     Dim IObj5 As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-                                    Inspector.Host.CheckAndAdd(IObj5, "", "Calculate", String.Format("Temperature Loop #{0}", cntT), "", True)
+                                    Inspector.Host.CheckAndAdd(IObj5, "", "Calculate", String.Format(SolutionInspector.Temperature_Loop_0, cntT), "", True)
 
-                                    IObj5?.Paragraphs.Add(String.Format("Temperature convergence loop iteration #{0}", cntT))
+                                    IObj5?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_convergence_loop_iteration_0, cntT))
 
                                     cntP = 0
 
@@ -448,9 +448,9 @@ Namespace UnitOperations
 
                                         Dim IObj6 As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-                                        Inspector.Host.CheckAndAdd(IObj6, "", "Calculate", String.Format("Pressure Loop #{0}", cntP), "", True)
+                                        Inspector.Host.CheckAndAdd(IObj6, "", "Calculate", String.Format(SolutionInspector.Pressure_Loop_0, cntP), "", True)
 
-                                        IObj6?.Paragraphs.Add(String.Format("Pressure convergence loop iteration #{0}", cntP))
+                                        IObj6?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_convergence_loop_iteration_0, cntP))
 
                                         With segmento
                                             count = 0
@@ -477,7 +477,7 @@ Namespace UnitOperations
 
                                             End With
 
-                                            IObj6?.Paragraphs.Add(String.Format("Calling Pressure Drop calculation routine..."))
+                                            IObj6?.Paragraphs.Add(String.Format(SolutionInspector.Calling_Pressure_Drop_calculation_routine))
 
                                             IObj6?.SetCurrent()
 
@@ -497,8 +497,8 @@ Namespace UnitOperations
                                         Pout_ant = Pout
                                         Pout = Pin - dpt
 
-                                        IObj6?.Paragraphs.Add(String.Format("Inlet pressure: {0} Pa", Pin))
-                                        IObj6?.Paragraphs.Add(String.Format("Calculated outlet pressure: {0} Pa", Pout))
+                                        IObj6?.Paragraphs.Add(String.Format(SolutionInspector.Inlet_pressure_0_Pa, Pin))
+                                        IObj6?.Paragraphs.Add(String.Format(SolutionInspector.Calculated_outlet_pressure_0_Pa, Pout))
 
                                         fP_ant2 = fP_ant
                                         fP_ant = fP
@@ -508,7 +508,7 @@ Namespace UnitOperations
                                             Pout = Pout - fP * (Pout - Pout_ant2) / (fP - fP_ant2)
                                         End If
 
-                                        IObj6?.Paragraphs.Add(String.Format("Updated outlet pressure: {0} Pa", Pout))
+                                        IObj6?.Paragraphs.Add(String.Format(SolutionInspector.Updated_outlet_pressure_0_Pa, Pout))
 
                                         cntP += 1
 
@@ -524,9 +524,9 @@ Namespace UnitOperations
 
                                     Loop Until Math.Abs(fP) < Me.TolP
 
-                                    IObj5?.Paragraphs.Add(String.Format("Converged outlet pressure: {0} Pa", Pout))
+                                    IObj5?.Paragraphs.Add(String.Format(SolutionInspector.Converged_outlet_pressure_0_Pa, Pout))
 
-                                    IObj5?.Paragraphs.Add(String.Format("Proceeding with temperature convergence..."))
+                                    IObj5?.Paragraphs.Add(String.Format(SolutionInspector.Proceeding_with_temperature_convergence))
 
                                     With segmento
 
@@ -573,14 +573,14 @@ Namespace UnitOperations
                                         End If
                                     End With
 
-                                    IObj5?.Paragraphs.Add(String.Format("Calculated/Estimated HTC: {0} W/[m2.K]", U))
-                                    IObj5?.Paragraphs.Add(String.Format("Calculated Heat Transfer Area: {0} m2", A))
-                                    IObj5?.Paragraphs.Add(String.Format("Calculated/Specified Heat Transfer: {0} kW", DQ))
+                                    IObj5?.Paragraphs.Add(String.Format(SolutionInspector.Calculated_Estimated_HTC_0_W_m2_K, U))
+                                    IObj5?.Paragraphs.Add(String.Format(SolutionInspector.Calculated_Heat_Transfer_Area_0_m2, A))
+                                    IObj5?.Paragraphs.Add(String.Format(SolutionInspector.Calculated_Specified_Heat_Transfer_0_kW, DQ))
 
                                     Hout = Hin + DQ / Win
 
-                                    IObj5?.Paragraphs.Add(String.Format("Inlet Enthalpy: {0} kJ/kg", Hin))
-                                    IObj5?.Paragraphs.Add(String.Format("Outlet Enthalpy: {0} kJ/kg", Hout))
+                                    IObj5?.Paragraphs.Add(String.Format(SolutionInspector.Inlet_Enthalpy_0_kJ_kg, Hin))
+                                    IObj5?.Paragraphs.Add(String.Format(SolutionInspector.Outlet_Enthalpy_0_kJ_kg, Hout))
 
                                     oms.PropertyPackage.CurrentMaterialStream = oms
 
@@ -589,7 +589,7 @@ Namespace UnitOperations
                                     Tout = oms.PropertyPackage.FlashBase.CalculateEquilibrium(PropertyPackages.FlashSpec.P, PropertyPackages.FlashSpec.H, Pout, Hout, oms.PropertyPackage, oms.PropertyPackage.RET_VMOL(PropertyPackages.Phase.Mixture), Nothing, Tout).CalculatedTemperature
                                     Tout = 0.7 * Tout_ant + 0.3 * Tout
 
-                                    IObj5?.Paragraphs.Add(String.Format("Calculated Outlet Temperature: {0} K", Tout))
+                                    IObj5?.Paragraphs.Add(String.Format(SolutionInspector.Calculated_Outlet_Temperature_0_K, Tout))
 
                                     fT = Tout - Tout_ant
 
@@ -609,8 +609,8 @@ Namespace UnitOperations
 
                                 Loop
 
-                                IObj4?.Paragraphs.Add(String.Format("Converged Outlet Temperature: {0} K", Tout))
-                                IObj4?.Paragraphs.Add(String.Format("Converged Outlet Pressure: {0} K", Pout))
+                                IObj4?.Paragraphs.Add(String.Format(SolutionInspector.Converged_outlet_temperature_0_K, Tout))
+                                IObj4?.Paragraphs.Add(String.Format(SolutionInspector.Converged_outlet_pressure_0_Pa, Pout))
 
                                 If IncludeJTEffect Then
 
@@ -654,7 +654,7 @@ Namespace UnitOperations
 
                                 oms.SpecType = Interfaces.Enums.StreamSpec.Pressure_and_Enthalpy
 
-                                IObj4?.Paragraphs.Add(String.Format("Recalculating the temporary material stream and moving on to the next segment/increment..."))
+                                IObj4?.Paragraphs.Add(String.Format(SolutionInspector.Recalculating_the_temporary_material_stream_and_moving_on_to_the_next_segment_increment))
 
                                 IObj4?.SetCurrent()
                                 oms.Calculate(True, True)
@@ -877,8 +877,8 @@ Namespace UnitOperations
 
                 If countext > 50 Then Throw New Exception("Nmeromximodeiteraesa3")
 
-                IObj2?.Paragraphs.Add(String.Format("Calculated outlet pressure: {0} Pa", Pout))
-                IObj2?.Paragraphs.Add(String.Format("Calculated outlet temperature: {0} Pa", Tout))
+                IObj2?.Paragraphs.Add(String.Format(SolutionInspector.Calculated_outlet_pressure_0_Pa, Pout))
+                IObj2?.Paragraphs.Add(String.Format(SolutionInspector.Calculated_Outlet_Temperature_0_K, Tout))
 
                 IObj2?.Close()
 
@@ -1276,7 +1276,7 @@ Namespace UnitOperations
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-            Inspector.Host.CheckAndAdd(IObj, "", "CalcOverallHeatTransferCoefficient", "Overall HTC Calculation", SolutionInspector.Overal_Heat_Transfer_Coefficient_Calculation_Routine, True)
+            Inspector.Host.CheckAndAdd(IObj, "", "CalcOverallHeatTransferCoefficient", SolutionInspector.Overall_HTC_Calculation, SolutionInspector.Overal_Heat_Transfer_Coefficient_Calculation_Routine, True)
 
             IObj?.Paragraphs.Add(SolutionInspector.This_Is_the_external_loop_To_converge_pressure_When_outlet_temperature_Is_specified_Or_vice_versa)
 

@@ -32,6 +32,7 @@ Imports DWSIM.Thermodynamics.Streams
 Imports DWSIM.SharedClasses
 Imports DWSIM.Interfaces.Enums
 Imports DWSIM.Drawing.SkiaSharp.GraphicObjects
+Imports DWSIM.Interfaces.My.Resources
 
 Namespace UnitOperations
 
@@ -958,7 +959,7 @@ Namespace UnitOperations
 
                 Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-                Inspector.Host.CheckAndAdd(IObj, "", "Calculate", If(GraphicObject IsNot Nothing, GraphicObject.Tag, "Temporary Object") & " (" & GetDisplayName() & ")", GetDisplayName() & " Calculation Routine", True)
+                Inspector.Host.CheckAndAdd(IObj, "", "Calculate", If(GraphicObject IsNot Nothing, GraphicObject.Tag, SolutionInspector.Temporary_Object) & " (" & GetDisplayName() & ")", GetDisplayName() & SolutionInspector.Calculation_Routine, True)
 
                 IObj?.SetCurrent()
 

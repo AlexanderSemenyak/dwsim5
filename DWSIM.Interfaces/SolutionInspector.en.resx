@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Calculated_Intermediate_Parameters" xml:space="preserve">
-    <value>&lt;h2&gt;Результаты вычисления промежуточных результатов&lt;/h2&gt;</value>
+    <value>&lt;h2&gt;Промежуточные результаты вычисления&lt;/h2&gt;</value>
   </data>
   <data name="State_0" xml:space="preserve">
     <value>Состояние: {0}</value>
@@ -270,7 +270,7 @@
                                 секции для оценки динамики показателей в интересующих точках.</value>
   </data>
   <data name="Pipe_Calculate_Paragraph_03" xml:space="preserve">
-    <value>Сегмент трубы рассчитывается на основе балансов массы и энергии. 
+    <value>Сегмент трубы рассчитывается с соблюдением баланса массы и энергии. 
                             Полный алгоритм состоит из трех вложенных циклов. 
                             Внешний цикл перебирает секции (приращения), 
                             средний цикл выполняет итерации по температуре, 
@@ -372,5 +372,242 @@
   </data>
   <data name="Compressibility_Factor_Calculation_Routine" xml:space="preserve">
     <value>Процедура расчета коэффициента сжимаемости</value>
+  </data>
+  <data name="Peng_Robinson_EOS_Compressibility_Factor" xml:space="preserve">
+    <value>Коэффициент сжимаемости для уравнения состояния Пенга-Робинсона</value>
+  </data>
+  <data name="Peng_Robinson_EOS_Compressibility_Factor_Calculation_Routine" xml:space="preserve">
+    <value>Процедура расчета коэффициента сжимаемости для уравнения состояния Пенга-Робинсона (Peng-Robinson EOS)</value>
+  </data>
+  <data name="DWSIM_will_calculate_PR_EOS_Fugacity_Coefficient_using_the_CPU" xml:space="preserve">
+    <value>Расчет коэффициента летучести для уравнения сотояния Пега-Робинсона ведется используя процессор (возможен расчет на рафическом ускорителе).</value>
+  </data>
+  <data name="Fugacity_Coefficients_0" xml:space="preserve">
+    <value>Коэффициенты летучести: {0}</value>
+  </data>
+  <data name="Pressure_Temperature_Flash_Algorithm_Routine" xml:space="preserve">
+    <value>Процедура вычисления равновесия по давлению/температуре</value>
+  </data>
+  <data name="NestedLoop_FlashPT_01" xml:space="preserve">
+    <value>Эта процедура пробует найти составы жидкой и паровой фазы в равновесии, решая уравнение Рэкфорда-Райса с поиском сходимости методом Ньютона.</value>
+  </data>
+  <data name="NestedLoop_FlashPT_02" xml:space="preserve">
+    <value>Уравнение Рэкфорда-Райса</value>
+  </data>
+  <data name="where" xml:space="preserve">
+    <value>где:</value>
+  </data>
+  <data name="NestedLoop_FlashPT_03" xml:space="preserve">
+    <value>Константы равновесия  K&lt;sub&gt;i&lt;/sub&gt; в общем случае являются функцией от нескольких параметров, хотя наиболее важным параметром является, вероятно, температура, которая определяется так:</value>
+  </data>
+  <data name="is_the_mole_fraction_of_component_i" xml:space="preserve">
+    <value>мольная доля i-го компонента</value>
+  </data>
+  <data name="in_liquid_phase" xml:space="preserve">
+    <value>в жидкой фазе</value>
+  </data>
+  <data name="in_gas_phase" xml:space="preserve">
+    <value>в газовой фазе</value>
+  </data>
+  <data name="NestedLoop_FlashPT_04" xml:space="preserve">
+    <value>Как только уравнение Рэкфорда-Райса решено для &lt;math_inline&gt;\beta&lt;/math_inline&gt;, композиции xx&lt;sub&gt;i&lt;/sub&gt; и y&lt;sub&gt;i&lt;/sub&gt; могут быть рассчитаны как:</value>
+  </data>
+  <data name="NestedLoop_FlashPT_05" xml:space="preserve">
+    <value>Уравнение Рэкфорда-Райса может иметь несколько решений для &lt;math_inline&gt;\beta&lt;/math_inline&gt;, как минимум одно из которых гарантирует, что все &lt;math_inline&gt;x_i&lt;/math_inline&gt; и &lt;math_inline&gt;y_i&lt;/math_inline&gt; будут положительными. Частный случай, если существует только один &lt;math_inline&gt;\beta&lt;/math_inline&gt;, для которого:</value>
+  </data>
+  <data name="NestedLoop_FlashPT_06" xml:space="preserve">
+    <value>тогда это &lt;math_inline&gt;\beta&lt;/math_inline&gt; является решением; если есть несколько таких &lt;math_inline&gt;\beta&lt;/math_inline&gt;, это означает, что либо &lt;math_inline&gt;K_{max}&lt;1&lt;/math_inline&gt; или &lt;math_inline&gt;K_{min}&gt;1&lt;/math_inline&gt;, указывая соответственно что газовая фаза не может ghbcencndjdfnm (и, следовательно, &lt;math_inline&gt;\beta=0&lt;/math_inline&gt;) или наоборот, что жидкая фаза не может существовать (и, следовательно, &lt;math_inline&gt;\beta=1&lt;/math_inline&gt;).</value>
+  </data>
+  <data name="NestedLoop_FlashPT_07" xml:space="preserve">
+    <value>Симулятор инициализирует текущий расчет идеальными значениями K, рассчитанными на основе данных о давлении паровой фазы для каждого компонента или с использованием ранее рассчитанных значений из паредыдущего решения.</value>
+  </data>
+  <data name="Initial_estimates_for_K_0" xml:space="preserve">
+    <value>Начальное предположение для K: {0}</value>
+  </data>
+  <data name="Initial_estimates_for_V_0" xml:space="preserve">
+    <value>Начальное предположение для V: {0}</value>
+  </data>
+  <data name="Initial_estimates_for_L_1_V_0" xml:space="preserve">
+    <value>Начальное предположение для L (1-V): {0}</value>
+  </data>
+  <data name="Initial_estimates_for_y_0" xml:space="preserve">
+    <value>Начальное предположение для y: {0}</value>
+  </data>
+  <data name="Initial_estimates_for_x_0" xml:space="preserve">
+    <value>Начальное предположение для x: {0}</value>
+  </data>
+  <data name="PT_Flash_Newton_Iteration" xml:space="preserve">
+    <value>Итерация метода Ньютона для вычисления перепада давления/температуры</value>
+  </data>
+  <data name="Pressure_Temperature_Flash_Algorithm_Convergence_Iteration_Step" xml:space="preserve">
+    <value>Шаг итерации сходимости алгоритма давления-температуры</value>
+  </data>
+  <data name="Newton_Iteration_Fugacity_Detail_0" xml:space="preserve">
+    <value>Итерация цикла сходимости Ньютона #{0}. Симулятор будет использовать текущие значения y и x для расчета коэффициентов летучести и обновлять K, используя модель уравнения состояния (Property Package).</value>
+  </data>
+  <data name="K_values_where_updated_Current_values_0" xml:space="preserve">
+    <value>Значения K обновлены. Текущие значения: {0}</value>
+  </data>
+  <data name="PH_Flash_Newton_Iteration" xml:space="preserve">
+    <value>Итерация метода Ньютона для вычисления давления/энтальпии</value>
+  </data>
+  <data name="Pressure_Entalphy_Flash_Algorithm_Convergence_Iteration_Step" xml:space="preserve">
+    <value>Шаг итерации сходимости алгоритма давления-энтальпии (быстрый алгоритм)</value>
+  </data>
+  <data name="Pressure_Entalphy_Flash_Algorithm_Convergence_Iteration_Step_Detail_0" xml:space="preserve">
+    <value>Это итерация цикла сходимости Ньютона #{0}. DWSIM будет использовать текущее значение T для вычисления распределения фазы, вызывая процедуру Flash_PT.</value>
+  </data>
+  <data name="Current_Enthalpy_error_0" xml:space="preserve">
+    <value>Текущая ошибка энтальпии: {0}</value>
+  </data>
+  <data name="Updated_Temperature_estimate_0_K" xml:space="preserve">
+    <value>Обновленная оценка температуры: {0} К</value>
+  </data>
+  <data name="The_PH_Flash_algorithm_converged_in_0_iterations_Final_Temperature_value_1_K" xml:space="preserve">
+    <value>Алгоритм PH Flash сошелся за {0} итер. Конечная температура: {1} К</value>
+  </data>
+  <data name="Initial_estimates_for_T_0_K" xml:space="preserve">
+    <value>Начальное предположение для T: {0} K</value>
+  </data>
+  <data name="The_algorithm_converged_in_0_iterations_Time_taken_1_ms" xml:space="preserve">
+    <value>Алгоритм сошелся за {0} итер. Время выполнения: {1} мс.</value>
+  </data>
+  <data name="PH_Flash_Fast_Mode" xml:space="preserve">
+    <value> (PH Flash - Fast Mode)</value>
+  </data>
+  <data name="PS_Flash_Newton_Iteration" xml:space="preserve">
+    <value>Итерация метода Ньютона для вычисления перепада давления/энтропии</value>
+  </data>
+  <data name="Pressure_Entropy_Flash_Algorithm_Fast_mode_Convergence_Iteration_Step" xml:space="preserve">
+    <value>Шаг итерации сходимости алгоритма давления-энтропии</value>
+  </data>
+  <data name="Entropy_0_kJ_kg" xml:space="preserve">
+    <value>Энтропия: {0} кДж/кг</value>
+  </data>
+  <data name="Phase_Equilibria" xml:space="preserve">
+    <value> (Равновесие фаз)</value>
+  </data>
+  <data name="Property_Package_Equilibrium_Calculation_Routine" xml:space="preserve">
+    <value>Процедура расчета равновесия</value>
+  </data>
+  <data name="DW_CalcEquilibrium_Paragraph_01" xml:space="preserve">
+    <value>Это процедура, отвечающая за вычисление распределения фаз в связанном в данный момент Материальном потоке с использованием указанного алгоритма (Flash Algorithm).</value>
+  </data>
+  <data name="DW_CalcEquilibrium_Paragraph_02" xml:space="preserve">
+    <value>Первое, что делает подпрограмма, это стирает все ранее рассчитанные распределения фаз и свойства в потоке, если они существуют.</value>
+  </data>
+  <data name="DW_CalcEquilibrium_Paragraph_03" xml:space="preserve">
+    <value>Очистка свойств...</value>
+  </data>
+  <data name="DW_CalcEquilibrium_Paragraph_04" xml:space="preserve">
+    <value>Затем проверяется состояние материального потока, чтобы приступить к корерктному расчету равновесия.</value>
+  </data>
+  <data name="DW_CalcEquilibrium_Paragraph_05" xml:space="preserve">
+    <value>Определенная спецификация - это TP (температура и давление). Симулятор будет вызывать подпрограмму 'Flash_PT' из связанного в текущий момент экземпляра алгоритма (Flash Algorithm).</value>
+  </data>
+  <data name="DW_CalcEquilibrium_Paragraph_06" xml:space="preserve">
+    <value>Расчет энергии Гиббса для начальной смеси...</value>
+  </data>
+  <data name="Nested_Loops_VLE" xml:space="preserve">
+    <value>Метод расчета с использованием вложенных циклов(равновесие Паровая фаза-Жидкость)</value>
+  </data>
+  <data name="in_the_feed_liquid_assumed_to_be_known" xml:space="preserve">
+    <value>в подаваемой жидкости (предполагается, что она известна)</value>
+  </data>
+  <data name="is_the_fraction_of_feed_that_is_vaporised" xml:space="preserve">
+    <value>доля потока, которая испаряется</value>
+  </data>
+  <data name="is_the_equilibrium_constant_of_component_i" xml:space="preserve">
+    <value>константа равновесия компонента i</value>
+  </data>
+  <data name="Segment_0_1_2" xml:space="preserve">
+    <value>Сегмент #{0} ({1}/{2})</value>
+  </data>
+  <data name="Calculating_segment_0_1_2" xml:space="preserve">
+    <value>Расчет сегмента {0} ({1}/{2})...</value>
+  </data>
+  <data name="Segment_type_0" xml:space="preserve">
+    <value>Тип сегмента: {0}</value>
+  </data>
+  <data name="Segment_increments_0" xml:space="preserve">
+    <value>Интервал приращения: {0}</value>
+  </data>
+  <data name="Increment_0" xml:space="preserve">
+    <value>Шаг приращения #{0}</value>
+  </data>
+  <data name="Calculating_increment_0" xml:space="preserve">
+    <value>Вычисление приращения {0}...</value>
+  </data>
+  <data name="Temperature_Loop_0" xml:space="preserve">
+    <value>Итерация #{0} по температуре</value>
+  </data>
+  <data name="Temperature_convergence_loop_iteration_0" xml:space="preserve">
+    <value>Итерация цикла сходимости температуры #{0}</value>
+  </data>
+  <data name="Pressure_Loop_0" xml:space="preserve">
+    <value>Итерация #{0} по давлению</value>
+  </data>
+  <data name="Pressure_convergence_loop_iteration_0" xml:space="preserve">
+    <value>Итерация цикла сходимости давления #{0}</value>
+  </data>
+  <data name="Calling_Pressure_Drop_calculation_routine" xml:space="preserve">
+    <value>Вызов процедуры расчета перепада давления ...</value>
+  </data>
+  <data name="Inlet_pressure_0_Pa" xml:space="preserve">
+    <value>Входное давление: {0} Па</value>
+  </data>
+  <data name="Calculated_outlet_pressure_0_Pa" xml:space="preserve">
+    <value>Рассчитанное давление на выходе: {0} Па</value>
+  </data>
+  <data name="Updated_outlet_pressure_0_Pa" xml:space="preserve">
+    <value>Обновленное давление на выходе: {0} Па</value>
+  </data>
+  <data name="Converged_outlet_pressure_0_Pa" xml:space="preserve">
+    <value>Сходимое давление на выходе: {0} Па</value>
+  </data>
+  <data name="Proceeding_with_temperature_convergence" xml:space="preserve">
+    <value>Продолжим, рассчитаем сходимость температуры ...</value>
+  </data>
+  <data name="Recalculating_the_temporary_material_stream_and_moving_on_to_the_next_segment_increment" xml:space="preserve">
+    <value>Пересчет временного материального потока и переход к следующему сегменту / приращению ...</value>
+  </data>
+  <data name="Converged_outlet_temperature_0_K" xml:space="preserve">
+    <value>Сходимая температура на выходе: {0} K</value>
+  </data>
+  <data name="Calculated_Outlet_Temperature_0_K" xml:space="preserve">
+    <value>Рассчитанная температура на выходе: {0} K</value>
+  </data>
+  <data name="Outlet_Enthalpy_0_kJ_kg" xml:space="preserve">
+    <value>Энтальпия на выходе: {0} кДж/кг</value>
+  </data>
+  <data name="Inlet_Enthalpy_0_kJ_kg" xml:space="preserve">
+    <value>Энтальпия на входе: {0} кДж/кг</value>
+  </data>
+  <data name="Calculated_Specified_Heat_Transfer_0_kW" xml:space="preserve">
+    <value>Расчетная / удельная теплопередача: {0} кВт</value>
+  </data>
+  <data name="Calculated_Heat_Transfer_Area_0_m2" xml:space="preserve">
+    <value>Вычисленная площадь теплопередачи: {0} м2</value>
+  </data>
+  <data name="Calculated_Estimated_HTC_0_W_m2_K" xml:space="preserve">
+    <value>Рассчитанный коэффициент теплопередачи ( HTC): {0} Вт/[м2.K]</value>
+  </data>
+  <data name="Overall_HTC_Calculation" xml:space="preserve">
+    <value>Расчет полного коэффициента теплоппередачи</value>
+  </data>
+  <data name="Calculation_Routine" xml:space="preserve">
+    <value> - процедура расчета</value>
+  </data>
+  <data name="Temporary_Object" xml:space="preserve">
+    <value> - Временный объект</value>
+  </data>
+  <data name="Beggs_and_Brill_Pressure_Drop" xml:space="preserve">
+    <value>Расчет перепада давления по корреляции Бэггса и Брилла</value>
+  </data>
+  <data name="Beggs_and_Brill_Multiphase_Pressure_Drop_Calculation_Routine" xml:space="preserve">
+    <value>Процедура расчета перепада давления по корреляции Бэггса и Брилла</value>
+  </data>
+  <data name="Loading_reports" xml:space="preserve">
+    <value>Загрузка отчетов...</value>
   </data>
 </root>

@@ -517,7 +517,7 @@ out:        Return New Object() {L, V, Vx, Vy, ecount, 0.0#, PP.RET_NullVector, 
 
 out:        d2 = Date.Now
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
 
             IObj?.Paragraphs.Add(String.Format("Final liquid phase composition: {0}", Vx.ToMathArrayString))
             IObj?.Paragraphs.Add(String.Format("Final solid phase composition: {0}", Vs.ToMathArrayString))
@@ -537,38 +537,38 @@ out:        d2 = Date.Now
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-            Inspector.Host.CheckAndAdd(IObj, "", "Flash_PT", Name & " (PT Flash)", "Pressure-Temperature Flash Algorithm Routine", True)
+            Inspector.Host.CheckAndAdd(IObj, "", "Flash_PT", Name & " (PT Flash)", SolutionInspector.Pressure_Temperature_Flash_Algorithm_Routine, True)
 
             IObj?.Paragraphs.Add("This routine tries to find the compositions of vapor, liquid and solid phases at equilibrium by solving the Rachford-Rice equation using a newton convergence approach.")
 
-            IObj?.Paragraphs.Add("The Rachford-Rice equation is")
+            IObj?.Paragraphs.Add(SolutionInspector.NestedLoop_FlashPT_02)
 
             IObj?.Paragraphs.Add("<math>\sum_i\frac{z_i \, (K_i - 1)}{1 + \beta \, (K_i - 1)}= 0</math>")
 
-            IObj?.Paragraphs.Add("where:")
+            IObj?.Paragraphs.Add(SolutionInspector.where)
 
-            IObj?.Paragraphs.Add("<math_inline>z_{i}</math_inline> is the mole fraction of component i in the feed liquid (assumed to be known);")
-            IObj?.Paragraphs.Add("<math_inline>\beta</math_inline> is the fraction of feed that is vaporised;")
-            IObj?.Paragraphs.Add("<math_inline>K_{i}</math_inline> is the equilibrium constant of component i.")
+            IObj?.Paragraphs.Add("<math_inline>z_{i}</math_inline> "+SolutionInspector.is_the_mole_fraction_of_component_i+" "+SolutionInspector.in_the_feed_liquid_assumed_to_be_known+";")
+            IObj?.Paragraphs.Add("<math_inline>\beta</math_inline> "+SolutionInspector.is_the_fraction_of_feed_that_is_vaporised+";")
+            IObj?.Paragraphs.Add("<math_inline>K_{i}</math_inline> "+SolutionInspector.is_the_equilibrium_constant_of_component_i+".")
 
-            IObj?.Paragraphs.Add("The equilibrium constants K<sub>i</sub> are in general functions of many parameters, though the most important is arguably temperature; they are defined as:")
+            IObj?.Paragraphs.Add(SolutionInspector.NestedLoop_FlashPT_03)
 
             IObj?.Paragraphs.Add("<math>y_i = K_i \, x_i</math>")
 
-            IObj?.Paragraphs.Add("where:")
+            IObj?.Paragraphs.Add(SolutionInspector.where)
 
-            IObj?.Paragraphs.Add("<math_inline>x_i</math_inline> is the mole fraction of component i in liquid phase;")
-            IObj?.Paragraphs.Add("<math_inline>y_i</math_inline> is the mole fraction of component i in gas phase.")
+            IObj?.Paragraphs.Add("<math_inline>x_i</math_inline> " + SolutionInspector.is_the_mole_fraction_of_component_i +" " + SolutionInspector.in_liquid_phase+";")
+            IObj?.Paragraphs.Add("<math_inline>y_i</math_inline> " + SolutionInspector.is_the_mole_fraction_of_component_i +" " + SolutionInspector.in_gas_phase+".")
 
-            IObj?.Paragraphs.Add("Once the Rachford-Rice equation has been solved for <math_inline>\beta</math_inline>, the compositions x<sub>i</sub> and y<sub>i</sub> can be immediately calculated as:")
+            IObj?.Paragraphs.Add(SolutionInspector.NestedLoop_FlashPT_04)
 
             IObj?.Paragraphs.Add("<math>x_i =\frac{z_i}{1+\beta(K_i-1)}\\y_i=K_i\,x_i</math>")
 
-            IObj?.Paragraphs.Add("The Rachford - Rice equation can have multiple solutions for <math_inline>\beta</math_inline>, at most one of which guarantees that all <math_inline>x_i</math_inline> and <math_inline>y_i</math_inline> will be positive. In particular, if there is only one <math_inline>\beta</math_inline> for which:")
+            IObj?.Paragraphs.Add(SolutionInspector.NestedLoop_FlashPT_05)
             IObj?.Paragraphs.Add("<math>\frac{1}{1-K_\text{max}}=\beta_\text{min}<\beta<\beta_\text{max}=\frac{1}{1-K_\text{min}}</math>")
-            IObj?.Paragraphs.Add("then that <math_inline>\beta</math_inline> is the solution; if there are multiple  such <math_inline>\beta</math_inline>s, it means that either <math_inline>K_{max}<1</math_inline> or <math_inline>K_{min}>1</math_inline>, indicating respectively that no gas phase can be sustained (and therefore <math_inline>\beta=0</math_inline>) or conversely that no liquid phase can exist (and therefore <math_inline>\beta=1</math_inline>).")
+            IObj?.Paragraphs.Add(SolutionInspector.NestedLoop_FlashPT_06)
 
-            IObj?.Paragraphs.Add("DWSIM initializes the current calculation with ideal K-values estimated from vapor pressure data for each compound, or by using previously calculated values from an earlier solution.")
+            IObj?.Paragraphs.Add(SolutionInspector.NestedLoop_FlashPT_07)
 
             IObj?.Paragraphs.Add("During the convergence process, solubility is checked for compounds in the liquid phase through the following equilibrium relation:")
 
@@ -628,7 +628,7 @@ out:        d2 = Date.Now
 
             IObj?.Paragraphs.Add(String.Format("<h2>Calculated Parameters</h2>"))
 
-            IObj?.Paragraphs.Add(String.Format("Initial estimate for V: {0}", V))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Initial_estimates_for_V_0, V))
             IObj?.Paragraphs.Add(String.Format("Initial estimate for L: {0}", L))
             IObj?.Paragraphs.Add(String.Format("Initial estimate for S: {0}", S))
 
@@ -644,7 +644,7 @@ out:        d2 = Date.Now
 
                 Dim IObj2 As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-                Inspector.Host.CheckAndAdd(IObj2, "", "Flash_PT", "PT SVLE Internal Loop Iteration", "Pressure-Temperature Flash Algorithm Convergence Iteration Step", True)
+                Inspector.Host.CheckAndAdd(IObj2, "", "Flash_PT", "PT SVLE Internal Loop Iteration", SolutionInspector.Pressure_Temperature_Flash_Algorithm_Convergence_Iteration_Step, True)
 
                 IObj2?.Paragraphs.Add(String.Format("This is the SVLE convergence loop iteration #{0}. DWSIM will use the current values of y, x and s to calculate fugacity coefficients and update K using the Property Package rigorous models.", ecount))
 
@@ -799,7 +799,7 @@ out:        d2 = Date.Now
 
                     Dim IObj3 As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-                    Inspector.Host.CheckAndAdd(IObj3, "", "Flash_PT", "PT Flash VLE Newton Iteration", "Pressure-Temperature Flash Algorithm Convergence Iteration Step")
+                    Inspector.Host.CheckAndAdd(IObj3, "", "Flash_PT", "PT Flash VLE Newton Iteration", SolutionInspector.Pressure_Temperature_Flash_Algorithm_Convergence_Iteration_Step)
 
                     IObj3?.Paragraphs.Add(String.Format("This is the VLE Newton convergence loop iteration #{0}. DWSIM will use the current values of y and x to calculate fugacity coefficients and update K using the Property Package rigorous models.", ecount))
 
@@ -924,7 +924,7 @@ out2:           If (Math.Abs(GL_old - L) < 0.0000005) And (Math.Abs(GV_old - V) 
 
             End If
 
-            IObj?.Paragraphs.Add("The algorithm converged in " & ecount & " iterations. Time taken: " & dt.TotalMilliseconds & " ms.")
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.The_algorithm_converged_in_0_iterations_Time_taken_1_ms, ecount, dt.TotalMilliseconds))
 
             IObj?.Paragraphs.Add(String.Format("Final liquid phase composition: {0}", Vx.ToMathArrayString))
             IObj?.Paragraphs.Add(String.Format("Final solid phase composition: {0}", Vs.ToMathArrayString))
@@ -1086,7 +1086,7 @@ out:        Return New Object() {L, V, Vxl, Vxv, ecount, 0.0#, PP.RET_NullVector
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-            Inspector.Host.CheckAndAdd(IObj, "", "Flash_PH", Name & " (PH Flash - Fast Mode)", "Pressure-Enthalpy Flash Algorithm Routine (Fast Mode)")
+            Inspector.Host.CheckAndAdd(IObj, "", "Flash_PH", Name & SolutionInspector.PH_Flash_Fast_Mode, "Pressure-Enthalpy Flash Algorithm Routine (Fast Mode)")
 
             IObj?.Paragraphs.Add("The PH Flash in fast mode uses two nested loops (hence the name) to calculate temperature and phase distribution. 
                                     The external one converges the temperature, while the internal one finds the phase distribution for the current temperature estimate in the external loop.
@@ -1146,7 +1146,7 @@ out:        Return New Object() {L, V, Vxl, Vxv, ecount, 0.0#, PP.RET_NullVector
             IObj?.Paragraphs.Add(String.Format(SolutionInspector.Enthalpy_0_kJ_kg, H))
             IObj?.Paragraphs.Add(String.Format(SolutionInspector.Compounds_0, PP.RET_VNAMES.ToMathArrayString))
             IObj?.Paragraphs.Add(String.Format(SolutionInspector.Mole_Fractions_0, Vz.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Initial estimate for T: {0} K", Tref))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Initial_estimates_for_T_0_K, Tref))
 
             x1 = Tref
             Try
@@ -1193,7 +1193,7 @@ alt:            T = bo.BrentOpt(Tinf, Tsup, 100, tolEXT, maxitEXT, {P, Vz, PP})
 
             WriteDebugInfo("PH Flash [NL-SLE]: Converged in " & ecount & " iterations. Time taken: " & dt.TotalMilliseconds & " ms.")
 
-            IObj?.Paragraphs.Add(String.Format("The PH Flash algorithm converged in {0} iterations. Final Temperature value: {1} K", cnt, T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.The_PH_Flash_algorithm_converged_in_0_iterations_Final_Temperature_value_1_K, cnt, T))
 
             IObj?.Close()
 
@@ -1264,10 +1264,10 @@ alt:            T = bo.BrentOpt(Tinf, Tsup, 100, tolEXT, maxitEXT, {P, Vz, PP})
             IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
 
             IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
-            IObj?.Paragraphs.Add(String.Format("Entropy: {0} kJ/kg", S))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Entropy_0_kJ_kg, S))
             IObj?.Paragraphs.Add(String.Format(SolutionInspector.Compounds_0, PP.RET_VNAMES.ToMathArrayString))
             IObj?.Paragraphs.Add(String.Format(SolutionInspector.Mole_Fractions_0, Vz.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Initial estimate for T: {0} K", Tref))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Initial_estimates_for_T_0_K, Tref))
 
             Try
                 Do

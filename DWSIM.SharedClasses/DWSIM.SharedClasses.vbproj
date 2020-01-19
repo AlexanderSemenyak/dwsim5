@@ -193,6 +193,9 @@
     <EmbeddedResource Include="Editor\InspectorReportBar.resx">
       <DependentUpon>InspectorReportBar.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Editor\InspectorReportBar.ru.resx">
+      <DependentUpon>InspectorReportBar.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Editor\ObjectEditorForm.resx">
       <DependentUpon>ObjectEditorForm.vb</DependentUpon>
     </EmbeddedResource>

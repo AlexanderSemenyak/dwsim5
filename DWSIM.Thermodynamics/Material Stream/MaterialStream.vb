@@ -34,6 +34,7 @@ Imports cv = DWSIM.SharedClasses.SystemsOfUnits.Converter
 Imports System.Globalization
 Imports CoolPropInterface.source
 Imports DWSIM.Interfaces.DWSIM.Interfaces
+Imports DWSIM.Interfaces.My.Resources
 
 Namespace Streams
 
@@ -342,7 +343,7 @@ Namespace Streams
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-            Inspector.Host.CheckAndAdd(IObj, "", "Calculate", If(GraphicObject IsNot Nothing, GraphicObject.Tag, "Temporary Object") & " (" & GetDisplayName() & ")", "Material Stream Calculation Routine", True)
+            Inspector.Host.CheckAndAdd(IObj, "", "Calculate", If(GraphicObject IsNot Nothing, GraphicObject.Tag, SolutionInspector.Temporary_Object) & " (" & GetDisplayName() & ")", "Material Stream Calculation Routine", True)
 
             IObj?.Paragraphs.Add("The Material Stream Calculation routine is responsible to calculate the phase distribution and its properties according to the specifications.")
 

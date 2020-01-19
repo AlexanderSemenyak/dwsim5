@@ -300,7 +300,7 @@ Namespace PropertyPackages.Auxiliary
                 i = i + 1
             Loop Until i = n + 1
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
 
             IObj?.Paragraphs.Add(String.Format("ln gamma c: {0}", Vgammac.ToMathArrayString))
             IObj?.Paragraphs.Add(String.Format("ln gamma r: {0}", Vgammar.ToMathArrayString))

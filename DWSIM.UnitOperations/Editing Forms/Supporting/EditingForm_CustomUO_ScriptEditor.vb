@@ -316,10 +316,10 @@ Imports Jolt
     End Sub
 
     Private Sub btnHighlightSpaces_Click(sender As Object, e As EventArgs) Handles btnHighlightSpaces.CheckedChanged
-        if Not ScriptUO is nothing then
+        If loaded Then
             ScriptUO.HighlightSpaces = btnHighlightSpaces.Checked
+            txtScript.SetEditorStyle(tscb1.SelectedItem.ToString, tscb2.SelectedItem.ToString, ScriptUO.HighlightSpaces, CAPEOPEN)
         End If
-        If loaded Then txtScript.SetEditorStyle(System.Convert.ToString(tscb1.SelectedItem), System.Convert.ToString(tscb2.SelectedItem), ScriptUO.HighlightSpaces, CAPEOPEN)
     End Sub
 
 End Class

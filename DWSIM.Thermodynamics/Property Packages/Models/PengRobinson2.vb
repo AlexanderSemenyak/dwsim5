@@ -343,7 +343,7 @@ Namespace PropertyPackages.ThermoPlugs
                 IObj?.Paragraphs.Add("DWSIM will calculate PR EOS Fugacity Coefficient using the GPU.")
                 result = CalcLnFugGPU(T, P, Vx, VKij, VTc, VPc, Vw, otherargs, forcephase)
             Else
-                IObj?.Paragraphs.Add("DWSIM will calculate PR EOS Fugacity Coefficient using the CPU.")
+                IObj?.Paragraphs.Add(SolutionInspector.DWSIM_will_calculate_PR_EOS_Fugacity_Coefficient_using_the_CPU)
                 result = CalcLnFugCPU(T, P, Vx, VKij, VTc, VPc, Vw, otherargs, forcephase)
             End If
 
@@ -521,9 +521,9 @@ Namespace PropertyPackages.ThermoPlugs
                 Loop Until i = n + 1
             End If
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
 
-            IObj?.Paragraphs.Add(String.Format("Fugacity Coefficients: {0}", LN_CF.ExpY().ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Fugacity_Coefficients_0, LN_CF.ExpY().ToMathArrayString))
 
             IObj?.Close()
 

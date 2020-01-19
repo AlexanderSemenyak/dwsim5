@@ -1,5 +1,6 @@
 ﻿Imports System.Windows.Forms
 Imports DWSIM.ExtensionMethods
+Imports DWSIM.Interfaces.My.Resources
 
 Public Class Window
     Private Sub Window_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -25,7 +26,7 @@ Public Class Window
 
                 With f
 
-                    .Label1.Text = "Loading reports..."
+                    .Label1.Text = SolutionInspector.Loading_reports
                     .ProgressBar1.Value = 0
 
                 End With

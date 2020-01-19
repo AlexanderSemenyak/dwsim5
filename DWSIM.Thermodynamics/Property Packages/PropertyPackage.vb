@@ -228,6 +228,12 @@ Namespace PropertyPackages
 
         Public Property IgnoreSalinityLimit As Boolean = False
 
+        ''' <summary>
+        ''' ' For mobile compatibility only.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property ParametersXMLString = ""
+
 
 #End Region
 
@@ -649,7 +655,7 @@ Namespace PropertyPackages
 
             IObj?.Paragraphs.Add("<m>c=\sqrt{\frac{K}{\rho}},</m>")
 
-            IObj?.Paragraphs.Add("where:")
+            IObj?.Paragraphs.Add(SolutionInspector.where)
 
             IObj?.Paragraphs.Add("<mi>c</mi> Speed of sound (m/s)")
 
@@ -1231,7 +1237,7 @@ Namespace PropertyPackages
                 If K(i) < 0.0000000001 Then K(i) = 0.0000000001
             Next
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
 
             IObj?.Paragraphs.Add(String.Format("Calculated K-values: {0}", K.ToMathArrayString()))
 
@@ -2008,7 +2014,7 @@ Namespace PropertyPackages
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-            Inspector.Host.CheckAndAdd(IObj, "", "DW_CalcEquilibrium", ComponentName & " (Phase Equilibria)", "Property Package Equilibrium Calculation Routine")
+            Inspector.Host.CheckAndAdd(IObj, "", "DW_CalcEquilibrium", ComponentName & SolutionInspector.Phase_Equilibria, SolutionInspector.Property_Package_Equilibrium_Calculation_Routine)
 
             Me.CurrentMaterialStream.AtEquilibrium = False
 
@@ -2037,11 +2043,11 @@ Namespace PropertyPackages
             H = Me.CurrentMaterialStream.Phases(0).Properties.enthalpy.GetValueOrDefault
             S = Me.CurrentMaterialStream.Phases(0).Properties.entropy.GetValueOrDefault
 
-            IObj?.Paragraphs.Add("This is the routine responsible for the calculation of phase distribution in the currently associated Material Stream, using the specified Flash Algorithm.")
+            IObj?.Paragraphs.Add(SolutionInspector.DW_CalcEquilibrium_Paragraph_01)
 
-            IObj?.Paragraphs.Add("The first thing that the routine does is to erase all previously calculated phase distribution and properties on the stream, if they exist.")
+            IObj?.Paragraphs.Add(SolutionInspector.DW_CalcEquilibrium_Paragraph_02)
 
-            IObj?.Paragraphs.Add("Erasing properties...")
+            IObj?.Paragraphs.Add(SolutionInspector.DW_CalcEquilibrium_Paragraph_03)
 
             Me.DW_ZerarPhaseProps(Phase.Vapor)
             Me.DW_ZerarPhaseProps(Phase.Liquid)
@@ -2058,7 +2064,7 @@ Namespace PropertyPackages
             Me.DW_ZerarComposicoes(Phase.Aqueous)
             Me.DW_ZerarComposicoes(Phase.Solid)
 
-            IObj?.Paragraphs.Add("It then checks for the Material Stream State Specification, in order to proceed with the correct flash (equilibrium) calculation.")
+            IObj?.Paragraphs.Add(SolutionInspector.DW_CalcEquilibrium_Paragraph_04)
 
             Select Case spec1
 
@@ -2068,7 +2074,7 @@ Namespace PropertyPackages
 
                         Case FlashSpec.P
 
-                            IObj?.Paragraphs.Add("The defined specification is TP (Temperature and Pressure). DWSIM will call the 'Flash_PT' routine from the currently associated Flash Algorithm instance.")
+                            IObj?.Paragraphs.Add(SolutionInspector.DW_CalcEquilibrium_Paragraph_05)
 
                             T = Me.CurrentMaterialStream.Phases(0).Properties.temperature.GetValueOrDefault
                             P = Me.CurrentMaterialStream.Phases(0).Properties.pressure.GetValueOrDefault
@@ -2084,7 +2090,7 @@ Namespace PropertyPackages
                                 If Me.FlashBase.FlashSettings(Enums.FlashSetting.ValidateEquilibriumCalc) = True Then
 
                                     IObj?.SetCurrent()
-                                    IObj?.Paragraphs.Add("Calculating Mixture Initial Gibbs Energy...")
+                                    IObj?.Paragraphs.Add(SolutionInspector.DW_CalcEquilibrium_Paragraph_06)
 
                                     ige = Me.DW_CalcGibbsEnergy(RET_VMOL(Phase.Mixture), T, P)
 
@@ -6779,7 +6785,7 @@ Final3:
 
             IObj?.Paragraphs.Add("<m>V_{s}=\frac{RT_{C}}{P_{C}}Z_{RA}^{[1+(1-T_{r})^{2/7}]},</m>")
 
-            IObj?.Paragraphs.Add("where:")
+            IObj?.Paragraphs.Add(SolutionInspector.where)
 
             IObj?.Paragraphs.Add("<mi>V_{s}</mi> Saturated molar volume (m³/mol)")
 
@@ -6809,7 +6815,7 @@ Final3:
 
             IObj?.Paragraphs.Add("<m>T_{c_{ij}}=[\frac{8(V_{c_{i}}V_{c_{j}})^{1/2}}{(V_{c_{i}}^{1/3}+V_{c_{j}}^{1/3})^{3}}](T_{c_{i}}T_{c_{j}})^{1/2},</m>")
 
-            IObj?.Paragraphs.Add("where:")
+            IObj?.Paragraphs.Add(SolutionInspector.where)
 
             IObj?.Paragraphs.Add("<mi>x_{i}</mi> Molar fraction")
 
@@ -6830,7 +6836,7 @@ Final3:
             IObj?.Paragraphs.Add("<mi>\frac{\beta}{P}	=	-1-9.070217(1-T_{r})^{1/3}+62.45326(1-T_{r})^{2/3}-135.1102(1-T_{r})+
 		                        +\exp(4.79594+0.250047\omega+1.14188\omega^{2})(1-T_{r})^{4/3},</mi>")
 
-            IObj?.Paragraphs.Add("where:")
+            IObj?.Paragraphs.Add(SolutionInspector.where)
 
             IObj?.Paragraphs.Add("<mi>V</mi> Compressed liquid volume (m³/mol)")
 
@@ -6843,7 +6849,7 @@ Final3:
 
             IObj?.Paragraphs.Add("<m>\rho=\frac{MM}{1000V},<m>")
 
-            IObj?.Paragraphs.Add("where:")
+            IObj?.Paragraphs.Add(SolutionInspector.where)
 
             IObj?.Paragraphs.Add("<mi>\rho</mi> Density (kg/m³)")
 
@@ -11047,6 +11053,11 @@ Final3:
             End Try
 
             Try
+                Me.ParametersXMLString = (From el As XElement In data Select el Where el.Name = "Parameters").FirstOrDefault.ToString()
+            Catch ex As Exception
+            End Try
+
+            Try
                 OverrideKvalFugCoeff = (From el As XElement In data Select el Where el.Name = "OverrideKvalFugCoeff").FirstOrDefault.Value
             Catch ex As Exception
             End Try
@@ -11457,6 +11468,14 @@ Final3:
                 .Add(New XElement("Tag", Tag))
                 .Add(New XElement("TPSeverity", _tpseverity))
                 .Add(New XElement("TPCompIDs", XMLSerializer.XMLSerializer.ArrayToString2(_tpcompids, ci)))
+
+                If ParametersXMLString <> "" Then
+                    Try
+                        .Add(XElement.Parse(Me.ParametersXMLString))
+                    Catch ex As Exception
+                    End Try
+                End If
+
                 .Add(New XElement("OverrideKvalFugCoeff", OverrideKvalFugCoeff))
                 .Add(New XElement("OverrideEnthalpyCalculation", OverrideEnthalpyCalculation))
                 .Add(New XElement("OverrideEntropyCalculation", OverrideEntropyCalculation))

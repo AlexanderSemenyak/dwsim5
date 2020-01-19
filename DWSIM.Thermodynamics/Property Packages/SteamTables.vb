@@ -75,7 +75,7 @@ Namespace PropertyPackages
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-            Inspector.Host.CheckAndAdd(IObj, "", "DW_CalcEquilibrium", ComponentName & " (Phase Equilibria)", "Property Package Equilibrium Calculation Routine")
+            Inspector.Host.CheckAndAdd(IObj, "", "DW_CalcEquilibrium", ComponentName & SolutionInspector.Phase_Equilibria, SolutionInspector.Property_Package_Equilibrium_Calculation_Routine)
 
             Dim water As Interfaces.ICompound = (From subst As Interfaces.ICompound In Me.CurrentMaterialStream.Phases(0).Compounds.Values Select subst Where subst.ConstantProperties.CAS_Number = "7732-18-5").SingleOrDefault
 

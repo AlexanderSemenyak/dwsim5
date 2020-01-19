@@ -1066,7 +1066,7 @@ Namespace PropertyPackages.Auxiliary
             tmp(1) = Cp / MMm
             tmp(2) = Cv / MMm
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
 
             IObj?.Paragraphs.Add(String.Format("Cp: {0} kJ/kg", tmp(1)))
             IObj?.Paragraphs.Add(String.Format("Cv: {0} kJ/kg", tmp(2)))

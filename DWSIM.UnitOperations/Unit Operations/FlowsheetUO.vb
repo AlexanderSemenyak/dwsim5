@@ -37,6 +37,7 @@ Imports DWSIM.Drawing.SkiaSharp.GraphicObjects
 Imports DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes
 Imports DWSIM.Drawing.SkiaSharp.GraphicObjects.Tables
 Imports DWSIM.Drawing.SkiaSharp.GraphicObjects.Charts
+Imports DWSIM.Interfaces.My.Resources
 
 Namespace UnitOperations.Auxiliary
 
@@ -704,7 +705,7 @@ Label_00CC:
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-            Inspector.Host.CheckAndAdd(IObj, "", "Calculate", If(GraphicObject IsNot Nothing, GraphicObject.Tag, "Temporary Object") & " (" & GetDisplayName() & ")", GetDisplayName() & " Calculation Routine", True)
+            Inspector.Host.CheckAndAdd(IObj, "", "Calculate", If(GraphicObject IsNot Nothing, GraphicObject.Tag, SolutionInspector.Temporary_Object) & " (" & GetDisplayName() & ")", GetDisplayName() & SolutionInspector.Calculation_Routine, True)
 
             IObj?.SetCurrent()
 

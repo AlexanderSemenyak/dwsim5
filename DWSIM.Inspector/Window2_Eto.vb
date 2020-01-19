@@ -91,7 +91,7 @@ Public Class Window2_Eto
             .Title = "Loading Inspector Reports"
 
             progressSpinner = New ProgressBar With {.Width = 350, .Height = 20, .Enabled = True}
-            loadingtext = New Label With {.Text = "Loading reports..."}
+            loadingtext = New Label With {.Text = SolutionInspector.Loading_reports}
             loadingtext.VerticalAlignment = VerticalAlignment.Center
             loadingtext.TextAlignment = TextAlignment.Center
             btnCancel = New Button With {.Text = "Cancel"}

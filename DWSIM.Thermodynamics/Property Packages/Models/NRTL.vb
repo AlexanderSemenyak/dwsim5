@@ -397,7 +397,7 @@ Namespace PropertyPackages.Auxiliary
 
             Vg = lnVg.ExpY
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
 
             IObj?.Paragraphs.Add(String.Format("Activity Coefficients: {0}", Vg.ToMathArrayString))
 

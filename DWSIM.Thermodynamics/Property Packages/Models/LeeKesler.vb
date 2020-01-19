@@ -699,7 +699,7 @@ Final3:
             tmp2(0) = DCp
             tmp2(1) = DCv
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
 
             IObj?.Paragraphs.Add(String.Format("Cp: {0} kJ/kg", tmp(1)))
             IObj?.Paragraphs.Add(String.Format("Cv: {0} kJ/kg", tmp(2)))

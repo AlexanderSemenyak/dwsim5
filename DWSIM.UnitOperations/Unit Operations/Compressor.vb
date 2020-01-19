@@ -24,6 +24,7 @@ Imports System.Windows.Forms
 Imports DWSIM.UnitOperations.UnitOperations.Auxiliary
 Imports DWSIM.Thermodynamics.BaseClasses
 Imports DWSIM.Interfaces.Enums
+Imports DWSIM.Interfaces.My.Resources
 
 Namespace UnitOperations
 
@@ -151,7 +152,7 @@ Namespace UnitOperations
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-            Inspector.Host.CheckAndAdd(IObj, "", "Calculate", If(GraphicObject IsNot Nothing, GraphicObject.Tag, "Temporary Object") & " (" & GetDisplayName() & ")", GetDisplayName() & " Calculation Routine", True)
+            Inspector.Host.CheckAndAdd(IObj, "", "Calculate", If(GraphicObject IsNot Nothing, GraphicObject.Tag, SolutionInspector.Temporary_Object) & " (" & GetDisplayName() & ")", GetDisplayName() & SolutionInspector.Calculation_Routine, True)
 
             IObj?.SetCurrent()
 
@@ -189,7 +190,7 @@ Namespace UnitOperations
 
             IObj?.Paragraphs.Add("<m>P_{2}=P_{1}[1+\frac{Pot}{\eta W}\frac{k-1}{k}\frac{MM}{8.314T_{1}}]^{[k/(k-1)]},</m>")
 
-            IObj?.Paragraphs.Add("where:")
+            IObj?.Paragraphs.Add(SolutionInspector.where)
 
             IObj?.Paragraphs.Add("<mi>P_{2}</mi> outlet stream pressure")
 
@@ -332,7 +333,7 @@ Namespace UnitOperations
 
                 P2 = P2i
 
-                If DebugMode Then AppendDebugLine(String.Format("Calculated outlet pressure: {0} Pa", P2))
+                If DebugMode Then AppendDebugLine(String.Format(SolutionInspector.Calculated_outlet_pressure_0_Pa, P2))
 
                 CheckSpec(P2, True, "outlet pressure")
 

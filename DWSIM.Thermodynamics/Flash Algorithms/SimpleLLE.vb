@@ -81,7 +81,7 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-            Inspector.Host.CheckAndAdd(IObj, "", "Flash_PT", Name & " (PT Flash)", "Pressure-Temperature Flash Algorithm Routine", True)
+            Inspector.Host.CheckAndAdd(IObj, "", "Flash_PT", Name & " (PT Flash)", SolutionInspector.Pressure_Temperature_Flash_Algorithm_Routine, True)
 
             IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
 
@@ -242,7 +242,7 @@ out:        d2 = Date.Now
 
             IObj?.Paragraphs.Add("PT Flash [SimpleLLE]: Converged in " & ecount & " iterations. Time taken: " & dt.TotalMilliseconds & " ms. Error function value: " & err)
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
 
             IObj?.Paragraphs.Add(String.Format("Liquid Phase 1 Molar Fraction: {0}", L1))
             IObj?.Paragraphs.Add(String.Format("Liquid Phase 2 Molar Fraction: {0}", L2))

@@ -74,11 +74,65 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Beggs and Brill Multiphase Pressure Drop Calculation Routine.
+        '''</summary>
+        Public Shared ReadOnly Property Beggs_and_Brill_Multiphase_Pressure_Drop_Calculation_Routine() As String
+            Get
+                Return ResourceManager.GetString("Beggs_and_Brill_Multiphase_Pressure_Drop_Calculation_Routine", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Beggs and Brill Pressure Drop.
+        '''</summary>
+        Public Shared ReadOnly Property Beggs_and_Brill_Pressure_Drop() As String
+            Get
+                Return ResourceManager.GetString("Beggs_and_Brill_Pressure_Drop", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Calculated/Estimated HTC: {0} W/[m2.K].
+        '''</summary>
+        Public Shared ReadOnly Property Calculated_Estimated_HTC_0_W_m2_K() As String
+            Get
+                Return ResourceManager.GetString("Calculated_Estimated_HTC_0_W_m2_K", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Calculated Heat Transfer Area: {0} m2.
+        '''</summary>
+        Public Shared ReadOnly Property Calculated_Heat_Transfer_Area_0_m2() As String
+            Get
+                Return ResourceManager.GetString("Calculated_Heat_Transfer_Area_0_m2", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to &lt;h2&gt;Calculated Intermediate Parameters&lt;/h2&gt;.
         '''</summary>
         Public Shared ReadOnly Property Calculated_Intermediate_Parameters() As String
             Get
                 Return ResourceManager.GetString("Calculated_Intermediate_Parameters", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Calculated outlet pressure: {0} Pa.
+        '''</summary>
+        Public Shared ReadOnly Property Calculated_outlet_pressure_0_Pa() As String
+            Get
+                Return ResourceManager.GetString("Calculated_outlet_pressure_0_Pa", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Calculated Outlet Temperature: {0} K.
+        '''</summary>
+        Public Shared ReadOnly Property Calculated_Outlet_Temperature_0_K() As String
+            Get
+                Return ResourceManager.GetString("Calculated_Outlet_Temperature_0_K", resourceCulture)
             End Get
         End Property
         
@@ -92,11 +146,56 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Calculated/Specified Heat Transfer: {0} kW.
+        '''</summary>
+        Public Shared ReadOnly Property Calculated_Specified_Heat_Transfer_0_kW() As String
+            Get
+                Return ResourceManager.GetString("Calculated_Specified_Heat_Transfer_0_kW", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Calculating increment {0}....
+        '''</summary>
+        Public Shared ReadOnly Property Calculating_increment_0() As String
+            Get
+                Return ResourceManager.GetString("Calculating_increment_0", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Calculating segment {0} ({1}/{2})....
+        '''</summary>
+        Public Shared ReadOnly Property Calculating_segment_0_1_2() As String
+            Get
+                Return ResourceManager.GetString("Calculating_segment_0_1_2", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to  Calculation Routine.
+        '''</summary>
+        Public Shared ReadOnly Property Calculation_Routine() As String
+            Get
+                Return ResourceManager.GetString("Calculation_Routine", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Calculation Type: {0}.
         '''</summary>
         Public Shared ReadOnly Property Calculation_Type_0() As String
             Get
                 Return ResourceManager.GetString("Calculation_Type_0", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Calling Pressure Drop calculation routine....
+        '''</summary>
+        Public Shared ReadOnly Property Calling_Pressure_Drop_calculation_routine() As String
+            Get
+                Return ResourceManager.GetString("Calling_Pressure_Drop_calculation_routine", resourceCulture)
             End Get
         End Property
         
@@ -137,6 +236,24 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Converged outlet pressure: {0} Pa.
+        '''</summary>
+        Public Shared ReadOnly Property Converged_outlet_pressure_0_Pa() As String
+            Get
+                Return ResourceManager.GetString("Converged_outlet_pressure_0_Pa", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Converged Outlet Temperature: {0} K.
+        '''</summary>
+        Public Shared ReadOnly Property Converged_outlet_temperature_0_K() As String
+            Get
+                Return ResourceManager.GetString("Converged_outlet_temperature_0_K", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Critical Pressures: {0} Pa&quot;.
         '''</summary>
         Public Shared ReadOnly Property Critical_Pressures_0_Pa() As String
@@ -155,11 +272,92 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Current Enthalpy error: {0}.
+        '''</summary>
+        Public Shared ReadOnly Property Current_Enthalpy_error_0() As String
+            Get
+                Return ResourceManager.GetString("Current_Enthalpy_error_0", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to This is the routine responsible for the calculation of phase distribution in the currently associated Material Stream, using the specified Flash Algorithm..
+        '''</summary>
+        Public Shared ReadOnly Property DW_CalcEquilibrium_Paragraph_01() As String
+            Get
+                Return ResourceManager.GetString("DW_CalcEquilibrium_Paragraph_01", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to The first thing that the routine does is to erase all previously calculated phase distribution and properties on the stream, if they exist..
+        '''</summary>
+        Public Shared ReadOnly Property DW_CalcEquilibrium_Paragraph_02() As String
+            Get
+                Return ResourceManager.GetString("DW_CalcEquilibrium_Paragraph_02", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Erasing properties....
+        '''</summary>
+        Public Shared ReadOnly Property DW_CalcEquilibrium_Paragraph_03() As String
+            Get
+                Return ResourceManager.GetString("DW_CalcEquilibrium_Paragraph_03", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to It then checks for the Material Stream State Specification, in order to proceed with the correct flash (equilibrium) calculation..
+        '''</summary>
+        Public Shared ReadOnly Property DW_CalcEquilibrium_Paragraph_04() As String
+            Get
+                Return ResourceManager.GetString("DW_CalcEquilibrium_Paragraph_04", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to The defined specification is TP (Temperature and Pressure). DWSIM will call the &apos;Flash_PT&apos; routine from the currently associated Flash Algorithm instance..
+        '''</summary>
+        Public Shared ReadOnly Property DW_CalcEquilibrium_Paragraph_05() As String
+            Get
+                Return ResourceManager.GetString("DW_CalcEquilibrium_Paragraph_05", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Calculating Mixture Initial Gibbs Energy....
+        '''</summary>
+        Public Shared ReadOnly Property DW_CalcEquilibrium_Paragraph_06() As String
+            Get
+                Return ResourceManager.GetString("DW_CalcEquilibrium_Paragraph_06", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to DWSIM will calculate PR EOS Fugacity Coefficient using the CPU..
+        '''</summary>
+        Public Shared ReadOnly Property DWSIM_will_calculate_PR_EOS_Fugacity_Coefficient_using_the_CPU() As String
+            Get
+                Return ResourceManager.GetString("DWSIM_will_calculate_PR_EOS_Fugacity_Coefficient_using_the_CPU", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Enthalpy: {0} kJ/kg.
         '''</summary>
         Public Shared ReadOnly Property Enthalpy_0_kJ_kg() As String
             Get
                 Return ResourceManager.GetString("Enthalpy_0_kJ_kg", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Entropy: {0} kJ/kg.
+        '''</summary>
+        Public Shared ReadOnly Property Entropy_0_kJ_kg() As String
+            Get
+                Return ResourceManager.GetString("Entropy_0_kJ_kg", resourceCulture)
             End Get
         End Property
         
@@ -218,11 +416,47 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Fugacity Coefficients: {0}.
+        '''</summary>
+        Public Shared ReadOnly Property Fugacity_Coefficients_0() As String
+            Get
+                Return ResourceManager.GetString("Fugacity_Coefficients_0", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Ideal Gas Heat Capacities: {0}.
         '''</summary>
         Public Shared ReadOnly Property Ideal_Gas_Heat_Capacities_0() As String
             Get
                 Return ResourceManager.GetString("Ideal_Gas_Heat_Capacities_0", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to in gas phase.
+        '''</summary>
+        Public Shared ReadOnly Property in_gas_phase() As String
+            Get
+                Return ResourceManager.GetString("in_gas_phase", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to in liquid phase.
+        '''</summary>
+        Public Shared ReadOnly Property in_liquid_phase() As String
+            Get
+                Return ResourceManager.GetString("in_liquid_phase", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to in the feed liquid (assumed to be known).
+        '''</summary>
+        Public Shared ReadOnly Property in_the_feed_liquid_assumed_to_be_known() As String
+            Get
+                Return ResourceManager.GetString("in_the_feed_liquid_assumed_to_be_known", resourceCulture)
             End Get
         End Property
         
@@ -259,6 +493,87 @@ Namespace My.Resources
         Public Shared ReadOnly Property Include_Pipe_Wall_0() As String
             Get
                 Return ResourceManager.GetString("Include_Pipe_Wall_0", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Increment #{0}.
+        '''</summary>
+        Public Shared ReadOnly Property Increment_0() As String
+            Get
+                Return ResourceManager.GetString("Increment_0", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Initial estimates for K: {0}.
+        '''</summary>
+        Public Shared ReadOnly Property Initial_estimates_for_K_0() As String
+            Get
+                Return ResourceManager.GetString("Initial_estimates_for_K_0", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Initial estimate for L (1-V): {0}.
+        '''</summary>
+        Public Shared ReadOnly Property Initial_estimates_for_L_1_V_0() As String
+            Get
+                Return ResourceManager.GetString("Initial_estimates_for_L_1_V_0", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Initial estimate for T: {0} K.
+        '''</summary>
+        Public Shared ReadOnly Property Initial_estimates_for_T_0_K() As String
+            Get
+                Return ResourceManager.GetString("Initial_estimates_for_T_0_K", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Initial estimate for V: {0}.
+        '''</summary>
+        Public Shared ReadOnly Property Initial_estimates_for_V_0() As String
+            Get
+                Return ResourceManager.GetString("Initial_estimates_for_V_0", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Initial estimates for x: {0}.
+        '''</summary>
+        Public Shared ReadOnly Property Initial_estimates_for_x_0() As String
+            Get
+                Return ResourceManager.GetString("Initial_estimates_for_x_0", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Initial estimates for y: {0}.
+        '''</summary>
+        Public Shared ReadOnly Property Initial_estimates_for_y_0() As String
+            Get
+                Return ResourceManager.GetString("Initial_estimates_for_y_0", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Inlet Enthalpy: {0} kJ/kg.
+        '''</summary>
+        Public Shared ReadOnly Property Inlet_Enthalpy_0_kJ_kg() As String
+            Get
+                Return ResourceManager.GetString("Inlet_Enthalpy_0_kJ_kg", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Inlet pressure: {0} Pa.
+        '''</summary>
+        Public Shared ReadOnly Property Inlet_pressure_0_Pa() As String
+            Get
+                Return ResourceManager.GetString("Inlet_pressure_0_Pa", resourceCulture)
             End Get
         End Property
         
@@ -317,6 +632,42 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to is the equilibrium constant of component i.
+        '''</summary>
+        Public Shared ReadOnly Property is_the_equilibrium_constant_of_component_i() As String
+            Get
+                Return ResourceManager.GetString("is_the_equilibrium_constant_of_component_i", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to is the fraction of feed that is vaporised.
+        '''</summary>
+        Public Shared ReadOnly Property is_the_fraction_of_feed_that_is_vaporised() As String
+            Get
+                Return ResourceManager.GetString("is_the_fraction_of_feed_that_is_vaporised", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to is the mole fraction of component i.
+        '''</summary>
+        Public Shared ReadOnly Property is_the_mole_fraction_of_component_i() As String
+            Get
+                Return ResourceManager.GetString("is_the_mole_fraction_of_component_i", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to K values where updated. Current values: {0}.
+        '''</summary>
+        Public Shared ReadOnly Property K_values_where_updated_Current_values_0() As String
+            Get
+                Return ResourceManager.GetString("K_values_where_updated_Current_values_0", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Length = {0} m.
         '''</summary>
         Public Shared ReadOnly Property Length_0_m() As String
@@ -371,6 +722,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Loading reports....
+        '''</summary>
+        Public Shared ReadOnly Property Loading_reports() As String
+            Get
+                Return ResourceManager.GetString("Loading_reports", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Mass Flow: {0} kg/s.
         '''</summary>
         Public Shared ReadOnly Property Mass_Flow_0_kg_s() As String
@@ -389,6 +749,96 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Nested Loops (VLE).
+        '''</summary>
+        Public Shared ReadOnly Property Nested_Loops_VLE() As String
+            Get
+                Return ResourceManager.GetString("Nested_Loops_VLE", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to This routine tries to find the compositions of a liquid and a vapor phase at equilibrium by solving the Rachford-Rice equation using a newton convergence approach..
+        '''</summary>
+        Public Shared ReadOnly Property NestedLoop_FlashPT_01() As String
+            Get
+                Return ResourceManager.GetString("NestedLoop_FlashPT_01", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to The Rachford-Rice equation is.
+        '''</summary>
+        Public Shared ReadOnly Property NestedLoop_FlashPT_02() As String
+            Get
+                Return ResourceManager.GetString("NestedLoop_FlashPT_02", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to The equilibrium constants K&lt;sub&gt;i&lt;/sub&gt; are in general functions of many parameters, though the most important is arguably temperature; they are defined as:.
+        '''</summary>
+        Public Shared ReadOnly Property NestedLoop_FlashPT_03() As String
+            Get
+                Return ResourceManager.GetString("NestedLoop_FlashPT_03", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Once the Rachford-Rice equation has been solved for &lt;math_inline&gt;\beta&lt;/math_inline&gt;, the compositions x&lt;sub&gt;i&lt;/sub&gt; and y&lt;sub&gt;i&lt;/sub&gt; can be immediately calculated as:.
+        '''</summary>
+        Public Shared ReadOnly Property NestedLoop_FlashPT_04() As String
+            Get
+                Return ResourceManager.GetString("NestedLoop_FlashPT_04", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to The Rachford - Rice equation can have multiple solutions for &lt;math_inline&gt;\beta&lt;/math_inline&gt;, at most one of which guarantees that all &lt;math_inline&gt;x_i&lt;/math_inline&gt; and &lt;math_inline&gt;y_i&lt;/math_inline&gt; will be positive. In particular, if there is only one &lt;math_inline&gt;\beta&lt;/math_inline&gt; for which:.
+        '''</summary>
+        Public Shared ReadOnly Property NestedLoop_FlashPT_05() As String
+            Get
+                Return ResourceManager.GetString("NestedLoop_FlashPT_05", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to then that &lt;math_inline&gt;\beta&lt;/math_inline&gt; is the solution; if there are multiple  such &lt;math_inline&gt;\beta&lt;/math_inline&gt;s, it means that either &lt;math_inline&gt;K_{max}&lt;1&lt;/math_inline&gt; or &lt;math_inline&gt;K_{min}&gt;1&lt;/math_inline&gt;, indicating respectively that no gas phase can be sustained (and therefore &lt;math_inline&gt;\beta=0&lt;/math_inline&gt;) or conversely that no liquid phase can exist (and therefore &lt;math_inline&gt;\beta=1&lt;/math_inline&gt;)..
+        '''</summary>
+        Public Shared ReadOnly Property NestedLoop_FlashPT_06() As String
+            Get
+                Return ResourceManager.GetString("NestedLoop_FlashPT_06", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to DWSIM initializes the current calculation with ideal K-values estimated from vapor pressure data for each compound, or by using previously calculated values from an earlier solution..
+        '''</summary>
+        Public Shared ReadOnly Property NestedLoop_FlashPT_07() As String
+            Get
+                Return ResourceManager.GetString("NestedLoop_FlashPT_07", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to This is the Newton convergence loop iteration #{0}. DWSIM will use the current values of y and x to calculate fugacity coefficients and update K using the Property Package rigorous models..
+        '''</summary>
+        Public Shared ReadOnly Property Newton_Iteration_Fugacity_Detail_0() As String
+            Get
+                Return ResourceManager.GetString("Newton_Iteration_Fugacity_Detail_0", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Outlet Enthalpy: {0} kJ/kg.
+        '''</summary>
+        Public Shared ReadOnly Property Outlet_Enthalpy_0_kJ_kg() As String
+            Get
+                Return ResourceManager.GetString("Outlet_Enthalpy_0_kJ_kg", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Overal Heat Transfer Coefficient Calculation Routine.
         '''</summary>
         Public Shared ReadOnly Property Overal_Heat_Transfer_Coefficient_Calculation_Routine() As String
@@ -403,6 +853,33 @@ Namespace My.Resources
         Public Shared ReadOnly Property Overall_HTC_0_W_m2_K() As String
             Get
                 Return ResourceManager.GetString("Overall_HTC_0_W_m2_K", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Overall HTC Calculation.
+        '''</summary>
+        Public Shared ReadOnly Property Overall_HTC_Calculation() As String
+            Get
+                Return ResourceManager.GetString("Overall_HTC_Calculation", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Peng Robinson EOS Compressibility Factor.
+        '''</summary>
+        Public Shared ReadOnly Property Peng_Robinson_EOS_Compressibility_Factor() As String
+            Get
+                Return ResourceManager.GetString("Peng_Robinson_EOS_Compressibility_Factor", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Peng Robinson EOS Compressibility Factor Calculation Routine.
+        '''</summary>
+        Public Shared ReadOnly Property Peng_Robinson_EOS_Compressibility_Factor_Calculation_Routine() As String
+            Get
+                Return ResourceManager.GetString("Peng_Robinson_EOS_Compressibility_Factor_Calculation_Routine", resourceCulture)
             End Get
         End Property
         
@@ -443,6 +920,24 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to  (PH Flash - Fast Mode).
+        '''</summary>
+        Public Shared ReadOnly Property PH_Flash_Fast_Mode() As String
+            Get
+                Return ResourceManager.GetString("PH_Flash_Fast_Mode", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to PH Flash Newton Iteration.
+        '''</summary>
+        Public Shared ReadOnly Property PH_Flash_Newton_Iteration() As String
+            Get
+                Return ResourceManager.GetString("PH_Flash_Newton_Iteration", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Phase 1 composition: {0}.
         '''</summary>
         Public Shared ReadOnly Property Phase_1_composition_0() As String
@@ -457,6 +952,15 @@ Namespace My.Resources
         Public Shared ReadOnly Property Phase_2_composition_0() As String
             Get
                 Return ResourceManager.GetString("Phase_2_composition_0", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to  (Phase Equilibria).
+        '''</summary>
+        Public Shared ReadOnly Property Phase_Equilibria() As String
+            Get
+                Return ResourceManager.GetString("Phase_Equilibria", resourceCulture)
             End Get
         End Property
         
@@ -632,6 +1136,78 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Pressure convergence loop iteration #{0}.
+        '''</summary>
+        Public Shared ReadOnly Property Pressure_convergence_loop_iteration_0() As String
+            Get
+                Return ResourceManager.GetString("Pressure_convergence_loop_iteration_0", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Pressure-Enthalpy Flash Algorithm (Fast Mode) Convergence Iteration Step.
+        '''</summary>
+        Public Shared ReadOnly Property Pressure_Entalphy_Flash_Algorithm_Convergence_Iteration_Step() As String
+            Get
+                Return ResourceManager.GetString("Pressure_Entalphy_Flash_Algorithm_Convergence_Iteration_Step", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to This is the Newton convergence loop iteration #{0}. DWSIM will use the current value of T to calculate the phase distribution by calling the Flash_PT routine..
+        '''</summary>
+        Public Shared ReadOnly Property Pressure_Entalphy_Flash_Algorithm_Convergence_Iteration_Step_Detail_0() As String
+            Get
+                Return ResourceManager.GetString("Pressure_Entalphy_Flash_Algorithm_Convergence_Iteration_Step_Detail_0", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Pressure-Entropy Flash Algorithm (Fast Mode) Convergence Iteration Step.
+        '''</summary>
+        Public Shared ReadOnly Property Pressure_Entropy_Flash_Algorithm_Fast_mode_Convergence_Iteration_Step() As String
+            Get
+                Return ResourceManager.GetString("Pressure_Entropy_Flash_Algorithm_Fast_mode_Convergence_Iteration_Step", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Pressure Loop #{0}.
+        '''</summary>
+        Public Shared ReadOnly Property Pressure_Loop_0() As String
+            Get
+                Return ResourceManager.GetString("Pressure_Loop_0", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Pressure-Temperature Flash Algorithm Convergence Iteration Step.
+        '''</summary>
+        Public Shared ReadOnly Property Pressure_Temperature_Flash_Algorithm_Convergence_Iteration_Step() As String
+            Get
+                Return ResourceManager.GetString("Pressure_Temperature_Flash_Algorithm_Convergence_Iteration_Step", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Pressure-Temperature Flash Algorithm Routine.
+        '''</summary>
+        Public Shared ReadOnly Property Pressure_Temperature_Flash_Algorithm_Routine() As String
+            Get
+                Return ResourceManager.GetString("Pressure_Temperature_Flash_Algorithm_Routine", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Proceeding with temperature convergence....
+        '''</summary>
+        Public Shared ReadOnly Property Proceeding_with_temperature_convergence() As String
+            Get
+                Return ResourceManager.GetString("Proceeding_with_temperature_convergence", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Property Package Enthalpy Calculation Routine.
         '''</summary>
         Public Shared ReadOnly Property Property_Package_Enthalpy_Calculation_Routine() As String
@@ -650,6 +1226,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Property Package Equilibrium Calculation Routine.
+        '''</summary>
+        Public Shared ReadOnly Property Property_Package_Equilibrium_Calculation_Routine() As String
+            Get
+                Return ResourceManager.GetString("Property_Package_Equilibrium_Calculation_Routine", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Property Package Fugacity Coefficient Calculation Routine.
         '''</summary>
         Public Shared ReadOnly Property Property_Package_Fugacity_Coefficient_Calculation_Routine() As String
@@ -659,11 +1244,66 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to PS Flash Newton Iteration.
+        '''</summary>
+        Public Shared ReadOnly Property PS_Flash_Newton_Iteration() As String
+            Get
+                Return ResourceManager.GetString("PS_Flash_Newton_Iteration", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to PT Flash Newton Iteration.
+        '''</summary>
+        Public Shared ReadOnly Property PT_Flash_Newton_Iteration() As String
+            Get
+                Return ResourceManager.GetString("PT_Flash_Newton_Iteration", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Recalculating the temporary material stream and moving on to the next segment/increment....
+        '''</summary>
+        Public Shared ReadOnly Property Recalculating_the_temporary_material_stream_and_moving_on_to_the_next_segment_increment() As String
+            Get
+                Return ResourceManager.GetString("Recalculating_the_temporary_material_stream_and_moving_on_to_the_next_segment_inc"& _ 
+                        "rement", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to &lt;h2&gt;Results&lt;/h2&gt;.
         '''</summary>
         Public Shared ReadOnly Property Results() As String
             Get
                 Return ResourceManager.GetString("Results", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Segment #{0} ({1}/{2}).
+        '''</summary>
+        Public Shared ReadOnly Property Segment_0_1_2() As String
+            Get
+                Return ResourceManager.GetString("Segment_0_1_2", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Segment increments: {0}.
+        '''</summary>
+        Public Shared ReadOnly Property Segment_increments_0() As String
+            Get
+                Return ResourceManager.GetString("Segment_increments_0", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Segment type: {0}.
+        '''</summary>
+        Public Shared ReadOnly Property Segment_type_0() As String
+            Get
+                Return ResourceManager.GetString("Segment_type_0", resourceCulture)
             End Get
         End Property
         
@@ -695,11 +1335,56 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Temperature convergence loop iteration #{0}.
+        '''</summary>
+        Public Shared ReadOnly Property Temperature_convergence_loop_iteration_0() As String
+            Get
+                Return ResourceManager.GetString("Temperature_convergence_loop_iteration_0", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Temperature Loop #{0}.
+        '''</summary>
+        Public Shared ReadOnly Property Temperature_Loop_0() As String
+            Get
+                Return ResourceManager.GetString("Temperature_Loop_0", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Temporary Object.
+        '''</summary>
+        Public Shared ReadOnly Property Temporary_Object() As String
+            Get
+                Return ResourceManager.GetString("Temporary_Object", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to The algorithm converged in {0} iterations. Time taken: {1} ms..
+        '''</summary>
+        Public Shared ReadOnly Property The_algorithm_converged_in_0_iterations_Time_taken_1_ms() As String
+            Get
+                Return ResourceManager.GetString("The_algorithm_converged_in_0_iterations_Time_taken_1_ms", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to The compressibility factor (liquid or vapor) can be obtained from the equation.
         '''</summary>
         Public Shared ReadOnly Property The_compressibility_factor_liquid_or_vapor_can_be_obtained_from_the_equation() As String
             Get
                 Return ResourceManager.GetString("The_compressibility_factor_liquid_or_vapor_can_be_obtained_from_the_equation", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to The PH Flash algorithm converged in {0} iterations. Final Temperature value: {1} K.
+        '''</summary>
+        Public Shared ReadOnly Property The_PH_Flash_algorithm_converged_in_0_iterations_Final_Temperature_value_1_K() As String
+            Get
+                Return ResourceManager.GetString("The_PH_Flash_algorithm_converged_in_0_iterations_Final_Temperature_value_1_K", resourceCulture)
             End Get
         End Property
         
@@ -710,6 +1395,24 @@ Namespace My.Resources
             Get
                 Return ResourceManager.GetString("This_Is_the_external_loop_To_converge_pressure_When_outlet_temperature_Is_specifi"& _ 
                         "ed_Or_vice_versa", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Updated outlet pressure: {0} Pa.
+        '''</summary>
+        Public Shared ReadOnly Property Updated_outlet_pressure_0_Pa() As String
+            Get
+                Return ResourceManager.GetString("Updated_outlet_pressure_0_Pa", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Updated Temperature estimate: {0} K.
+        '''</summary>
+        Public Shared ReadOnly Property Updated_Temperature_estimate_0_K() As String
+            Get
+                Return ResourceManager.GetString("Updated_Temperature_estimate_0_K", resourceCulture)
             End Get
         End Property
         
@@ -773,6 +1476,15 @@ Namespace My.Resources
         Public Shared ReadOnly Property Vapor_Phase_Velocity_0_m_s() As String
             Get
                 Return ResourceManager.GetString("Vapor_Phase_Velocity_0_m_s", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to where:.
+        '''</summary>
+        Public Shared ReadOnly Property where() As String
+            Get
+                Return ResourceManager.GetString("where", resourceCulture)
             End Get
         End Property
     End Class

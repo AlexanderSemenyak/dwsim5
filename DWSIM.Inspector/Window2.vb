@@ -20,7 +20,7 @@ Public Class Window2
 
         With f
 
-            .Label1.Text = "Loading reports..."
+            .Label1.Text = SolutionInspector.Loading_reports
             .ProgressBar1.Value = 0
 
         End With

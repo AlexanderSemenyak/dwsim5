@@ -96,38 +96,38 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-            Inspector.Host.CheckAndAdd(IObj, "", "Flash_PT", Name & " (PT Flash)", "Pressure-Temperature Flash Algorithm Routine", True)
+            Inspector.Host.CheckAndAdd(IObj, "", "Flash_PT", Name & " (PT Flash)", SolutionInspector.Pressure_Temperature_Flash_Algorithm_Routine, True)
 
-            IObj?.Paragraphs.Add("This routine tries to find the compositions of a liquid and a vapor phase at equilibrium by solving the Rachford-Rice equation using a newton convergence approach.")
+            IObj?.Paragraphs.Add(SolutionInspector.NestedLoop_FlashPT_01)
 
-            IObj?.Paragraphs.Add("The Rachford-Rice equation is")
+            IObj?.Paragraphs.Add(SolutionInspector.NestedLoop_FlashPT_02)
 
             IObj?.Paragraphs.Add("<math>\sum_i\frac{z_i \, (K_i - 1)}{1 + \beta \, (K_i - 1)}= 0</math>")
 
-            IObj?.Paragraphs.Add("where:")
+            IObj?.Paragraphs.Add(SolutionInspector.where)
 
-            IObj?.Paragraphs.Add("<math_inline>z_{i}</math_inline> is the mole fraction of component i in the feed liquid (assumed to be known);")
-            IObj?.Paragraphs.Add("<math_inline>\beta</math_inline> is the fraction of feed that is vaporised;")
-            IObj?.Paragraphs.Add("<math_inline>K_{i}</math_inline> is the equilibrium constant of component i.")
+            IObj?.Paragraphs.Add("<math_inline>z_{i}</math_inline> "+SolutionInspector.is_the_mole_fraction_of_component_i+" "+SolutionInspector.in_the_feed_liquid_assumed_to_be_known+";")
+            IObj?.Paragraphs.Add("<math_inline>\beta</math_inline> "+SolutionInspector.is_the_fraction_of_feed_that_is_vaporised+";")
+            IObj?.Paragraphs.Add("<math_inline>K_{i}</math_inline> "+SolutionInspector.is_the_equilibrium_constant_of_component_i+".")
 
-            IObj?.Paragraphs.Add("The equilibrium constants K<sub>i</sub> are in general functions of many parameters, though the most important is arguably temperature; they are defined as:")
+            IObj?.Paragraphs.Add(SolutionInspector.NestedLoop_FlashPT_03)
 
             IObj?.Paragraphs.Add("<math>y_i = K_i \, x_i</math>")
 
-            IObj?.Paragraphs.Add("where:")
+            IObj?.Paragraphs.Add(SolutionInspector.where)
 
-            IObj?.Paragraphs.Add("<math_inline>x_i</math_inline> is the mole fraction of component i in liquid phase;")
-            IObj?.Paragraphs.Add("<math_inline>y_i</math_inline> is the mole fraction of component i in gas phase.")
+            IObj?.Paragraphs.Add("<math_inline>x_i</math_inline> " + SolutionInspector.is_the_mole_fraction_of_component_i +" " + SolutionInspector.in_liquid_phase+";")
+            IObj?.Paragraphs.Add("<math_inline>y_i</math_inline> " + SolutionInspector.is_the_mole_fraction_of_component_i +" " + SolutionInspector.in_gas_phase+".")
 
-            IObj?.Paragraphs.Add("Once the Rachford-Rice equation has been solved for <math_inline>\beta</math_inline>, the compositions x<sub>i</sub> and y<sub>i</sub> can be immediately calculated as:")
+            IObj?.Paragraphs.Add(SolutionInspector.NestedLoop_FlashPT_04)
 
             IObj?.Paragraphs.Add("<math>x_i =\frac{z_i}{1+\beta(K_i-1)}\\y_i=K_i\,x_i</math>")
 
-            IObj?.Paragraphs.Add("The Rachford - Rice equation can have multiple solutions for <math_inline>\beta</math_inline>, at most one of which guarantees that all <math_inline>x_i</math_inline> and <math_inline>y_i</math_inline> will be positive. In particular, if there is only one <math_inline>\beta</math_inline> for which:")
+            IObj?.Paragraphs.Add(SolutionInspector.NestedLoop_FlashPT_05)
             IObj?.Paragraphs.Add("<math>\frac{1}{1-K_\text{max}}=\beta_\text{min}<\beta<\beta_\text{max}=\frac{1}{1-K_\text{min}}</math>")
-            IObj?.Paragraphs.Add("then that <math_inline>\beta</math_inline> is the solution; if there are multiple  such <math_inline>\beta</math_inline>s, it means that either <math_inline>K_{max}<1</math_inline> or <math_inline>K_{min}>1</math_inline>, indicating respectively that no gas phase can be sustained (and therefore <math_inline>\beta=0</math_inline>) or conversely that no liquid phase can exist (and therefore <math_inline>\beta=1</math_inline>).")
+            IObj?.Paragraphs.Add(SolutionInspector.NestedLoop_FlashPT_06)
 
-            IObj?.Paragraphs.Add("DWSIM initializes the current calculation with ideal K-values estimated from vapor pressure data for each compound, or by using previously calculated values from an earlier solution.")
+            IObj?.Paragraphs.Add(SolutionInspector.NestedLoop_FlashPT_07)
 
             Dim d1, d2 As Date, dt As TimeSpan
             Dim i, j, k As Integer
@@ -219,7 +219,7 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
             IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
             IObj?.Paragraphs.Add(String.Format(SolutionInspector.Compounds_0, PP.RET_VNAMES.ToMathArrayString))
             IObj?.Paragraphs.Add(String.Format(SolutionInspector.Mole_Fractions_0, Vz.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Initial estimates for K: {0}", Ki.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Initial_estimates_for_K_0, Ki.ToMathArrayString))
 
             Dim result As Object = Nothing
 
@@ -321,8 +321,8 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
 
             End If
 
-            IObj?.Paragraphs.Add(String.Format("Initial estimate for V: {0}", V))
-            IObj?.Paragraphs.Add(String.Format("Initial estimate for L (1-V): {0}", L))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Initial_estimates_for_V_0, V))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Initial_estimates_for_L_1_V_0, L))
 
             IObj?.Paragraphs.Add(String.Format("Initial estimate for y: {0}", Vy.ToMathArrayString))
             IObj?.Paragraphs.Add(String.Format("Initial estimate for x: {0}", Vx.ToMathArrayString))
@@ -336,9 +336,9 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
 
                 Dim IObj2 As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-                Inspector.Host.CheckAndAdd(IObj2, "", "Flash_PT", "PT Flash Newton Iteration", "Pressure-Temperature Flash Algorithm Convergence Iteration Step")
+                Inspector.Host.CheckAndAdd(IObj2, "", "Flash_PT", SolutionInspector.PT_Flash_Newton_Iteration, SolutionInspector.Pressure_Temperature_Flash_Algorithm_Convergence_Iteration_Step)
 
-                IObj2?.Paragraphs.Add(String.Format("This is the Newton convergence loop iteration #{0}. DWSIM will use the current values of y and x to calculate fugacity coefficients and update K using the Property Package rigorous models.", ecount))
+                IObj2?.Paragraphs.Add(String.Format(SolutionInspector.Newton_Iteration_Fugacity_Detail_0, ecount))
 
                 IObj2?.SetCurrent()
 
@@ -812,7 +812,7 @@ out2:       d2 = Date.Now
 
                 Inspector.Host.CheckAndAdd(IObj2, "", "Flash_PT", "PT VLLE Flash Newton Iteration", "Pressure-Temperature VLLE Flash Algorithm Convergence Iteration Step")
 
-                IObj2?.Paragraphs.Add(String.Format("This is the Newton convergence loop iteration #{0}. DWSIM will use the current values of y and x to calculate fugacity coefficients and update K using the Property Package rigorous models.", ecount))
+                IObj2?.Paragraphs.Add(String.Format(SolutionInspector.Newton_Iteration_Fugacity_Detail_0, ecount))
 
                 IObj2?.Paragraphs.Add(String.Format("Current Estimate for Vapor Phase Molar Fraction (V): {0}", V))
                 IObj2?.Paragraphs.Add(String.Format("Current Estimate for Liquid Phase 1 Molar Fraction (L1): {0}", L1))
@@ -1183,7 +1183,7 @@ out:
             IObj?.Paragraphs.Add(String.Format(SolutionInspector.Enthalpy_0_kJ_kg, H))
             IObj?.Paragraphs.Add(String.Format(SolutionInspector.Compounds_0, PP.RET_VNAMES.ToMathArrayString))
             IObj?.Paragraphs.Add(String.Format(SolutionInspector.Mole_Fractions_0, Vz.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Initial estimate for T: {0} K", T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Initial_estimates_for_T_0_K, T))
 
             For j = 0 To 1
 
@@ -1196,16 +1196,16 @@ out:
 
                     Dim IObj2 As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-                    Inspector.Host.CheckAndAdd(IObj2, "", "Flash_PH", "PH Flash Newton Iteration", "Pressure-Enthalpy Flash Algorithm Convergence Iteration Step")
+                    Inspector.Host.CheckAndAdd(IObj2, "", "Flash_PH", SolutionInspector.PH_Flash_Newton_Iteration, "Pressure-Enthalpy Flash Algorithm Convergence Iteration Step")
 
-                    IObj2?.Paragraphs.Add(String.Format("This is the Newton convergence loop iteration #{0}. DWSIM will use the current value of T to calculate the phase distribution by calling the Flash_PT routine.", cnt))
+                    IObj2?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_Entalphy_Flash_Algorithm_Convergence_Iteration_Step_Detail_0, cnt))
 
                     IObj2?.SetCurrent()
                     fx = Herror(x1, {P, Vz, PP})
                     IObj2?.SetCurrent()
                     fx2 = Herror(x1 + epsilon(j), {P, Vz, PP})
 
-                    IObj2?.Paragraphs.Add(String.Format("Current Enthalpy error: {0}", fx))
+                    IObj2?.Paragraphs.Add(String.Format(SolutionInspector.Current_Enthalpy_error_0, fx))
 
                     If Abs(fx) < tolEXT Then Exit Do
 
@@ -1216,7 +1216,7 @@ out:
 
                     x1 = x1 - dx
 
-                    IObj2?.Paragraphs.Add(String.Format("Updated Temperature estimate: {0} K", T))
+                    IObj2?.Paragraphs.Add(String.Format(SolutionInspector.Updated_Temperature_estimate_0_K, T))
 
                     cnt += 1
 
@@ -1224,7 +1224,7 @@ out:
 
                 Loop Until cnt > maxitEXT Or Double.IsNaN(x1)
 
-                IObj?.Paragraphs.Add(String.Format("The PH Flash algorithm converged in {0} iterations. Final Temperature value: {1} K", cnt, T))
+                IObj?.Paragraphs.Add(String.Format(SolutionInspector.The_PH_Flash_algorithm_converged_in_0_iterations_Final_Temperature_value_1_K, cnt, T))
 
                 T = x1
 
@@ -1268,7 +1268,7 @@ alt:
 
             WriteDebugInfo("PH Flash [NL3P]: Converged in " & ecount & " iterations. Time taken: " & dt.TotalMilliseconds & " ms")
 
-            IObj?.Paragraphs.Add("The algorithm converged in " & ecount & " iterations. Time taken: " & dt.TotalMilliseconds & " ms.")
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.The_algorithm_converged_in_0_iterations_Time_taken_1_ms, ecount, dt.TotalMilliseconds))
 
             IObj?.Close()
 
@@ -1331,10 +1331,10 @@ alt:
             IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
 
             IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
-            IObj?.Paragraphs.Add(String.Format("Entropy: {0} kJ/kg", S))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Entropy_0_kJ_kg, S))
             IObj?.Paragraphs.Add(String.Format(SolutionInspector.Compounds_0, PP.RET_VNAMES.ToMathArrayString))
             IObj?.Paragraphs.Add(String.Format(SolutionInspector.Mole_Fractions_0, Vz.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Initial estimate for T: {0} K", Tref))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Initial_estimates_for_T_0_K, Tref))
 
             For j = 0 To 4
 
@@ -1347,9 +1347,9 @@ alt:
 
                     Dim IObj2 As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-                    Inspector.Host.CheckAndAdd(IObj2, "", "Flash_PS", "PS Flash Newton Iteration", "Pressure-Entropy Flash Algorithm Convergence Iteration Step")
+                    Inspector.Host.CheckAndAdd(IObj2, "", "Flash_PS", SolutionInspector.PS_Flash_Newton_Iteration, "Pressure-Entropy Flash Algorithm Convergence Iteration Step")
 
-                    IObj2?.Paragraphs.Add(String.Format("This is the Newton convergence loop iteration #{0}. DWSIM will use the current value of T to calculate the phase distribution by calling the Flash_PT routine.", cnt))
+                    IObj2?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_Entalphy_Flash_Algorithm_Convergence_Iteration_Step_Detail_0, cnt))
 
                     IObj2?.SetCurrent()
                     fx = Serror(x1, {P, Vz, PP})
@@ -1367,7 +1367,7 @@ alt:
 
                     x1 = x1 - dx
 
-                    IObj2?.Paragraphs.Add(String.Format("Updated Temperature estimate: {0} K", x1))
+                    IObj2?.Paragraphs.Add(String.Format(SolutionInspector.Updated_Temperature_estimate_0_K, x1))
 
                     IObj2?.Close()
 
@@ -1419,7 +1419,7 @@ alt:
 
             WriteDebugInfo("PS Flash [NL-3PV3]: Converged in " & ecount & " iterations. Time taken: " & dt.TotalMilliseconds & " ms")
 
-            IObj?.Paragraphs.Add("The algorithm converged in " & ecount & " iterations. Time taken: " & dt.TotalMilliseconds & " ms.")
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.The_algorithm_converged_in_0_iterations_Time_taken_1_ms, ecount, dt.TotalMilliseconds))
 
             IObj?.Close()
 
@@ -1647,7 +1647,7 @@ alt:
 
             WriteDebugInfo("TV Flash [NL-3PV3]: Converged in " & ecount & " iterations. Time taken: " & dt.TotalMilliseconds & " ms.")
 
-            IObj?.Paragraphs.Add("The algorithm converged in " & ecount & " iterations. Time taken: " & dt.TotalMilliseconds & " ms.")
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.The_algorithm_converged_in_0_iterations_Time_taken_1_ms, ecount, dt.TotalMilliseconds))
 
             IObj?.Paragraphs.Add(String.Format("Final converged value for P: {0}", P))
 
@@ -1767,7 +1767,7 @@ alt:
 
             WriteDebugInfo("PV Flash [NL-3PV3]: Converged in " & ecount & " iterations. Time taken: " & dt.TotalMilliseconds & " ms.")
 
-            IObj?.Paragraphs.Add("The algorithm converged in " & ecount & " iterations. Time taken: " & dt.TotalMilliseconds & " ms.")
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.The_algorithm_converged_in_0_iterations_Time_taken_1_ms, ecount, dt.TotalMilliseconds))
 
             IObj?.Paragraphs.Add(String.Format("Final converged value for T: {0}", T))
 

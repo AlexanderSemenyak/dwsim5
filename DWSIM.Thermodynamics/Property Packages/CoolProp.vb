@@ -135,7 +135,7 @@ Namespace PropertyPackages
                 val = MyBase.AUX_CPi(sub1, T)
             End If
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
             IObj?.Paragraphs.Add(String.Format("Ideal Gas Heat Capacity: {0} kJ/[kg.K]", val))
             IObj?.Close()
 
@@ -173,7 +173,7 @@ Namespace PropertyPackages
                 val = MyBase.AUX_PVAPi(index, T)
             End If
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
             IObj?.Paragraphs.Add(String.Format("Vapor Pressure: {0} Pa", val))
             IObj?.Close()
 
@@ -210,7 +210,7 @@ Namespace PropertyPackages
                 val = MyBase.AUX_PVAPi(sub1, T)
             End If
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
             IObj?.Paragraphs.Add(String.Format("Vapor Pressure: {0} Pa", val))
             IObj?.Close()
 
@@ -248,7 +248,7 @@ Namespace PropertyPackages
                 val = MyBase.AUX_TSATi(PVAP, index)
             End If
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
             IObj?.Paragraphs.Add(String.Format("Saturation Temperature: {0} K", val))
             IObj?.Close()
 
@@ -285,7 +285,7 @@ Namespace PropertyPackages
                 val = MyBase.AUX_TSATi(PVAP, subst)
             End If
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
             IObj?.Paragraphs.Add(String.Format("Saturation Temperature: {0} K", val))
             IObj?.Close()
 
@@ -324,7 +324,7 @@ Namespace PropertyPackages
                 val = MyBase.AUX_LIQDENSi(cprop, T)
             End If
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
             IObj?.Paragraphs.Add(String.Format("Density: {0} kg/m3", val))
             IObj?.Close()
 
@@ -363,7 +363,7 @@ Namespace PropertyPackages
                 val = MyBase.AUX_LIQ_Cpi(cprop, T)
             End If
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
             IObj?.Paragraphs.Add(String.Format("Liquid Cp: {0} kJ/[kg.K]", val))
             IObj?.Close()
 
@@ -452,7 +452,7 @@ Namespace PropertyPackages
             Next
             val = MathEx.Common.Sum(vk)
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
             IObj?.Paragraphs.Add(String.Format("Thermal Conductivity: {0} W/[m.K]", val))
             IObj?.Close()
 
@@ -524,7 +524,7 @@ Namespace PropertyPackages
             Next
             val = MathEx.Common.Sum(vk)
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
             IObj?.Paragraphs.Add(String.Format("Thermal Conductivity: {0} W/[m.K]", val))
             IObj?.Close()
 
@@ -601,7 +601,7 @@ Namespace PropertyPackages
             val = 1 / MathEx.Common.Sum(vk)
             If Double.IsNaN(val) Or Double.IsInfinity(val) Then val = 0.0#
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
             IObj?.Paragraphs.Add(String.Format("Density: {0} kg/m3", val))
             IObj?.Close()
 
@@ -646,7 +646,7 @@ Namespace PropertyPackages
                 val = MyBase.AUX_LIQTHERMCONDi(cprop, T)
             End If
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
             IObj?.Paragraphs.Add(String.Format("Thermal Conductivity: {0} W/[m.K]", val))
             IObj?.Close()
 
@@ -693,7 +693,7 @@ Namespace PropertyPackages
                 val = MyBase.AUX_LIQVISCi(sub1, T, P)
             End If
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
             IObj?.Paragraphs.Add(String.Format("Viscosity: {0} Pa.s", val))
             IObj?.Close()
 
@@ -736,7 +736,7 @@ Namespace PropertyPackages
                 val = MyBase.AUX_LIQTHERMCONDi(constprop, T)
             End If
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
             IObj?.Paragraphs.Add(String.Format("Surface Tension: {0} N/m", val))
             IObj?.Close()
 
@@ -815,7 +815,7 @@ Namespace PropertyPackages
                 val = MyBase.AUX_VAPTHERMCONDi(cprop, T, P)
             End If
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
             IObj?.Paragraphs.Add(String.Format("Thermal Conductivity: {0} W/[m.K]", val))
             IObj?.Close()
 
@@ -854,7 +854,7 @@ Namespace PropertyPackages
                 val = MyBase.AUX_VAPVISCi(cprop, T)
             End If
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
             IObj?.Paragraphs.Add(String.Format("Viscosity: {0} Pa.s", val))
             IObj?.Close()
 
@@ -1000,7 +1000,7 @@ Namespace PropertyPackages
             Next
             val = MathEx.Common.Sum(vk)
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
             IObj?.Paragraphs.Add(String.Format("Density: {0} kg/m3", val))
             IObj?.Close()
 
@@ -1359,7 +1359,7 @@ Namespace PropertyPackages
 
             val = MathEx.Common.Sum(vk)
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
             IObj?.Paragraphs.Add(String.Format(SolutionInspector.Enthalpy_0_kJ_kg, val))
             IObj?.Close()
 
@@ -1480,7 +1480,7 @@ Namespace PropertyPackages
 
             val = MathEx.Common.Sum(vk)
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
             IObj?.Paragraphs.Add(String.Format("Entropy: {0} kJ/[kg.K]", val))
             IObj?.Close()
 
@@ -1538,8 +1538,8 @@ Namespace PropertyPackages
 
             Calculator.WriteToConsole("Result: " & fugcoeff.ToArrayString(), 2)
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
-            IObj?.Paragraphs.Add(String.Format("Fugacity Coefficients: {0}", fugcoeff.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Fugacity_Coefficients_0, fugcoeff.ToMathArrayString))
             IObj?.Close()
 
             Return fugcoeff

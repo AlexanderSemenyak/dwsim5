@@ -411,7 +411,7 @@ Namespace PropertyPackages.Auxiliary
             lng = lngc.AddY(lngr)
             g = lng.ExpY
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
 
             IObj?.Paragraphs.Add(String.Format("ln gc: {0}", lngc.ToMathArrayString))
             IObj?.Paragraphs.Add(String.Format("ln gr: {0}", lngr.ToMathArrayString))

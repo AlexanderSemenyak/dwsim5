@@ -35,7 +35,7 @@ Namespace FlowPackages
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-            Inspector.Host.CheckAndAdd(IObj, "", "CalculateDeltaP", "Beggs and Brill Pressure Drop", "Beggs and Brill Multiphase Pressure Drop Calculation Routine", True)
+            Inspector.Host.CheckAndAdd(IObj, "", "CalculateDeltaP", SolutionInspector.Beggs_and_Brill_Pressure_Drop, SolutionInspector.Beggs_and_Brill_Multiphase_Pressure_Drop_Calculation_Routine, True)
 
             IObj?.SetCurrent()
 

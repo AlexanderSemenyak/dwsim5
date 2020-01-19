@@ -22,6 +22,7 @@ Imports Ciloci.Flee
 Imports System.Math
 Imports System.Linq
 Imports DWSIM.Interfaces.Enums
+Imports DWSIM.Interfaces.My.Resources
 Imports DWSIM.SharedClasses
 Imports DWSIM.Thermodynamics.Streams
 Imports DWSIM.Thermodynamics
@@ -325,7 +326,7 @@ Namespace Reactors
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-            Inspector.Host.CheckAndAdd(IObj, "", "Calculate", If(GraphicObject IsNot Nothing, GraphicObject.Tag, "Temporary Object") & " (" & GetDisplayName() & ")", GetDisplayName() & " Calculation Routine", True)
+            Inspector.Host.CheckAndAdd(IObj, "", "Calculate", If(GraphicObject IsNot Nothing, GraphicObject.Tag, SolutionInspector.Temporary_Object) & " (" & GetDisplayName() & ")", GetDisplayName() & SolutionInspector.Calculation_Routine, True)
 
             IObj?.SetCurrent()
 

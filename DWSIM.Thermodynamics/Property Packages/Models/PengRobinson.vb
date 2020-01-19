@@ -192,7 +192,7 @@ Namespace PropertyPackages.Auxiliary
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-            Inspector.Host.CheckAndAdd(IObj, "", "Z_PR", "Peng-Robinson EOS Compressibility Factor", "Процедура вычисления коэффициента сжимаемости для уравнения состояния Пенга-Робинсона (Peng-Robinson EOS)")
+            Inspector.Host.CheckAndAdd(IObj, "", "Z_PR", SolutionInspector.Peng_Robinson_EOS_Compressibility_Factor, SolutionInspector.Peng_Robinson_EOS_Compressibility_Factor_Calculation_Routine)
 
             IObj?.Paragraphs.Add(SolutionInspector.The_compressibility_factor_liquid_or_vapor_can_be_obtained_from_the_equation)
             IObj?.Paragraphs.Add("<math>Z^ {3} - (1 - b)Z^{2}+(A-3B^{2}-2B)Z-(AB-B^{2}-2B)=0,</math>")
@@ -548,7 +548,7 @@ Namespace PropertyPackages.Auxiliary
             Dim DSres = R * Math.Log((Z - BG1) / Z) + R * Math.Log(Z) - 1 / (8 ^ 0.5 * bm) * dadT * Math.Log((2 * Z + BG1 * (2 - 8 ^ 0.5)) / (2 * Z + BG1 * (2 + 8 ^ 0.5)))
             Dim DHres = DAres + T * (DSres) + R * T * (Z - 1)
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
 
             IObj?.Paragraphs.Add(String.Format("Calculated Enthalpy Departure: {0} kJ/kmol", DHres))
             IObj?.Paragraphs.Add(String.Format("Calculated Enthalpy Departure: {0} kJ/kg", DHres / MMm))
@@ -778,7 +778,7 @@ Namespace PropertyPackages.Auxiliary
             'Dim DSres = R * Math.Log((Z - BG1) / Z) + R * Math.Log(V / V0) - 1 / (8 ^ 0.5 * bm) * dadT * Math.Log((2 * Z + BG1 * (2 - 8 ^ 0.5)) / (2 * Z + BG1 * (2 + 8 ^ 0.5)))
             Dim DSres = R * Math.Log((Z - BG1) / Z) + R * Math.Log(Z) - 1 / (8 ^ 0.5 * bm) * dadT * Math.Log((2 * Z + BG1 * (2 - 8 ^ 0.5)) / (2 * Z + BG1 * (2 + 8 ^ 0.5)))
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
 
             IObj?.Paragraphs.Add(String.Format("Calculated Entropy Departure: {0} kJ/kmol.K", DSres))
             IObj?.Paragraphs.Add(String.Format("Calculated Entropy Departure: {0} kJ/kg.K", DSres / MMm))
