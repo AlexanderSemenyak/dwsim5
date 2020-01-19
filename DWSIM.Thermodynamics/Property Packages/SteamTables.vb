@@ -22,6 +22,7 @@ Imports DWSIM.Thermodynamics.PropertyPackages.Auxiliary
 Imports DWSIM.MathOps.MathEx
 Imports System.Linq
 Imports DWSIM.Interfaces.Enums
+Imports DWSIM.Interfaces.My.Resources
 
 Namespace PropertyPackages
 
@@ -1001,7 +1002,7 @@ FINAL:
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-            Inspector.Host.CheckAndAdd(IObj, "", "DW_CalcEnthalpy", "Steam Tables Enthalpy", "Property Package Enthalpy Calculation Routine")
+            Inspector.Host.CheckAndAdd(IObj, "", "DW_CalcEnthalpy", "Steam Tables Enthalpy", SolutionInspector.Property_Package_Enthalpy_Calculation_Routine)
 
             IObj?.SetCurrent()
 

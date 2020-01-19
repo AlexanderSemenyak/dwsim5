@@ -24,6 +24,7 @@ Imports System.Linq
 Imports System.IO
 Imports System.Runtime.Serialization.Formatters.Binary
 Imports System.Runtime.Serialization
+Imports DWSIM.Interfaces.My.Resources
 
 Namespace PropertyPackages.Auxiliary.FlashAlgorithms
 
@@ -582,16 +583,16 @@ unable to exist as a pure liquid. As a consequence the pure component initializa
 this particular component, and there is no certainty that the alternative initializations, which start far from the desired minimum, 
 will converge to this solution.")
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
 
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
-            IObj?.Paragraphs.Add(String.Format("Pressure: {0} Pa", P))
-            IObj?.Paragraphs.Add(String.Format("Compounds: {0}", pp.RET_VNAMES.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Mole Fractions: {0}", Vz.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Compounds_0, pp.RET_VNAMES.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Mole_Fractions_0, Vz.ToMathArrayString))
 
             WriteDebugInfo("Starting Liquid Phase Stability Test @ T = " & T & " K & P = " & P & " Pa for the following trial phases:")
 
-            IObj?.Paragraphs.Add("Starting Liquid Phase Stability Test @ T = " & T & " K & P = " & P & " Pa for the following trial phases:")
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Starting_Liquid_Phase_Stability_Test_T_0_K_P_1_Pa_for_the_following_trial_phases, T, P))
 
             Dim i, j, n, o, l, nt, maxits As Integer
             n = Vz.Length - 1

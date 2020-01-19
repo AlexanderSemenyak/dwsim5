@@ -28,6 +28,7 @@ Imports DWSIM.SharedClasses
 Imports Cureos.Numerics
 Imports DWSIM.Interfaces.Enums
 Imports DotNumerics.Optimization
+Imports DWSIM.Interfaces.My.Resources
 
 Namespace UnitOperations.Auxiliary.SepOps.SolvingMethods
 
@@ -70,7 +71,7 @@ Namespace UnitOperations.Auxiliary.SepOps.SolvingMethods
 
             IObj?.Paragraphs.Add("The Thomas algorithm avoids buildup of computer truncation errors because none of the steps involves subtraction of nearly equal quantities. Furthermore, computed values of xi,j are almost always positive. The algorithmis superior to alternative matrix-inversion routines. A modified Thomas algorithm for difficult cases is given by Boston and Sullivan [9]. Such cases can occur for columns with large numbers of equilibrium stages and components whose absorption factors, <mi>A=L/KV</mi>, are less than unity in one section and greater than unity in another.")
 
-            IObj?.Paragraphs.Add("<h2>Input Parameters</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Input_Parameters)
 
             IObj?.Paragraphs.Add(String.Format("A: {0}", a.ToMathArrayString))
 
@@ -107,7 +108,7 @@ Namespace UnitOperations.Auxiliary.SepOps.SolvingMethods
                 x(i) = d(i) - c(i) * x(i + 1)
             Next
 
-            IObj?.Paragraphs.Add("<h2>Results</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Results)
 
             IObj?.Paragraphs.Add(String.Format("x: {0}", x.ToMathArrayString))
 
@@ -959,7 +960,7 @@ Namespace UnitOperations.Auxiliary.SepOps.SolvingMethods
             IObj?.Paragraphs.Add(String.Format("Vapor/Liquid2 Phase Compositions: {0}", y.ToMathArrayString))
             IObj?.Paragraphs.Add(String.Format("K-values: {0}", Kval.ToMathArrayString))
 
-            IObj?.Paragraphs.Add("<h2>Calculated Parameters</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Calculated_Parameters)
 
             ik = IdealK
             ih = IdealH
@@ -1905,7 +1906,7 @@ Namespace UnitOperations.Auxiliary.SepOps.SolvingMethods
 
             IObj?.Paragraphs.Add("The algorithm converged in " & ec & " iterations.")
 
-            IObj?.Paragraphs.Add("<h2>Results</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Results)
 
             IObj?.Paragraphs.Add(String.Format("Final converged values for T: {0}", Tj.ToMathArrayString))
             IObj?.Paragraphs.Add(String.Format("Final converged values for V: {0}", Vj.ToMathArrayString))
@@ -2051,7 +2052,7 @@ Namespace UnitOperations.Auxiliary.SepOps.SolvingMethods
             IObj?.Paragraphs.Add(String.Format("Vapor/Liquid2 Phase Compositions: {0}", y.ToMathArrayString))
             IObj?.Paragraphs.Add(String.Format("K-values: {0}", Kval.ToMathArrayString))
 
-            IObj?.Paragraphs.Add("<h2>Calculated Parameters</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Calculated_Parameters)
 
             Dim ppr As PropertyPackages.RaoultPropertyPackage = Nothing
 
@@ -2650,7 +2651,7 @@ Namespace UnitOperations.Auxiliary.SepOps.SolvingMethods
 
             IObj?.Paragraphs.Add("The algorithm converged in " & ic & " iterations.")
 
-            IObj?.Paragraphs.Add("<h2>Results</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Results)
 
             IObj?.Paragraphs.Add(String.Format("Final converged values for T: {0}", Tj.ToMathArrayString))
             IObj?.Paragraphs.Add(String.Format("Final converged values for V: {0}", Vj.ToMathArrayString))
@@ -2823,7 +2824,7 @@ Namespace UnitOperations.Auxiliary.SepOps.SolvingMethods
             IObj?.Paragraphs.Add(String.Format("Vapor/Liquid2 Phase Compositions: {0}", y.ToMathArrayString))
             IObj?.Paragraphs.Add(String.Format("K-values: {0}", K.ToMathArrayString))
 
-            IObj?.Paragraphs.Add("<h2>Calculated Parameters</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Calculated_Parameters)
 
             For i = 0 To ns
                 For j = 0 To nc - 1
@@ -3223,7 +3224,7 @@ Namespace UnitOperations.Auxiliary.SepOps.SolvingMethods
 
             IObj?.Paragraphs.Add("The algorithm converged in " & ic & " iterations.")
 
-            IObj?.Paragraphs.Add("<h2>Results</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Results)
 
             IObj?.Paragraphs.Add(String.Format("Final converged values for T: {0}", Tj.ToMathArrayString))
             IObj?.Paragraphs.Add(String.Format("Final converged values for V: {0}", Vj.ToMathArrayString))
@@ -3891,7 +3892,7 @@ Namespace UnitOperations.Auxiliary.SepOps.SolvingMethods
             IObj?.Paragraphs.Add(String.Format("Vapor/Liquid2 Phase Compositions: {0}", y.ToMathArrayString))
             IObj?.Paragraphs.Add(String.Format("K-values: {0}", Kval.ToMathArrayString))
 
-            IObj?.Paragraphs.Add("<h2>Calculated Parameters</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Calculated_Parameters)
 
             ik = IdealK
             ih = IdealH
@@ -4258,7 +4259,7 @@ Namespace UnitOperations.Auxiliary.SepOps.SolvingMethods
 
             IObj?.Paragraphs.Add("The algorithm converged in " & ec & " iterations.")
 
-            IObj?.Paragraphs.Add("<h2>Results</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Results)
 
             IObj?.Paragraphs.Add(String.Format("Final converged values for T: {0}", Tj.ToMathArrayString))
             IObj?.Paragraphs.Add(String.Format("Final converged values for V: {0}", Vj.ToMathArrayString))

@@ -16,6 +16,7 @@
 '    You should have received a copy of the GNU General Public License
 '    along with DWSIM.  If not, see <http://www.gnu.org/licenses/>.
 
+Imports DWSIM.Interfaces.My.Resources
 Imports DWSIM.MathOps.MathEx.PolySolve
 
 Namespace PropertyPackages.Auxiliary
@@ -181,10 +182,10 @@ Namespace PropertyPackages.Auxiliary
             IObj?.Paragraphs.Add("<m>D = (0.3257 / (1.0039 - Tr^{2.573})^{0.2906})-0.2086</m>")
             IObj?.Paragraphs.Add("<m>C = -0.07921 + 2.1616 Tr - 13.404  Tr ^ 2 + 44.1706 Tr ^ 3 - 84.8291 Tr ^ 4 + 96.1209 Tr ^ 5 - 59.8127 Tr ^ 6 + 15.6719 Tr ^ 7</m>")
 
-            IObj?.Paragraphs.Add("<h2>Input Parameters</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Input_Parameters)
 
             IObj?.Paragraphs.Add(String.Format("Reduced Temperature: {0}", Tr))
-            IObj?.Paragraphs.Add(String.Format("Pressure: {0} Pa", P))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
             IObj?.Paragraphs.Add(String.Format("Critical Pressure: {0} Pa", Pc))
             IObj?.Paragraphs.Add(String.Format("Vapor Pressure: {0} Pa", Pvap))
             IObj?.Paragraphs.Add(String.Format("Acentric Factor: {0}", w))
@@ -203,7 +204,7 @@ Namespace PropertyPackages.Auxiliary
 
             Dim correction = (1 + D * (DPr / 2.118) ^ A) / (1 + C * w * DPr)
 
-            IObj?.Paragraphs.Add("<h2>Results</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Results)
 
             IObj?.Paragraphs.Add(String.Format("Correction Factor: {0}", correction))
 
@@ -261,10 +262,10 @@ Namespace PropertyPackages.Auxiliary
             IObj?.Paragraphs.Add("<m>j=0.0861488</m>")
             IObj?.Paragraphs.Add("<m>k=0.0344483</m>")
 
-            IObj?.Paragraphs.Add("<h2>Input Parameters</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Input_Parameters)
 
             IObj?.Paragraphs.Add(String.Format("Reduced Temperature: {0}", Tr))
-            IObj?.Paragraphs.Add(String.Format("Pressure: {0} Pa", P))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
             IObj?.Paragraphs.Add(String.Format("Vapor Pressure: {0} Pa", Pvap))
             IObj?.Paragraphs.Add(String.Format("Acentric Factor: {0}", w))
 
@@ -286,7 +287,7 @@ Namespace PropertyPackages.Auxiliary
 
             Dim correction = 1 / (1 - c * Math.Log((beta + P) / (beta + Pvap)))
 
-            IObj?.Paragraphs.Add("<h2>Results</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Results)
 
             IObj?.Paragraphs.Add(String.Format("Correction Factor: {0}", correction))
 
@@ -478,9 +479,9 @@ Namespace PropertyPackages.Auxiliary
 
             IObj?.Paragraphs.Add("<m>T_{0}=T/f<m>")
 
-            IObj?.Paragraphs.Add("<h2>Input Parameters</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Input_Parameters)
 
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
             IObj?.Paragraphs.Add(String.Format("Critical Temperature: {0} K", Tc))
             IObj?.Paragraphs.Add(String.Format("Critical Volume: {0} m3/mol", Vc))
             IObj?.Paragraphs.Add(String.Format("Critical Compressibility: {0}", Zc))
@@ -546,7 +547,7 @@ Namespace PropertyPackages.Auxiliary
 
             eta_ = eta0 * Hgrande * M / (0.01604)
 
-            IObj?.Paragraphs.Add("<h2>Results</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Results)
 
             condtg_elyhanley = lambda_ + (eta_ / M) * 1.32 * (Cv - 3 * 8.314 / 2) 'W/(m.K)
 
@@ -799,7 +800,7 @@ Namespace PropertyPackages.Auxiliary
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-            Inspector.Host.CheckAndAdd(IObj, "", "CpCvR", "Peng-Robinson EOS Heat Capacity Ratio", "Peng-Robinson EOS Heat Capacity Ratio Calculation Routine")
+            Inspector.Host.CheckAndAdd(IObj, "", "CpCvR", "Peng-Robinson EOS Heat Capacity Ratio", SolutionInspector.Peng_Robinson_EOS_Heat_Capacity_Ratio_Calculation_Routine)
 
             IObj?.Paragraphs.Add("The Peng-Robinson equation is a cubic Equation of State (characteristic related to the exponent of the molar volume) 
                                     which relates temperature, pressure And molar volume of a pure component or a mixture of components at equilibrium. The cubic 
@@ -835,19 +836,19 @@ Namespace PropertyPackages.Auxiliary
 
             IObj?.Paragraphs.Add("<m>C_{p}-C_{v}=-T\frac{(\frac{\partial P}{\partial T})_{V}^{2}}{(\frac{\partial P}{\partial V})_{T}}<m>")
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
 
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
-            IObj?.Paragraphs.Add(String.Format("Pressure: {0} Pa", P))
-            IObj?.Paragraphs.Add(String.Format("Mole Fractions: {0}", Vz.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Ideal Gas Heat Capacities: {0}", VCpig.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Interaction Parameters: {0}", VKij.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Critical Temperatures: {0} K", VTc.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Critical Pressures: {0} Pa", VPc.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Acentric Factors: {0} ", Vw.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("State: {0}", TIPO))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Mole_Fractions_0, Vz.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Ideal_Gas_Heat_Capacities_0, VCpig.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Interaction_Parameters_0, VKij.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Critical_Temperatures_0_K, VTc.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Critical_Pressures_0_Pa, VPc.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Acentric_Factors_0, Vw.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.State_0, TIPO))
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Calculated Intermediate Parameters</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Calculated_Intermediate_Parameters))
 
             Dim dadt, n, R, Z As Double
             Dim i, j As Integer

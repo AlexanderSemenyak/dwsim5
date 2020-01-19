@@ -1,0 +1,376 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Calculated_Intermediate_Parameters" xml:space="preserve">
+    <value>&lt;h2&gt;Результаты вычисления промежуточных результатов&lt;/h2&gt;</value>
+  </data>
+  <data name="State_0" xml:space="preserve">
+    <value>Состояние: {0}</value>
+  </data>
+  <data name="Acentric_Factors_0" xml:space="preserve">
+    <value>Факторы ацентричности: {0}</value>
+  </data>
+  <data name="Critical_Pressures_0_Pa" xml:space="preserve">
+    <value>Критические давления: {0} Па"</value>
+  </data>
+  <data name="Critical_Temperatures_0_K" xml:space="preserve">
+    <value>Критические температуры: {0} K</value>
+  </data>
+  <data name="Interaction_Parameters_0" xml:space="preserve">
+    <value>Параметры взаимодействия: {0}</value>
+  </data>
+  <data name="Ideal_Gas_Heat_Capacities_0" xml:space="preserve">
+    <value>Теплоемкости идеального газа: {0}</value>
+  </data>
+  <data name="Mole_Fractions_0" xml:space="preserve">
+    <value>Мольные доли: {0}</value>
+  </data>
+  <data name="Pressure_0_Pa" xml:space="preserve">
+    <value>Давление: {0} Па</value>
+  </data>
+  <data name="Temperature_0_K" xml:space="preserve">
+    <value>Температура: {0} K</value>
+  </data>
+  <data name="Input_Parameters" xml:space="preserve">
+    <value>&lt;h2&gt;Исходные данные&lt;/h2&gt;</value>
+  </data>
+  <data name="Peng_Robinson_EOS_Heat_Capacity_Ratio_Calculation_Routine" xml:space="preserve">
+    <value>Процедура расчета коэффициента теплоемкости для уравнения состояния Пенга-Робинсона (Peng-Robinson EOS)</value>
+  </data>
+  <data name="Compounds_0" xml:space="preserve">
+    <value>Флюиды: {0}</value>
+  </data>
+  <data name="Starting_Liquid_Phase_Stability_Test_T_0_K_P_1_Pa_for_the_following_trial_phases" xml:space="preserve">
+    <value>Начало проверки стабильности жидкой фазы  @ T = {0} K &amp; P = {1} Па для следующих этапов испытаний:</value>
+  </data>
+  <data name="The_compressibility_factor_liquid_or_vapor_can_be_obtained_from_the_equation" xml:space="preserve">
+    <value>Коэффициент сжимаемости (жидкая или газовая фаза) может быть получен из уравнения</value>
+  </data>
+  <data name="Phase_1_composition_0" xml:space="preserve">
+    <value>Состав 1-й фазы: {0}</value>
+  </data>
+  <data name="Phase_2_composition_0" xml:space="preserve">
+    <value>Состав 2-й фазы: {0}</value>
+  </data>
+  <data name="Calculation_Type_0" xml:space="preserve">
+    <value>Способ вычисления: {0}</value>
+  </data>
+  <data name="Enthalpy_0_kJ_kg" xml:space="preserve">
+    <value>Энтальпия: {0} кДж/кг (kJ/kg)</value>
+  </data>
+  <data name="Mass_Flow_0_kg_s" xml:space="preserve">
+    <value>Массовый поток: {0} кг/с</value>
+  </data>
+  <data name="Inlet_Stream_0" xml:space="preserve">
+    <value>&lt;h3&gt;Входящий поток #{0}&lt;/h3&gt;</value>
+  </data>
+  <data name="Calculated_Parameters" xml:space="preserve">
+    <value>&lt;h2&gt;Результаты вычисления&lt;/h2&gt;</value>
+  </data>
+  <data name="Results" xml:space="preserve">
+    <value>&lt;h2&gt;Результаты&lt;/h2&gt;</value>
+  </data>
+  <data name="Overal_Heat_Transfer_Coefficient_Calculation_Routine" xml:space="preserve">
+    <value>Процедура расчета общего коэффициента теплопередачи (термопереноса)</value>
+  </data>
+  <data name="This_Is_the_external_loop_To_converge_pressure_When_outlet_temperature_Is_specified_Or_vice_versa" xml:space="preserve">
+    <value>Это внешний цикл, рассчитывающий давление, когда указана температура или наоборот.</value>
+  </data>
+  <data name="External_Diameter_0_m" xml:space="preserve">
+    <value>Внешний диаметр = {0} м</value>
+  </data>
+  <data name="External_Temperature_0_K" xml:space="preserve">
+    <value>Внешняя температура = {0} K</value>
+  </data>
+  <data name="Fluid_Temperature_0_K" xml:space="preserve">
+    <value>Температура флюида = {0} K</value>
+  </data>
+  <data name="Include_External_HTC_0" xml:space="preserve">
+    <value>Включая внешний теплообмен (HTC) = {0}</value>
+  </data>
+  <data name="Include_Insulation_0" xml:space="preserve">
+    <value>Включая теплоизоляцию = {0}</value>
+  </data>
+  <data name="Include_Internal_HTC_0" xml:space="preserve">
+    <value>Включая внутренний теплообмен (HTC) = {0}</value>
+  </data>
+  <data name="Include_Pipe_Wall_0" xml:space="preserve">
+    <value>Включая толщину стенки = {0}</value>
+  </data>
+  <data name="Internal_Diameter_0_m" xml:space="preserve">
+    <value>Внутренний диаметр = {0} м</value>
+  </data>
+  <data name="Length_0_m" xml:space="preserve">
+    <value>Длина = {0} м</value>
+  </data>
+  <data name="Liquid_Holdup_0" xml:space="preserve">
+    <value>Выпадение жидкой фазы = {0}</value>
+  </data>
+  <data name="Liquid_Phase_Cp_0_kJ_kg_K" xml:space="preserve">
+    <value>Теплоемкость жидкой фазы Cp = {0} кДж/[кг.K]</value>
+  </data>
+  <data name="Liquid_Phase_Density_0_kg_m3" xml:space="preserve">
+    <value>Плотность жидкой фазы = {0} кг/м3</value>
+  </data>
+  <data name="Liquid_Phase_Thermal_Conductivity_0_W_m_K" xml:space="preserve">
+    <value>Теплопроводность жидкой фазы = {0} Вт/[м.K]</value>
+  </data>
+  <data name="Liquid_Phase_Velocity_0_m_s" xml:space="preserve">
+    <value>Скорость жидкой фазы = {0} м/с</value>
+  </data>
+  <data name="Pipe_Roughness_0_m" xml:space="preserve">
+    <value>Шероховатость трубы = {0} м</value>
+  </data>
+  <data name="Pipe_Wall_Material_0" xml:space="preserve">
+    <value>Материал трубы = {0}</value>
+  </data>
+  <data name="Vapor_Phase_Cp_0_kJ_kg_K" xml:space="preserve">
+    <value>Теплоемкость паровой фазы Cp = {0} кДж/[кг.K]</value>
+  </data>
+  <data name="Vapor_Phase_Density_0_kg_m3" xml:space="preserve">
+    <value>Плотность паровой фазы = {0} кг/м3</value>
+  </data>
+  <data name="Vapor_Phase_Thermal_Conductivity_0_W_m_K" xml:space="preserve">
+    <value>Теплопроводность паровой фазы = {0} Вт/[м.K]</value>
+  </data>
+  <data name="Vapor_Phase_Velocity_0_m_s" xml:space="preserve">
+    <value>Скорость паровой фазы = {0} м/с</value>
+  </data>
+  <data name="External_Loop_0" xml:space="preserve">
+    <value>Внешний цикл #{0}</value>
+  </data>
+  <data name="Pipe_Calculate_Paragraph_01" xml:space="preserve">
+    <value>Вычислительный блок Сегмент трубы (труба) может использоваться для 
+                                моделирования процесса потока флюида в трубе. В симуляторе доступны 
+                                следующие наиболее часто используемые корреляции для расчета перепада 
+                                давления (с учетом наклона трубы, типа истечения флюида (Lockhart and Martinelli, 
+                                Beggs &amp; Brill - жидкость-газ; эмпирическая; любой угол; 
+                                Petalas &amp; Aziz : жидкость-газ; механистическая; любой угол). 
+                                Температура может быть рассчитана с учетом влияния окружающей среды.</value>
+  </data>
+  <data name="Pipe_Calculate_Paragraph_02" xml:space="preserve">
+    <value>Сегмент трубы разделен на секции, которые могут быть прямыми трубами, 
+                                клапанами, угловыми отводами и т. д. Каждая секция делится на небольшие 
+                                секции для оценки динамики показателей в интересующих точках.</value>
+  </data>
+  <data name="Pipe_Calculate_Paragraph_03" xml:space="preserve">
+    <value>Сегмент трубы рассчитывается на основе балансов массы и энергии. 
+                            Полный алгоритм состоит из трех вложенных циклов. 
+                            Внешний цикл перебирает секции (приращения), 
+                            средний цикл выполняет итерации по температуре, 
+                            а внутренний цикл вычисляет давление. Давление и температура 
+                            рассчитываются следующим образом:</value>
+  </data>
+  <data name="Pipe_Calculate_Paragraph_04" xml:space="preserve">
+    <value>1. Температура и давление на входе используются для оценки 
+                           приращения давления и температуры на выходе.</value>
+  </data>
+  <data name="Pipe_Calculate_Paragraph_05" xml:space="preserve">
+    <value>2. Свойства флюида рассчитываются на основе среднего 
+                            арифметического входных и выходных условий.</value>
+  </data>
+  <data name="Pipe_Calculate_Paragraph_06" xml:space="preserve">
+    <value>3. Рассчитанные свойства и давление на входе используются для 
+                              расчета перепада давления. С его помощью 
+                              рассчитывается давление на выходе.</value>
+  </data>
+  <data name="Pipe_Calculate_Paragraph_07" xml:space="preserve">
+    <value>4. Расчетное и предполагаемое давления сравниваются, и, если их разность 
+                              превышает допуск, подставляется новое значение давления 
+                              на выходе, и шаги 2 и 3 повторяются.</value>
+  </data>
+  <data name="Pipe_Calculate_Paragraph_08" xml:space="preserve">
+    <value>5. После схождения внутреннего цикла рассчитывается температура 
+                              на выходе. Если был задан общий коэффициент 
+                              теплопередачи (U), температура на выходе 
+                              рассчитывается по следующему уравнению:</value>
+  </data>
+  <data name="Pipe_Calculate_Paragraph_09" xml:space="preserve">
+    <value>где: Q = теплообмен, A = площадь теплообмена (внешняя 
+                              поверхность) и `\Delta T_{ml}` = среднее 
+                              логарифмическое разницы температур.</value>
+  </data>
+  <data name="Pipe_Calculate_Paragraph_10" xml:space="preserve">
+    <value>6. Рассчитанная температура сравнивается с ожидаемой, и, 
+                            если их разность превышает указанный допуск, оценивается 
+                            новая температура и вычисляются новые свойства 
+                            (возврат к шагу 2).</value>
+  </data>
+  <data name="Pipe_Calculate_Paragraph_11" xml:space="preserve">
+    <value>7. Когда давление и температура сходятся, результаты передаются 
+                           на следующий шаг, где расчет повторяются.</value>
+  </data>
+  <data name="External_HTC_0_W_m2_K" xml:space="preserve">
+    <value>Коэффициент внешней теплоотдачи (HTC) = {0} Вт/[м2.K]</value>
+  </data>
+  <data name="Internal_HTC_0_W_m2_K" xml:space="preserve">
+    <value>Коэффициент внутренней теплоотдачи (HTC) = {0} W/[m2.K]</value>
+  </data>
+  <data name="Overall_HTC_0_W_m2_K" xml:space="preserve">
+    <value>Общий коэффициент теплоотдачи (HTC) = {0} W/[m2.K]</value>
+  </data>
+  <data name="Pipe_Insulation_HTC_0_W_m2_K" xml:space="preserve">
+    <value>Коэффициент теплоотдачи теплоизоляции трубы (HTC)= {0} W/[m2.K]</value>
+  </data>
+  <data name="Pipe_Wall_HTC_0_W_m2_K" xml:space="preserve">
+    <value>Коэффициент теплоотдачи стенки трубы (HTC) = {0} W/[m2.K]</value>
+  </data>
+  <data name="Flow_Regime" xml:space="preserve">
+    <value>Режим потока:</value>
+  </data>
+  <data name="Petalas_and_Aziz_Pressure_Drop" xml:space="preserve">
+    <value>Падение давления по корреляции Petalas and Aziz</value>
+  </data>
+  <data name="Petalas_and_Aziz_Multiphase_Pressure_Drop_Calculation_Routine" xml:space="preserve">
+    <value>Процедура расчета падения давления по корреляции Petalas and Aziz (механистическая модуль, мультифазный поток, учитывает наклон трубы)</value>
+  </data>
+  <data name="Compressibility_Factor_0" xml:space="preserve">
+    <value>Коэффициент сжимаемости: {0}</value>
+  </data>
+  <data name="Compressibility_Factor" xml:space="preserve">
+    <value>Коэффициент сжимаемости</value>
+  </data>
+  <data name="Peng_Robinson_EOS_Fugacity_Coefficient" xml:space="preserve">
+    <value>Коэффициент летучести для уравнения состояния Пенга-Робинсона</value>
+  </data>
+  <data name="Property_Package_Fugacity_Coefficient_Calculation_Routine" xml:space="preserve">
+    <value>Процедура расчета коэффициента летучести для уравнения состояния</value>
+  </data>
+  <data name="Vapor_Phase_Compressibility_Factor_0" xml:space="preserve">
+    <value>Коэффициент сжимаемости паровой фазы: {0}</value>
+  </data>
+  <data name="Intermediate_Calculations" xml:space="preserve">
+    <value>&lt;h2&gt;Промежуточные расчеты&lt;/h2&gt;</value>
+  </data>
+  <data name="Vapor_Phase_Density" xml:space="preserve">
+    <value>Плотность паровой фазы</value>
+  </data>
+  <data name="Vapor_Phase_Density_Calculation_Routine" xml:space="preserve">
+    <value>Процедура расчета плотности паровой фазы</value>
+  </data>
+  <data name="Property_Package_Entropy_Calculation_Routine" xml:space="preserve">
+    <value>Процедура расчета энтропии для уравнения состояния</value>
+  </data>
+  <data name="Property_Package_Enthalpy_Calculation_Routine" xml:space="preserve">
+    <value>Процедура расчета энтальпии для уравнения состояния</value>
+  </data>
+  <data name="Compressibility_Factor_Calculation_Routine" xml:space="preserve">
+    <value>Процедура расчета коэффициента сжимаемости</value>
+  </data>
+</root>

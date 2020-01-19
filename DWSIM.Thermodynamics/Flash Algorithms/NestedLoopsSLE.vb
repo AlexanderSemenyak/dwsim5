@@ -24,6 +24,7 @@ Imports DWSIM.MathOps.MathEx.Common
 Imports System.Threading.Tasks
 
 Imports System.Linq
+Imports DWSIM.Interfaces.My.Resources
 
 Namespace PropertyPackages.Auxiliary.FlashAlgorithms
 
@@ -363,13 +364,13 @@ out:        Return New Object() {L, V, Vx, Vy, ecount, 0.0#, PP.RET_NullVector, 
                 GoTo out
             End If
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
 
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
-            IObj?.Paragraphs.Add(String.Format("Pressure: {0} Pa", P))
-            IObj?.Paragraphs.Add(String.Format("Compounds: {0}", PP.RET_VNAMES.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Mole Fractions: {0}", Vz.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Critical Temperatures: {0} K", Tc.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Compounds_0, PP.RET_VNAMES.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Mole_Fractions_0, Vz.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Critical_Temperatures_0_K, Tc.ToMathArrayString))
             IObj?.Paragraphs.Add(String.Format("Fusion Temperatures: {0} K", Tf.ToMathArrayString))
             IObj?.Paragraphs.Add(String.Format("Fusion Enthalpies: {0} kJ/mol", Hf.ToMathArrayString))
 
@@ -618,12 +619,12 @@ out:        d2 = Date.Now
             L = 1.0
             V = 0.0
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
 
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
-            IObj?.Paragraphs.Add(String.Format("Pressure: {0} Pa", P))
-            IObj?.Paragraphs.Add(String.Format("Compounds: {0}", PP.RET_VNAMES.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Mole Fractions: {0}", Vz.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Compounds_0, PP.RET_VNAMES.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Mole_Fractions_0, Vz.ToMathArrayString))
 
             IObj?.Paragraphs.Add(String.Format("<h2>Calculated Parameters</h2>"))
 
@@ -1139,12 +1140,12 @@ out:        Return New Object() {L, V, Vxl, Vxv, ecount, 0.0#, PP.RET_NullVector
 
             If Tref = 0 Then Tref = 300.0#
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
 
-            IObj?.Paragraphs.Add(String.Format("Pressure: {0} Pa", P))
-            IObj?.Paragraphs.Add(String.Format("Enthalpy: {0} kJ/kg", H))
-            IObj?.Paragraphs.Add(String.Format("Compounds: {0}", PP.RET_VNAMES.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Mole Fractions: {0}", Vz.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Enthalpy_0_kJ_kg, H))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Compounds_0, PP.RET_VNAMES.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Mole_Fractions_0, Vz.ToMathArrayString))
             IObj?.Paragraphs.Add(String.Format("Initial estimate for T: {0} K", Tref))
 
             x1 = Tref
@@ -1260,12 +1261,12 @@ alt:            T = bo.BrentOpt(Tinf, Tsup, 100, tolEXT, maxitEXT, {P, Vz, PP})
             If Tref = 0 Then Tref = 298.15
             x1 = Tref
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
 
-            IObj?.Paragraphs.Add(String.Format("Pressure: {0} Pa", P))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
             IObj?.Paragraphs.Add(String.Format("Entropy: {0} kJ/kg", S))
-            IObj?.Paragraphs.Add(String.Format("Compounds: {0}", PP.RET_VNAMES.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Mole Fractions: {0}", Vz.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Compounds_0, PP.RET_VNAMES.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Mole_Fractions_0, Vz.ToMathArrayString))
             IObj?.Paragraphs.Add(String.Format("Initial estimate for T: {0} K", Tref))
 
             Try

@@ -25,6 +25,7 @@ Imports System.Linq
 Imports DWSIM.Interfaces.Enums
 Imports System.IO
 Imports System.Reflection
+Imports DWSIM.Interfaces.My.Resources
 
 Namespace PropertyPackages
 
@@ -704,7 +705,7 @@ Namespace PropertyPackages
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-            Inspector.Host.CheckAndAdd(IObj, "", "AUX_Z", "Compressibility Factor", "Compressibility Factor Calculation Routine")
+            Inspector.Host.CheckAndAdd(IObj, "", "AUX_Z", SolutionInspector.Compressibility_Factor, SolutionInspector.Compressibility_Factor_Calculation_Routine)
 
             IObj?.SetCurrent()
 
@@ -716,9 +717,9 @@ Namespace PropertyPackages
             End If
 
 
-            IObj?.Paragraphs.Add("<h2>Results</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Results)
 
-            IObj?.Paragraphs.Add(String.Format("Compressibility Factor: {0}", val))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Compressibility_Factor_0, val))
 
             IObj?.Close()
 

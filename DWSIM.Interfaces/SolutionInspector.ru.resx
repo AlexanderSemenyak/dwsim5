@@ -1,0 +1,376 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Calculated_Intermediate_Parameters" xml:space="preserve">
+    <value>&lt;h2&gt;Calculated Intermediate Parameters&lt;/h2&gt;</value>
+  </data>
+  <data name="State_0" xml:space="preserve">
+    <value>State {0}</value>
+  </data>
+  <data name="Acentric_Factors_0" xml:space="preserve">
+    <value>Acentric Factors: {0}</value>
+  </data>
+  <data name="Critical_Pressures_0_Pa" xml:space="preserve">
+    <value>Critical Pressures: {0} Pa"</value>
+  </data>
+  <data name="Critical_Temperatures_0_K" xml:space="preserve">
+    <value>Critical Temperatures: {0} K</value>
+  </data>
+  <data name="Interaction_Parameters_0" xml:space="preserve">
+    <value>Interaction Parameters: {0}</value>
+  </data>
+  <data name="Ideal_Gas_Heat_Capacities_0" xml:space="preserve">
+    <value>Ideal Gas Heat Capacities: {0}</value>
+  </data>
+  <data name="Mole_Fractions_0" xml:space="preserve">
+    <value>Mole Fractions: {0}</value>
+  </data>
+  <data name="Temperature_0_K" xml:space="preserve">
+    <value>Temperature: {0} K</value>
+  </data>
+  <data name="Input_Parameters" xml:space="preserve">
+    <value>&lt;h2&gt;Input Parameters&lt;/h2&gt;</value>
+  </data>
+  <data name="Peng_Robinson_EOS_Heat_Capacity_Ratio_Calculation_Routine" xml:space="preserve">
+    <value>Peng-Robinson EOS Heat Capacity Ratio Calculation Routine</value>
+  </data>
+  <data name="Compounds_0" xml:space="preserve">
+    <value>Compounds: {0}</value>
+  </data>
+  <data name="Starting_Liquid_Phase_Stability_Test_T_0_K_P_1_Pa_for_the_following_trial_phases" xml:space="preserve">
+    <value>Starting Liquid Phase Stability Test @ T = {0} K &amp; P = {1} Pa for the following trial phases:</value>
+  </data>
+  <data name="The_compressibility_factor_liquid_or_vapor_can_be_obtained_from_the_equation" xml:space="preserve">
+    <value>The compressibility factor (liquid or vapor) can be obtained from the equation</value>
+  </data>
+  <data name="Phase_1_composition_0" xml:space="preserve">
+    <value>Phase 1 composition: {0}</value>
+  </data>
+  <data name="Phase_2_composition_0" xml:space="preserve">
+    <value>Phase 2 composition: {0}</value>
+  </data>
+  <data name="Calculation_Type_0" xml:space="preserve">
+    <value>Calculation Type: {0}</value>
+  </data>
+  <data name="Enthalpy_0_kJ_kg" xml:space="preserve">
+    <value>Enthalpy: {0} kJ/kg</value>
+  </data>
+  <data name="Mass_Flow_0_kg_s" xml:space="preserve">
+    <value>Mass Flow: {0} kg/s</value>
+  </data>
+  <data name="Inlet_Stream_0" xml:space="preserve">
+    <value>&lt;h3&gt;Inlet Stream #{0}&lt;/h3&gt;</value>
+  </data>
+  <data name="Calculated_Parameters" xml:space="preserve">
+    <value>&lt;h2&gt;Calculated Parameters&lt;/h2&gt;</value>
+  </data>
+  <data name="Results" xml:space="preserve">
+    <value>&lt;h2&gt;Results&lt;/h2&gt;</value>
+  </data>
+  <data name="Pipe_Wall_Material_0" xml:space="preserve">
+    <value>Pipe Wall Material = {0}</value>
+  </data>
+  <data name="Pressure_0_Pa" xml:space="preserve">
+    <value>Pressure: {0} Pa</value>
+  </data>
+  <data name="Liquid_Holdup_0" xml:space="preserve">
+    <value>Liquid Holdup = {0}</value>
+  </data>
+  <data name="Length_0_m" xml:space="preserve">
+    <value>Length = {0} m</value>
+  </data>
+  <data name="Internal_Diameter_0_m" xml:space="preserve">
+    <value>Internal Diameter = {0} m</value>
+  </data>
+  <data name="External_Diameter_0_m" xml:space="preserve">
+    <value>External Diameter = {0} m</value>
+  </data>
+  <data name="Pipe_Roughness_0_m" xml:space="preserve">
+    <value>Pipe Roughness = {0} m</value>
+  </data>
+  <data name="Fluid_Temperature_0_K" xml:space="preserve">
+    <value>Fluid Temperature = {0} K</value>
+  </data>
+  <data name="External_Temperature_0_K" xml:space="preserve">
+    <value>External Temperature = {0} K</value>
+  </data>
+  <data name="Vapor_Phase_Velocity_0_m_s" xml:space="preserve">
+    <value>Vapor Phase Velocity = {0} m/s</value>
+  </data>
+  <data name="Liquid_Phase_Velocity_0_m_s" xml:space="preserve">
+    <value>Liquid Phase Velocity = {0} m/s</value>
+  </data>
+  <data name="Vapor_Phase_Cp_0_kJ_kg_K" xml:space="preserve">
+    <value>Vapor Phase Cp = {0} kJ/[kg.K]</value>
+  </data>
+  <data name="Liquid_Phase_Cp_0_kJ_kg_K" xml:space="preserve">
+    <value>Liquid Phase Cp = {0} kJ/[kg.K]</value>
+  </data>
+  <data name="Vapor_Phase_Thermal_Conductivity_0_W_m_K" xml:space="preserve">
+    <value>Vapor Phase Thermal Conductivity = {0} W/[m.K]</value>
+  </data>
+  <data name="Liquid_Phase_Thermal_Conductivity_0_W_m_K" xml:space="preserve">
+    <value>Liquid Phase Thermal Conductivity = {0} W/[m.K]</value>
+  </data>
+  <data name="Vapor_Phase_Density_0_kg_m3" xml:space="preserve">
+    <value>Vapor Phase Density = {0} kg/m3</value>
+  </data>
+  <data name="Liquid_Phase_Density_0_kg_m3" xml:space="preserve">
+    <value>Liquid Phase Density = {0} kg/m3</value>
+  </data>
+  <data name="Include_External_HTC_0" xml:space="preserve">
+    <value>Include External HTC = {0}</value>
+  </data>
+  <data name="Include_Internal_HTC_0" xml:space="preserve">
+    <value>Include Internal HTC = {0}</value>
+  </data>
+  <data name="Include_Insulation_0" xml:space="preserve">
+    <value>Include Insulation = {0}</value>
+  </data>
+  <data name="Include_Pipe_Wall_0" xml:space="preserve">
+    <value>Include Pipe Wall = {0}</value>
+  </data>
+  <data name="This_Is_the_external_loop_To_converge_pressure_When_outlet_temperature_Is_specified_Or_vice_versa" xml:space="preserve">
+    <value>This Is the external loop To converge pressure When outlet temperature Is specified Or vice-versa.</value>
+  </data>
+  <data name="Overal_Heat_Transfer_Coefficient_Calculation_Routine" xml:space="preserve">
+    <value>Overal Heat Transfer Coefficient Calculation Routine</value>
+  </data>
+  <data name="External_Loop_0" xml:space="preserve">
+    <value>External Loop #{0}</value>
+  </data>
+  <data name="Pipe_Calculate_Paragraph_01" xml:space="preserve">
+    <value>The Pipe Segment unit operation  can be used to 
+                                simulate fluid flow process in a pipe. Two of the most used 
+                                correlations for the calculation of pressure drop are available 
+                                in DWSIM. Temperature can be rigorously calculated considering 
+                                the influence of the environment. With the help of the Recycle 
+                                Logical Operation, the user can build large water distribution 
+                                systems, as an example.</value>
+  </data>
+  <data name="Pipe_Calculate_Paragraph_02" xml:space="preserve">
+    <value>The pipe segment is divided in sections, which can be straight 
+                                tubes, valves, curves, etc. Each section is subdivided in small 
+                                sections for calculation purposes, as defined by the user.</value>
+  </data>
+  <data name="Pipe_Calculate_Paragraph_03" xml:space="preserve">
+    <value>The pipe segment is calculated based on incremental mass and 
+                            energy balances. The complete algorithm consists in three nested 
+                            loops. The external loop iterates on the sections (increments), 
+                            the middle loop iterates on the temperature and the internal loop 
+                            calculates the pressure. The pressure and temperature are 
+                            calculated as follows:</value>
+  </data>
+  <data name="Pipe_Calculate_Paragraph_04" xml:space="preserve">
+    <value>1. The inlet temperature and pressure are used to estimate the 
+                            increment outlet pressure and temperature.</value>
+  </data>
+  <data name="Pipe_Calculate_Paragraph_05" xml:space="preserve">
+    <value>2. Fluid properties are calculated based in a arithmetic mean of 
+                            inlet and outlet conditions.</value>
+  </data>
+  <data name="Pipe_Calculate_Paragraph_06" xml:space="preserve">
+    <value>3. The calculated properties and the inlet pressure are used to 
+                              calculate the pressure drop. With it, the outlet pressure is 
+                              calculated.</value>
+  </data>
+  <data name="Pipe_Calculate_Paragraph_07" xml:space="preserve">
+    <value>4. The calculated and estimated pressure are compared, and if 
+                              their difference exceeds the tolerance, a new outlet pressure 
+                              is estimated, and the steps 2 and 3 are repeated.</value>
+  </data>
+  <data name="Pipe_Calculate_Paragraph_08" xml:space="preserve">
+    <value>5. Once the internal loop has converged, the outlet temperature 
+                              is calculated. If the global heat transfer coefficient (U) was 
+                              given, the outlet temperature is calculated from the following 
+                              equation:</value>
+  </data>
+  <data name="Pipe_Calculate_Paragraph_09" xml:space="preserve">
+    <value>where: Q = heat transferred, A = heat transfer area (external 
+                              surface) and `\Delta T_{ml}` = logarithmic mean temperature 
+                              difference.</value>
+  </data>
+  <data name="Pipe_Calculate_Paragraph_10" xml:space="preserve">
+    <value>6. The calculated temperature is compared to the estimated one, 
+                              and if their difference exceeds the specified tolerance, a new 
+                              temperature is estimated and new properties are calculated 
+                              (return to step 2).</value>
+  </data>
+  <data name="Pipe_Calculate_Paragraph_11" xml:space="preserve">
+    <value>7. When both pressure and temperature converges, the results are 
+                            passed to the next increment, where calculation restarts.</value>
+  </data>
+  <data name="External_HTC_0_W_m2_K" xml:space="preserve">
+    <value>External HTC = {0} W/[m2.K]</value>
+  </data>
+  <data name="Internal_HTC_0_W_m2_K" xml:space="preserve">
+    <value>Internal HTC = {0} W/[m2.K]</value>
+  </data>
+  <data name="Pipe_Wall_HTC_0_W_m2_K" xml:space="preserve">
+    <value>Pipe Wall HTC = {0} W/[m2.K]</value>
+  </data>
+  <data name="Pipe_Insulation_HTC_0_W_m2_K" xml:space="preserve">
+    <value>Pipe Insulation HTC = {0} W/[m2.K]</value>
+  </data>
+  <data name="Overall_HTC_0_W_m2_K" xml:space="preserve">
+    <value>Overall HTC = {0} W/[m2.K]</value>
+  </data>
+  <data name="Flow_Regime" xml:space="preserve">
+    <value>Flow Regime:</value>
+  </data>
+  <data name="Petalas_and_Aziz_Pressure_Drop" xml:space="preserve">
+    <value>Petalas and Aziz Pressure Drop</value>
+  </data>
+  <data name="Petalas_and_Aziz_Multiphase_Pressure_Drop_Calculation_Routine" xml:space="preserve">
+    <value>Petalas and Aziz Multiphase Pressure Drop Calculation Routine</value>
+  </data>
+  <data name="Compressibility_Factor_0" xml:space="preserve">
+    <value>Compressibility Factor: {0}</value>
+  </data>
+  <data name="Compressibility_Factor" xml:space="preserve">
+    <value>Compressibility Factor</value>
+  </data>
+  <data name="Peng_Robinson_EOS_Fugacity_Coefficient" xml:space="preserve">
+    <value>Peng-Robinson EOS Fugacity Coefficient</value>
+  </data>
+  <data name="Property_Package_Fugacity_Coefficient_Calculation_Routine" xml:space="preserve">
+    <value>Property Package Fugacity Coefficient Calculation Routine</value>
+  </data>
+  <data name="Vapor_Phase_Compressibility_Factor_0" xml:space="preserve">
+    <value>Vapor Phase Compressibility Factor: {0}</value>
+  </data>
+  <data name="Intermediate_Calculations" xml:space="preserve">
+    <value>&lt;h2&gt;Intermediate Calculations&lt;/h2&gt;</value>
+  </data>
+  <data name="Vapor_Phase_Density" xml:space="preserve">
+    <value>Vapor Phase Density</value>
+  </data>
+  <data name="Vapor_Phase_Density_Calculation_Routine" xml:space="preserve">
+    <value>Vapor Phase Density Calculation Routine</value>
+  </data>
+  <data name="Property_Package_Entropy_Calculation_Routine" xml:space="preserve">
+    <value>Property Package Entropy Calculation Routine</value>
+  </data>
+  <data name="Property_Package_Enthalpy_Calculation_Routine" xml:space="preserve">
+    <value>Property Package Enthalpy Calculation Routine</value>
+  </data>
+  <data name="Compressibility_Factor_Calculation_Routine" xml:space="preserve">
+    <value>Compressibility Factor Calculation Routine</value>
+  </data>
+</root>

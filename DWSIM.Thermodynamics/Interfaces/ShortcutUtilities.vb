@@ -95,7 +95,7 @@ Namespace ShortcutUtilities
 
                     Case CalculationType.CriticalPoint
 
-                        If pp.ComponentName.Equals("Peng-Robinson (PR)") Then
+                        If pp.ComponentName.Equals("Peng-Robinson (PR)") or pp.ComponentName.Equals("Peng-Robinson (Advanced)") Then
 
                             Dim res As ArrayList = DirectCast(pp, PengRobinsonPropertyPackage).ReturnCriticalPoints()
 
@@ -103,62 +103,30 @@ Namespace ShortcutUtilities
                                 results.Data.Add("CriticalPoint", New List(Of Double) From {dl(0).ConvertFromSI(Units.temperature), dl(1).ConvertFromSI(Units.pressure), dl(2).ConvertFromSI(Units.molar_volume)})
                             Next
 
-                            If results.Language.Equals("pt-BR") Then
+                            results.TextOutput += "True Critical Point calculation results for " & MixName & " " & Compounds.ToArrayString & System.Environment.NewLine
+                            results.TextOutput += "Property Package: " & PropertyPackageName & System.Environment.NewLine & System.Environment.NewLine
+                            If res(0)(3) = 0.0# Then results.TextOutput += "True Critical Point calculation failed. Showing mole-fraction averaged compound values." & System.Environment.NewLine
+                            results.TextOutput += "Critical Temperature: " & results.Data("CriticalPoint")(0).ToString(results.NumberFormat) & " " & Units.temperature & System.Environment.NewLine
+                            results.TextOutput += "Critical Pressure: " & results.Data("CriticalPoint")(1).ToString(results.NumberFormat) & " " & Units.pressure & System.Environment.NewLine
+                            results.TextOutput += "Critical Volume: " & results.Data("CriticalPoint")(2).ToString(results.NumberFormat) & " " & Units.molar_volume & System.Environment.NewLine
 
-                                results.TextOutput += "Resultados do cálculo do Ponto Crítico Verdadeiro para a mistura " & MixName & " " & Compounds.ToArrayString & System.Environment.NewLine
-                                results.TextOutput += "Pacote de Propriedades: " & PropertyPackageName & System.Environment.NewLine & System.Environment.NewLine
-                                If res(0)(3) = 0.0# Then results.TextOutput += "Cálculo do Ponto Crítico Verdadeiro falhou. Mostrando informações como uma média ponderada das propriedades individuais." & System.Environment.NewLine
-                                results.TextOutput += "Temperatura crítica: " & results.Data("CriticalPoint")(0).ToString(results.NumberFormat) & " " & Units.temperature & System.Environment.NewLine
-                                results.TextOutput += "Pressão crítica: " & results.Data("CriticalPoint")(1).ToString(results.NumberFormat) & " " & Units.pressure & System.Environment.NewLine
-                                results.TextOutput += "Volume crítico: " & results.Data("CriticalPoint")(2).ToString(results.NumberFormat) & " " & Units.molar_volume & System.Environment.NewLine
+                        ElseIf pp.ComponentName.Equals("Soave-Redlich-Kwong (SRK)") Or  pp.ComponentName.Equals("Soave-Redlich-Kwong (Advanced)") Then
 
-                            Else
-
-                                results.TextOutput += "True Critical Point calculation results for " & MixName & " " & Compounds.ToArrayString & System.Environment.NewLine
-                                results.TextOutput += "Property Package: " & PropertyPackageName & System.Environment.NewLine & System.Environment.NewLine
-                                If res(0)(3) = 0.0# Then results.TextOutput += "True Critical Point calculation failed. Showing mole-fraction averaged compound values." & System.Environment.NewLine
-                                results.TextOutput += "Critical Temperature: " & results.Data("CriticalPoint")(0).ToString(results.NumberFormat) & " " & Units.temperature & System.Environment.NewLine
-                                results.TextOutput += "Critical Pressure: " & results.Data("CriticalPoint")(1).ToString(results.NumberFormat) & " " & Units.pressure & System.Environment.NewLine
-                                results.TextOutput += "Critical Volume: " & results.Data("CriticalPoint")(2).ToString(results.NumberFormat) & " " & Units.molar_volume & System.Environment.NewLine
-
-                            End If
-
-                        ElseIf pp.ComponentName.Equals("Soave-Redlich-Kwong (SRK)") Then
-
-                            Dim res As New List(Of Double()) '= DirectCast(pp, SimulationObjects.PropertyPackages.SoaveRedlichKwongPropertyPackage).ReturnCriticalPoints()
+                            Dim res As ArrayList = DirectCast(pp, SRKPropertyPackage).ReturnCriticalPoints()
 
                             For Each dl As Double() In res
                                 results.Data.Add("CriticalPoint", New List(Of Double) From {dl(0).ConvertFromSI(Units.temperature), dl(1).ConvertFromSI(Units.pressure), dl(2).ConvertFromSI(Units.molar_volume)})
                             Next
 
-                            If results.Language.Equals("pt-BR") Then
-
-                                results.TextOutput += "Resultados do cálculo do Ponto Crítico Verdadeiro para a mistura " & MixName & " " & Compounds.ToArrayString & System.Environment.NewLine
-                                results.TextOutput += "Pacote de Propriedades: " & PropertyPackageName & System.Environment.NewLine & System.Environment.NewLine
-                                If res(0)(3) = 0.0# Then results.TextOutput += "Cálculo do Ponto Crítico Verdadeiro falhou. Mostrando informações como uma média ponderada das propriedades individuais." & System.Environment.NewLine
-                                results.TextOutput += "Temperatura crítica: " & results.Data("CriticalPoint")(0).ToString(results.NumberFormat) & " " & Units.temperature & System.Environment.NewLine
-                                results.TextOutput += "Pressão crítica: " & results.Data("CriticalPoint")(1).ToString(results.NumberFormat) & " " & Units.pressure & System.Environment.NewLine
-                                results.TextOutput += "Volume crítico: " & results.Data("CriticalPoint")(2).ToString(results.NumberFormat) & " " & Units.molar_volume & System.Environment.NewLine
-
-                            Else
-
-                                results.TextOutput += "True Critical Point calculation results for " & MixName & " " & Compounds.ToArrayString & System.Environment.NewLine
-                                results.TextOutput += "Property Package: " & PropertyPackageName & System.Environment.NewLine & System.Environment.NewLine
-                                If res(0)(3) = 0.0# Then results.TextOutput += "True Critical Point calculation failed. Showing mole-fraction averaged compound values." & System.Environment.NewLine
-                                results.TextOutput += "Critical Temperature: " & results.Data("CriticalPoint")(0).ToString(results.NumberFormat) & " " & Units.temperature & System.Environment.NewLine
-                                results.TextOutput += "Critical Pressure: " & results.Data("CriticalPoint")(1).ToString(results.NumberFormat) & " " & Units.pressure & System.Environment.NewLine
-                                results.TextOutput += "Critical Volume: " & results.Data("CriticalPoint")(2).ToString(results.NumberFormat) & " " & Units.molar_volume & System.Environment.NewLine
-
-                            End If
+                            results.TextOutput += "True Critical Point calculation results for " & MixName & " " & Compounds.ToArrayString & System.Environment.NewLine
+                            results.TextOutput += "Property Package: " & PropertyPackageName & System.Environment.NewLine & System.Environment.NewLine
+                            If res(0)(3) = 0.0# Then results.TextOutput += "True Critical Point calculation failed. Showing mole-fraction averaged compound values." & System.Environment.NewLine
+                            results.TextOutput += "Critical Temperature: " & results.Data("CriticalPoint")(0).ToString(results.NumberFormat) & " " & Units.temperature & System.Environment.NewLine
+                            results.TextOutput += "Critical Pressure: " & results.Data("CriticalPoint")(1).ToString(results.NumberFormat) & " " & Units.pressure & System.Environment.NewLine
+                            results.TextOutput += "Critical Volume: " & results.Data("CriticalPoint")(2).ToString(results.NumberFormat) & " " & Units.molar_volume & System.Environment.NewLine
 
                         Else
-
-                            If results.Language.Equals("pt-BR") Then
-                                Throw New Exception("Modelo inválido.")
-                            Else
-                                Throw New Exception("The Critical Point utility works with PR or SRK Property Package only.")
-                            End If
-
+                                Throw New Exception("The Critical Point utility works with PR (+Advanced version) or SRK (+Advanced version) Property Package only.")
                         End If
 
                     Case CalculationType.BinaryEnvelopeTxy

@@ -25,6 +25,7 @@ Imports System.Linq
 Imports System.Runtime.CompilerServices
 Imports DWSIM.Interfaces
 Imports DWSIM.Interfaces.Enums
+Imports DWSIM.Interfaces.My.Resources
 Imports DWSIM.Thermodynamics.PropertyPackages.Auxiliary
 
 Namespace PropertyPackages
@@ -728,7 +729,7 @@ Namespace PropertyPackages
 
                 Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-                Inspector.Host.CheckAndAdd(IObj, "", "DW_CalcEnthalpy", "Peng-Robinson EOS Enthalpy", "Property Package Enthalpy Calculation Routine")
+                Inspector.Host.CheckAndAdd(IObj, "", "DW_CalcEnthalpy", "Peng-Robinson EOS Enthalpy", SolutionInspector.Property_Package_Enthalpy_Calculation_Routine)
 
                 IObj?.SetCurrent()
 
@@ -780,7 +781,7 @@ Namespace PropertyPackages
 
                 Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-                Inspector.Host.CheckAndAdd(IObj, "", "DW_CalcEntropy", "Peng-Robinson EOS Entropy", "Property Package Entropy Calculation Routine")
+                Inspector.Host.CheckAndAdd(IObj, "", "DW_CalcEntropy", "Peng-Robinson EOS Entropy", SolutionInspector.Property_Package_Entropy_Calculation_Routine)
 
                 IObj?.SetCurrent()
 
@@ -917,15 +918,15 @@ Namespace PropertyPackages
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-            Inspector.Host.CheckAndAdd(IObj, "", "AUX_VAPDENS", "Vapor Phase Density", "Vapor Phase Density Calculation Routine")
+            Inspector.Host.CheckAndAdd(IObj, "", "AUX_VAPDENS", SolutionInspector.Vapor_Phase_Density, SolutionInspector.Vapor_Phase_Density_Calculation_Routine)
 
             IObj?.SetCurrent()
 
             Dim val As Double
             val = m_pr.Z_PR(T, P, RET_VMOL(Phase.Vapor), RET_VKij(), RET_VTC, RET_VPC, RET_VW, "V")
 
-            IObj?.Paragraphs.Add("<h2>Intermediate Calculations</h2>")
-            IObj?.Paragraphs.Add(String.Format("Vapor Phase Compressibility Factor: {0}", val))
+            IObj?.Paragraphs.Add(SolutionInspector.Intermediate_Calculations)
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Vapor_Phase_Compressibility_Factor_0, val))
 
             val = (8.314 * val * T / P)
             If LiquidDensity_UsePenelouxVolumeTranslation Then
@@ -933,9 +934,9 @@ Namespace PropertyPackages
             End If
             val = 1 / val * Me.AUX_MMM(Phase.Vapor) / 1000
 
-            IObj?.Paragraphs.Add("<h2>Results</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Results)
 
-            IObj?.Paragraphs.Add(String.Format("Vapor Phase Density: {0} kg/m3", val))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Vapor_Phase_Density_0_kg_m3, val))
 
             IObj?.Close()
 
@@ -951,16 +952,16 @@ Namespace PropertyPackages
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-            Inspector.Host.CheckAndAdd(IObj, "", "DW_CalcFugCoeff", "Peng-Robinson EOS Fugacity Coefficient", "Property Package Fugacity Coefficient Calculation Routine")
+            Inspector.Host.CheckAndAdd(IObj, "", "DW_CalcFugCoeff", SolutionInspector.Peng_Robinson_EOS_Fugacity_Coefficient, SolutionInspector.Property_Package_Fugacity_Coefficient_Calculation_Routine)
 
             IObj?.SetCurrent()
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
 
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
-            IObj?.Paragraphs.Add(String.Format("Pressure: {0} Pa", P))
-            IObj?.Paragraphs.Add(String.Format("Mole Fractions: {0}", DirectCast(Vx, Double()).ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("State: {0}", [Enum].GetName(st.GetType, st)))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Mole_Fractions_0, DirectCast(Vx, Double()).ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.State_0, [Enum].GetName(st.GetType, st)))
 
             Dim lnfug As Double()
 
@@ -1071,7 +1072,7 @@ Namespace PropertyPackages
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-            Inspector.Host.CheckAndAdd(IObj, "", "AUX_Z", "Compressibility Factor", "Compressibility Factor Calculation Routine")
+            Inspector.Host.CheckAndAdd(IObj, "", "AUX_Z", SolutionInspector.Compressibility_Factor, SolutionInspector.Compressibility_Factor_Calculation_Routine)
 
             IObj?.SetCurrent()
 
@@ -1088,9 +1089,9 @@ Namespace PropertyPackages
             End If
             val = P * val / (8.314 * T)
 
-            IObj?.Paragraphs.Add("<h2>Results</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Results)
 
-            IObj?.Paragraphs.Add(String.Format("Compressibility Factor: {0}", val))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Compressibility_Factor_0, val))
 
             IObj?.Close()
 

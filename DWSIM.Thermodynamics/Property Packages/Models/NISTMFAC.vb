@@ -22,6 +22,7 @@
 
 Imports Microsoft.VisualBasic.FileIO
 Imports System.Linq
+Imports DWSIM.Interfaces.My.Resources
 
 Namespace PropertyPackages.Auxiliary
 
@@ -195,14 +196,14 @@ Namespace PropertyPackages.Auxiliary
                                 insufficient number of experimental data points is available or 
                                 where existing data are conflicting.")
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
 
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
-            IObj?.Paragraphs.Add(String.Format("Mole Fractions: {0}", Vx.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Mole_Fractions_0, Vx.ToMathArrayString))
             IObj?.Paragraphs.Add(String.Format("Q: {0}", VQ.ToMathArrayString))
             IObj?.Paragraphs.Add(String.Format("R: {0}", VR.ToMathArrayString))
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Calculated Intermediate Parameters</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Calculated_Intermediate_Parameters))
 
             CheckParameters(VEKI)
 

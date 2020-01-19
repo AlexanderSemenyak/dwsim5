@@ -28,6 +28,7 @@ Imports DWSIM.Thermodynamics
 Imports DWSIM.MathOps.MathEx
 Imports DWSIM.MathOps.MathEx.Common
 Imports DotNumerics.Optimization
+Imports DWSIM.Interfaces.My.Resources
 
 Namespace Reactors
 
@@ -504,7 +505,7 @@ Namespace Reactors
 
             IObj?.Paragraphs.Add("where K is the equilibrium constant, 'basis' is the reaction basis for each reaction compound (i.e. activity, fugacity, partial pressure, etc.), and <mi>\nu</mi> is the stoichiometric coefficient.")
 
-            IObj?.Paragraphs.Add("<h2>Calculated Parameters</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Calculated_Parameters)
 
             _IObj = IObj
 

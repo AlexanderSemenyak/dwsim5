@@ -15,6 +15,7 @@
 '
 '    You should have received a copy of the GNU General Public License
 '    along with DWSIM.  If not, see <http://www.gnu.org/licenses/>.
+Imports DWSIM.Interfaces.My.Resources
 
 Namespace FlowPackages
     <Serializable()> Public Class LockhartMartinelli
@@ -43,7 +44,7 @@ Namespace FlowPackages
 
             IObj?.Paragraphs.Add("Reference: <a href='https://cheguide.com/tag/lockhart-martinelli/'>https://cheguide.com/tag/lockhart-martinelli/</a>")
 
-            IObj?.Paragraphs.Add("<h2>Input Parameters</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Input_Parameters)
 
             IObj?.Paragraphs.Add("<mi>D</mi> = " & D & " m")
             IObj?.Paragraphs.Add("<mi>L</mi> = " & L & " m")
@@ -57,7 +58,7 @@ Namespace FlowPackages
             IObj?.Paragraphs.Add("<mi>\rho _L</mi> = " & rhol & " kg/m3")
             IObj?.Paragraphs.Add("<mi>\sigma</mi> = " & surft & " N/m")
 
-            IObj?.Paragraphs.Add("<h2>Calculated Parameters</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Calculated_Parameters)
 
             CalculateDeltaP = Nothing
 
@@ -206,9 +207,9 @@ Namespace FlowPackages
 
             End If
 
-            IObj?.Paragraphs.Add("<h2>Results</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Results)
 
-            IObj?.Paragraphs.Add("Flow Regime: " & resvect(0))
+            IObj?.Paragraphs.Add(SolutionInspector.Flow_Regime & resvect(0))
             IObj?.Paragraphs.Add("<mi>e_L</mi> = " & resvect(1))
             IObj?.Paragraphs.Add("<mi>\Delta P_{friction}</mi> = " & resvect(2) & " Pa")
             IObj?.Paragraphs.Add("<mi>\Delta P_{elevation}</mi> = " & resvect(3) & " Pa")

@@ -24,6 +24,8 @@ Imports System.Text
 Imports DWSIM.SharedClasses.Flowsheet
 Imports System.Dynamic
 Imports DWSIM.Interfaces.Enums
+Imports DWSIM.Thermodynamics.SpecialEOS
+Imports DWSIM.Thermodynamics.SpecialEOS.PRSRKAdv
 
 <System.Runtime.InteropServices.ComVisible(True)> Public MustInherit Class FlowsheetBase
 
@@ -2073,6 +2075,12 @@ Label_00CC:
         Dim BOPP As BlackOilPropertyPackage = New BlackOilPropertyPackage()
         BOPP.ComponentName = "Black Oil"
         AvailablePropertyPackages.Add(BOPP.ComponentName.ToString, BOPP)
+
+        Dim SRKPPAdv = New SoaveRedlichKwongAdvancedPropertyPackage()
+        AvailablePropertyPackages.Add(SRKPPAdv.ComponentName.ToString, SRKPPAdv)
+
+        Dim PRPPAdv = New PengRobinsonAdvancedPropertyPackage()
+        AvailablePropertyPackages.Add(PRPPAdv.ComponentName.ToString, PRPPAdv)
 
         Dim otherpps = SharedClasses.Utility.LoadAdditionalPropertyPackages()
 

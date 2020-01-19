@@ -25,6 +25,7 @@ Imports DWSIM.UnitOperations.UnitOperations.Auxiliary
 Imports DWSIM.UnitOperations.UnitOperations.Auxiliary.Pipe
 Imports DWSIM.Thermodynamics.BaseClasses
 Imports DWSIM.Interfaces.Enums
+Imports DWSIM.Interfaces.My.Resources
 Imports DWSIM.Thermodynamics.PropertyPackages.Auxiliary
 Imports OxyPlot
 Imports OxyPlot.Axes
@@ -220,57 +221,29 @@ Namespace UnitOperations
 
             IObj?.SetCurrent()
 
-            IObj?.Paragraphs.Add("The Pipe Segment unit operation  can be used to 
-                                simulate fluid flow process in a pipe. Two of the most used 
-                                correlations for the calculation of pressure drop are available 
-                                in DWSIM. Temperature can be rigorously calculated considering 
-                                the influence of the environment. With the help of the Recycle 
-                                Logical Operation, the user can build large water distribution 
-                                systems, as an example.")
+            IObj?.Paragraphs.Add(SolutionInspector.Pipe_Calculate_Paragraph_01)
 
-            IObj?.Paragraphs.Add("The pipe segment is divided in sections, which can be straight 
-                                tubes, valves, curves, etc. Each section is subdivided in small 
-                                sections for calculation purposes, as defined by the user.")
+            IObj?.Paragraphs.Add(SolutionInspector.Pipe_Calculate_Paragraph_02)
 
-            IObj?.Paragraphs.Add("The pipe segment is calculated based on incremental mass and 
-                            energy balances. The complete algorithm consists in three nested 
-                            loops. The external loop iterates on the sections (increments), 
-                            the middle loop iterates on the temperature and the internal loop 
-                            calculates the pressure. The pressure and temperature are 
-                            calculated as follows:")
+            IObj?.Paragraphs.Add(SolutionInspector.Pipe_Calculate_Paragraph_03)
 
-            IObj?.Paragraphs.Add("1. The inlet temperature and pressure are used to estimate the 
-                            increment outlet pressure and temperature.")
+            IObj?.Paragraphs.Add(SolutionInspector.Pipe_Calculate_Paragraph_04)
 
-            IObj?.Paragraphs.Add("2. Fluid properties are calculated based in a arithmetic mean of 
-                            inlet and outlet conditions.")
+            IObj?.Paragraphs.Add(SolutionInspector.Pipe_Calculate_Paragraph_05)
+            
+            IObj?.Paragraphs.Add(SolutionInspector.Pipe_Calculate_Paragraph_06)
 
-            IObj?.Paragraphs.Add("3. The calculated properties and the inlet pressure are used to 
-                              calculate the pressure drop. With it, the outlet pressure is 
-                              calculated.")
+            IObj?.Paragraphs.Add(SolutionInspector.Pipe_Calculate_Paragraph_07)
 
-            IObj?.Paragraphs.Add("4. The calculated and estimated pressure are compared, and if 
-                              their difference exceeds the tolerance, a new outlet pressure 
-                              is estimated, and the steps 2 and 3 are repeated.")
-
-            IObj?.Paragraphs.Add("5. Once the internal loop has converged, the outlet temperature 
-                              is calculated. If the global heat transfer coefficient (U) was 
-                              given, the outlet temperature is calculated from the following 
-                              equation:")
+            IObj?.Paragraphs.Add(SolutionInspector.Pipe_Calculate_Paragraph_08)
 
             IObj?.Paragraphs.Add("<m>Q=UA\Delta T_{ml}</m>")
 
-            IObj?.Paragraphs.Add("where: Q = heat transferred, A = heat transfer area (external 
-                              surface) and `\Delta T_{ml}` = logarithmic mean temperature 
-                              difference.")
+            IObj?.Paragraphs.Add(SolutionInspector.Pipe_Calculate_Paragraph_09)
 
-            IObj?.Paragraphs.Add("6. The calculated temperature is compared to the estimated one, 
-                              and if their difference exceeds the specified tolerance, a new 
-                              temperature is estimated and new properties are calculated 
-                              (return to step 2).")
+            IObj?.Paragraphs.Add(SolutionInspector.Pipe_Calculate_Paragraph_10)
 
-            IObj?.Paragraphs.Add("7. When both pressure and temperature converges, the results are 
-                            passed to the next increment, where calculation restarts.")
+            IObj?.Paragraphs.Add(SolutionInspector.Pipe_Calculate_Paragraph_11)
 
             If Not Me.GraphicObject.EnergyConnector.IsAttached Then
                 Throw New Exception(FlowSheet.GetTranslatedString("NohcorrentedeEnergyFlow3"))
@@ -349,9 +322,9 @@ Namespace UnitOperations
 
                 Dim IObj2 As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-                Inspector.Host.CheckAndAdd(IObj2, "", "Calculate", String.Format("External Loop #{0}", countext), "", True)
+                Inspector.Host.CheckAndAdd(IObj2, "", "Calculate", String.Format(SolutionInspector.External_Loop_0, countext), "", True)
 
-                IObj2?.Paragraphs.Add("This is the external loop to converge pressure when outlet temperature is specified or vice-versa.")
+                IObj2?.Paragraphs.Add(SolutionInspector.This_Is_the_external_loop_To_converge_pressure_When_outlet_temperature_Is_specified_Or_vice_versa)
 
                 oms = Me.GetInletMaterialStream(0).Clone()
                 oms.SetFlowsheet(Me.FlowSheet)
@@ -1303,32 +1276,32 @@ Namespace UnitOperations
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-            Inspector.Host.CheckAndAdd(IObj, "", "CalcOverallHeatTransferCoefficient", "Overall HTC Calculation", "Overal Heat Transfer Coefficient Calculation Routine", True)
+            Inspector.Host.CheckAndAdd(IObj, "", "CalcOverallHeatTransferCoefficient", "Overall HTC Calculation", SolutionInspector.Overal_Heat_Transfer_Coefficient_Calculation_Routine, True)
 
-            IObj?.Paragraphs.Add("This Is the external loop To converge pressure When outlet temperature Is specified Or vice-versa.")
+            IObj?.Paragraphs.Add(SolutionInspector.This_Is_the_external_loop_To_converge_pressure_When_outlet_temperature_Is_specified_Or_vice_versa)
 
-            IObj?.Paragraphs.Add("<h2>Input Parameters</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Input_Parameters)
 
-            IObj?.Paragraphs.Add("Pipe Wall Material = " & materialparede)
-            IObj?.Paragraphs.Add("Liquid Holdup = " & EL)
-            IObj?.Paragraphs.Add("Length = " & L & " m")
-            IObj?.Paragraphs.Add("Internal Diameter = " & Dint & " m")
-            IObj?.Paragraphs.Add("External Diameter = " & Dext & " m")
-            IObj?.Paragraphs.Add("Pipe Roughness = " & rugosidade & " m")
-            IObj?.Paragraphs.Add("Fluid Temperature = " & T & " K")
-            IObj?.Paragraphs.Add("External Temperature = " & Text & " K")
-            IObj?.Paragraphs.Add("Vapor Phase Velocity = " & vel_g & " m/s")
-            IObj?.Paragraphs.Add("Liquid Phase Velocity = " & vel_l & " m/s")
-            IObj?.Paragraphs.Add("Vapor Phase Cp = " & Cpl & " kJ/[kg.K]")
-            IObj?.Paragraphs.Add("Liquid Phase Cp = " & Cpv & " kJ/[kg.K]")
-            IObj?.Paragraphs.Add("Vapor Phase Thermal Conductivity = " & kv & " W/[m.K]")
-            IObj?.Paragraphs.Add("Liquid Phase Thermal Conductivity = " & kl & " W/[m.K]")
-            IObj?.Paragraphs.Add("Vapor Phase Density = " & rho_v & " kg/m3")
-            IObj?.Paragraphs.Add("Liquid Phase Density = " & rho_l & " kg/m3")
-            IObj?.Paragraphs.Add("Include External HTC = " & hexterno)
-            IObj?.Paragraphs.Add("Include Internal HTC = " & hinterno)
-            IObj?.Paragraphs.Add("Include Insulation = " & isolamento)
-            IObj?.Paragraphs.Add("Include Pipe Wall = " & parede)
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pipe_Wall_Material_0, materialparede))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Liquid_Holdup_0, EL))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Length_0_m, L))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Internal_Diameter_0_m, Dint))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.External_Diameter_0_m, Dext))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pipe_Roughness_0_m, rugosidade))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Fluid_Temperature_0_K, T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.External_Temperature_0_K, Text))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Vapor_Phase_Velocity_0_m_s, vel_g))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Liquid_Phase_Velocity_0_m_s, vel_l))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Vapor_Phase_Cp_0_kJ_kg_K, Cpl))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Liquid_Phase_Cp_0_kJ_kg_K, Cpv))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Vapor_Phase_Thermal_Conductivity_0_W_m_K, kv))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Liquid_Phase_Thermal_Conductivity_0_W_m_K, kl))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Vapor_Phase_Density_0_kg_m3, rho_v))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Liquid_Phase_Density_0_kg_m3, rho_l))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Include_External_HTC_0, hexterno))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Include_Internal_HTC_0, hinterno))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Include_Insulation_0, isolamento))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Include_Pipe_Wall_0, parede))
 
             If Double.IsNaN(rho_l) Then rho_l = 0.0#
 
@@ -1489,13 +1462,13 @@ Namespace UnitOperations
                 End If
             End If
 
-            IObj?.Paragraphs.Add("<h2>Results</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Results)
 
-            IObj?.Paragraphs.Add("External HTC = " & U_ext & " W/[m2.K]")
-            IObj?.Paragraphs.Add("Internal HTC = " & U_int & " W/[m2.K]")
-            IObj?.Paragraphs.Add("Pipe Wall HTC = " & U_parede & " W/[m2.K]")
-            IObj?.Paragraphs.Add("Pipe Insulation HTC = " & U_isol & " W/[m2.K]")
-            IObj?.Paragraphs.Add("Overall HTC = " & (1 / _U).ToString & " W/[m2.K]")
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.External_HTC_0_W_m2_K, U_ext))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Internal_HTC_0_W_m2_K, U_int))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pipe_Wall_HTC_0_W_m2_K, U_parede))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pipe_Insulation_HTC_0_W_m2_K, U_isol))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Overall_HTC_0_W_m2_K, (1 / _U).ToString))
 
             IObj?.Close()
 

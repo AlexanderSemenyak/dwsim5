@@ -28,6 +28,7 @@ Imports DWSIM.Thermodynamics
 Imports DWSIM.ExtensionMethods
 
 Imports DotNumerics.Optimization
+Imports DWSIM.Interfaces.My.Resources
 
 Namespace Reactors
 
@@ -552,7 +553,7 @@ Namespace Reactors
                 Me.ComponentConversions(cnames(i)) = (ni0(i) - nif(i)) / ni0(i)
             Next
 
-            IObj?.Paragraphs.Add(String.Format("Compounds: {0}", N0.Keys.ToArray.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Compounds_0, N0.Keys.ToArray.ToMathArrayString))
             IObj?.Paragraphs.Add(String.Format("Initial Mole Flows: {0} mol/s", ni0.ToArray.ToMathArrayString))
             IObj?.Paragraphs.Add(String.Format("Final Mole Flows: {0} mol/s", nif.ToArray.ToMathArrayString))
             IObj?.Paragraphs.Add(String.Format("Conversions: {0}", ComponentConversions.Values.Select(Of Double)(Function(d) If(Not Double.IsNaN(d) And Not Double.IsInfinity(d), d, 0.0)).ToArray.ToMathArrayString))

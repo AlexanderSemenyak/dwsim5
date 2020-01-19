@@ -39,6 +39,8 @@ Imports DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes
 Imports DWSIM.Drawing.SkiaSharp.GraphicObjects.Charts
 
 Imports Cefsharp.Winforms
+Imports DWSIM.Thermodynamics.SpecialEOS
+Imports DWSIM.Thermodynamics.SpecialEOS.PRSRKAdv
 
 Public Class FormMain
 
@@ -763,6 +765,12 @@ Public Class FormMain
         BOPP.ComponentDescription = DWSIM.App.GetLocalString("DescBOPP")
 
         PropertyPackages.Add(BOPP.ComponentName.ToString, BOPP)
+
+        Dim SRKPPAdv = New SoaveRedlichKwongAdvancedPropertyPackage()
+        PropertyPackages.Add(SRKPPAdv.ComponentName.ToString, SRKPPAdv)
+
+        Dim PRPPAdv = New PengRobinsonAdvancedPropertyPackage()
+        PropertyPackages.Add(PRPPAdv.ComponentName.ToString, PRPPAdv)
 
         Dim otherpps = SharedClasses.Utility.LoadAdditionalPropertyPackages()
 

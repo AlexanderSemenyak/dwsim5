@@ -19,6 +19,7 @@
 Imports System.Collections.Generic
 Imports FileHelpers
 Imports System.Threading.Tasks
+Imports DWSIM.Interfaces.My.Resources
 
 Namespace PropertyPackages.Auxiliary
 
@@ -275,13 +276,13 @@ Namespace PropertyPackages.Auxiliary
                                 representation of experimental data, although good quality data 
                                 is necessary to estimate the three required parameters.")
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
 
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
-            IObj?.Paragraphs.Add(String.Format("Mole Fractions: {0}", Vx.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Mole_Fractions_0, Vx.ToMathArrayString))
             IObj?.Paragraphs.Add(String.Format("Compound IDs: {0}", Vids.ToMathArrayString))
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Calculated Intermediate Parameters</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Calculated_Intermediate_Parameters))
 
             Dim doparallel As Boolean = Settings.EnableParallelProcessing
             Dim poptions As New ParallelOptions() With {.MaxDegreeOfParallelism = Settings.MaxDegreeOfParallelism, .TaskScheduler = Settings.AppTaskScheduler}

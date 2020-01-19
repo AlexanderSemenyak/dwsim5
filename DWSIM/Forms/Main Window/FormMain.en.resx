@@ -269,7 +269,7 @@
     <value>156, 22</value>
   </data>
   <data name="PainelDeBoasvindasToolStripMenuItem.Text" xml:space="preserve">
-    <value>Welcome Panel</value>
+    <value>О программе</value>
   </data>
   <data name="PainelDaWebToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>156, 22</value>
@@ -410,10 +410,10 @@
     <value>Общие настройки</value>
   </data>
   <data name="tsbInspector.Text" xml:space="preserve">
-    <value>Enable/Disable Solution Inspector</value>
+    <value>Включить/отключить инспектор расчета</value>
   </data>
   <data name="tsbInspector.ToolTipText" xml:space="preserve">
-    <value>Enable/Disable Solution Inspector</value>
+    <value>Включить/отключить инспектор расчета</value>
   </data>
   <data name="ToolStripButton3.Text" xml:space="preserve">
     <value>Расположить каскадом</value>
@@ -2033,7 +2033,7 @@
 </value>
   </data>
   <data name="SaveStudyDlg.Filter" xml:space="preserve">
-    <value>Compound Creator Study|*.dwcsd2</value>
+    <value>Модель пользовательских смесей|*.dwcsd2</value>
   </data>
   <data name="SaveRegStudyDlg.Filter" xml:space="preserve">
     <value>Data Regression Study|*.dwrsd2</value>
@@ -2042,7 +2042,7 @@
     <value>Сохранить исследование</value>
   </data>
   <data name="SaveUnifacIPRegrDlg.Filter" xml:space="preserve">
-    <value>Regression of UNIFAC IPs |*.dwruf</value>
+    <value>Регрессия UNIFAC IPs |*.dwruf</value>
   </data>
   <data name="SaveUnifacIPRegrDlg.Title" xml:space="preserve">
     <value>Сохранить регрессию</value>

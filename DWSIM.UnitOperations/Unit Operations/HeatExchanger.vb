@@ -28,6 +28,7 @@ Imports System.Globalization
 Imports System.Reflection
 Imports System.Threading.Tasks
 Imports System.Math
+Imports DWSIM.Interfaces.My.Resources
 Imports DWSIM.UnitOperations.UnitOperations.Auxiliary.HeatExchanger
 
 Namespace UnitOperations
@@ -408,17 +409,17 @@ Namespace UnitOperations
 
             IObj?.Paragraphs.Add(String.Format("<h3>Cold Stream: {0}</h3>", StInCold.GraphicObject.Tag))
 
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", StInCold.Phases(0).Properties.temperature.GetValueOrDefault))
-            IObj?.Paragraphs.Add(String.Format("Pressure: {0} Pa", StInCold.Phases(0).Properties.pressure.GetValueOrDefault))
-            IObj?.Paragraphs.Add(String.Format("Mass Flow: {0} kg/s", StInCold.Phases(0).Properties.massflow.GetValueOrDefault))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, StInCold.Phases(0).Properties.temperature.GetValueOrDefault))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, StInCold.Phases(0).Properties.pressure.GetValueOrDefault))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Mass_Flow_0_kg_s, StInCold.Phases(0).Properties.massflow.GetValueOrDefault))
             IObj?.Paragraphs.Add(String.Format("Specific Enthalpy: {0} kJ/kg", StInCold.Phases(0).Properties.enthalpy.GetValueOrDefault))
 
 
             IObj?.Paragraphs.Add(String.Format("<h3>Hot Stream: {0}</h3>", StInHot.GraphicObject.Tag))
 
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", StInHot.Phases(0).Properties.temperature.GetValueOrDefault))
-            IObj?.Paragraphs.Add(String.Format("Pressure: {0} Pa", StInHot.Phases(0).Properties.pressure.GetValueOrDefault))
-            IObj?.Paragraphs.Add(String.Format("Mass Flow: {0} kg/s", StInHot.Phases(0).Properties.massflow.GetValueOrDefault))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, StInHot.Phases(0).Properties.temperature.GetValueOrDefault))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, StInHot.Phases(0).Properties.pressure.GetValueOrDefault))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Mass_Flow_0_kg_s, StInHot.Phases(0).Properties.massflow.GetValueOrDefault))
             IObj?.Paragraphs.Add(String.Format("Specific Enthalpy: {0} kJ/kg", StInHot.Phases(0).Properties.enthalpy.GetValueOrDefault))
 
             IObj?.Paragraphs.Add("<h2>Maximum Heat Exchange</h2>")
@@ -1498,7 +1499,7 @@ Namespace UnitOperations
             CheckSpec(Ph2, True, "hot stream outlet pressure")
             CheckSpec(Pc2, True, "cold stream outlet pressure")
 
-            IObj?.Paragraphs.Add("<h2>Results</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Results)
 
             IObj?.Paragraphs.Add("<mi>T_{c,out}</mi> = " & Tc2 & " K")
             IObj?.Paragraphs.Add("<mi>T_{h,out}</mi> = " & Th2 & " K")

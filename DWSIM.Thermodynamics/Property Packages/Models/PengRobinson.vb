@@ -19,6 +19,7 @@ Imports FileHelpers
 Imports System.Linq
 Imports DWSIM.Thermodynamics.PropertyPackages.ThermoPlugs.PR
 Imports System.Threading.Tasks
+Imports DWSIM.Interfaces.My.Resources
 Imports DWSIM.MathOps.MathEx.PolySolve
 
 Namespace PropertyPackages.Auxiliary
@@ -191,26 +192,26 @@ Namespace PropertyPackages.Auxiliary
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-            Inspector.Host.CheckAndAdd(IObj, "", "Z_PR", "Peng-Robinson EOS Compressibility Factor", "Peng-Robinson EOS Compressibility Factor Calculation Routine")
+            Inspector.Host.CheckAndAdd(IObj, "", "Z_PR", "Peng-Robinson EOS Compressibility Factor", "Процедура вычисления коэффициента сжимаемости для уравнения состояния Пенга-Робинсона (Peng-Robinson EOS)")
 
-            IObj?.Paragraphs.Add("The compressibility factor (liquid or vapor) can be obtained from the equation")
+            IObj?.Paragraphs.Add(SolutionInspector.The_compressibility_factor_liquid_or_vapor_can_be_obtained_from_the_equation)
             IObj?.Paragraphs.Add("<math>Z^ {3} - (1 - b)Z^{2}+(A-3B^{2}-2B)Z-(AB-B^{2}-2B)=0,</math>")
             IObj?.Paragraphs.Add("<math>A =\frac{a_{m}P}{R^{2}T^{2}}</math>")
             IObj?.Paragraphs.Add("<math>B =\frac{b_{m}P}{RT}</math>")
             IObj?.Paragraphs.Add("<math>Z =\frac{PV}{RT}</math>")
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
 
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
-            IObj?.Paragraphs.Add(String.Format("Pressure: {0} Pa", P))
-            IObj?.Paragraphs.Add(String.Format("Mole Fractions: {0}", Vx.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Interaction Parameters: {0}", VKij.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Critical Temperatures: {0} K", VTc.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Critical Pressures: {0} Pa", VPc.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Acentric Factors: {0} ", Vw.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("State: {0}", TIPO))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Mole_Fractions_0, Vx.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Interaction_Parameters_0, VKij.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Critical_Temperatures_0_K, VTc.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Critical_Pressures_0_Pa, VPc.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Acentric_Factors_0, Vw.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.State_0, TIPO))
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Calculated Intermediate Parameters</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Calculated_Intermediate_Parameters))
 
             Calculator.WriteToConsole("PR cubic equation root finder (Z) for T = " & T & " K, P = " & P & " Pa and Phase = " & TIPO, 3)
             Calculator.WriteToConsole("Mole fractions: " & DirectCast(Vx, Double()).ToMathArrayString, 3)
@@ -448,19 +449,19 @@ Namespace PropertyPackages.Auxiliary
 
             IObj?.Paragraphs.Add("<math>\frac{H-H^{id}}{RT}=Z-1-\frac{1}{2^{1.5}bRT}[a-T\frac{da}{dT}]\ln[\frac{V+2.414b}{V-0.414b}]</math>")
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
 
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
-            IObj?.Paragraphs.Add(String.Format("Pressure: {0} Pa", P))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
             IObj?.Paragraphs.Add(String.Format("Ideal Enthalpy (Ideal Gas State): {0} kJ/kg", Hid))
-            IObj?.Paragraphs.Add(String.Format("Mole Fractions: {0}", Vz.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Interaction Parameters: {0}", VKij.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Critical Temperatures: {0} K", Tc.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Critical Pressures: {0} Pa", Pc.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Acentric Factors: {0} ", w.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("State: {0}", TIPO))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Mole_Fractions_0, Vz.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Interaction_Parameters_0, VKij.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Critical_Temperatures_0_K, Tc.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Critical_Pressures_0_Pa, Pc.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Acentric_Factors_0, w.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.State_0, TIPO))
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Calculated Intermediate Parameters</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Calculated_Intermediate_Parameters))
 
             Dim n As Integer, R, Z, dadT As Double
             Dim i As Integer
@@ -601,19 +602,19 @@ Namespace PropertyPackages.Auxiliary
 
             IObj?.Paragraphs.Add("<math>\frac{S-S^{id}}{RT}=\ln(Z-B)-\ln\frac{P}{P^{0}}-\frac{A}{2^{1.5}bRT}[\frac{T}{a}\frac{da}{dT}]\ln[\frac{V+2.414b}{V+0.414b}]</math>")
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
 
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
-            IObj?.Paragraphs.Add(String.Format("Pressure: {0} Pa", P))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
             IObj?.Paragraphs.Add(String.Format("Ideal Enthalpy (Ideal Gas State): {0} kJ/kg", Sid))
-            IObj?.Paragraphs.Add(String.Format("Mole Fractions: {0}", Vz.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Interaction Parameters: {0}", VKij.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Critical Temperatures: {0} K", VTc.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Critical Pressures: {0} Pa", VPc.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Acentric Factors: {0} ", Vw.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("State: {0}", TIPO))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Mole_Fractions_0, Vz.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Interaction_Parameters_0, VKij.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Critical_Temperatures_0_K, VTc.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Critical_Pressures_0_Pa, VPc.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Acentric_Factors_0, Vw.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.State_0, TIPO))
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Calculated Intermediate Parameters</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Calculated_Intermediate_Parameters))
 
             Dim ai(), bi(), ci() As Double
             Dim n, R As Double

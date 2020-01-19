@@ -1,4 +1,5 @@
 Imports System.Runtime.InteropServices
+Imports DWSIM.Interfaces.My.Resources
 
 '    Petalas-Aziz Pressure Drop Calculation Routine
 '    Copyright 2012 Daniel Wagner O. de Medeiros
@@ -60,11 +61,11 @@ Namespace FlowPackages
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-            Inspector.Host.CheckAndAdd(IObj, "", "CalculateDeltaP", "Petalas and Aziz Pressure Drop", "Petalas and Aziz Multiphase Pressure Drop Calculation Routine", True)
+            Inspector.Host.CheckAndAdd(IObj, "", "CalculateDeltaP", SolutionInspector.Petalas_and_Aziz_Pressure_Drop, SolutionInspector.Petalas_and_Aziz_Multiphase_Pressure_Drop_Calculation_Routine, True)
 
             IObj?.SetCurrent()
 
-            IObj?.Paragraphs.Add("<h2>Input Parameters</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Input_Parameters)
 
             IObj?.Paragraphs.Add("<mi>D</mi> = " & D & " m")
             IObj?.Paragraphs.Add("<mi>L</mi> = " & L & " m")
@@ -202,9 +203,9 @@ Namespace FlowPackages
 
             End If
 
-            IObj?.Paragraphs.Add("<h2>Results</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Results)
 
-            IObj?.Paragraphs.Add("Flow Regime: " & FlowRegime)
+            IObj?.Paragraphs.Add(SolutionInspector.Flow_Regime & FlowRegime)
             IObj?.Paragraphs.Add("<mi>e_L</mi> = " & eL)
             IObj?.Paragraphs.Add("<mi>\Delta P_{friction}</mi> = " & dPfr * 6894.76 * 3.28084 * L & " Pa")
             IObj?.Paragraphs.Add("<mi>\Delta P_{elevation}</mi> = " & dPhh * 6894.76 * 3.28084 * L & " Pa")

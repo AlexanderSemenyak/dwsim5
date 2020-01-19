@@ -46,6 +46,7 @@ Imports Microsoft.Scripting.Hosting
 Imports sui = DWSIM.UI.Shared.Common
 Imports DWSIM.UI.Shared
 Imports DWSIM.Interfaces.Enums
+Imports DWSIM.Interfaces.My.Resources
 Imports Sysytem
 
 Namespace PropertyPackages
@@ -685,7 +686,7 @@ Namespace PropertyPackages
 
             IObj?.Paragraphs.Add("for liquids.")
 
-            IObj?.Paragraphs.Add("<h2>Results</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Results)
 
             For Each p As IPhase In Me.CurrentMaterialStream.Phases.Values
                 IObj?.Paragraphs.Add(String.Format("<h3>{0}</h3>", p.Name))
@@ -1102,13 +1103,13 @@ Namespace PropertyPackages
 
             IObj?.Paragraphs.Add("The fugacity coefficients also depend on x and y, and are used to calculate updated K-values, which is why this routine is always called from a successive substitution procedure.")
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
 
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
-            IObj?.Paragraphs.Add(String.Format("Pressure: {0} Pa", P))
-            IObj?.Paragraphs.Add(String.Format("Phase 1 composition: {0}", Vx.ToMathArrayString()))
-            IObj?.Paragraphs.Add(String.Format("Phase 2 composition: {0}", Vy.ToMathArrayString()))
-            IObj?.Paragraphs.Add(String.Format("Calculation Type: {0}", type))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Phase_1_composition_0, Vx.ToMathArrayString()))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Phase_2_composition_0, Vy.ToMathArrayString()))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Calculation_Type_0, type))
 
             Dim fugvap As Double() = Nothing
             Dim fugliq As Double() = Nothing
@@ -6294,7 +6295,7 @@ Final3:
                     result = Exp(1.0 / val)
             End Select
 
-            IObj?.Paragraphs.Add("<h2>Results</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Results)
 
             IObj?.Paragraphs.Add(String.Format("Liquid Phase Viscosity: {0} Pa.s", result))
 
@@ -6361,7 +6362,7 @@ Final3:
                 val += subst.MoleFraction.GetValueOrDefault * tmpval / ftotal
             Next
 
-            IObj?.Paragraphs.Add("<h2>Results</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Results)
 
             IObj?.Paragraphs.Add(String.Format("Liquid Phase Surface Tension: {0} N/m", val))
 
@@ -6453,7 +6454,7 @@ Final3:
 
             val = Auxiliary.PROPS.condlm_li(Me.RET_VVC, vcl, Me.RET_VMOL(Me.RET_PHASECODE(phaseid)))
 
-            IObj?.Paragraphs.Add("<h2>Results</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Results)
 
             IObj?.Paragraphs.Add(String.Format("Average Mixture Value from Li's mixing rule: {0} W/[m.K]", val))
 
@@ -6496,7 +6497,7 @@ Final3:
                 i = i + 1
             Next
 
-            IObj?.Paragraphs.Add("<h2>Results</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Results)
 
             IObj?.Paragraphs.Add(String.Format("Molar Average Value: {0} W/[m.K]", val))
 
@@ -6598,7 +6599,7 @@ Final3:
 
             val = Auxiliary.PROPS.viscg_jossi_stiel_thodos(val, T, MM / RHO / 1000, AUX_TCM(Phase.Vapor), AUX_PCM(Phase.Vapor), AUX_VCM(Phase.Vapor), AUX_MMM(Phase.Vapor))
 
-            IObj?.Paragraphs.Add("<h2>Results</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Results)
 
             IObj?.Paragraphs.Add(String.Format("Molar Average Value: {0} Pa.s", val))
 
@@ -6898,7 +6899,7 @@ Final3:
                 End If
             End If
 
-            IObj?.Paragraphs.Add("<h2>Results</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Results)
 
             IObj?.Paragraphs.Add(String.Format("Liquid Phase Density: {0} kg/m3", val))
 

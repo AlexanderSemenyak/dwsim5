@@ -23,6 +23,7 @@ Imports DWSIM.MathOps.MathEx
 Imports System.Runtime.InteropServices
 Imports System.Linq
 Imports DWSIM.Interfaces.Enums
+Imports DWSIM.Interfaces.My.Resources
 
 Namespace PropertyPackages
 
@@ -106,8 +107,8 @@ Namespace PropertyPackages
             Inspector.Host.CheckAndAdd(IObj, "", "AUX_CPi", routinename, "", True)
             _IObj = IObj
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
 
             Dim Tmin, Tmax, Tc, val As Double
             If IsCompoundSupported(sub1) Then
@@ -148,8 +149,8 @@ Namespace PropertyPackages
             Inspector.Host.CheckAndAdd(IObj, "", "AUX_PVAPi", routinename, "", True)
             _IObj = IObj
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
 
             Dim sub1 As String = RET_VNAMES()(index)
             Dim Tmin, Tmax, Tc, val As Double
@@ -186,8 +187,8 @@ Namespace PropertyPackages
             Inspector.Host.CheckAndAdd(IObj, "", "AUX_PVAPi", routinename, "", True)
             _IObj = IObj
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
 
             Dim Tmin, Tmax, Tc, val As Double
             If IsCompoundSupported(sub1) Then
@@ -223,7 +224,7 @@ Namespace PropertyPackages
             Inspector.Host.CheckAndAdd(IObj, "", "AUX_TSATi", routinename, "", True)
             _IObj = IObj
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
             IObj?.Paragraphs.Add(String.Format("Vapor Pressure: {0} Pa", PVAP))
 
             Dim sub1 As String = RET_VNAMES()(index)
@@ -261,7 +262,7 @@ Namespace PropertyPackages
             Inspector.Host.CheckAndAdd(IObj, "", "AUX_TSATi", routinename, "", True)
             _IObj = IObj
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
             IObj?.Paragraphs.Add(String.Format("Vapor Pressure: {0} Pa", PVAP))
 
             Dim Pmin, Pmax, val As Double
@@ -298,8 +299,8 @@ Namespace PropertyPackages
             Inspector.Host.CheckAndAdd(IObj, "", "AUX_LIQDENSi", routinename, "", True)
             _IObj = IObj
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
 
             Dim sub1 = cprop.Name
             Dim Tmin, Tmax, Tc, val As Double
@@ -337,8 +338,8 @@ Namespace PropertyPackages
             Inspector.Host.CheckAndAdd(IObj, "", "AUX_LIQ_Cpi", routinename, "", True)
             _IObj = IObj
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
 
             Dim sub1 = cprop.Name
             Dim Tmin, Tmax, Tc, val As Double
@@ -376,9 +377,9 @@ Namespace PropertyPackages
             Inspector.Host.CheckAndAdd(IObj, "", "AUX_CONDTG", routinename, "", True)
             _IObj = IObj
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
-            IObj?.Paragraphs.Add(String.Format("Pressure: {0} Pa", P))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
 
             Dim val As Double
             Dim i As Integer
@@ -465,8 +466,8 @@ Namespace PropertyPackages
             Inspector.Host.CheckAndAdd(IObj, "", "AUX_CONDTL", routinename, "", True)
             _IObj = IObj
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
 
             Dim val As Double
             Dim i As Integer
@@ -537,9 +538,9 @@ Namespace PropertyPackages
             Inspector.Host.CheckAndAdd(IObj, "", "AUX_LIQDENS", routinename, "", True)
             _IObj = IObj
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
-            IObj?.Paragraphs.Add(String.Format("Pressure: {0} Pa", P))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
 
             Dim val As Double
             Dim i As Integer
@@ -620,8 +621,8 @@ Namespace PropertyPackages
             Inspector.Host.CheckAndAdd(IObj, "", "AUX_LIQTHERMCONDi", routinename, "", True)
             _IObj = IObj
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
 
             Dim sub1 = cprop.Name
             Dim Tmin, Tmax, Tc, val As Double
@@ -659,8 +660,8 @@ Namespace PropertyPackages
             Inspector.Host.CheckAndAdd(IObj, "", "AUX_LIQVISCi", routinename, "", True)
             _IObj = IObj
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
 
             Dim Tmin, Tmax, Tc, Pmin, Pmax, Tb, val As Double
             If IsCompoundSupported(sub1) Then
@@ -706,8 +707,8 @@ Namespace PropertyPackages
             Inspector.Host.CheckAndAdd(IObj, "", "AUX_SURFTi", routinename, "", True)
             _IObj = IObj
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
 
             Dim sub1 = constprop.Name
             Dim Tmin, Tmax, Tc, val As Double
@@ -760,9 +761,9 @@ Namespace PropertyPackages
             Inspector.Host.CheckAndAdd(IObj, "", "AUX_VAPTHERMCONDi", routinename, "", True)
             _IObj = IObj
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
-            IObj?.Paragraphs.Add(String.Format("Pressure: {0} Pa", P))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
 
             Dim sub1 = cprop.Name
             Dim Tmin, Tmax, Pmin, Pmax, Tb, Tc, val As Double
@@ -828,9 +829,9 @@ Namespace PropertyPackages
             Inspector.Host.CheckAndAdd(IObj, "", "AUX_VAPVISCi", routinename, "", True)
             _IObj = IObj
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
-            IObj?.Paragraphs.Add(String.Format("Pressure: {0} Pa", P))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
 
             Dim sub1 = cprop.Name
             Dim Tmin, Tmax, val As Double
@@ -936,9 +937,9 @@ Namespace PropertyPackages
             Inspector.Host.CheckAndAdd(IObj, "", "AUX_VAPDENS", routinename, "", True)
             _IObj = IObj
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
-            IObj?.Paragraphs.Add(String.Format("Pressure: {0} Pa", P))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
 
             Dim val As Double = 1.0
             Dim i As Integer
@@ -1260,12 +1261,12 @@ Namespace PropertyPackages
             Inspector.Host.CheckAndAdd(IObj, "", "DW_CalcEnthalpy", routinename, "", True)
             _IObj = IObj
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
 
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
-            IObj?.Paragraphs.Add(String.Format("Pressure: {0} Pa", P))
-            IObj?.Paragraphs.Add(String.Format("Mole Fractions: {0}", DirectCast(Vx, Double()).ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("State: {0}", [Enum].GetName(st.GetType, st)))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Mole_Fractions_0, DirectCast(Vx, Double()).ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.State_0, [Enum].GetName(st.GetType, st)))
 
             Dim val As Double
             Dim i As Integer
@@ -1359,7 +1360,7 @@ Namespace PropertyPackages
             val = MathEx.Common.Sum(vk)
 
             IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
-            IObj?.Paragraphs.Add(String.Format("Enthalpy: {0} kJ/kg", val))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Enthalpy_0_kJ_kg, val))
             IObj?.Close()
 
             Return val
@@ -1381,12 +1382,12 @@ Namespace PropertyPackages
             Inspector.Host.CheckAndAdd(IObj, "", "DW_CalcEntropy", routinename, "", True)
             _IObj = IObj
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
 
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
-            IObj?.Paragraphs.Add(String.Format("Pressure: {0} Pa", P))
-            IObj?.Paragraphs.Add(String.Format("Mole Fractions: {0}", DirectCast(Vx, Double()).ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("State: {0}", [Enum].GetName(st.GetType, st)))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Mole_Fractions_0, DirectCast(Vx, Double()).ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.State_0, [Enum].GetName(st.GetType, st)))
 
             Dim val As Double
             Dim i As Integer
@@ -1499,16 +1500,16 @@ Namespace PropertyPackages
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-            Inspector.Host.CheckAndAdd(IObj, "", "DW_CalcFugCoeff", "Fugacity Coefficient", "Property Package Fugacity Coefficient Calculation Routine")
+            Inspector.Host.CheckAndAdd(IObj, "", "DW_CalcFugCoeff", "Fugacity Coefficient", SolutionInspector.Property_Package_Fugacity_Coefficient_Calculation_Routine)
 
             IObj?.SetCurrent()
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
 
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
-            IObj?.Paragraphs.Add(String.Format("Pressure: {0} Pa", P))
-            IObj?.Paragraphs.Add(String.Format("Mole Fractions: {0}", DirectCast(Vx, Double()).ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("State: {0}", [Enum].GetName(st.GetType, st)))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Mole_Fractions_0, DirectCast(Vx, Double()).ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.State_0, [Enum].GetName(st.GetType, st)))
 
             Calculator.WriteToConsole(Me.ComponentName & " fugacity coefficient calculation for phase '" & st.ToString & "' requested at T = " & T & " K and P = " & P & " Pa.", 2)
             Calculator.WriteToConsole("Compounds: " & Me.RET_VNAMES.ToArrayString, 2)
@@ -1934,7 +1935,7 @@ Namespace PropertyPackages
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-            Inspector.Host.CheckAndAdd(IObj, "", "AUX_Z", "Compressibility Factor", "Compressibility Factor Calculation Routine")
+            Inspector.Host.CheckAndAdd(IObj, "", "AUX_Z", SolutionInspector.Compressibility_Factor, SolutionInspector.Compressibility_Factor_Calculation_Routine)
 
             IObj?.SetCurrent()
 
@@ -1946,9 +1947,9 @@ Namespace PropertyPackages
             End If
 
 
-            IObj?.Paragraphs.Add("<h2>Results</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Results)
 
-            IObj?.Paragraphs.Add(String.Format("Compressibility Factor: {0}", val))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Compressibility_Factor_0, val))
 
             IObj?.Close()
 

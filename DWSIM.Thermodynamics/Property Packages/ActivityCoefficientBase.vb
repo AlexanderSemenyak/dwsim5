@@ -30,6 +30,7 @@ Imports System.Runtime.Serialization.Formatters
 Imports System.Threading.Tasks
 Imports DWSIM.MathOps.MathEx
 Imports DWSIM.Interfaces.Enums
+Imports DWSIM.Interfaces.My.Resources
 
 Namespace PropertyPackages
 
@@ -84,7 +85,7 @@ Namespace PropertyPackages
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-            Inspector.Host.CheckAndAdd(IObj, "", "AUX_VAPDENS", "Vapor Phase Density", "Vapor Phase Density Calculation Routine")
+            Inspector.Host.CheckAndAdd(IObj, "", "AUX_VAPDENS", SolutionInspector.Vapor_Phase_Density, SolutionInspector.Vapor_Phase_Density_Calculation_Routine)
 
             IObj?.SetCurrent()
 
@@ -98,14 +99,14 @@ Namespace PropertyPackages
                 Z = m_pr.Z_PR(T, P, RET_VMOL(Phase.Vapor), RET_VKij, RET_VTC, RET_VPC, RET_VW, "V")
             End If
 
-            IObj?.Paragraphs.Add("<h2>Intermediate Calculations</h2>")
-            IObj?.Paragraphs.Add(String.Format("Vapor Phase Compressibility Factor: {0}", val))
+            IObj?.Paragraphs.Add(SolutionInspector.Intermediate_Calculations)
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Vapor_Phase_Compressibility_Factor_0, val))
 
             val = P / (Z * 8.314 * T) / 1000 * AUX_MMM(Phase.Vapor)
 
-            IObj?.Paragraphs.Add("<h2>Results</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Results)
 
-            IObj?.Paragraphs.Add(String.Format("Vapor Phase Density: {0} kg/m3", val))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Vapor_Phase_Density_0_kg_m3, val))
 
             IObj?.Close()
 
@@ -351,7 +352,7 @@ Namespace PropertyPackages
 
                 Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-                Inspector.Host.CheckAndAdd(IObj, "", "DW_CalcEnthalpy", "Enthalpy", "Property Package Enthalpy Calculation Routine")
+                Inspector.Host.CheckAndAdd(IObj, "", "DW_CalcEnthalpy", "Enthalpy", SolutionInspector.Property_Package_Enthalpy_Calculation_Routine)
 
                 IObj?.SetCurrent()
 
@@ -521,17 +522,17 @@ Namespace PropertyPackages
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-            Inspector.Host.CheckAndAdd(IObj, "", "DW_CalcFugCoeff", "Fugacity Coefficient", "Property Package Fugacity Coefficient Calculation Routine")
+            Inspector.Host.CheckAndAdd(IObj, "", "DW_CalcFugCoeff", "Fugacity Coefficient", SolutionInspector.Property_Package_Fugacity_Coefficient_Calculation_Routine)
 
             IObj?.SetCurrent()
 
-            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
 
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
-            IObj?.Paragraphs.Add(String.Format("Pressure: {0} Pa", P))
-            IObj?.Paragraphs.Add(String.Format("Compounds: {0}", RET_VNAMES.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Mole Fractions: {0}", DirectCast(Vx, Double()).ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("State: {0}", [Enum].GetName(st.GetType, st)))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Compounds_0, RET_VNAMES.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Mole_Fractions_0, DirectCast(Vx, Double()).ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.State_0, [Enum].GetName(st.GetType, st)))
 
             If Not ActivityCoefficientModels_IgnoreMissingInteractionParameters Then
                 CheckMissingInteractionParameters(Vx)
@@ -1002,7 +1003,7 @@ Namespace PropertyPackages
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-            Inspector.Host.CheckAndAdd(IObj, "", "AUX_Z", "Compressibility Factor", "Compressibility Factor Calculation Routine")
+            Inspector.Host.CheckAndAdd(IObj, "", "AUX_Z", SolutionInspector.Compressibility_Factor, SolutionInspector.Compressibility_Factor_Calculation_Routine)
 
             IObj?.SetCurrent()
 
@@ -1017,9 +1018,9 @@ Namespace PropertyPackages
                 val = m_lk.Z_LK("V", T / TCM, P / PCM, WM)(0)
             End If
 
-            IObj?.Paragraphs.Add("<h2>Results</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Results)
 
-            IObj?.Paragraphs.Add(String.Format("Compressibility Factor: {0}", val))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Compressibility_Factor_0, val))
 
             IObj?.Close()
 

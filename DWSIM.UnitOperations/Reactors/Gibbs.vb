@@ -25,6 +25,7 @@ Imports DWSIM.MathOps.MathEx.Common
 Imports DotNumerics.Optimization
 Imports DWSIM.MathOps.MathEx
 Imports DWSIM.Interfaces.Enums
+Imports DWSIM.Interfaces.My.Resources
 Imports DWSIM.SharedClasses
 Imports DWSIM.Thermodynamics.Streams
 Imports DWSIM.Thermodynamics
@@ -1022,7 +1023,7 @@ Namespace Reactors
             IObj?.Paragraphs.Add("The intermediate loop converges the mass balance for all phases using an initial distribution obtained from the initial estimates for the overall composition.")
             IObj?.Paragraphs.Add("The internal loop converges fugacity coefficients calculated with the current estimate for phase compositions.")
 
-            IObj?.Paragraphs.Add("<h2>Calculated Parameters</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Calculated_Parameters)
 
             If Me.Conversions Is Nothing Then Me.m_conversions = New Dictionary(Of String, Double)
             If Me.ReactionExtents Is Nothing Then Me.m_reactionextents = New Dictionary(Of String, Double)

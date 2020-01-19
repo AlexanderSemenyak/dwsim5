@@ -15,6 +15,7 @@
 '
 '    You should have received a copy of the GNU General Public License
 '    along with DWSIM.  If not, see <http://www.gnu.org/licenses/>.
+Imports DWSIM.Interfaces.My.Resources
 
 Namespace PropertyPackages.Auxiliary
 
@@ -35,11 +36,11 @@ Namespace PropertyPackages.Auxiliary
 
             PopulateWithDefaultText(IObj)
 
-            IObj?.Paragraphs.Add("<h2>Input Parameters</h2>")
-            IObj?.Paragraphs.Add(String.Format("Mole Fractions: {0}", Vz.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Critical Temperatures: {0} K", VTc.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Critical Pressures: {0} Pa", VPc.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Acentric Factors: {0} ", Vw.ToMathArrayString))
+            IObj?.Paragraphs.Add(SolutionInspector.Input_Parameters)
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Mole_Fractions_0, Vz.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Critical_Temperatures_0_K, VTc.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Critical_Pressures_0_Pa, VPc.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Acentric_Factors_0, Vw.ToMathArrayString))
 
             Dim Pcm, Tcm, Vcm, wm As Double
             Dim n As Integer = Vz.Length - 1
@@ -91,7 +92,7 @@ Namespace PropertyPackages.Auxiliary
             Pcm = (0.2905 - 0.085 * wm) * 8.314 * Tcm / Vcm
 
 
-            IObj?.Paragraphs.Add("<h2>Results</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Results)
             IObj?.Paragraphs.Add(String.Format("Mixture Critical Temperature: {0} K", Tcm))
             IObj?.Paragraphs.Add(String.Format("Mixture Critical Pressure: {0} Pa", Pcm))
             IObj?.Paragraphs.Add(String.Format("Mixture Critical Volume: {0} ", Vcm))
@@ -111,16 +112,16 @@ Namespace PropertyPackages.Auxiliary
 
             PopulateWithDefaultText(IObj)
 
-            IObj?.Paragraphs.Add("<h2>Input Parameters</h2>")
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
-            IObj?.Paragraphs.Add(String.Format("Pressure: {0} Pa", P))
+            IObj?.Paragraphs.Add(SolutionInspector.Input_Parameters)
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
             IObj?.Paragraphs.Add(String.Format("Ideal Gas Enthalpy: {0} kJ/kg", Hid))
-            IObj?.Paragraphs.Add(String.Format("Mole Fractions: {0}", Vz.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Interaction Parameters: {0}", VKij.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Critical Temperatures: {0} K", VTc.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Critical Pressures: {0} Pa", VPc.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Acentric Factors: {0} ", Vw.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("State: {0}", TIPO))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Mole_Fractions_0, Vz.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Interaction_Parameters_0, VKij.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Critical_Temperatures_0_K, VTc.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Critical_Pressures_0_Pa, VPc.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Acentric_Factors_0, Vw.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.State_0, TIPO))
 
             Dim n, R As Double
             Dim Tc(), Pc(), w(), Tr() As Double
@@ -170,7 +171,7 @@ Namespace PropertyPackages.Auxiliary
                 H_LK_MIX = Hid + DHres / MMm '/ 1000
             End If
 
-            IObj?.Paragraphs.Add("<h2>Results</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Results)
             IObj?.Paragraphs.Add(String.Format("Specific Enthalpy: {0} kJ/kg", H_LK_MIX))
 
             IObj?.Close()
@@ -185,16 +186,16 @@ Namespace PropertyPackages.Auxiliary
 
             PopulateWithDefaultText(IObj)
 
-            IObj?.Paragraphs.Add("<h2>Input Parameters</h2>")
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
-            IObj?.Paragraphs.Add(String.Format("Pressure: {0} Pa", P))
+            IObj?.Paragraphs.Add(SolutionInspector.Input_Parameters)
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
             IObj?.Paragraphs.Add(String.Format("Ideal Gas Entropy: {0} kJ/kg.K", Sid))
-            IObj?.Paragraphs.Add(String.Format("Mole Fractions: {0}", Vz.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Interaction Parameters: {0}", VKij.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Critical Temperatures: {0} K", VTc.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Critical Pressures: {0} Pa", VPc.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Acentric Factors: {0} ", Vw.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("State: {0}", TIPO))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Mole_Fractions_0, Vz.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Interaction_Parameters_0, VKij.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Critical_Temperatures_0_K, VTc.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Critical_Pressures_0_Pa, VPc.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Acentric_Factors_0, Vw.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.State_0, TIPO))
 
             Dim n, R As Double
             Dim Tc(), Pc(), w(), Tr() As Double
@@ -241,7 +242,7 @@ Namespace PropertyPackages.Auxiliary
                 S_LK_MIX = Sid + DSres / MMm '/ 1000
             End If
 
-            IObj?.Paragraphs.Add("<h2>Results</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Results)
             IObj?.Paragraphs.Add(String.Format("Specific Enthalpy: {0} kJ/kg", S_LK_MIX))
 
             IObj?.Close()
@@ -307,7 +308,7 @@ Namespace PropertyPackages.Auxiliary
 
             z = zs + w / wh * (zh - zs)
 
-            IObj?.Paragraphs.Add("<h2>Results</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Results)
             IObj?.Paragraphs.Add(String.Format("z: {0}", z))
             IObj?.Paragraphs.Add(String.Format("zs: {0}", zs))
             IObj?.Paragraphs.Add(String.Format("zh: {0}", zh))
@@ -326,11 +327,11 @@ Namespace PropertyPackages.Auxiliary
 
             PopulateWithDefaultText(IObj)
 
-            IObj?.Paragraphs.Add("<h2>Input Parameters</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Input_Parameters)
             IObj?.Paragraphs.Add(String.Format("Reduced Temperature: {0}", Tr))
             IObj?.Paragraphs.Add(String.Format("Reduced Pressure: {0}", Pr))
             IObj?.Paragraphs.Add(String.Format("Acentric Factor: {0}", w))
-            IObj?.Paragraphs.Add(String.Format("State: {0}", TIPO))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.State_0, TIPO))
 
             Dim zs, zh, wh, Vr, z, DHresS, DHresH, DHres As Double
             Dim E, b1, b2, b3, b4, c1, c2, c3, c4, d1, d2, beta, gamma As Double
@@ -385,7 +386,7 @@ Namespace PropertyPackages.Auxiliary
 
             DHres = DHresS + w / wh * (DHresH - DHresS)
 
-            IObj?.Paragraphs.Add("<h2>Results</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Results)
             IObj?.Paragraphs.Add(String.Format("DHres: {0}", DHres))
             IObj?.Paragraphs.Add(String.Format("DHresS: {0}", DHresS))
             IObj?.Paragraphs.Add(String.Format("DHresH: {0}", DHresH))
@@ -404,12 +405,12 @@ Namespace PropertyPackages.Auxiliary
 
             PopulateWithDefaultText(IObj)
 
-            IObj?.Paragraphs.Add("<h2>Input Parameters</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Input_Parameters)
             IObj?.Paragraphs.Add(String.Format("Reduced Temperature: {0}", Tr))
-            IObj?.Paragraphs.Add(String.Format("Pressure: {0} Pa", P))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
             IObj?.Paragraphs.Add(String.Format("Critical Pressure: {0} Pa", Pc))
             IObj?.Paragraphs.Add(String.Format("Acentric Factor: {0}", w))
-            IObj?.Paragraphs.Add(String.Format("State: {0}", TIPO))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.State_0, TIPO))
 
             Dim zs, zh, wh, Vr, z, DSresS, DSresH, DSres, Pr As Double
             Dim E, b1, b2, b3, b4, c1, c2, c3, c4, d1, d2, beta, gamma As Double
@@ -468,7 +469,7 @@ Namespace PropertyPackages.Auxiliary
 
             DSres = DSresS + w / wh * (DSresH - DSresS)
 
-            IObj?.Paragraphs.Add("<h2>Results</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Results)
             IObj?.Paragraphs.Add(String.Format("DSres: {0}", DSres))
             IObj?.Paragraphs.Add(String.Format("DSresS: {0}", DSresS))
             IObj?.Paragraphs.Add(String.Format("DSresH: {0}", DSresH))
@@ -487,7 +488,7 @@ Namespace PropertyPackages.Auxiliary
 
             PopulateWithDefaultText(IObj)
 
-            IObj?.Paragraphs.Add("<h2>Input Parameters</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Input_Parameters)
             IObj?.Paragraphs.Add(String.Format("Reduced Temperature: {0}", Tr))
             IObj?.Paragraphs.Add(String.Format("Reduced Pressure: {0}", Pr))
             IObj?.Paragraphs.Add(String.Format("B: {0}", B))
@@ -496,7 +497,7 @@ Namespace PropertyPackages.Auxiliary
             IObj?.Paragraphs.Add(String.Format("c4: {0}", c4))
             IObj?.Paragraphs.Add(String.Format("beta: {0}", beta))
             IObj?.Paragraphs.Add(String.Format("gamma: {0}", gamma))
-            IObj?.Paragraphs.Add(String.Format("State: {0}", TIPO))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.State_0, TIPO))
 
             Dim i As Integer
 
@@ -603,7 +604,7 @@ Namespace PropertyPackages.Auxiliary
 
 Final3:
 
-            IObj?.Paragraphs.Add("<h2>Results</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Results)
             IObj?.Paragraphs.Add(String.Format("Reduced Volume: {0}", bbb))
 
             IObj?.Close()
@@ -620,11 +621,11 @@ Final3:
 
             PopulateWithDefaultText(IObj)
 
-            IObj?.Paragraphs.Add("<h2>Input Parameters</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Input_Parameters)
             IObj?.Paragraphs.Add(String.Format("Reduced Temperature: {0}", Tr))
             IObj?.Paragraphs.Add(String.Format("Reduced Pressure: {0}", Pr))
             IObj?.Paragraphs.Add(String.Format("Acentric Factor: {0}", w))
-            IObj?.Paragraphs.Add(String.Format("State: {0}", TIPO))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.State_0, TIPO))
 
             Dim zs, zh, wh, Vr, z, DCvS, DCvH, DCpS, DCpH, DCv, DCp, dPdT, dPdV As Double
             Dim E, B, C, D, b1, b2, b3, b4, c1, c2, c3, c4, d1, d2, beta, gamma As Double
@@ -717,15 +718,15 @@ Final3:
 
             PopulateWithDefaultText(IObj)
 
-            IObj?.Paragraphs.Add("<h2>Input Parameters</h2>")
-            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
-            IObj?.Paragraphs.Add(String.Format("Pressure: {0} Pa", P))
-            IObj?.Paragraphs.Add(String.Format("Mole Fractions: {0}", Vz.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Interaction Parameters: {0}", VKij.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Critical Temperatures: {0} K", VTc.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Critical Pressures: {0} Pa", VPc.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("Acentric Factors: {0} ", Vw.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("State: {0}", TIPO))
+            IObj?.Paragraphs.Add(SolutionInspector.Input_Parameters)
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Mole_Fractions_0, Vz.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Interaction_Parameters_0, VKij.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Critical_Temperatures_0_K, VTc.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Critical_Pressures_0_Pa, VPc.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Acentric_Factors_0, Vw.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format(SolutionInspector.State_0, TIPO))
 
             Dim n, R As Double
             Dim Tc(), Pc(), Vc(), w(), Tr() As Double
@@ -778,7 +779,7 @@ Final3:
             tmp(1) = (lkcp(0) * R + Cpm_ig) / MMm
             tmp(2) = (lkcp(1) * R + Cpm_ig - R) / MMm
 
-            IObj?.Paragraphs.Add("<h2>Results</h2>")
+            IObj?.Paragraphs.Add(SolutionInspector.Results)
             IObj?.Paragraphs.Add(String.Format("Cp/Cv: {0}", tmp(0)))
             IObj?.Paragraphs.Add(String.Format("Cp: {0} kJ/[kg.K]", tmp(1)))
             IObj?.Paragraphs.Add(String.Format("Cv: {0} kJ/[kg.K]", tmp(2)))
