@@ -47,7 +47,7 @@ Namespace UnitOperations
             MyBase.CreateNew()
         End Sub
 
-        Public Overrides Function LoadData(data As System.Collections.Generic.List(Of System.Xml.Linq.XElement)) As Boolean
+        Public Overrides Function LoadData(data As ICollection(Of XElement)) As Boolean
 
             MyBase.LoadData(data)
 

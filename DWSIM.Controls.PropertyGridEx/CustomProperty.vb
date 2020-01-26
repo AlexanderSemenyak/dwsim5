@@ -190,7 +190,7 @@ Namespace PropertyGridEx
                     Else
                         Dim oLookupTable As DataTable = TryCast(oDatasource, DataTable)
                         If oLookupTable IsNot Nothing Then
-                            If oLookupTable.Columns(sDisplayMember).DataType.Equals(System.Type.GetType("System.String")) Then
+                            If oLookupTable.Columns(sDisplayMember).DataType.Equals(GetType(String)) Then
                                 oRow(sProp) = oLookupTable.Select(oLookupTable.Columns(sDisplayMember).ColumnName & " = '" & value & "'")(0).Item(sValueMember)
                             Else
                                 oRow(sProp) = oLookupTable.Select(oLookupTable.Columns(sDisplayMember).ColumnName & " = " & value)(0).Item(sValueMember)

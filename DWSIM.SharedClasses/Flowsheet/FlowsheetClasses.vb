@@ -111,7 +111,7 @@ Namespace DWSIM.Flowsheet
 
         End Sub
 
-        Public Function LoadData(data As System.Collections.Generic.List(Of System.Xml.Linq.XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
+        Public Function LoadData(data As ICollection(Of XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
 
             Dim el As XElement = (From xel As XElement In data Select xel Where xel.Name = "VisibleProperties").SingleOrDefault
 

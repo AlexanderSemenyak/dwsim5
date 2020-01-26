@@ -421,7 +421,7 @@ Namespace UnitOperations
                     proplist.AddRange(Me.InputVariables.Keys.ToArray)
                 Case Else
             End Select
-            Return proplist.ToArray(Type.GetType("System.String"))
+            Return proplist.ToArray(GetType(String))
         End Function
 
         Public Overrides Function GetPropertyUnit(ByVal prop As String, Optional ByVal su As Interfaces.IUnitsOfMeasure = Nothing) As String
@@ -456,7 +456,7 @@ Namespace UnitOperations
             Return Nothing
         End Function
 
-        Public Overrides Function LoadData(data As List(Of XElement)) As Boolean
+        Public Overrides Function LoadData(data As ICollection(Of XElement)) As Boolean
 
             If InputVariables Is Nothing Then InputVariables = New Dictionary(Of String, Double)
             If OutputVariables Is Nothing Then OutputVariables = New Dictionary(Of String, Double)

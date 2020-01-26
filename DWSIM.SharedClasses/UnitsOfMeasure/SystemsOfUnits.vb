@@ -40,7 +40,7 @@ Namespace SystemsOfUnits
         ''' <returns></returns>
         Public Shared Property PredefinedUserUnits As Dictionary(Of String, SystemsOfUnits.Units) = New Dictionary(Of String,Units)()
 
-        Public Function LoadData(data As System.Collections.Generic.List(Of System.Xml.Linq.XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
+        Public Function LoadData(data As ICollection(Of XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
             XMLSerializer.XMLSerializer.Deserialize(Me, data)
             Return True
         End Function

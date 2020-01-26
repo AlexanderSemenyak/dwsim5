@@ -61,7 +61,7 @@ Namespace GraphicObjects.Tables
 
         End Function
 
-        Public Overrides Function LoadData(data As System.Collections.Generic.List(Of System.Xml.Linq.XElement)) As Boolean
+        Public Overrides Function LoadData(data As ICollection(Of XElement)) As Boolean
 
             Dim el As XElement = (From xel As XElement In data Select xel Where xel.Name = "VisibleProperties").SingleOrDefault
 

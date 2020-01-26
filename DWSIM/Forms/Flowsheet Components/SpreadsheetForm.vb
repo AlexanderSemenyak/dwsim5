@@ -367,7 +367,7 @@ Public Class SpreadsheetForm
             Next
         Next
 
-        Return names.ToArray(Type.GetType("System.String"))
+        Return names.ToArray(GetType(String))
 
     End Function
 

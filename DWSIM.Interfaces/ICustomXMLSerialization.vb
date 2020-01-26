@@ -23,6 +23,6 @@ Public Interface ICustomXMLSerialization
 
     Function SaveData() As System.Collections.Generic.List(Of System.Xml.Linq.XElement)
 
-    Function LoadData(ByVal data As System.Collections.Generic.List(Of System.Xml.Linq.XElement)) As Boolean
+    Function LoadData(data As ICollection(Of XElement)) As Boolean
 
 End Interface

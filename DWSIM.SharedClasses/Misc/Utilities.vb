@@ -137,74 +137,121 @@ Public Class Utility
 
     End Sub
 
+
+    'alexander sppedupRename
+    Shared cacheOfOldValues as HashSet(Of Int32) = New HashSet(Of Int32)() From {
+        "TipoObjeto".GetHashCode(),
+        "Nome".GetHashCode(),
+        "Descricao".GetHashCode(),
+        "Tipo".GetHashCode(),
+        "FracaoMolar".GetHashCode(),
+        "FracaoMassica".GetHashCode(),
+        "FracaoDePetroleo".GetHashCode(),
+        "Nenhum".GetHashCode(),
+        "Destino".GetHashCode(),
+        "Fonte".GetHashCode(),
+        "Manipulada".GetHashCode(),
+        "Referencia".GetHashCode(),
+        "Controlada".GetHashCode(),
+        "DWSIM.DrawingTools.GraphicObjects.ReactorEquilibriumGraphic".GetHashCode(),
+        "DWSIM.DrawingTools.GraphicObjects.ReactorConversionGraphic".GetHashCode(),
+        "DWSIM.DrawingTools.GraphicObjects.ReactorGibbsGraphic".GetHashCode(),
+        "DWSIM.DrawingTools.GraphicObjects.ReactorCSTRGraphic".GetHashCode(),
+        "DWSIM.DrawingTools.GraphicObjects.ReactorPFRGraphic".GetHashCode(),
+        "DWSIM.DrawingTools.GraphicObjects.NodeInGraphic".GetHashCode(),
+        "DWSIM.DrawingTools.GraphicObjects.NodeOutGraphic".GetHashCode(),
+        "DWSIM.DrawingTools.GraphicObjects.HeaterGraphic".GetHashCode(),
+        "DWSIM.DrawingTools.GraphicObjects.CoolerGraphic".GetHashCode(),
+        "DWSIM.DrawingTools.GraphicObjects.CompressorGraphic".GetHashCode(),
+        "DWSIM.DrawingTools.GraphicObjects.ExpanderGraphic".GetHashCode(),
+        "DWSIM.DrawingTools.GraphicObjects.ShorcutColumnGraphic".GetHashCode(),
+        "DWSIM.DrawingTools.GraphicObjects.DistillationColumnGraphic".GetHashCode(),
+        "DWSIM.DrawingTools.GraphicObjects.AbsorptionColumnGraphic".GetHashCode(),
+        "DWSIM.DrawingTools.GraphicObjects.FlowsheetUOGraphic".GetHashCode(),
+        "DWSIM.DrawingTools.GraphicObjects.CustomUOGraphic".GetHashCode(),
+        "DWSIM.DrawingTools.GraphicObjects.CapeOpenUOGraphic".GetHashCode(),
+        "DWSIM.DrawingTools.GraphicObjects.ExcelUOGraphic".GetHashCode(),
+        "DWSIM.DrawingTools.GraphicObjects.PipeGraphic".GetHashCode(),
+        "DWSIM.DrawingTools.GraphicObjects.TextGraphic".GetHashCode()
+        }
+    
+
     Shared Sub UpdateElementForNewUI(xel As XElement)
 
-        If xel.Name = "TipoObjeto" Then xel.Name = "ObjectType"
-        If xel.Name = "Nome" Then xel.Name = "Name"
-        If xel.Name = "Descricao" Then xel.Name = "Description"
-        If xel.Name = "Tipo" Then xel.Name = "Type"
-        If xel.Name = "FracaoMolar" Then xel.Name = "MoleFraction"
-        If xel.Name = "FracaoMassica" Then xel.Name = "MassFraction"
-        If xel.Name = "FracaoDePetroleo" Then xel.Name = "PetroleumFraction"
-        If xel.Value = "Nenhum" Then xel.Value = "None"
-        If xel.Value = "Destino" Then xel.Value = "Target"
-        If xel.Value = "Fonte" Then xel.Value = "Source"
-        If xel.Value = "Manipulada" Then xel.Value = "Manipulated"
-        If xel.Value = "Referencia" Then xel.Value = "Referenced"
-        If xel.Value = "Controlada" Then xel.Value = "Controlled"
+        Dim hashName = if(xel.Name?.GetHashCode(),0)
+        Dim hashValue = If(xel.Value?.GetHashCode(),0)
+
+        if cacheOfOldValues.Contains(hashName) or cacheOfOldValues.Contains(hashValue) Then 
+            'alexander start slow comparison
+
+            If xel.Name =  "TipoObjeto" Then xel.Name = "ObjectType"
+            If xel.Name =  "Nome" Then xel.Name = "Name"
+            If xel.Name =  "Descricao" Then xel.Name = "Description"
+            If xel.Name =  "Tipo" Then xel.Name = "Type"
+            If xel.Name =  "FracaoMolar" Then xel.Name = "MoleFraction"
+            If xel.Name =  "FracaoMassica" Then xel.Name = "MassFraction"
+            If xel.Name =  "FracaoDePetroleo" Then xel.Name = "PetroleumFraction"
+            If xel.Value = "Nenhum" Then xel.Value = "None"
+            If xel.Value = "Destino" Then xel.Value = "Target"
+            If xel.Value = "Fonte" Then xel.Value = "Source"
+            If xel.Value = "Manipulada" Then xel.Value = "Manipulated"
+            If xel.Value = "Referencia" Then xel.Value = "Referenced"
+            If xel.Value = "Controlada" Then xel.Value = "Controlled"
+
+            If xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.ReactorEquilibriumGraphic") Then
+                xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.EquilibriumReactorGraphic"
+            ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.ReactorConversionGraphic") Then
+                xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.ConversionReactorGraphic"
+            ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.ReactorGibbsGraphic") Then
+                xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.GibbsReactorGraphic"
+            ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.ReactorCSTRGraphic") Then
+                xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.CSTRGraphic"
+            ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.ReactorPFRGraphic") Then
+                xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.PFRGraphic"
+            ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.NodeInGraphic") Then
+                xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.MixerGraphic"
+            ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.NodeOutGraphic") Then
+                xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.SplitterGraphic"
+            ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.HeaterGraphic") Then
+                xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.HeaterGraphic"
+            ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.CoolerGraphic") Then
+                xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.CoolerGraphic"
+            ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.CompressorGraphic") Then
+                xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.CompressorGraphic"
+            ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.ExpanderGraphic") Then
+                xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.ExpanderGraphic"
+            ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.ShorcutColumnGraphic") Then
+                xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.ShortcutColumnGraphic"
+            ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.DistillationColumnGraphic") Then
+                xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.RigorousColumnGraphic"
+            ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.AbsorptionColumnGraphic") Then
+                xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.AbsorptionColumnGraphic"
+            ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.FlowsheetUOGraphic") Then
+                xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.FlowsheetGraphic"
+            ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.CustomUOGraphic") Then
+                xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.ScriptGraphic"
+            ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.CapeOpenUOGraphic") Then
+                xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.CAPEOPENGraphic"
+            ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.ExcelUOGraphic") Then
+                xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.SpreadsheetGraphic"
+            ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.PipeGraphic") Then
+                xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.PipeSegmentGraphic"
+            ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.TextGraphic") Then
+                xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.TextGraphic"
+            End If
+        end if
 
         If xel.Name = "Fill" Then xel.Value = "True"
 
-        If xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.ReactorEquilibriumGraphic") Then
-            xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.EquilibriumReactorGraphic"
-        ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.ReactorConversionGraphic") Then
-            xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.ConversionReactorGraphic"
-        ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.ReactorGibbsGraphic") Then
-            xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.GibbsReactorGraphic"
-        ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.ReactorCSTRGraphic") Then
-            xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.CSTRGraphic"
-        ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.ReactorPFRGraphic") Then
-            xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.PFRGraphic"
-        ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.NodeInGraphic") Then
-            xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.MixerGraphic"
-        ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.NodeOutGraphic") Then
-            xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.SplitterGraphic"
-        ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.HeaterGraphic") Then
-            xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.HeaterGraphic"
-        ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.CoolerGraphic") Then
-            xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.CoolerGraphic"
-        ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.CompressorGraphic") Then
-            xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.CompressorGraphic"
-        ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.ExpanderGraphic") Then
-            xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.ExpanderGraphic"
-        ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.ShorcutColumnGraphic") Then
-            xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.ShortcutColumnGraphic"
-        ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.DistillationColumnGraphic") Then
-            xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.RigorousColumnGraphic"
-        ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.AbsorptionColumnGraphic") Then
-            xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.AbsorptionColumnGraphic"
-        ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.FlowsheetUOGraphic") Then
-            xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.FlowsheetGraphic"
-        ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.CustomUOGraphic") Then
-            xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.ScriptGraphic"
-        ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.CapeOpenUOGraphic") Then
-            xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.CAPEOPENGraphic"
-        ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.ExcelUOGraphic") Then
-            xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.SpreadsheetGraphic"
-        ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.PipeGraphic") Then
-            xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.PipeSegmentGraphic"
-        ElseIf xel.Value.Equals("DWSIM.DrawingTools.GraphicObjects.TextGraphic") Then
-            xel.Value = "DWSIM.Drawing.SkiaSharp.GraphicObjects.TextGraphic"
-        End If
+        if StringComparer.Ordinal.Equals(xel.Name,"Type") then 'alexander sppedup
+            If xel.Value.StartsWith("DWSIM.DrawingTools.GraphicObjects",StringComparison.Ordinal) Then 'And xel.Name = "Type" Then
+                xel.Value = xel.Value.Replace("DWSIM.DrawingTools.GraphicObjects", "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes")
+            End If
 
-        If xel.Value.StartsWith("DWSIM.DrawingTools.GraphicObjects") And xel.Name = "Type" Then
-            xel.Value = xel.Value.Replace("DWSIM.DrawingTools.GraphicObjects", "DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes")
-        End If
-
-        If xel.Value.StartsWith("DWSIM.GraphicObjects") And xel.Name = "Type" Then
-            xel.Value = xel.Value.Replace("DWSIM.GraphicObjects", "DWSIM.Drawing.SkiaSharp.GraphicObjects.Tables")
-        End If
-
+            If xel.Value.StartsWith("DWSIM.GraphicObjects",StringComparison.Ordinal) Then 'And xel.Name = "Type" Then
+                xel.Value = xel.Value.Replace("DWSIM.GraphicObjects", "DWSIM.Drawing.SkiaSharp.GraphicObjects.Tables")
+            End If
+        end if
     End Sub
 
     Shared Sub UpdateElementFromNewUI(xel As XElement)

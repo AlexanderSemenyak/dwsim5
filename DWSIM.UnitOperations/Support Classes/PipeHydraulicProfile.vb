@@ -49,7 +49,7 @@ Namespace UnitOperations.Auxiliary.Pipe
             End Set
         End Property
 
-        Public Function LoadData(data As System.Collections.Generic.List(Of System.Xml.Linq.XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
+        Public Function LoadData(data As ICollection(Of XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
 
             XMLSerializer.XMLSerializer.Deserialize(Me, data)
             Dim ci As Globalization.CultureInfo = Globalization.CultureInfo.InvariantCulture
@@ -108,7 +108,7 @@ Namespace UnitOperations.Auxiliary.Pipe
 
         Protected m_results As New System.Collections.Generic.List(Of PipeResults)
 
-        Public Function LoadData(data As System.Collections.Generic.List(Of System.Xml.Linq.XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
+        Public Function LoadData(data As ICollection(Of XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
 
             XMLSerializer.XMLSerializer.Deserialize(Me, data)
             Dim ci As Globalization.CultureInfo = Globalization.CultureInfo.InvariantCulture
@@ -558,7 +558,7 @@ Namespace UnitOperations.Auxiliary.Pipe
         Public Property HTC_insulation As Double = 0.0#
         Public Property HTC_external As Double = 0.0#
 
-        Public Function LoadData(data As System.Collections.Generic.List(Of System.Xml.Linq.XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
+        Public Function LoadData(data As ICollection(Of XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
 
             XMLSerializer.XMLSerializer.Deserialize(Me, data)
             Return True

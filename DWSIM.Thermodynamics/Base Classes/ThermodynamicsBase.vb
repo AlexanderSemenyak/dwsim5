@@ -29,12 +29,21 @@ Imports System.Globalization
 Imports DWSIM.Interfaces.Enums
 Imports DWSIM.Interfaces
 Imports System.Dynamic
+Imports DWSIM.SharedClasses
+Imports XMLSerializer
 
 Namespace BaseClasses
 
     <System.Serializable()> Public Class Compound
 
         Implements Interfaces.ICustomXMLSerialization, CapeOpen.ICapeIdentification, Interfaces.ICompound
+
+        ''' <summary>
+        ''' For Generate XMLSerializer DLL
+        ''' </summary>
+        protected Sub New()
+        End Sub
+        
 
         Public Sub New(ByVal name As String, ByVal description As String)
 
@@ -53,16 +62,17 @@ Namespace BaseClasses
         End Function
 
 
-        Public Function LoadData(data As System.Collections.Generic.List(Of System.Xml.Linq.XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
+        Public Function LoadData(data As ICollection(Of XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
 
             XMLSerializer.XMLSerializer.Deserialize(Me, data)
 
             ExtraProperties = New ExpandoObject
 
-            Dim xel_d = (From xel2 As XElement In data Select xel2 Where xel2.Name = "DynamicProperties")
+            'Dim xel_d = (From xel2 As XElement In data Select xel2 Where xel2.Name = "DynamicProperties")
+            Dim xel_d = OnitUtilities.GetFilteredXElementsEnumerable(data, "DynamicProperties")
 
             If Not xel_d Is Nothing Then
-                Dim dataDyn As List(Of XElement) = xel_d.Elements.ToList
+                Dim dataDyn = xel_d.Elements
                 For Each xel As XElement In dataDyn
                     Try
                         Dim propname = xel.Element("Name").Value
@@ -78,6 +88,8 @@ Namespace BaseClasses
             Return True
 
         End Function
+
+
 
         Public Function SaveData() As System.Collections.Generic.List(Of System.Xml.Linq.XElement) Implements Interfaces.ICustomXMLSerialization.SaveData
 
@@ -166,15 +178,16 @@ Namespace BaseClasses
             End If
         End Function
 
-        Public Function LoadData(data As System.Collections.Generic.List(Of System.Xml.Linq.XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
+        Public Function LoadData(data As ICollection(Of XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
 
             XMLSerializer.XMLSerializer.Deserialize(Me, data)
 
-            Dim datac As List(Of XElement) = (From xel As XElement In data Select xel Where xel.Name = "Compounds").Elements.ToList
+            'Dim datac = (From xel As XElement In data Select xel Where xel.Name = "Compounds").Elements
+            Dim datac = OnitUtilities.GetFilteredXElementsEnumerable(data, "Compounds").Elements
 
             For Each xel As XElement In datac
                 Dim s As New Compound("", "")
-                s.LoadData(xel.Elements.ToList)
+                s.LoadData(xel.Elements.ToArray())
                 Me.Compounds.Add(s.Name, s)
             Next
 
@@ -342,7 +355,7 @@ Namespace BaseClasses
             End If
         End Function
 
-        Public Function LoadData(data As System.Collections.Generic.List(Of System.Xml.Linq.XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
+        Public Function LoadData(data As ICollection(Of XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
 
             XMLSerializer.XMLSerializer.Deserialize(Me, data)
 
@@ -1119,7 +1132,7 @@ Namespace BaseClasses
 
 #End Region
 
-        Public Function LoadData(data As System.Collections.Generic.List(Of System.Xml.Linq.XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
+        Public Function LoadData(data As ICollection(Of XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
 
             Me.ID = (From xel As XElement In data Select xel Where xel.Name = "ID").SingleOrDefault.Value
             Me.Name = (From xel As XElement In data Select xel Where xel.Name = "Name").SingleOrDefault.Value
@@ -1365,7 +1378,7 @@ Namespace BaseClasses
 
         End Function
 
-        Public Function LoadData(data As System.Collections.Generic.List(Of System.Xml.Linq.XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
+        Public Function LoadData(data As ICollection(Of XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
 
             XMLSerializer.XMLSerializer.Deserialize(Me, data, True)
             Return True
@@ -1421,16 +1434,17 @@ Namespace BaseClasses
 
         End Function
 
-        Public Function LoadData(data As System.Collections.Generic.List(Of System.Xml.Linq.XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
+        Public Function LoadData(data As ICollection(Of XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
 
             XMLSerializer.XMLSerializer.Deserialize(Me, data)
 
             ExtraProperties = New ExpandoObject
 
-            Dim xel_d = (From xel2 As XElement In data Select xel2 Where xel2.Name = "DynamicProperties")
+            'Dim xel_d = (From xel2 As XElement In data Select xel2 Where xel2.Name = "DynamicProperties")
+            Dim xel_d = OnitUtilities.GetFilteredXElementsEnumerable(data, "DynamicProperties")
 
             If Not xel_d Is Nothing Then
-                Dim dataDyn As List(Of XElement) = xel_d.Elements.ToList
+                Dim dataDyn = xel_d.Elements
                 For Each xel As XElement In dataDyn
                     Try
                         Dim propname = xel.Element("Name").Value
@@ -1468,11 +1482,13 @@ Namespace BaseClasses
                 unif = Nothing
                 modf = Nothing
             end if
-            For Each xel2 As XElement In (From xel As XElement In data Select xel Where xel.Name = "NISTMODFACGroups").Elements
+            'For Each xel2 As XElement In  (From xel As XElement In data Select xel Where xel.Name = "NISTMODFACGroups").Elements
+            For Each xel2 As XElement In  OnitUtilities.GetFilteredXElementsEnumerable(data, "NISTMODFACGroups").Elements
                 Me.NISTMODFACGroups.Add(xel2.@GroupID.ToString, xel2.@Value)
             Next
 
-            For Each xel2 As XElement In (From xel As XElement In data Select xel Where xel.Name = "Elements").Elements
+            'For Each xel2 As XElement In (From xel As XElement In data Select xel Where xel.Name = "Elements").Elements
+            For Each xel2 As XElement In OnitUtilities.GetFilteredXElementsEnumerable(data,"Elements").Elements
                 Me.Elements.Add(xel2.@Name, xel2.@Value)
             Next
 

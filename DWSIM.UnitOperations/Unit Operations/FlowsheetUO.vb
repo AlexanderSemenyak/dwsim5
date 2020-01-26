@@ -48,7 +48,7 @@ Namespace UnitOperations.Auxiliary
         Public Property ObjectProperty As String = ""
         'Public Property Value As Object = Nothing
         'Public Property Unit As String = ""
-        Public Function LoadData(data As List(Of XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
+        Public Function LoadData(data As ICollection(Of XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
             XMLSerializer.XMLSerializer.Deserialize(Me, data)
             Return True
         End Function
@@ -1017,7 +1017,7 @@ Label_00CC:
 
         End Function
 
-        Public Overrides Function LoadData(data As List(Of XElement)) As Boolean
+        Public Overrides Function LoadData(data As ICollection(Of XElement)) As Boolean
 
             XMLSerializer.XMLSerializer.Deserialize(Me, data)
 

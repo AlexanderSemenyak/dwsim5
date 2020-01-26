@@ -820,7 +820,7 @@ Namespace UnitOperations
 
 #Region "    DWSIM Specifics"
 
-        Public Overrides Function LoadData(data As System.Collections.Generic.List(Of System.Xml.Linq.XElement)) As Boolean
+        Public Overrides Function LoadData(data As ICollection(Of XElement)) As Boolean
 
             MyBase.LoadData(data)
 
@@ -1082,7 +1082,7 @@ Namespace UnitOperations
                 For Each p As ICapeIdentification In Me._params
                     proplist.Add(p.ComponentName)
                 Next
-                Return proplist.ToArray(Type.GetType("System.String"))
+                Return proplist.ToArray(GetType(String))
             Else
                 Return New String() {Nothing}
             End If
@@ -1368,7 +1368,7 @@ Namespace UnitOperations.Auxiliary.CapeOpen
         Public Name As String = ""
         Public ImplementedCategory As String = ""
 
-        Public Function LoadData(data As System.Collections.Generic.List(Of System.Xml.Linq.XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
+        Public Function LoadData(data As ICollection(Of XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
             XMLSerializer.XMLSerializer.Deserialize(Me, data, True)
             Return True
         End Function

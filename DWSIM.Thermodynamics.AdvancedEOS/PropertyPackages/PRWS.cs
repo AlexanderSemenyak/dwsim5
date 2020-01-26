@@ -315,7 +315,7 @@ namespace DWSIM.Thermodynamics.AdvancedEOS
             return data;
         }
 
-        public override bool LoadData(List<System.Xml.Linq.XElement> data)
+        public override bool LoadData(ICollection<XElement> data)
         {
 
             base.LoadData(data);

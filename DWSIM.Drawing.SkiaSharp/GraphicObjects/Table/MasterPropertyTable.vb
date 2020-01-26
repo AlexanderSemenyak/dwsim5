@@ -42,7 +42,7 @@ Namespace GraphicObjects.Tables
 
         <Xml.Serialization.XmlIgnore> Public Property Flowsheet As Interfaces.IFlowsheet
 
-        Public Overrides Function LoadData(data As System.Collections.Generic.List(Of System.Xml.Linq.XElement)) As Boolean
+        Public Overrides Function LoadData(data As ICollection(Of XElement)) As Boolean
 
             XMLSerializer.XMLSerializer.Deserialize(Me, data)
             m_objectlist.Clear()
@@ -158,7 +158,7 @@ Namespace GraphicObjects.Tables
                     End If
                 Next
                 m_sortableitems.Add("Custom")
-                Return m_sortableitems.ToArray(Type.GetType("System.String"))
+                Return m_sortableitems.ToArray(GetType(String))
             End Get
         End Property
 

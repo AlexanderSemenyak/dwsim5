@@ -90,7 +90,7 @@ Namespace PropertyPackages
             Return elements
         End Function
 
-        Public Overrides Function LoadData(data As List(Of XElement)) As Boolean
+        Public Overrides Function LoadData(data As ICollection(Of XElement)) As Boolean
             XMLSerializer.XMLSerializer.Deserialize(Me, data)
             MyBase.LoadData(data)
         End Function

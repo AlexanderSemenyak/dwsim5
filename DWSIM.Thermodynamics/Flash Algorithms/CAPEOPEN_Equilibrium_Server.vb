@@ -91,7 +91,7 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
 
 #Region "XML Load/Save"
 
-        Public Overrides Function LoadData(data As List(Of XElement)) As Boolean
+        Public Overrides Function LoadData(data As ICollection(Of XElement)) As Boolean
 
             MyBase.LoadData(data)
 

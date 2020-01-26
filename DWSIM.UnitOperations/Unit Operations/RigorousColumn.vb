@@ -89,7 +89,7 @@ Namespace UnitOperations.Auxiliary.SepOps
             Return Me.Value.ToString
         End Function
 
-        Public Function LoadData(data As System.Collections.Generic.List(Of System.Xml.Linq.XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
+        Public Function LoadData(data As ICollection(Of XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
 
             XMLSerializer.XMLSerializer.Deserialize(Me, data)
             Return True
@@ -261,7 +261,7 @@ Namespace UnitOperations.Auxiliary.SepOps
 
         End Sub
 
-        Public Function LoadData(data As System.Collections.Generic.List(Of System.Xml.Linq.XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
+        Public Function LoadData(data As ICollection(Of XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
 
             XMLSerializer.XMLSerializer.Deserialize(Me, data)
             Dim fields As Reflection.PropertyInfo() = Me.GetType.GetProperties()
@@ -315,7 +315,7 @@ Namespace UnitOperations.Auxiliary.SepOps
         Private _liqmolflows As New List(Of Parameter)
         Private _vapmolflows As New List(Of Parameter)
 
-        Public Function LoadData(data As System.Collections.Generic.List(Of System.Xml.Linq.XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
+        Public Function LoadData(data As ICollection(Of XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
 
             For Each xel As XElement In (From xel2 As XElement In data Select xel2 Where xel2.Name = "LiquidCompositions").SingleOrDefault.Elements.ToList
                 Dim var As New Dictionary(Of String, Parameter)
@@ -475,7 +475,7 @@ Namespace UnitOperations.Auxiliary.SepOps
 
         Public Property StreamID As String = ""
 
-        Public Function LoadData(data As System.Collections.Generic.List(Of System.Xml.Linq.XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
+        Public Function LoadData(data As ICollection(Of XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
 
             Dim xel = (From xe In data Select xe Where xe.Name = "Name").SingleOrDefault
 
@@ -595,7 +595,7 @@ Namespace UnitOperations.Auxiliary.SepOps
         Private m_value As Double = 0.0#
         Private m_unit As String = ""
 
-        Public Function LoadData(data As System.Collections.Generic.List(Of System.Xml.Linq.XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
+        Public Function LoadData(data As ICollection(Of XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
 
             Return XMLSerializer.XMLSerializer.Deserialize(Me, data)
 
@@ -1645,7 +1645,7 @@ Namespace UnitOperations
         Private _autoupdie As Boolean = False
         Private _storejac As Boolean = True
 
-        Public Overrides Function LoadData(data As System.Collections.Generic.List(Of System.Xml.Linq.XElement)) As Boolean
+        Public Overrides Function LoadData(data As ICollection(Of XElement)) As Boolean
 
             MyBase.LoadData(data)
 

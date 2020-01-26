@@ -85,7 +85,7 @@ Namespace Reactors
             Return Newtonsoft.Json.JsonConvert.DeserializeObject(Of Reactor_Gibbs)(Newtonsoft.Json.JsonConvert.SerializeObject(Me))
         End Function
 
-        Public Overrides Function LoadData(data As System.Collections.Generic.List(Of System.Xml.Linq.XElement)) As Boolean
+        Public Overrides Function LoadData(data As ICollection(Of XElement)) As Boolean
 
             MyBase.LoadData(data)
 
@@ -103,7 +103,7 @@ Namespace Reactors
             For Each xel2 As XElement In (From xel As XElement In data Select xel Where xel.Name = "Elements").Elements
                 elmns.Add(xel2.@ID)
             Next
-            _elements = elmns.ToArray(Type.GetType("System.String"))
+            _elements = elmns.ToArray(GetType(String))
 
             Dim telmns As New ArrayList
             For Each xel2 As XElement In (From xel As XElement In data Select xel Where xel.Name = "TotalElements").Elements

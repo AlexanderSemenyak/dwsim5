@@ -144,7 +144,7 @@ Namespace UnitOperations
 
         Public Property MITA As Double = 0.0#
 
-        Public Overrides Function LoadData(data As List(Of XElement)) As Boolean
+        Public Overrides Function LoadData(data As ICollection(Of XElement)) As Boolean
             'workaround for renaming CalcBothTemp_KA calculation type to CalcBothTemp_UA
             For Each xel In data
                 If xel.Name = "CalculationMode" Then
@@ -2273,7 +2273,7 @@ Namespace UnitOperations.Auxiliary.HeatExchanger
         'Reynold numbers, only as calculation results
         Public ReT, ReS As Double
 
-        Public Function LoadData(data As System.Collections.Generic.List(Of System.Xml.Linq.XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
+        Public Function LoadData(data As ICollection(Of XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
 
             XMLSerializer.XMLSerializer.Deserialize(Me, data, True)
             Return True

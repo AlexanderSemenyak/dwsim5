@@ -274,7 +274,7 @@ Namespace SpecialOps
             End Set
         End Property
 
-        Public Overrides Function LoadData(data As System.Collections.Generic.List(Of System.Xml.Linq.XElement)) As Boolean
+        Public Overrides Function LoadData(data As ICollection(Of XElement)) As Boolean
 
             Dim ci As Globalization.CultureInfo = Globalization.CultureInfo.InvariantCulture
 

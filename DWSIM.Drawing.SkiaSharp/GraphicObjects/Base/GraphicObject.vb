@@ -76,7 +76,7 @@ Namespace GraphicObjects
 
         End Function
 
-        Public Overridable Function LoadData(data As System.Collections.Generic.List(Of System.Xml.Linq.XElement)) As Boolean Implements ICustomXMLSerialization.LoadData
+        Public Overridable Function LoadData(data As ICollection(Of XElement)) As Boolean Implements ICustomXMLSerialization.LoadData
 
             XMLSerializer.XMLSerializer.Deserialize(Me, data)
 

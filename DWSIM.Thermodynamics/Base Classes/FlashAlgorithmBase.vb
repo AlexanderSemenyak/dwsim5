@@ -24,6 +24,7 @@ Imports System.Linq
 Imports System.IO
 Imports System.Runtime.Serialization.Formatters.Binary
 Imports System.Runtime.Serialization
+Imports System.Text
 Imports DWSIM.Interfaces.My.Resources
 
 Namespace PropertyPackages.Auxiliary.FlashAlgorithms
@@ -51,17 +52,17 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
 
         Public Property StabSearchCompIDs As String()
             Get
-                Dim list1 As String() = FlashSettings(ThreePhaseFlashStabTestCompIds).ToArray(System.Globalization.CultureInfo.CurrentCulture, Type.GetType("System.String"))
+                Dim list1 As String() = FlashSettings(ThreePhaseFlashStabTestCompIds).ToArray(System.Globalization.CultureInfo.CurrentCulture, GetType(String))
                 Dim list2 = list1.ToList()
                 list2.Remove("")
                 Return list2.ToArray
             End Get
             Set(value As String())
-                Dim comps As String = ""
+                Dim comps As StringBuilder = New StringBuilder()
                 For Each s As String In value
-                    comps += s + ","
+                    comps.Append(s).Append(",")
                 Next
-                FlashSettings(ThreePhaseFlashStabTestCompIds) = comps
+                FlashSettings(ThreePhaseFlashStabTestCompIds) = comps.ToString()
             End Set
         End Property
 
@@ -1116,7 +1117,7 @@ will converge to this solution.")
 
 #Region "XML Serialization"
 
-        Public Overridable Function LoadData(data As List(Of XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
+        Public Overridable Function LoadData(data As ICollection(Of XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
 
             Dim el = (From xel As XElement In data Select xel Where xel.Name = "FlashSettings").SingleOrDefault
 

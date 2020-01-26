@@ -48,6 +48,7 @@ Imports DWSIM.UI.Shared
 Imports DWSIM.Interfaces.Enums
 Imports DWSIM.Interfaces.My.Resources
 Imports Sysytem
+Imports XMLSerializer
 
 Namespace PropertyPackages
 
@@ -2021,7 +2022,7 @@ Namespace PropertyPackages
             If Not Settings.CAPEOPENMode Then
                 Try
                     Me._tpseverity = Me.FlashBase.FlashSettings(Enums.FlashSetting.ThreePhaseFlashStabTestSeverity)
-                    Me._tpcompids = Me.FlashBase.FlashSettings(Enums.FlashSetting.ThreePhaseFlashStabTestCompIds).ToArray(Globalization.CultureInfo.CurrentCulture, Type.GetType("System.String"))
+                    Me._tpcompids = Me.FlashBase.FlashSettings(Enums.FlashSetting.ThreePhaseFlashStabTestCompIds).ToArray(Globalization.CultureInfo.CurrentCulture, GetType(String))
                     Dim newlist = Me._tpcompids.ToList
                     newlist.Remove("")
                     Me._tpcompids = newlist.ToArray()
@@ -3343,7 +3344,7 @@ redirect2:                      IObj?.SetCurrent()
 
             Try
                 Me._tpseverity = Me.FlashBase.FlashSettings(Enums.FlashSetting.ThreePhaseFlashStabTestSeverity)
-                Me._tpcompids = Me.FlashBase.FlashSettings(Enums.FlashSetting.ThreePhaseFlashStabTestCompIds).ToArray(Globalization.CultureInfo.CurrentCulture, Type.GetType("System.String"))
+                Me._tpcompids = Me.FlashBase.FlashSettings(Enums.FlashSetting.ThreePhaseFlashStabTestCompIds).ToArray(Globalization.CultureInfo.CurrentCulture, GetType(String))
             Catch ex As Exception
                 Me._tpseverity = 0
                 Me._tpcompids = New String() {}
@@ -11035,132 +11036,164 @@ Final3:
 
 #Region "   XML data persistence"
 
-        Public Overridable Function LoadData(data As System.Collections.Generic.List(Of System.Xml.Linq.XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
+        Public Overridable Function LoadData(data As ICollection(Of XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
 
             Dim ci As Globalization.CultureInfo = Globalization.CultureInfo.InvariantCulture
 
             Try
-                Me.UniqueID = (From el As XElement In data Select el Where el.Name = "ID").FirstOrDefault.Value
-                Me.Tag = (From el As XElement In data Select el Where el.Name = "Tag").FirstOrDefault.Value
+                'Me.UniqueID = (From el As XElement In data Select el Where el.Name = "ID").FirstOrDefault.Value
+                Me.UniqueID = OnitUtilities.GetFilteredXElementsEnumerable (data, "ID").FirstOrDefault.Value
+                'Me.Tag = (From el As XElement In data Select el Where el.Name = "Tag").FirstOrDefault.Value
+                Me.Tag = OnitUtilities.GetFilteredXElementsEnumerable (data, "Tag").FirstOrDefault.Value
             Catch ex As Exception
             End Try
-            Me.ComponentName = (From el As XElement In data Select el Where el.Name = "ComponentName").FirstOrDefault.Value
-            Me.ComponentDescription = (From el As XElement In data Select el Where el.Name = "ComponentDescription").FirstOrDefault.Value
+            'Me.ComponentName = (From el As XElement In data Select el Where el.Name = "ComponentName").FirstOrDefault.Value
+            try
+            Me.ComponentName = OnitUtilities.GetFilteredXElementsEnumerable (data, "ComponentName").FirstOrDefault.Value
+            Catch ex As Exception
+            End Try
+
+            'Me.ComponentDescription = (From el As XElement In data Select el Where el.Name = "ComponentDescription").FirstOrDefault.Value
+            Me.ComponentDescription = OnitUtilities.GetFilteredXElementsEnumerable (data, "ComponentDescription").FirstOrDefault.Value
             Try
-                Me._tpseverity = (From el As XElement In data Select el Where el.Name = "TPSeverity").FirstOrDefault.Value
-                Me._tpcompids = XMLSerializer.XMLSerializer.StringToArray2((From el As XElement In data Select el Where el.Name = "TPCompIDs").FirstOrDefault.Value, ci, Type.GetType("System.String"))
+                'Me._tpseverity = (From el As XElement In data Select el Where el.Name = "TPSeverity").FirstOrDefault.Value
+                Me._tpseverity = OnitUtilities.GetFilteredXElementsEnumerable (data, "TPSeverity").FirstOrDefault.Value
+                'Me._tpcompids = XMLSerializer.XMLSerializer.StringToArray2((From el As XElement In data Select el Where el.Name = "TPCompIDs").FirstOrDefault.Value, ci, GetType(String))
+                Me._tpcompids = XMLSerializer.XMLSerializer.StringToArray2(OnitUtilities.GetFilteredXElementsEnumerable (data, "TPCompIDs").FirstOrDefault.Value, ci, GetType(String))
             Catch ex As Exception
             End Try
 
             Try
-                Me.ParametersXMLString = (From el As XElement In data Select el Where el.Name = "Parameters").FirstOrDefault.ToString()
+                'Me.ParametersXMLString = (From el As XElement In data Select el Where el.Name = "Parameters").FirstOrDefault.ToString()
+                Me.ParametersXMLString = OnitUtilities.GetFilteredXElementsEnumerable (data,  "Parameters").FirstOrDefault.ToString()
             Catch ex As Exception
             End Try
 
             Try
-                OverrideKvalFugCoeff = (From el As XElement In data Select el Where el.Name = "OverrideKvalFugCoeff").FirstOrDefault.Value
+                'OverrideKvalFugCoeff = (From el As XElement In data Select el Where el.Name = "OverrideKvalFugCoeff").FirstOrDefault.Value
+                OverrideKvalFugCoeff = OnitUtilities.GetFilteredXElementsEnumerable (data,  "OverrideKvalFugCoeff").FirstOrDefault.Value
             Catch ex As Exception
             End Try
 
             Try
-                OverrideEnthalpyCalculation = (From el As XElement In data Select el Where el.Name = "OverrideEnthalpyCalculation").FirstOrDefault.Value
+                'OverrideEnthalpyCalculation = (From el As XElement In data Select el Where el.Name = "OverrideEnthalpyCalculation").FirstOrDefault.Value
+                OverrideEnthalpyCalculation = OnitUtilities.GetFilteredXElementsEnumerable (data,  "OverrideEnthalpyCalculation").FirstOrDefault.Value
             Catch ex As Exception
             End Try
 
             Try
-                OverrideEntropyCalculation = (From el As XElement In data Select el Where el.Name = "OverrideEntropyCalculation").FirstOrDefault.Value
+                'OverrideEntropyCalculation = (From el As XElement In data Select el Where el.Name = "OverrideEntropyCalculation").FirstOrDefault.Value
+                OverrideEntropyCalculation = OnitUtilities.GetFilteredXElementsEnumerable (data,  "OverrideEntropyCalculation").FirstOrDefault.Value
             Catch ex As Exception
             End Try
 
             Try
-                LiquidDensityCalculationMode_Subcritical = (From el As XElement In data Select el Where el.Name = "LiquidDensityCalculationMode_Supercritical").FirstOrDefault.Value
+                'LiquidDensityCalculationMode_Subcritical = (From el As XElement In data Select el Where el.Name = "LiquidDensityCalculationMode_Supercritical").FirstOrDefault.Value
+                LiquidDensityCalculationMode_Subcritical = OnitUtilities.GetFilteredXElementsEnumerable (data,  "LiquidDensityCalculationMode_Supercritical").FirstOrDefault.Value
             Catch ex As Exception
             End Try
 
             Try
-                LiquidDensityCalculationMode_Supercritical = (From el As XElement In data Select el Where el.Name = "LiquidDensityCalculationMode_Supercritical").FirstOrDefault.Value
+                'LiquidDensityCalculationMode_Supercritical = (From el As XElement In data Select el Where el.Name = "LiquidDensityCalculationMode_Supercritical").FirstOrDefault.Value
+                LiquidDensityCalculationMode_Supercritical = OnitUtilities.GetFilteredXElementsEnumerable (data,  "LiquidDensityCalculationMode_Supercritical").FirstOrDefault.Value
             Catch ex As Exception
             End Try
 
             Try
-                LiquidDensity_CorrectExpDataForPressure = (From el As XElement In data Select el Where el.Name = "LiquidDensity_CorrectExpDataForPressure").FirstOrDefault.Value
+                'LiquidDensity_CorrectExpDataForPressure = (From el As XElement In data Select el Where el.Name = "LiquidDensity_CorrectExpDataForPressure").FirstOrDefault.Value
+                LiquidDensity_CorrectExpDataForPressure = OnitUtilities.GetFilteredXElementsEnumerable (data,  "LiquidDensity_CorrectExpDataForPressure").FirstOrDefault.Value
             Catch ex As Exception
             End Try
 
             Try
-                LiquidDensity_UsePenelouxVolumeTranslation = (From el As XElement In data Select el Where el.Name = "LiquidDensity_UsePenelouxVolumeTranslation").FirstOrDefault.Value
+                'LiquidDensity_UsePenelouxVolumeTranslation = (From el As XElement In data Select el Where el.Name = "LiquidDensity_UsePenelouxVolumeTranslation").FirstOrDefault.Value
+                LiquidDensity_UsePenelouxVolumeTranslation = OnitUtilities.GetFilteredXElementsEnumerable (data,  "LiquidDensity_UsePenelouxVolumeTranslation").FirstOrDefault.Value
             Catch ex As Exception
             End Try
 
             Try
-                LiquidViscosityCalculationMode_Subcritical = (From el As XElement In data Select el Where el.Name = "LiquidViscosityCalculationMode_Subcritical").FirstOrDefault.Value
+                'LiquidViscosityCalculationMode_Subcritical = (From el As XElement In data Select el Where el.Name = "LiquidViscosityCalculationMode_Subcritical").FirstOrDefault.Value
+                LiquidViscosityCalculationMode_Subcritical = OnitUtilities.GetFilteredXElementsEnumerable (data,  "LiquidViscosityCalculationMode_Subcritical").FirstOrDefault.Value
             Catch ex As Exception
             End Try
 
             Try
-                LiquidViscosityCalculationMode_Supercritical = (From el As XElement In data Select el Where el.Name = "LiquidViscosityCalculationMode_Supercritical").FirstOrDefault.Value
+                'LiquidViscosityCalculationMode_Supercritical = (From el As XElement In data Select el Where el.Name = "LiquidViscosityCalculationMode_Supercritical").FirstOrDefault.Value
+                LiquidViscosityCalculationMode_Supercritical = OnitUtilities.GetFilteredXElementsEnumerable (data,  "LiquidViscosityCalculationMode_Supercritical").FirstOrDefault.Value
             Catch ex As Exception
             End Try
 
             Try
-                LiquidViscosity_CorrectExpDataForPressure = (From el As XElement In data Select el Where el.Name = "LiquidViscosity_CorrectExpDataForPressure").FirstOrDefault.Value
+               ' LiquidViscosity_CorrectExpDataForPressure = (From el As XElement In data Select el Where el.Name = "LiquidViscosity_CorrectExpDataForPressure").FirstOrDefault.Value
+                LiquidViscosity_CorrectExpDataForPressure = OnitUtilities.GetFilteredXElementsEnumerable (data,  "LiquidViscosity_CorrectExpDataForPressure").FirstOrDefault.Value
             Catch ex As Exception
             End Try
 
             Try
-                LiquidViscosity_MixingRule = (From el As XElement In data Select el Where el.Name = "LiquidViscosity_MixingRule").FirstOrDefault.Value
+               ' LiquidViscosity_MixingRule = (From el As XElement In data Select el Where el.Name = "LiquidViscosity_MixingRule").FirstOrDefault.Value
+                LiquidViscosity_MixingRule = OnitUtilities.GetFilteredXElementsEnumerable (data,  "LiquidViscosity_MixingRule").FirstOrDefault.Value
             Catch ex As Exception
             End Try
 
             Try
-                VaporPhaseFugacityCalculationMode = (From el As XElement In data Select el Where el.Name = "VaporPhaseFugacityCalculationMode").FirstOrDefault.Value
+               ' VaporPhaseFugacityCalculationMode = (From el As XElement In data Select el Where el.Name = "VaporPhaseFugacityCalculationMode").FirstOrDefault.Value
+                VaporPhaseFugacityCalculationMode =OnitUtilities.GetFilteredXElementsEnumerable (data,  "VaporPhaseFugacityCalculationMode").FirstOrDefault.Value
             Catch ex As Exception
             End Try
 
             Try
-                SolidPhaseFugacityCalculationMethod = (From el As XElement In data Select el Where el.Name = "SolidPhaseFugacityCalculationMethod").FirstOrDefault.Value
+                'SolidPhaseFugacityCalculationMethod = (From el As XElement In data Select el Where el.Name = "SolidPhaseFugacityCalculationMethod").FirstOrDefault.Value
+                SolidPhaseFugacityCalculationMethod = OnitUtilities.GetFilteredXElementsEnumerable (data,  "SolidPhaseFugacityCalculationMethod").FirstOrDefault.Value
             Catch ex As Exception
             End Try
 
             Try
-                SolidPhaseFugacity_UseIdealLiquidPhaseFugacity = (From el As XElement In data Select el Where el.Name = "SolidPhaseFugacity_UseIdealLiquidPhaseFugacity").FirstOrDefault.Value
+                'SolidPhaseFugacity_UseIdealLiquidPhaseFugacity = (From el As XElement In data Select el Where el.Name = "SolidPhaseFugacity_UseIdealLiquidPhaseFugacity").FirstOrDefault.Value
+                SolidPhaseFugacity_UseIdealLiquidPhaseFugacity = OnitUtilities.GetFilteredXElementsEnumerable (data,  "SolidPhaseFugacity_UseIdealLiquidPhaseFugacity").FirstOrDefault.Value
             Catch ex As Exception
             End Try
 
             Try
-                EnthalpyEntropyCpCvCalculationMode = (From el As XElement In data Select el Where el.Name = "EnthalpyEntropyCpCvCalculationMode").FirstOrDefault.Value
+                'EnthalpyEntropyCpCvCalculationMode = (From el As XElement In data Select el Where el.Name = "EnthalpyEntropyCpCvCalculationMode").FirstOrDefault.Value
+                EnthalpyEntropyCpCvCalculationMode = OnitUtilities.GetFilteredXElementsEnumerable (data,  "EnthalpyEntropyCpCvCalculationMode").FirstOrDefault.Value
             Catch ex As Exception
             End Try
 
             Try
-                LiquidFugacity_UsePoyntingCorrectionFactor = (From el As XElement In data Select el Where el.Name = "LiquidFugacity_UsePoyntingCorrectionFactor").FirstOrDefault.Value
+                'LiquidFugacity_UsePoyntingCorrectionFactor = (From el As XElement In data Select el Where el.Name = "LiquidFugacity_UsePoyntingCorrectionFactor").FirstOrDefault.Value
+                LiquidFugacity_UsePoyntingCorrectionFactor = OnitUtilities.GetFilteredXElementsEnumerable (data,  "LiquidFugacity_UsePoyntingCorrectionFactor").FirstOrDefault.Value
             Catch ex As Exception
             End Try
 
             Try
-                ActivityCoefficientModels_IgnoreMissingInteractionParameters = (From el As XElement In data Select el Where el.Name = "ActivityCoefficientModels_IgnoreMissingInteractionParameters").FirstOrDefault.Value
+                'ActivityCoefficientModels_IgnoreMissingInteractionParameters = (From el As XElement In data Select el Where el.Name = "ActivityCoefficientModels_IgnoreMissingInteractionParameters").FirstOrDefault.Value
+                ActivityCoefficientModels_IgnoreMissingInteractionParameters = OnitUtilities.GetFilteredXElementsEnumerable (data,  "ActivityCoefficientModels_IgnoreMissingInteractionParameters").FirstOrDefault.Value
             Catch ex As Exception
             End Try
 
             Try
-                IgnoreVaporFractionLimit = (From el As XElement In data Select el Where el.Name = "IgnoreVaporFractionLimit").FirstOrDefault.Value
+                'IgnoreVaporFractionLimit = (From el As XElement In data Select el Where el.Name = "IgnoreVaporFractionLimit").FirstOrDefault.Value
+                IgnoreVaporFractionLimit = OnitUtilities.GetFilteredXElementsEnumerable (data,  "IgnoreVaporFractionLimit").FirstOrDefault.Value
             Catch ex As Exception
             End Try
 
             Try
-                IgnoreSalinityLimit = (From el As XElement In data Select el Where el.Name = "IgnoreSalinityLimit").FirstOrDefault.Value
+                'IgnoreSalinityLimit = (From el As XElement In data Select el Where el.Name = "IgnoreSalinityLimit").FirstOrDefault.Value
+                IgnoreSalinityLimit = OnitUtilities.GetFilteredXElementsEnumerable (data,  "IgnoreSalinityLimit").FirstOrDefault.Value
             Catch ex As Exception
             End Try
 
             Dim jsonoptions As New JsonSerializerSettings With {.StringEscapeHandling = StringEscapeHandling.EscapeHtml, .Formatting = Formatting.Indented}
 
             Try
-                ForcedSolids = JsonConvert.DeserializeObject(Of List(Of String))((From el As XElement In data Select el Where el.Name = "ForcedSolids").FirstOrDefault.Value)
+                'ForcedSolids = JsonConvert.DeserializeObject(Of List(Of String))((From el As XElement In data Select el Where el.Name = "ForcedSolids").FirstOrDefault.Value)
+                ForcedSolids = JsonConvert.DeserializeObject(Of List(Of String))(OnitUtilities.GetFilteredXElementsEnumerable (data,  "ForcedSolids").FirstOrDefault.Value)
             Catch ex As Exception
             End Try
 
             Try
-                PropertyOverrides = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))((From el As XElement In data Select el Where el.Name = "PropertyOverrides").FirstOrDefault.Value)
+                'PropertyOverrides = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))((From el As XElement In data Select el Where el.Name = "PropertyOverrides").FirstOrDefault.Value)
+                PropertyOverrides = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(OnitUtilities.GetFilteredXElementsEnumerable (data,  "PropertyOverrides").FirstOrDefault.Value)
             Catch ex As Exception
             End Try
 
@@ -11178,7 +11211,8 @@ Final3:
                     Try
                         Dim pp As PengRobinsonPropertyPackage = Me
                         'pp.m_pr.InteractionParameters.Clear()
-                        For Each xel As XElement In (From xel2 As XElement In data Select xel2 Where xel2.Name = "InteractionParameters").FirstOrDefault.Elements.ToList
+                        'For Each xel As XElement In (From xel2 As XElement In data Select xel2 Where xel2.Name = "InteractionParameters").FirstOrDefault.Elements.ToList
+                        For Each xel As XElement In OnitUtilities.GetFilteredXElementsEnumerable (data, "InteractionParameters").FirstOrDefault.Elements'.ToList
                             Dim ip As New Auxiliary.PR_IPData() With {.kij = Double.Parse(xel.@Value, ci)}
                             Dim dic As New Dictionary(Of String, Auxiliary.PR_IPData)(StringComparer.Ordinal)
                             dic.Add(xel.@Compound2, ip)
@@ -11200,7 +11234,8 @@ Final3:
 
                     Dim pp As PRSV2PropertyPackage = Me
                     'pp.m_pr.InteractionParameters.Clear()
-                    For Each xel As XElement In (From xel2 As XElement In data Select xel2 Where xel2.Name = "InteractionParameters").FirstOrDefault.Elements.ToList
+                    'For Each xel As XElement In (From xel2 As XElement In data Select xel2 Where xel2.Name = "InteractionParameters").FirstOrDefault.Elements.ToList
+                    For Each xel As XElement In OnitUtilities.GetFilteredXElementsEnumerable (data,  "InteractionParameters").FirstOrDefault.Elements'.ToList
                         Dim ip As New Auxiliary.PRSV2_IPData() With {.id1 = xel.@Compound1, .id2 = xel.@Compound2, .kij = Double.Parse(xel.@Value, ci)}
                         Dim dic As New Dictionary(Of String, Auxiliary.PRSV2_IPData)(StringComparer.Ordinal)
                         dic.Add(xel.@Compound2, ip)
@@ -11219,7 +11254,8 @@ Final3:
 
                     Dim pp As PRSV2VLPropertyPackage = Me
                     'pp.m_pr.InteractionParameters.Clear()
-                    For Each xel As XElement In (From xel2 As XElement In data Select xel2 Where xel2.Name = "InteractionParameters").FirstOrDefault.Elements.ToList
+                    'For Each xel As XElement In (From xel2 As XElement In data Select xel2 Where xel2.Name = "InteractionParameters").FirstOrDefault.Elements.ToList
+                    For Each xel As XElement In OnitUtilities.GetFilteredXElementsEnumerable (data, "InteractionParameters").FirstOrDefault.Elements'.ToList
                         Dim ip As New Auxiliary.PRSV2_IPData() With {.id1 = xel.@Compound1, .id2 = xel.@Compound2, .kij = Double.Parse(xel.@kij, ci), .kji = Double.Parse(xel.@kji, ci)}
                         Dim dic As New Dictionary(Of String, Auxiliary.PRSV2_IPData)(StringComparer.Ordinal)
                         dic.Add(xel.@Compound2, ip)
@@ -11239,7 +11275,8 @@ Final3:
                     Try
                         Dim pp As SRKPropertyPackage = Me
                         'pp.m_pr.InteractionParameters.Clear()
-                        For Each xel As XElement In (From xel2 As XElement In data Select xel2 Where xel2.Name = "InteractionParameters").FirstOrDefault.Elements.ToList
+                        'For Each xel As XElement In (From xel2 As XElement In data Select xel2 Where xel2.Name = "InteractionParameters").FirstOrDefault.Elements.ToList
+                        For Each xel As XElement In OnitUtilities.GetFilteredXElementsEnumerable (data,  "InteractionParameters").FirstOrDefault.Elements'.ToList
                             Dim ip As New Auxiliary.PR_IPData() With {.kij = Double.Parse(xel.@Value, ci)}
                             Dim dic As New Dictionary(Of String, Auxiliary.PR_IPData)(StringComparer.Ordinal)
                             dic.Add(xel.@Compound2, ip)
@@ -11261,7 +11298,8 @@ Final3:
 
                     Dim pp As PengRobinsonLKPropertyPackage = Me
                     'pp.m_pr.InteractionParameters.Clear()
-                    For Each xel As XElement In (From xel2 As XElement In data Select xel2 Where xel2.Name = "InteractionParameters").FirstOrDefault.Elements.ToList
+                    'For Each xel As XElement In (From xel2 As XElement In data Select xel2 Where xel2.Name = "InteractionParameters").FirstOrDefault.Elements.ToList
+                    For Each xel As XElement In OnitUtilities.GetFilteredXElementsEnumerable (data,  "InteractionParameters").FirstOrDefault.Elements'.ToList
                         Dim ip As New Auxiliary.PR_IPData() With {.kij = Double.Parse(xel.@Value, ci)}
                         Dim dic As New Dictionary(Of String, Auxiliary.PR_IPData)(StringComparer.Ordinal)
                         dic.Add(xel.@Compound2, ip)
@@ -11426,11 +11464,12 @@ Final3:
                         Dim pp As LKPPropertyPackage = Me
                         'pp.m_pr.InteractionParameters.Clear()
 
-                        Dim el = (From xel2 As XElement In data Select xel2 Where xel2.Name = "InteractionParameters").FirstOrDefault
+                        'Dim el = (From xel2 As XElement In data Select xel2 Where xel2.Name = "InteractionParameters").FirstOrDefault
+                        Dim el = OnitUtilities.GetFilteredXElementsEnumerable (data, "InteractionParameters").FirstOrDefault
 
                         If Not el Is Nothing Then
 
-                            For Each xel As XElement In el.Elements.ToList
+                            For Each xel As XElement In el.Elements'.ToList
                                 Dim ip As New Auxiliary.LKP_IPData() With {.kij = Double.Parse(xel.@Value, ci)}
                                 Dim dic As New Dictionary(Of String, Auxiliary.LKP_IPData)(StringComparer.Ordinal)
                                 dic.Add(xel.@Compound2, ip)

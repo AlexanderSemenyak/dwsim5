@@ -16,12 +16,98 @@
 '    You should have received a copy of the GNU General Public License
 '    along with DWSIM.  If not, see <http://www.gnu.org/licenses/>.
 
+Imports System.Collections.Concurrent
 Imports System.Globalization
 Imports System.Reflection
 Imports System.Drawing
 Imports DWSIM.Interfaces
+Imports FastMember
 
 Public Class XMLSerializer
+
+    'Shared cacheOfFastMemberAccessors As ConcurrentDictionary(Of Type,FastMember.TypeAccessor()) = new ConcurrentDictionary(Of Type,PropertyInfo())
+
+    Shared cacheOfTypeProperties As ConcurrentDictionary(Of Type,PropertyInfo()) = new ConcurrentDictionary(Of Type,PropertyInfo())
+    Shared cacheOfNameProperties As ConcurrentDictionary(Of Type,ConcurrentDictionary(Of String,PropertyInfo)) = new ConcurrentDictionary(Of Type,ConcurrentDictionary(Of String,PropertyInfo))
+
+    Shared cacheOfTypeFields As ConcurrentDictionary(Of Type,FieldInfo()) = new ConcurrentDictionary(Of Type,FieldInfo())
+    Shared cacheOfNameFields As ConcurrentDictionary(Of Type,ConcurrentDictionary(Of String,FieldInfo)) = new ConcurrentDictionary(Of Type,ConcurrentDictionary(Of String,FieldInfo))
+
+    ''' <summary>
+    ''' alexander - cache of FieldInfo for type
+    ''' </summary>
+    ''' <param name="t"></param>
+    ''' <returns>not null</returns>
+    Shared function GetFieldsForType(t As Type) As FieldInfo()
+
+        Dim result As FieldInfo() = Nothing
+        if cacheOfTypeFields.TryGetValue(t, result) Then Return result
+
+        result = t.GetFields()
+        cacheOfTypeFields.TryAdd(t, result)
+        Return result
+    End function
+
+    ''' <summary>
+    ''' alexander -> Get FieldInfo from cache
+    ''' </summary>
+    ''' <param name="t"></param>
+    ''' <param name="fieldName"></param>
+    ''' <returns>Can be null</returns>
+    Shared function GetFieldInfoForFieldName(t As Type, fieldName As string) As FieldInfo
+        Dim subCache as ConcurrentDictionary(Of String,FieldInfo)= Nothing
+        If Not cacheOfNameFields.TryGetValue(t, subCache) Then
+            subCache = new ConcurrentDictionary(Of String,FieldInfo)
+            cacheOfNameFields.TryAdd(t, subCache)
+        End If
+
+        Dim result As FieldInfo = Nothing
+        If subCache.TryGetValue(fieldName, result) then Return result
+
+        Dim fields = GetFieldsForType(t)
+        result = fields.FirstOrDefault(Function(x) x.Name = fieldName)
+
+        subCache.TryAdd(fieldName, result)
+        Return result
+    End function
+    
+    ''' <summary>
+    ''' alexander - cache of PropertyInfo for type
+    ''' </summary>
+    ''' <param name="t"></param>
+    ''' <returns>not null</returns>
+    Shared function GetPropertiesForType(t As Type) As PropertyInfo()
+        Dim result As PropertyInfo() = Nothing
+        if cacheOfTypeProperties.TryGetValue(t, result) Then Return result
+
+        result = t.GetProperties()
+        cacheOfTypeProperties.TryAdd(t, result)
+        Return result
+    End function
+
+    ''' <summary>
+    ''' alexander -> Get PropertyInfo from cache
+    ''' </summary>
+    ''' <param name="t"></param>
+    ''' <param name="propertyName"></param>
+    ''' <returns>Can be null</returns>
+    Shared function GetPropertyInfoForPropertyName(t As Type, propertyName As string) As PropertyInfo
+        Dim subCache as ConcurrentDictionary(Of String,PropertyInfo)= Nothing
+        If Not cacheOfNameProperties.TryGetValue(t, subCache) Then
+            subCache = new ConcurrentDictionary(Of String,PropertyInfo)
+            cacheOfNameProperties.TryAdd(t, subCache)
+        End If
+
+        Dim result As PropertyInfo = Nothing
+        If subCache.TryGetValue(propertyName, result) then Return result
+
+        Dim properties = GetPropertiesForType(t)
+        result = properties.FirstOrDefault(Function(x) x.Name = propertyName)
+
+        subCache.TryAdd(propertyName, result)
+        Return result
+    End function
+
 
     ''' <summary>
     ''' Deserializes selected properties of an object from XML.
@@ -32,18 +118,25 @@ Public Class XMLSerializer
     ''' <remarks> Properties of type Boolean, String, Double, Single, Integer, Nullable(Of Double), 
     ''' Nullable(Of Single), Nullable(Of Integer), ArrayList, Font, Color, [Enum]
     ''' are supported.</remarks>
-    Shared Function Deserialize(obj As Object, xmlprops As System.Collections.Generic.List(Of XElement), Optional ByVal Fields As Boolean = False) As Boolean
+    Shared Function Deserialize(obj As Object, xmlprops As IEnumerable(Of XElement), Optional ByVal Fields As Boolean = False) As Boolean
 
         Dim ci As CultureInfo = CultureInfo.InvariantCulture
         Dim skip As Boolean = False
+        Dim objType  = obj.GetType
+        Dim typeAccessor = FastMember.TypeAccessor.Create(objType)
         If Not Fields Then
-            Dim props As PropertyInfo() = obj.GetType.GetProperties()
+            'alexander Dim props As PropertyInfo() = obj.GetType.GetProperties()
+            Dim props As PropertyInfo() = GetPropertiesForType(objType)
             For Each prop As PropertyInfo In props
                 skip = False
                 If prop.CanWrite And prop.CanRead Then
                     Dim propname As String = prop.Name
-                    Dim properties = obj.GetType().GetProperties().Where(Function(p) p.Name = prop.Name)
-                    Dim attributes As Object() = properties(0).GetCustomAttributes(True)
+                    'alexander Dim properties = obj.GetType().GetProperties().Where(Function(p) p.Name = prop.Name)
+                    'Dim properties = props.Where(Function(p) p.Name = prop.Name)
+                    'Dim attributes As Object() = properties(0).GetCustomAttributes(True)
+
+                    prop = GetPropertyInfoForPropertyName(objType,propname) 'alexander do not modify
+                    Dim attributes As Object() = prop.GetCustomAttributes(True)
                     For Each attr As Attribute In attributes
                         If TypeOf attr Is System.Xml.Serialization.XmlIgnoreAttribute Then
                             skip = True
@@ -51,81 +144,99 @@ Public Class XMLSerializer
                         End If
                     Next
                     If Not skip Then
-                        If obj.GetType.GetProperty(prop.Name) IsNot Nothing Then
-                            If TypeOf obj.GetType.GetProperty(prop.Name).GetValue(obj, Nothing) Is ICustomXMLSerialization Then
-                                Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                        'alexander speedup
+                        'Dim propertyInfo  = obj.GetType.GetProperty(prop.Name)
+                        Dim propertyInfo  = GetPropertyInfoForPropertyName(objType, prop.Name)
+                        If propertyInfo IsNot Nothing Then
+                            'alexander speedup
+                            'Dim propertyValue  =  propertyInfo.GetValue(obj, Nothing)
+                            Dim propertyValue  =  typeAccessor(obj,propname)
+
+                            If TypeOf propertyValue Is ICustomXMLSerialization Then
+                                'alexander Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                                Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
                                 If Not xel Is Nothing Then
-                                    Dim val As List(Of XElement) = xel.Descendants.ToList()
-                                    DirectCast(obj.GetType.GetProperty(prop.Name).GetValue(obj, Nothing), ICustomXMLSerialization).LoadData(val)
+                                    Dim val = xel.Descendants.ToArray()'.ToList()
+                                    DirectCast(propertyValue, ICustomXMLSerialization).LoadData(val)
                                 End If
-                            ElseIf TypeOf obj.GetType.GetProperty(prop.Name).GetValue(obj, Nothing) Is Single Then
-                                Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                            ElseIf TypeOf propertyValue Is Single Then
+                                'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                                Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
                                 Dim val As Single = Single.Parse(xel.Value, ci)
-                                obj.GetType.GetProperty(prop.Name).SetValue(obj, val, Nothing)
-                            ElseIf TypeOf obj.GetType.GetProperty(prop.Name).GetValue(obj, Nothing) Is Double Then
-                                Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                                typeAccessor(obj,propname) = val ' propertyInfo.SetValue(obj, val, Nothing)
+                            ElseIf TypeOf propertyValue Is Double Then
+                                'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                                Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
                                 If Not xel Is Nothing Then
                                     Dim val As Double = Double.Parse(xel.Value, ci)
-                                    obj.GetType.GetProperty(prop.Name).SetValue(obj, val, Nothing)
+                                    typeAccessor(obj,propname) = val ' propertyInfo.SetValue(obj, val, Nothing)
                                 End If
-                            ElseIf obj.GetType.GetProperty(prop.Name).GetValue(obj, Nothing) Is Nothing Then
+                            ElseIf propertyValue Is Nothing Then
                                 'nullable type
                                 If prop.PropertyType.FullName.Contains("Nullable") Then
-                                    Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                                    'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                                    Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
                                     If prop.PropertyType.FullName.Contains("Double") Then
                                         If Not xel Is Nothing Then
                                             Dim val As Nullable(Of Double)
                                             If xel.Value <> "" Then val = Double.Parse(xel.Value, ci)
-                                            If Not val Is Nothing Then obj.GetType.GetProperty(prop.Name).SetValue(obj, val, Nothing)
+                                            If Not val Is Nothing Then typeAccessor(obj,propname) = val ' propertyInfo.SetValue(obj, val, Nothing)
                                         End If
                                     ElseIf prop.PropertyType.FullName.Contains("Integer") Then
                                         If Not xel Is Nothing Then
                                             Dim val As Nullable(Of Integer)
                                             If xel.Value <> "" Then val = Integer.Parse(xel.Value, ci)
-                                            If Not val Is Nothing Then obj.GetType.GetProperty(prop.Name).SetValue(obj, val, Nothing)
+                                            If Not val Is Nothing Then typeAccessor(obj,propname) = val ' propertyInfo.SetValue(obj, val, Nothing)
                                         End If
                                     End If
                                 End If
-                            ElseIf TypeOf obj.GetType.GetProperty(prop.Name).GetValue(obj, Nothing) Is Integer Then
-                                Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                            ElseIf TypeOf propertyValue Is Integer Then
+                                'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                                Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
                                 If Not xel Is Nothing Then
                                     Dim val As Integer = xel.Value
-                                    obj.GetType.GetProperty(prop.Name).SetValue(obj, val, Nothing)
+                                    typeAccessor(obj,propname) = val ' propertyInfo.SetValue(obj, val, Nothing)
                                 End If
-                            ElseIf TypeOf obj.GetType.GetProperty(prop.Name).GetValue(obj, Nothing) Is Boolean Then
-                                Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                            ElseIf TypeOf propertyValue Is Boolean Then
+                                'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                                Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
                                 If Not xel Is Nothing Then
                                     Dim val As Boolean = xel.Value
-                                    obj.GetType.GetProperty(prop.Name).SetValue(obj, val, Nothing)
+                                    typeAccessor(obj,propname) = val ' propertyInfo.SetValue(obj, val, Nothing)
                                 End If
-                            ElseIf TypeOf obj.GetType.GetProperty(prop.Name).GetValue(obj, Nothing) Is String Then
-                                Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                            ElseIf TypeOf propertyValue Is String Then
+                                'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                                Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
                                 If Not xel Is Nothing Then
                                     Dim val As Object = xel.Value
-                                    If Not val Is Nothing Then obj.GetType.GetProperty(prop.Name).SetValue(obj, val, Nothing)
+                                    If Not val Is Nothing Then typeAccessor(obj,propname) = val ' propertyInfo.SetValue(obj, val, Nothing)
                                 End If
-                            ElseIf TypeOf obj.GetType.GetProperty(prop.Name).GetValue(obj, Nothing) Is [Enum] Then
-                                Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                            ElseIf TypeOf propertyValue Is [Enum] Then
+                                'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                                Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
                                 If Not xel Is Nothing Then
                                     Dim val As String = xel.Value
-                                    If Not val Is Nothing Then obj.GetType.GetProperty(prop.Name).SetValue(obj, [Enum].Parse(obj.GetType.GetProperty(prop.Name).GetValue(obj, Nothing).GetType, val), Nothing)
+                                    If Not val Is Nothing Then typeAccessor(obj,propname) = [Enum].Parse(propertyValue.GetType, val) ' propertyInfo.SetValue(obj, [Enum].Parse(propertyValue.GetType, val), Nothing)
                                 End If
-                            ElseIf TypeOf obj.GetType.GetProperty(prop.Name).GetValue(obj, Nothing) Is Font Then
-                                Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                            ElseIf TypeOf propertyValue Is Font Then
+                                'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                                Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
                                 Try
                                     Dim val As Font = New FontConverter().ConvertFromInvariantString(xel.Value)
-                                    obj.GetType.GetProperty(prop.Name).SetValue(obj, val, Nothing)
+                                    typeAccessor(obj,propname) = val ' propertyInfo.SetValue(obj, val, Nothing)
                                 Catch ex As Exception
-                                    obj.GetType.GetProperty(prop.Name).SetValue(obj, New Font("Arial", 8), Nothing)
+                                    propertyInfo.SetValue(obj, New Font("Arial", 8), Nothing)
                                 End Try
-                            ElseIf TypeOf obj.GetType.GetProperty(prop.Name).GetValue(obj, Nothing) Is Color Then
-                                Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                            ElseIf TypeOf propertyValue Is Color Then
+                                'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                                Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
                                 If Not xel Is Nothing Then
                                     Dim val As Color = ColorTranslator.FromHtml(xel.Value)
-                                    obj.GetType.GetProperty(prop.Name).SetValue(obj, val, Nothing)
+                                    typeAccessor(obj,propname) = val ' propertyInfo.SetValue(obj, val, Nothing)
                                 End If
-                            ElseIf TypeOf obj.GetType.GetProperty(prop.Name).GetValue(obj, Nothing) Is SkiaSharp.SKColor Then
-                                Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                            ElseIf TypeOf propertyValue Is SkiaSharp.SKColor Then
+                                'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                                Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
                                 If Not xel Is Nothing Then
                                     Dim val As SkiaSharp.SKColor = SkiaSharp.SKColors.Black
                                     If SkiaSharp.SKColor.TryParse(xel.Value, val) Then
@@ -137,76 +248,84 @@ Public Class XMLSerializer
                                             val = New SkiaSharp.SKColor(val2.R, val2.G, val2.B, val2.A)
                                         Catch ex As Exception
                                         End Try
-                                        obj.GetType.GetProperty(prop.Name).SetValue(obj, val, Nothing)
+                                        typeAccessor(obj,propname) = val ' propertyInfo.SetValue(obj, val, Nothing)
                                     End If
                                 End If
-                            ElseIf TypeOf obj.GetType.GetProperty(prop.Name).GetValue(obj, Nothing) Is ArrayList Then
-                                Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                            ElseIf TypeOf propertyValue Is ArrayList Then
+                                'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                                Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
                                 Dim val As ArrayList = StringToArray(xel.Value, ci)
-                                If Not val Is Nothing Then obj.GetType.GetProperty(prop.Name).SetValue(obj, val, Nothing)
-                            ElseIf TypeOf obj.GetType.GetProperty(prop.Name).GetValue(obj, Nothing) Is Byte Then
-                                Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                                If Not val Is Nothing Then typeAccessor(obj,propname) = val ' propertyInfo.SetValue(obj, val, Nothing)
+                            ElseIf TypeOf propertyValue Is Byte Then
+                                'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                                Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
                                 If Not xel Is Nothing Then
                                     Dim val As Byte = xel.Value
-                                    obj.GetType.GetProperty(prop.Name).SetValue(obj, val, Nothing)
+                                    typeAccessor(obj,propname) = val ' propertyInfo.SetValue(obj, val, Nothing)
                                 End If
-                            ElseIf TypeOf obj.GetType.GetProperty(prop.Name).GetValue(obj, Nothing) Is Date Then
-                                Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                            ElseIf TypeOf propertyValue Is Date Then
+                                'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                                Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
                                 If Not xel Is Nothing Then
                                     Dim val As Date = Date.Parse(xel.Value, CultureInfo.InvariantCulture)
-                                    obj.GetType.GetProperty(prop.Name).SetValue(obj, val, Nothing)
+                                    typeAccessor(obj,propname) = val ' propertyInfo.SetValue(obj, val, Nothing)
                                 End If
-                            ElseIf TypeOf obj.GetType.GetProperty(prop.Name).GetValue(obj, Nothing) Is OxyPlot.OxyColor Then
-                                Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                            ElseIf TypeOf propertyValue Is OxyPlot.OxyColor Then
+                                'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                                Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
                                 If Not xel Is Nothing Then
                                     Dim val As OxyPlot.OxyColor = OxyPlot.OxyColor.Parse(xel.Value)
-                                    obj.GetType.GetProperty(prop.Name).SetValue(obj, val, Nothing)
+                                    typeAccessor(obj,propname) = val ' propertyInfo.SetValue(obj, val, Nothing)
                                 End If
-                            ElseIf TypeOf obj.GetType.GetProperty(prop.Name).GetValue(obj, Nothing) Is List(Of String) Then
+                            ElseIf TypeOf propertyValue Is List(Of String) Then
                                 Try
-                                    Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                                    'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                                    Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
                                     If Not xel Is Nothing Then
                                         Dim list As New List(Of String)
                                         For Each el In xel.Elements
                                             list.Add(el.Value)
                                         Next
-                                        obj.GetType.GetProperty(prop.Name).SetValue(obj, list, Nothing)
+                                        typeAccessor(obj,propname) = list ' propertyInfo.SetValue(obj, list, Nothing)
                                     End If
                                 Catch ex As Exception
                                 End Try
-                            ElseIf TypeOf obj.GetType.GetProperty(prop.Name).GetValue(obj, Nothing) Is List(Of Double) Then
+                            ElseIf TypeOf propertyValue Is List(Of Double) Then
                                 Try
-                                    Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                                    'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                                    Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
                                     If Not xel Is Nothing Then
                                         Dim list As New List(Of Double)
                                         For Each el In xel.Elements
                                             list.Add(Double.Parse(el.Value, ci))
                                         Next
-                                        obj.GetType.GetProperty(prop.Name).SetValue(obj, list, Nothing)
+                                        typeAccessor(obj,propname) = list ' propertyInfo.SetValue(obj, list, Nothing)
                                     End If
                                 Catch ex As Exception
                                 End Try
-                            ElseIf TypeOf obj.GetType.GetProperty(prop.Name).GetValue(obj, Nothing) Is Dictionary(Of String, String) Then
+                            ElseIf TypeOf propertyValue Is Dictionary(Of String, String) Then
                                 Try
-                                    Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                                    'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                                    Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
                                     If Not xel Is Nothing Then
                                         Dim list As New Dictionary(Of String, String)
                                         For Each el In xel.Elements
                                             list.Add(el.Attribute("Key"), el.Attribute("Value"))
                                         Next
-                                        obj.GetType.GetProperty(prop.Name).SetValue(obj, list, Nothing)
+                                        typeAccessor(obj,propname) = list ' propertyInfo.SetValue(obj, list, Nothing)
                                     End If
                                 Catch ex As Exception
                                 End Try
-                            ElseIf TypeOf obj.GetType.GetProperty(prop.Name).GetValue(obj, Nothing) Is Dictionary(Of String, Double) Then
+                            ElseIf TypeOf propertyValue Is Dictionary(Of String, Double) Then
                                 Try
-                                    Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                                    'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                                    Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
                                     If Not xel Is Nothing Then
                                         Dim list As New Dictionary(Of String, Double)
                                         For Each el In xel.Elements
                                             list.Add(el.Attribute("Key"), Double.Parse(el.Attribute("Value"), ci))
                                         Next
-                                        obj.GetType.GetProperty(prop.Name).SetValue(obj, list, Nothing)
+                                        typeAccessor(obj,propname) = list ' propertyInfo.SetValue(obj, list, Nothing)
                                     End If
                                 Catch ex As Exception
                                 End Try
@@ -216,83 +335,104 @@ Public Class XMLSerializer
                 End If
             Next
         Else
-            Dim props As FieldInfo() = obj.GetType.GetFields()
+            'Dim props As FieldInfo() = obj.GetType.GetFields()
+            Dim props As FieldInfo() = GetFieldsForType(objType)
             For Each prop As FieldInfo In props
                 skip = False
                 Dim propname As String = prop.Name
-                Dim properties = obj.GetType().GetFields().Where(Function(p) p.Name = prop.Name)
-                Dim attributes As Object() = properties(0).GetCustomAttributes(True)
+                'Dim properties = obj.GetType().GetFields().Where(Function(p) p.Name = prop.Name)
+                'Dim attributes As Object() = properties(0).GetCustomAttributes(True)
+
+                prop = GetFieldInfoForFieldName(objType,propname) 'alexander do not modify
+                Dim attributes As Object() = prop.GetCustomAttributes(True)
+
                 For Each attr As Attribute In attributes
                     If TypeOf attr Is System.Xml.Serialization.XmlIgnoreAttribute Then
                         skip = True
                         Exit For
                     End If
                 Next
+
                 If Not skip Then
-                    If obj.GetType.GetField(prop.Name) IsNot Nothing Then
-                        If TypeOf obj.GetType.GetField(prop.Name).GetValue(obj) Is ICustomXMLSerialization Then
-                            Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                    'alexander 2Dim fieldInfo = objType.GetField(prop.Name)
+                    Dim fieldInfo = prop'objType.GetField(prop.Name)
+                    If fieldInfo IsNot Nothing Then
+                        'Dim fieldValue  = fieldInfo.GetValue(obj)
+                        Dim fieldValue = typeAccessor(obj,propname)  
+                        If TypeOf fieldValue Is ICustomXMLSerialization Then
+                            'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                            Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
                             If Not xel Is Nothing Then
-                                Dim val As List(Of XElement) = xel.Descendants.ToList()
-                                DirectCast(obj.GetType.GetField(prop.Name).GetValue(obj), ICustomXMLSerialization).LoadData(val)
+                                Dim val = xel.Descendants.ToArray()'.ToList()
+                                DirectCast(fieldValue, ICustomXMLSerialization).LoadData(val)
                             End If
-                        ElseIf TypeOf obj.GetType.GetField(prop.Name).GetValue(obj) Is Single Then
-                            Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                        ElseIf TypeOf fieldValue Is Single Then
+                            'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                            Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
                             Dim val As Single = Single.Parse(xel.Value, ci)
-                            obj.GetType.GetField(prop.Name).SetValue(obj, val)
-                        ElseIf TypeOf obj.GetType.GetField(prop.Name).GetValue(obj) Is Double Then
-                            Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                            typeAccessor(obj,propname) = val ' fieldInfo.SetValue(obj, val)
+                        ElseIf TypeOf fieldValue Is Double Then
+                            'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                            Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
                             If Not xel Is Nothing Then
                                 Dim val As Double = Double.Parse(xel.Value, ci)
-                                obj.GetType.GetField(prop.Name).SetValue(obj, val)
+                                typeAccessor(obj,propname) = val ' fieldInfo.SetValue(obj, val)
                             End If
-                        ElseIf obj.GetType.GetField(prop.Name).GetValue(obj) Is Nothing Then
-                            Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                        ElseIf fieldValue Is Nothing Then
+                            'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                            Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
                             If Not xel Is Nothing Then
                                 Dim val As Nullable(Of Double)
                                 If xel.Value <> "" Then val = Double.Parse(xel.Value, ci)
-                                If Not val Is Nothing Then obj.GetType.GetField(prop.Name).SetValue(obj, val)
+                                If Not val Is Nothing Then typeAccessor(obj,propname) = val ' fieldInfo.SetValue(obj, val)
                             End If
-                        ElseIf TypeOf obj.GetType.GetField(prop.Name).GetValue(obj) Is Integer Then
-                            Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                        ElseIf TypeOf fieldValue Is Integer Then
+                            'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                            Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
                             If Not xel Is Nothing Then
                                 Dim val As Integer = xel.Value
-                                obj.GetType.GetField(prop.Name).SetValue(obj, val)
+                                typeAccessor(obj,propname) = val ' fieldInfo.SetValue(obj, val)
                             End If
-                        ElseIf TypeOf obj.GetType.GetField(prop.Name).GetValue(obj) Is Boolean Then
-                            Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                        ElseIf TypeOf fieldValue Is Boolean Then
+                            'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                            Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
                             If Not xel Is Nothing Then
                                 Dim val As Boolean = xel.Value
-                                obj.GetType.GetField(prop.Name).SetValue(obj, val)
+                                typeAccessor(obj,propname) = val ' fieldInfo.SetValue(obj, val)
                             End If
-                        ElseIf TypeOf obj.GetType.GetField(prop.Name).GetValue(obj) Is String Then
-                            Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                        ElseIf TypeOf fieldValue Is String Then
+                            'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                            Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
                             If Not xel Is Nothing Then
                                 Dim val As String = xel.Value
-                                obj.GetType.GetField(prop.Name).SetValue(obj, val)
+                                typeAccessor(obj,propname) = val ' fieldInfo.SetValue(obj, val)
                             End If
-                        ElseIf TypeOf obj.GetType.GetField(prop.Name).GetValue(obj) Is [Enum] Then
-                            Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                        ElseIf TypeOf fieldValue Is [Enum] Then
+                            'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                            Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
                             If Not xel Is Nothing Then
                                 Dim val As String = xel.Value
-                                If Not val Is Nothing Then obj.GetType.GetField(prop.Name).SetValue(obj, [Enum].Parse(obj.GetType.GetField(prop.Name).GetValue(obj).GetType, val))
+                                If Not val Is Nothing Then typeAccessor(obj,propname) = [Enum].Parse(fieldValue.GetType, val) ' fieldInfo.SetValue(obj, [Enum].Parse(fieldValue.GetType, val))
                             End If
-                        ElseIf TypeOf obj.GetType.GetField(prop.Name).GetValue(obj) Is Font Then
-                            Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                        ElseIf TypeOf fieldValue Is Font Then
+                            'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                            Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
                             If Not xel Is Nothing Then
                                 Try
                                     Dim val As Font = New FontConverter().ConvertFromInvariantString(xel.Value)
-                                    obj.GetType.GetField(prop.Name).SetValue(obj, val)
+                                    typeAccessor(obj,propname) = val ' fieldInfo.SetValue(obj, val)
                                 Catch ex As Exception
-                                    obj.GetType.GetField(prop.Name).SetValue(obj, New Font("Arial", 8))
+                                    typeAccessor(obj,propname) = New Font("Arial", 8) ' fieldInfo.SetValue(obj, New Font("Arial", 8))
                                 End Try
                             End If
-                        ElseIf TypeOf obj.GetType.GetField(prop.Name).GetValue(obj) Is Color Then
-                            Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                        ElseIf TypeOf fieldValue Is Color Then
+                            'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                            Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
                             Dim val As Color = ColorTranslator.FromHtml(xel.Value)
-                            obj.GetType.GetField(prop.Name).SetValue(obj, val)
-                        ElseIf TypeOf obj.GetType.GetField(prop.Name).GetValue(obj) Is SkiaSharp.SKColor Then
-                            Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                            typeAccessor(obj,propname) = val ' fieldInfo.SetValue(obj, val)
+                        ElseIf TypeOf fieldValue Is SkiaSharp.SKColor Then
+                            'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                            Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
                             If Not xel Is Nothing Then
                                 Dim val As SkiaSharp.SKColor = SkiaSharp.SKColors.Black
                                 If SkiaSharp.SKColor.TryParse(xel.Value, val) Then
@@ -304,24 +444,27 @@ Public Class XMLSerializer
                                         val = New SkiaSharp.SKColor(val2.R, val2.G, val2.B, val2.A)
                                     Catch ex As Exception
                                     End Try
-                                    obj.GetType.GetField(prop.Name).SetValue(obj, val)
+                                    typeAccessor(obj,propname) = val ' fieldInfo.SetValue(obj, val)
                                 End If
                             End If
-                        ElseIf TypeOf obj.GetType.GetField(prop.Name).GetValue(obj) Is ArrayList Then
-                            Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                        ElseIf TypeOf fieldValue Is ArrayList Then
+                            'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                            Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
                             Dim val As ArrayList = StringToArray(xel.Value, ci)
-                            If Not val Is Nothing Then obj.GetType.GetField(prop.Name).SetValue(obj, val)
-                        ElseIf TypeOf obj.GetType.GetField(prop.Name).GetValue(obj) Is Byte Then
-                            Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                            If Not val Is Nothing Then typeAccessor(obj,propname) = val ' fieldInfo.SetValue(obj, val)
+                        ElseIf TypeOf fieldValue Is Byte Then
+                            'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                            Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
                             If Not xel Is Nothing Then
                                 Dim val As Byte = xel.Value
-                                obj.GetType.GetField(prop.Name).SetValue(obj, val)
+                                typeAccessor(obj,propname) = val ' fieldInfo.SetValue(obj, val)
                             End If
-                        ElseIf TypeOf obj.GetType.GetField(prop.Name).GetValue(obj) Is Date Then
-                            Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                        ElseIf TypeOf fieldValue Is Date Then
+                            'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                            Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
                             If Not xel Is Nothing Then
                                 Dim val As Date = Date.Parse(xel.Value, CultureInfo.InvariantCulture)
-                                obj.GetType.GetField(prop.Name).SetValue(obj, val)
+                                typeAccessor(obj,propname) = val ' fieldInfo.SetValue(obj, val)
                             End If
                         End If
                     End If

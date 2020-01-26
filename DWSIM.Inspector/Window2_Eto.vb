@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 Imports DWSIM.Interfaces
+Imports DWSIM.Interfaces.My.Resources
 Imports Eto.Drawing
 Imports Eto.Forms
 Imports c = DWSIM.UI.Shared.Common

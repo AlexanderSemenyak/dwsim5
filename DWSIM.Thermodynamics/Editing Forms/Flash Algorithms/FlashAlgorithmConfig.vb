@@ -250,7 +250,7 @@ Public Class FlashAlgorithmConfig
 
         Dim selected As Array
 
-        selected = Settings(Interfaces.Enums.FlashSetting.ThreePhaseFlashStabTestCompIds).ToArray(ci, Type.GetType("System.String"))
+        selected = Settings(Interfaces.Enums.FlashSetting.ThreePhaseFlashStabTestCompIds).ToArray(ci, GetType(String))
 
         Me.cbImmiscible.Items.Clear()
 

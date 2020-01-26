@@ -13,7 +13,7 @@
     Public Property Linked As Boolean = False Implements IScript.Linked
     Public Property PythonInterpreter As Interfaces.Enums.Scripts.Interpreter = Interfaces.Enums.Scripts.Interpreter.IronPython Implements IScript.PythonInterpreter
 
-    Public Function LoadData(data As List(Of XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
+    Public Function LoadData(data As ICollection(Of XElement)) As Boolean Implements Interfaces.ICustomXMLSerialization.LoadData
         XMLSerializer.XMLSerializer.Deserialize(Me, data)
         Return True
     End Function

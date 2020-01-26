@@ -102,7 +102,7 @@ Public Class ElementMatrixEditorForm
                 End If
             Next
         Next
-        gr.Elements = elements.ToArray(Type.GetType("System.String"))
+        gr.Elements = elements.ToArray(GetType(String))
 
     End Sub
 

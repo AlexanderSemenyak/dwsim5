@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using DWSIM.Drawing.SkiaSharp.GraphicObjects;
 using OxyPlot;
 using OxyPlot.Series;
@@ -65,7 +66,7 @@ namespace DWSIM.Drawing.SkiaSharp.GraphicObjects.Charts
 
         #endregion
 
-        public override bool LoadData(List<System.Xml.Linq.XElement> data)
+        public override bool LoadData(ICollection<XElement> data)
         {
             base.LoadData(data);
             return true;

@@ -9,6 +9,7 @@ using System.Reflection;
 using System.IO;
 using DWSIM.Interfaces;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using DWSIM.Thermodynamics.PropertyPackages;
 using DWSIM.Interfaces.Enums;
 
@@ -987,7 +988,7 @@ namespace DWSIM.Thermodynamics.AdvancedEOS
             //do nothing
         }
 
-        public override bool LoadData(List<System.Xml.Linq.XElement> data)
+        public override bool LoadData(ICollection<XElement> data)
         {
             return base.LoadData(data);
         }

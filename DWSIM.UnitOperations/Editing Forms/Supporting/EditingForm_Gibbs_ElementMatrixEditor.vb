@@ -105,7 +105,7 @@ Public Class EditingForm_Gibbs_ElementMatrixEditor
                 End If
             Next
         Next
-        gr.Elements = elements.ToArray(Type.GetType("System.String"))
+        gr.Elements = elements.ToArray(GetType(String))
         gr.ElementMatrix = elmat
 
     End Sub

@@ -145,7 +145,7 @@
     <value>Benzene</value>
   </data>
   <data name="_DioxidoDeCarbono" xml:space="preserve">
-    <value>Carbon Dioxide</value>
+    <value>Диоксид углерода</value>
   </data>
   <data name="_Etano" xml:space="preserve">
     <value>Этан</value>
@@ -238,7 +238,7 @@
     <value>Opening simulation file</value>
   </data>
   <data name="AbrirSalvar" xml:space="preserve">
-    <value>Open/Save</value>
+    <value>Открыть/Сохранить</value>
   </data>
   <data name="AbsorptionColumn" xml:space="preserve">
     <value>Absorption Column</value>
@@ -319,13 +319,13 @@
     <value>Heater</value>
   </data>
   <data name="Aquecedores" xml:space="preserve">
-    <value>Heaters</value>
+    <value>Нагреватели</value>
   </data>
   <data name="AquecimentoResfriame" xml:space="preserve">
-    <value>Heating/Cooling</value>
+    <value>Нагревание/Охлаждение</value>
   </data>
   <data name="AquecResfr" xml:space="preserve">
-    <value>Heating/Cooling</value>
+    <value>Нагревание/Охлаждение</value>
   </data>
   <data name="Aqueous" xml:space="preserve">
     <value>Aqueous</value>
@@ -5475,10 +5475,10 @@ In this model, chemical and physical equilibria of NH3, CO2, and H2S in sour wat
     <value>Diffusion Coefficient</value>
   </data>
   <data name="EnergyBalanceMessage" xml:space="preserve">
-    <value>the energy balance did not converge within tolerance.</value>
+    <value>энергетический баланс не сошелся в пределах допуска.</value>
   </data>
   <data name="MassBalanceMessage" xml:space="preserve">
-    <value>the mass balance did not converge within tolerance.</value>
+    <value>баланс массы не сошелся в пределах допуска.</value>
   </data>
   <data name="UnsupportedSolver" xml:space="preserve">
     <value>The selected column solver is not supported by this object.</value>

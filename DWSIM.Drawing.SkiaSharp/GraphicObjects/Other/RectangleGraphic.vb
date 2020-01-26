@@ -128,7 +128,7 @@ Namespace GraphicObjects.Shapes
             Return XMLSerializer.XMLSerializer.Serialize(Me)
         End Function
 
-        Public Overrides Function LoadData(data As List(Of XElement)) As Boolean
+        Public Overrides Function LoadData(data As ICollection(Of XElement)) As Boolean
             Return XMLSerializer.XMLSerializer.Deserialize(Me, data)
         End Function
 

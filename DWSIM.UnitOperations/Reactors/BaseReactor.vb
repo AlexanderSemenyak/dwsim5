@@ -48,7 +48,7 @@ Namespace Reactors
 
         Public Overrides Property ObjectClass As SimulationObjectClass = SimulationObjectClass.Reactors
 
-        Public Overrides Function LoadData(data As System.Collections.Generic.List(Of System.Xml.Linq.XElement)) As Boolean
+        Public Overrides Function LoadData(data As ICollection(Of XElement)) As Boolean
 
             MyBase.LoadData(data)
             Dim ci As Globalization.CultureInfo = Globalization.CultureInfo.InvariantCulture

@@ -1,6 +1,7 @@
 ﻿Imports System.Windows.Forms
 Imports DWSIM.ExtensionMethods
 Imports DWSIM.Interfaces
+Imports DWSIM.Interfaces.My.Resources
 
 Public Class Window2
 
