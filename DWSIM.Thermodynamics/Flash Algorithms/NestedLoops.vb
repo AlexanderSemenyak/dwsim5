@@ -61,17 +61,19 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
 
         Public Overrides ReadOnly Property Description As String
             Get
-                If GlobalSettings.Settings.CurrentCulture = "pt-BR" Then
-                    Return "Algoritmo Flash para equilíbrio Líquido-Vapor, baseado na equação de Rachford e Rice."
-                Else
+                'If GlobalSettings.Settings.CurrentCulture = "pt-BR" Then
+                '    Return "Algoritmo Flash para equilíbrio Líquido-Vapor, baseado na equação de Rachford e Rice."
+                'Else
                     Return "Flash Algorithm for Vapor-Liquid Equilibria based on the Rachford-Rice VLE equations."
-                End If
+                'End If
+                'return SolutionInspector.Nested_Loops_VLE
             End Get
         End Property
 
         Public Overrides ReadOnly Property Name As String
             Get
-                Return SolutionInspector.Nested_Loops_VLE
+                Return "Nested Loops (VLE)"
+                'Return SolutionInspector.Nested_Loops_VLE
             End Get
         End Property
 

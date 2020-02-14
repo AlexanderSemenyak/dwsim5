@@ -571,6 +571,11 @@
     <Compile Include="Unit Operations\Tank.vb" />
     <Compile Include="Unit Operations\Valve.vb" />
     <Compile Include="Unit Operations\Vessel.vb" />
+    <Compile Include="UnitOperationsTranslate.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UnitOperationsTranslate.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Editing Forms\EditingForm_Adjust.de.resx">
@@ -1101,6 +1106,13 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="UnitOperationsTranslate.en.resx" />
+    <EmbeddedResource Include="UnitOperationsTranslate.resx">
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>UnitOperationsTranslate.Designer.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnitOperationsTranslate.ru.resx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

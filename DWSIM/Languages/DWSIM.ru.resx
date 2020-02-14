@@ -2170,7 +2170,7 @@
     <value>Density</value>
   </data>
   <data name="MassaespecficadaPhase" xml:space="preserve">
-    <value>Density of vapor phase</value>
+    <value>Плотность паровой фазы</value>
   </data>
   <data name="MassaespecficadaPhase2" xml:space="preserve">
     <value>Density of liquid phase</value>
@@ -4735,7 +4735,7 @@ FPROPS is Copyright (C) 2011 - Carnegie Mellon University</value>
     <value>Liquid Density</value>
   </data>
   <data name="SolidDensity" xml:space="preserve">
-    <value>Solid Density</value>
+    <value>Плотность твердой фазы</value>
   </data>
   <data name="SolidCp" xml:space="preserve">
     <value>Heat Capacity Solid</value>
@@ -5409,7 +5409,7 @@ In this model, chemical and physical equilibria of NH3, CO2, and H2S in sour wat
     <value>Molar Gibbs Free Energy</value>
   </data>
   <data name="MolarHelmholtzEnergy" xml:space="preserve">
-    <value>Molar Helmholtz Free Energy</value>
+    <value>Мольная высвобожденная энергия (Гельмгольц)</value>
   </data>
   <data name="MolarInternalEnergy" xml:space="preserve">
     <value>Molar Internal Energy</value>

@@ -375,7 +375,7 @@ Namespace FlowPackages
 
                 IObj?.Paragraphs.Add("<mi>\rho_M</mi> = " & rhom & " kg/m3")
 
-                'calculo do delta P em funcao da carga hidrostatica em lbf/ft2
+                'delta P calculation as a function of hydrostatic load in lbf / ft2
                 Dim dP_hh = rhom * deltaz
 
                 'calculo do delta P em funcao da friccao
@@ -415,7 +415,7 @@ Namespace FlowPackages
 
                 IObj?.Paragraphs.Add("<mi>f_{tp}</mi> = " & f_tp)
 
-                ' delta P devido a friccao em lbf/ft2
+                'delta P due to friction in lbf / ft2
                 'Dim dP_fr = 2 * f_tp * vm ^ 2 * rho_ns * L / (32.2 * D)
                 Dim dP_fr = f_tp * vm ^ 2 / 2 * rho_ns * L / (32.2 * D)
 

@@ -81,14 +81,9 @@ Namespace UnitOperations
 
             IObj?.SetCurrent()
 
-            IObj?.Paragraphs.Add("The Mixer is used to mix up to six material streams into one, while executing all the mass and energy balances.")
+            IObj?.Paragraphs.Add(SolutionInspector.Mixer_Calculate_Paragraph_01)
 
-            IObj?.Paragraphs.Add("The mixer does the mass balance in the equipment and determines 
-                                the mass flow and the composition of the outlet stream. Pressure 
-                                is calculated according to the parameter defined by the user. 
-                                Temperature is calculated by doing a PH Flash in the outlet 
-                                stream, with the enthalpy calculated from the inlet streams 
-                                (energy balance).")
+            IObj?.Paragraphs.Add(SolutionInspector.Mixer_Calculate_Paragraph_02)
 
             If Not Me.GraphicObject.OutputConnectors(0).IsAttached Then
                 Throw New Exception(FlowSheet.GetTranslatedString("Nohcorrentedematriac6"))
@@ -161,7 +156,7 @@ Namespace UnitOperations
 
             If W = 0.0# Then T = 273.15
 
-            IObj?.Paragraphs.Add("Outlet Mixed Stream</h3>")
+            IObj?.Paragraphs.Add(SolutionInspector.Mixer_Calculate_Paragraph_03)
 
             IObj?.Paragraphs.Add(String.Format(SolutionInspector.Mass_Flow_0_kg_s, W))
             IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
@@ -200,6 +195,8 @@ Namespace UnitOperations
                 .Phases(0).Properties.temperature = T
                 .SpecType = Interfaces.Enums.StreamSpec.Pressure_and_Enthalpy
             End With
+
+            'omstr.Calculate()
 
             IObj?.Close()
 

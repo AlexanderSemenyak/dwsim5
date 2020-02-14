@@ -740,6 +740,38 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to The Mixer is used to mix up to six material streams into one, while executing all the mass and energy balances..
+        '''</summary>
+        Public Shared ReadOnly Property Mixer_Calculate_Paragraph_01() As String
+            Get
+                Return ResourceManager.GetString("Mixer_Calculate_Paragraph_01", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to The mixer does the mass balance in the equipment and determines 
+        '''                                the mass flow and the composition of the outlet stream. Pressure 
+        '''                                is calculated according to the parameter defined by the user. 
+        '''                                Temperature is calculated by doing a PH Flash in the outlet 
+        '''                                stream, with the enthalpy calculated from the inlet streams 
+        '''                                (energy balance)..
+        '''</summary>
+        Public Shared ReadOnly Property Mixer_Calculate_Paragraph_02() As String
+            Get
+                Return ResourceManager.GetString("Mixer_Calculate_Paragraph_02", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to &lt;h3&gt;Outlet Mixed Stream&lt;/h3&gt;.
+        '''</summary>
+        Public Shared ReadOnly Property Mixer_Calculate_Paragraph_03() As String
+            Get
+                Return ResourceManager.GetString("Mixer_Calculate_Paragraph_03", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Mole Fractions: {0}.
         '''</summary>
         Public Shared ReadOnly Property Mole_Fractions_0() As String

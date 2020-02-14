@@ -1,5 +1,6 @@
 Imports System.Runtime.InteropServices
 Imports DWSIM.Interfaces.My.Resources
+Imports DWSIM.UnitOperations.My.Resources
 
 '    Petalas-Aziz Pressure Drop Calculation Routine
 '    Copyright 2012 Daniel Wagner O. de Medeiros
@@ -99,7 +100,7 @@ Namespace FlowPackages
                 Dim dPl = fric * L / D * vlo ^ 2 / 2 * rhol
                 Dim dPh = rhol * 9.8 * Math.Sin(Math.Asin(deltaz / L)) * L
 
-                ResVector(0) = "Liquid Only"
+                ResVector(0) = UnitOperationsTranslate.PetalasAziz_FlowRegime_LiquidOnly
                 ResVector(1) = 1
                 ResVector(2) = dPl
                 ResVector(3) = dPh
@@ -125,7 +126,7 @@ Namespace FlowPackages
                 Dim dPl = fric * L / D * vgo ^ 2 / 2 * rhov
                 Dim dPh = rhov * 9.8 * Math.Sin(Math.Asin(deltaz / L)) * L
 
-                ResVector(0) = "Vapor Only"
+                ResVector(0) = UnitOperationsTranslate.PetalasAziz_FlowRegime_VaporOnly
                 ResVector(1) = 0
                 ResVector(2) = dPl
                 ResVector(3) = dPh
@@ -166,37 +167,37 @@ Namespace FlowPackages
 
                 Select Case Region
                     Case 1
-                        FlowRegime = "Elongated Bubbles"
+                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_ElongatedBubbles
                     Case 2
-                        FlowRegime = "Bubbles"
+                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_Bubbles
                     Case 3
-                        FlowRegime = "Stratified Smooth"
+                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_StratifiedSmooth
                     Case 4
-                        FlowRegime = "Stratified Waves"
+                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_StratifiedWaves
                     Case 5
-                        FlowRegime = "Slug"
+                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_Slug
                     Case 6
-                        FlowRegime = "Annular Mist"
+                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_AnnularMist
                     Case 7
-                        FlowRegime = "Dispersed Bubbles"
+                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_DispersedBubbles
                     Case 8
-                        FlowRegime = "Froth I (DB/AM transition)"
+                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_Froth_I_DB_AM_transition
                     Case 9
-                        FlowRegime = "Homogeneous"
+                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_Homogenous
                     Case 10
-                        FlowRegime = "Froth"
+                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_Froth
                     Case 11
-                        FlowRegime = "Stratified"
+                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_Stratified
                     Case 12
-                        FlowRegime = "Segregated"
+                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_Segregated
                     Case 13
-                        FlowRegime = "Transition"
+                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_Transition
                     Case 14
-                        FlowRegime = "Intermittent"
+                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_Intermittent
                     Case 15
-                        FlowRegime = "Distributed"
+                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_Distributed
                     Case 16
-                        FlowRegime = "Single Phase"
+                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_Single_Phase
                 End Select
 
                 CalculateDeltaP = New Object() {FlowRegime, eL, dPfr * 6894.76 * 3.28084 * L, dPhh * 6894.76 * 3.28084 * L, (dPfr + dPhh) * 6894.76 * 3.28084 * L}
