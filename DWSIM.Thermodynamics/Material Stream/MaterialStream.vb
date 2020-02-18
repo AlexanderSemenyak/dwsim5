@@ -186,6 +186,7 @@ Namespace Streams
             PropertyPackage.CurrentMaterialStream = ms
         End Sub
 
+
         ''' <summary>
         ''' Gets or sets the associated Property Package for this stream.
         ''' </summary>
@@ -243,12 +244,21 @@ Namespace Streams
 
         End Sub
 
+        ''' <summary>
+        ''' Is Empty PropertyPackage
+        ''' </summary>
+        ''' <returns></returns>
+        Function EmptyPropertyPackage as Boolean
+            return string.IsNullOrEmpty(Me._ppid) and _pp Is Nothing
+        End Function
+
         Public Sub New(ByVal name As String, ByVal description As String, ByVal flowsheet As IFlowsheet, ByVal proppack As PropertyPackages.PropertyPackage)
 
             MyBase.CreateNew()
 
             Me.SetFlowsheet(flowsheet)
-            If Me.PropertyPackage Is Nothing Then Me.PropertyPackage = proppack
+           ' If Me.PropertyPackage Is Nothing Then Me.PropertyPackage = proppack
+            If Me.EmptyPropertyPackage then Me.PropertyPackage = proppack
 
             Me.ComponentName = name
             Me.ComponentDescription = description
