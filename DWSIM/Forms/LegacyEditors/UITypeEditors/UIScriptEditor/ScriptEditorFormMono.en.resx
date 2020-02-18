@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -135,7 +135,7 @@
 </value>
   </data>
   <data name="OpenToolStripButton.Text" xml:space="preserve">
-    <value>&amp;Open</value>
+    <value>Открыть</value>
   </data>
   <data name="SaveToolStripButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -154,7 +154,7 @@
 </value>
   </data>
   <data name="SaveToolStripButton.Text" xml:space="preserve">
-    <value>&amp;Save</value>
+    <value>Сохранить</value>
   </data>
   <data name="PrintToolStripButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -172,7 +172,7 @@
 </value>
   </data>
   <data name="PrintToolStripButton.Text" xml:space="preserve">
-    <value>&amp;Print</value>
+    <value>Печать</value>
   </data>
   <data name="CutToolStripButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -188,7 +188,7 @@
 </value>
   </data>
   <data name="CutToolStripButton.Text" xml:space="preserve">
-    <value>&amp;Cut</value>
+    <value>Вырезать</value>
   </data>
   <data name="CopyToolStripButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -205,7 +205,7 @@
 </value>
   </data>
   <data name="CopyToolStripButton.Text" xml:space="preserve">
-    <value>&amp;Copy</value>
+    <value>Копировать</value>
   </data>
   <data name="PasteToolStripButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -224,19 +224,19 @@
 </value>
   </data>
   <data name="PasteToolStripButton.Text" xml:space="preserve">
-    <value>&amp;Paste</value>
+    <value>Вставить</value>
   </data>
   <data name="ToolStripButton2.Text" xml:space="preserve">
-    <value>Select files to include</value>
+    <value>Выбрать файлы к включению</value>
   </data>
   <data name="ToolStripButton3.Text" xml:space="preserve">
-    <value>Remove selected include file</value>
+    <value>Исключить выбранный файл</value>
   </data>
   <data name="ToolStripButton4.Text" xml:space="preserve">
-    <value>Increase Opacity</value>
+    <value>Увеличить прозрчность</value>
   </data>
   <data name="ToolStripButton5.Text" xml:space="preserve">
-    <value>Decrease Opacity</value>
+    <value>Уменьшить прозрачность</value>
   </data>
   <data name="HelpToolStripButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -254,9 +254,9 @@
 </value>
   </data>
   <data name="ofd1.Filter" xml:space="preserve">
-    <value>All files|*.*</value>
+    <value>Все файлы|*.*</value>
   </data>
   <data name="FaTabStripItem4.Title" xml:space="preserve">
-    <value>Includes</value>
+    <value>Вложения</value>
   </data>
 </root>

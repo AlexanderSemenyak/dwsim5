@@ -1816,14 +1816,15 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
             Tf = T
 
             Dim Vn(n) As String, Vx(n), Vy(n), Vx_ant(n), Vy_ant(n), Vp(n), Ki(n), fi(n) As Double
-            Dim Vt(n), VTc(n), Tmin, Tmax, dFdT, Tsat(n) As Double
+            Dim Vt(n), VTc(n), dFdT, Tsat(n) As Double
+            'Dim Tmin, Tmax  as  Double
 
             Vn = PP.RET_VNAMES()
             VTc = PP.RET_VTC()
             fi = Vz.Clone
 
-            Tmin = 0.0#
-            Tmax = 0.0#
+            'Tmin = 0.0#
+            'Tmax = 0.0#
 
             If Tref = 0.0# Then
                 i = 0
@@ -1831,13 +1832,13 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
                 Do
                     'Tref += 0.8 * Vz(i) * VTc(i)
                     Tref += Vz(i) * PP.AUX_TSATi(P, i)
-                    Tmin += 0.1 * Vz(i) * VTc(i)
-                    Tmax += 2.0 * Vz(i) * VTc(i)
+                    'Tmin += 0.1 * Vz(i) * VTc(i)
+                    'Tmax += 2.0 * Vz(i) * VTc(i)
                     i += 1
                 Loop Until i = n + 1
             Else
-                Tmin = Tref - 50
-                Tmax = Tref + 50
+                'Tmin = Tref - 50
+                'Tmax = Tref + 50
             End If
 
             T = Tref
@@ -2188,7 +2189,9 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
 
             dt = d2 - d1
 
-            If ecount > maxit_e Then Throw New Exception(Calculator.GetLocalString("PropPack_FlashMaxIt2") & String.Format(" (T = {0} K, P = {1} Pa, MoleFracs = {2})", T.ToString("N2"), P.ToString("N2"), Vz.ToArrayString()))
+            If ecount > maxit_e Then
+                Throw New Exception(Calculator.GetLocalString("PropPack_FlashMaxIt2") & String.Format(" (T = {0} K, P = {1} Pa, MoleFracs = {2})", T.ToString("N2"), P.ToString("N2"), Vz.ToArrayString()))
+            End If
 
             If PP.AUX_CheckTrivial(Ki) Then
                 Dim ex As New Exception("PV Flash [NL]: Invalid result: converged to the trivial solution (T = " & T & " ).")

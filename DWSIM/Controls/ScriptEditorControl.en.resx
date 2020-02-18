@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Label4.Text" xml:space="preserve">
-    <value>Variables</value>
+    <value>Переменные</value>
   </data>
   <data name="tc1.Header" xml:space="preserve">
-    <value>Object</value>
+    <value>Объект</value>
   </data>
   <data name="tc2.Header" xml:space="preserve">
-    <value>Type</value>
+    <value>Тип</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="tc2.Width" type="System.Int32, mscorlib">
@@ -144,7 +144,7 @@
     <value>218, 22</value>
   </data>
   <data name="ViewSourceCodeTSMI.Text" xml:space="preserve">
-    <value>View Source Code (GitHub)</value>
+    <value>Просмотреть исходный код (GitHub)</value>
   </data>
   <data name="ContextMenuStrip1.Size" type="System.Drawing.Size, System.Drawing">
     <value>219, 48</value>
@@ -166,7 +166,7 @@
     <value>91, 13</value>
   </data>
   <data name="Label3.Text" xml:space="preserve">
-    <value>Python Interpreter</value>
+    <value>Интерпретатор Pyton</value>
   </data>
   <data name="cbLinkedEvent.Location" type="System.Drawing.Point, System.Drawing">
     <value>319, 6</value>
@@ -181,10 +181,10 @@
     <value>35, 13</value>
   </data>
   <data name="Label2.Text" xml:space="preserve">
-    <value>Event</value>
+    <value>Событие</value>
   </data>
   <data name="Label1.Text" xml:space="preserve">
-    <value>Object</value>
+    <value>Объект</value>
   </data>
   <data name="chkLink.Location" type="System.Drawing.Point, System.Drawing">
     <value>8, 10</value>
@@ -193,6 +193,6 @@
     <value>46, 17</value>
   </data>
   <data name="chkLink.Text" xml:space="preserve">
-    <value>Link</value>
+    <value>Связь</value>
   </data>
 </root>

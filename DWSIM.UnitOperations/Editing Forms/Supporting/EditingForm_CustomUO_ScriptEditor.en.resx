@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -127,7 +127,7 @@
     <value />
   </data>
   <data name="FaTabStripItem4.Title" xml:space="preserve">
-    <value>Includes</value>
+    <value>Вложения</value>
   </data>
   <data name="FaTabStripItem4.ToolTip" xml:space="preserve">
     <value />
@@ -201,7 +201,7 @@
 </value>
   </data>
   <data name="OpenToolStripButton.Text" xml:space="preserve">
-    <value>&amp;Open</value>
+    <value>Открыть</value>
   </data>
   <data name="SaveToolStripButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -220,7 +220,7 @@
 </value>
   </data>
   <data name="SaveToolStripButton.Text" xml:space="preserve">
-    <value>&amp;Save</value>
+    <value>Сохранить</value>
   </data>
   <data name="PrintToolStripButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -238,7 +238,7 @@
 </value>
   </data>
   <data name="PrintToolStripButton.Text" xml:space="preserve">
-    <value>&amp;Print</value>
+    <value>Печать</value>
   </data>
   <data name="CutToolStripButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -254,7 +254,7 @@
 </value>
   </data>
   <data name="CutToolStripButton.Text" xml:space="preserve">
-    <value>&amp;Cut (Ctrl+X)</value>
+    <value>Вырезать (Ctrl+X)</value>
   </data>
   <data name="CopyToolStripButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -271,7 +271,7 @@
 </value>
   </data>
   <data name="CopyToolStripButton.Text" xml:space="preserve">
-    <value>&amp;Copy (Ctrl+C)</value>
+    <value>Копировать (Ctrl+C)</value>
   </data>
   <data name="PasteToolStripButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -290,7 +290,7 @@
 </value>
   </data>
   <data name="PasteToolStripButton.Text" xml:space="preserve">
-    <value>&amp;Paste (Ctrl+V)</value>
+    <value>Вставить (Ctrl+V)</value>
   </data>
   <data name="btnHighlightSpaces.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -311,28 +311,28 @@
     <value>100, 22</value>
   </data>
   <data name="btnHighlightSpaces.Text" xml:space="preserve">
-    <value>Highlight Spaces</value>
+    <value>Подстветка пробелов</value>
   </data>
   <data name="btnUndo.Text" xml:space="preserve">
-    <value>Undo (Ctrl+Z)</value>
+    <value>Отменить (Ctrl+Z)</value>
   </data>
   <data name="btnRedo.Text" xml:space="preserve">
-    <value>Redo (Ctrl+Y)</value>
+    <value>Вернуть (Ctrl+Y)</value>
   </data>
   <data name="ToolStripButton2.Text" xml:space="preserve">
-    <value>Select files to include</value>
+    <value>Выбрать файлы к включению</value>
   </data>
   <data name="ToolStripButton3.Text" xml:space="preserve">
-    <value>Remove selected include file</value>
+    <value>Исключить выбранный файл</value>
   </data>
   <data name="tsbInsertSnippet.Size" type="System.Drawing.Size, System.Drawing">
     <value>92, 22</value>
   </data>
   <data name="tsbInsertSnippet.Text" xml:space="preserve">
-    <value>Insert Snippet</value>
+    <value>Вставить шаблон</value>
   </data>
   <data name="btnDebug.Text" xml:space="preserve">
-    <value>Run script (F5)</value>
+    <value>Запустить скрипт (F5)</value>
   </data>
   <data name="HelpToolStripButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -350,16 +350,16 @@
 </value>
   </data>
   <data name="HelpToolStripButton.Text" xml:space="preserve">
-    <value>Help</value>
+    <value>Справка</value>
   </data>
   <data name="APIHelptsbutton.Text" xml:space="preserve">
-    <value>API Help</value>
+    <value>Документация API</value>
   </data>
   <data name="ToolStrip1.ToolTip" xml:space="preserve">
     <value />
   </data>
   <data name="ofd1.Filter" xml:space="preserve">
-    <value>All files|*.*</value>
+    <value>Все файлы|*.*</value>
   </data>
   <data name="treeViewItems.ToolTip" xml:space="preserve">
     <value />

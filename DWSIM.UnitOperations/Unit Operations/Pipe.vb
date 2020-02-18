@@ -512,11 +512,17 @@ Namespace UnitOperations
 
                                         cntP += 1
 
-                                        If Pout <= 0 Then Throw New Exception(FlowSheet.GetTranslatedString("Pressonegativadentro"))
+                                        If Pout <= 0 Then
+                                            Throw New Exception(FlowSheet.GetTranslatedString("Pressonegativadentro"))
+                                        End If
 
-                                        If Double.IsNaN(Pout) Then Throw New Exception(FlowSheet.GetTranslatedString("Erronoclculodapresso"))
+                                        If Double.IsNaN(Pout) Then
+                                            Throw New Exception(FlowSheet.GetTranslatedString("Erronoclculodapresso"))
+                                        End If
 
-                                        If cntP > Me.MaxPressureIterations Then Throw New Exception(FlowSheet.GetTranslatedString("Ocalculadorexcedeuon"))
+                                        If cntP > Me.MaxPressureIterations Then
+                                            Throw New Exception(FlowSheet.GetTranslatedString("Ocalculadorexcedeuon"))
+                                        End If
 
                                         FlowSheet.CheckStatus()
 
@@ -601,7 +607,9 @@ Namespace UnitOperations
                                         Throw New Exception(FlowSheet.GetTranslatedString("Erronoclculodatemper"))
                                     End If
 
-                                    If cntT > Me.MaxTemperatureIterations Then Throw New Exception(FlowSheet.GetTranslatedString("Ocalculadorexcedeuon1"))
+                                    If cntT > Me.MaxTemperatureIterations Then
+                                        Throw New Exception(FlowSheet.GetTranslatedString("Ocalculadorexcedeuon1"))
+                                    End If
 
                                     FlowSheet.CheckStatus()
 
@@ -842,7 +850,9 @@ Namespace UnitOperations
                         fx = Tout - OutletTemperature
                         If countext > 2 Then
                             x = x - fx * (x - x00) / (fx - fx00)
-                            If Double.IsNaN(x) Or Double.IsInfinity(x) Then Throw New Exception(FlowSheet.GetTranslatedString("Erroaocalculartemper"))
+                            If Double.IsNaN(x) Or Double.IsInfinity(x) Then
+                                Throw New Exception(FlowSheet.GetTranslatedString("Erroaocalculartemper"))
+                            End If
                             Me.ThermalProfile.Calor_trocado = x
                         Else
                             Me.ThermalProfile.Calor_trocado += 0.1
@@ -860,7 +870,9 @@ Namespace UnitOperations
                         fx = Pout - OutletPressure
                         If countext > 2 Then
                             x = x - fx * (x - x00) / (fx - fx00)
-                            If Double.IsNaN(x) Or Double.IsInfinity(x) Then Throw New Exception(FlowSheet.GetTranslatedString("Erronoclculodapresso"))
+                            If Double.IsNaN(x) Or Double.IsInfinity(x) Then
+                                Throw New Exception(FlowSheet.GetTranslatedString("Erronoclculodapresso"))
+                            End If
                             Me.Profile.Sections(1).Comprimento = x
                         Else
                             Me.Profile.Sections(1).Comprimento *= 1.05
@@ -875,7 +887,9 @@ Namespace UnitOperations
 
                 countext += 1
 
-                If countext > 50 Then Throw New Exception("Nmeromximodeiteraesa3")
+                If countext > 50 Then
+                    Throw New Exception("Nmeromximodeiteraesa3")
+                End If
 
                 IObj2?.Paragraphs.Add(String.Format(SolutionInspector.Calculated_outlet_pressure_0_Pa, Pout))
                 IObj2?.Paragraphs.Add(String.Format(SolutionInspector.Calculated_Outlet_Temperature_0_K, Tout))

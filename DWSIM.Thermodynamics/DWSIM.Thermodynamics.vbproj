@@ -624,7 +624,9 @@
       <DependentUpon>FormUnhandledException.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Languages\Strings.de.resx" />
-    <EmbeddedResource Include="Languages\Strings.en.resx" />
+    <EmbeddedResource Include="Languages\Strings.en.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Languages\Strings.resx">
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <Generator>ResXFileCodeGenerator</Generator>

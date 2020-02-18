@@ -122,7 +122,7 @@
     <value>287, 22</value>
   </data>
   <data name="CelulaToolStripMenuItem.Text" xml:space="preserve">
-    <value>Cell</value>
+    <value>Ячейка</value>
   </data>
   <data name="ToolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
     <value>284, 6</value>
@@ -131,19 +131,19 @@
     <value>287, 22</value>
   </data>
   <data name="AvaliarFormulaToolStripMenuItem.Text" xml:space="preserve">
-    <value>Evaluate Formula</value>
+    <value>Вычислить формулу</value>
   </data>
   <data name="ImportarDadosToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>287, 22</value>
   </data>
   <data name="ImportarDadosToolStripMenuItem.Text" xml:space="preserve">
-    <value>Import Value from Flowsheet</value>
+    <value>Импортировать значение из модели</value>
   </data>
   <data name="ExportarDadosToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>287, 22</value>
   </data>
   <data name="ExportarDadosToolStripMenuItem.Text" xml:space="preserve">
-    <value>Export Value to Flowsheet Object</value>
+    <value>Экспортировать значение в объект модели</value>
   </data>
   <data name="ToolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
     <value>284, 6</value>
@@ -152,19 +152,19 @@
     <value>287, 22</value>
   </data>
   <data name="LimparToolStripMenuItem.Text" xml:space="preserve">
-    <value>Clear</value>
+    <value>Очистить</value>
   </data>
   <data name="CopiarToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>287, 22</value>
   </data>
   <data name="CopiarToolStripMenuItem.Text" xml:space="preserve">
-    <value>Copy</value>
+    <value>Копировать</value>
   </data>
   <data name="ColarToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>287, 22</value>
   </data>
   <data name="ColarToolStripMenuItem.Text" xml:space="preserve">
-    <value>Paste</value>
+    <value>Вставить</value>
   </data>
   <data name="ContextMenuStrip1.Size" type="System.Drawing.Size, System.Drawing">
     <value>288, 170</value>
@@ -176,7 +176,7 @@
     <value>34, 13</value>
   </data>
   <data name="Label1.Text" xml:space="preserve">
-    <value>Value</value>
+    <value>Значение</value>
   </data>
   <data name="tbValue.Size" type="System.Drawing.Size, System.Drawing">
     <value>600, 20</value>
@@ -191,7 +191,7 @@
     <value>147, 17</value>
   </data>
   <data name="chkUpdate.Text" xml:space="preserve">
-    <value>Toggle Automatic Update</value>
+    <value>Включить автоматическое обновление</value>
   </data>
   <data name="Button4.ImageAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleLeft</value>
@@ -203,19 +203,19 @@
     <value>140, 29</value>
   </data>
   <data name="Button4.Text" xml:space="preserve">
-    <value>Copy Data to Clipboard</value>
+    <value>Скопировать в буфер обмена</value>
   </data>
   <data name="chkUseRegionalSeparator.Size" type="System.Drawing.Size, System.Drawing">
     <value>352, 17</value>
   </data>
   <data name="chkUseRegionalSeparator.Text" xml:space="preserve">
-    <value>Use System-Defined Decimal Separator for Expressions and Formulas</value>
+    <value>Использовать системный разделитель дробной части для вычисления формул</value>
   </data>
   <data name="chkEnableUnitLocking.Size" type="System.Drawing.Size, System.Drawing">
     <value>158, 17</value>
   </data>
   <data name="chkEnableUnitLocking.Text" xml:space="preserve">
-    <value>Activate Unit Locking Mode</value>
+    <value>Активировать режим заблокированных единиц измерения</value>
   </data>
   <data name="GroupBox1.Location" type="System.Drawing.Point, System.Drawing">
     <value>7, 336</value>
@@ -224,19 +224,19 @@
     <value>771, 93</value>
   </data>
   <data name="GroupBox1.Text" xml:space="preserve">
-    <value>Control Options</value>
+    <value>Настройки</value>
   </data>
   <data name="ToolStripLabel1.Size" type="System.Drawing.Size, System.Drawing">
     <value>83, 22</value>
   </data>
   <data name="ToolStripLabel1.Text" xml:space="preserve">
-    <value>Selection Style</value>
+    <value>Способ выделения</value>
   </data>
   <data name="ToolStripLabel2.Size" type="System.Drawing.Size, System.Drawing">
     <value>63, 22</value>
   </data>
   <data name="ToolStripLabel2.Text" xml:space="preserve">
-    <value>Alignment</value>
+    <value>Выравнивание</value>
   </data>
   <data name="tsbAlignment.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -257,13 +257,13 @@
     <value>76, 22</value>
   </data>
   <data name="tsbAlignment.Text" xml:space="preserve">
-    <value>Alignment</value>
+    <value>Выравнивание</value>
   </data>
   <data name="ToolStripLabel3.Size" type="System.Drawing.Size, System.Drawing">
     <value>31, 22</value>
   </data>
   <data name="ToolStripLabel3.Text" xml:space="preserve">
-    <value>Font</value>
+    <value>Шрифт</value>
   </data>
   <data name="btnFont.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -284,13 +284,13 @@
     <value>35, 22</value>
   </data>
   <data name="btnFont.Text" xml:space="preserve">
-    <value>Font</value>
+    <value>Шрифт</value>
   </data>
   <data name="ToolStripLabel7.Size" type="System.Drawing.Size, System.Drawing">
     <value>45, 22</value>
   </data>
   <data name="ToolStripLabel7.Text" xml:space="preserve">
-    <value>Format</value>
+    <value>Формат</value>
   </data>
   <data name="ToolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
     <value>89, 22</value>
@@ -356,7 +356,7 @@
     <value>97, 22</value>
   </data>
   <data name="ToolStripLabel6.Text" xml:space="preserve">
-    <value>Content Padding</value>
+    <value>Отступы</value>
   </data>
   <data name="txtPadding.Font" type="System.Drawing.Font, System.Drawing">
     <value>Segoe UI, 9pt</value>
@@ -372,7 +372,7 @@
     <value>60, 22</value>
   </data>
   <data name="ToolStripLabel4.Text" xml:space="preserve">
-    <value>Text Color</value>
+    <value>Цвет текста</value>
   </data>
   <data name="btnForeColor.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -393,7 +393,7 @@
     <value>103, 22</value>
   </data>
   <data name="ToolStripLabel5.Text" xml:space="preserve">
-    <value>Background Color</value>
+    <value>Цвет заднего фона</value>
   </data>
   <data name="btnBackColor.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -432,7 +432,7 @@
     <value>71, 19</value>
   </data>
   <data name="btnWordWrap.Text" xml:space="preserve">
-    <value>Word Wrap</value>
+    <value>Переносить текст</value>
   </data>
   <data name="ToolStrip1.Size" type="System.Drawing.Size, System.Drawing">
     <value>787, 25</value>
@@ -1885,9 +1885,9 @@
 </value>
   </data>
   <data name="$this.TabText" xml:space="preserve">
-    <value>Spreadsheet</value>
+    <value>Таблица</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
-    <value>Spreadsheet</value>
+    <value>Таблица</value>
   </data>
 </root>

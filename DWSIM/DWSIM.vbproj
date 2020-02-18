@@ -1551,7 +1551,9 @@
     <EmbeddedResource Include="Forms\FormWebPanel.resx">
       <DependentUpon>FormWebPanel.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Languages\DWSIM.ru.resx" />
+    <EmbeddedResource Include="Languages\DWSIM.ru.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Languages\Tips.de.resx" />
     <EmbeddedResource Include="Languages\Tips.en.resx" />
     <EmbeddedResource Include="Languages\Tips.es.resx">
