@@ -1,6 +1,6 @@
 ﻿==================================================
 DWSIM - Open Source Process Simulator
-Version 5.8 Update 8
+Version 5.8 Update 10
 Copyright (c) 2017-2020 Daniel Medeiros
 Copyright (c) 2008-2016 Daniel Medeiros, Gregor Reichert, Gustavo Leon
 ==================================================
@@ -61,6 +61,18 @@ VERSION HISTORY / CHANGELOG
 ==================================================
 
 The full changelog, including code changes and their authors can be viewed at https://github.com/DanWBR/dwsim5/commits/windows
+
+Version 5.8 Update 10
+
+- [NEW] Update compound data from JSON file while importing
+- [FIX] Updated SVLLE Flash Algorithm to handle forced solids
+- [FIX] Fixes for High DPI displaying (Classic UI)
+- [FIX] Raoult's Law/Activity Coeff. Property Packages: added an option to calculate Solid Phase Enthalpy with Solid Cp
+- [FIX] General bug fixes and minor enhancements
+
+Version 5.8 Update 9
+
+- [FIX] General bug fixes and minor enhancements
 
 Version 5.8 Update 8
 

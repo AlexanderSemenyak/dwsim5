@@ -214,11 +214,11 @@
   <data name="Label60.Text" xml:space="preserve">
     <value>Enter the amount of each UNIFAC group in the compound structure, if available.</value>
   </data>
-  <data name="GridUNIFAC.Size" type="System.Drawing.Size, System.Drawing">
-    <value>690, 433</value>
-  </data>
   <data name="Column4.HeaderText" xml:space="preserve">
     <value>Amount</value>
+  </data>
+  <data name="GridUNIFAC.Size" type="System.Drawing.Size, System.Drawing">
+    <value>690, 433</value>
   </data>
   <data name="TBModfac.Size" type="System.Drawing.Size, System.Drawing">
     <value>356, 116</value>
@@ -618,7 +618,7 @@
     <value>Regress Experimental Data</value>
   </data>
   <data name="Label77.Text" xml:space="preserve">
-    <value>Rho*:  [kg/m³] ; T: [K]</value>
+    <value>Rho*:  [kmol/m³] ; T: [K]</value>
   </data>
   <data name="Label76.Text" xml:space="preserve">
     <value>Equation</value>
@@ -656,14 +656,11 @@
   <data name="DBOpenDlg.Title" xml:space="preserve">
     <value>Open/Create Database</value>
   </data>
-  <data name="MenuStrip1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1102, 24</value>
+  <data name="GridExpDataTCLiquid.Location" type="System.Drawing.Point, System.Drawing">
+    <value>11, 76</value>
   </data>
-  <data name="ComponenteToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>80, 20</value>
-  </data>
-  <data name="ComponenteToolStripMenuItem.Text" xml:space="preserve">
-    <value>Compound</value>
+  <data name="GridExpDataTCLiquid.Size" type="System.Drawing.Size, System.Drawing">
+    <value>208, 164</value>
   </data>
   <data name="SalvarNoBancoDeDadosToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>248, 22</value>
@@ -677,29 +674,35 @@
   <data name="ExportarDadosParaArquivoJSONToolStripMenuItem.Text" xml:space="preserve">
     <value>Export Data to JSON File</value>
   </data>
+  <data name="BancoDeDadosKDBCHERICToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>300, 22</value>
+  </data>
+  <data name="BancoDeDadosKDBCHERICToolStripMenuItem.Text" xml:space="preserve">
+    <value>KDB/CHERIC Thermo Database</value>
+  </data>
+  <data name="BancoDeDadosChemeoToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>300, 22</value>
+  </data>
+  <data name="BancoDeDadosChemeoToolStripMenuItem.Text" xml:space="preserve">
+    <value>Cheméo Database</value>
+  </data>
+  <data name="EstruturaUNIFACMODFACDDBToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>300, 22</value>
+  </data>
+  <data name="EstruturaUNIFACMODFACDDBToolStripMenuItem.Text" xml:space="preserve">
+    <value>DDB UNIFAC/MODFAC Structure Database </value>
+  </data>
   <data name="ImportarDadosToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>248, 22</value>
   </data>
   <data name="ImportarDadosToolStripMenuItem.Text" xml:space="preserve">
     <value>Import Data from Online Sources</value>
   </data>
-  <data name="BancoDeDadosKDBCHERICToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>302, 22</value>
+  <data name="ComponenteToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>80, 20</value>
   </data>
-  <data name="BancoDeDadosKDBCHERICToolStripMenuItem.Text" xml:space="preserve">
-    <value>KDB/CHERIC Thermo Database</value>
-  </data>
-  <data name="BancoDeDadosChemeoToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>302, 22</value>
-  </data>
-  <data name="BancoDeDadosChemeoToolStripMenuItem.Text" xml:space="preserve">
-    <value>Cheméo Database</value>
-  </data>
-  <data name="EstruturaUNIFACMODFACDDBToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>302, 22</value>
-  </data>
-  <data name="EstruturaUNIFACMODFACDDBToolStripMenuItem.Text" xml:space="preserve">
-    <value>DDB UNIFAC/MODFAC Structure Database </value>
+  <data name="ComponenteToolStripMenuItem.Text" xml:space="preserve">
+    <value>Compound</value>
   </data>
   <data name="SistemasDeUnidadesToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>101, 20</value>
@@ -707,20 +710,44 @@
   <data name="SistemasDeUnidadesToolStripMenuItem.Text" xml:space="preserve">
     <value>System of Units</value>
   </data>
-  <data name="OptionsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>61, 20</value>
-  </data>
-  <data name="OptionsToolStripMenuItem.Text" xml:space="preserve">
-    <value>Options</value>
-  </data>
   <data name="tsmiIgnoreUnsupportedGroups.Size" type="System.Drawing.Size, System.Drawing">
     <value>368, 22</value>
   </data>
   <data name="tsmiIgnoreUnsupportedGroups.Text" xml:space="preserve">
     <value>Ignore Unsupported Groups when Estimating Properties</value>
   </data>
+  <data name="OptionsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>61, 20</value>
+  </data>
+  <data name="OptionsToolStripMenuItem.Text" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="MenuStrip1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1102, 24</value>
+  </data>
   <data name="TabPageID.Size" type="System.Drawing.Size, System.Drawing">
     <value>1090, 510</value>
+  </data>
+  <data name="TabPage1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1076, 478</value>
+  </data>
+  <data name="TabPage2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1076, 478</value>
+  </data>
+  <data name="Label1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>418, 13</value>
+  </data>
+  <data name="Label1.Text" xml:space="preserve">
+    <value>Enter the amount of each NIST-MODFAC group in the compound structure, if available.</value>
+  </data>
+  <data name="TabPage3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1076, 478</value>
+  </data>
+  <data name="TabPage4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1076, 478</value>
+  </data>
+  <data name="TabControl2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>1084, 504</value>
   </data>
   <data name="TabPageStructure.Size" type="System.Drawing.Size, System.Drawing">
     <value>1090, 510</value>
@@ -927,12 +954,6 @@
   <data name="Label98.Text" xml:space="preserve">
     <value>C</value>
   </data>
-  <data name="GridExpDataTCLiquid.Location" type="System.Drawing.Point, System.Drawing">
-    <value>11, 76</value>
-  </data>
-  <data name="GridExpDataTCLiquid.Size" type="System.Drawing.Size, System.Drawing">
-    <value>208, 164</value>
-  </data>
   <data name="rbRegressTCLiquid.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -981,27 +1002,6 @@
   <data name="TabControl1.Size" type="System.Drawing.Size, System.Drawing">
     <value>1098, 536</value>
   </data>
-  <data name="TabControl2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1084, 504</value>
-  </data>
-  <data name="TabPage1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1076, 478</value>
-  </data>
-  <data name="TabPage2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1076, 478</value>
-  </data>
-  <data name="TabPage3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1076, 478</value>
-  </data>
-  <data name="Label1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>418, 13</value>
-  </data>
-  <data name="Label1.Text" xml:space="preserve">
-    <value>Enter the amount of each NIST-MODFAC group in the compound structure, if available.</value>
-  </data>
-  <data name="TabPage4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>1076, 478</value>
-  </data>
   <data name="tbStatus.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Bottom, Left, Right</value>
   </data>
@@ -1022,6 +1022,9 @@
   </data>
   <data name="SaveFileDialog2.Title" xml:space="preserve">
     <value>Export Compound to XML Database</value>
+  </data>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>96, 96</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
     <value>1102, 599</value>

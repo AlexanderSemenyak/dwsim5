@@ -257,8 +257,9 @@ Namespace Streams
             MyBase.CreateNew()
 
             Me.SetFlowsheet(flowsheet)
-           ' If Me.PropertyPackage Is Nothing Then Me.PropertyPackage = proppack
-            If Me.EmptyPropertyPackage then Me.PropertyPackage = proppack
+
+            'If Me.PropertyPackage Is Nothing Then Me.PropertyPackage = proppack
+            If Me.EmptyPropertyPackage Then Me.PropertyPackage = proppack
 
             Me.ComponentName = name
             Me.ComponentDescription = description
@@ -271,8 +272,6 @@ Namespace Streams
             Me.Phases.Add(5, New BaseClasses.Phase(("Liquid3"), ""))
             Me.Phases.Add(6, New BaseClasses.Phase(("Aqueous"), ""))
             Me.Phases.Add(7, New BaseClasses.Phase(("Solid"), ""))
-
-            'Me.PropertyPackage = FlowSheet.Options.PropertyPackages(0)
 
             'assign default values for temperature, pressure and mass flow
             Me.Phases(0).Properties.temperature = 298.15
@@ -414,6 +413,12 @@ Namespace Streams
             With Me.PropertyPackage
 
                 .CurrentMaterialStream = Me
+
+                If (PropertyPackage.ForcedSolids.Count > 0 And Not PropertyPackage.FlashBase.AlgoType = Enums.FlashMethod.Nested_Loops_SVLLE) Then
+
+                    FlowSheet?.ShowMessage("When working with forced solids, prefer the Nested Loops SVLLE Flash Algorithm for a correct calculation of the energy balance of the flowsheet.", IFlowsheet.MessageType.Information)
+
+                End If
 
                 If W.HasValue Then
                     If DebugMode Then AppendDebugLine(String.Format("Checking flow definition. Mass flow specified, will calculate molar and volumetric flow."))

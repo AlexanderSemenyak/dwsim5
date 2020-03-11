@@ -524,22 +524,45 @@ Namespace SpecialOps
                         Me.ExpContext.Variables.Add("Y", Double.Parse(Me.GetTargetVarValue))
                         Me.Expr = Me.ExpContext.CompileGeneric(Of Double)(Me.Expression)
 
-                        Dim val = Me.Expr.Evaluate
+                    Try
 
-                        If Not Me.MaxVal.HasValue And Not Me.MinVal.HasValue Then
-                            Me.SetTargetVarValue(val)
-                        Else
-                            If val < Me.MinVal.Value Then
-                                Me.SetTargetVarValue(Me.MinVal.Value)
-                            ElseIf val > Me.MaxVal.Value Then
-                                Me.SetTargetVarValue(Me.MaxVal.Value)
-                            Else
+                        With Me
+
+                            .ExpContext.Variables.Add("X", Double.Parse(.GetSourceVarValue))
+                            .ExpContext.Variables.Add("Y", Double.Parse(.GetTargetVarValue))
+                            .Expr = .ExpContext.CompileGeneric(Of Double)(.Expression)
+
+                            Dim val = .Expr.Evaluate
+
+                            If Not Me.MaxVal.HasValue And Not Me.MinVal.HasValue Then
                                 Me.SetTargetVarValue(val)
+                            Else
+                                If val < Me.MinVal.Value Then
+                                    Me.SetTargetVarValue(Me.MinVal.Value)
+                                ElseIf val > Me.MaxVal.Value Then
+                                    Me.SetTargetVarValue(Me.MaxVal.Value)
+                                Else
+                                    Me.SetTargetVarValue(val)
+                                End If
+                                Exit Sub
                             End If
-                            Exit Sub
+
+                        End With
+
+                    Catch ex As Exception
+
+                        If GraphicObject IsNot Nothing Then
+
+                            Throw New Exception(GraphicObject.Tag + ": error parsing expression - " + ex.Message)
+
+                        Else
+
+                            Throw New Exception("Spec Logical Op: error parsing expression - " + ex.Message)
+
                         End If
 
-                    'End With
+
+                    End Try
 
                     Me.GraphicObject.Calculated = True
 
