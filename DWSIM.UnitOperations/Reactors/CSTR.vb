@@ -381,7 +381,7 @@ Namespace Reactors
             Dim dT, MaxChange As Double 'Time step in seconds; MaxChange = max relative change of a component
             Dim i, NIter As Integer
             Dim NC As Integer = ims.Phases(0).Compounds.Count 'Number of components
-            Dim CompNames(NC - 1) As String 'ComponentNames
+            
             Dim MM(NC - 1) As Double 'Mol masses of components
             Dim LC(NC - 1) As Double 'Composition of last iteration
             Dim Nin(NC - 1), Nout(NC - 1), NReac(NC - 1), Mout(NC - 1), RComp(NC - 1), dB(NC - 1), dN(NC - 1), dRT(NC - 1), Y(NC - 1), M(NC - 1) As Double
@@ -457,20 +457,22 @@ Namespace Reactors
             End If
             dT = ResidenceTimeL / 10 'initial time step
 
-            CompNames = ims.PropertyPackage.RET_VNAMES 'Component names
+            'Dim CompNames as IList(Of )(NC - 1) As String 'ComponentNames
+            Dim CompNames = ims.PropertyPackage.RET_VNAMES 'Component names
             MM = ims.PropertyPackage.RET_VMM 'Component molar wheights
             LC = ims.PropertyPackage.RET_VMOL(PropertyPackages.Phase.Mixture) 'Component molar fractions
 
             'Calculate initial inventory of components in reactor
             For i = 0 To NC - 1
-                Nin(i) = ims.Phases(0).Compounds(CompNames(i)).MolarFlow
+                Dim compName  = CompNames(i)
+                Nin(i) = ims.Phases(0).Compounds(compName).MolarFlow
                 Nout(i) = Nin(i)
                 If ReactorMode = EReactorMode.SingleOutlet Then
-                    NReac(i) = Me.Volume * ims.Phases(0).Compounds(CompNames(i)).Molarity 'global composition; headspace is ignored
+                    NReac(i) = Me.Volume * ims.Phases(0).Compounds(compName).Molarity 'global composition; headspace is ignored
                 Else
-                    NReac(i) = Me.Headspace * ims.Phases(2).Compounds(CompNames(i)).Molarity 'vapour in headspace
-                    If QL + QS > 0 Then NReac(i) += Volume * QL / (QL + QS) * ims.Phases(1).Compounds(CompNames(i)).Molarity 'liqud phase
-                    If QL + QS > 0 Then NReac(i) += Volume * QS / (QL + QS) * ims.Phases(7).Compounds(CompNames(i)).Molarity 'liqud phase
+                    NReac(i) = Me.Headspace * ims.Phases(2).Compounds(compName).Molarity 'vapour in headspace
+                    If QL + QS > 0 Then NReac(i) += Volume * QL / (QL + QS) * ims.Phases(1).Compounds(compName).Molarity 'liqud phase
+                    If QL + QS > 0 Then NReac(i) += Volume * QS / (QL + QS) * ims.Phases(7).Compounds(compName).Molarity 'liqud phase
                 End If
             Next
 
@@ -905,8 +907,9 @@ out:        Dim ms1, ms2 As MaterialStream
 
             'Calculate component conversions
             For i = 0 To NC - 1
+                Dim compName  = CompNames(i)
                 If Nin(i) > 0 Then
-                    ComponentConversions(CompNames(i)) = Abs(Nin(i) - Nout(i)) / Nin(i)
+                    ComponentConversions(compName) = Abs(Nin(i) - Nout(i)) / Nin(i)
                 End If
             Next
 

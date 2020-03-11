@@ -140,7 +140,8 @@ Namespace UnitOperations
         Public Overridable Sub PerformPostCalcValidation() Implements ISimulationObject.PerformPostCalcValidation
 
             If GraphicObject.ObjectType <> ObjectType.MaterialStream And GraphicObject.ObjectType <> ObjectType.EnergyStream And
-                GraphicObject.ObjectType <> ObjectType.OT_Adjust And GraphicObject.ObjectType <> ObjectType.OT_Spec Then
+                GraphicObject.ObjectType <> ObjectType.OT_Adjust And GraphicObject.ObjectType <> ObjectType.OT_Spec And
+                GraphicObject.ObjectType <> ObjectType.OT_Recycle And GraphicObject.ObjectType <> ObjectType.OT_EnergyRecycle Then
 
                 'calculate mass balance
 
@@ -161,8 +162,8 @@ Namespace UnitOperations
                         mb += mi
                         mbt += mi
                         hi = Convert.ToDouble(ims.GetPropertyValue("PROP_MS_7"))
-                        eb += mi * hi 'kg/s * kJ/kg = kJ/s = kW
-                        ebt += eb
+                        eb -= mi * hi 'kg/s * kJ/kg = kJ/s = kW
+                        ebt += Math.Abs(mi * hi)
                     End If
                 Next
 
@@ -172,8 +173,8 @@ Namespace UnitOperations
                         mb -= mi
                         mbt += mi
                         hi = Convert.ToDouble(oms.GetPropertyValue("PROP_MS_7"))
-                        eb -= mi * hi 'kg/s * kJ/kg = kJ/s = kW
-                        ebt += eb
+                        eb += mi * hi 'kg/s * kJ/kg = kJ/s = kW
+                        ebt += Math.Abs(mi * hi)
                     End If
                 Next
 
@@ -184,28 +185,28 @@ Namespace UnitOperations
 
                 For Each ies In iesc
                     If ies.GraphicObject.Active Then
-                        eb += Convert.ToDouble(ies.GetPropertyValue("PROP_ES_0"))
-                        ebt += Convert.ToDouble(ies.GetPropertyValue("PROP_ES_0"))
+                        eb -= Convert.ToDouble(ies.GetPropertyValue("PROP_ES_0"))
+                        ebt += Math.Abs(Convert.ToDouble(ies.GetPropertyValue("PROP_ES_0")))
                     End If
                 Next
 
                 For Each oes In oesc
                     If oes.GraphicObject.Active Then
-                        eb -= Convert.ToDouble(oes.GetPropertyValue("PROP_ES_0"))
-                        ebt += Convert.ToDouble(oes.GetPropertyValue("PROP_ES_0"))
+                        eb += Convert.ToDouble(oes.GetPropertyValue("PROP_ES_0"))
+                        ebt += Math.Abs(Convert.ToDouble(oes.GetPropertyValue("PROP_ES_0")))
                     End If
                 Next
 
                 If GraphicObject.EnergyConnector.IsAttached Then
                     Dim inobj = FlowSheet.SimulationObjects(GraphicObject.EnergyConnector.AttachedConnector.AttachedFrom.Name)
                     If inobj.GraphicObject.IsEnergyStream And inobj.GraphicObject.Active Then
-                        eb += Convert.ToDouble(inobj.GetPropertyValue("PROP_ES_0"))
-                        ebt += Convert.ToDouble(inobj.GetPropertyValue("PROP_ES_0"))
+                        eb -= Convert.ToDouble(inobj.GetPropertyValue("PROP_ES_0"))
+                        ebt += Math.Abs(Convert.ToDouble(inobj.GetPropertyValue("PROP_ES_0")))
                     End If
                     Dim outobj = FlowSheet.SimulationObjects(GraphicObject.EnergyConnector.AttachedConnector.AttachedTo.Name)
                     If outobj.GraphicObject.IsEnergyStream And outobj.GraphicObject.Active Then
-                        eb -= Convert.ToDouble(outobj.GetPropertyValue("PROP_ES_0"))
-                        ebt -= Convert.ToDouble(outobj.GetPropertyValue("PROP_ES_0"))
+                        eb += Convert.ToDouble(outobj.GetPropertyValue("PROP_ES_0"))
+                        ebt += Math.Abs(Convert.ToDouble(outobj.GetPropertyValue("PROP_ES_0")))
                     End If
                 End If
 

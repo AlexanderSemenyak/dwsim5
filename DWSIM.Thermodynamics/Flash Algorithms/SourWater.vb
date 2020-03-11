@@ -667,9 +667,9 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
             Hf = H
             Pf = P
 
-            Dim Vn(n) As String, Vx(n), Vy(n), Vx_ant(n), Vy_ant(n), Vp(n), Ki(n), Ki_ant(n), fi(n) As Double
+            Dim Vx(n), Vy(n), Vx_ant(n), Vy_ant(n), Vp(n), Ki(n), Ki_ant(n), fi(n) As Double
 
-            Vn = PP.RET_VNAMES()
+            'Dim Vn = PP.RET_VNAMES()
             fi = Vz.Clone
 
             Dim maxitINT As Integer = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Maximum_Number_Of_Internal_Iterations)
@@ -753,7 +753,7 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
 
             Dim doparallel As Boolean = Settings.EnableParallelProcessing
 
-            Dim Vn(1) As String, Vx(1), Vy(1), Vx_ant(1), Vy_ant(1), Vp(1), Ki(1), Ki_ant(1), fi(1) As Double
+            'Dim Vn(1) As String, Vx(1), Vy(1), Vx_ant(1), Vy_ant(1), Vp(1), Ki(1), Ki_ant(1), fi(1) As Double
             Dim i, j, n, ecount As Integer
             Dim d1, d2 As Date, dt As TimeSpan
             Dim L, V, T, Pf As Double
@@ -766,9 +766,9 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
             Sf = S
             Pf = P
 
-            ReDim Vn(n), Vx(n), Vy(n), Vx_ant(n), Vy_ant(n), Vp(n), Ki(n), fi(n)
+            Dim Vx(n), Vy(n), Vx_ant(n), Vy_ant(n), Vp(n), Ki(n), fi(n)As Double
 
-            Vn = PP.RET_VNAMES()
+            'Dim Vn = PP.RET_VNAMES()
             fi = Vz.Clone
 
             Dim maxitINT As Integer = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Maximum_Number_Of_Internal_Iterations)

@@ -61,7 +61,8 @@ namespace DWSIM.UI.Desktop.Editors
                 var ctn = new DynamicLayout();
                 ctn.BackgroundColor = Colors.LightGrey;
                 s.CreateAndAddLabelRow(ctn, "Inspector Reports");
-                s.CreateAndAddLabelAndButtonRow(ctn, "An Inspector Report is ready for viewing.", "View Report", null, (btn, e) => {
+                s.CreateAndAddLabelAndButtonRow(ctn, "An Inspector Report is ready for viewing.", "View Report", null, (btn, e) =>
+                {
                     var f = s.GetDefaultEditorForm("Inspector Report for '" + SimObject.GraphicObject.Tag + "'", 1024, 768, Inspector.Window2_Eto.GetInspectorWindow(SimObject), false);
                     f.Show();
                 });
@@ -118,6 +119,9 @@ namespace DWSIM.UI.Desktop.Editors
 
             switch (SimObject.GraphicObject.ObjectType)
             {
+                case ObjectType.External:
+                    ((IExternalUnitOperation)SimObject)?.PopulateEditorPanel(container);
+                    break;
                 case ObjectType.CapeOpenUO:
                     s.CreateAndAddDescriptionRow(container, "CAPE-OPEN Unit Operations are supported on the Classic User Interface (Classic UI) running on Windows only.");
                     break;
@@ -189,6 +193,12 @@ namespace DWSIM.UI.Desktop.Editors
                         case Compressor.CalculationMode.EnergyStream:
                             pos1 = 3;
                             break;
+                        case Compressor.CalculationMode.Head:
+                            pos1 = 4;
+                            break;
+                        case Compressor.CalculationMode.Curves:
+                            pos1 = 5;
+                            break;
                     }
                     s.CreateAndAddDropDownRow(container, "Calculation Mode", StringResources.comprcalcmode().ToList(), pos1, (DropDown arg3, EventArgs ev) =>
                     {
@@ -206,11 +216,51 @@ namespace DWSIM.UI.Desktop.Editors
                             case 3:
                                 ce.CalcMode = Compressor.CalculationMode.EnergyStream;
                                 break;
+                            case 4:
+                                ce.CalcMode = Compressor.CalculationMode.Head;
+                                break;
+                            case 5:
+                                ce.CalcMode = Compressor.CalculationMode.Curves;
+                                break;
                         }
                     }, () => CallSolverIfNeeded());
                     s.CreateAndAddDescriptionRow(container,
                              SimObject.GetPropertyDescription("Calculation Mode"));
-                    s.CreateAndAddTextBoxRow(container, nf, "Pressure Increase (" + su.deltaP + ")", cv.ConvertFromSI(su.deltaP, ce.DeltaP.GetValueOrDefault()),
+                    s.CreateAndAddDropDownRow(container, "Thermodynamic Path", new List<string>(new[] { "Adiabatic", "Polytropic" }), (int)ce.ProcessPath, (DropDown arg3, EventArgs ev) =>
+                     {
+                         switch (arg3.SelectedIndex)
+                         {
+                             case 0:
+                                 ce.ProcessPath = Compressor.ProcessPathType.Adiabatic;
+                                 break;
+                             case 1:
+                                 ce.ProcessPath = Compressor.ProcessPathType.Polytropic;
+                                 break;
+                         }
+                     }, () => CallSolverIfNeeded());
+                    s.CreateAndAddDescriptionRow(container,
+                             SimObject.GetPropertyDescription("Thermodynamic Path"));
+                    s.CreateAndAddButtonRow(container, "Edit Performance Curves", null, (btn, ea) =>
+                    {
+                        var f = new UnitOperations.EditingForm_CompressorExpander_Curves { simobj = ce };
+                        f.ShowDialog();
+                    });
+                    s.CreateAndAddTextBoxRow(container, nf, "Rotation Speed", ce.Speed,
+                        (TextBox arg3, EventArgs ev) =>
+                        {
+                            if (arg3.Text.IsValidDoubleExpression())
+                            {
+                                arg3.TextColor = (SystemColors.ControlText);
+                                ce.Speed = (int)arg3.Text.ToString().ParseExpressionToDouble();
+                            }
+                            else
+                            {
+                                arg3.TextColor = (Colors.Red);
+                            }
+                        }, () => CallSolverIfNeeded());
+                    s.CreateAndAddDescriptionRow(container,
+                             SimObject.GetPropertyDescription("Rotation Speed"));
+                    s.CreateAndAddTextBoxRow(container, nf, "Pressure Increase (" + su.deltaP + ")", cv.ConvertFromSI(su.deltaP, ce.DeltaP),
                                    (TextBox arg3, EventArgs ev) =>
                                    {
                                        if (arg3.Text.IsValidDoubleExpression())
@@ -225,7 +275,7 @@ namespace DWSIM.UI.Desktop.Editors
                                    }, () => CallSolverIfNeeded());
                     s.CreateAndAddDescriptionRow(container,
                              SimObject.GetPropertyDescription("Pressure Increase"));
-                    s.CreateAndAddTextBoxRow(container, nf, "Outlet Pressure (" + su.pressure + ")", cv.ConvertFromSI(su.pressure, ce.POut.GetValueOrDefault()),
+                    s.CreateAndAddTextBoxRow(container, nf, "Outlet Pressure (" + su.pressure + ")", cv.ConvertFromSI(su.pressure, ce.POut),
                        (TextBox arg3, EventArgs ev) =>
                        {
                            if (arg3.Text.IsValidDoubleExpression())
@@ -240,7 +290,7 @@ namespace DWSIM.UI.Desktop.Editors
                        }, () => CallSolverIfNeeded());
                     s.CreateAndAddDescriptionRow(container,
                              SimObject.GetPropertyDescription("Outlet Pressure"));
-                    s.CreateAndAddTextBoxRow(container, nf, "Power Required (" + su.heatflow + ")", cv.ConvertFromSI(su.heatflow, ce.DeltaQ.GetValueOrDefault()),
+                    s.CreateAndAddTextBoxRow(container, nf, "Power Required (" + su.heatflow + ")", cv.ConvertFromSI(su.heatflow, ce.DeltaQ),
                        (TextBox arg3, EventArgs ev) =>
                        {
                            if (arg3.Text.IsValidDoubleExpression())
@@ -255,13 +305,13 @@ namespace DWSIM.UI.Desktop.Editors
                        }, () => CallSolverIfNeeded());
                     s.CreateAndAddDescriptionRow(container,
                              SimObject.GetPropertyDescription("Power Required"));
-                    s.CreateAndAddTextBoxRow(container, nf, "Efficiency (%)", ce.EficienciaAdiabatica.GetValueOrDefault(),
+                    s.CreateAndAddTextBoxRow(container, nf, "Adiabatic Efficiency (%)", ce.AdiabaticEfficiency,
                        (TextBox arg3, EventArgs ev) =>
                        {
                            if (arg3.Text.IsValidDoubleExpression())
                            {
                                arg3.TextColor = (SystemColors.ControlText);
-                               ce.EficienciaAdiabatica = arg3.Text.ToString().ParseExpressionToDouble();
+                               ce.AdiabaticEfficiency = arg3.Text.ToString().ParseExpressionToDouble();
                            }
                            else
                            {
@@ -269,7 +319,52 @@ namespace DWSIM.UI.Desktop.Editors
                            }
                        }, () => CallSolverIfNeeded());
                     s.CreateAndAddDescriptionRow(container,
-                             SimObject.GetPropertyDescription("Efficiency (%)"));
+                             SimObject.GetPropertyDescription("Adiabatic Efficiency (%)"));
+                    s.CreateAndAddTextBoxRow(container, nf, "Polytropic Efficiency (%)", ce.PolytropicEfficiency,
+                       (TextBox arg3, EventArgs ev) =>
+                       {
+                           if (arg3.Text.IsValidDoubleExpression())
+                           {
+                               arg3.TextColor = (SystemColors.ControlText);
+                               ce.PolytropicEfficiency = arg3.Text.ToString().ParseExpressionToDouble();
+                           }
+                           else
+                           {
+                               arg3.TextColor = (Colors.Red);
+                           }
+                       }, () => CallSolverIfNeeded());
+                    s.CreateAndAddDescriptionRow(container,
+                             SimObject.GetPropertyDescription("Polytropic Efficiency (%)"));
+                    s.CreateAndAddTextBoxRow(container, nf, "Adiabatic Head (" + su.distance + ")", cv.ConvertFromSI(su.distance, ce.AdiabaticHead),
+                       (TextBox arg3, EventArgs ev) =>
+                       {
+                           if (arg3.Text.IsValidDoubleExpression())
+                           {
+                               arg3.TextColor = (SystemColors.ControlText);
+                               ce.AdiabaticHead = cv.ConvertToSI(su.distance, arg3.Text.ToString().ParseExpressionToDouble());
+                           }
+                           else
+                           {
+                               arg3.TextColor = (Colors.Red);
+                           }
+                       }, () => CallSolverIfNeeded());
+                    s.CreateAndAddDescriptionRow(container,
+                             SimObject.GetPropertyDescription("Adiabatic Head"));
+                    s.CreateAndAddTextBoxRow(container, nf, "Polytropic Head (" + su.distance + ")", cv.ConvertFromSI(su.distance, ce.PolytropicHead),
+                       (TextBox arg3, EventArgs ev) =>
+                       {
+                           if (arg3.Text.IsValidDoubleExpression())
+                           {
+                               arg3.TextColor = (SystemColors.ControlText);
+                               ce.PolytropicHead = cv.ConvertToSI(su.distance, arg3.Text.ToString().ParseExpressionToDouble());
+                           }
+                           else
+                           {
+                               arg3.TextColor = (Colors.Red);
+                           }
+                       }, () => CallSolverIfNeeded());
+                    s.CreateAndAddDescriptionRow(container,
+                             SimObject.GetPropertyDescription("Polytropic Head"));
                     break;
                 case ObjectType.Expander:
                     var xe = (UnitOperations.UnitOperations.Expander)SimObject;
@@ -285,6 +380,12 @@ namespace DWSIM.UI.Desktop.Editors
                         case UnitOperations.UnitOperations.Expander.CalculationMode.PowerGenerated:
                             pos1 = 2;
                             break;
+                        case UnitOperations.UnitOperations.Expander.CalculationMode.Head:
+                            pos1 = 3;
+                            break;
+                        case UnitOperations.UnitOperations.Expander.CalculationMode.Curves:
+                            pos1 = 4;
+                            break;
                     }
                     s.CreateAndAddDropDownRow(container, "Calculation Mode", StringResources.expndrcalcmode().ToList(), pos1e, (DropDown arg3, EventArgs ev) =>
                     {
@@ -299,11 +400,51 @@ namespace DWSIM.UI.Desktop.Editors
                             case 2:
                                 xe.CalcMode = UnitOperations.UnitOperations.Expander.CalculationMode.PowerGenerated;
                                 break;
+                            case 3:
+                                xe.CalcMode = UnitOperations.UnitOperations.Expander.CalculationMode.Head;
+                                break;
+                            case 4:
+                                xe.CalcMode = UnitOperations.UnitOperations.Expander.CalculationMode.Curves;
+                                break;
                         }
                     }, () => CallSolverIfNeeded());
                     s.CreateAndAddDescriptionRow(container,
                              SimObject.GetPropertyDescription("Calculation Mode"));
-                    s.CreateAndAddTextBoxRow(container, nf, "Pressure Decrease (" + su.deltaP + ")", cv.ConvertFromSI(su.deltaP, xe.DeltaP.GetValueOrDefault()),
+                    s.CreateAndAddButtonRow(container, "Edit Performance Curves", null, (btn, ea) =>
+                    {
+                        var f = new UnitOperations.EditingForm_CompressorExpander_Curves { simobj = xe };
+                        f.ShowDialog();
+                    });
+                    s.CreateAndAddDropDownRow(container, "Thermodynamic Path", new List<string>(new[] { "Adiabatic", "Polytropic" }), (int)xe.ProcessPath, (DropDown arg3, EventArgs ev) =>
+                    {
+                        switch (arg3.SelectedIndex)
+                        {
+                            case 0:
+                                xe.ProcessPath = UnitOperations.UnitOperations.Expander.ProcessPathType.Adiabatic;
+                                break;
+                            case 1:
+                                xe.ProcessPath = UnitOperations.UnitOperations.Expander.ProcessPathType.Polytropic;
+                                break;
+                        }
+                    }, () => CallSolverIfNeeded());
+                    s.CreateAndAddDescriptionRow(container,
+                             SimObject.GetPropertyDescription("Thermodynamic Path"));
+                    s.CreateAndAddTextBoxRow(container, nf, "Rotation Speed", xe.Speed,
+                       (TextBox arg3, EventArgs ev) =>
+                       {
+                           if (arg3.Text.IsValidDoubleExpression())
+                           {
+                               arg3.TextColor = (SystemColors.ControlText);
+                               xe.Speed = (int)arg3.Text.ToString().ParseExpressionToDouble();
+                           }
+                           else
+                           {
+                               arg3.TextColor = (Colors.Red);
+                           }
+                       }, () => CallSolverIfNeeded());
+                    s.CreateAndAddDescriptionRow(container,
+                             SimObject.GetPropertyDescription("Rotation Speed"));
+                    s.CreateAndAddTextBoxRow(container, nf, "Pressure Decrease (" + su.deltaP + ")", cv.ConvertFromSI(su.deltaP, xe.DeltaP),
                                    (TextBox arg3, EventArgs ev) =>
                                    {
                                        if (arg3.Text.IsValidDoubleExpression())
@@ -318,7 +459,7 @@ namespace DWSIM.UI.Desktop.Editors
                                    }, () => CallSolverIfNeeded());
                     s.CreateAndAddDescriptionRow(container,
                              SimObject.GetPropertyDescription("Pressure Decrease"));
-                    s.CreateAndAddTextBoxRow(container, nf, "Outlet Pressure (" + su.pressure + ")", cv.ConvertFromSI(su.pressure, xe.POut.GetValueOrDefault()),
+                    s.CreateAndAddTextBoxRow(container, nf, "Outlet Pressure (" + su.pressure + ")", cv.ConvertFromSI(su.pressure, xe.POut),
                        (TextBox arg3, EventArgs ev) =>
                        {
                            if (arg3.Text.IsValidDoubleExpression())
@@ -333,7 +474,7 @@ namespace DWSIM.UI.Desktop.Editors
                        }, () => CallSolverIfNeeded());
                     s.CreateAndAddDescriptionRow(container,
                              SimObject.GetPropertyDescription("Outlet Pressure"));
-                    s.CreateAndAddTextBoxRow(container, nf, "Power Generated (" + su.heatflow + ")", cv.ConvertFromSI(su.heatflow, xe.DeltaQ.GetValueOrDefault()),
+                    s.CreateAndAddTextBoxRow(container, nf, "Power Generated (" + su.heatflow + ")", cv.ConvertFromSI(su.heatflow, xe.DeltaQ),
                        (TextBox arg3, EventArgs ev) =>
                        {
                            if (arg3.Text.IsValidDoubleExpression())
@@ -348,13 +489,13 @@ namespace DWSIM.UI.Desktop.Editors
                        }, () => CallSolverIfNeeded());
                     s.CreateAndAddDescriptionRow(container,
                              SimObject.GetPropertyDescription("Power Generated"));
-                    s.CreateAndAddTextBoxRow(container, nf, "Efficiency (%)", xe.EficienciaAdiabatica.GetValueOrDefault(),
+                    s.CreateAndAddTextBoxRow(container, nf, "Adiabatic Efficiency (%)", xe.AdiabaticEfficiency,
                        (TextBox arg3, EventArgs ev) =>
                        {
                            if (arg3.Text.IsValidDoubleExpression())
                            {
                                arg3.TextColor = (SystemColors.ControlText);
-                               xe.EficienciaAdiabatica = arg3.Text.ToString().ParseExpressionToDouble();
+                               xe.AdiabaticEfficiency = arg3.Text.ToString().ParseExpressionToDouble();
                            }
                            else
                            {
@@ -362,7 +503,52 @@ namespace DWSIM.UI.Desktop.Editors
                            }
                        }, () => CallSolverIfNeeded());
                     s.CreateAndAddDescriptionRow(container,
-                             SimObject.GetPropertyDescription("Efficiency (%)"));
+                             SimObject.GetPropertyDescription("Adiabatic Efficiency (%)"));
+                    s.CreateAndAddTextBoxRow(container, nf, "Polytropic Efficiency (%)", xe.PolytropicEfficiency,
+                       (TextBox arg3, EventArgs ev) =>
+                       {
+                           if (arg3.Text.IsValidDoubleExpression())
+                           {
+                               arg3.TextColor = (SystemColors.ControlText);
+                               xe.PolytropicEfficiency = arg3.Text.ToString().ParseExpressionToDouble();
+                           }
+                           else
+                           {
+                               arg3.TextColor = (Colors.Red);
+                           }
+                       }, () => CallSolverIfNeeded());
+                    s.CreateAndAddDescriptionRow(container,
+                             SimObject.GetPropertyDescription("Polytropic Efficiency (%)"));
+                    s.CreateAndAddTextBoxRow(container, nf, "Adiabatic Head (" + su.distance + ")", cv.ConvertFromSI(su.distance, xe.AdiabaticHead),
+                        (TextBox arg3, EventArgs ev) =>
+                        {
+                            if (arg3.Text.IsValidDoubleExpression())
+                            {
+                                arg3.TextColor = (SystemColors.ControlText);
+                                xe.AdiabaticHead = cv.ConvertToSI(su.distance, arg3.Text.ToString().ParseExpressionToDouble());
+                            }
+                            else
+                            {
+                                arg3.TextColor = (Colors.Red);
+                            }
+                        }, () => CallSolverIfNeeded());
+                    s.CreateAndAddDescriptionRow(container,
+                             SimObject.GetPropertyDescription("Adiabatic Head"));
+                    s.CreateAndAddTextBoxRow(container, nf, "Polytropic Head (" + su.distance + ")", cv.ConvertFromSI(su.distance, xe.PolytropicHead),
+                       (TextBox arg3, EventArgs ev) =>
+                       {
+                           if (arg3.Text.IsValidDoubleExpression())
+                           {
+                               arg3.TextColor = (SystemColors.ControlText);
+                               xe.PolytropicHead = cv.ConvertToSI(su.distance, arg3.Text.ToString().ParseExpressionToDouble());
+                           }
+                           else
+                           {
+                               arg3.TextColor = (Colors.Red);
+                           }
+                       }, () => CallSolverIfNeeded());
+                    s.CreateAndAddDescriptionRow(container,
+                             SimObject.GetPropertyDescription("Polytropic Head"));
                     break;
                 case ObjectType.Heater:
                     var hc = (Heater)SimObject;
@@ -2185,6 +2371,38 @@ namespace DWSIM.UI.Desktop.Editors
                     break;
                 case ObjectType.CustomUO:
                     var scriptuo = (CustomUO)SimObject;
+                    s.CreateAndAddLabelRow(container, "Python Script Repositories");
+                    s.CreateAndAddButtonRow(container, "FOSSEE's Custom Modeling Repository", null, (btn, e) => {
+                        Process.Start("https://dwsim.fossee.in/custom-model");
+                    });
+                    s.CreateAndAddLabelRow(container, "Flowsheet Object");
+                    s.CreateAndAddLabelAndButtonRow(container, "Embedded Image Icon", "Load File", null, (s, e) =>
+                    {
+                        var searchdialog = new OpenFileDialog() { Title = "Open Image File", MultiSelect = false };
+                        searchdialog.Filters.Add(new FileFilter("Image Files", new[] { ".png", ".jpg" }));
+                        if (searchdialog.ShowDialog(container) == DialogResult.Ok)
+                        {
+                            try
+                            {
+                                using (var bmp = (System.Drawing.Bitmap)System.Drawing.Bitmap.FromFile(searchdialog.FileName))
+                                {
+                                    using (var img =SkiaSharp.Views.Desktop.Extensions.ToSKImage(bmp))
+                                    {
+                                        scriptuo.EmbeddedImageData = DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.EmbeddedImageGraphic.ImageToBase64(img, SkiaSharp.SKEncodedImageFormat.Png);
+                                        MessageBox.Show("Image data read successfully.", MessageBoxButtons.OK);
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show("Error reading image data.", MessageBoxButtons.OK);
+                            }
+                        }
+                    });
+                    s.CreateAndAddCheckBoxRow(container, "Use Embedded Image Icon", scriptuo.UseEmbeddedImage, (c, e) => {
+                        scriptuo.UseEmbeddedImage = c.Checked.GetValueOrDefault();
+                    });
+                    s.CreateAndAddLabelRow(container, "Python Script");
                     s.CreateAndAddDropDownRow(container, "Python Interpreter", new List<string> { "IronPython", "Python.NET" }, (int)scriptuo.ExecutionEngine, (sender, e) => scriptuo.ExecutionEngine = (DWSIM.UnitOperations.UnitOperations.CustomUO.PythonExecutionEngine)sender.SelectedIndex);
                     s.CreateAndAddLabelRow(container, "Script Variables");
                     var tabc = new TabControl { Height = 400 };
@@ -2206,7 +2424,8 @@ namespace DWSIM.UI.Desktop.Editors
                     s.CreateAndAddDescriptionRow(c1, "Enter one variable per line, separating its name (no special characters or spaces) from its value with a tab or a single space.");
                     s.CreateAndAddMultilineMonoSpaceTextBoxRow(c1, t1, 300, false, (s, e) =>
                     {
-                        if (s.Text == "") {
+                        if (s.Text == "")
+                        {
                             scriptuo.InputVariables.Clear();
                             return;
                         }
@@ -2222,7 +2441,7 @@ namespace DWSIM.UI.Desktop.Editors
                             }
                             catch (Exception ex)
                             {
-                                scriptuo.FlowSheet.ShowMessage(String.Format("Error parsing variable at line {0}: " + ex.Message.ToString(),is1), IFlowsheet.MessageType.Information);
+                                scriptuo.FlowSheet.ShowMessage(String.Format("Error parsing variable at line {0}: " + ex.Message.ToString(), is1), IFlowsheet.MessageType.Information);
                             }
                             is1 += 1;
                         }

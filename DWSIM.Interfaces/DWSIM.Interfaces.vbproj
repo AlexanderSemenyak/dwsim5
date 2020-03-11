@@ -111,6 +111,7 @@
     <Compile Include="IReactionSetBase.vb" />
     <Compile Include="IReactionStoichBase.vb" />
     <Compile Include="IScript.vb" />
+    <Compile Include="IExternalUnitOperation.vb" />
     <Compile Include="ISpecialOps.vb" />
     <Compile Include="ISimulationObject.vb" />
     <Compile Include="IUndoRedoAction.vb" />
@@ -131,6 +132,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ONITDictionary.vb" />
     <Compile Include="SolutionInspector.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

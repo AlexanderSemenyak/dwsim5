@@ -154,11 +154,11 @@
     <comment>0</comment>
   </data>
   <data name="PROP_CO_0" xml:space="preserve">
-    <value>Увеличение давления (голова)</value>
+    <value>Увеличение давления</value>
     <comment>1</comment>
   </data>
   <data name="PROP_CO_1" xml:space="preserve">
-    <value>КПД</value>
+    <value>Адиабатическая эффективность (КПД)</value>
     <comment>1</comment>
   </data>
   <data name="PROP_CO_2" xml:space="preserve">
@@ -1548,7 +1548,7 @@
     <comment>1</comment>
   </data>
   <data name="PROP_TU_1" xml:space="preserve">
-    <value>КПД</value>
+    <value>Адиабатическая эффективность (КПД)</value>
     <comment>1</comment>
   </data>
   <data name="PROP_TU_2" xml:space="preserve">

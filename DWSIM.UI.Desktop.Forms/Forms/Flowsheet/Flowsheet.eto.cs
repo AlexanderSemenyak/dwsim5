@@ -133,7 +133,7 @@ namespace DWSIM.UI.Forms
             var btnmZoomFit = new ButtonToolItem { ToolTip = "Zoom to Fit", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-zoom_to_extents.png")) };
             var btnmZoomDefault = new ButtonToolItem { ToolTip = "Default Zoom", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-zoom_to_actual_size_filled.png")) };
 
-            var chkmInspector = new CheckToolItem {Checked = GlobalSettings.Settings.InspectorEnabled, ToolTip = "Enable/Disable Inspector", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-spy_male.png")) };
+            var chkmInspector = new CheckToolItem { Checked = GlobalSettings.Settings.InspectorEnabled, ToolTip = "Enable/Disable Inspector", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-spy_male.png")) };
             var btnmInspector = new ButtonToolItem { ToolTip = "View Inspector Window", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-spy_filled.png")) };
 
             btnmDrawGrid = new CheckToolItem { ToolTip = "Draw Grid", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-grid.png")) };
@@ -612,7 +612,8 @@ namespace DWSIM.UI.Forms
                             Form f = (Form)iplugin.UtilityForm;
                             f.Show();
                         }
-                        else {
+                        else
+                        {
                             System.Windows.Forms.Form f = (System.Windows.Forms.Form)iplugin.UtilityForm;
                             f.Show();
                         }
@@ -763,8 +764,10 @@ namespace DWSIM.UI.Forms
 
             ChartsControl = new ChartManager(FlowsheetObject);
 
-            FlowsheetObject.AddChart = (dpage) => {
-                Application.Instance.Invoke(() => {
+            FlowsheetObject.AddChart = (dpage) =>
+            {
+                Application.Instance.Invoke(() =>
+                {
                     ChartsControl.TabControl.Pages.Add(dpage);
                     DocumentContainer.SelectedIndex = 3;
                     ChartsControl.TabControl.SelectedPage = dpage;
@@ -895,7 +898,22 @@ namespace DWSIM.UI.Forms
             {
                 if (e.Data.GetString("ObjectName") != null)
                 {
-                    FlowsheetObject.AddObject(e.Data.GetString("ObjectName"), (int)(e.Location.X * GlobalSettings.Settings.DpiScale / FlowsheetControl.FlowsheetSurface.Zoom), (int)(e.Location.Y * GlobalSettings.Settings.DpiScale / FlowsheetControl.FlowsheetSurface.Zoom));
+                    var objname = e.Data.GetString("ObjectName");
+                    var euo = FlowsheetObject.ExternalUnitOperations.Values.Where((x) => x.Name == objname).FirstOrDefault();
+                    if (euo != null)
+                    {
+                        var item = ((Interfaces.ISimulationObject)euo);
+                        var isobj = (Interfaces.ISimulationObject)item.CloneXML();
+                        FlowsheetObject.AddObjectToSurface(Interfaces.Enums.GraphicObjects.ObjectType.External,
+                            (int)(e.Location.X * GlobalSettings.Settings.DpiScale / FlowsheetControl.FlowsheetSurface.Zoom),
+                            (int)(e.Location.Y * GlobalSettings.Settings.DpiScale / FlowsheetControl.FlowsheetSurface.Zoom),
+                            "", "",
+                            (Interfaces.IExternalUnitOperation)isobj);
+                    }
+                    else
+                    {
+                        FlowsheetObject.AddObject(e.Data.GetString("ObjectName"), (int)(e.Location.X * GlobalSettings.Settings.DpiScale / FlowsheetControl.FlowsheetSurface.Zoom), (int)(e.Location.Y * GlobalSettings.Settings.DpiScale / FlowsheetControl.FlowsheetSurface.Zoom));
+                    }
                     UpdateEditorConnectionsPanel();
                 }
             };
@@ -1233,6 +1251,11 @@ namespace DWSIM.UI.Forms
                 }
             }
 
+            foreach (var item in FlowsheetObject.ExternalUnitOperations.Values.OrderBy(x => x.Name))
+            {
+                ObjectList.Add(item.Name, (Interfaces.ISimulationObject)item);
+            }
+
             string netprops = "";
 
             PropertyInfo[] props = calculatorassembly.GetType("DWSIM.Thermodynamics.Streams.MaterialStream").GetProperties();
@@ -1428,7 +1451,20 @@ namespace DWSIM.UI.Forms
             var item5 = new ButtonMenuItem { Text = "Clone", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "Copy_96px.png")) };
             item5.Click += (sender, e) =>
             {
-                var isobj = FlowsheetObject.AddObject(obj.GraphicObject.ObjectType, obj.GraphicObject.X + 50, obj.GraphicObject.Y + 50, obj.GraphicObject.Tag + "_CLONE");
+                Interfaces.ISimulationObject isobj;
+                if (obj is Interfaces.IExternalUnitOperation)
+                {
+                    isobj = (Interfaces.ISimulationObject)obj.CloneXML();
+                    FlowsheetObject.AddObjectToSurface(obj.GraphicObject.ObjectType,
+                        obj.GraphicObject.X + 50,
+                        obj.GraphicObject.Y + 50,
+                        obj.GraphicObject.Tag + "_CLONE", "",
+                        (Interfaces.IExternalUnitOperation)isobj);
+                }
+                else
+                {
+                    isobj = FlowsheetObject.AddObject(obj.GraphicObject.ObjectType, obj.GraphicObject.X + 50, obj.GraphicObject.Y + 50, obj.GraphicObject.Tag + "_CLONE");
+                }
                 var id = isobj.Name;
                 ((Interfaces.ICustomXMLSerialization)isobj).LoadData(((Interfaces.ICustomXMLSerialization)obj).SaveData());
                 isobj.Name = id;
@@ -1575,7 +1611,18 @@ namespace DWSIM.UI.Forms
                 menuitem.Click += (sender2, e2) =>
                 {
                     var z = FlowsheetControl.FlowsheetSurface.Zoom;
-                    FlowsheetObject.AddObject(item.GetDisplayName(), (int)(currposx / z), (int)(currposy / z), "");
+                    if (item is Interfaces.IExternalUnitOperation)
+                    {
+                        var isobj = (Interfaces.ISimulationObject)item.CloneXML();
+                        FlowsheetObject.AddObjectToSurface(Interfaces.Enums.GraphicObjects.ObjectType.External,
+                            (int)(currposx / z), (int)(currposy / z),
+                            "", "",
+                            (Interfaces.IExternalUnitOperation)isobj);
+                    }
+                    else
+                    {
+                        FlowsheetObject.AddObject(item.GetDisplayName(), (int)(currposx / z), (int)(currposy / z), "");
+                    }
                     FlowsheetControl.Invalidate();
                     UpdateEditorConnectionsPanel();
                 };

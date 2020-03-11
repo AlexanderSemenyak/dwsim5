@@ -270,7 +270,7 @@ Namespace DWSIM.Utilities.HYD
 
         End Function
 
-        Function RetornarIDsParaCalculoDeHidratos(ByVal nomes As String())
+        Function RetornarIDsParaCalculoDeHidratos(ByVal nomes As IList(Of string))
 
             Dim res As ArrayList = New ArrayList()
 

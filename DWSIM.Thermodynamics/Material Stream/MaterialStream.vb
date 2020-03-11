@@ -6041,6 +6041,43 @@ Namespace Streams
             Return New String() {"PROP_MS_0", "PROP_MS_1", "PROP_MS_2", "PROP_MS_3", "PROP_MS_4", "PROP_MS_9", "PROP_MS_10", "PROP_MS_27", "PROP_MS_130", "PROP_MS_154"}
         End Function
 
+        Public Function GetProcessFlowsheetProperties() As String()
+
+            Dim prefix = "PROP_MS_"
+
+            Dim plist As New List(Of String)
+
+            plist.Add(prefix & "0")
+            plist.Add(prefix & "1")
+            plist.Add(prefix & "2")
+            plist.Add(prefix & "3")
+            plist.Add(prefix & "4")
+            plist.Add(prefix & "27")
+            plist.Add(prefix & "28")
+            plist.Add(prefix & "29")
+            plist.Add(prefix & "12")
+            plist.Add(prefix & "13")
+            plist.Add(prefix & "20")
+            plist.Add(prefix & "21")
+            plist.Add(prefix & "26")
+            For Each subst As ConstantProperties In FlowSheet.SelectedCompounds.Values
+                plist.Add("PROP_MS_106" + "/" + subst.Name)
+            Next
+            plist.Add(prefix & "63")
+            plist.Add(prefix & "64")
+            plist.Add(prefix & "65")
+            plist.Add(prefix & "48")
+            plist.Add(prefix & "49")
+            plist.Add(prefix & "56")
+            plist.Add(prefix & "57")
+            For Each subst As ConstantProperties In FlowSheet.SelectedCompounds.Values
+                plist.Add("PROP_MS_108" + "/" + subst.Name)
+            Next
+
+            Return plist.ToArray
+
+        End Function
+
         Public Overrides Sub CloseEditForm()
             If f IsNot Nothing Then
                 If Not f.IsDisposed Then
@@ -7387,6 +7424,91 @@ Namespace Streams
             End If
 
         End Function
+
+        ' shortcut functions
+
+        ''' <summary>
+        ''' Sets stream temperature.
+        ''' </summary>
+        ''' <param name="value">Temperature in K</param>
+        Public Sub SetTemperature(value As Double)
+            Phases(0).Properties.temperature = value
+        End Sub
+
+        ''' <summary>
+        ''' Sets stream pressure
+        ''' </summary>
+        ''' <param name="value">Pressure in Pa</param>
+        Public Sub SetPressure(value As Double)
+            Phases(0).Properties.pressure = value
+        End Sub
+
+        ''' <summary>
+        ''' Sets stream enthalpy.
+        ''' </summary>
+        ''' <param name="value">Enthalpy in kJ/kg</param>
+        Public Sub SetMassEnthalpy(value As Double)
+            Phases(0).Properties.enthalpy = value
+        End Sub
+
+        ''' <summary>
+        ''' Sets stream entropy.
+        ''' </summary>
+        ''' <param name="value">Entropy in kJ/[kg.K]</param>
+        Public Sub SetMassEntropy(value As Double)
+            Phases(0).Properties.entropy = value
+        End Sub
+
+        ''' <summary>
+        ''' Sets stream mass flow.
+        ''' </summary>
+        ''' <param name="value">Flow in kg/s</param>
+        Public Sub SetMassFlow(value As Double)
+            Phases(0).Properties.massflow = value
+            Phases(0).Properties.molarflow = Nothing
+            Phases(0).Properties.volumetric_flow = Nothing
+        End Sub
+
+        ''' <summary>
+        ''' Sets stream molar flow.
+        ''' </summary>
+        ''' <param name="value">Flow in mol/s</param>
+        Public Sub SetMolarFlow(value As Double)
+            Phases(0).Properties.massflow = Nothing
+            Phases(0).Properties.molarflow = value
+            Phases(0).Properties.volumetric_flow = Nothing
+        End Sub
+
+        ''' <summary>
+        ''' Sets stream volumetric flow.
+        ''' </summary>
+        ''' <param name="value">Flow in m3/s</param>
+        Public Sub SetVolumetricFlow(value As Double)
+            Phases(0).Properties.massflow = Nothing
+            Phases(0).Properties.molarflow = Nothing
+            Phases(0).Properties.volumetric_flow = value
+        End Sub
+
+        ''' <summary>
+        ''' Sets stream flash spec.
+        ''' </summary>
+        ''' <param name="value">Flash spec (PT, PH, PS, PVF, TVF or PSF).</param>
+        Public Sub SetFlashSpec(value As String)
+            Select Case value.ToLower
+                Case "pt", "tp"
+                    SpecType = StreamSpec.Temperature_and_Pressure
+                Case "ph"
+                    SpecType = StreamSpec.Pressure_and_Enthalpy
+                Case "ps"
+                    SpecType = StreamSpec.Pressure_and_Entropy
+                Case "pvf"
+                    SpecType = StreamSpec.Pressure_and_VaporFraction
+                Case "tvf"
+                    SpecType = StreamSpec.Temperature_and_VaporFraction
+                Case "psf"
+                    SpecType = StreamSpec.Pressure_and_SolidFraction
+            End Select
+        End Sub
 
     End Class
 

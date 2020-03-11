@@ -278,7 +278,7 @@ out:        d2 = Date.Now
 
             Dim doparallel As Boolean = Settings.EnableParallelProcessing
 
-            Dim Vn(1) As String, Vx(1), Vy(1), Vx_ant(1), Vy_ant(1), Vp(1), Ki(1), Ki_ant(1), fi(1) As Double
+            'Dim Vn(1) As String, Vx(1), Vy(1), Vx_ant(1), Vy_ant(1), Vp(1), Ki(1), Ki_ant(1), fi(1) As Double
             Dim i, n, ecount As Integer
             Dim d1, d2 As Date, dt As TimeSpan
             Dim L, V, T, Pf As Double
@@ -291,9 +291,9 @@ out:        d2 = Date.Now
             Hf = H
             Pf = P
 
-            ReDim Vn(n), Vx(n), Vy(n), Vx_ant(n), Vy_ant(n), Vp(n), Ki(n), fi(n)
+            Dim Vx(n), Vy(n), Ki(n), fi(n) As Double
 
-            Vn = PP.RET_VNAMES()
+            'Dim Vn = PP.RET_VNAMES()
             fi = Vz.Clone
 
             Dim maxitINT As Integer = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Maximum_Number_Of_Internal_Iterations)
@@ -379,7 +379,7 @@ alt:            T = bo.BrentOpt(Tinf, Tsup, 10, tolEXT, maxitEXT, {P, Vz, PP})
 
             Dim doparallel As Boolean = Settings.EnableParallelProcessing
 
-            Dim Vn(1) As String, Vx(1), Vy(1), Vx_ant(1), Vy_ant(1), Vp(1), Ki(1), Ki_ant(1), fi(1) As Double
+            'Dim Vn(1) As String, Vx(1), Vy(1), Vx_ant(1), Vy_ant(1), Vp(1), Ki(1), Ki_ant(1), fi(1) As Double
             Dim i, n, ecount As Integer
             Dim d1, d2 As Date, dt As TimeSpan
             Dim L, V, T, Pf As Double
@@ -392,9 +392,9 @@ alt:            T = bo.BrentOpt(Tinf, Tsup, 10, tolEXT, maxitEXT, {P, Vz, PP})
             Sf = S
             Pf = P
 
-            ReDim Vn(n), Vx(n), Vy(n), Vx_ant(n), Vy_ant(n), Vp(n), Ki(n), fi(n)
+            Dim Vx(n), Vy(n), Ki(n), fi(n) As Double
 
-            Vn = PP.RET_VNAMES()
+            'Dim Vn = PP.RET_VNAMES()
             fi = Vz.Clone
 
             Dim maxitINT As Integer = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Maximum_Number_Of_Internal_Iterations)
@@ -475,7 +475,7 @@ alt:            T = bo.BrentOpt(Tinf, Tsup, 10, tolEXT, maxitEXT, {P, Vz, PP})
 
         Public Overrides Function Flash_TV(ByVal Vz As Double(), ByVal T As Double, ByVal V As Double, ByVal Pref As Double, ByVal PP As PropertyPackages.PropertyPackage, Optional ByVal ReuseKI As Boolean = False, Optional ByVal PrevKi As Double() = Nothing) As Object
 
-            Dim Vn(1) As String, Vx(1), Vy(1), Vx_ant(1), Vy_ant(1), Vp(1), Ki(1), Ki_ant(1), fi(1) As Double
+           ' Dim Vn(1) As String, Vx(1), Vy(1), Vx_ant(1), Vy_ant(1), Vp(1), Ki(1), Ki_ant(1), fi(1) As Double
             Dim i, n, ecount As Integer
             Dim d1, d2 As Date, dt As TimeSpan
             Dim Pmin, Pmax, soma_x, soma_y As Double
@@ -496,12 +496,12 @@ alt:            T = bo.BrentOpt(Tinf, Tsup, 10, tolEXT, maxitEXT, {P, Vz, PP})
             Lf = 1 - Vf
             Pf = P
 
-            ReDim Vn(n), Vx(n), Vy(n), Vx_ant(n), Vy_ant(n), Vp(n), Ki(n), fi(n)
+            Dim Vx(n), Vy(n), Vx_ant(n), Vy_ant(n), Vp(n), Ki(n), fi(n) As Double
             Dim dFdP As Double
 
-            Dim VTc = PP.RET_VTC()
+            'Dim VTc = PP.RET_VTC()
 
-            Vn = PP.RET_VNAMES()
+            Dim Vn = PP.RET_VNAMES()
             fi = Vz.Clone
 
             If Pref = 0 Then
@@ -805,7 +805,7 @@ alt:            T = bo.BrentOpt(Tinf, Tsup, 10, tolEXT, maxitEXT, {P, Vz, PP})
 
         Public Overrides Function Flash_PV(ByVal Vz As Double(), ByVal P As Double, ByVal V As Double, ByVal Tref As Double, ByVal PP As PropertyPackages.PropertyPackage, Optional ByVal ReuseKI As Boolean = False, Optional ByVal PrevKi As Double() = Nothing) As Object
 
-            Dim Vn(1) As String, Vx(1), Vy(1), Vx_ant(1), Vy_ant(1), Vp(1), Ki(1), Ki_ant(1), fi(1) As Double
+            'Dim Vn(1) As String, Vx(1), Vy(1), Vx_ant(1), Vy_ant(1), Vp(1), Ki(1), Ki_ant(1), fi(1) As Double
             Dim i, n, ecount As Integer
             Dim d1, d2 As Date, dt As TimeSpan
             Dim soma_x, soma_y As Double
@@ -826,10 +826,10 @@ alt:            T = bo.BrentOpt(Tinf, Tsup, 10, tolEXT, maxitEXT, {P, Vz, PP})
             Lf = 1 - Vf
             Tf = T
 
-            ReDim Vn(n), Vx(n), Vy(n), Vx_ant(n), Vy_ant(n), Vp(n), Ki(n), fi(n)
-            Dim Vt(n), VTc(n), Tmin, Tmax, dFdT As Double
+            Dim Vx(n), Vy(n), Vx_ant(n), Vy_ant(n), Vp(n), Ki(n), fi(n) As Double
+            Dim VTc(n), Tmin, Tmax, dFdT As Double
 
-            Vn = PP.RET_VNAMES()
+            Dim Vn = PP.RET_VNAMES()
             VTc = PP.RET_VTC()
             fi = Vz.Clone
 

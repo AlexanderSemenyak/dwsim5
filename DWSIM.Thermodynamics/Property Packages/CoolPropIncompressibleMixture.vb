@@ -345,7 +345,7 @@ Namespace PropertyPackages
         Public Overrides Function DW_CalcEnthalpy(ByVal Vx As System.Array, ByVal T As Double, ByVal P As Double, ByVal st As State) As Double
 
             Dim Vxw = AUX_CONVERT_MOL_TO_MASS(Vx)
-            Dim x = Vxw(Array.IndexOf(RET_VNAMES(), SoluteCompound))
+            Dim x = Vxw(RET_VNAMES().IndexOf( SoluteCompound))
 
             Dim Tmin = CoolProp.Props1SI(GetCoolPropName(0.0), "TMIN")
             Dim Tmax = CoolProp.Props1SI(GetCoolPropName(0.0), "TMAX")
@@ -419,7 +419,7 @@ Namespace PropertyPackages
         Public Overrides Function DW_CalcEntropy(ByVal Vx As System.Array, ByVal T As Double, ByVal P As Double, ByVal st As State) As Double
 
             Dim Vxw = AUX_CONVERT_MOL_TO_MASS(Vx)
-            Dim x = Vxw(Array.IndexOf(RET_VNAMES(), SoluteCompound))
+            Dim x = Vxw(RET_VNAMES().IndexOf( SoluteCompound))
 
             Dim Tmin = CoolProp.Props1SI(GetCoolPropName(0.0), "TMIN")
             Dim Tmax = CoolProp.Props1SI(GetCoolPropName(0.0), "TMAX")

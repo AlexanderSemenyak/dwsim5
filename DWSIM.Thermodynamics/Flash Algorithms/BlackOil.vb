@@ -107,9 +107,10 @@ out:        Return New Object() {L, V, Vx, Vy, 1, 0.0#, PP.RET_NullVector, 0.0#,
             Hf = H
             Pf = P
 
-            Dim Vn(n) As String, Vx(n), Vy(n), Vx_ant(n), Vy_ant(n), Vp(n), Ki(n), Ki_ant(n), fi(n) As Double
+            'Dim Vn As IList(Of string), 
+                Dim Vx(n), Vy(n), Vx_ant(n), Vy_ant(n), Vp(n), Ki(n), Ki_ant(n), fi(n) As Double
 
-            Vn = PP.RET_VNAMES()
+            'Vn = PP.RET_VNAMES()
             fi = Vz.Clone
 
             Dim maxitINT As Integer = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Maximum_Number_Of_Internal_Iterations)
@@ -225,9 +226,10 @@ out:        Return New Object() {L, V, Vx, Vy, 1, 0.0#, PP.RET_NullVector, 0.0#,
             Sf = S
             Pf = P
 
-            ReDim Vn(n), Vx(n), Vy(n), Vx_ant(n), Vy_ant(n), Vp(n), Ki(n), fi(n)
+            'ReDim Vn(n),
+                ReDim Vx(n), Vy(n), Vx_ant(n), Vy_ant(n), Vp(n), Ki(n), fi(n)
 
-            Vn = PP.RET_VNAMES()
+            'Vn = PP.RET_VNAMES()
             fi = Vz.Clone
 
             Dim maxitINT As Integer = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Maximum_Number_Of_Internal_Iterations)

@@ -16,14 +16,8 @@
 '    You should have received a copy of the GNU General Public License
 '    along with DWSIM.  If not, see <http://www.gnu.org/licenses/>.
 
-Imports System.Globalization
 Imports System.Math
-
 Imports DWSIM.MathOps.MathEx
-Imports DWSIM.MathOps.MathEx.Common
-
-Imports System.Threading.Tasks
-Imports System.Linq
 Imports System.Runtime.CompilerServices
 Imports DWSIM.Interfaces.My.Resources
 
@@ -41,8 +35,8 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
         Dim itol As Double = 0.000001
         Dim maxit_i As Integer = 100
         Dim maxit_e As Integer = 100
-        Dim Hv0, Hvid, Hlid, Hf, Hv, Hl As Double
-        Dim Sv0, Svid, Slid, Sf, Sv, Sl As Double
+        Dim Hf As Double
+        Dim Sf As Double
 
         Private CalculatingAzeotrope As Boolean = False
 
@@ -128,13 +122,13 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
 
             n = Vz.Length - 1
 
-            Dim Vn(n) As String, Vx(n), Vy(n), Vx_ant(n), Vy_ant(n), Vp(n), Ki(n), Ki_ant(n), fi(n) As Double
-            Dim VPc(n), VTc(n), Vw(n) As Double
+            Dim Vx(n), Vy(n), Vx_ant(), Vy_ant(), Vp(n), Ki(n), Ki_ant(n), fi(n) As Double
+            Dim VPc(), VTc(), Vw() As Double
 
             VPc = PP.RET_VPC()
             VTc = PP.RET_VTC()
             Vw = PP.RET_VW()
-            Vn = PP.RET_VNAMES()
+            'Dim Vn = PP.RET_VNAMES()
 
             fi = Vz.Clone
 
@@ -469,7 +463,7 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
 
             IObj?.SetCurrent()
 
-            Dim doparallel As Boolean = Settings.EnableParallelProcessing
+           ' Dim doparallel As Boolean = Settings.EnableParallelProcessing
 
             Dim i, j, n, ecount As Integer
             Dim d1, d2 As Date, dt As TimeSpan
@@ -483,14 +477,14 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
             Hf = H
             Pf = P
 
-            Dim Vn(n) As String, Vx(n), Vy(n), Vx_ant(n), Vy_ant(n), Vp(n), Ki(n), Ki_ant(n), fi(n) As Double
+            Dim Vx(n), Vy(n), Ki(n), fi(n) As Double
 
-            Vn = PP.RET_VNAMES()
+            'Dim Vn = PP.RET_VNAMES()
             fi = Vz.Clone
 
-            Dim maxitINT As Integer = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Maximum_Number_Of_Internal_Iterations)
+            'Dim maxitINT As Integer = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Maximum_Number_Of_Internal_Iterations)
             Dim maxitEXT As Integer = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Maximum_Number_Of_External_Iterations)
-            Dim tolINT As Double = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Internal_Loop_Tolerance).ToDoubleFromInvariant
+            'Dim tolINT As Double = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Internal_Loop_Tolerance).ToDoubleFromInvariant
             Dim tolEXT As Double = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_External_Loop_Tolerance).ToDoubleFromInvariant
 
             Dim Tmin, Tmax, epsilon(4), maxDT As Double
@@ -637,7 +631,7 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
 
             IObj?.SetCurrent()
 
-            Dim doparallel As Boolean = Settings.EnableParallelProcessing
+            'Dim doparallel As Boolean = Settings.EnableParallelProcessing
 
             Dim i, n, ecount As Integer
             Dim d1, d2 As Date, dt As TimeSpan
@@ -654,15 +648,15 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
             Hf = H
             Pf = P
 
-            Dim Vn(n) As String, Vx(n), Vy(n), Vx_ant(n), Vy_ant(n), Vp(n), Ki(n), Ki_ant(n), fi(n) As Double
+            Dim Vx(n), Vy(n), Ki(n), fi(n) As Double
 
-            Vn = PP.RET_VNAMES()
+            'Dim Vn = PP.RET_VNAMES()
             fi = Vz.Clone
 
-            Dim maxitINT As Integer = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Maximum_Number_Of_Internal_Iterations)
+            'Dim maxitINT As Integer = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Maximum_Number_Of_Internal_Iterations)
             Dim maxitEXT As Integer = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Maximum_Number_Of_External_Iterations)
-            Dim tolINT As Double = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Internal_Loop_Tolerance).ToDoubleFromInvariant
-            Dim tolEXT As Double = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_External_Loop_Tolerance).ToDoubleFromInvariant
+            'Dim tolINT As Double = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Internal_Loop_Tolerance).ToDoubleFromInvariant
+            'Dim tolEXT As Double = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_External_Loop_Tolerance).ToDoubleFromInvariant
 
             Dim Tmin, Tmax As Double
 
@@ -876,9 +870,9 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
 
             IObj?.SetCurrent()
 
-            Dim doparallel As Boolean = Settings.EnableParallelProcessing
+            'Dim doparallel As Boolean = Settings.EnableParallelProcessing
 
-            Dim Vn(1) As String, Vx(1), Vy(1), Vx_ant(1), Vy_ant(1), Vp(1), Ki(1), Ki_ant(1), fi(1) As Double
+            'Dim Vx(1), Vy(1), Vx_ant(1), Vy_ant(1), Vp(1), Ki(1), Ki_ant(1), fi(1) As Double
             Dim i, j, n, ecount As Integer
             Dim d1, d2 As Date, dt As TimeSpan
             Dim L, V, T, Pf As Double
@@ -891,15 +885,15 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
             Sf = S
             Pf = P
 
-            ReDim Vn(n), Vx(n), Vy(n), Vx_ant(n), Vy_ant(n), Vp(n), Ki(n), fi(n)
+            Dim Vx(n), Vy(n),  Ki(n), fi(n) As Double
 
-            Vn = PP.RET_VNAMES()
+            'Dim Vn = PP.RET_VNAMES()
             fi = Vz.Clone
 
 
-            Dim maxitINT As Integer = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Maximum_Number_Of_Internal_Iterations)
+           ' Dim maxitINT As Integer = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Maximum_Number_Of_Internal_Iterations)
             Dim maxitEXT As Integer = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Maximum_Number_Of_External_Iterations)
-            Dim tolINT As Double = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Internal_Loop_Tolerance).ToDoubleFromInvariant
+            'Dim tolINT As Double = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Internal_Loop_Tolerance).ToDoubleFromInvariant
             Dim tolEXT As Double = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_External_Loop_Tolerance).ToDoubleFromInvariant
 
             Dim Tmin, Tmax, epsilon(4) As Double
@@ -1053,9 +1047,9 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
 
             IObj?.SetCurrent()
 
-            Dim doparallel As Boolean = Settings.EnableParallelProcessing
+           ' Dim doparallel As Boolean = Settings.EnableParallelProcessing
 
-            Dim Vn(1) As String, Vx(1), Vy(1), Vx_ant(1), Vy_ant(1), Vp(1), Ki(1), Ki_ant(1), fi(1) As Double
+            Dim Vx(1) As Double ', Vy(1), Vx_ant(1), Vy_ant(1), Vp(1), Ki(1), Ki_ant(1), fi(1) As Double
             Dim i, n, ecount As Integer
             Dim d1, d2 As Date, dt As TimeSpan
             Dim L, V, T, Pf As Double
@@ -1071,15 +1065,15 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
             Sf = S
             Pf = P
 
-            ReDim Vn(n), Vy(n), Vp(n), Ki(n), fi(n)
+            Dim Vy(n), Vp(n), Ki(n), fi(n) As Double
 
-            Vn = PP.RET_VNAMES()
+            'Dim Vn = PP.RET_VNAMES()
             fi = Vz.Clone
 
-            Dim maxitINT As Integer = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Maximum_Number_Of_Internal_Iterations)
+            'Dim maxitINT As Integer = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Maximum_Number_Of_Internal_Iterations)
             Dim maxitEXT As Integer = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Maximum_Number_Of_External_Iterations)
-            Dim tolINT As Double = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Internal_Loop_Tolerance).ToDoubleFromInvariant
-            Dim tolEXT As Double = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_External_Loop_Tolerance).ToDoubleFromInvariant
+            'Dim tolINT As Double = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Internal_Loop_Tolerance).ToDoubleFromInvariant
+            'Dim tolEXT As Double = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_External_Loop_Tolerance).ToDoubleFromInvariant
 
             Dim Tmin, Tmax As Double
 
@@ -1294,7 +1288,7 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
             IObj?.Paragraphs.Add(String.Format(SolutionInspector.Compounds_0, PP.RET_VNAMES.ToMathArrayString))
             IObj?.Paragraphs.Add(String.Format(SolutionInspector.Mole_Fractions_0, Vz.ToMathArrayString))
 
-            Dim Vn(1) As String, Vx(1), Vy(1), Vx_ant(1), Vy_ant(1), Vp(1), Ki(1), Ki_ant(1), fi(1) As Double
+            'Dim Vx(1), Vy(1), Vx_ant(1), Vy_ant(1), Vp(1), Ki(1), Ki_ant(1), fi(1) As Double
             Dim i, n, ecount As Integer
             Dim d1, d2 As Date, dt As TimeSpan
             Dim Pmin, Pmax, soma_x, soma_y As Double
@@ -1315,12 +1309,12 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
             Lf = 1 - Vf
             Pf = P
 
-            ReDim Vn(n), Vx(n), Vy(n), Vx_ant(n), Vy_ant(n), Vp(n), Ki(n), fi(n)
+            Dim Vx(n), Vy(n), Vx_ant(n), Vy_ant(n), Vp(n), Ki(n), fi(n)As Double
             Dim dFdP As Double
 
             Dim VTc = PP.RET_VTC()
 
-            Vn = PP.RET_VNAMES()
+            'Dim Vn = PP.RET_VNAMES()
             fi = Vz.Clone
 
             If Pref = 0.0# Then
@@ -1524,7 +1518,7 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
                     IObj2?.Paragraphs.Add(String.Format("Updated x: {0}", Vx.ToMathArrayString))
                     IObj2?.Paragraphs.Add(String.Format("Updated y: {0}", Vy.ToMathArrayString))
 
-                    Dim K1(n), K2(n), dKdP(n) As Double
+                    Dim K1(), K2(), dKdP(n) As Double
 
                     IObj?.SetCurrent
                     K1 = PP.DW_CalcKvalue(Vx, Vy, T, P)
@@ -1658,7 +1652,7 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
                             i = i + 1
                         Loop Until i = n + 1
 
-                        Dim K1(n), K2(n), dKdP(n) As Double
+                        Dim K1(), K2(), dKdP(n) As Double
 
                         IObj2?.SetCurrent
 
@@ -1690,7 +1684,7 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
                             i = i + 1
                         Loop Until i = n + 1
 
-                        Dim K1(n), K2(n), dKdP(n) As Double
+                        Dim K1(), K2(), dKdP(n) As Double
 
                         IObj2?.SetCurrent
                         K1 = PP.DW_CalcKvalue(Vx, Vy, T, P)
@@ -1815,11 +1809,11 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
             Lf = 1 - Vf
             Tf = T
 
-            Dim Vn(n) As String, Vx(n), Vy(n), Vx_ant(n), Vy_ant(n), Vp(n), Ki(n), fi(n) As Double
+            Dim Vx(n), Vy(n), Vx_ant(n), Vy_ant(n), Vp(n), Ki(n), fi(n) As Double
             Dim Vt(n), VTc(n), dFdT, Tsat(n) As Double
             'Dim Tmin, Tmax  as  Double
 
-            Vn = PP.RET_VNAMES()
+            'Dim Vn = PP.RET_VNAMES()
             VTc = PP.RET_VTC()
             fi = Vz.Clone
 
@@ -1901,6 +1895,11 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
                     T += Vz(i) * PP.AUX_TSATi(P, i)
                 Next
                 IObj?.Close()
+                If Vz.Count = 1 Then
+                    Vx = New Double() {1.0}
+                    Vy = New Double() {1.0}
+                    Ki = New Double() {1.0}
+                End If
                 Return New Object() {L, V, Vx, Vy, T, 0, Ki, 0.0#, PP.RET_NullVector, 0.0#, PP.RET_NullVector}
             End If
 
@@ -2115,7 +2114,7 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
 
                         stmp4 = Ki.MultiplyY(Vx).SumY
 
-                        Dim K1(n), K2(n), dKdT(n) As Double
+                        Dim K1(), K2(), dKdT() As Double
 
                         IObj2?.SetCurrent
 
@@ -2135,7 +2134,7 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
 
                         stmp4 = Vy.DivideY(Ki).SumY
 
-                        Dim K1(n), K2(n), dKdT(n) As Double
+                        Dim K1(), K2(), dKdT() As Double
 
                         IObj2?.SetCurrent
 

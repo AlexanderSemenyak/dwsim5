@@ -47,6 +47,8 @@ Imports DWSIM.Thermodynamics.SpecialEOS.PRSRKAdv
 
     Public Property AvailableSystemsOfUnits As New List(Of IUnitsOfMeasure) Implements IFlowsheet.AvailableSystemsOfUnits
 
+    Public Property ExternalUnitOperations As New Dictionary(Of String, IExternalUnitOperation)
+
     Private loaded As Boolean = False
 
     Private rm, prm As Resources.ResourceManager
@@ -512,13 +514,27 @@ Imports DWSIM.Thermodynamics.SpecialEOS.PRSRKAdv
 
     End Function
 
-    Public Function AddObjectToSurface(ByVal type As ObjectType, ByVal x As Integer, ByVal y As Integer, Optional ByVal tag As String = "", Optional ByVal id As String = "") As String
+    Public Function AddObjectToSurface(ByVal type As ObjectType, ByVal x As Integer, ByVal y As Integer, Optional ByVal tag As String = "", Optional ByVal id As String = "", Optional ByVal uoobj As IExternalUnitOperation = Nothing) As String
 
         Dim gObj As IGraphicObject = Nothing
         Dim mpx = x '- SplitContainer1.SplitterDistance
         Dim mpy = y '- ToolStripContainer1.TopToolStripPanel.Height
 
         Select Case type
+
+            Case ObjectType.External
+
+                Dim myNode As New ExternalUnitOperationGraphic(mpx, mpy, 40, 40)
+                myNode.Tag = uoobj.Prefix & SimulationObjects.Count.ToString("00#")
+                If tag <> "" Then myNode.Tag = tag
+                gObj = myNode
+                gObj.Name = Guid.NewGuid.ToString
+                If id <> "" Then gObj.Name = id
+                DirectCast(uoobj, ISimulationObject).Name = gObj.Name
+                GraphicObjects.Add(gObj.Name, myNode)
+                DirectCast(uoobj, ISimulationObject).GraphicObject = myNode
+                myNode.CreateConnectors(0, 0)
+                SimulationObjects.Add(myNode.Name, uoobj)
 
             Case ObjectType.OT_Adjust
 
@@ -1207,10 +1223,17 @@ Imports DWSIM.Thermodynamics.SpecialEOS.PRSRKAdv
             Try
                 Dim id As String = xel.<Name>.Value
                 Dim obj As ISimulationObject = Nothing
-                If xel.Element("Type").Value.Contains("MaterialStream") Then
+                If xel.Element("Type").Value.Contains("Streams.MaterialStream") Then
                     obj = CType(New RaoultPropertyPackage().ReturnInstance(xel.Element("Type").Value), ISimulationObject)
                 Else
-                    obj = CType(UnitOperations.ReturnInstance(xel.Element("Type").Value), ISimulationObject)
+                    Dim uokey As String = xel.Element("ComponentDescription").Value
+                    If ExternalUnitOperations.ContainsKey(uokey) Then
+                        RunCodeOnUIThread(Sub()
+                                              obj = ExternalUnitOperations(uokey).ReturnInstance(xel.Element("Type").Value)
+                                          End Sub)
+                    Else
+                        obj = CType(UnitOperations.ReturnInstance(xel.Element("Type").Value), ISimulationObject)
+                    End If
                 End If
                 Dim gobj As IGraphicObject = (From go As IGraphicObject In
                                     FlowsheetSurface.DrawingObjects Where go.Name = id).SingleOrDefault
@@ -1553,6 +1576,15 @@ Imports DWSIM.Thermodynamics.SpecialEOS.PRSRKAdv
                     ElseIf TypeOf obj Is RigorousColumnGraphic Or TypeOf obj Is AbsorptionColumnGraphic Or TypeOf obj Is CAPEOPENGraphic Then
                         obj.CreateConnectors(xel.Element("InputConnectors").Elements.Count, xel.Element("OutputConnectors").Elements.Count)
                         obj.PositionConnectors()
+                    ElseIf TypeOf obj Is ExternalUnitOperationGraphic Then
+                        Dim euo = ExternalUnitOperations.Values.Where(Function(x) x.Description = obj.Description).FirstOrDefault
+                        If euo IsNot Nothing Then
+                            obj.Owner = euo
+                            DirectCast(euo, Interfaces.ISimulationObject).GraphicObject = obj
+                            obj.CreateConnectors(0, 0)
+                            obj.Owner = Nothing
+                            DirectCast(euo, Interfaces.ISimulationObject).GraphicObject = Nothing
+                        End If
                     Else
                         If obj.Name = "" Then obj.Name = obj.Tag
                         obj.CreateConnectors(0, 0)
@@ -1567,14 +1599,13 @@ Imports DWSIM.Thermodynamics.SpecialEOS.PRSRKAdv
             End Try
         Next
 
+
         For Each xel As XElement In data
             Try
                 Dim id As String = pkey & xel.Element("Name").Value
                 If id <> "" Then
-                    Dim obj As IGraphicObject = (From go As IGraphicObject In
-                                                            FlowsheetSurface.DrawingObjects Where go.Name = id).SingleOrDefault
-                    If obj Is Nothing Then obj = (From go As IGraphicObject In
-                                                                                    FlowsheetSurface.DrawingObjects Where go.Name = xel.Element("Name").Value).SingleOrDefault
+                    Dim obj As IGraphicObject = (From go As IGraphicObject In FlowsheetSurface.DrawingObjects Where go.Name = id).SingleOrDefault
+                    If obj Is Nothing Then obj = (From go As IGraphicObject In FlowsheetSurface.DrawingObjects Where go.Name = xel.Element("Name").Value).SingleOrDefault
                     If Not obj Is Nothing Then
                         If xel.Element("InputConnectors") IsNot Nothing Then
                             Dim i As Integer = 0
@@ -1583,8 +1614,7 @@ Imports DWSIM.Thermodynamics.SpecialEOS.PRSRKAdv
                                     obj.InputConnectors(i).ConnectorName = pkey & xel2.@AttachedFromObjID & "|" & xel2.@AttachedFromConnIndex
                                     obj.InputConnectors(i).Type = CType([Enum].Parse(obj.InputConnectors(i).Type.GetType, xel2.@ConnType), ConType)
                                     If reconnectinlets Then
-                                        Dim objFrom As IGraphicObject = (From go As IGraphicObject In
-                                                                                   FlowsheetSurface.DrawingObjects Where go.Name = xel2.@AttachedFromObjID).SingleOrDefault
+                                        Dim objFrom As IGraphicObject = (From go As IGraphicObject In FlowsheetSurface.DrawingObjects Where go.Name = xel2.@AttachedFromObjID).SingleOrDefault
                                         If Not objFrom Is Nothing Then
                                             If Not objFrom.OutputConnectors(CInt(xel2.@AttachedFromConnIndex)).IsAttached Then
                                                 FlowsheetSurface.ConnectObject(CType(objFrom, GraphicObject), CType(obj, GraphicObject), CInt(xel2.@AttachedFromConnIndex), CInt(xel2.@AttachedToConnIndex))
@@ -1606,18 +1636,15 @@ Imports DWSIM.Thermodynamics.SpecialEOS.PRSRKAdv
             Try
                 Dim id As String = pkey & xel.Element("Name").Value
                 If id <> "" Then
-                    Dim obj As IGraphicObject = (From go As IGraphicObject In
-                                                            FlowsheetSurface.DrawingObjects Where go.Name = id).SingleOrDefault
+                    Dim obj As IGraphicObject = (From go As IGraphicObject In FlowsheetSurface.DrawingObjects Where go.Name = id).SingleOrDefault
                     If Not obj Is Nothing Then
                         If xel.Element("OutputConnectors") IsNot Nothing Then
                             For Each xel2 As XElement In xel.Element("OutputConnectors").Elements
                                 If CBool(xel2.@IsAttached) = True Then
                                     Dim objToID = pkey & xel2.@AttachedToObjID
                                     If objToID <> "" Then
-                                        Dim objTo As IGraphicObject = (From go As IGraphicObject In
-                                                                                    FlowsheetSurface.DrawingObjects Where go.Name = objToID).SingleOrDefault
-                                        If objTo Is Nothing Then objTo = (From go As IGraphicObject In
-                                                                                    FlowsheetSurface.DrawingObjects Where go.Name = xel2.@AttachedToObjID).SingleOrDefault
+                                        Dim objTo As IGraphicObject = (From go As IGraphicObject In FlowsheetSurface.DrawingObjects Where go.Name = objToID).SingleOrDefault
+                                        If objTo Is Nothing Then objTo = (From go As IGraphicObject In FlowsheetSurface.DrawingObjects Where go.Name = xel2.@AttachedToObjID).SingleOrDefault
                                         Dim fromidx As Integer = -1
                                         Dim cp As IConnectionPoint = (From cp2 As IConnectionPoint In objTo.InputConnectors Select cp2 Where cp2.ConnectorName.Split("|"c)(0) = obj.Name).SingleOrDefault
                                         If cp Is Nothing Then cp = (From cp2 As IConnectionPoint In objTo.InputConnectors Select cp2 Where cp2.ConnectorName.Split("|"c)(0) = xel2.@AttachedToObjID).SingleOrDefault
@@ -1745,6 +1772,7 @@ Imports DWSIM.Thermodynamics.SpecialEOS.PRSRKAdv
         FlowsheetSurface.DrawFloatingTable = Options.DisplayFloatingPropertyTables
 
         AddPropPacks()
+        AddExternalUOs()
         AddFlashAlgorithms()
 
         Dim fa As New Thermodynamics.PropertyPackages.Auxiliary.FlashAlgorithms.NestedLoops()
@@ -2097,6 +2125,17 @@ Label_00CC:
 
     End Sub
 
+    Sub AddExternalUOs()
+
+        Dim otheruos = SharedClasses.Utility.LoadAdditionalUnitOperations()
+
+        For Each uo In otheruos
+            ExternalUnitOperations.Add(uo.Description, uo)
+        Next
+
+    End Sub
+
+
     Function GetPropertyPackages(ByVal assmbly As Assembly) As List(Of Interfaces.IPropertyPackage)
 
         Dim availableTypes As New List(Of Type)()
@@ -2192,6 +2231,11 @@ Label_00CC:
                     Me.FlowsheetOptions.VisibleProperties(item.Name) = obj.GetDefaultProperties.ToList
                     obj = Nothing
                 End If
+            Next
+
+            For Each obj In ExternalUnitOperations.Values
+                obj.SetFlowsheet(Me)
+                Me.FlowsheetOptions.VisibleProperties(obj.GetType.Name) = DirectCast(obj, ISimulationObject).GetDefaultProperties().ToList()
             Next
 
         End If

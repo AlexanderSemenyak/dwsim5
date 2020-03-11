@@ -61,7 +61,8 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
             spp = PP
 
             Dim Vxw = spp.AUX_CONVERT_MOL_TO_MASS(Vz)
-            Dim x = Vxw(Array.IndexOf(spp.RET_VNAMES(), spp.SoluteCompound))
+            'Dim x = Vxw(Array.IndexOf(spp.RET_VNAMES(), spp.SoluteCompound))
+            Dim x = Vxw(spp.RET_VNAMES().IndexOf(spp.SoluteCompound))
 
             Psat = spp.AUX_PVAPi2(x, T)
 
@@ -82,8 +83,10 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
 
             spp = PP
 
-            Dim si = Array.IndexOf(spp.RET_VNAMES(), spp.SoluteCompound)
-            Dim nsi = Array.IndexOf(spp.RET_VNAMES(), spp.SolventCompound)
+            'Dim si = Array.IndexOf(spp.RET_VNAMES(), spp.SoluteCompound)
+            Dim si = spp.RET_VNAMES().IndexOf(spp.SoluteCompound)
+            'Dim nsi = Array.IndexOf(spp.RET_VNAMES(), spp.SolventCompound)
+            Dim nsi = spp.RET_VNAMES().IndexOf(spp.SolventCompound)
             Dim xmax = spp.SolutionDataList(spp.SoluteName).xmax
 
             Tmin = CoolProp.Props1SI(spp.GetCoolPropName(0.0), "TMIN")
@@ -190,8 +193,10 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
 
             spp = PP
 
-            Dim si = Array.IndexOf(spp.RET_VNAMES(), spp.SoluteCompound)
-            Dim nsi = Array.IndexOf(spp.RET_VNAMES(), spp.SolventCompound)
+            'Dim si = Array.IndexOf(spp.RET_VNAMES(), spp.SoluteCompound)
+            'Dim nsi = Array.IndexOf(spp.RET_VNAMES(), spp.SolventCompound)
+            Dim si = spp.RET_VNAMES().IndexOf(spp.SoluteCompound)
+            Dim nsi = spp.RET_VNAMES().IndexOf(spp.SolventCompound)
 
             Tmin = CoolProp.Props1SI(spp.GetCoolPropName(0.0), "TMIN")
             Tmax = CoolProp.Props1SI(spp.GetCoolPropName(0.0), "TMAX")
@@ -299,8 +304,10 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
 
             vf = V
 
-            Dim si = Array.IndexOf(spp.RET_VNAMES(), spp.SoluteCompound)
-            Dim nsi = Array.IndexOf(spp.RET_VNAMES(), spp.SolventCompound)
+            'Dim si = Array.IndexOf(spp.RET_VNAMES(), spp.SoluteCompound)
+            'Dim nsi = Array.IndexOf(spp.RET_VNAMES(), spp.SolventCompound)
+            Dim si = spp.RET_VNAMES().IndexOf(spp.SoluteCompound)
+            Dim nsi = spp.RET_VNAMES().IndexOf(spp.SolventCompound)
 
             Dim Vxw = spp.AUX_CONVERT_MOL_TO_MASS(Vz)
             Dim x = Vxw(si)
@@ -328,8 +335,8 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
 
             vf = V
 
-            Dim si = Array.IndexOf(spp.RET_VNAMES(), spp.SoluteCompound)
-            Dim nsi = Array.IndexOf(spp.RET_VNAMES(), spp.SolventCompound)
+            Dim si = spp.RET_VNAMES().IndexOf( spp.SoluteCompound)
+            Dim nsi = spp.RET_VNAMES().IndexOf( spp.SolventCompound)
 
             Dim Vxw = spp.AUX_CONVERT_MOL_TO_MASS(Vz)
             Dim x = Vxw(si)

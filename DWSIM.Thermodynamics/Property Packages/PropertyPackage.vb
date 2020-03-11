@@ -2610,10 +2610,10 @@ Namespace PropertyPackages
                                     xv = (H - hl) / (hv - hl)
                                 End If
                                 IObj?.SetCurrent()
-                                If Tsat > Me.AUX_TCM(Phase.Mixture) Then
-                                    xv = 1.0#
-                                    LoopVarState = State.Vapor
-                                End If
+                                'If Tsat > Me.AUX_TCM(Phase.Mixture) Then
+                                '    xv = 1.0#
+                                '    LoopVarState = State.Vapor
+                                'End If
                                 xl = 1 - xv - xs
 
                                 If xv <> 0.0# And xv <> 1.0# And xs = 0.0# Then
@@ -5956,10 +5956,10 @@ Final3:
 
             Dim fT, fT_inf, nsub, delta_T As Double
 
-            Tinf = 10
-            Tsup = 2000
+            Tinf = 0.1
+            Tsup = 10000
 
-            nsub = 25
+            nsub = 50
 
             delta_T = (Tsup - Tinf) / nsub
 
@@ -7850,18 +7850,21 @@ Final3:
 
         End Function
 
-        Public Function RET_VNAMES() As String()
+'        <MethodImpl(MethodImplOptions.AggressiveInlining)>
+        Public Function RET_VNAMES() As StringListFastComparable
 
-            Dim val(Me.CurrentMaterialStream.Phases(0).Compounds.Count - 1) As String
-            Dim subst As Interfaces.ICompound
-            Dim i As Integer = 0
+            Return Me.CurrentMaterialStream.Phases(0).Compounds.RET_VNAMES()
 
-            For Each subst In Me.CurrentMaterialStream.Phases(0).Compounds.Values
-                val(i) = subst.ConstantProperties.Name
-                i += 1
-            Next
+            'Dim val(Me.CurrentMaterialStream.Phases(0).Compounds.Count - 1) As String
+            'Dim subst As Interfaces.ICompound
+            'Dim i As Integer = 0
 
-            Return val
+            'For Each subst In Me.CurrentMaterialStream.Phases(0).Compounds.Values
+            '    val(i) = subst.ConstantProperties.Name
+            '    i += 1
+            'Next
+
+            'Return val
 
         End Function
 

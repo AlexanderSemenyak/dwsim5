@@ -842,7 +842,7 @@ Namespace PropertyPackages.Auxiliary
 
         End Function
 
-        Function GAMMA_MR(ByVal T As Double, ByVal Vx As Double(), cprops As List(Of Interfaces.ICompoundConstantProperties)) As Double()
+        Function GAMMA_MR(ByVal T As Double, ByVal Vx As Double(), cprops As IList(Of Interfaces.ICompoundConstantProperties)) As Double()
 
             Dim n As Integer = Vx.Length - 1
 

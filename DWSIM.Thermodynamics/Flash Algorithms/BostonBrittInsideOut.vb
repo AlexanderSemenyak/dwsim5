@@ -89,9 +89,9 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
 
             proppack = PP
 
-            ReDim Vn(n), Vx(n), Vy(n), Vp(n), ui(n), uic(n), pi(n), Ki(n), fi(n)
+            ReDim  Vx(n), Vy(n), Vp(n), ui(n), uic(n), pi(n), Ki(n), fi(n)
 
-            Vn = PP.RET_VNAMES()
+            Dim Vn = PP.RET_VNAMES()
             fi = Vz.Clone
 
             Dim VPc(n), VTc(n), Vw(n), g As Double
@@ -388,9 +388,9 @@ out:        Return New Object() {L, V, Vx, Vy, ecount, 0.0#, Vx, 0.0#, PP.RET_Nu
             Hf = H * PP.AUX_MMM(Vz)
             Pf = P
 
-            ReDim Vn(n), Vx(n), Vy(n), Vp(n), ui(n), uic(n), pi(n), Ki(n), fi(n), Vpc(n), VTc(n), Vw(n)
+            ReDim Vx(n), Vy(n), Vp(n), ui(n), uic(n), pi(n), Ki(n), fi(n), Vpc(n), VTc(n), Vw(n)
 
-            Vn = PP.RET_VNAMES()
+            Dim Vn = PP.RET_VNAMES()
             VTc = PP.RET_VTC
             fi = Vz.Clone
 
@@ -861,9 +861,9 @@ restart:    Do
             Sf = S * PP.AUX_MMM(Vz)
             Pf = P
 
-            ReDim Vn(n), Vx(n), Vy(n), Vp(n), ui(n), uic(n), pi(n), Ki(n), fi(n), Vt(n), Vpc(n), VTc(n), Vw(n)
+            ReDim Vx(n), Vy(n), Vp(n), ui(n), uic(n), pi(n), Ki(n), fi(n), Vt(n), Vpc(n), VTc(n), Vw(n)
 
-            Vn = PP.RET_VNAMES()
+            Dim Vn = PP.RET_VNAMES()
             VTc = PP.RET_VTC
             fi = Vz.Clone
 
@@ -1321,10 +1321,10 @@ restart:    Do
             Lf = 1 - Vf
             Pf = P
 
-            ReDim Vn(n), Vx(n), Vy(n), Vp(n), ui(n), uic(n), pi(n), Ki(n), fi(n)
+            ReDim Vx(n), Vy(n), Vp(n), ui(n), uic(n), pi(n), Ki(n), fi(n)
             Dim Vt(n), VTc(n), Tmin, Tmax As Double
 
-            Vn = PP.RET_VNAMES()
+            Dim Vn = PP.RET_VNAMES()
             VTc = PP.RET_VTC
             fi = Vz.Clone
 
@@ -1613,11 +1613,11 @@ final:      d2 = Date.Now
             Lf = 1 - Vf
             Tf = T
 
-            ReDim Vn(n), Vx(n), Vy(n), Vp(n), ui(n), uic(n), pi(n), Ki(n), fi(n)
+            ReDim Vx(n), Vy(n), Vp(n), ui(n), uic(n), pi(n), Ki(n), fi(n)
 
             Dim VTc = PP.RET_VTC()
 
-            Vn = PP.RET_VNAMES()
+            Dim Vn = PP.RET_VNAMES()
             fi = Vz.Clone
 
             If Pref = 0 Then

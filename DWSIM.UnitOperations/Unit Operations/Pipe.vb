@@ -42,6 +42,18 @@ Namespace UnitOperations
     <System.Serializable()> Public Class Pipe
 
         Inherits UnitOperations.UnitOpBaseClass
+        Public const LiquidHoldupProfile as String = "Профиль выпадения жидкости"
+        Public const VaporVelocityProfile as String = "Профиль скорости паровой фазы"
+        Public const LiquidVelocityProfile as String = "Профиль скорости жидкости"
+        Public const HeatFlowProfile as String = "Профиль термопереноса"
+        Public const PressureProfile as String = "Профиль давления"
+        Public const TemperatureProfile as String = "Температурный профиль"
+        Public const InclinationProfile as String = "Инклинометрия"
+        Public const OverallHtcProfile as String = "Профиль полного термопереноса"
+        Public const InternalHtcProfile as String = "Профиль внутреннего термопереноса"
+        Public const WallKlProfile as String = "Профиль термопереноса стенки трубы"
+        Public const InsulationKlProfile as String = "Профиль термоизолящии стенки"
+        Public const ExternalHtcProfile as String = "Профиль внешнего термопереноса"
         Public Overrides Property ObjectClass As SimulationObjectClass = SimulationObjectClass.PressureChangers
 
         <NonSerialized> <Xml.Serialization.XmlIgnore> Public f As EditingForm_Pipe
@@ -1372,7 +1384,7 @@ Namespace UnitOperations
             Dim esp_isol = 0.0#
             If isolamento = True Then
 
-                esp_isol = Me.m_thermalprofile.Espessura
+                esp_isol = Me.m_thermalprofile.Espessura / 1000.0 'mm to m
                 U_isol = Me.m_thermalprofile.Condtermica / (Math.Log((Dext + esp_isol) / Dext) * Dext)
 
             End If
@@ -2304,7 +2316,7 @@ Final3:     T = bbb
             Next
 
             str.AppendLine()
-            str.AppendLine("Pressure Profile")
+            str.AppendLine(PressureProfile)
             str.AppendLine()
             str.AppendLine("Length (" & su.distance & ")" & vbTab & "Pressure (" & su.pressure & ")")
             comp_ant = 0
@@ -2344,7 +2356,7 @@ Final3:     T = bbb
             Next
 
             str.AppendLine()
-            str.AppendLine("Temperature Profile")
+            str.AppendLine(TemperatureProfile)
             str.AppendLine()
             str.AppendLine("Length (" & su.distance & ")" & vbTab & "Temperature (" & su.temperature & ")")
             comp_ant = 0
@@ -2357,7 +2369,7 @@ Final3:     T = bbb
             Next
 
             str.AppendLine()
-            str.AppendLine("Liquid Velocity Profile")
+            str.AppendLine(LiquidVelocityProfile)
             str.AppendLine()
             str.AppendLine("Length (" & su.distance & ")" & vbTab & "Liquid Velocity (" & su.velocity & ")")
             comp_ant = 0
@@ -2370,7 +2382,7 @@ Final3:     T = bbb
             Next
 
             str.AppendLine()
-            str.AppendLine("Vapor Velocity Profile")
+            str.AppendLine(VaporVelocityProfile)
             str.AppendLine()
             str.AppendLine("Length (" & su.distance & ")" & vbTab & "Vapor Velocity (" & su.velocity & ")")
             comp_ant = 0
@@ -2409,7 +2421,7 @@ Final3:     T = bbb
             Next
 
             str.AppendLine()
-            str.AppendLine("Liquid Holdup Profile")
+            str.AppendLine(LiquidHoldupProfile)
             str.AppendLine()
             str.AppendLine("Length (" & su.distance & ")" & vbTab & "Liquid Holdup")
             comp_ant = 0
@@ -2448,7 +2460,7 @@ Final3:     T = bbb
             Next
 
             str.AppendLine()
-            str.AppendLine("Overall HTC Profile")
+            str.AppendLine(OverallHtcProfile)
             str.AppendLine()
             str.AppendLine("Length (" & su.distance & ")" & vbTab & "Overall HTC (" & su.heat_transf_coeff & ")")
             comp_ant = 0
@@ -2461,7 +2473,7 @@ Final3:     T = bbb
             Next
 
             str.AppendLine()
-            str.AppendLine("Internal HTC Profile")
+            str.AppendLine(InternalHtcProfile)
             str.AppendLine()
             str.AppendLine("Length (" & su.distance & ")" & vbTab & "Internal HTC (" & su.heat_transf_coeff & ")")
             comp_ant = 0
@@ -2500,7 +2512,7 @@ Final3:     T = bbb
             Next
 
             str.AppendLine()
-            str.AppendLine("External HTC Profile")
+            str.AppendLine(ExternalHtcProfile)
             str.AppendLine()
             str.AppendLine("Length (" & su.distance & ")" & vbTab & "External HTC (" & su.heat_transf_coeff & ")")
             comp_ant = 0
@@ -2548,7 +2560,7 @@ Final3:     T = bbb
         End Function
 
         Public Overrides Function GetChartModelNames() As List(Of String)
-            Return New List(Of String)({"Temperature Profile", "Pressure Profile", "Heat Flow Profile", "Liquid Velocity Profile", "Vapor Velocity Profile", "Liquid Holdup Profile", "Inclination Profile", "Overall HTC Profile", "Internal HTC Profile", "Wall k/L Profile", "Insulation k/L Profile", "External HTC Profile"})
+            Return New List(Of String)({TemperatureProfile, PressureProfile, HeatFlowProfile, LiquidVelocityProfile, VaporVelocityProfile, LiquidHoldupProfile, InclinationProfile, OverallHtcProfile, InternalHtcProfile, WallKlProfile, InsulationKlProfile, ExternalHtcProfile})
         End Function
 
         Public Overrides Function GetChartModel(name As String) As Object
@@ -2565,7 +2577,7 @@ Final3:     T = bbb
                 .MinorGridlineStyle = LineStyle.Dot,
                 .Position = AxisPosition.Bottom,
                 .FontSize = 10,
-                .Title = "Length (" + su.distance + ")"
+                .Title = "Длина (" + su.distance + ")"
             })
 
             model.Axes.Add(New LinearAxis() With {
@@ -2584,42 +2596,42 @@ Final3:     T = bbb
             Dim px = PopulateData(0)
 
             Select Case name
-                Case "Temperature Profile"
+                Case TemperatureProfile
                     model.AddLineSeries(px, PopulateData(3))
-                    model.Axes(1).Title = "Temperature (" + su.temperature + ")"
-                Case "Pressure Profile"
+                    model.Axes(1).Title = "Температура (" + su.temperature + ")"
+                Case PressureProfile
                     model.AddLineSeries(px, PopulateData(2))
-                    model.Axes(1).Title = "Pressure (" + su.pressure + ")"
-                Case "Heat Flow Profile"
+                    model.Axes(1).Title = "Давление (" + su.pressure + ")"
+                Case HeatFlowProfile
                     model.AddLineSeries(px, PopulateData(6))
-                    model.Axes(1).Title = "Heat Flow (" + su.heatflow + ")"
-                Case "Liquid Velocity Profile"
+                    model.Axes(1).Title = "Термоперенос (" + su.heatflow + ")"
+                Case LiquidVelocityProfile
                     model.AddLineSeries(px, PopulateData(4))
-                    model.Axes(1).Title = "Velocity (" + su.velocity + ")"
-                Case "Vapor Velocity Profile"
+                    model.Axes(1).Title = "Скорость (" + su.velocity + ")"
+                Case VaporVelocityProfile
                     model.AddLineSeries(px, PopulateData(5))
-                    model.Axes(1).Title = "Velocity (" + su.velocity + ")"
-                Case "Inclination Profile"
+                    model.Axes(1).Title = "Скорость (" + su.velocity + ")"
+                Case InclinationProfile
                     model.AddLineSeries(px, PopulateData(1))
-                    model.Axes(1).Title = "Elevation (" + su.distance + ")"
-                Case "Liquid Holdup Profile"
+                    model.Axes(1).Title = "Подъем (" + su.distance + ")"
+                Case LiquidHoldupProfile
                     model.AddLineSeries(px, PopulateData(7))
-                    model.Axes(1).Title = "Holdup"
-                Case "Overall HTC Profile"
+                    model.Axes(1).Title = "Выпадение"
+                Case OverallHtcProfile
                     model.AddLineSeries(px, PopulateData(8))
-                    model.Axes(1).Title = "Heat Transfer Coefficient (" + su.heat_transf_coeff + ")"
-                Case "Internal HTC Profile"
+                    model.Axes(1).Title = "Коэффициент термопереноса (" + su.heat_transf_coeff + ")"
+                Case InternalHtcProfile
                     model.AddLineSeries(px, PopulateData(9))
-                    model.Axes(1).Title = "Heat Transfer Coefficient (" + su.heat_transf_coeff + ")"
-                Case "Wall k/L Profile"
+                    model.Axes(1).Title = "Коэффициент термопереноса (" + su.heat_transf_coeff + ")"
+                Case WallKlProfile
                     model.AddLineSeries(px, PopulateData(10))
-                    model.Axes(1).Title = "Heat Transfer Coefficient (" + su.heat_transf_coeff + ")"
-                Case "Insulation k/L Profile"
+                    model.Axes(1).Title = "Коэффициент термопереноса (" + su.heat_transf_coeff + ")"
+                Case InsulationKlProfile
                     model.AddLineSeries(px, PopulateData(11))
-                    model.Axes(1).Title = "Heat Transfer Coefficient (" + su.heat_transf_coeff + ")"
-                Case "External HTC Profile"
+                    model.Axes(1).Title = "Коэффициент термопереноса (" + su.heat_transf_coeff + ")"
+                Case ExternalHtcProfile
                     model.AddLineSeries(px, PopulateData(12))
-                    model.Axes(1).Title = "Heat Transfer Coefficient (" + su.heat_transf_coeff + ")"
+                    model.Axes(1).Title = "Коэффициент термопереноса (" + su.heat_transf_coeff + ")"
             End Select
 
             Return model

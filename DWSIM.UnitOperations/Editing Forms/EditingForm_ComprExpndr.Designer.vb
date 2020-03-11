@@ -42,6 +42,27 @@ Partial Class EditingForm_ComprExpndr
         Me.cbPropPack = New System.Windows.Forms.ComboBox()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.Label25 = New System.Windows.Forms.Label()
+        Me.tbRotSpeed = New System.Windows.Forms.TextBox()
+        Me.Label26 = New System.Windows.Forms.Label()
+        Me.btnCurves = New System.Windows.Forms.Button()
+        Me.Label24 = New System.Windows.Forms.Label()
+        Me.Label23 = New System.Windows.Forms.Label()
+        Me.Label22 = New System.Windows.Forms.Label()
+        Me.cbPolytropicHead = New System.Windows.Forms.ComboBox()
+        Me.cbAdiabaticHead = New System.Windows.Forms.ComboBox()
+        Me.tbPolytropicHead = New System.Windows.Forms.TextBox()
+        Me.Label20 = New System.Windows.Forms.Label()
+        Me.tbAdiabaticHead = New System.Windows.Forms.TextBox()
+        Me.Label21 = New System.Windows.Forms.Label()
+        Me.tbPolytropicCoeff = New System.Windows.Forms.TextBox()
+        Me.Label18 = New System.Windows.Forms.Label()
+        Me.tbAdiabaticCoeff = New System.Windows.Forms.TextBox()
+        Me.Label17 = New System.Windows.Forms.Label()
+        Me.cbProcessPath = New System.Windows.Forms.ComboBox()
+        Me.Label16 = New System.Windows.Forms.Label()
+        Me.tbPolytropicEfficiency = New System.Windows.Forms.TextBox()
+        Me.Label15 = New System.Windows.Forms.Label()
         Me.cbDeltaT = New System.Windows.Forms.ComboBox()
         Me.tbDeltaT = New System.Windows.Forms.TextBox()
         Me.Label5 = New System.Windows.Forms.Label()
@@ -107,7 +128,8 @@ Partial Class EditingForm_ComprExpndr
         Me.chkActive.Image = Global.DWSIM.UnitOperations.My.Resources.Resources.bullet_tick
         Me.chkActive.Name = "chkActive"
         Me.ToolTip1.SetToolTip(Me.chkActive, resources.GetString("chkActive.ToolTip"))
-        Me.ToolTipValues.SetToolTip(Me.chkActive, resources.GetString("chkActive.ToolTip1"))
+        Me.ToolTipChangeTag.SetToolTip(Me.chkActive, resources.GetString("chkActive.ToolTip1"))
+        Me.ToolTipValues.SetToolTip(Me.chkActive, resources.GetString("chkActive.ToolTip2"))
         Me.chkActive.UseVisualStyleBackColor = True
         '
         'lblConnectedTo
@@ -146,10 +168,9 @@ Partial Class EditingForm_ComprExpndr
         '
         resources.ApplyResources(Me.rtbAnnotations, "rtbAnnotations")
         Me.rtbAnnotations.Name = "rtbAnnotations"
-        Me.rtbAnnotations.Rtf = "{\rtf1\ansi\ansicpg1252\deff0\deflang1046{\fonttbl{\f0\fnil\fcharset0 Microsoft S" &
-    "ans Serif;}}" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "\viewkind4\uc1\pard\f0\fs17\par" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "}" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
-        Me.rtbAnnotations.ShowRedo = False
-        Me.rtbAnnotations.ShowUndo = False
+        Me.rtbAnnotations.Rtf = "{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1046{\fonttbl{\f0\fnil Microsoft " &
+    "Sans Serif;}}" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "{\*\generator Riched20 10.0.18362}\viewkind4\uc1 " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "\pard\f0\fs17\" &
+    "par" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "}" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         'GroupBox3
         '
@@ -169,7 +190,8 @@ Partial Class EditingForm_ComprExpndr
         Me.btnConfigureFlashAlg.BackgroundImage = Global.DWSIM.UnitOperations.My.Resources.Resources.cog
         Me.btnConfigureFlashAlg.Name = "btnConfigureFlashAlg"
         Me.ToolTip1.SetToolTip(Me.btnConfigureFlashAlg, resources.GetString("btnConfigureFlashAlg.ToolTip"))
-        Me.ToolTipValues.SetToolTip(Me.btnConfigureFlashAlg, resources.GetString("btnConfigureFlashAlg.ToolTip1"))
+        Me.ToolTipChangeTag.SetToolTip(Me.btnConfigureFlashAlg, resources.GetString("btnConfigureFlashAlg.ToolTip1"))
+        Me.ToolTipValues.SetToolTip(Me.btnConfigureFlashAlg, resources.GetString("btnConfigureFlashAlg.ToolTip2"))
         Me.btnConfigureFlashAlg.UseVisualStyleBackColor = True
         '
         'btnConfigurePP
@@ -178,7 +200,8 @@ Partial Class EditingForm_ComprExpndr
         Me.btnConfigurePP.BackgroundImage = Global.DWSIM.UnitOperations.My.Resources.Resources.cog
         Me.btnConfigurePP.Name = "btnConfigurePP"
         Me.ToolTip1.SetToolTip(Me.btnConfigurePP, resources.GetString("btnConfigurePP.ToolTip"))
-        Me.ToolTipValues.SetToolTip(Me.btnConfigurePP, resources.GetString("btnConfigurePP.ToolTip1"))
+        Me.ToolTipChangeTag.SetToolTip(Me.btnConfigurePP, resources.GetString("btnConfigurePP.ToolTip1"))
+        Me.ToolTipValues.SetToolTip(Me.btnConfigurePP, resources.GetString("btnConfigurePP.ToolTip2"))
         Me.btnConfigurePP.UseVisualStyleBackColor = True
         '
         'cbFlashAlg
@@ -208,6 +231,27 @@ Partial Class EditingForm_ComprExpndr
         'GroupBox2
         '
         resources.ApplyResources(Me.GroupBox2, "GroupBox2")
+        Me.GroupBox2.Controls.Add(Me.Label25)
+        Me.GroupBox2.Controls.Add(Me.tbRotSpeed)
+        Me.GroupBox2.Controls.Add(Me.Label26)
+        Me.GroupBox2.Controls.Add(Me.btnCurves)
+        Me.GroupBox2.Controls.Add(Me.Label24)
+        Me.GroupBox2.Controls.Add(Me.Label23)
+        Me.GroupBox2.Controls.Add(Me.Label22)
+        Me.GroupBox2.Controls.Add(Me.cbPolytropicHead)
+        Me.GroupBox2.Controls.Add(Me.cbAdiabaticHead)
+        Me.GroupBox2.Controls.Add(Me.tbPolytropicHead)
+        Me.GroupBox2.Controls.Add(Me.Label20)
+        Me.GroupBox2.Controls.Add(Me.tbAdiabaticHead)
+        Me.GroupBox2.Controls.Add(Me.Label21)
+        Me.GroupBox2.Controls.Add(Me.tbPolytropicCoeff)
+        Me.GroupBox2.Controls.Add(Me.Label18)
+        Me.GroupBox2.Controls.Add(Me.tbAdiabaticCoeff)
+        Me.GroupBox2.Controls.Add(Me.Label17)
+        Me.GroupBox2.Controls.Add(Me.cbProcessPath)
+        Me.GroupBox2.Controls.Add(Me.Label16)
+        Me.GroupBox2.Controls.Add(Me.tbPolytropicEfficiency)
+        Me.GroupBox2.Controls.Add(Me.Label15)
         Me.GroupBox2.Controls.Add(Me.cbDeltaT)
         Me.GroupBox2.Controls.Add(Me.tbDeltaT)
         Me.GroupBox2.Controls.Add(Me.Label5)
@@ -229,6 +273,121 @@ Partial Class EditingForm_ComprExpndr
         Me.GroupBox2.Controls.Add(Me.Label8)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.TabStop = False
+        '
+        'Label25
+        '
+        resources.ApplyResources(Me.Label25, "Label25")
+        Me.Label25.Name = "Label25"
+        '
+        'tbRotSpeed
+        '
+        resources.ApplyResources(Me.tbRotSpeed, "tbRotSpeed")
+        Me.tbRotSpeed.Name = "tbRotSpeed"
+        '
+        'Label26
+        '
+        resources.ApplyResources(Me.Label26, "Label26")
+        Me.Label26.Name = "Label26"
+        '
+        'btnCurves
+        '
+        resources.ApplyResources(Me.btnCurves, "btnCurves")
+        Me.btnCurves.Name = "btnCurves"
+        Me.btnCurves.UseVisualStyleBackColor = True
+        '
+        'Label24
+        '
+        resources.ApplyResources(Me.Label24, "Label24")
+        Me.Label24.Name = "Label24"
+        '
+        'Label23
+        '
+        resources.ApplyResources(Me.Label23, "Label23")
+        Me.Label23.Name = "Label23"
+        '
+        'Label22
+        '
+        resources.ApplyResources(Me.Label22, "Label22")
+        Me.Label22.Name = "Label22"
+        '
+        'cbPolytropicHead
+        '
+        resources.ApplyResources(Me.cbPolytropicHead, "cbPolytropicHead")
+        Me.cbPolytropicHead.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cbPolytropicHead.FormattingEnabled = True
+        Me.cbPolytropicHead.Items.AddRange(New Object() {resources.GetString("cbPolytropicHead.Items"), resources.GetString("cbPolytropicHead.Items1"), resources.GetString("cbPolytropicHead.Items2")})
+        Me.cbPolytropicHead.Name = "cbPolytropicHead"
+        '
+        'cbAdiabaticHead
+        '
+        resources.ApplyResources(Me.cbAdiabaticHead, "cbAdiabaticHead")
+        Me.cbAdiabaticHead.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cbAdiabaticHead.FormattingEnabled = True
+        Me.cbAdiabaticHead.Items.AddRange(New Object() {resources.GetString("cbAdiabaticHead.Items"), resources.GetString("cbAdiabaticHead.Items1"), resources.GetString("cbAdiabaticHead.Items2")})
+        Me.cbAdiabaticHead.Name = "cbAdiabaticHead"
+        '
+        'tbPolytropicHead
+        '
+        resources.ApplyResources(Me.tbPolytropicHead, "tbPolytropicHead")
+        Me.tbPolytropicHead.Name = "tbPolytropicHead"
+        '
+        'Label20
+        '
+        resources.ApplyResources(Me.Label20, "Label20")
+        Me.Label20.Name = "Label20"
+        '
+        'tbAdiabaticHead
+        '
+        resources.ApplyResources(Me.tbAdiabaticHead, "tbAdiabaticHead")
+        Me.tbAdiabaticHead.Name = "tbAdiabaticHead"
+        '
+        'Label21
+        '
+        resources.ApplyResources(Me.Label21, "Label21")
+        Me.Label21.Name = "Label21"
+        '
+        'tbPolytropicCoeff
+        '
+        resources.ApplyResources(Me.tbPolytropicCoeff, "tbPolytropicCoeff")
+        Me.tbPolytropicCoeff.Name = "tbPolytropicCoeff"
+        '
+        'Label18
+        '
+        resources.ApplyResources(Me.Label18, "Label18")
+        Me.Label18.Name = "Label18"
+        '
+        'tbAdiabaticCoeff
+        '
+        resources.ApplyResources(Me.tbAdiabaticCoeff, "tbAdiabaticCoeff")
+        Me.tbAdiabaticCoeff.Name = "tbAdiabaticCoeff"
+        '
+        'Label17
+        '
+        resources.ApplyResources(Me.Label17, "Label17")
+        Me.Label17.Name = "Label17"
+        '
+        'cbProcessPath
+        '
+        resources.ApplyResources(Me.cbProcessPath, "cbProcessPath")
+        Me.cbProcessPath.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cbProcessPath.FormattingEnabled = True
+        Me.cbProcessPath.Items.AddRange(New Object() {resources.GetString("cbProcessPath.Items"), resources.GetString("cbProcessPath.Items1")})
+        Me.cbProcessPath.Name = "cbProcessPath"
+        '
+        'Label16
+        '
+        resources.ApplyResources(Me.Label16, "Label16")
+        Me.Label16.Name = "Label16"
+        '
+        'tbPolytropicEfficiency
+        '
+        resources.ApplyResources(Me.tbPolytropicEfficiency, "tbPolytropicEfficiency")
+        Me.tbPolytropicEfficiency.Name = "tbPolytropicEfficiency"
+        '
+        'Label15
+        '
+        resources.ApplyResources(Me.Label15, "Label15")
+        Me.Label15.Name = "Label15"
         '
         'cbDeltaT
         '
@@ -335,7 +494,7 @@ Partial Class EditingForm_ComprExpndr
         resources.ApplyResources(Me.cbCalcMode, "cbCalcMode")
         Me.cbCalcMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cbCalcMode.FormattingEnabled = True
-        Me.cbCalcMode.Items.AddRange(New Object() {resources.GetString("cbCalcMode.Items"), resources.GetString("cbCalcMode.Items1"), resources.GetString("cbCalcMode.Items2"), resources.GetString("cbCalcMode.Items3")})
+        Me.cbCalcMode.Items.AddRange(New Object() {resources.GetString("cbCalcMode.Items"), resources.GetString("cbCalcMode.Items1"), resources.GetString("cbCalcMode.Items2"), resources.GetString("cbCalcMode.Items3"), resources.GetString("cbCalcMode.Items4"), resources.GetString("cbCalcMode.Items5")})
         Me.cbCalcMode.Name = "cbCalcMode"
         '
         'Label8
@@ -367,7 +526,8 @@ Partial Class EditingForm_ComprExpndr
         Me.btnCreateAndConnectEnergy.BackgroundImage = Global.DWSIM.UnitOperations.My.Resources.Resources.bullet_lightning
         Me.btnCreateAndConnectEnergy.Name = "btnCreateAndConnectEnergy"
         Me.ToolTip1.SetToolTip(Me.btnCreateAndConnectEnergy, resources.GetString("btnCreateAndConnectEnergy.ToolTip"))
-        Me.ToolTipValues.SetToolTip(Me.btnCreateAndConnectEnergy, resources.GetString("btnCreateAndConnectEnergy.ToolTip1"))
+        Me.ToolTipChangeTag.SetToolTip(Me.btnCreateAndConnectEnergy, resources.GetString("btnCreateAndConnectEnergy.ToolTip1"))
+        Me.ToolTipValues.SetToolTip(Me.btnCreateAndConnectEnergy, resources.GetString("btnCreateAndConnectEnergy.ToolTip2"))
         Me.btnCreateAndConnectEnergy.UseVisualStyleBackColor = True
         '
         'btnCreateAndConnectOutlet1
@@ -376,7 +536,8 @@ Partial Class EditingForm_ComprExpndr
         Me.btnCreateAndConnectOutlet1.BackgroundImage = Global.DWSIM.UnitOperations.My.Resources.Resources.bullet_lightning
         Me.btnCreateAndConnectOutlet1.Name = "btnCreateAndConnectOutlet1"
         Me.ToolTip1.SetToolTip(Me.btnCreateAndConnectOutlet1, resources.GetString("btnCreateAndConnectOutlet1.ToolTip"))
-        Me.ToolTipValues.SetToolTip(Me.btnCreateAndConnectOutlet1, resources.GetString("btnCreateAndConnectOutlet1.ToolTip1"))
+        Me.ToolTipChangeTag.SetToolTip(Me.btnCreateAndConnectOutlet1, resources.GetString("btnCreateAndConnectOutlet1.ToolTip1"))
+        Me.ToolTipValues.SetToolTip(Me.btnCreateAndConnectOutlet1, resources.GetString("btnCreateAndConnectOutlet1.ToolTip2"))
         Me.btnCreateAndConnectOutlet1.UseVisualStyleBackColor = True
         '
         'btnCreateAndConnectInlet1
@@ -385,7 +546,8 @@ Partial Class EditingForm_ComprExpndr
         Me.btnCreateAndConnectInlet1.BackgroundImage = Global.DWSIM.UnitOperations.My.Resources.Resources.bullet_lightning
         Me.btnCreateAndConnectInlet1.Name = "btnCreateAndConnectInlet1"
         Me.ToolTip1.SetToolTip(Me.btnCreateAndConnectInlet1, resources.GetString("btnCreateAndConnectInlet1.ToolTip"))
-        Me.ToolTipValues.SetToolTip(Me.btnCreateAndConnectInlet1, resources.GetString("btnCreateAndConnectInlet1.ToolTip1"))
+        Me.ToolTipChangeTag.SetToolTip(Me.btnCreateAndConnectInlet1, resources.GetString("btnCreateAndConnectInlet1.ToolTip1"))
+        Me.ToolTipValues.SetToolTip(Me.btnCreateAndConnectInlet1, resources.GetString("btnCreateAndConnectInlet1.ToolTip2"))
         Me.btnCreateAndConnectInlet1.UseVisualStyleBackColor = True
         '
         'btnDisconnectEnergy
@@ -394,7 +556,8 @@ Partial Class EditingForm_ComprExpndr
         Me.btnDisconnectEnergy.Image = Global.DWSIM.UnitOperations.My.Resources.Resources.disconnect
         Me.btnDisconnectEnergy.Name = "btnDisconnectEnergy"
         Me.ToolTip1.SetToolTip(Me.btnDisconnectEnergy, resources.GetString("btnDisconnectEnergy.ToolTip"))
-        Me.ToolTipValues.SetToolTip(Me.btnDisconnectEnergy, resources.GetString("btnDisconnectEnergy.ToolTip1"))
+        Me.ToolTipChangeTag.SetToolTip(Me.btnDisconnectEnergy, resources.GetString("btnDisconnectEnergy.ToolTip1"))
+        Me.ToolTipValues.SetToolTip(Me.btnDisconnectEnergy, resources.GetString("btnDisconnectEnergy.ToolTip2"))
         Me.btnDisconnectEnergy.UseVisualStyleBackColor = True
         '
         'Label14
@@ -415,7 +578,8 @@ Partial Class EditingForm_ComprExpndr
         Me.btnDisconnectOutlet1.Image = Global.DWSIM.UnitOperations.My.Resources.Resources.disconnect
         Me.btnDisconnectOutlet1.Name = "btnDisconnectOutlet1"
         Me.ToolTip1.SetToolTip(Me.btnDisconnectOutlet1, resources.GetString("btnDisconnectOutlet1.ToolTip"))
-        Me.ToolTipValues.SetToolTip(Me.btnDisconnectOutlet1, resources.GetString("btnDisconnectOutlet1.ToolTip1"))
+        Me.ToolTipChangeTag.SetToolTip(Me.btnDisconnectOutlet1, resources.GetString("btnDisconnectOutlet1.ToolTip1"))
+        Me.ToolTipValues.SetToolTip(Me.btnDisconnectOutlet1, resources.GetString("btnDisconnectOutlet1.ToolTip2"))
         Me.btnDisconnectOutlet1.UseVisualStyleBackColor = True
         '
         'btnDisconnect1
@@ -424,7 +588,8 @@ Partial Class EditingForm_ComprExpndr
         Me.btnDisconnect1.Image = Global.DWSIM.UnitOperations.My.Resources.Resources.disconnect
         Me.btnDisconnect1.Name = "btnDisconnect1"
         Me.ToolTip1.SetToolTip(Me.btnDisconnect1, resources.GetString("btnDisconnect1.ToolTip"))
-        Me.ToolTipValues.SetToolTip(Me.btnDisconnect1, resources.GetString("btnDisconnect1.ToolTip1"))
+        Me.ToolTipChangeTag.SetToolTip(Me.btnDisconnect1, resources.GetString("btnDisconnect1.ToolTip1"))
+        Me.ToolTipValues.SetToolTip(Me.btnDisconnect1, resources.GetString("btnDisconnect1.ToolTip2"))
         Me.btnDisconnect1.UseVisualStyleBackColor = True
         '
         'Label7
@@ -530,4 +695,25 @@ Partial Class EditingForm_ComprExpndr
     Public WithEvents btnCreateAndConnectOutlet1 As System.Windows.Forms.Button
     Public WithEvents btnCreateAndConnectInlet1 As System.Windows.Forms.Button
     Friend WithEvents ToolTipChangeTag As ToolTip
+    Public WithEvents cbProcessPath As ComboBox
+    Public WithEvents Label16 As Label
+    Public WithEvents tbPolytropicEfficiency As TextBox
+    Public WithEvents Label15 As Label
+    Public WithEvents cbPolytropicHead As ComboBox
+    Public WithEvents cbAdiabaticHead As ComboBox
+    Public WithEvents tbPolytropicHead As TextBox
+    Public WithEvents Label20 As Label
+    Public WithEvents tbAdiabaticHead As TextBox
+    Public WithEvents Label21 As Label
+    Public WithEvents tbPolytropicCoeff As TextBox
+    Public WithEvents Label18 As Label
+    Public WithEvents tbAdiabaticCoeff As TextBox
+    Public WithEvents Label17 As Label
+    Friend WithEvents Label23 As Label
+    Friend WithEvents Label22 As Label
+    Public WithEvents btnCurves As Button
+    Public WithEvents Label24 As Label
+    Friend WithEvents Label25 As Label
+    Public WithEvents tbRotSpeed As TextBox
+    Public WithEvents Label26 As Label
 End Class

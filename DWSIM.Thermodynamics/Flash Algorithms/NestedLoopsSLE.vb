@@ -122,9 +122,9 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
 
             n = Vz.Length - 1
 
-            Dim Vn(n) As String, Vx(n), Vy(n), Vx_ant(n), Vy_ant(n), Vp(n), Ki(n), Ki_ant(n), fi(n), Vs(n), Vs_ant(n), activcoeff(n) As Double
+            Dim Vx(n), Vy(n), Vx_ant(n), Vy_ant(n), Vp(n), Ki(n), Ki_ant(n), fi(n), Vs(n), Vs_ant(n), activcoeff(n) As Double
 
-            Vn = PP.RET_VNAMES()
+            'Dim Vn = PP.RET_VNAMES()
             fi = Vz.Clone
 
             'Calculate Ki`s
@@ -347,7 +347,7 @@ out:        Return New Object() {L, V, Vx, Vy, ecount, 0.0#, PP.RET_NullVector, 
             Dim Vx(n), Vs(n), MaxAct(n), MaxX(n), MaxLiquPhase(n), Tf(n), Hf(n), Tc(n), ActCoeff(n), VnL(n), VnS(n), Vp(n) As Double
             Dim L, L_old, SF, SLP As Double
             Dim cpl(n), cps(n), dCp(n) As Double
-            Dim Vn(n) As String
+            'Dim Vn(n) As String
             Dim constprop As Interfaces.ICompoundConstantProperties
 
             Vx = Vz.Clone 'assuming initially only liquids exist
@@ -397,7 +397,7 @@ out:        Return New Object() {L, V, Vx, Vy, ecount, 0.0#, PP.RET_NullVector, 
                 Next
             End If
 
-            Vn = PP.RET_VNAMES()
+            Dim Vn = PP.RET_VNAMES()
             For i = 0 To n
                 constprop = PP.CurrentMaterialStream.Phases(0).Compounds(Vn(i)).ConstantProperties
                 IObj?.SetCurrent
@@ -1096,7 +1096,7 @@ out:        Return New Object() {L, V, Vxl, Vxv, ecount, 0.0#, PP.RET_NullVector
 
             CompoundProperties = PP.DW_GetConstantProperties
 
-            Dim Vn(1) As String, Vx(1), Vy(1), Vx_ant(1), Vy_ant(1), Vp(1), Ki(1), Ki_ant(1), fi(1), Vs(1) As Double
+            'Dim Vx(1), Vy(1), Vx_ant(1), Vy_ant(1), Vp(1), Ki(1), Ki_ant(1), fi(1), Vs(1) As Double
             Dim i, n, ecount As Integer
             Dim d1, d2 As Date, dt As TimeSpan
             Dim L, V, T, S, Pf As Double
@@ -1109,9 +1109,9 @@ out:        Return New Object() {L, V, Vxl, Vxv, ecount, 0.0#, PP.RET_NullVector
             Hf = H
             Pf = P
 
-            ReDim Vn(n), Vx(n), Vy(n), Vx_ant(n), Vy_ant(n), Vp(n), Ki(n), fi(n), Vs(n)
+            Dim Vx(n), Vy(n), Ki(n), fi(n), Vs(n) As Double
 
-            Vn = PP.RET_VNAMES()
+            'Dim Vn = PP.RET_VNAMES()
             fi = Vz.Clone
 
             Dim maxitINT As Integer = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Maximum_Number_Of_Internal_Iterations)
@@ -1217,7 +1217,7 @@ alt:            T = bo.BrentOpt(Tinf, Tsup, 100, tolEXT, maxitEXT, {P, Vz, PP})
 
             Dim doparallel As Boolean = Settings.EnableParallelProcessing
 
-            Dim Vn(1) As String, Vx(1), Vy(1), Vx_ant(1), Vy_ant(1), Vp(1), Ki(1), Ki_ant(1), fi(1), Vs(1) As Double
+            Dim  Vx(1), Vy(1), Vx_ant(1), Vy_ant(1), Vp(1), Ki(1), Ki_ant(1), fi(1), Vs(1) As Double
             Dim i, n, ecount As Integer
             Dim d1, d2 As Date, dt As TimeSpan
             Dim L, V, Ss, T, Pf As Double
@@ -1230,9 +1230,9 @@ alt:            T = bo.BrentOpt(Tinf, Tsup, 100, tolEXT, maxitEXT, {P, Vz, PP})
             Sf = S
             Pf = P
 
-            ReDim Vn(n), Vx(n), Vy(n), Vx_ant(n), Vy_ant(n), Vp(n), Ki(n), fi(n), Vs(n)
+            ReDim Vx(n), Vy(n), Vx_ant(n), Vy_ant(n), Vp(n), Ki(n), fi(n), Vs(n)
 
-            Vn = PP.RET_VNAMES()
+            'Dim Vn = PP.RET_VNAMES()
             fi = Vz.Clone
 
             Dim maxitINT As Integer = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Maximum_Number_Of_Internal_Iterations)
@@ -1450,10 +1450,10 @@ alt:            T = bo.BrentOpt(Tinf, Tsup, 100, tolEXT, maxitEXT, {P, Vz, PP})
             GV_old = V
             GS_old = 0
 
-            Dim Vn(n) As String, Vx(n), Vy(n), Vs(n), Vmix(n), Vx_ant(n), Vy_ant(n), Vs_ant(n), Vp(n), Ki(n), fi(n) As Double
+            Dim Vx(n), Vy(n), Vs(n), Vmix(n), Vx_ant(n), Vy_ant(n), Vs_ant(n), Vp(n), Ki(n), fi(n) As Double
             Dim Vt(n), VTc(n), Tmin, Tmax, dFdT, Tsat(n) As Double
 
-            Vn = PP.RET_VNAMES()
+            Dim Vn = PP.RET_VNAMES()
             VTc = PP.RET_VTC()
             fi = Vz.Clone
 
@@ -1846,10 +1846,10 @@ alt:            T = bo.BrentOpt(Tinf, Tsup, 100, tolEXT, maxitEXT, {P, Vz, PP})
             Lf = 1 - Sf
             Tf = T
 
-            Dim Vn(n) As String, Vx(n), Vs(n), Vx_ant(1), Vs_ant(1), Vp(n), Vp2(n), Ki(n), Ki_ant(n), fi(n), activcoeff(n), activcoeff2(n) As Double
+            Dim Vx(n), Vs(n), Vx_ant(1), Vs_ant(1), Vp(n), Vp2(n), Ki(n), Ki_ant(n), fi(n), activcoeff(n), activcoeff2(n) As Double
             Dim Vt(n), VTF(n), Tmin, Tmax, dFdT As Double
 
-            Vn = PP.RET_VNAMES()
+            'Dim Vn = PP.RET_VNAMES()
             VTF = PP.RET_VTF()
             fi = Vz.Clone
 
@@ -2084,10 +2084,10 @@ alt:            T = bo.BrentOpt(Tinf, Tsup, 100, tolEXT, maxitEXT, {P, Vz, PP})
             Lf = 1 - Sf
             Tf = T
 
-            Dim Vn(n) As String, Vx(n), Vs(n), Vx_ant(1), Vs_ant(1), Vp(n), Vp2(n), Ki(n), Ki_ant(n), fi(n), activcoeff(n), activcoeff2(n) As Double
+            Dim Vx(n), Vs(n), Vx_ant(1), Vs_ant(1), Vp(n), Vp2(n), Ki(n), Ki_ant(n), fi(n), activcoeff(n), activcoeff2(n) As Double
             Dim Vt(n), VTF(n), Tmin, Tmax As Double
 
-            Vn = PP.RET_VNAMES()
+            'Dim Vn = PP.RET_VNAMES()
             VTF = PP.RET_VTF()
             fi = Vz.Clone
 

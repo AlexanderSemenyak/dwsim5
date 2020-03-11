@@ -276,12 +276,13 @@ Namespace PropertyPackages
             Dim i As Integer = 0
             Dim l As Integer = 0
 
-            Dim vn As String() = RET_VNAMES()
-            Dim n As Integer = vn.Length - 1
+            Dim vn As IList(of String) = RET_VNAMES()
+            Dim n As Integer = vn.Count - 1
 
             For i = 0 To n
+                Dim vn_i  = vn(i)
                 For l = 0 To n
-                    val(i, l) = Me.RET_KIJ(vn(i), vn(l))
+                    val(i, l) = Me.RET_KIJ(vn_i, vn(l))
                 Next
             Next
 

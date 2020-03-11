@@ -84,7 +84,7 @@ Public Class FormFlowsheet
 
     Public WithEvents Options As New SharedClasses.DWSIM.Flowsheet.FlowsheetVariables
 
-    Public Property CalculationQueue As Generic.Queue(Of ICalculationArgs) Implements IFlowsheetCalculationQueue.CalculationQueue
+    Public Property CalculationQueue As New Generic.Queue(Of ICalculationArgs) Implements IFlowsheetCalculationQueue.CalculationQueue
 
     Public ScriptCollection As Dictionary(Of String, IScript)
 
@@ -205,7 +205,7 @@ Public Class FormFlowsheet
         Else
             'FormObjList = New frmObjList
             Me.MenuStrip1.Visible = False
-            Me.WindowState = FormWindowState.Normal
+            '(^) Alexander disable - slow loading for redraw Me.WindowState = FormWindowState.Normal
         End If
 
         If GlobalSettings.Settings.OldUI Then
@@ -221,8 +221,6 @@ Public Class FormFlowsheet
         Dim str As String = rand.Next(10000000, 99999999)
 
         Me.Options.BackupFileName = str & ".dwbcs"
-
-        Me.CalculationQueue = New Generic.Queue(Of ICalculationArgs)
 
         Me.FormSurface.TSTBZoom.Text = Format(Me.FormSurface.FlowsheetSurface.Zoom, "#%")
 
@@ -251,6 +249,11 @@ Public Class FormFlowsheet
                     Me.FlowsheetOptions.VisibleProperties.Add(item.Name, obj.GetDefaultProperties.ToList)
                     obj = Nothing
                 End If
+            Next
+
+            For Each item In FormMain.ExternalUnitOperations.Values
+                item.SetFlowsheet(Me)
+                Me.FlowsheetOptions.VisibleProperties(item.GetType.Name) = DirectCast(item, ISimulationObject).GetDefaultProperties().ToList()
             Next
 
             If Not DWSIM.App.IsRunningOnMono Then
@@ -313,7 +316,7 @@ Public Class FormFlowsheet
 
         loaded = True
 
-        If My.Settings.ObjectEditor = 0 Then FormProps.Hide()
+        '(^)Alexander disable - slow start -> If My.Settings.ObjectEditor = 0 Then FormProps.Hide()
 
         Dim fs As New FormScript
         fs.fc = Me
@@ -2704,7 +2707,7 @@ Public Class FormFlowsheet
 
     Public Function GetTranslatedString(text As String, locale As String) As String Implements Interfaces.IFlowsheet.GetTranslatedString, IFlowsheetGUI.GetTranslatedString
 
-        Return DWSIM.App.GetLocalString(text)
+        Return GetTranslatedString1(text)
 
     End Function
 

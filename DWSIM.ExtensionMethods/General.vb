@@ -432,7 +432,7 @@ Public Module General
     End Function
 
     <System.Runtime.CompilerServices.Extension()>
-    Public Function ToMathArrayString(vector As String()) As String
+    Public Function ToMathArrayString(vector As IList(Of String)) As String
 
         Dim retstr As String = "<math_inline>\left[{\begin{array}{}"
         For Each s In vector
@@ -576,7 +576,7 @@ Public Module General
             retstr.Append(s)
             retstr.Append( ", ")
         Next
-        if vector.Length>0 then
+        if vector.Count>0 then
            retstr.Remove(retstr.Length-2,2) 'alexander remove last ", "
         end if
         retstr.Append("}")

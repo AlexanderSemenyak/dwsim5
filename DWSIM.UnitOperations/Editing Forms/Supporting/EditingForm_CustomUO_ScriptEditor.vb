@@ -322,4 +322,7 @@ Imports Jolt
         End If
     End Sub
 
+    Private Sub ToolStripButton1_Click_1(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
+        Process.Start("https://dwsim.fossee.in/custom-model")
+    End Sub
 End Class

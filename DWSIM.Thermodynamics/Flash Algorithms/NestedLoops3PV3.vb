@@ -143,9 +143,9 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
 
             proppack = PP
 
-            ReDim Vn(n), Vx(n), Vy(n), Vx_ant(n), Vy_ant(n), Vp(n), Ki(n), fi(n)
+            ReDim Vx(n), Vy(n), Vx_ant(n), Vy_ant(n), Vp(n), Ki(n), fi(n)
 
-            Vn = PP.RET_VNAMES()
+            Dim Vn = PP.RET_VNAMES()
             fi = Vz.Clone
 
             Vpc = PP.RET_VPC
@@ -734,11 +734,11 @@ out2:       d2 = Date.Now
 
             proppack = PP
 
-            ReDim Vn(n), Vx1(n), Vx2(n), Vy(n), Vp(n), ui1(n), ui2(n), uic1(n), uic2(n), pi(n), Ki1(n), Ki2(n), fi(n)
+            ReDim Vx1(n), Vx2(n), Vy(n), Vp(n), ui1(n), ui2(n), uic1(n), uic2(n), pi(n), Ki1(n), Ki2(n), fi(n)
             Dim b1(n), b2(n), CFL1(n), CFL2(n), CFV(n), Kil(n), L1ant, L2ant As Double
             Dim i As Integer
 
-            Vn = PP.RET_VNAMES()
+            'Dim Vn = PP.RET_VNAMES()
             fi = Vz.Clone
 
             'Calculate Ki`s
@@ -1152,9 +1152,9 @@ out:
             Hf = H
             Pf = P
 
-            ReDim Vn(n), Vx1(n), Vx2(n), Vy(n), Vp(n), Ki(n), fi(n)
+            ReDim Vx1(n), Vx2(n), Vy(n), Vp(n), Ki(n), fi(n)
 
-            Vn = PP.RET_VNAMES()
+            'Dim Vn = PP.RET_VNAMES()
             fi = Vz.Clone
 
             Dim maxitINT As Integer = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Maximum_Number_Of_Internal_Iterations)
@@ -1301,9 +1301,9 @@ alt:
             Sf = S
             Pf = P
 
-            ReDim Vn(n), Vx1(n), Vx2(n), Vy(n), Vp(n), Ki(n), fi(n)
+            ReDim Vx1(n), Vx2(n), Vy(n), Vp(n), Ki(n), fi(n)
 
-            Vn = PP.RET_VNAMES()
+            'Dim Vn = PP.RET_VNAMES()
             fi = Vz.Clone
 
             Dim maxitINT As Integer = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Maximum_Number_Of_Internal_Iterations)

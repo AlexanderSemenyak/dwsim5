@@ -1007,7 +1007,7 @@ exec:       With Me.GraphControl.GraphPane.Legend
 
         PC = diagdata(15)
 
-        Dim th1, th2, ph1, ph2 As New ArrayList, Ph, Th As Object, Pmin, Pmax As Double, Vz() As Double, Vn() As String
+        Dim th1, th2, ph1, ph2 As New ArrayList, Ph, Th As Object, Pmin, Pmax As Double, Vz() As Double, Vn As IList(of String)
 
         If e.Argument(5) = True Then
 
@@ -1017,7 +1017,7 @@ exec:       With Me.GraphControl.GraphPane.Legend
             Pmax = PC(0)(1) * 1.3
             Dim i As Integer = 0
             Vz = mat.PropertyPackage.RET_VMOL(PropertyPackages.Phase.Mixture)
-            Vn = mat.PropertyPackage.RET_VNAMES
+            Vn = mat.PropertyPackage.RET_VNAMES()
 
             Dim m_aux As New DWSIM.Utilities.HYD.AuxMethods
 

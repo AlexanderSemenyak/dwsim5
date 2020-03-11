@@ -939,9 +939,9 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
             Hf = H * PP.AUX_MMM(Vz)
             Pf = P
 
-            ReDim Vn(n), Vx1(n), Vx2(n), Vy(n), Vp(n), ui1(n), uic1(n), ui2(n), uic2(n), pi(n), Ki1(n), Ki2(n), fi(n), Vpc(n), VTc(n), Vw(n)
+            ReDim Vx1(n), Vx2(n), Vy(n), Vp(n), ui1(n), uic1(n), ui2(n), uic2(n), pi(n), Ki1(n), Ki2(n), fi(n), Vpc(n), VTc(n), Vw(n)
 
-            Vn = PP.RET_VNAMES()
+            'Dim Vn = PP.RET_VNAMES()
             VTc = PP.RET_VTC
             fi = Vz.Clone
 
@@ -1207,9 +1207,9 @@ restart:    Do
             Sf = S * PP.AUX_MMM(Vz)
             Pf = P
 
-            ReDim Vn(n), Vx1(n), Vx2(n), Vy(n), Vp(n), ui1(n), uic1(n), ui2(n), uic2(n), pi(n), Ki1(n), Ki2(n), fi(n), Vpc(n), VTc(n), Vw(n)
+            ReDim Vx1(n), Vx2(n), Vy(n), Vp(n), ui1(n), uic1(n), ui2(n), uic2(n), pi(n), Ki1(n), Ki2(n), fi(n), Vpc(n), VTc(n), Vw(n)
 
-            Vn = PP.RET_VNAMES()
+            'Dim Vn = PP.RET_VNAMES()
             VTc = PP.RET_VTC
             fi = Vz.Clone
 
@@ -1474,9 +1474,9 @@ restart:    Do
 
             proppack = PP
 
-            ReDim Vn(n), Vx1(n), Vx2(n), Vy(n), Vp(n), ui1(n), ui2(n), uic1(n), uic2(n), pi(n), Ki1(n), Ki2(n), fi(n)
+            ReDim Vx1(n), Vx2(n), Vy(n), Vp(n), ui1(n), ui2(n), uic1(n), uic2(n), pi(n), Ki1(n), Ki2(n), fi(n)
 
-            Vn = PP.RET_VNAMES()
+            'Dim Vn = PP.RET_VNAMES()
             fi = Vz.Clone
 
             '--------------------------------------
@@ -1781,10 +1781,10 @@ out:
             Lf = 1 - Vf
             Pf = P
 
-            ReDim Vn(n), Vx1(n), Vx2(n), Vy(n), Vp(n), ui1(n), uic1(n), ui2(n), uic2(n), pi(n), Ki1(n), Ki2(n), fi(n)
+            ReDim Vx1(n), Vx2(n), Vy(n), Vp(n), ui1(n), uic1(n), ui2(n), uic2(n), pi(n), Ki1(n), Ki2(n), fi(n)
             Dim Vt(n), VTc(n), Tmin, Tmax As Double
 
-            Vn = PP.RET_VNAMES()
+            'Dim Vn = PP.RET_VNAMES()
             VTc = PP.RET_VTC
             fi = Vz.Clone
 
@@ -2002,11 +2002,11 @@ out:
             Lf = 1 - Vf
             Tf = T
 
-            ReDim Vn(n), Vx1(n), Vx2(n), Vy(n), Vp(n), ui1(n), uic1(n), ui2(n), uic2(n), pi(n), Ki1(n), Ki2(n), fi(n)
+            ReDim Vx1(n), Vx2(n), Vy(n), Vp(n), ui1(n), uic1(n), ui2(n), uic2(n), pi(n), Ki1(n), Ki2(n), fi(n)
 
             Dim VTc = PP.RET_VTC()
 
-            Vn = PP.RET_VNAMES()
+            Dim Vn = PP.RET_VNAMES()
             fi = Vz.Clone
 
             If Pref = 0 Then

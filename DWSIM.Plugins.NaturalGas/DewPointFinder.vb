@@ -21,8 +21,9 @@ Public Class DewPointFinder
         P = Pressure
         proppack = PP
 
-        If PP.RET_VNAMES.Contains("Water") Then
-            wid = PP.RET_VNAMES.ToList.IndexOf("Water")
+        Dim indexOfWater = PP.RET_VNAMES.IndexOf("Water")
+        If indexOfWater>=0 then 'PP.RET_VNAMES.Contains("Water") Then
+            wid = indexOfWater
         Else
             wid = -1
         End If

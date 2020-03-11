@@ -236,7 +236,7 @@ Namespace BaseClasses
 
         Public Property ComponentName As String = "" Implements Interfaces.IPhase.ComponentName
 
-        Public Property Compounds As Dictionary(Of String, Interfaces.ICompound) = New Dictionary(Of String, Interfaces.ICompound)(StringComparer.Ordinal) Implements Interfaces.IPhase.Compounds
+        Public Property Compounds As CompoundsDictionary = New CompoundsDictionary(StringComparer.Ordinal) Implements Interfaces.IPhase.Compounds
 
         Public Property Name As String = "" Implements Interfaces.IPhase.Name
 
@@ -1456,8 +1456,8 @@ Namespace BaseClasses
                     End Try
                 Next
             End If
-            'Alexander - disable not used slow load data
-            If  GlobalSettings.Settings.AutomationMode = false Then
+            '(^)Alexander - disable not used slow load data
+            If (GlobalSettings.Settings.AutomationMode = false) Then
                 Dim unif As New PropertyPackages.Auxiliary.Unifac
                 Dim modf As New PropertyPackages.Auxiliary.Modfac
 
