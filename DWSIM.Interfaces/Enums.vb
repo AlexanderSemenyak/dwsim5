@@ -293,6 +293,9 @@ Namespace Enums
         Pressure_and_VaporFraction = 3
         Temperature_and_VaporFraction = 4
         Pressure_and_SolidFraction = 5
+        Volume_and_Temperature = 6
+        Volume_and_Enthalpy = 7
+        Volume_and_Entropy = 8
     End Enum
 
     Public Enum CompositionBasis
@@ -382,6 +385,8 @@ Namespace Enums
         UserModels = 9
         Logical = 10
         Other = 11
+        Indicators = 12
+        Controllers = 13
 
     End Enum
 
@@ -511,6 +516,12 @@ Namespace Enums.GraphicObjects
         GO_InputControl
 
         External
+
+        AnalogGauge
+        DigitalGauge
+        LevelGauge
+
+        Controller_PLC
 
     End Enum
 

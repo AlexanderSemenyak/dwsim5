@@ -606,6 +606,12 @@ Namespace PropertyPackages
 
 #Region "   Must Override or Overridable Functions"
 
+        Public Overridable Function GetModel() As Object
+
+            Return Nothing
+
+        End Function
+
         Public Overridable Sub AddDefaultCompounds(compnames As String())
 
             If Not Settings.ExcelMode Then

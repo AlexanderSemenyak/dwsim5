@@ -61,6 +61,10 @@ Namespace PropertyPackages
 
         End Sub
 
+        Public Overrides Function GetModel() As Object
+            Return m_pr
+        End Function
+
         Public Overrides Sub DisplayEditingForm()
 
             If GlobalSettings.Settings.CAPEOPENMode Then

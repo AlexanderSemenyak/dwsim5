@@ -120,15 +120,6 @@
   <data name="TabPage1.Text" xml:space="preserve">
     <value>Потоки</value>
   </data>
-  <data name="TabPage10.Text" xml:space="preserve">
-    <value>Пользовательские модели</value>
-  </data>
-  <data name="TabPage11.Text" xml:space="preserve">
-    <value>Логические операции</value>
-  </data>
-  <data name="TabPage12.Text" xml:space="preserve">
-    <value>Прочее</value>
-  </data>
   <data name="TabPage2.Text" xml:space="preserve">
     <value>Изменяют давление</value>
   </data>
@@ -149,6 +140,21 @@
   </data>
   <data name="TabPage8.Text" xml:space="preserve">
     <value>Жидкости</value>
+  </data>
+  <data name="TabPage10.Text" xml:space="preserve">
+    <value>Пользовательские модели</value>
+  </data>
+  <data name="TabPage11.Text" xml:space="preserve">
+    <value>Логические операции</value>
+  </data>
+  <data name="TabPage13.Text" xml:space="preserve">
+    <value>Индикаторы</value>
+  </data>
+  <data name="TabPage14.Text" xml:space="preserve">
+    <value>Контроллеры</value>
+  </data>
+  <data name="TabPage12.Text" xml:space="preserve">
+    <value>Прочее</value>
   </data>
   <data name="$this.TabText" xml:space="preserve">
     <value>Объекты модели</value>

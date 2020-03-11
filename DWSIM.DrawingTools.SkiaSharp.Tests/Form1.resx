@@ -117,41 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="Label1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>154, 19</value>
-  </data>
-  <data name="Label1.Text" xml:space="preserve">
-    <value>DWSIM on the Web</value>
-  </data>
-  <data name="TabPageD.Text" xml:space="preserve">
-    <value>YouTube Videos</value>
-  </data>
-  <data name="TabPageC.Text" xml:space="preserve">
-    <value>FOSSEE Forum</value>
-  </data>
-  <data name="TabPageB.Text" xml:space="preserve">
-    <value>Official Forums</value>
-  </data>
-  <data name="TabPageA.Size" type="System.Drawing.Size, System.Drawing">
-    <value>760, 355</value>
-  </data>
-  <data name="TabPageA.Text" xml:space="preserve">
-    <value>Patreon Page</value>
-  </data>
-  <data name="TabPageE.Text" xml:space="preserve">
-    <value>Download Stats</value>
-  </data>
-  <data name="TabControl1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>768, 381</value>
-  </data>
-  <data name="chkDoNotShow.Location" type="System.Drawing.Point, System.Drawing">
-    <value>16, 427</value>
-  </data>
-  <data name="chkDoNotShow.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 17</value>
-  </data>
-  <data name="chkDoNotShow.Text" xml:space="preserve">
-    <value>Do not show on the next startup</value>
-  </data>
 </root>
