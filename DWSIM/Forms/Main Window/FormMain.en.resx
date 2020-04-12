@@ -2040,7 +2040,7 @@
     <value>Сохранить регрессию</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
-    <value>АРМ Геолог (термодинамика)</value>
+    <value>Reservoir.Thermodynamics</value>
   </data>
   <data name="SaveStudyDlg.Title" xml:space="preserve">
     <value>Сохранить исследование</value>

@@ -10,10 +10,10 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("Симулятор термодинамики АРМ Геолог")>
-<Assembly: AssemblyDescription("Симулятор термодинамики АРМ Геолог")>
-<Assembly: AssemblyCompany("ПАО Газпром автоматизация")>
-<Assembly: AssemblyProduct("Симулятор термодинамики АРМ Геолог")>
+<Assembly: AssemblyTitle("Reservoir.Thermodynamics")>
+<Assembly: AssemblyDescription("Симулятор термодинамических и химических процессов")>
+<Assembly: AssemblyCompany("LLC ONIT")>
+<Assembly: AssemblyProduct("Reservoir.Thermodynamics")>
 <Assembly: AssemblyCopyright("© 2008-2020")>
 <Assembly: AssemblyTrademark("")>
 

@@ -118,7 +118,7 @@
     <value>Введите TCP-порт для приема заданий:</value>
   </data>
   <data name="locAbout" xml:space="preserve">
-    <value>Симулятор АРМ Геолога (с калькулятором технологических процессов)</value>
+    <value>Reservoir.Thermodynamic (симулятор химических и технологических процессов)</value>
   </data>
   <data name="locTCPServer_Main_Server_is_running_and_listening_to_incoming_data_on_port" xml:space="preserve">
     <value>Server is running and listening to incoming data on port </value>

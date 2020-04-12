@@ -554,9 +554,10 @@ Namespace PropertyPackages.Auxiliary
 
             Dim fields As String()
             Dim delimiter As String = ";"
+
             Using filestr As IO.Stream = System.Reflection.Assembly.GetAssembly(Me.GetType).GetManifestResourceStream("DWSIM.Thermodynamics.modfac.txt")
-                Using parser As New TextFieldParser(filestr)
-                    parser.SetDelimiters(delimiter)
+                Using parser As New ONITTextFieldReader(filestr,ONITTextFieldReader.dotCommaDelimiter) 'TextFieldParser(filestr)
+                    'parser.SetDelimiters(delimiter)
                     fields = parser.ReadFields()
                     While Not parser.EndOfData
                         fields = parser.ReadFields()
@@ -566,9 +567,9 @@ Namespace PropertyPackages.Auxiliary
             End Using
 
             Using filestr As IO.Stream = System.Reflection.Assembly.GetAssembly(Me.GetType).GetManifestResourceStream("DWSIM.Thermodynamics.modfac_ip.txt")
-                Using parser As New TextFieldParser(filestr)
-                    delimiter = " "
-                    parser.SetDelimiters(delimiter)
+                Using parser As New ONITTextFieldReader(filestr,ONITTextFieldReader.spaceDelimiter)'TextFieldParser(filestr)
+                    'delimiter = " "
+                    'parser.SetDelimiters(delimiter)
                     fields = parser.ReadFields()
                     fields = parser.ReadFields()
                     fields = parser.ReadFields()
@@ -581,36 +582,41 @@ Namespace PropertyPackages.Auxiliary
                     fields = parser.ReadFields()
                     fields = parser.ReadFields()
                     fields = parser.ReadFields()
+
+                    dim  field0Int, field1Int As Integer 
                     While Not parser.EndOfData
                         fields = parser.ReadFields()
-                        If Not Me.InteracParam_aij.ContainsKey(fields(0)) Then
-                            Me.InteracParam_aij.Add(fields(0), New System.Collections.Generic.Dictionary(Of Integer, Double))
-                            Me.InteracParam_aij(fields(0)).Add(fields(1), Double.Parse(fields(2), cult))
-                            Me.InteracParam_bij.Add(fields(0), New System.Collections.Generic.Dictionary(Of Integer, Double))
-                            Me.InteracParam_bij(fields(0)).Add(fields(1), Double.Parse(fields(3), cult))
-                            Me.InteracParam_cij.Add(fields(0), New System.Collections.Generic.Dictionary(Of Integer, Double))
-                            Me.InteracParam_cij(fields(0)).Add(fields(1), Double.Parse(fields(4), cult))
-                            Me.InteracParam_aji.Add(fields(0), New System.Collections.Generic.Dictionary(Of Integer, Double))
-                            Me.InteracParam_aji(fields(0)).Add(fields(1), Double.Parse(fields(5), cult))
-                            Me.InteracParam_bji.Add(fields(0), New System.Collections.Generic.Dictionary(Of Integer, Double))
-                            Me.InteracParam_bji(fields(0)).Add(fields(1), Double.Parse(fields(6), cult))
-                            Me.InteracParam_cji.Add(fields(0), New System.Collections.Generic.Dictionary(Of Integer, Double))
-                            Me.InteracParam_cji(fields(0)).Add(fields(1), Double.Parse(fields(7), cult))
+                        field0Int = [Int32].Parse(fields(0))
+                        field1Int = [Int32].Parse(fields(1))
+
+                        If Not Me.InteracParam_aij.ContainsKey(field0Int) Then
+                            Me.InteracParam_aij.Add(field0Int, New System.Collections.Generic.Dictionary(Of Integer, Double))
+                            Me.InteracParam_aij(field0Int).Add(field1Int, Double.Parse(fields(2), cult))
+                            Me.InteracParam_bij.Add(field0Int, New System.Collections.Generic.Dictionary(Of Integer, Double))
+                            Me.InteracParam_bij(field0Int).Add(field1Int, Double.Parse(fields(3), cult))
+                            Me.InteracParam_cij.Add(field0Int, New System.Collections.Generic.Dictionary(Of Integer, Double))
+                            Me.InteracParam_cij(field0Int).Add(field1Int, Double.Parse(fields(4), cult))
+                            Me.InteracParam_aji.Add(field0Int, New System.Collections.Generic.Dictionary(Of Integer, Double))
+                            Me.InteracParam_aji(field0Int).Add(field1Int, Double.Parse(fields(5), cult))
+                            Me.InteracParam_bji.Add(field0Int, New System.Collections.Generic.Dictionary(Of Integer, Double))
+                            Me.InteracParam_bji(field0Int).Add(field1Int, Double.Parse(fields(6), cult))
+                            Me.InteracParam_cji.Add(field0Int, New System.Collections.Generic.Dictionary(Of Integer, Double))
+                            Me.InteracParam_cji(field0Int).Add(field1Int, Double.Parse(fields(7), cult))
                         Else
-                            If Not Me.InteracParam_aij(fields(0)).ContainsKey(fields(1)) Then
-                                Me.InteracParam_aij(fields(0)).Add(fields(1), Double.Parse(fields(2), cult))
-                                Me.InteracParam_bij(fields(0)).Add(fields(1), Double.Parse(fields(3), cult))
-                                Me.InteracParam_cij(fields(0)).Add(fields(1), Double.Parse(fields(4), cult))
-                                Me.InteracParam_aji(fields(0)).Add(fields(1), Double.Parse(fields(5), cult))
-                                Me.InteracParam_bji(fields(0)).Add(fields(1), Double.Parse(fields(6), cult))
-                                Me.InteracParam_cji(fields(0)).Add(fields(1), Double.Parse(fields(7), cult))
+                            If Not Me.InteracParam_aij(field0Int).ContainsKey(field1Int) Then
+                                Me.InteracParam_aij(field0Int).Add(field1Int, Double.Parse(fields(2), cult))
+                                Me.InteracParam_bij(field0Int).Add(field1Int, Double.Parse(fields(3), cult))
+                                Me.InteracParam_cij(field0Int).Add(field1Int, Double.Parse(fields(4), cult))
+                                Me.InteracParam_aji(field0Int).Add(field1Int, Double.Parse(fields(5), cult))
+                                Me.InteracParam_bji(field0Int).Add(field1Int, Double.Parse(fields(6), cult))
+                                Me.InteracParam_cji(field0Int).Add(field1Int, Double.Parse(fields(7), cult))
                             Else
-                                Me.InteracParam_aij(fields(0))(fields(1)) = Double.Parse(fields(2), cult)
-                                Me.InteracParam_bij(fields(0))(fields(1)) = Double.Parse(fields(3), cult)
-                                Me.InteracParam_cij(fields(0))(fields(1)) = Double.Parse(fields(4), cult)
-                                Me.InteracParam_aji(fields(0))(fields(1)) = Double.Parse(fields(5), cult)
-                                Me.InteracParam_bji(fields(0))(fields(1)) = Double.Parse(fields(6), cult)
-                                Me.InteracParam_cji(fields(0))(fields(1)) = Double.Parse(fields(7), cult)
+                                Me.InteracParam_aij(field0Int)(field1Int) = Double.Parse(fields(2), cult)
+                                Me.InteracParam_bij(field0Int)(field1Int) = Double.Parse(fields(3), cult)
+                                Me.InteracParam_cij(field0Int)(field1Int) = Double.Parse(fields(4), cult)
+                                Me.InteracParam_aji(field0Int)(field1Int) = Double.Parse(fields(5), cult)
+                                Me.InteracParam_bji(field0Int)(field1Int) = Double.Parse(fields(6), cult)
+                                Me.InteracParam_cji(field0Int)(field1Int) = Double.Parse(fields(7), cult)
                             End If
                         End If
                     End While

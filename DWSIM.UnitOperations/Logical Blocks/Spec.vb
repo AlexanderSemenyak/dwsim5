@@ -517,18 +517,21 @@ Namespace SpecialOps
                 'If Not Me.GetSourceVarValue Is Nothing And Not Me.GetTargetVarValue Is Nothing Then
                 If Not Me.GetTargetVarValue Is Nothing Then
                     'With Me
-                        Me.ExpContext.Variables.Add("X", Double.Parse(Me.GetSourceVarValue))
-                        If Not Me.GetSourceVarValue2 Is Nothing
-                              Me.ExpContext.Variables.Add("X2", Double.Parse(Me.GetSourceVarValue2))
-                        end if
-                        Me.ExpContext.Variables.Add("Y", Double.Parse(Me.GetTargetVarValue))
-                        Me.Expr = Me.ExpContext.CompileGeneric(Of Double)(Me.Expression)
+                        'Me.ExpContext.Variables.Add("X", Double.Parse(Me.GetSourceVarValue))
+                        'If Not Me.GetSourceVarValue2 Is Nothing
+                        '      Me.ExpContext.Variables.Add("X2", Double.Parse(Me.GetSourceVarValue2))
+                        'end if
+                        'Me.ExpContext.Variables.Add("Y", Double.Parse(Me.GetTargetVarValue))
+                        'Me.Expr = Me.ExpContext.CompileGeneric(Of Double)(Me.Expression)
 
                     Try
 
                         With Me
-
                             .ExpContext.Variables.Add("X", Double.Parse(.GetSourceVarValue))
+                            If Not Me.GetSourceVarValue2 Is Nothing
+                                Me.ExpContext.Variables.Add("X2", Double.Parse(Me.GetSourceVarValue2))
+                            end if
+
                             .ExpContext.Variables.Add("Y", Double.Parse(.GetTargetVarValue))
                             .Expr = .ExpContext.CompileGeneric(Of Double)(.Expression)
 

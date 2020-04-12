@@ -509,9 +509,18 @@ Public Module General
 
         Dim ci As CultureInfo = CultureInfo.InvariantCulture
 
-        Return Double.Parse(s.Replace(",", "."), NumberStyles.Any - NumberStyles.AllowThousands, ci)
+        Return Double.Parse(s.ReplaceCommaIfNeed, NumberStyles.Any - NumberStyles.AllowThousands, ci)
 
     End Function
+
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
+    <System.Runtime.CompilerServices.Extension()>
+    Public Function ReplaceCommaIfNeed(s As String) As string
+        if (String.IsNullOrEmpty(s)) or (not s.Contains(","C)) then return s
+        Return s.Replace(","C, "."C)
+    End Function
+
+
     <MethodImpl(MethodImplOptions.AggressiveInlining)>
     <System.Runtime.CompilerServices.Extension()>
     Public Function ToDoubleFromCurrent(s As String) As Double

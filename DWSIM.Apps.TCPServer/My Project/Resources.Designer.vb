@@ -61,7 +61,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Симулятор АРМ Геолога (с калькулятором технологических процессов).
+        '''  Looks up a localized string similar to Reservoir.Thermodynamic (симулятор химических и технологических процессов).
         '''</summary>
         Friend ReadOnly Property locAbout() As String
             Get

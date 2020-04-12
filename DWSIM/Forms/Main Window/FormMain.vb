@@ -41,6 +41,7 @@ Imports DWSIM.Drawing.SkiaSharp.GraphicObjects.Charts
 Imports CefSharp.WinForms
 Imports DWSIM.Interfaces
 Imports DWSIM.Thermodynamics.SpecialEOS
+Imports DWSIM.Thermodynamics.SpecialEOS.PCSAFT
 Imports DWSIM.Thermodynamics.SpecialEOS.PRSRKAdv
 Imports XMLSerializer
 
@@ -196,7 +197,7 @@ Public Class FormMain
             End Try
 
             Try
-                If Not DWSIM.App.IsRunningOnMono Then CefSharp.Cef.Shutdown()
+                'If Not DWSIM.App.IsRunningOnMono Then CefSharp.Cef.Shutdown()
             Catch ex As Exception
             End Try
 
@@ -659,6 +660,9 @@ Public Class FormMain
         GERG2008PropertyPackageInitializer.Initialize()
         Dim GERG2008 = New GERG2008PropertyPackage()
         PropertyPackages.Add(GERG2008.ComponentName.ToString, GERG2008)
+
+        Dim PCSAFT2 = New PCSAFT2PropertyPackage()
+        PropertyPackages.Add(PCSAFT2.ComponentName.ToString, PCSAFT2)
 
         Dim otherpps = SharedClasses.Utility.LoadAdditionalPropertyPackages()
 

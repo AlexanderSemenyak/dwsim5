@@ -906,10 +906,10 @@ Namespace PropertyPackages.Auxiliary
             Dim cult As Globalization.CultureInfo = New Globalization.CultureInfo("en-US")
 
             Dim fields As String()
-            Dim delimiter As String = ","
+            'Dim delimiter As String = ","
             Using filestr As IO.Stream = System.Reflection.Assembly.GetAssembly(Me.GetType).GetManifestResourceStream("DWSIM.Thermodynamics.unifac.txt")
-                Using parser As New TextFieldParser(filestr)
-                    parser.SetDelimiters(delimiter)
+                Using parser As New ONITTextFieldReader(filestr,ONITTextFieldReader.commaDelimiter)'TextFieldParser(filestr)
+                    'parser.SetDelimiters(delimiter)
                     fields = parser.ReadFields()
                     fields = parser.ReadFields()
                     While Not parser.EndOfData
@@ -920,30 +920,33 @@ Namespace PropertyPackages.Auxiliary
             End Using
 
             Using filestr As IO.Stream = System.Reflection.Assembly.GetAssembly(Me.GetType).GetManifestResourceStream("DWSIM.Thermodynamics.unifac_ip.txt")
-                Using parser As New TextFieldParser(filestr)
-                    delimiter = vbTab
-                    parser.SetDelimiters(delimiter)
+                Using parser As New ONITTextFieldReader(filestr,ONITTextFieldReader.tabDelimiter)'TextFieldParser(filestr)
+                    'delimiter = vbTab
+                    'parser.SetDelimiters(delimiter)
                     fields = parser.ReadFields()
+                    dim field0Int, field2int As integer
                     While Not parser.EndOfData
                         fields = parser.ReadFields()
-                        If Not Me.InteracParam.ContainsKey(fields(0)) Then
-                            Me.InteracParam.Add(fields(0), New System.Collections.Generic.Dictionary(Of Integer, Double))
-                            Me.InteracParam(fields(0)).Add(fields(2), Double.Parse(fields(4), cult))
+                        field0Int = [Int32].Parse(fields(0))
+                        field2Int = [Int32].Parse(fields(2))
+                        If Not Me.InteracParam.ContainsKey(field0Int) Then
+                            Me.InteracParam.Add(field0Int, New System.Collections.Generic.Dictionary(Of Integer, Double))
+                            Me.InteracParam(field0Int).Add(field2Int, Double.Parse(fields(4), cult))
                         Else
-                            If Not Me.InteracParam(fields(0)).ContainsKey(fields(2)) Then
-                                Me.InteracParam(fields(0)).Add(fields(2), Double.Parse(fields(4), cult))
+                            If Not Me.InteracParam(field0Int).ContainsKey(field2Int) Then
+                                Me.InteracParam(field0Int).Add(field2Int, Double.Parse(fields(4), cult))
                             Else
-                                Me.InteracParam(fields(0))(fields(2)) = Double.Parse(fields(4), cult)
+                                Me.InteracParam(field0Int)(field2Int) = Double.Parse(fields(4), cult)
                             End If
                         End If
-                        If Not Me.InteracParam.ContainsKey(fields(2)) Then
-                            Me.InteracParam.Add(fields(2), New System.Collections.Generic.Dictionary(Of Integer, Double))
-                            Me.InteracParam(fields(2)).Add(fields(0), Double.Parse(fields(5), cult))
+                        If Not Me.InteracParam.ContainsKey(field2Int) Then
+                            Me.InteracParam.Add(field2Int, New System.Collections.Generic.Dictionary(Of Integer, Double))
+                            Me.InteracParam(field2Int).Add(field0Int, Double.Parse(fields(5), cult))
                         Else
-                            If Not Me.InteracParam(fields(2)).ContainsKey(fields(0)) Then
-                                Me.InteracParam(fields(2)).Add(fields(0), Double.Parse(fields(5), cult))
+                            If Not Me.InteracParam(field2Int).ContainsKey(field0Int) Then
+                                Me.InteracParam(field2Int).Add(field0Int, Double.Parse(fields(5), cult))
                             Else
-                                Me.InteracParam(fields(2))(fields(0)) = Double.Parse(fields(5), cult)
+                                Me.InteracParam(field2Int)(field0Int) = Double.Parse(fields(5), cult)
                             End If
                         End If
                     End While

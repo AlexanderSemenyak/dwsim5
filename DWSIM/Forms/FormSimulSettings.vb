@@ -117,6 +117,10 @@ Public Class FormSimulSettings
             colAdd.TrueValue = True
             colAdd.IndeterminateValue = False
 
+
+            'alexander speedup
+            ogc1.SuspendLayout()
+
             For Each comp In Me.FrmChild.Options.SelectedComponents.Values
                 ogc1.Rows.Add(New Object() {comp.Name, True, comp.Name, comp.Tag, comp.CAS_Number, DWSIM.App.GetComponentType(comp), comp.Formula, comp.OriginalDB, comp.IsCOOLPROPSupported})
             Next
@@ -124,10 +128,16 @@ Public Class FormSimulSettings
                 ogc1.Rows.Add(New Object() {comp.Name, False, comp.Name, comp.Tag, comp.CAS_Number, DWSIM.App.GetComponentType(comp), comp.Formula, comp.OriginalDB, comp.IsCOOLPROPSupported})
             Next
 
+            'alexander speedup
+            ogc1.ResumeLayout()
+
             Dim addobj As Boolean = True
 
             'property packages
             Me.DataGridViewPP.Rows.Clear()
+
+            'alexander speedup
+            Me.DataGridViewPP.SuspendLayout()
             For Each pp2 As PropertyPackages.PropertyPackage In FormMain.PropertyPackages.Values.OrderBy(Function(x) x.ComponentName)
                 If Not FrmChild.MobileCompatibilityMode Then
                     addobj = True
@@ -136,6 +146,8 @@ Public Class FormSimulSettings
                 End If
                 If addobj Then Me.DataGridViewPP.Rows.Add(New String() {pp2.ComponentName, pp2.ComponentName, pp2.ComponentDescription})
             Next
+
+            Me.DataGridViewPP.ResumeLayout()
 
             'flash algorithms
             Me.dgvAvailableFlashAlgos.Rows.Clear()
