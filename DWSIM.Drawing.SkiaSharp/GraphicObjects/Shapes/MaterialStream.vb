@@ -139,6 +139,18 @@ Namespace GraphicObjects.Shapes
 
             canvas.DrawPath(gp, myPen)
 
+            If Owner?.GetFlowsheet.DynamicMode Then
+
+                If ObjectType = ObjectType.MaterialStream And (Not InputConnectors(0).IsAttached Or Not OutputConnectors(0).IsAttached) Then
+
+                    'draw dyn spec
+
+                    DrawDynSpec(canvas, Owner.DynamicsSpec)
+
+                End If
+
+            End If
+
         End Sub
 
     End Class

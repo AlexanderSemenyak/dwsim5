@@ -195,6 +195,12 @@
   <data name="CSTR_Name" xml:space="preserve">
     <value>Continuous Stirred Tank Reactor (CSTR)</value>
   </data>
+  <data name="DG_Desc" xml:space="preserve">
+    <value>Digital Gauge Display</value>
+  </data>
+  <data name="DG_Name" xml:space="preserve">
+    <value>Digital Gauge</value>
+  </data>
   <data name="EQUIL_Desc" xml:space="preserve">
     <value>Supports equilibrium constant-defined reactions</value>
   </data>
@@ -255,11 +261,23 @@
   <data name="HEXCH_Name" xml:space="preserve">
     <value>Теплообменник</value>
   </data>
+  <data name="IN_Desc" xml:space="preserve">
+    <value>Displays and updates a variable directly from the flowsheet</value>
+  </data>
+  <data name="IN_Name" xml:space="preserve">
+    <value>Input Box</value>
+  </data>
   <data name="IPUO_Desc" xml:space="preserve">
     <value>Python Script Unit Operation</value>
   </data>
   <data name="IPUO_Name" xml:space="preserve">
     <value>Скрипт Pyton</value>
+  </data>
+  <data name="LG_Desc" xml:space="preserve">
+    <value>Level Gauge</value>
+  </data>
+  <data name="LG_Name" xml:space="preserve">
+    <value>Level Gauge</value>
   </data>
   <data name="MIX_Desc" xml:space="preserve">
     <value>Mixes multiple Material Streams into a single one</value>
@@ -284,6 +302,12 @@
   </data>
   <data name="PFR_Name" xml:space="preserve">
     <value>Реактор с поршневым потоком (PFR)</value>
+  </data>
+  <data name="PID_Desc" xml:space="preserve">
+    <value>PID Controller</value>
+  </data>
+  <data name="PID_Name" xml:space="preserve">
+    <value>PID Controller</value>
   </data>
   <data name="PIPE_Desc" xml:space="preserve">
     <value>Defines a piping segment for pressure drop calculations</value>
@@ -335,6 +359,12 @@
   </data>
   <data name="SSEP_Name" xml:space="preserve">
     <value>Сеператор жидкости</value>
+  </data>
+  <data name="SW_Desc" xml:space="preserve">
+    <value>Changes a variable to one of two possible values</value>
+  </data>
+  <data name="SW_Name" xml:space="preserve">
+    <value>Switch</value>
   </data>
   <data name="TANK_Desc" xml:space="preserve">
     <value>Simple Tank model</value>

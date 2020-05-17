@@ -169,6 +169,8 @@ Namespace UnitOperations
         Inherits UnitOperations.UnitOpBaseClass
         Public Overrides Property ObjectClass As SimulationObjectClass = SimulationObjectClass.PressureChangers
 
+        Public Overrides ReadOnly Property SupportsDynamicMode As Boolean = True
+
         <NonSerialized> <Xml.Serialization.XmlIgnore> Public f As EditingForm_Pump
 
         Public Enum CalculationMode
@@ -433,6 +435,22 @@ Namespace UnitOperations
             If Not Me.Curves.ContainsKey("SYSTEM") Then
                 Me.Curves.Add("SYSTEM", New PumpOps.Curve(Guid.NewGuid().ToString, "SYSTEM", PumpOps.CurveType.SystemHead))
             End If
+
+        End Sub
+
+        Public Overrides Sub RunDynamicModel()
+
+            Select Case CalcMode
+
+                Case CalculationMode.Curves, CalculationMode.Delta_P, CalculationMode.OutletPressure
+
+                    Throw New Exception("This calculation mode is not supported while in Dynamic Mode.")
+
+                Case Else
+
+                    Calculate()
+
+            End Select
 
         End Sub
 

@@ -8,6 +8,8 @@ Namespace GraphicObjects
 
         Inherits GraphicObject
 
+        Private AttentionImage As SKImage
+
         Public Sub UpdateStatus()
             Dim alpha As Integer = 255
 
@@ -17,7 +19,11 @@ Namespace GraphicObjects
                 If Me.Active Then
                     Select Case Status
                         Case Status.Calculated
-                            LineColor = SKColors.SteelBlue
+                            If s.DarkMode Then
+                                LineColor = SKColors.WhiteSmoke
+                            Else
+                                LineColor = SKColors.SteelBlue
+                            End If
                         Case Status.Calculating
                             LineColor = SKColors.YellowGreen
                         Case Status.ErrorCalculating
@@ -44,19 +50,81 @@ Namespace GraphicObjects
         Public Overridable Property LineWidth As Integer = 1
         Public Overridable Property GradientMode As Boolean = True
         Public Overridable Property LineColor As SKColor = SKColors.Black
-        Public Overridable Property LineColorDark As SKColor = SKColors.SteelBlue
+        Public Overridable Property LineColorDark As SKColor = SKColors.WhiteSmoke
         Public Overridable Property Fill As Boolean = False
         Public Overridable Property FillColor As SKColor = SKColors.LightGray
-        Public Overridable Property FillColorDark As SKColor = SKColors.Black
+        Public Overridable Property FillColorDark As SKColor = SKColors.White
         Public Overridable Property GradientColor1 As SKColor = SKColors.LightGray
         Public Overridable Property GradientColor2 As SKColor = SKColors.White
         Public Overridable Property FontSize As Double = 10.0#
         Public Overridable Property OverrideColors As Boolean = False
 
         Public Overrides Sub Draw(ByVal g As Object)
+
             MyBase.Draw(g)
 
+            If Not Owner?.SupportsDynamicMode And Owner?.GetFlowsheet.DynamicMode Then
+
+                DrawNotDynamicsCompatible(g)
+
+            End If
+
         End Sub
+
+        Public Sub DrawNotDynamicsCompatible(ByVal canvas As SKCanvas)
+
+            If AttentionImage Is Nothing Then
+
+                Dim assm = Me.GetType.Assembly
+                Using filestr As IO.Stream = assm.GetManifestResourceStream("DWSIM.Drawing.SkiaSharp.attention.png")
+                    Using bitmap = SKBitmap.Decode(filestr)
+                        AttentionImage = SKImage.FromBitmap(bitmap)
+                    End Using
+                End Using
+
+            End If
+
+            Using p As New SKPaint With {.IsAntialias = s.DrawingAntiAlias, .FilterQuality = SKFilterQuality.High}
+                canvas.DrawImage(AttentionImage, New SKRect(X + Width / 2 - 10, Y - 25, X + Width / 2 + 10, Y - 5), p)
+            End Using
+
+        End Sub
+
+        Public Overridable Sub DrawDynSpec(ByVal g As SKCanvas, ByVal DynSpec As Enums.Dynamics.DynamicsSpecType)
+
+            Dim tpaint As New SKPaint()
+
+            Dim text As String = "P"
+
+            If DynSpec = Enums.Dynamics.DynamicsSpecType.Flow Then text = "F"
+
+            With tpaint
+                .TextSize = FontSize
+                .IsAntialias = GlobalSettings.Settings.DrawingAntiAlias
+                .Color = If(DynSpec = Enums.Dynamics.DynamicsSpecType.Flow, SKColors.Brown, SKColors.Blue)
+                .IsStroke = False
+                .Typeface = DefaultTypeFace
+            End With
+
+            Dim trect As New SKRect(0, 0, 2, 2)
+            tpaint.GetTextPath(text, 0, 0).GetBounds(trect)
+            Dim tsize As New SKSize(trect.Right - trect.Left, trect.Bottom - trect.Top)
+
+            Dim strx As Single = (Me.Width - tpaint.MeasureText(text)) / 2
+
+            Dim bpaint As New SKPaint()
+
+            With bpaint
+                .IsAntialias = GlobalSettings.Settings.DrawingAntiAlias
+                .IsStroke = False
+                .Color = SKColors.LightGray
+            End With
+
+            g.DrawRoundRect(X - 3 + strx, Y - 8 - tsize.Height, tsize.Width + 6, tsize.Height + 6, 2, 2, bpaint)
+            g.DrawText(text, X + strx, Y - 5, tpaint)
+
+        End Sub
+
 
         Public Overridable Sub DrawTag(ByVal g As SKCanvas)
             Dim tpaint As New SKPaint()

@@ -33,6 +33,8 @@ Imports DWSIM.Thermodynamics.SpecialEOS.PRSRKAdv
 
     Public Property DynamicMode As Boolean = False Implements IFlowsheet.DynamicMode
 
+    Public Property DynamicsManager As IDynamicsManager = New DynamicsManager.Manager Implements IFlowsheet.DynamicsManager
+
     Public Property ExtraProperties As New ExpandoObject Implements IFlowsheet.ExtraProperties
 
     Public WithEvents Options As New SharedClasses.DWSIM.Flowsheet.FlowsheetVariables
@@ -182,6 +184,20 @@ Imports DWSIM.Thermodynamics.SpecialEOS.PRSRKAdv
 
                         ElseIf gobj.ObjectType = ObjectType.OT_Adjust Then
                             Dim adjobj As Adjust = CType(SimulationObjects(namesel), Adjust)
+                            If Me.SimulationObjects.ContainsKey(adjobj.ManipulatedObjectData.ID) Then
+                                Me.SimulationObjects(adjobj.ManipulatedObjectData.ID).IsAdjustAttached = False
+                                Me.SimulationObjects(adjobj.ManipulatedObjectData.ID).AttachedAdjustId = ""
+                            End If
+                            If Me.SimulationObjects.ContainsKey(adjobj.ControlledObjectData.ID) Then
+                                Me.SimulationObjects(adjobj.ControlledObjectData.ID).IsAdjustAttached = False
+                                Me.SimulationObjects(adjobj.ControlledObjectData.ID).AttachedAdjustId = ""
+                            End If
+                            If Me.SimulationObjects.ContainsKey(adjobj.ReferencedObjectData.ID) Then
+                                Me.SimulationObjects(adjobj.ReferencedObjectData.ID).IsAdjustAttached = False
+                                Me.SimulationObjects(adjobj.ReferencedObjectData.ID).AttachedAdjustId = ""
+                            End If
+                        ElseIf gobj.ObjectType = ObjectType.Controller_PID Then
+                            Dim adjobj As PIDController = CType(SimulationObjects(namesel), PIDController)
                             If Me.SimulationObjects.ContainsKey(adjobj.ManipulatedObjectData.ID) Then
                                 Me.SimulationObjects(adjobj.ManipulatedObjectData.ID).IsAdjustAttached = False
                                 Me.SimulationObjects(adjobj.ManipulatedObjectData.ID).AttachedAdjustId = ""
@@ -416,11 +432,11 @@ Imports DWSIM.Thermodynamics.SpecialEOS.PRSRKAdv
 
                 Return Me.SimulationObjects(AddObjectToSurface(ObjectType.EnergyStream, x, y, tag))
 
-            Case "Adiabatic Compressor"
+            Case "Compressor"
 
                 Return Me.SimulationObjects(AddObjectToSurface(ObjectType.Compressor, x, y, tag))
 
-            Case "Adiabatic Expander"
+            Case "Expander (Turbine)"
 
                 Return Me.SimulationObjects(AddObjectToSurface(ObjectType.Expander, x, y, tag))
 
@@ -508,6 +524,30 @@ Imports DWSIM.Thermodynamics.SpecialEOS.PRSRKAdv
 
                 Return Me.SimulationObjects(AddObjectToSurface(ObjectType.CapeOpenUO, x, y, tag))
 
+            Case "Digital Gauge"
+
+                Return Me.SimulationObjects(AddObjectToSurface(ObjectType.DigitalGauge, x, y, tag))
+
+            Case "Analog Gauge"
+
+                Return Me.SimulationObjects(AddObjectToSurface(ObjectType.AnalogGauge, x, y, tag))
+
+            Case "Level Gauge"
+
+                Return Me.SimulationObjects(AddObjectToSurface(ObjectType.LevelGauge, x, y, tag))
+
+            Case "PID Controller"
+
+                Return Me.SimulationObjects(AddObjectToSurface(ObjectType.Controller_PID, x, y, tag))
+
+            Case "Input Box"
+
+                Return Me.SimulationObjects(AddObjectToSurface(ObjectType.Input, x, y, tag))
+
+            Case "Switch"
+
+                Return Me.SimulationObjects(AddObjectToSurface(ObjectType.Switch, x, y, tag))
+
             Case Else
 
                 Return Nothing
@@ -537,6 +577,88 @@ Imports DWSIM.Thermodynamics.SpecialEOS.PRSRKAdv
                 DirectCast(uoobj, ISimulationObject).GraphicObject = myNode
                 myNode.CreateConnectors(0, 0)
                 SimulationObjects.Add(myNode.Name, uoobj)
+
+            Case ObjectType.Switch
+
+                Dim myGobj As New SwitchGraphic(mpx, mpy, 50, 40)
+                myGobj.Tag = "SW-" & SimulationObjects.Count.ToString("00#")
+                If tag <> "" Then myGobj.Tag = tag
+                gObj = myGobj
+                gObj.Name = "SW-" & Guid.NewGuid.ToString
+                If id <> "" Then gObj.Name = id
+                GraphicObjects.Add(gObj.Name, myGobj)
+                Dim myObj As UnitOperations.UnitOperations.Switch = New UnitOperations.UnitOperations.Switch(gObj.Name, "")
+                myObj.GraphicObject = myGobj
+                SimulationObjects.Add(myGobj.Name, myObj)
+
+            Case ObjectType.Input
+
+                Dim myGobj As New InputGraphic(mpx, mpy, 50, 25)
+                myGobj.Tag = "IN-" & SimulationObjects.Count.ToString("00#")
+                If tag <> "" Then myGobj.Tag = tag
+                gObj = myGobj
+                gObj.Name = "IN-" & Guid.NewGuid.ToString
+                If id <> "" Then gObj.Name = id
+                GraphicObjects.Add(gObj.Name, myGobj)
+                Dim myObj As Input = New Input(gObj.Name, "")
+                myObj.GraphicObject = myGobj
+                SimulationObjects.Add(myGobj.Name, myObj)
+
+                GraphicObjectControlPanelModeEditors.SetInputDelegate(myGobj, myObj)
+
+            Case ObjectType.Controller_PID
+
+                Dim myGobj As New PIDControllerGraphic(mpx, mpy, 50, 50)
+                myGobj.Tag = "PID-" & SimulationObjects.Count.ToString("00#")
+                If tag <> "" Then myGobj.Tag = tag
+                gObj = myGobj
+                gObj.Name = "PID-" & Guid.NewGuid.ToString
+                If id <> "" Then gObj.Name = id
+                GraphicObjects.Add(gObj.Name, myGobj)
+                Dim myObj As PIDController = New PIDController(gObj.Name, "")
+                myObj.GraphicObject = myGobj
+                SimulationObjects.Add(myGobj.Name, myObj)
+
+                GraphicObjectControlPanelModeEditors.SetPIDDelegate(myGobj, myObj)
+
+            Case ObjectType.LevelGauge
+
+                Dim myGobj As New LevelGaugeGraphic(mpx, mpy, 40, 70)
+                myGobj.Tag = "LG-" & SimulationObjects.Count.ToString("00#")
+                If tag <> "" Then myGobj.Tag = tag
+                gObj = myGobj
+                gObj.Name = "LG-" & Guid.NewGuid.ToString
+                If id <> "" Then gObj.Name = id
+                GraphicObjects.Add(gObj.Name, myGobj)
+                Dim myObj As LevelGauge = New LevelGauge(gObj.Name, "")
+                myObj.GraphicObject = myGobj
+                SimulationObjects.Add(myGobj.Name, myObj)
+
+            Case ObjectType.DigitalGauge
+
+                Dim myGobj As New DigitalGaugeGraphic(mpx, mpy, 40, 20)
+                myGobj.Tag = "DG-" & SimulationObjects.Count.ToString("00#")
+                If tag <> "" Then myGobj.Tag = tag
+                gObj = myGobj
+                gObj.Name = "DG-" & Guid.NewGuid.ToString
+                If id <> "" Then gObj.Name = id
+                GraphicObjects.Add(gObj.Name, myGobj)
+                Dim myObj As DigitalGauge = New DigitalGauge(gObj.Name, "")
+                myObj.GraphicObject = myGobj
+                SimulationObjects.Add(myGobj.Name, myObj)
+
+            Case ObjectType.AnalogGauge
+
+                Dim myGobj As New AnalogGaugeGraphic(mpx, mpy, 50, 50)
+                myGobj.Tag = "AG-" & SimulationObjects.Count.ToString("00#")
+                If tag <> "" Then myGobj.Tag = tag
+                gObj = myGobj
+                gObj.Name = "AG-" & Guid.NewGuid.ToString
+                If id <> "" Then gObj.Name = id
+                GraphicObjects.Add(gObj.Name, myGobj)
+                Dim myObj As AnalogGauge = New AnalogGauge(gObj.Name, "")
+                myObj.GraphicObject = myGobj
+                SimulationObjects.Add(myGobj.Name, myObj)
 
             Case ObjectType.OT_Adjust
 
@@ -1258,6 +1380,10 @@ Imports DWSIM.Thermodynamics.SpecialEOS.PRSRKAdv
                                 gobj.Height = 180
                             End If
                         End If
+                    ElseIf TypeOf obj Is Input Then
+                        GraphicObjectControlPanelModeEditors.SetInputDelegate(gobj, obj)
+                    ElseIf TypeOf obj Is PIDController Then
+                        GraphicObjectControlPanelModeEditors.SetPIDDelegate(gobj, obj)
                     End If
                 End If
                 objlist.Add(obj)
@@ -1298,6 +1424,32 @@ Imports DWSIM.Thermodynamics.SpecialEOS.PRSRKAdv
             End Try
         Next
 
+        If xdoc.Element("DWSIM_Simulation_Data").Element("StoredSolutions") IsNot Nothing Then
+
+            data = xdoc.Element("DWSIM_Simulation_Data").Element("StoredSolutions").Elements.ToList
+
+            StoredSolutions.Clear()
+
+            For Each xel As XElement In data
+                Try
+                    StoredSolutions.Add(xel.@ID, xel.Elements.ToList())
+                Catch ex As Exception
+                End Try
+            Next
+
+        End If
+
+        If xdoc.Element("DWSIM_Simulation_Data").Element("DynamicsManager") IsNot Nothing Then
+
+            data = xdoc.Element("DWSIM_Simulation_Data").Element("DynamicsManager").Elements.ToList
+
+            Try
+                DirectCast(DynamicsManager, ICustomXMLSerialization).LoadData(data)
+            Catch ex As Exception
+                excs.Add(New Exception("Error Loading Dynamics Manager Information", ex))
+            End Try
+
+        End If
 
         If xdoc.Element("DWSIM_Simulation_Data").Element("OptimizationCases") IsNot Nothing Then
 
@@ -1485,6 +1637,18 @@ Imports DWSIM.Thermodynamics.SpecialEOS.PRSRKAdv
             xel.Add(New XElement("Reaction", {DirectCast(pp.Value, ICustomXMLSerialization).SaveData().ToArray()}))
         Next
 
+        xdoc.Element("DWSIM_Simulation_Data").Add(New XElement("StoredSolutions"))
+        xel = xdoc.Element("DWSIM_Simulation_Data").Element("StoredSolutions")
+
+        For Each pp As KeyValuePair(Of String, List(Of XElement)) In StoredSolutions
+            xel.Add(New XElement("Solution", New XAttribute("ID", pp.Key), pp.Value))
+        Next
+
+        xdoc.Element("DWSIM_Simulation_Data").Add(New XElement("DynamicsManager"))
+        xel = xdoc.Element("DWSIM_Simulation_Data").Element("DynamicsManager")
+
+        xel.Add(DirectCast(DynamicsManager, ICustomXMLSerialization).SaveData().ToArray())
+
         Dim flsconfig As New System.Text.StringBuilder()
 
         With flsconfig
@@ -1533,6 +1697,37 @@ Imports DWSIM.Thermodynamics.SpecialEOS.PRSRKAdv
         Return xdoc
 
     End Function
+
+    Public Function GetProcessData() As List(Of XElement) Implements IFlowsheet.GetProcessData
+
+        Dim dlist As New List(Of XElement)
+
+        For Each so As SharedClasses.UnitOperations.BaseClass In SimulationObjects.Values
+            so.SetFlowsheet(Me)
+            dlist.Add(New XElement("SimulationObject", {so.SaveData().ToArray()}))
+        Next
+
+        Return dlist
+
+    End Function
+
+    Public Sub LoadProcessData(data As List(Of XElement)) Implements IFlowsheet.LoadProcessData
+
+        For Each xel In data
+            Dim id As String = xel.<Name>.Value
+            Dim obj = SimulationObjects(id)
+            obj.LoadData(xel.Elements.ToList)
+            If TypeOf obj Is Streams.MaterialStream Then
+                Dim stream = DirectCast(obj, Streams.MaterialStream)
+                For Each p In stream.Phases.Values
+                    For Each c In p.Compounds.Values
+                        c.ConstantProperties = SelectedCompounds(c.Name)
+                    Next
+                Next
+            End If
+        Next
+
+    End Sub
 
     Sub AddGraphicObjects(data As List(Of XElement), excs As Concurrent.ConcurrentBag(Of Exception),
                       Optional ByVal pkey As String = "", Optional ByVal shift As Integer = 0, Optional ByVal reconnectinlets As Boolean = False)
@@ -2094,13 +2289,13 @@ Label_00CC:
         LKPPP.ComponentName = "Lee-Kesler-Plöcker"
         AvailablePropertyPackages.Add(LKPPP.ComponentName.ToString, LKPPP)
 
-        'Dim EUQPP As ExUNIQUACPropertyPackage = New ExUNIQUACPropertyPackage()
-        'EUQPP.ComponentName = "Extended UNIQUAC (Aqueous Electrolytes)"
-        'AvailablePropertyPackages.Add(EUQPP.ComponentName.ToString, EUQPP)
+        Dim EUQPP As ExUNIQUACPropertyPackage = New ExUNIQUACPropertyPackage()
+        EUQPP.ComponentName = "Extended UNIQUAC (Aqueous Electrolytes)"
+        AvailablePropertyPackages.Add(EUQPP.ComponentName.ToString, EUQPP)
 
-        'Dim ENQPP As New ElectrolyteNRTLPropertyPackage()
-        'ENQPP.ComponentName = "Electrolyte NRTL (Aqueous Electrolytes)"
-        'AvailablePropertyPackages.Add(ENQPP.ComponentName.ToString, ENQPP)
+        Dim ENQPP As New ElectrolyteNRTLPropertyPackage()
+        ENQPP.ComponentName = "Electrolyte NRTL (Aqueous Electrolytes)"
+        AvailablePropertyPackages.Add(ENQPP.ComponentName.ToString, ENQPP)
 
         Dim BOPP As BlackOilPropertyPackage = New BlackOilPropertyPackage()
         BOPP.ComponentName = "Black Oil"
@@ -2253,6 +2448,8 @@ Label_00CC:
     Public Property Scripts As New Dictionary(Of String, IScript) Implements IFlowsheet.Scripts
 
     Public Property Charts As Dictionary(Of String, IChart) = New Dictionary(Of String, IChart) Implements IFlowsheet.Charts
+
+    Public Property StoredSolutions As Dictionary(Of String, List(Of XElement)) = New Dictionary(Of String, List(Of XElement)) Implements IFlowsheet.StoredSolutions
 
     Public Sub RunScript(ScriptID As String)
         Dim script = Scripts(ScriptID)

@@ -58,7 +58,13 @@ namespace DWSIM.UI.Desktop.Shared
         {
             if (!SupressMessages)
             {
-                Application.Instance.AsyncInvoke(() => { if (FlowsheetForm != null) FlowsheetForm.Invalidate(); });
+                Application.Instance.AsyncInvoke(() =>
+                {
+                    if (FlowsheetForm != null)
+                    {
+                        FlowsheetForm.Invalidate();                        
+                    }
+                });
             }
         }
         public override void ShowDebugInfo(string text, int level)
@@ -78,7 +84,7 @@ namespace DWSIM.UI.Desktop.Shared
         {
             if (!SupressMessages)
             {
-                if (listeningaction != null) listeningaction(text, IFlowsheet.MessageType.Information);
+                listeningaction?.Invoke(text, IFlowsheet.MessageType.Information);
                 //Console.WriteLine(text);
             }
         }

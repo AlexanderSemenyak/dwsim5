@@ -1098,10 +1098,18 @@ Namespace UnitOperations
 
                     Case 0
                         'PROP_DC_0	Condenser Pressure
-                        value = SystemsOfUnits.Converter.ConvertFromSI(su.pressure, Me.CondenserPressure)
+                        Try
+                            value = SystemsOfUnits.Converter.ConvertFromSI(su.pressure, Me.Stages.First.P)
+                        Catch ex As Exception
+                            value = 0.0
+                        End Try
                     Case 1
                         'PROP_DC_1	Reboiler Pressure
-                        value = SystemsOfUnits.Converter.ConvertFromSI(su.pressure, Me.ReboilerPressure)
+                        Try
+                            value = SystemsOfUnits.Converter.ConvertFromSI(su.pressure, Me.Stages.Last.P)
+                        Catch ex As Exception
+                            value = 0.0
+                        End Try
                     Case 2
                         'PROP_DC_7	Number of Stages
                         value = Me.NumberOfStages
@@ -1139,7 +1147,9 @@ Namespace UnitOperations
             If MyBase.SetPropertyValue(prop, propval, su) Then Return True
 
             If su Is Nothing Then su = New SystemsOfUnits.SI
+
             Dim cv As New SystemsOfUnits.Converter
+
             Dim propidx As Integer = Convert.ToInt32(prop.Split("_")(2))
 
             Select Case propidx
@@ -1152,7 +1162,9 @@ Namespace UnitOperations
                     Me.ReboilerPressure = SystemsOfUnits.Converter.ConvertToSI(su.pressure, propval)
 
             End Select
+
             Return 1
+
         End Function
 
         Public Overrides Function GetIconBitmap() As Object

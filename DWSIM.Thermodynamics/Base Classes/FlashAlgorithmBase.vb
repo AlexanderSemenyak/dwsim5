@@ -304,6 +304,14 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
                     End With
                 ElseIf spec1 = FlashSpec.T And spec2 = FlashSpec.SF Then
                     Throw New NotImplementedException("Flash specification set not supported.")
+                ElseIf spec1 = FlashSpec.V And spec2 = FlashSpec.T Then
+                    Return Flash_VT(mixmolefrac, val1, val2, initialestimate, pp, useestimates, initialKval)
+                ElseIf spec1 = FlashSpec.V And spec2 = FlashSpec.P Then
+                    Return Flash_VP(mixmolefrac, val1, val2, initialestimate, pp, useestimates, initialKval)
+                ElseIf spec1 = FlashSpec.V And spec2 = FlashSpec.H Then
+                    Return Flash_VH(mixmolefrac, val1, val2, 101325, initialestimate, pp, useestimates, initialKval)
+                ElseIf spec1 = FlashSpec.V And spec2 = FlashSpec.S Then
+                    Return Flash_VS(mixmolefrac, val1, val2, 101325, initialestimate, pp, useestimates, initialKval)
                 Else
                     Throw New NotImplementedException("Flash specification set not supported.")
                 End If
@@ -410,7 +418,7 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
         ''' <param name="ReuseKI"></param>
         ''' <param name="PrevKi"></param>
         ''' <returns></returns>
-        Public Function FlashVT(ByVal Vz As Double(), ByVal Vspec As Double, ByVal T As Double, ByVal Pref As Double, ByVal PP As PropertyPackages.PropertyPackage, Optional ByVal ReuseKI As Boolean = False, Optional ByVal PrevKi As Double() = Nothing) As FlashCalculationResult
+        Public Function Flash_VT(ByVal Vz As Double(), ByVal Vspec As Double, ByVal T As Double, ByVal Pref As Double, ByVal PP As PropertyPackages.PropertyPackage, Optional ByVal ReuseKI As Boolean = False, Optional ByVal PrevKi As Double() = Nothing) As FlashCalculationResult
 
             'PV = nZRT
 
@@ -430,17 +438,20 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
                                    ZL1 = PP.AUX_Z(flashresult.GetLiquidPhase1MoleFractions, T, P, Interfaces.Enums.PhaseName.Liquid)
                                    ZL2 = PP.AUX_Z(flashresult.GetLiquidPhase2MoleFractions, T, P, Interfaces.Enums.PhaseName.Liquid)
                                    ZV = PP.AUX_Z(flashresult.GetVaporPhaseMoleFractions, T, P, Interfaces.Enums.PhaseName.Vapor)
+                                   If Double.IsNaN(ZV) Then ZV = 0
+                                   If Double.IsNaN(ZL1) Then ZL1 = 0
+                                   If Double.IsNaN(ZL2) Then ZL2 = 0
                                    VL1 = flashresult.GetLiquidPhase1MoleFraction * ZL1 * 8.314 * T / P
                                    VL2 = flashresult.GetLiquidPhase2MoleFraction * ZL2 * 8.314 * T / P
                                    VV = flashresult.GetVaporPhaseMoleFraction * ZV * 8.314 * T / P
-                                   Return (Vspec - VV - VL1 - VL2) ^ 2
+                                   Return ((Vspec - VV - VL1 - VL2) / Vspec) ^ 2
                                End Function, {var})
 
             Return flashresult
 
         End Function
 
-        Public Function FlashVP(ByVal Vz As Double(), ByVal Vspec As Double, ByVal P As Double, ByVal Tref As Double, ByVal PP As PropertyPackages.PropertyPackage, Optional ByVal ReuseKI As Boolean = False, Optional ByVal PrevKi As Double() = Nothing) As FlashCalculationResult
+        Public Function Flash_VP(ByVal Vz As Double(), ByVal Vspec As Double, ByVal P As Double, ByVal Tref As Double, ByVal PP As PropertyPackages.PropertyPackage, Optional ByVal ReuseKI As Boolean = False, Optional ByVal PrevKi As Double() = Nothing) As FlashCalculationResult
 
             'PV = nZRT
 
@@ -460,17 +471,20 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
                                    ZL1 = PP.AUX_Z(flashresult.GetLiquidPhase1MoleFractions, T, P, Interfaces.Enums.PhaseName.Liquid)
                                    ZL2 = PP.AUX_Z(flashresult.GetLiquidPhase2MoleFractions, T, P, Interfaces.Enums.PhaseName.Liquid)
                                    ZV = PP.AUX_Z(flashresult.GetVaporPhaseMoleFractions, T, P, Interfaces.Enums.PhaseName.Vapor)
+                                   If Double.IsNaN(ZV) Then ZV = 0
+                                   If Double.IsNaN(ZL1) Then ZL1 = 0
+                                   If Double.IsNaN(ZL2) Then ZL2 = 0
                                    VL1 = flashresult.GetLiquidPhase1MoleFraction * ZL1 * 8.314 * T / P
                                    VL2 = flashresult.GetLiquidPhase2MoleFraction * ZL2 * 8.314 * T / P
                                    VV = flashresult.GetVaporPhaseMoleFraction * ZV * 8.314 * T / P
-                                   Return (Vspec - VV - VL1 - VL2) ^ 2
+                                   Return ((Vspec - VV - VL1 - VL2) / Vspec) ^ 2
                                End Function, {var})
 
             Return flashresult
 
         End Function
 
-        Public Function FlashVH(ByVal Vz As Double(), ByVal Vspec As Double, ByVal H As Double, ByVal Pref As Double, ByVal Tref As Double, ByVal PP As PropertyPackages.PropertyPackage, Optional ByVal ReuseKI As Boolean = False, Optional ByVal PrevKi As Double() = Nothing) As FlashCalculationResult
+        Public Function Flash_VH(ByVal Vz As Double(), ByVal Vspec As Double, ByVal H As Double, ByVal Pref As Double, ByVal Tref As Double, ByVal PP As PropertyPackages.PropertyPackage, Optional ByVal ReuseKI As Boolean = False, Optional ByVal PrevKi As Double() = Nothing) As FlashCalculationResult
 
             'PV = nZRT
 
@@ -499,14 +513,14 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
                                    HL1 = flashresult.GetLiquidPhase1MassFraction * PP.DW_CalcEnthalpy(flashresult.GetLiquidPhase1MoleFractions, T, P, State.Liquid)
                                    HL2 = flashresult.GetLiquidPhase2MassFraction * PP.DW_CalcEnthalpy(flashresult.GetLiquidPhase2MoleFractions, T, P, State.Liquid)
                                    HV = flashresult.GetVaporPhaseMassFraction * PP.DW_CalcEnthalpy(flashresult.GetVaporPhaseMoleFractions, T, P, State.Vapor)
-                                   Return (Vspec - VV - VL1 - VL2) ^ 2 + (H - HV - HL1 - HL2) ^ 2
+                                   Return ((Vspec - VV - VL1 - VL2) / Vspec) ^ 2 + ((H - HV - HL1 - HL2) / H) ^ 2
                                End Function, {var1, var2})
 
             Return flashresult
 
         End Function
 
-        Public Function FlashVS(ByVal Vz As Double(), ByVal Vspec As Double, ByVal S As Double, ByVal Pref As Double, ByVal Tref As Double, ByVal PP As PropertyPackages.PropertyPackage, Optional ByVal ReuseKI As Boolean = False, Optional ByVal PrevKi As Double() = Nothing) As FlashCalculationResult
+        Public Function Flash_VS(ByVal Vz As Double(), ByVal Vspec As Double, ByVal S As Double, ByVal Pref As Double, ByVal Tref As Double, ByVal PP As PropertyPackages.PropertyPackage, Optional ByVal ReuseKI As Boolean = False, Optional ByVal PrevKi As Double() = Nothing) As FlashCalculationResult
 
             'PV = nZRT
 
@@ -535,7 +549,7 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
                                    SL1 = flashresult.GetLiquidPhase1MassFraction * PP.DW_CalcEnthalpy(flashresult.GetLiquidPhase1MoleFractions, T, P, State.Liquid)
                                    SL2 = flashresult.GetLiquidPhase2MassFraction * PP.DW_CalcEnthalpy(flashresult.GetLiquidPhase2MoleFractions, T, P, State.Liquid)
                                    SV = flashresult.GetVaporPhaseMassFraction * PP.DW_CalcEnthalpy(flashresult.GetVaporPhaseMoleFractions, T, P, State.Vapor)
-                                   Return (Vspec - VV - VL1 - VL2) ^ 2 + (S - SV - SL1 - SL2) ^ 2
+                                   Return ((Vspec - VV - VL1 - VL2) / Vspec) ^ 2 + ((S - SV - SL1 - SL2) / S) ^ 2
                                End Function, {var1, var2})
 
             Return flashresult

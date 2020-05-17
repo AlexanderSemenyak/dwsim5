@@ -33,6 +33,8 @@ Namespace UnitOperations
         Inherits UnitOperations.UnitOpBaseClass
         Public Overrides Property ObjectClass As SimulationObjectClass = SimulationObjectClass.PressureChangers
 
+        Public Overrides ReadOnly Property SupportsDynamicMode As Boolean = True
+
         <NonSerialized> <Xml.Serialization.XmlIgnore> Public f As EditingForm_OrificePlate
 
         Public Enum CalcMethod
@@ -155,6 +157,12 @@ Namespace UnitOperations
 
         Public Sub New()
             MyBase.New()
+        End Sub
+
+        Public Overrides Sub RunDynamicModel()
+
+            Calculate()
+
         End Sub
 
         Public Overrides Sub Calculate(Optional ByVal args As Object = Nothing)

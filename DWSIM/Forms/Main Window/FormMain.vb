@@ -93,20 +93,20 @@ Public Class FormMain
 
 #Region "    Form Events"
 
-    Public Sub InitializeChromium()
-        'If My.Settings.ShowWebPanel And Not DWSIM.App.IsRunningOnMono Then
-        '    Try
-        '        Dim settings As CefSettings = New CefSettings
-        '        settings.IgnoreCertificateErrors = True
-        '        settings.PersistUserPreferences = True
-        '        settings.PersistSessionCookies = True
-        '        settings.CachePath = Path.Combine(My.Computer.FileSystem.SpecialDirectories.CurrentUserApplicationData, "BrowserDataCache")
-        '        CefSharp.CefSharpSettings.SubprocessExitIfParentProcessClosed = True
-        '        CefSharp.Cef.Initialize(settings)
-        '    Catch ex As Exception
-        '    End Try
-        'End If
-    End Sub
+    'Public Sub InitializeChromium()
+    '    If Not DWSIM.App.IsRunningOnMono Then
+    '        Try
+    '            Dim settings As CefSettings = New CefSettings
+    '            settings.IgnoreCertificateErrors = True
+    '            settings.PersistUserPreferences = True
+    '            settings.PersistSessionCookies = True
+    '            settings.CachePath = Path.Combine(My.Computer.FileSystem.SpecialDirectories.CurrentUserApplicationData, "BrowserDataCache")
+    '            CefSharp.CefSharpSettings.SubprocessExitIfParentProcessClosed = True
+    '            CefSharp.Cef.Initialize(settings)
+    '        Catch ex As Exception
+    '        End Try
+    '    End If
+    'End Sub
 
     Private Sub FormMain_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles Me.DragDrop
         If e.Data.GetDataPresent(DataFormats.FileDrop) Then
@@ -633,17 +633,17 @@ Public Class FormMain
 
         PropertyPackages.Add(LKPPP.ComponentName.ToString, LKPPP)
 
-        'Dim EUQPP As ExUNIQUACPropertyPackage = New ExUNIQUACPropertyPackage()
-        'EUQPP.ComponentName = "Extended UNIQUAC (Aqueous Electrolytes)"
-        'EUQPP.ComponentDescription = DWSIM.App.GetLocalString("DescEUPP")
+        Dim EUQPP As ExUNIQUACPropertyPackage = New ExUNIQUACPropertyPackage()
+        EUQPP.ComponentName = "Extended UNIQUAC (Aqueous Electrolytes)"
+        EUQPP.ComponentDescription = DWSIM.App.GetLocalString("DescEUPP")
 
-        'PropertyPackages.Add(EUQPP.ComponentName.ToString, EUQPP)
+        PropertyPackages.Add(EUQPP.ComponentName.ToString, EUQPP)
 
-        'Dim ENQPP As New ElectrolyteNRTLPropertyPackage()
-        'ENQPP.ComponentName = "Electrolyte NRTL (Aqueous Electrolytes)"
-        'ENQPP.ComponentDescription = DWSIM.App.GetLocalString("DescENPP")
+        Dim ENQPP As New ElectrolyteNRTLPropertyPackage()
+        ENQPP.ComponentName = "Electrolyte NRTL (Aqueous Electrolytes)"
+        ENQPP.ComponentDescription = DWSIM.App.GetLocalString("DescENPP")
 
-        'PropertyPackages.Add(ENQPP.ComponentName.ToString, ENQPP)
+        PropertyPackages.Add(ENQPP.ComponentName.ToString, ENQPP)
 
         Dim BOPP As BlackOilPropertyPackage = New BlackOilPropertyPackage()
         BOPP.ComponentName = "Black Oil"
@@ -1814,6 +1814,10 @@ Public Class FormMain
                                 gobj.Height = 180
                             End If
                         End If
+                    ElseIf TypeOf obj Is Input Then
+                        GraphicObjectControlPanelModeEditors.SetInputDelegate(gobj, obj)
+                    ElseIf TypeOf obj Is PIDController Then
+                        GraphicObjectControlPanelModeEditors.SetPIDDelegate(gobj, obj)
                     End If
                 End If
                 objlist.Add(obj)
@@ -1852,6 +1856,34 @@ Public Class FormMain
             End Try
         Next
 
+        If simulationDataRootElement.Element("StoredSolutions") IsNot Nothing Then
+
+            data = simulationDataRootElement.Element("StoredSolutions").Elements'.ToList
+
+            form.StoredSolutions.Clear()
+
+            For Each xel As XElement In data
+                Try
+                    form.StoredSolutions.Add(xel.@ID, xel.Elements.ToList)
+                Catch ex As Exception
+                End Try
+            Next
+
+        End If
+
+        If simulationDataRootElement.Element("DynamicsManager") IsNot Nothing Then
+
+            data = simulationDataRootElement.Element("DynamicsManager").Elements'.ToList
+
+            Try
+                DirectCast(form.DynamicsManager, ICustomXMLSerialization).LoadData(data)
+            Catch ex As Exception
+                excs.Add(New Exception("Error Loading Dynamics Manager Information", ex))
+            End Try
+
+        End If
+
+        'data = xdoc.Element("DWSIM_Simulation_Data").Element("OptimizationCases").Elements.ToList
         data = simulationDataRootElement.Element("OptimizationCases").Elements'.ToList
 
         For Each xel As XElement In data
@@ -2017,6 +2049,8 @@ Public Class FormMain
 
             form.FormCharts.Flowsheet = form
 
+            form.FormDynamics.Flowsheet = form
+
             ' Set DockPanel properties
             form.dckPanel.ActiveAutoHideContent = Nothing
             form.dckPanel.Parent = form
@@ -2029,6 +2063,7 @@ Public Class FormMain
             form.FormSpreadsheet.Flowsheet = form
             form.FormWatch.DockPanel = Nothing
             form.FormSurface.DockPanel = Nothing
+            form.FormDynamics.DockPanel = Nothing
             form.FormProps.DockPanel = Nothing
             form.FormCharts.DockPanel = Nothing
 
@@ -2055,6 +2090,7 @@ Public Class FormMain
                 form.FormCharts.Show(form.dckPanel)
                 form.FormMatList.Show(form.dckPanel)
                 form.FormSurface.Show(form.dckPanel)
+                form.FormDynamics.Show(form.dckPanel)
                 form.FormProps.Show(form.dckPanel)
                 form.dckPanel.BringToFront()
                 form.dckPanel.UpdateDockWindowZOrder(DockStyle.Fill, True)
@@ -2337,6 +2373,10 @@ Public Class FormMain
                                 gobj.Height = 180
                             End If
                         End If
+                    ElseIf TypeOf obj Is Input Then
+                        GraphicObjectControlPanelModeEditors.SetInputDelegate(gobj, obj)
+                    ElseIf TypeOf obj Is PIDController Then
+                        GraphicObjectControlPanelModeEditors.SetPIDDelegate(gobj, obj)
                     End If
                 End If
                 objlist.Add(obj)
@@ -2375,7 +2415,34 @@ Public Class FormMain
             End Try
         Next
 
-        data = simulatiOnDataRootElement.Element("OptimizationCases").Elements'.ToList
+        If simulatiOnDataRootElement.Element("StoredSolutions") IsNot Nothing Then
+
+            data = simulatiOnDataRootElement.Element("StoredSolutions").Elements.ToList
+
+            form.StoredSolutions.Clear()
+
+            For Each xel As XElement In data
+                Try
+                    form.StoredSolutions.Add(xel.@ID, xel.Elements.ToList)
+                Catch ex As Exception
+                End Try
+            Next
+
+        End If
+
+        If simulatiOnDataRootElement.Element("DynamicsManager") IsNot Nothing Then
+
+            data = simulatiOnDataRootElement.Element("DynamicsManager").Elements.ToList
+
+            Try
+                DirectCast(form.DynamicsManager, ICustomXMLSerialization).LoadData(data)
+            Catch ex As Exception
+                excs.Add(New Exception("Error Loading Dynamics Manager Information", ex))
+            End Try
+
+        End If
+
+        data = simulatiOnDataRootElement.Element("OptimizationCases").Elements.ToList
 
         For Each xel As XElement In data
             Try
@@ -2540,6 +2607,8 @@ Public Class FormMain
 
             form.FormCharts.Flowsheet = form
 
+            form.FormDynamics.Flowsheet = form
+
             ' Set DockPanel properties
             form.dckPanel.ActiveAutoHideContent = Nothing
             form.dckPanel.Parent = form
@@ -2553,6 +2622,7 @@ Public Class FormMain
             form.FormCharts.DockPanel = Nothing
             form.FormWatch.DockPanel = Nothing
             form.FormSurface.DockPanel = Nothing
+            form.FormDynamics.DockPanel = Nothing
 
             If Not My.Computer.Keyboard.ShiftKeyDown Then
                 Dim myfile As String = My.Computer.FileSystem.GetTempFileName()
@@ -2573,6 +2643,7 @@ Public Class FormMain
                 form.FormCharts.Show(form.dckPanel)
                 form.FormMatList.Show(form.dckPanel)
                 form.FormSurface.Show(form.dckPanel)
+                form.FormDynamics.Show(form.dckPanel)
                 form.dckPanel.BringToFront()
                 form.dckPanel.UpdateDockWindowZOrder(DockStyle.Fill, True)
             Catch ex As Exception
@@ -2894,6 +2965,18 @@ Public Class FormMain
             xel.Add(New XElement("Reaction", {DirectCast(pp.Value, Interfaces.ICustomXMLSerialization).SaveData().ToArray()}))
         Next
 
+        xdoc.Element("DWSIM_Simulation_Data").Add(New XElement("StoredSolutions"))
+        xel = xdoc.Element("DWSIM_Simulation_Data").Element("StoredSolutions")
+
+        For Each pp As KeyValuePair(Of String, List(Of XElement)) In form.StoredSolutions
+            xel.Add(New XElement("Solution", New XAttribute("ID", pp.Key), pp.Value))
+        Next
+
+        xdoc.Element("DWSIM_Simulation_Data").Add(New XElement("DynamicsManager"))
+        xel = xdoc.Element("DWSIM_Simulation_Data").Element("DynamicsManager")
+
+        xel.Add(DirectCast(form.DynamicsManager, ICustomXMLSerialization).SaveData().ToArray())
+
         xdoc.Element("DWSIM_Simulation_Data").Add(New XElement("OptimizationCases"))
         xel = xdoc.Element("DWSIM_Simulation_Data").Element("OptimizationCases")
 
@@ -3134,6 +3217,8 @@ Label_00CC:
     End Sub
 
     Sub LoadFile(fpath As String)
+
+        Me.WelcomePanel.Visible = False
 
         Dim floading As New FormLoadingSimulation
 
@@ -3463,6 +3548,8 @@ Label_00CC:
         If myLink.Text <> DWSIM.App.GetLocalString("vazio") Then
             If File.Exists(myLink.Tag.ToString) Then
 
+                Me.WelcomePanel.Visible = False
+
                 Dim floading As New FormLoadingSimulation
 
                 floading.Label1.Text = DWSIM.App.GetLocalString("LoadingFile") & vbCrLf & "(" & myLink.Tag.ToString & ")"
@@ -3471,7 +3558,6 @@ Label_00CC:
                 Application.DoEvents()
 
                 Dim nome = myLink.Tag.ToString
-                'Me.ToolStripStatusLabel1.Text = DWSIM.App.GetLocalString("Abrindosimulao") + " (" + nome + ")"
                 Me.filename = nome
                 Application.DoEvents()
                 Dim objStreamReader As FileStream = Nothing

@@ -179,14 +179,14 @@ Public Class FormSimulWizard
         Dim needselecting As Boolean = True
 
         For Each r As DataGridViewRow In ogc1.Rows
-            If Not r.Cells(1).Value Is Nothing Then
-                If r.Cells(1).Value.ToString.ToLower.Contains(Me.TextBox1.Text.ToLower) Or
-                   r.Cells(2).Value.ToString.ToLower.Contains(Me.TextBox1.Text.ToLower) Or
-                   r.Cells(4).Value.ToString.ToLower.Contains(Me.TextBox1.Text.ToLower) Then
+            If Not r.Cells(2).Value Is Nothing Then
+                If r.Cells(2).Value.ToString.ToLower.Contains(Me.TextBox1.Text.ToLower) Or
+                   r.Cells(3).Value.ToString.ToLower.Contains(Me.TextBox1.Text.ToLower) Or
+                   r.Cells(5).Value.ToString.ToLower.Contains(Me.TextBox1.Text.ToLower) Then
                     r.Visible = True
-                    If r.Cells(1).Value.ToString.ToLower.Equals(Me.TextBox1.Text.ToLower) Or
-                                       r.Cells(2).Value.ToString.ToLower.Equals(Me.TextBox1.Text.ToLower) Or
-                                       r.Cells(4).Value.ToString.ToLower.Equals(Me.TextBox1.Text.ToLower) Then
+                    If r.Cells(2).Value.ToString.ToLower.Equals(Me.TextBox1.Text.ToLower) Or
+                                       r.Cells(3).Value.ToString.ToLower.Equals(Me.TextBox1.Text.ToLower) Or
+                                       r.Cells(5).Value.ToString.ToLower.Equals(Me.TextBox1.Text.ToLower) Then
                         r.Selected = True
                         needselecting = False
                     End If
@@ -301,6 +301,7 @@ Public Class FormSimulWizard
             .Add(New Object() {DWSIM.App.GetLocalString("Velocity"), su.velocity, DWSIM.App.GetLocalString("HXFoulingFactor"), su.foulingfactor})
             .Add(New Object() {DWSIM.App.GetLocalString("FilterSpecificCakeResistance"), su.cakeresistance, DWSIM.App.GetLocalString("FilterMediumResistance"), su.mediumresistance})
             .Add(New String() {DWSIM.App.GetLocalString("IsothermalCompressibility"), su.compressibility, DWSIM.App.GetLocalString("JouleThomsonCoefficient"), su.jouleThomsonCoefficient})
+            .Add(New String() {DWSIM.App.GetLocalString("Conductance"), su.conductance, "", ""})
         End With
 
         If ComboBox2.SelectedIndex <= 2 Then
@@ -612,6 +613,12 @@ Public Class FormSimulWizard
             .Style.Tag = 38
         End With
 
+        With DirectCast(Me.DataGridView1.Rows.Item(19).Cells(1), DataGridViewComboBoxCell)
+            .Items.Clear()
+            .Items.AddRange(su.GetUnitSet(UnitOfMeasure.conductance).ToArray)
+            .Value = su.conductance
+            .Style.Tag = 39
+        End With
     End Sub
 
     Private Sub DataGridView1_CellValueChanged1(ByVal sender As Object, ByVal e As System.Windows.Forms.DataGridViewCellEventArgs) Handles DataGridView1.CellValueChanged
@@ -777,6 +784,10 @@ Public Class FormSimulWizard
                     member = "jouleThomsonCoefficient"
                     oldvalue = su.jouleThomsonCoefficient
                     su.jouleThomsonCoefficient = cell.Value
+                Case 39
+                    member = "conductance"
+                    oldvalue = su.conductance
+                    su.conductance = cell.Value
             End Select
 
         End If

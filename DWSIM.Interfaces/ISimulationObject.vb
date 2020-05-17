@@ -17,18 +17,35 @@
 '    along with DWSIM.  If not, see <http://www.gnu.org/licenses/>.
 
 Imports System.Dynamic
+Imports DWSIM.Interfaces.Enums
 ''' <summary>
 ''' This interface defines the basic properties of Simulation Objects (Unit Operations, Material Streams and Energy Streams)
 ''' </summary>
 <InterfaceType(ComInterfaceType.InterfaceIsIDispatch)> Public Interface ISimulationObject
 
+    Property DynamicsSpec As Enums.Dynamics.DynamicsSpecType
+
+    Property DynamicsOnly As Boolean
+
+    ReadOnly Property SupportsDynamicMode As Boolean
+
     Property ExtraProperties As Dynamic.ExpandoObject
+
+    Property ExtraPropertiesDescriptions As ExpandoObject
+
+    Property ExtraPropertiesUnitTypes As ExpandoObject
 
     Property AttachedUtilities As List(Of IAttachedUtility)
 
+    Sub CreateDynamicProperties()
+
     Sub DisplayEditForm()
 
+    Sub DisplayDynamicsEditForm()
+
     Sub UpdateEditForm()
+
+    Sub UpdateDynamicsEditForm()
 
     Property PreferredFlashAlgorithmTag As String
 
@@ -73,6 +90,8 @@ Imports System.Dynamic
     ''' <remarks>More details at http://dwsim.inforside.com.br/wiki/index.php?title=Object_Property_Codes </remarks>
     Function GetPropertyValue(ByVal prop As String, Optional ByVal su As IUnitsOfMeasure = Nothing) As Object
 
+    Sub AddDynamicProperty(pname As String, pdesc As String, pvalue As Double, punittype As UnitOfMeasure)
+
     ''' <summary>
     ''' Gets the units of a property.
     ''' </summary>
@@ -81,6 +100,7 @@ Imports System.Dynamic
     ''' <returns>Property units.</returns>
     ''' <remarks>More details at http://dwsim.inforside.com.br/wiki/index.php?title=Object_Property_Codes </remarks>
     Function GetPropertyUnit(ByVal prop As String, Optional ByVal su As IUnitsOfMeasure = Nothing) As String
+    Sub RemoveDynamicProperty(pname As String)
 
     ''' <summary>
     ''' Sets the value of a property.
@@ -147,6 +167,8 @@ Imports System.Dynamic
 
     Property Annotation() As String
 
+    Sub RunDynamicModel()
+
     Sub Calculate(Optional ByVal args As Object = Nothing)
 
     Sub DeCalculate(Optional ByVal args As Object = Nothing)
@@ -156,7 +178,7 @@ Imports System.Dynamic
     Sub PerformPostCalcValidation()
 
     Property PropertyPackage As IPropertyPackage
-    Property ExtraPropertiesDescriptions As ExpandoObject
+
     Sub SetFlowsheet(fobj As Object)
 
     Function GetFlowsheet() As IFlowsheet
@@ -166,6 +188,8 @@ Imports System.Dynamic
     Function GetDisplayName() As String
 
     Function GetDisplayDescription() As String
+
+    Sub CloseDynamicsEditForm()
 
     Sub CloseEditForm()
 

@@ -66,7 +66,7 @@ Public Class FlowsheetSurface_SkiaSharp
             DirectCast(FControl, FlowsheetSurfaceGLControl).FlowsheetObject = Flowsheet
         End If
 
-        SplitContainer1.Panel1.Controls.Add(FControl)
+        TableLayoutPanel1.Controls.Add(FControl, 1, 1)
 
         SimObjPanel = New SimulationObjectsPanel() With {.Dock = DockStyle.Fill, .Flowsheet = Flowsheet}
 
@@ -129,6 +129,8 @@ Public Class FlowsheetSurface_SkiaSharp
         Me.SplitToolStripMenuItem.Visible = False
         Me.MergeStreamsToolStripMenuItem.Visible = False
         Me.SplitAndInsertRecycleMenuItem.Visible = False
+
+        Me.SplitAndInsertValveTSMI.Visible = False
 
         Me.AtivadoToolStripMenuItem.Checked = FlowsheetSurface.SelectedObject.Active
 
@@ -233,6 +235,8 @@ Public Class FlowsheetSurface_SkiaSharp
                 End If
 
                 If FlowsheetSurface.SelectedObject.ObjectType = ObjectType.MaterialStream Then
+
+                    Me.SplitAndInsertValveTSMI.Visible = True
 
                     Dim cancopy As Boolean
 
@@ -1561,18 +1565,87 @@ Public Class FlowsheetSurface_SkiaSharp
                 myNode.CreateConnectors(0, 0)
                 Flowsheet.Collections.FlowsheetObjectCollection.Add(myNode.Name, uoobj)
 
+            Case ObjectType.Switch
+
+                Dim myGobj As New SwitchGraphic(mpx, mpy, 50, 40)
+                myGobj.Tag = "SW-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                If tag <> "" Then myGobj.Tag = tag
+                gObj = myGobj
+                gObj.Name = "SW-" & Guid.NewGuid.ToString
+                If id <> "" Then gObj.Name = id
+                Flowsheet.Collections.GraphicObjectCollection.Add(gObj.Name, myGobj)
+                Dim myObj As UnitOperations.UnitOperations.Switch = New UnitOperations.UnitOperations.Switch(gObj.Name, "")
+                myObj.GraphicObject = myGobj
+                Flowsheet.Collections.FlowsheetObjectCollection.Add(myGobj.Name, myObj)
+
+            Case ObjectType.Input
+
+                Dim myGobj As New InputGraphic(mpx, mpy, 50, 25)
+                myGobj.Tag = "IN-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                If tag <> "" Then myGobj.Tag = tag
+                gObj = myGobj
+                gObj.Name = "IN-" & Guid.NewGuid.ToString
+                If id <> "" Then gObj.Name = id
+                Flowsheet.Collections.GraphicObjectCollection.Add(gObj.Name, myGobj)
+                Dim myObj As Input = New Input(gObj.Name, "")
+                myObj.GraphicObject = myGobj
+                Flowsheet.Collections.FlowsheetObjectCollection.Add(myGobj.Name, myObj)
+
+                GraphicObjectControlPanelModeEditors.SetInputDelegate(myGobj, myObj)
+
+            Case ObjectType.Controller_PID
+
+                Dim myGobj As New PIDControllerGraphic(mpx, mpy, 50, 50)
+                myGobj.Tag = "PID-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                If tag <> "" Then myGobj.Tag = tag
+                gObj = myGobj
+                gObj.Name = "PID-" & Guid.NewGuid.ToString
+                If id <> "" Then gObj.Name = id
+                Flowsheet.Collections.GraphicObjectCollection.Add(gObj.Name, myGobj)
+                Dim myObj As PIDController = New PIDController(gObj.Name, "")
+                myObj.GraphicObject = myGobj
+                Flowsheet.Collections.FlowsheetObjectCollection.Add(myGobj.Name, myObj)
+
+                GraphicObjectControlPanelModeEditors.SetPIDDelegate(myGobj, myObj)
+
+            Case ObjectType.LevelGauge
+
+                Dim myGobj As New LevelGaugeGraphic(mpx, mpy, 40, 70)
+                myGobj.Tag = "LG-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                If tag <> "" Then myGobj.Tag = tag
+                gObj = myGobj
+                gObj.Name = "LG-" & Guid.NewGuid.ToString
+                If id <> "" Then gObj.Name = id
+                Flowsheet.Collections.GraphicObjectCollection.Add(gObj.Name, myGobj)
+                Dim myObj As LevelGauge = New LevelGauge(gObj.Name, "")
+                myObj.GraphicObject = myGobj
+                Flowsheet.Collections.FlowsheetObjectCollection.Add(myGobj.Name, myObj)
+
+            Case ObjectType.DigitalGauge
+
+                Dim myGobj As New DigitalGaugeGraphic(mpx, mpy, 40, 20)
+                myGobj.Tag = "DG-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                If tag <> "" Then myGobj.Tag = tag
+                gObj = myGobj
+                gObj.Name = "DG-" & Guid.NewGuid.ToString
+                If id <> "" Then gObj.Name = id
+                Flowsheet.Collections.GraphicObjectCollection.Add(gObj.Name, myGobj)
+                Dim myObj As DigitalGauge = New DigitalGauge(gObj.Name, "")
+                myObj.GraphicObject = myGobj
+                Flowsheet.Collections.FlowsheetObjectCollection.Add(myGobj.Name, myObj)
+
             Case ObjectType.AnalogGauge
 
-                Dim myNode As New AnalogGaugeGraphic(mpx, mpy, 50, 50)
-                myNode.Tag = "AG-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
-                If tag <> "" Then myNode.Tag = tag
-                gObj = myNode
+                Dim myGobj As New AnalogGaugeGraphic(mpx, mpy, 50, 50)
+                myGobj.Tag = "AG-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                If tag <> "" Then myGobj.Tag = tag
+                gObj = myGobj
                 gObj.Name = "AG-" & Guid.NewGuid.ToString
                 If id <> "" Then gObj.Name = id
-                Flowsheet.Collections.GraphicObjectCollection.Add(gObj.Name, myNode)
-                Dim myADJ As AnalogGauge = New AnalogGauge(gObj.Name, "")
-                myADJ.GraphicObject = myNode
-                Flowsheet.Collections.FlowsheetObjectCollection.Add(myNode.Name, myADJ)
+                Flowsheet.Collections.GraphicObjectCollection.Add(gObj.Name, myGobj)
+                Dim myObj As AnalogGauge = New AnalogGauge(gObj.Name, "")
+                myObj.GraphicObject = myGobj
+                Flowsheet.Collections.FlowsheetObjectCollection.Add(myGobj.Name, myObj)
 
             Case ObjectType.OT_Adjust
 
@@ -2325,6 +2398,16 @@ Public Class FlowsheetSurface_SkiaSharp
                 tobj = ObjectType.FlowsheetUO
             Case "AnalogGauge"
                 tobj = ObjectType.AnalogGauge
+            Case "DigitalGauge"
+                tobj = ObjectType.DigitalGauge
+            Case "LevelGauge"
+                tobj = ObjectType.LevelGauge
+            Case "PIDController"
+                tobj = ObjectType.Controller_PID
+            Case "Input"
+                tobj = ObjectType.Input
+            Case "Switch"
+                tobj = ObjectType.Switch
         End Select
 
         AddObjectToSurface(tobj, x, y, chemsep)
@@ -2488,12 +2571,14 @@ Public Class FlowsheetSurface_SkiaSharp
     End Sub
 
     Private Sub ToolStripButton2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton2.Click
+        If tsbControlPanelMode.Checked Then Exit Sub
         FlowsheetSurface.Zoom += 0.05
         Me.TSTBZoom.Text = Format(Flowsheet.FormSurface.FlowsheetSurface.Zoom, "#%")
         SplitContainer1.Panel1.Refresh()
     End Sub
 
     Private Sub ToolStripButton1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton1.Click
+        If tsbControlPanelMode.Checked Then Exit Sub
         FlowsheetSurface.Zoom -= 0.05
         If FlowsheetSurface.Zoom < 0.05 Then FlowsheetSurface.Zoom = 0.05
         Me.TSTBZoom.Text = Format(FlowsheetSurface.Zoom, "#%")
@@ -2513,21 +2598,24 @@ Public Class FlowsheetSurface_SkiaSharp
     End Sub
 
     Private Sub ToolStripButton20_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton20.Click
-        FlowsheetSurface.ZoomAll(SplitContainer1.Panel1.Width - 14, SplitContainer1.Panel1.Height - 14)
+        If tsbControlPanelMode.Checked Then Exit Sub
+        FlowsheetSurface.ZoomAll(FControl.Width, FControl.Height)
         Application.DoEvents()
-        FlowsheetSurface.ZoomAll(SplitContainer1.Panel1.Width - 14, SplitContainer1.Panel1.Height - 14)
+        FlowsheetSurface.ZoomAll(FControl.Width, FControl.Height)
         Application.DoEvents()
         Me.TSTBZoom.Text = Format(FlowsheetSurface.Zoom, "#%")
         SplitContainer1.Panel1.Refresh()
     End Sub
 
     Private Sub ToolStripButton3_Click(sender As System.Object, e As System.EventArgs) Handles ToolStripButton3.Click
+        If tsbControlPanelMode.Checked Then Exit Sub
         FlowsheetSurface.Zoom = 1
         Me.TSTBZoom.Text = Format(FlowsheetSurface.Zoom, "#%")
         SplitContainer1.Panel1.Refresh()
     End Sub
 
     Private Sub TSTBZoom_KeyPress(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles TSTBZoom.KeyDown
+        If tsbControlPanelMode.Checked Then Exit Sub
         If e.KeyCode = Keys.Enter Then
             FlowsheetSurface.Zoom = Convert.ToInt32(Me.TSTBZoom.Text.Replace("%", "")) / 100
             Me.TSTBZoom.Text = Format(FlowsheetSurface.Zoom, "#%")
@@ -2905,6 +2993,122 @@ Public Class FlowsheetSurface_SkiaSharp
 
     End Sub
 
+    Private Sub SplitAndInsertValveTSMI_Click(sender As Object, e As EventArgs) Handles SplitAndInsertValveTSMI.Click
+
+        Try
+
+            My.Application.PushUndoRedoAction = False
+
+            Dim stream = FlowsheetSurface.SelectedObject
+            Dim newstream = CloneObject(stream)
+            newstream.CreateConnectors(1, 1)
+            newstream.Status = stream.Status
+
+            Dim istream = DirectCast(Flowsheet.SimulationObjects(stream.Name), Thermodynamics.Streams.MaterialStream)
+            Dim ostream = DirectCast(Flowsheet.SimulationObjects(newstream.Name), Thermodynamics.Streams.MaterialStream)
+
+            ostream.Phases(0).Properties.pressure = istream.Phases(0).Properties.pressure.GetValueOrDefault * 0.95
+
+            Dim x = stream.X
+            Dim y = stream.Y
+
+            Dim objto As GraphicObject, toidx As Integer
+
+            If stream.OutputConnectors(0).IsAttached Then
+                objto = stream.OutputConnectors(0).AttachedConnector.AttachedTo
+                toidx = stream.OutputConnectors(0).AttachedConnector.AttachedToConnectorIndex
+                Flowsheet.DisconnectObjects(stream, objto)
+                Flowsheet.ConnectObject(newstream, objto, 0, toidx)
+            End If
+
+            Dim id As String, obj As GraphicObject
+
+            id = AddObjectToSurface(ObjectType.Valve, x, y, False)
+            Dim valve = DirectCast(Flowsheet.SimulationObjects(id), Valve)
+            If istream.Phases(2).Properties.molarfraction.GetValueOrDefault >= 0.5 Then
+                valve.CalcMode = Valve.CalculationMode.Kv_Gas
+            Else
+                valve.CalcMode = Valve.CalculationMode.Kv_Liquid
+            End If
+            valve.Kv = 2.0
+            valve.EnableOpeningKvRelationship = True
+            valve.OpeningPct = 50
+            valve.PercentOpeningVersusPercentKvExpression = "OP"
+            valve.DynamicsOnly = True
+
+            obj = Flowsheet.SimulationObjects(id).GraphicObject
+            obj.CreateConnectors(1, 1)
+            obj.Calculated = True
+            obj.Owner.Calculated = True
+
+            Flowsheet.ConnectObjects(stream, obj, 0, 0)
+            Flowsheet.ConnectObjects(obj, newstream, 0, 0)
+
+            valve.CalculateKv()
+
+            If Not stream.FlippedH Then
+                stream.X = x - 50
+                stream.Y = y
+                newstream.X = x + 50
+                newstream.Y = y
+            Else
+                stream.X = x + 50
+                stream.Y = y
+                stream.FlippedH = True
+                newstream.X = x - 50
+                newstream.Y = y
+                obj.FlippedH = True
+            End If
+
+        Catch ex As Exception
+
+        Finally
+            My.Application.PushUndoRedoAction = True
+        End Try
+
+
+    End Sub
+
+    Private Sub btnUp_Click(sender As Object, e As EventArgs) Handles btnUp.Click
+
+        Dim s As Size = SplitContainer1.Panel1.Size
+        Dim z = FlowsheetSurface.Zoom
+
+        FlowsheetSurface.OffsetAll(0, s.Height / z)
+        FControl.Invalidate()
+
+    End Sub
+
+    Private Sub btnDown_Click(sender As Object, e As EventArgs) Handles btnDown.Click
+
+        Dim s As Size = SplitContainer1.Panel1.Size
+        Dim z = FlowsheetSurface.Zoom
+
+        FlowsheetSurface.OffsetAll(0, -s.Height / z)
+        FControl.Invalidate()
+
+    End Sub
+
+    Private Sub btnLeft_Click(sender As Object, e As EventArgs) Handles btnLeft.Click
+
+        Dim s As Size = SplitContainer1.Panel1.Size
+        Dim z = FlowsheetSurface.Zoom
+
+        FlowsheetSurface.OffsetAll(s.Width / z, 0)
+        FControl.Invalidate()
+
+    End Sub
+
+    Private Sub btnRight_Click(sender As Object, e As EventArgs) Handles btnRight.Click
+
+        Dim s As Size = SplitContainer1.Panel1.Size
+        Dim z = FlowsheetSurface.Zoom
+
+        FlowsheetSurface.OffsetAll(-s.Width / z, 0)
+        FControl.Invalidate()
+
+    End Sub
+
     Private Sub tstbSearch_GotFocus(sender As Object, e As EventArgs) Handles tstbSearch.GotFocus
 
         tstbSearch.AutoCompleteCustomSource = New AutoCompleteStringCollection()
@@ -2912,4 +3116,40 @@ Public Class FlowsheetSurface_SkiaSharp
         tstbSearch.AutoCompleteCustomSource.AddRange(Flowsheet.GraphicObjects.Select(Function(x) x.Value.Tag).ToArray)
 
     End Sub
+
+    Private Sub tsbControlPanelMode_CheckedChanged(sender As Object, e As EventArgs) Handles tsbControlPanelMode.CheckedChanged
+
+        If tsbControlPanelMode.Checked Then
+            btnDown.Visible = True
+            btnUp.Visible = True
+            btnLeft.Visible = True
+            btnRight.Visible = True
+            btnUp.Height = 24
+            btnDown.Height = 24
+            btnRight.Height = 24
+            btnLeft.Height = 24
+            FlowsheetSurface.ControlPanelMode = True
+            GlobalSettings.Settings.DarkMode = True
+            Drawing.SkiaSharp.GraphicsSurface.BackgroundColor = SKColors.DimGray
+            Drawing.SkiaSharp.GraphicsSurface.ForegroundColor = SKColors.WhiteSmoke
+            SplitContainer1.Panel2Collapsed = True
+        Else
+            btnDown.Visible = False
+            btnUp.Visible = False
+            btnLeft.Visible = False
+            btnRight.Visible = False
+            btnUp.Height = 1
+            btnDown.Height = 1
+            btnRight.Height = 1
+            btnLeft.Height = 1
+            FlowsheetSurface.ControlPanelMode = False
+            GlobalSettings.Settings.DarkMode = False
+            Drawing.SkiaSharp.GraphicsSurface.BackgroundColor = SKColors.White
+            Drawing.SkiaSharp.GraphicsSurface.ForegroundColor = SKColors.Black
+            SplitContainer1.Panel2Collapsed = False
+        End If
+        FControl.Invalidate()
+
+    End Sub
+
 End Class

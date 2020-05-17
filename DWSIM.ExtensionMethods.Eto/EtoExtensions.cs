@@ -6,6 +6,7 @@ using DWSIM.ExtensionMethods;
 using System.IO;
 using VerticalAlignment = Eto.Forms.VerticalAlignment;
 using DWSIM.ExtensionMethods.Eto;
+using System.Globalization;
 
 namespace DWSIM.UI.Shared
 {
@@ -28,7 +29,7 @@ namespace DWSIM.UI.Shared
         public static bool IsValidDouble(string s)
         {
             double d = 0;
-            return double.TryParse(s, out d);
+            return double.TryParse(s, NumberStyles.Any & ~NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out d);
         }
 
         public static int GetEditorFontSize()
@@ -152,6 +153,24 @@ namespace DWSIM.UI.Shared
             return alert;
         }
 
+        public static Dialog CreateDialogWithButtons(Control content, String title, Action okclicked, int width = 0, int height = 0)
+        {
+            var alert = new Eto.Forms.Dialog();
+            var t1 = new Eto.Forms.TableLayout { Padding = new Padding(5), Spacing = new Size(5, 5) };
+            t1.Rows.Add(new Eto.Forms.TableRow(content));
+            var t2 = new Eto.Forms.TableLayout();
+            var b1 = new Button { Text = "OK" };
+            b1.Click += (s, e) => { okclicked.Invoke(); alert.Close(); };
+            t2.Rows.Add(new Eto.Forms.TableRow(null, b1));
+            t1.Rows.Add(new Eto.Forms.TableRow(t2));
+            alert.Content = t1;
+            if (height != 0) alert.Height = (int)(sf * height);
+            if (width != 0) alert.Width = (int)(sf * width);
+            alert.Title = title;
+            alert.Icon = Eto.Drawing.Icon.FromResource(imgprefix + "DWSIM_ico.ico");
+            return alert;
+        }
+
         public static DynamicLayout GetDefaultContainer()
         {
             var content = new DynamicLayout();
@@ -202,6 +221,10 @@ namespace DWSIM.UI.Shared
             {
                 if (GlobalSettings.Settings.EditorTextBoxFixedSize) drop.Width = (int)(sf * 140);
             }
+            else
+            {
+                drop.Height = (int)(sf * 28);
+            }
 
             foreach (var item in options)
             {
@@ -233,6 +256,10 @@ namespace DWSIM.UI.Shared
             {
                 if (GlobalSettings.Settings.EditorTextBoxFixedSize) drop.Width = (int)(sf * 140);
             }
+            else
+            {
+                drop.Height = (int)(sf * 28);
+            }
 
             foreach (var item in options)
             {
@@ -259,7 +286,7 @@ namespace DWSIM.UI.Shared
             container.CreateAndAddEmptySpace();
             container.AddRow(new TableRow(label));
             container.CreateAndAddEmptySpace();
-            container.AddRow(new TableRow(new Border { BorderThickness = 1}));
+            container.AddRow(new TableRow(new Border { BorderThickness = 1 }));
             container.CreateAndAddEmptySpace();
             return label;
         }
@@ -715,7 +742,7 @@ namespace DWSIM.UI.Shared
 
         }
 
-        public static ListBox CreateAndAddListBoxRow(this  TableLayout container, int height, String[] listitems, Action<ListBox, EventArgs> command)
+        public static ListBox CreateAndAddListBoxRow(this TableLayout container, int height, String[] listitems, Action<ListBox, EventArgs> command)
         {
 
             var lbox = new ListBox { Height = height };
@@ -804,7 +831,7 @@ namespace DWSIM.UI.Shared
             var txt3 = new Label { Text = text3, Width = (int)(sf * 140), VerticalAlignment = VerticalAlignment.Center };
             txt3.Font = new Font(SystemFont.Default, GetEditorFontSize());
 
-            var tr = new TableRow(txt, null, txt2, new Label {Text = " " }, txt3);
+            var tr = new TableRow(txt, null, txt2, new Label { Text = " " }, txt3);
 
             container.AddRow(tr);
             container.CreateAndAddEmptySpace();
@@ -884,6 +911,10 @@ namespace DWSIM.UI.Shared
             var btn = new Button { Text = buttonlabel };
             btn.Font = new Font(SystemFont.Default, DWSIM.UI.Shared.Common.GetEditorFontSize());
             if (GlobalSettings.Settings.EditorTextBoxFixedSize) btn.Width = (int)(sf * 140);
+            if (Eto.Forms.Application.Instance.Platform.IsGtk)
+            {
+                btn.Height = (int)(sf * 28);
+            }
 
             if (imageResID != null) btn.Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imageResID), 22, 22, ImageInterpolation.Default);
 
@@ -907,6 +938,10 @@ namespace DWSIM.UI.Shared
             var btn = new Button { Text = buttonlabel };
             btn.Font = new Font(SystemFont.Default, DWSIM.UI.Shared.Common.GetEditorFontSize());
             if (GlobalSettings.Settings.EditorTextBoxFixedSize) btn.Width = (int)(sf * 140);
+            if (Eto.Forms.Application.Instance.Platform.IsGtk)
+            {
+                btn.Height = (int)(sf * 28);
+            }
 
             if (imageResID != null) btn.Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imageResID), 22, 22, ImageInterpolation.Default);
 
@@ -925,7 +960,7 @@ namespace DWSIM.UI.Shared
         {
 
             var txt = new Label { Text = label, VerticalAlignment = VerticalAlignment.Center };
-            txt.Font = new Font(SystemFont.Default, GetEditorFontSize());
+            txt.Font = new Font(SystemFont.Bold, GetEditorFontSize());
             if (GlobalSettings.Settings.EditorTextBoxFixedSize) control.Width = (int)(sf * 140);
 
             var tr = new TableRow(txt, null, control);
@@ -942,6 +977,10 @@ namespace DWSIM.UI.Shared
             txt.Font = new Font(SystemFont.Bold, GetEditorFontSize());
             var btn = new Button { Text = buttonlabel };
             if (GlobalSettings.Settings.EditorTextBoxFixedSize) btn.Width = (int)(sf * 140);
+            if (Eto.Forms.Application.Instance.Platform.IsGtk)
+            {
+                btn.Height = (int)(sf * 28);
+            }
 
             if (imageResID != null) btn.Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imageResID), 22, 22, ImageInterpolation.Default);
 
@@ -1094,6 +1133,11 @@ namespace DWSIM.UI.Shared
             btn.Font = new Font(SystemFont.Default, GetEditorFontSize());
             if (GlobalSettings.Settings.EditorTextBoxFixedSize) btn.Width = (int)(sf * 140);
 
+            if (Eto.Forms.Application.Instance.Platform.IsGtk)
+            {
+                btn.Height = (int)(sf * 28);
+            }
+
             if (imageResID != null) btn.Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imageResID), (int)(sf * 22), (int)(sf * 22), ImageInterpolation.Default);
 
             if (command != null) btn.Click += (sender, e) => command.Invoke((Button)sender, e);
@@ -1115,6 +1159,11 @@ namespace DWSIM.UI.Shared
             btn.Font = new Font(SystemFont.Default, GetEditorFontSize());
             if (GlobalSettings.Settings.EditorTextBoxFixedSize) btn.Width = (int)(sf * 140);
 
+            if (Eto.Forms.Application.Instance.Platform.IsGtk)
+            {
+                btn.Height = (int)(sf * 28);
+            }
+
             if (imageResID != null) btn.Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imageResID), (int)(sf * 22), (int)(sf * 22), ImageInterpolation.Default);
 
             if (command != null) btn.Click += (sender, e) => command.Invoke((Button)sender, e);
@@ -1124,7 +1173,7 @@ namespace DWSIM.UI.Shared
             container.Rows.Add(tr);
 
             return btn;
-            
+
         }
 
         public static CheckBox CreateAndAddCheckBoxRow(this DynamicLayout container, String text, bool value, Action<CheckBox, EventArgs> command, Action keypress = null)

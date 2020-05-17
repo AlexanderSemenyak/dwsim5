@@ -30,17 +30,51 @@ Namespace UnitOperations
 
         <NonSerialized> <Xml.Serialization.XmlIgnore> Public f As EditingForm_AnalogGauge
 
+        Public Property DecimalDigits As Integer = 2 Implements IIndicator.DecimalDigits
+
+        Public Property IntegralDigits As Integer = 4 Implements IIndicator.IntegralDigits
+
         Public Property MinimumValue As Double Implements IIndicator.MinimumValue
 
         Public Property MaximumValue As Double = 100 Implements IIndicator.MaximumValue
 
-        Public Property SelectedObject As ISimulationObject Implements IIndicator.SelectedObject
+        Public Property CurrentValue As Double Implements IIndicator.CurrentValue
+
+        Public Property SelectedObjectID As String = "" Implements IIndicator.SelectedObjectID
 
         Public Property SelectedProperty As String = "" Implements IIndicator.SelectedProperty
 
         Public Property SelectedPropertyType As UnitOfMeasure = UnitOfMeasure.none Implements IIndicator.SelectedPropertyType
 
         Public Property SelectedPropertyUnits As String = "" Implements IIndicator.SelectedPropertyUnits
+
+        Public Property VeryLowAlarmEnabled As Boolean = False Implements IIndicator.VeryLowAlarmEnabled
+
+        Public Property LowAlarmEnabled As Boolean = False Implements IIndicator.LowAlarmEnabled
+
+        Public Property HighAlarmEnabled As Boolean = False Implements IIndicator.HighAlarmEnabled
+
+        Public Property VeryHighAlarmEnabled As Boolean = False Implements IIndicator.VeryHighAlarmEnabled
+
+        Public Property VeryLowAlarmValue As Double Implements IIndicator.VeryLowAlarmValue
+
+        Public Property LowAlarmValue As Double Implements IIndicator.LowAlarmValue
+
+        Public Property HighAlarmValue As Double Implements IIndicator.HighAlarmValue
+
+        Public Property VeryHighAlarmValue As Double Implements IIndicator.VeryHighAlarmValue
+
+        Public Property VeryLowAlarmActive As Boolean = False Implements IIndicator.VeryLowAlarmActive
+
+        Public Property LowAlarmActive As Boolean = False Implements IIndicator.LowAlarmActive
+
+        Public Property HighAlarmActive As Boolean = False Implements IIndicator.HighAlarmActive
+
+        Public Property VeryHighAlarmActive As Boolean = False Implements IIndicator.VeryHighAlarmActive
+
+        Public Property ShowAlarms As Boolean = False Implements IIndicator.ShowAlarms
+
+        Public Overrides ReadOnly Property SupportsDynamicMode As Boolean = True
 
         Public Sub New(ByVal name As String, ByVal description As String)
 
@@ -65,6 +99,25 @@ Namespace UnitOperations
         End Sub
 
         Public Overrides Sub Calculate(Optional ByVal args As Object = Nothing)
+
+            Try
+
+                Dim SelectedObject = GetFlowsheet.SimulationObjects.Values.Where(Function(x) x.Name = SelectedObjectID).FirstOrDefault
+
+                Dim currentvalue = SystemsOfUnits.Converter.ConvertFromSI(SelectedPropertyUnits, SelectedObject.GetPropertyValue(SelectedProperty))
+
+                VeryLowAlarmActive = currentvalue <= VeryLowAlarmValue And VeryLowAlarmEnabled
+
+                LowAlarmActive = currentvalue <= LowAlarmValue And LowAlarmEnabled
+
+                HighAlarmActive = currentvalue >= HighAlarmValue And HighAlarmEnabled
+
+                VeryHighAlarmActive = currentvalue >= VeryHighAlarmValue And VeryHighAlarmEnabled
+
+            Catch ex As Exception
+
+            End Try
+
 
         End Sub
 

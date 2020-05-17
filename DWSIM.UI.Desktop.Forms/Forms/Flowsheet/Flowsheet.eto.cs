@@ -18,6 +18,10 @@ using DWSIM.Drawing.SkiaSharp.GraphicObjects.Charts;
 using System.Reflection;
 using s = DWSIM.GlobalSettings.Settings;
 using DWSIM.UI.Desktop.Editors.Charts;
+using DWSIM.UI.Desktop.Editors.Dynamics;
+using SkiaSharp;
+using DWSIM.UI.Controls;
+using DWSIM.ExtensionMethods;
 
 namespace DWSIM.UI.Forms
 {
@@ -42,6 +46,10 @@ namespace DWSIM.UI.Forms
 
         private DWSIM.UI.Desktop.Editors.ResultsViewer ResultsControl;
 
+        private DynamicsManagerControl DynManagerControl;
+
+        private DynamicsIntegratorControl DynIntegratorControl;
+
         public ChartManager ChartsControl;
 
         private DWSIM.UI.Desktop.Editors.MaterialStreamListViewer MaterialStreamListControl;
@@ -63,7 +71,13 @@ namespace DWSIM.UI.Forms
 
         private double sf = s.UIScalingFactor;
 
-        private CheckToolItem btnmSnapToGrid, btnmDrawGrid, btnmMultiSelect;
+        private CheckBox btnmSnapToGrid, btnmDrawGrid, btnmMultiSelect;
+
+        private CheckToolItem chkmDynamics;
+
+        private CheckMenuItem chkDynamics;
+
+        private DropDown ddstates;
 
         void InitializeComponent()
         {
@@ -96,7 +110,7 @@ namespace DWSIM.UI.Forms
 
             Icon = Eto.Drawing.Icon.FromResource(imgprefix + "DWSIM_ico.ico");
 
-            if (GlobalSettings.Settings.FlowsheetRenderer == GlobalSettings.Settings.SkiaCanvasRenderer.CPU)
+            if (s.FlowsheetRenderer == s.SkiaCanvasRenderer.CPU)
             {
                 FlowsheetControl = new DWSIM.UI.Controls.FlowsheetSurfaceControl() { FlowsheetObject = FlowsheetObject, FlowsheetSurface = (DWSIM.Drawing.SkiaSharp.GraphicsSurface)FlowsheetObject.GetSurface() };
             }
@@ -128,27 +142,12 @@ namespace DWSIM.UI.Forms
             var btnmBasis = new ButtonToolItem { ToolTip = "Basis", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-math.png")) };
             var btnmOptions = new ButtonToolItem { ToolTip = "Settings", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-sorting_options.png")) };
 
-            var btnmZoomIn = new ButtonToolItem { ToolTip = "Zoom In", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-zoom_in_filled.png")) };
-            var btnmZoomOut = new ButtonToolItem { ToolTip = "Zoom Out", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-zoom_out_filled.png")) };
-            var btnmZoomFit = new ButtonToolItem { ToolTip = "Zoom to Fit", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-zoom_to_extents.png")) };
-            var btnmZoomDefault = new ButtonToolItem { ToolTip = "Default Zoom", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-zoom_to_actual_size_filled.png")) };
+            chkmDynamics = new CheckToolItem { Checked = FlowsheetObject.DynamicMode, ToolTip = "Enable/Disable Dynamic Mode", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-exercise.png")) };
+            var btnmDynManager = new ButtonToolItem { ToolTip = "Dynamics Manager", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-module.png")) };
+            var btnmDynIntegrator = new ButtonToolItem { ToolTip = "Dynamics Integrator Controls", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-ecg.png")) };
 
-            var chkmInspector = new CheckToolItem { Checked = GlobalSettings.Settings.InspectorEnabled, ToolTip = "Enable/Disable Inspector", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-spy_male.png")) };
+            var chkmInspector = new CheckToolItem { Checked = s.InspectorEnabled, ToolTip = "Enable/Disable Inspector", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-spy_male.png")) };
             var btnmInspector = new ButtonToolItem { ToolTip = "View Inspector Window", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-spy_filled.png")) };
-
-            btnmDrawGrid = new CheckToolItem { ToolTip = "Draw Grid", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-grid.png")) };
-            btnmSnapToGrid = new CheckToolItem { ToolTip = "Snap to Grid", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-grid_filled.png")) };
-
-            btnmMultiSelect = new CheckToolItem { ToolTip = "MultiSelect Mode", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "shape_group.png")) };
-
-            var btnmAlignLefts = new ButtonToolItem { ToolTip = "Align Lefts", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "shape_align_left.png")) };
-            var btnmAlignCenters = new ButtonToolItem { ToolTip = "Align Centers", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "shape_align_center.png")) };
-            var btnmAlignRights = new ButtonToolItem { ToolTip = "Align Rights", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "shape_align_right.png")) };
-            var btnmAlignTops = new ButtonToolItem { ToolTip = "Align Tops", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "shape_align_top.png")) };
-            var btnmAlignMiddles = new ButtonToolItem { ToolTip = "Align Middles", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "shape_align_middle.png")) };
-            var btnmAlignBottoms = new ButtonToolItem { ToolTip = "Align Bottoms", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "shape_align_bottom.png")) };
-            var btnmEqHoriz = new ButtonToolItem { ToolTip = "Equalize Horizontally", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "shape_align_middle1.png")) };
-            var btnmEqVert = new ButtonToolItem { ToolTip = "Equalize Vertically", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "shape_align_center1.png")) };
 
             if (Application.Instance.Platform.IsMac)
             {
@@ -158,34 +157,23 @@ namespace DWSIM.UI.Forms
                 btnmComps.Text = "Compounds";
                 btnmBasis.Text = "Basis";
                 btnmOptions.Text = "Settings";
-                btnmZoomIn.Text = "Zoom In";
-                btnmZoomOut.Text = "Zoom Out";
-                btnmZoomFit.Text = "Zoom to Fit";
-                btnmZoomDefault.Text = "Default Zoom";
                 chkmInspector.Text = "Enable/Disable Inspector";
                 btnmInspector.Text = "View Inspector";
-                btnmDrawGrid.Text = "Draw Grid";
-                btnmSnapToGrid.Text = "Snap to Grid";
-                btnmMultiSelect.Text = "MultiSelect";
-                btnmAlignLefts.Text = "Align Lefts";
-                btnmAlignCenters.Text = "Align Centers";
-                btnmAlignRights.Text = "Align Rights";
-                btnmAlignTops.Text = "Align Tops";
-                btnmAlignMiddles.Text = "Align Middles";
-                btnmAlignBottoms.Text = "Align Bottoms";
-                btnmEqHoriz.Text = "Eq. Horizontally";
-                btnmEqVert.Text = "Eq. Vertically";
+                chkmDynamics.Text = "Dynamic Mode";
+                btnmDynIntegrator.Text = "Integrator";
+                btnmDynManager.Text = "Manager";
             }
 
             ToolBar = new ToolBar
             {
-                Items = { btnmSave, new SeparatorToolItem { Type = SeparatorToolItemType.Space } , btnmComps, btnmBasis, btnmOptions,
-                new SeparatorToolItem{ Type = SeparatorToolItemType.Space }, btnmSolve, btnmSimultSolve, new SeparatorToolItem{ Type = SeparatorToolItemType.Space },
-                btnmZoomOut, btnmZoomIn, btnmZoomFit, btnmZoomDefault,
+                Items = { btnmSave, new SeparatorToolItem { Type = SeparatorToolItemType.Space },
+                btnmComps, btnmBasis, btnmOptions,
+                new SeparatorToolItem{ Type = SeparatorToolItemType.Space },
+                btnmSolve, btnmSimultSolve,
+                new SeparatorToolItem{ Type = SeparatorToolItemType.Space },
+                chkmDynamics, btnmDynManager, btnmDynIntegrator,
                 new SeparatorToolItem{ Type = SeparatorToolItemType.Space},
-                btnmDrawGrid, btnmSnapToGrid,new SeparatorToolItem{ Type = SeparatorToolItemType.Space },
-                btnmMultiSelect, btnmAlignLefts, btnmAlignCenters, btnmAlignRights, btnmAlignTops, btnmAlignMiddles, btnmAlignBottoms,btnmEqHoriz, btnmEqVert,
-                new SeparatorToolItem{ Type = SeparatorToolItemType.Space }, chkmInspector, btnmInspector
+                chkmInspector, btnmInspector
                 }
             };
 
@@ -200,6 +188,8 @@ namespace DWSIM.UI.Forms
             var btnGlobalOptions = new ButtonMenuItem { Text = "Global Settings", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-sorting_options.png")), Shortcut = Keys.G | Application.Instance.AlternateModifier };
             var btnSolve = new ButtonMenuItem { Text = "Solve Flowsheet", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-play.png")), Shortcut = Keys.F5 };
             var btnSolveC = new ButtonMenuItem { Text = "Solve Flowsheet (Custom Calculation Order)", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-play.png")), Shortcut = Keys.F5 | Application.Instance.CommonModifier | Application.Instance.AlternateModifier };
+
+            var dd =
 
             // actions
 
@@ -248,7 +238,7 @@ namespace DWSIM.UI.Forms
 
             ActGlobalOptions = () =>
             {
-                new DWSIM.UI.Forms.Forms.GeneralSettings().GetForm().Show();
+                new Forms.GeneralSettings().GetForm().Show();
             };
 
             ActSave = () =>
@@ -319,32 +309,23 @@ namespace DWSIM.UI.Forms
             ActDrawGrid = () =>
             {
                 FlowsheetObject.Options.FlowsheetDisplayGrid = !FlowsheetObject.Options.FlowsheetDisplayGrid;
-                FlowsheetControl.FlowsheetSurface.ShowGrid = btnmDrawGrid.Checked;
+                FlowsheetControl.FlowsheetSurface.ShowGrid = btnmDrawGrid.Checked.GetValueOrDefault();
                 FlowsheetControl.Invalidate();
             };
 
             ActSnapToGrid = () =>
             {
                 FlowsheetObject.Options.FlowsheetSnapToGrid = !FlowsheetObject.Options.FlowsheetSnapToGrid;
-                FlowsheetControl.FlowsheetSurface.SnapToGrid = btnmSnapToGrid.Checked;
+                FlowsheetControl.FlowsheetSurface.SnapToGrid = btnmSnapToGrid.Checked.GetValueOrDefault();
                 FlowsheetControl.Invalidate();
             };
 
             ActMultiSelect = () =>
             {
                 FlowsheetObject.Options.FlowsheetMultiSelectMode = !FlowsheetObject.Options.FlowsheetMultiSelectMode;
-                FlowsheetControl.FlowsheetSurface.MultiSelectMode = btnmMultiSelect.Checked;
+                FlowsheetControl.FlowsheetSurface.MultiSelectMode = btnmMultiSelect.Checked.GetValueOrDefault();
                 FlowsheetControl.Invalidate();
             };
-
-            ActAlignLefts = () => { AlignObjects(btnmAlignLefts); };
-            ActAlignCenters = () => { AlignObjects(btnmAlignCenters); };
-            ActAlignRights = () => { AlignObjects(btnmAlignRights); };
-            ActAlignTops = () => { AlignObjects(btnmAlignTops); };
-            ActAlignMiddles = () => { AlignObjects(btnmAlignMiddles); };
-            ActAlignBottoms = () => { AlignObjects(btnmAlignBottoms); };
-            ActVertAlign = () => { AlignObjects(btnmEqVert); };
-            ActHorizAlign = () => { AlignObjects(btnmEqHoriz); };
 
             FlowsheetObject.ActBasis = ActBasis;
             FlowsheetObject.ActComps = ActComps;
@@ -370,7 +351,7 @@ namespace DWSIM.UI.Forms
 
             // button click events
 
-            chkmInspector.CheckedChanged += (sender, e) => GlobalSettings.Settings.InspectorEnabled = chkmInspector.Checked;
+            chkmInspector.CheckedChanged += (sender, e) => s.InspectorEnabled = chkmInspector.Checked;
 
             btnmInspector.Click += (sender, e) => ActInspector.Invoke();
 
@@ -396,31 +377,6 @@ namespace DWSIM.UI.Forms
 
             btnSaveAs.Click += (sender, e) => ActSaveAs.Invoke();
 
-            btnmZoomOut.Click += (sender, e) => ActZoomOut.Invoke();
-            btnmZoomIn.Click += (sender, e) => ActZoomIn.Invoke();
-            btnmZoomFit.Click += (sender, e) => ActZoomFit.Invoke();
-            btnmZoomDefault.Click += (sender, e) => ActZoomDefault.Invoke();
-
-            btnmDrawGrid.CheckedChanged += (sender, e) => ActDrawGrid.Invoke();
-            btnmSnapToGrid.CheckedChanged += (sender, e) => ActSnapToGrid.Invoke();
-            btnmMultiSelect.CheckedChanged += (sender, e) => ActMultiSelect.Invoke();
-
-            if (Application.Instance.Platform.IsGtk)
-            {
-                btnmDrawGrid.Click += (sender, e) => ActDrawGrid.Invoke();
-                btnmSnapToGrid.Click += (sender, e) => ActSnapToGrid.Invoke();
-                btnmMultiSelect.Click += (sender, e) => ActMultiSelect.Invoke();
-            }
-
-            btnmAlignBottoms.Click += (sender, e) => ActAlignBottoms.Invoke();
-            btnmAlignCenters.Click += (sender, e) => ActAlignCenters.Invoke();
-            btnmAlignTops.Click += (sender, e) => ActAlignTops.Invoke();
-            btnmAlignLefts.Click += (sender, e) => ActAlignLefts.Invoke();
-            btnmAlignMiddles.Click += (sender, e) => ActAlignMiddles.Invoke();
-            btnmAlignRights.Click += (sender, e) => ActAlignRights.Invoke();
-            btnmEqHoriz.Click += (sender, e) => ActHorizAlign.Invoke();
-            btnmEqVert.Click += (sender, e) => ActVertAlign.Invoke();
-
             var btnUtilities_TrueCriticalPoint = new ButtonMenuItem { Text = "True Critical Point", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-swiss_army_knife.png")) };
             var btnUtilities_BinaryEnvelope = new ButtonMenuItem { Text = "Binary Envelope", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-swiss_army_knife.png")) };
             var btnUtilities_PhaseEnvelope = new ButtonMenuItem { Text = "Phase Envelope", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-swiss_army_knife.png")) };
@@ -428,21 +384,21 @@ namespace DWSIM.UI.Forms
             btnUtilities_TrueCriticalPoint.Click += (sender, e) =>
             {
                 var tcp = new Desktop.Editors.Utilities.TrueCriticalPointView(FlowsheetObject);
-                var form = DWSIM.UI.Shared.Common.GetDefaultEditorForm("True Critical Point", (int)(sf * 500), (int)(sf * 250), tcp);
+                var form = DWSIM.UI.Shared.Common.GetDefaultEditorForm("True Critical Point", (int)(sf * 500), (int)(sf * 500), tcp);
                 form.Show();
             };
 
             btnUtilities_BinaryEnvelope.Click += (sender, e) =>
             {
                 var bpe = new Desktop.Editors.Utilities.BinaryEnvelopeView(FlowsheetObject);
-                var form = DWSIM.UI.Shared.Common.GetDefaultEditorForm("Binary Phase Envelope", (int)(sf * 1024), (int)(sf * 600), bpe, false);
+                var form = DWSIM.UI.Shared.Common.GetDefaultEditorForm("Binary Phase Envelope", (int)(sf * 1024), (int)(sf * 768), bpe, false);
                 form.Show();
             };
 
             btnUtilities_PhaseEnvelope.Click += (sender, e) =>
             {
                 var pe = new Desktop.Editors.Utilities.PhaseEnvelopeView(FlowsheetObject);
-                var form = DWSIM.UI.Shared.Common.GetDefaultEditorForm("Phase Envelope", (int)(sf * 1024), (int)(sf * 500), pe, false);
+                var form = DWSIM.UI.Shared.Common.GetDefaultEditorForm("Phase Envelope", (int)(sf * 1024), (int)(sf * 768), pe, false);
                 form.Show();
             };
 
@@ -470,19 +426,20 @@ namespace DWSIM.UI.Forms
             btnSensAnalysis.Click += (sender, e) =>
             {
                 var saeditor = new Desktop.Editors.SensAnalysisView(FlowsheetObject);
-                var form = DWSIM.UI.Shared.Common.GetDefaultEditorForm("Sensitivity Analysis", (int)(sf * 750), (int)(sf * 520), saeditor);
+                var form = DWSIM.UI.Shared.Common.GetDefaultEditorForm("Sensitivity Analysis", (int)(sf * 860), (int)(sf * 600), saeditor);
                 form.Show();
             };
 
             btnOptimization.Click += (sender, e) =>
             {
                 var foeditor = new Desktop.Editors.OptimizerView(FlowsheetObject);
-                var form = DWSIM.UI.Shared.Common.GetDefaultEditorForm("Flowsheet Optimizer", (int)(sf * 800), (int)(sf * 600), foeditor);
+                var form = DWSIM.UI.Shared.Common.GetDefaultEditorForm("Flowsheet Optimizer", (int)(sf * 800), (int)(sf * 650), foeditor);
                 form.Show();
             };
 
             Drawing.SkiaSharp.GraphicsSurface.BackgroundColor = SkiaSharp.SKColor.Parse(SystemColors.ControlBackground.ToHex());
             Drawing.SkiaSharp.GraphicsSurface.ForegroundColor = SkiaSharp.SKColor.Parse(SystemColors.ControlText.ToHex());
+
             FlowsheetControl.KeyDown += (sender, e) =>
             {
                 if (e.Key == Keys.Delete) DeleteObject();
@@ -568,6 +525,19 @@ namespace DWSIM.UI.Forms
 
             FlowsheetObject.ActSimultAdjustSolver = ActSimultAdjustSolver;
 
+            chkDynamics = new CheckMenuItem { Text = "Enable/Disable Dynamic Mode" };
+            chkDynamics.Checked = FlowsheetObject.DynamicMode;
+            var btnDynManager = new ButtonMenuItem { Text = "Dynamics Manager", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-module.png")) };
+            var btnDynIntegrator = new ButtonMenuItem { Text = "Integrator Controls", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-ecg.png")) };
+            var btnDynPIDTuning = new ButtonMenuItem { Text = "PID Controller Tuning", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-adjust.png")) };
+
+            btnDynPIDTuning.Click += (s, e) =>
+            {
+                var editor = new PIDTuningTool(FlowsheetObject, DynIntegratorControl);
+                var form = UI.Shared.Common.GetDefaultEditorForm("PID Tuning Tool", 800, 600, editor, false);
+                form.Show();
+            };
+
             // menu items
 
             Menu = new MenuBar();
@@ -633,16 +603,18 @@ namespace DWSIM.UI.Forms
                         Menu.Items.Insert(3, new ButtonMenuItem { Text = "Setup", Items = { btnComps, btnBasis, btnOptions, btnGlobalOptions } });
                         Menu.Items.Insert(4, new ButtonMenuItem { Text = "Objects", Items = { btnObjects, btnInsertText, btnInsertTable, btnInsertMasterTable, btnInsertSpreadsheetTable, btnInsertChartObject } });
                         Menu.Items.Insert(5, new ButtonMenuItem { Text = "Solver", Items = { btnSolve, btnSolveC, chkSimSolver } });
-                        Menu.Items.Insert(6, new ButtonMenuItem { Text = "Tools", Items = { btnSensAnalysis, btnOptimization, btnInspector } });
-                        Menu.Items.Insert(7, new ButtonMenuItem { Text = "Utilities", Items = { btnUtilities_TrueCriticalPoint, btnUtilities_PhaseEnvelope, btnUtilities_BinaryEnvelope } });
-                        Menu.Items.Insert(7, pluginsmenu);
-                        Menu.Items.Insert(7, new ButtonMenuItem { Text = "View", Items = { btnShowHideObjectPalette, btnShowHideObjectEditorPanel } });
+                        Menu.Items.Insert(6, new ButtonMenuItem { Text = "Dynamics", Items = { chkDynamics, btnDynManager, btnDynIntegrator, btnDynPIDTuning } });
+                        Menu.Items.Insert(7, new ButtonMenuItem { Text = "Tools", Items = { btnSensAnalysis, btnOptimization, btnInspector } });
+                        Menu.Items.Insert(8, new ButtonMenuItem { Text = "Utilities", Items = { btnUtilities_TrueCriticalPoint, btnUtilities_PhaseEnvelope, btnUtilities_BinaryEnvelope } });
+                        Menu.Items.Insert(9, pluginsmenu);
+                        Menu.Items.Insert(10, new ButtonMenuItem { Text = "View", Items = { btnShowHideObjectPalette, btnShowHideObjectEditorPanel } });
                     }
                     else
                     {
                         Menu.Items.Add(new ButtonMenuItem { Text = "Setup", Items = { btnComps, btnBasis, btnOptions, btnGlobalOptions } });
                         Menu.Items.Add(new ButtonMenuItem { Text = "Objects", Items = { btnObjects, btnInsertText, btnInsertTable, btnInsertMasterTable, btnInsertSpreadsheetTable, btnInsertChartObject } });
                         Menu.Items.Add(new ButtonMenuItem { Text = "Solver", Items = { btnSolve, btnSolveC, chkSimSolver } });
+                        Menu.Items.Add(new ButtonMenuItem { Text = "Dynamics", Items = { chkDynamics, btnDynManager, btnDynIntegrator, btnDynPIDTuning } });
                         Menu.Items.Add(new ButtonMenuItem { Text = "Tools", Items = { btnSensAnalysis, btnOptimization, btnInspector } });
                         Menu.Items.Add(new ButtonMenuItem { Text = "Utilities", Items = { btnUtilities_TrueCriticalPoint, btnUtilities_PhaseEnvelope, btnUtilities_BinaryEnvelope } });
                         Menu.Items.Add(pluginsmenu);
@@ -654,6 +626,7 @@ namespace DWSIM.UI.Forms
                     Menu.Items.Add(new ButtonMenuItem { Text = "Setup", Items = { btnComps, btnBasis, btnOptions, btnGlobalOptions } });
                     Menu.Items.Add(new ButtonMenuItem { Text = "Objects", Items = { btnObjects, btnInsertText, btnInsertTable, btnInsertMasterTable, btnInsertSpreadsheetTable, btnInsertChartObject } });
                     Menu.Items.Add(new ButtonMenuItem { Text = "Solver", Items = { btnSolve, btnSolveC, chkSimSolver } });
+                    Menu.Items.Add(new ButtonMenuItem { Text = "Dynamics", Items = { chkDynamics, btnDynManager, btnDynIntegrator, btnDynPIDTuning } });
                     Menu.Items.Add(new ButtonMenuItem { Text = "Tools", Items = { btnSensAnalysis, btnOptimization, btnInspector } });
                     Menu.Items.Add(new ButtonMenuItem { Text = "Utilities", Items = { btnUtilities_TrueCriticalPoint, btnUtilities_PhaseEnvelope, btnUtilities_BinaryEnvelope } });
                     Menu.Items.Add(pluginsmenu);
@@ -664,25 +637,25 @@ namespace DWSIM.UI.Forms
             var hitem1 = new ButtonMenuItem { Text = "Online Help", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "help_browser.png")) };
             hitem1.Click += (sender, e) =>
             {
-                Process.Start("http://dwsim.inforside.com.br/docs/crossplatform/help/");
+                "http://dwsim.inforside.com.br/docs/crossplatform/help/".OpenURL();
             };
 
             var hitem2 = new ButtonMenuItem { Text = "Support".Localize(), Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "help_browser.png")) };
             hitem2.Click += (sender, e) =>
             {
-                Process.Start("http://dwsim.inforside.com.br/wiki/index.php?title=Support");
+                "http://dwsim.inforside.com.br/wiki/index.php?title=Support".OpenURL();
             };
 
             var hitem3 = new ButtonMenuItem { Text = "Report a Bug".Localize(), Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "help_browser.png")) };
             hitem3.Click += (sender, e) =>
             {
-                Process.Start("https://sourceforge.net/p/dwsim/tickets/");
+                "https://sourceforge.net/p/dwsim/tickets/".OpenURL();
             };
 
             var hitem4 = new ButtonMenuItem { Text = "Go to DWSIM's Website".Localize(), Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "help_browser.png")) };
             hitem4.Click += (sender, e) =>
             {
-                Process.Start("http://dwsim.inforside.com.br");
+                "http://dwsim.inforside.com.br".OpenURL();
             };
 
             Menu.HelpItems.Add(hitem1);
@@ -774,9 +747,13 @@ namespace DWSIM.UI.Forms
                 });
             };
 
-            ResultsControl = new DWSIM.UI.Desktop.Editors.ResultsViewer(FlowsheetObject);
+            ResultsControl = new ResultsViewer(FlowsheetObject);
 
-            MaterialStreamListControl = new DWSIM.UI.Desktop.Editors.MaterialStreamListViewer(FlowsheetObject);
+            MaterialStreamListControl = new MaterialStreamListViewer(FlowsheetObject);
+
+            DynManagerControl = new DynamicsManagerControl(FlowsheetObject);
+
+            DynIntegratorControl = new DynamicsIntegratorControl(FlowsheetObject);
 
             LoadObjects();
 
@@ -813,6 +790,9 @@ namespace DWSIM.UI.Forms
             var panelsolids = new StackLayout() { Padding = new Padding(4), Orientation = Orientation.Horizontal, BackgroundColor = !s.DarkMode ? Colors.White : SystemColors.ControlBackground };
             var paneluser = new StackLayout() { Padding = new Padding(4), Orientation = Orientation.Horizontal, BackgroundColor = !s.DarkMode ? Colors.White : SystemColors.ControlBackground };
             var panellogical = new StackLayout() { Padding = new Padding(4), Orientation = Orientation.Horizontal, BackgroundColor = !s.DarkMode ? Colors.White : SystemColors.ControlBackground };
+            var panelcontrollers = new StackLayout() { Padding = new Padding(4), Orientation = Orientation.Horizontal, BackgroundColor = !s.DarkMode ? Colors.White : SystemColors.ControlBackground };
+            var panelindicators = new StackLayout() { Padding = new Padding(4), Orientation = Orientation.Horizontal, BackgroundColor = !s.DarkMode ? Colors.White : SystemColors.ControlBackground };
+            var panelinputs = new StackLayout() { Padding = new Padding(4), Orientation = Orientation.Horizontal, BackgroundColor = !s.DarkMode ? Colors.White : SystemColors.ControlBackground };
             var panelother = new StackLayout() { Padding = new Padding(4), Orientation = Orientation.Horizontal, BackgroundColor = !s.DarkMode ? Colors.White : SystemColors.ControlBackground };
 
 
@@ -828,13 +808,15 @@ namespace DWSIM.UI.Forms
             objcontainer.Pages.Add(new DocumentPage(panelsolids) { Closable = false, Text = "Solids" });
             objcontainer.Pages.Add(new DocumentPage(paneluser) { Closable = false, Text = "User Models" });
             objcontainer.Pages.Add(new DocumentPage(panellogical) { Closable = false, Text = "Logical Ops" });
+            objcontainer.Pages.Add(new DocumentPage(panelcontrollers) { Closable = false, Text = "Controllers" });
+            objcontainer.Pages.Add(new DocumentPage(panelindicators) { Closable = false, Text = "Indicators" });
             objcontainer.Pages.Add(new DocumentPage(panelother) { Closable = false, Text = "Other" });
 
             var PanelObjects = new DocumentControl() { DisplayArrows = false, TabBarBackgroundColor = SystemColors.Highlight };
             PanelObjects.Pages.Add(new DocumentPage(objcontainer) { Text = "Object Palette", Closable = false });
 
             Split2.Panel2 = PanelObjects;
-            Split2.Panel2.Height = 120;
+            Split2.Panel2.Height = 120 * (int)sf;
 
             foreach (var obj in ObjectList.Values.OrderBy(x => x.GetDisplayName()))
             {
@@ -862,6 +844,8 @@ namespace DWSIM.UI.Forms
                         case Interfaces.Enums.SimulationObjectClass.Exchangers:
                             panelexchangers.Items.Add(pitem);
                             break;
+                        case Interfaces.Enums.SimulationObjectClass.Switches:
+                        case Interfaces.Enums.SimulationObjectClass.Inputs:
                         case Interfaces.Enums.SimulationObjectClass.Logical:
                             panellogical.Items.Add(pitem);
                             break;
@@ -888,6 +872,12 @@ namespace DWSIM.UI.Forms
                             break;
                         case Interfaces.Enums.SimulationObjectClass.UserModels:
                             paneluser.Items.Add(pitem);
+                            break;
+                        case Interfaces.Enums.SimulationObjectClass.Controllers:
+                            panelcontrollers.Items.Add(pitem);
+                            break;
+                        case Interfaces.Enums.SimulationObjectClass.Indicators:
+                            panelindicators.Items.Add(pitem);
                             break;
                     }
                 }
@@ -918,12 +908,287 @@ namespace DWSIM.UI.Forms
                 }
             };
 
-            Split2.Panel1 = FlowsheetControl;
+            var flowsheetcontrolcontainer = new TableLayout { Padding = new Padding(5), Spacing = new Size(5, 5) };
+
+            var btnmZoomIn = new Eto.Forms.Button { ImagePosition = ButtonImagePosition.Overlay, Height = 24, Width = 24, ToolTip = "Zoom In", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-zoom_in_filled.png")).WithSize(16, 16) };
+            var btnmZoomOut = new Eto.Forms.Button { ImagePosition = ButtonImagePosition.Overlay, Height = 24, Width = 24, ToolTip = "Zoom Out", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-zoom_out_filled.png")).WithSize(16, 16) };
+            var btnmZoomFit = new Eto.Forms.Button { ImagePosition = ButtonImagePosition.Overlay, Height = 24, Width = 24, ToolTip = "Zoom to Fit", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-zoom_to_extents.png")).WithSize(16, 16) };
+
+            btnmDrawGrid = new Eto.Forms.CheckBox { Text = "Draw Grid" };
+            btnmSnapToGrid = new Eto.Forms.CheckBox { Text = "Snap to Grid" };
+
+            btnmMultiSelect = new Eto.Forms.CheckBox { Text = "MultiSelect" };
+
+            btnmDrawGrid.CheckedChanged += (sender, e) => ActDrawGrid.Invoke();
+            btnmSnapToGrid.CheckedChanged += (sender, e) => ActSnapToGrid.Invoke();
+            btnmMultiSelect.CheckedChanged += (sender, e) => ActMultiSelect.Invoke();
+
+            var btnmZoomDefault = new Eto.Forms.Button { ImagePosition = ButtonImagePosition.Overlay, Height = 24, Width = 24, ToolTip = "Default Zoom", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-zoom_to_actual_size_filled.png")).WithSize(16, 16) };
+            var btnmAlignLefts = new Eto.Forms.Button { ImagePosition = ButtonImagePosition.Overlay, Height = 24, Width = 24, ToolTip = "Align Lefts", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "shape_align_left.png")).WithSize(16, 16) };
+            var btnmAlignCenters = new Eto.Forms.Button { ImagePosition = ButtonImagePosition.Overlay, Height = 24, Width = 24, ToolTip = "Align Centers", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "shape_align_center.png")).WithSize(16, 16) };
+            var btnmAlignRights = new Eto.Forms.Button { ImagePosition = ButtonImagePosition.Overlay, Height = 24, Width = 24, ToolTip = "Align Rights", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "shape_align_right.png")).WithSize(16, 16) };
+            var btnmAlignTops = new Eto.Forms.Button { ImagePosition = ButtonImagePosition.Overlay, Height = 24, Width = 24, ToolTip = "Align Tops", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "shape_align_top.png")).WithSize(16, 16) };
+            var btnmAlignMiddles = new Eto.Forms.Button { ImagePosition = ButtonImagePosition.Overlay, Height = 24, Width = 24, ToolTip = "Align Middles", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "shape_align_middle.png")).WithSize(16, 16) };
+            var btnmAlignBottoms = new Eto.Forms.Button { ImagePosition = ButtonImagePosition.Overlay, Height = 24, Width = 24, ToolTip = "Align Bottoms", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "shape_align_bottom.png")).WithSize(16, 16) };
+            var btnmEqHoriz = new Eto.Forms.Button { ImagePosition = ButtonImagePosition.Overlay, Height = 24, Width = 24, ToolTip = "Equalize Horizontally", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "shape_align_middle1.png")).WithSize(16, 16) };
+            var btnmEqVert = new Eto.Forms.Button { ImagePosition = ButtonImagePosition.Overlay, Height = 24, Width = 24, ToolTip = "Equalize Vertically", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "shape_align_center1.png")).WithSize(16, 16) };
+
+            ActAlignLefts = () => { AlignObjects(btnmAlignLefts); };
+            ActAlignCenters = () => { AlignObjects(btnmAlignCenters); };
+            ActAlignRights = () => { AlignObjects(btnmAlignRights); };
+            ActAlignTops = () => { AlignObjects(btnmAlignTops); };
+            ActAlignMiddles = () => { AlignObjects(btnmAlignMiddles); };
+            ActAlignBottoms = () => { AlignObjects(btnmAlignBottoms); };
+            ActVertAlign = () => { AlignObjects(btnmEqVert); };
+            ActHorizAlign = () => { AlignObjects(btnmEqHoriz); };
+
+            ActAlignLefts = () => { AlignObjects(btnmAlignLefts); };
+            ActAlignCenters = () => { AlignObjects(btnmAlignCenters); };
+            ActAlignRights = () => { AlignObjects(btnmAlignRights); };
+            ActAlignTops = () => { AlignObjects(btnmAlignTops); };
+            ActAlignMiddles = () => { AlignObjects(btnmAlignMiddles); };
+            ActAlignBottoms = () => { AlignObjects(btnmAlignBottoms); };
+            ActVertAlign = () => { AlignObjects(btnmEqVert); };
+            ActHorizAlign = () => { AlignObjects(btnmEqHoriz); };
+
+            btnmZoomOut.Click += (sender, e) => ActZoomOut.Invoke();
+            btnmZoomIn.Click += (sender, e) => ActZoomIn.Invoke();
+            btnmZoomFit.Click += (sender, e) => ActZoomFit.Invoke();
+            btnmZoomDefault.Click += (sender, e) => ActZoomDefault.Invoke();
+
+            if (Application.Instance.Platform.IsGtk)
+            {
+                btnmDrawGrid.CheckedChanged += (sender, e) => ActDrawGrid.Invoke();
+                btnmSnapToGrid.CheckedChanged += (sender, e) => ActSnapToGrid.Invoke();
+                btnmMultiSelect.CheckedChanged += (sender, e) => ActMultiSelect.Invoke();
+            }
+
+            btnmAlignBottoms.Click += (sender, e) => ActAlignBottoms.Invoke();
+            btnmAlignCenters.Click += (sender, e) => ActAlignCenters.Invoke();
+            btnmAlignTops.Click += (sender, e) => ActAlignTops.Invoke();
+            btnmAlignLefts.Click += (sender, e) => ActAlignLefts.Invoke();
+            btnmAlignMiddles.Click += (sender, e) => ActAlignMiddles.Invoke();
+            btnmAlignRights.Click += (sender, e) => ActAlignRights.Invoke();
+            btnmEqHoriz.Click += (sender, e) => ActHorizAlign.Invoke();
+            btnmEqVert.Click += (sender, e) => ActVertAlign.Invoke();
+
+            var chkControlPanelMode = new Eto.Forms.CheckBox { Text = "CP Mode", ToolTip = "Enable/Disable Control Panel Mode" };
+
+            ddstates = new DropDown { Width = 100 };
+            var btnSaveState = new Button { ImagePosition = ButtonImagePosition.Overlay, Height = 24, Width = 24, ToolTip = "Save State", Image = new Bitmap(Bitmap.FromResource(imgprefix + "icons8-scroll_up.png")).WithSize(16, 16) };
+            var btnLoadState = new Button { ImagePosition = ButtonImagePosition.Overlay, Height = 24, Width = 24, ToolTip = "Load State", Image = new Bitmap(Bitmap.FromResource(imgprefix + "icons8-scroll_down.png")).WithSize(16, 16) };
+            var btnDeleteState = new Button { ImagePosition = ButtonImagePosition.Overlay, Height = 24, Width = 24, ToolTip = "Delete Selected State", Image = new Bitmap(Bitmap.FromResource(imgprefix + "icons8-cancel.png")).WithSize(16, 16) };
+
+            btnDeleteState.Click += (s, e) =>
+            {
+                if (ddstates.SelectedValue != null)
+                {
+                    if (FlowsheetObject.StoredSolutions.ContainsKey(ddstates.SelectedValue.ToString()))
+                    {
+                        try
+                        {
+                            if (MessageBox.Show("Confirm?", MessageBoxButtons.YesNo, MessageBoxType.Question) == DialogResult.Yes)
+                            {
+                                FlowsheetObject.StoredSolutions.Remove(ddstates.SelectedValue.ToString());
+                                ddstates.Items.RemoveAt(ddstates.SelectedIndex);
+                                DynManagerControl.UpdateSelectedSchedule();
+                                MessageBox.Show("State Deleted successfully.", "DWSIM", MessageBoxButtons.OK, MessageBoxType.Information);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Error: " + ex.Message, "DWSIM", MessageBoxButtons.OK, MessageBoxType.Error);
+                        }
+                    }
+                }
+            };
+
+            btnSaveState.Click += (s, e) =>
+            {
+                string sname = "";
+                Dialog formName = null;
+                var tb = new TextBox { Text = "NewState" };
+                formName = UI.Shared.Common.CreateDialogWithButtons(tb, "Enter a Name", () => sname = tb.Text);
+                formName.Location = new Point(Mouse.Position);
+                formName.ShowModal(this);
+                if (sname != "" && !FlowsheetObject.StoredSolutions.ContainsKey(sname))
+                {
+                    FlowsheetObject.StoredSolutions.Add(sname, FlowsheetObject.GetProcessData());
+                    ddstates.Items.Add(sname);
+                    DynManagerControl.UpdateSelectedSchedule();
+                    MessageBox.Show("State Saved successfully.", "DWSIM", MessageBoxButtons.OK, MessageBoxType.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Invalid name.", "DWSIM", MessageBoxButtons.OK, MessageBoxType.Error);
+                }
+            };
+
+            btnLoadState.Click += (s, e) =>
+            {
+                if (ddstates.SelectedValue != null)
+                {
+                    if (FlowsheetObject.StoredSolutions.ContainsKey(ddstates.SelectedValue.ToString()))
+                    {
+                        try
+                        {
+                            FlowsheetObject.LoadProcessData(FlowsheetObject.StoredSolutions[ddstates.SelectedValue.ToString()]);
+                            FlowsheetObject.UpdateInterface();
+                            FlowsheetObject.UpdateEditorPanels?.Invoke();
+                            MessageBox.Show("State Restored successfully.", "DWSIM", MessageBoxButtons.OK, MessageBoxType.Information);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Error: " + ex.Message, "DWSIM", MessageBoxButtons.OK, MessageBoxType.Error);
+                        }
+                    }
+                }
+            };
+
+            if (Application.Instance.Platform.IsGtk)
+            {
+
+                ddstates.Height = 26;
+
+                btnSaveState.Size = new Size(30, 30);
+                btnLoadState.Size = new Size(30, 30);
+                btnDeleteState.Size = new Size(30, 30);
+                btnmZoomOut.Size = new Size(30, 30);
+                btnmZoomIn.Size = new Size(30, 30);
+                btnmZoomFit.Size = new Size(30, 30);
+                btnmZoomDefault.Size = new Size(30, 30);
+
+                btnmAlignBottoms.Size = new Size(30, 30);
+                btnmAlignCenters.Size = new Size(30, 30);
+                btnmAlignTops.Size = new Size(30, 30);
+                btnmAlignLefts.Size = new Size(30, 30);
+                btnmAlignMiddles.Size = new Size(30, 30);
+                btnmAlignRights.Size = new Size(30, 30);
+                btnmEqHoriz.Size = new Size(30, 30);
+                btnmEqVert.Size = new Size(30, 30);
+
+            }
+
+            var menu1 = new StackLayout
+            {
+                Items = { chkControlPanelMode,  new Label {Text =" " },
+                new Label{Text = "States"}, ddstates, btnSaveState, btnLoadState, btnDeleteState,new Label {Text =" " },
+                btnmZoomOut, btnmZoomIn, btnmZoomFit, btnmZoomDefault, new Label {Text =" " },
+                btnmDrawGrid, btnmSnapToGrid, btnmMultiSelect, new Label {Text =" " },
+                btnmAlignBottoms, btnmAlignCenters, btnmAlignTops, btnmAlignLefts, btnmAlignMiddles, btnmAlignRights, new Label {Text =" " },
+                btnmEqHoriz, btnmEqVert},
+                Orientation = Orientation.Horizontal,
+                Spacing = 4,
+                HorizontalContentAlignment = HorizontalAlignment.Stretch,
+                VerticalContentAlignment = VerticalAlignment.Center,
+                Padding = new Padding(5)
+            };
+            flowsheetcontrolcontainer.Rows.Add(new TableRow(menu1));
+
+            Button btnUp, btnLeft, btnRight, btnDown;
+
+            btnUp = new Button { Text = "^", Height = 24, Visible = false };
+            btnLeft = new Button { Text = "<", Width = 24, Visible = false };
+            btnRight = new Button { Text = ">", Width = 24, Visible = false };
+            btnDown = new Button { Text = "v", Height = 24, Visible = false };
+
+            flowsheetcontrolcontainer.Rows.Add(new TableRow(btnUp));
+
+            var tabfl1 = new TableLayout();
+            var tabfl1r = new TableRow();
+            tabfl1r.Cells.Add(new TableCell(btnLeft));
+            tabfl1r.Cells.Add(new TableCell(FlowsheetControl, true));
+            tabfl1r.Cells.Add(new TableCell(btnRight));
+            tabfl1.Rows.Add(tabfl1r);
+
+            flowsheetcontrolcontainer.Rows.Add(new TableRow(tabfl1) { ScaleHeight = true });
+
+            flowsheetcontrolcontainer.Rows.Add(new TableRow(btnDown));
+
+            Split2.Panel1 = flowsheetcontrolcontainer;
 
             SplitterFlowsheet = Split2;
 
+            btnLeft.Click += (s, e) =>
+            {
+                Size sz = SplitterFlowsheet.Panel1.Size;
+                var z = this.FlowsheetControl.FlowsheetSurface.Zoom;
+                var offs = (double)sz.Width / (double)z * sf;
+                this.FlowsheetControl.FlowsheetSurface.OffsetAll((int)offs, 0);
+                this.FlowsheetControl.Invalidate();
+            };
+
+            btnRight.Click += (s, e) =>
+            {
+                Size sz = SplitterFlowsheet.Panel1.Size;
+                var z = this.FlowsheetControl.FlowsheetSurface.Zoom;
+                var offs = -(double)sz.Width / (double)z * sf;
+                this.FlowsheetControl.FlowsheetSurface.OffsetAll((int)offs, 0);
+                this.FlowsheetControl.Invalidate();
+            };
+
+            btnUp.Click += (s, e) =>
+            {
+                Size sz = SplitterFlowsheet.Panel1.Size;
+                var z = this.FlowsheetControl.FlowsheetSurface.Zoom;
+                var offs = (double)sz.Height / (double)z * sf;
+                this.FlowsheetControl.FlowsheetSurface.OffsetAll(0, (int)offs);
+                this.FlowsheetControl.Invalidate();
+            };
+
+            btnDown.Click += (s, e) =>
+            {
+                Size sz = SplitterFlowsheet.Panel1.Size;
+                var z = this.FlowsheetControl.FlowsheetSurface.Zoom;
+                var offs = (double)sz.Height / (double)z * sf;
+                this.FlowsheetControl.FlowsheetSurface.OffsetAll(0, -(int)offs);
+                this.FlowsheetControl.Invalidate();
+            };
+
+            chkControlPanelMode.CheckedChanged += (s, e) =>
+            {
+                if (chkControlPanelMode.Checked.GetValueOrDefault())
+                {
+                    FlowsheetControl.FlowsheetSurface.ControlPanelMode = true;
+                    GlobalSettings.Settings.DarkMode = true;
+                    Drawing.SkiaSharp.GraphicsSurface.BackgroundColor = SKColors.DimGray;
+                    Drawing.SkiaSharp.GraphicsSurface.ForegroundColor = SKColors.WhiteSmoke;
+                    btnLeft.Visible = true;
+                    btnUp.Visible = true;
+                    btnDown.Visible = true;
+                    btnRight.Visible = true;
+                }
+                else
+                {
+                    FlowsheetControl.FlowsheetSurface.ControlPanelMode = false;
+                    GlobalSettings.Settings.DarkMode = false;
+                    Drawing.SkiaSharp.GraphicsSurface.BackgroundColor = SKColors.White;
+                    Drawing.SkiaSharp.GraphicsSurface.ForegroundColor = SKColors.Black;
+                    btnLeft.Visible = false;
+                    btnUp.Visible = false;
+                    btnDown.Visible = false;
+                    btnRight.Visible = false;
+                }
+                FlowsheetControl.Invalidate();
+                Split2.Invalidate();
+            };
+
             Split3.Panel2 = SetupLogWindow();
-            Split3.Panel2.Height = (int)(sf * 100);
+            Split3.Panel2.Height = (int)(sf * 120);
+
+            var documentcontainer = (DocumentControl)Split3.Panel2;
+
+            documentcontainer.Pages.Add(new DocumentPage(DynIntegratorControl) { Text = "Integrator Controls", Closable = false });
+
+            btnDynIntegrator.Click += (s, e) =>
+            {
+                documentcontainer.SelectedIndex = 1;
+            };
+
+            btnmDynIntegrator.Click += (s, e) =>
+            {
+                documentcontainer.SelectedIndex = 1;
+            };
 
             Split1.Panel2 = Split3;
 
@@ -934,15 +1199,40 @@ namespace DWSIM.UI.Forms
 
             DocumentPageSpreadsheet = new DocumentPage { Content = SpreadsheetControl, Text = "Spreadsheet", Closable = false };
 
-            DocumentContainer = new DocumentControl() { AllowReordering = true, DisplayArrows = false };
+            DocumentContainer = new DocumentControl() { AllowReordering = false, DisplayArrows = false };
             DocumentContainer.Pages.Add(new DocumentPage { Content = Split2, Text = "Flowsheet", Closable = false });
             DocumentContainer.Pages.Add(new DocumentPage { Content = MaterialStreamListControl, Text = "Material Streams", Closable = false });
             DocumentContainer.Pages.Add(DocumentPageSpreadsheet);
             DocumentContainer.Pages.Add(new DocumentPage { Content = ChartsControl, Text = "Charts", Closable = false });
             DocumentContainer.Pages.Add(new DocumentPage { Content = ScriptListControl, Text = "Script Manager", Closable = false });
+            DocumentContainer.Pages.Add(new DocumentPage { Content = DynManagerControl, Text = "Dynamics Manager", Closable = false });
             DocumentContainer.Pages.Add(new DocumentPage { Content = ResultsControl, Text = "Results", Closable = false });
 
             Split3.Panel1 = DocumentContainer;
+
+            btnDynManager.Click += (s, e) =>
+            {
+                DocumentContainer.SelectedIndex = 5;
+            };
+
+            btnmDynManager.Click += (s, e) =>
+            {
+                DocumentContainer.SelectedIndex = 5;
+            };
+
+            chkmDynamics.CheckedChanged += (s, e) =>
+            {
+                FlowsheetObject.DynamicMode = chkmDynamics.Checked;
+                chkDynamics.Checked = FlowsheetObject.DynamicMode;
+                DynManagerControl.chkDynamics.Checked = FlowsheetObject.DynamicMode;
+            };
+
+            chkDynamics.CheckedChanged += (s, e) =>
+            {
+                FlowsheetObject.DynamicMode = chkDynamics.Checked;
+                chkmDynamics.Checked = FlowsheetObject.DynamicMode;
+                DynManagerControl.chkDynamics.Checked = FlowsheetObject.DynamicMode;
+            };
 
             // main container
 
@@ -1074,29 +1364,40 @@ namespace DWSIM.UI.Forms
 
             FlowsheetObject.HighLevelSolve = () => SolveFlowsheet(false);
 
+            DynIntegratorControl.Init();
+
+            DynManagerControl.Init();
+
         }
 
         public void SolveFlowsheet(bool changecalcorder)
         {
-            FlowsheetObject.UpdateSpreadsheet(() =>
+            if (!FlowsheetObject.DynamicMode)
             {
-                Spreadsheet.EvaluateAll();
-                Spreadsheet.WriteAll();
-            });
-            FlowsheetObject.FinishedSolving = (() =>
-            {
-                Application.Instance.AsyncInvoke(() =>
+                FlowsheetObject.UpdateSpreadsheet(() =>
                 {
-                    ResultsControl.UpdateList();
-                    MaterialStreamListControl.UpdateList();
-                    UpdateEditorPanels();
+                    Spreadsheet.EvaluateAll();
+                    Spreadsheet.WriteAll();
                 });
-            });
-            FlowsheetObject.SolveFlowsheet(false, null, changecalcorder);
-            FlowsheetObject.UpdateSpreadsheet(() =>
+                FlowsheetObject.FinishedSolving = (() =>
+                {
+                    Application.Instance.AsyncInvoke(() =>
+                    {
+                        ResultsControl.UpdateList();
+                        MaterialStreamListControl.UpdateList();
+                        UpdateEditorPanels();
+                    });
+                });
+                FlowsheetObject.SolveFlowsheet(false, null, changecalcorder);
+                FlowsheetObject.UpdateSpreadsheet(() =>
+                {
+                    Spreadsheet.EvaluateAll();
+                });
+            }
+            else
             {
-                Spreadsheet.EvaluateAll();
-            });
+                FlowsheetObject.ShowMessage("Dynamic Mode is enabled.", Interfaces.IFlowsheet.MessageType.Warning);
+            }
         }
 
         void Flowsheet_Shown(object sender, EventArgs e)
@@ -1106,15 +1407,42 @@ namespace DWSIM.UI.Forms
             btnmSnapToGrid.Checked = FlowsheetObject.Options.FlowsheetSnapToGrid;
             btnmMultiSelect.Checked = FlowsheetObject.Options.FlowsheetMultiSelectMode;
 
-            FlowsheetControl.FlowsheetSurface.ZoomAll((int)(FlowsheetControl.Width * GlobalSettings.Settings.DpiScale), (int)(FlowsheetControl.Height * GlobalSettings.Settings.DpiScale));
-            FlowsheetControl.FlowsheetSurface.ZoomAll((int)(FlowsheetControl.Width * GlobalSettings.Settings.DpiScale), (int)(FlowsheetControl.Height * GlobalSettings.Settings.DpiScale));
+            FlowsheetControl.FlowsheetSurface.ZoomAll((int)(FlowsheetControl.Width * s.DpiScale), (int)(FlowsheetControl.Height * s.DpiScale));
+            FlowsheetControl.FlowsheetSurface.ZoomAll((int)(FlowsheetControl.Width * s.DpiScale), (int)(FlowsheetControl.Height * s.DpiScale));
             FlowsheetControl.Invalidate();
+
+            ddstates.Items.Clear();
+            ddstates.Items.Add("");
+            foreach (var item in FlowsheetObject.StoredSolutions)
+            {
+                ddstates.Items.Add(item.Key);
+            }
 
             ScriptListControl.UpdateList();
 
+            DynIntegratorControl.Populate();
+
+            DynManagerControl.Populate();
+
+            DynIntegratorControl.btnViewResults.Click += (s2, e2) =>
+            {
+                DocumentContainer.SelectedIndex = 2;
+            };
+
+            DynManagerControl.chkDynamics.CheckedChanged += (s2, e2) =>
+            {
+                FlowsheetObject.DynamicMode = DynManagerControl.chkDynamics.Checked.GetValueOrDefault();
+                chkmDynamics.Checked = FlowsheetObject.DynamicMode;
+                chkDynamics.Checked = FlowsheetObject.DynamicMode;
+            };
+
+            DocumentContainer.SelectedIndexChanged += (sender2, e2) =>
+            {
+                DynManagerControl.CheckModelStatus();
+            };
+
             if (Application.Instance.Platform.IsWpf)
             {
-
                 DocumentContainer.SelectedIndexChanged += (sender2, e2) =>
                 {
                     if (TabSwitch)
@@ -1333,7 +1661,7 @@ namespace DWSIM.UI.Forms
             outtxt.ReadOnly = true;
             outtxt.SelectionBold = true;
 
-            var container = new DocumentControl() { DisplayArrows = false, TabBarBackgroundColor = SystemColors.Highlight };
+            var container = new DocumentControl() { DisplayArrows = false };
 
             container.Pages.Add(new DocumentPage(outtxt) { Text = "Log Panel", Closable = false });
 
@@ -1363,8 +1691,19 @@ namespace DWSIM.UI.Forms
                     var item = "[" + DateTime.Now.ToString() + "] " + text;
                     try
                     {
+                        if (FlowsheetObject.DynamicMode)
+                        {
+                            if (outtxt.Text.Length > 500 * 50) outtxt.Text = "";
+                        }
                         outtxt.Append(item, true);
-                        outtxt.Selection = new Range<int>(outtxt.Text.Length - item.Length, outtxt.Text.Length - 1);
+                        if (s.RunningPlatform() == s.Platform.Windows)
+                        {
+                            outtxt.Selection = new Range<int>(outtxt.Text.Length - item.Length - 1, outtxt.Text.Length - 1);
+                        }
+                        else
+                        {
+                            outtxt.Selection = new Range<int>(outtxt.Text.Length - item.Length, outtxt.Text.Length - 1);
+                        }
                         switch (mtype)
                         {
                             case Interfaces.IFlowsheet.MessageType.Information:
@@ -1907,7 +2246,7 @@ namespace DWSIM.UI.Forms
             }
         }
 
-        public void AlignObjects(ToolItem tsb)
+        public void AlignObjects(Button tsb)
         {
             Drawing.SkiaSharp.GraphicsSurface.AlignDirection direction = Drawing.SkiaSharp.GraphicsSurface.AlignDirection.Centers;
             string text = "";

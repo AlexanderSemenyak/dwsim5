@@ -35,6 +35,8 @@ Namespace UnitOperations
         Inherits UnitOperations.UnitOpBaseClass
         Public Overrides Property ObjectClass As SimulationObjectClass = SimulationObjectClass.PressureChangers
 
+        Public Overrides ReadOnly Property SupportsDynamicMode As Boolean = True
+
         <NonSerialized> <Xml.Serialization.XmlIgnore> Public f As EditingForm_ComprExpndr
 
         Public Enum CalculationMode
@@ -179,6 +181,12 @@ Namespace UnitOperations
             Return Newtonsoft.Json.JsonConvert.DeserializeObject(Of Expander)(Newtonsoft.Json.JsonConvert.SerializeObject(Me))
         End Function
 
+        Public Overrides Sub RunDynamicModel()
+
+            Calculate()
+
+        End Sub
+
         Public Overrides Sub Calculate(Optional ByVal args As Object = Nothing)
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
@@ -246,8 +254,6 @@ Namespace UnitOperations
 
             If Not Me.GraphicObject.EnergyConnector.IsAttached Then
                 Throw New Exception(FlowSheet.GetTranslatedString("NohcorrentedeEnergyFlow5"))
-            ElseIf qli > 0 And Not Me.IgnorePhase Then
-                Throw New Exception(FlowSheet.GetTranslatedString("ExisteumaPhaselquidan2"))
             ElseIf Not Me.GraphicObject.OutputConnectors(0).IsAttached Then
                 Throw New Exception(FlowSheet.GetTranslatedString("Verifiqueasconexesdo"))
             ElseIf Not Me.GraphicObject.InputConnectors(0).IsAttached Then
@@ -319,7 +325,6 @@ Namespace UnitOperations
 
                     If DebugMode Then AppendDebugLine(String.Format("Calculated ideal outlet enthalpy Hid = {0} kJ/kg", tmp.CalculatedEnthalpy))
 
-
                     If ProcessPath = ProcessPathType.Adiabatic Then
                         Me.DeltaQ = -Wi * (H2s - Hi) * (Me.AdiabaticEfficiency / 100)
                         H2 = Hi - Me.DeltaQ / Wi
@@ -342,9 +347,9 @@ Namespace UnitOperations
 
 Curves:             If CalcMode = CalculationMode.Head Then
                         If ProcessPath = ProcessPathType.Adiabatic Then
-                            DeltaQ = AdiabaticHead / 1000 / Wi * 9.8
+                            DeltaQ = AdiabaticHead / 1000 * Wi * 9.8 * (Me.AdiabaticEfficiency / 100)
                         Else
-                            DeltaQ = PolytropicHead / 1000 / Wi * 9.8
+                            DeltaQ = PolytropicHead / 1000 * Wi * 9.8 * (Me.PolytropicEfficiency / 100)
                         End If
                     End If
 
@@ -512,9 +517,9 @@ Curves:             If CalcMode = CalculationMode.Head Then
                         End If
                     Else
                         If ProcessPath = ProcessPathType.Adiabatic Then
-                            AdiabaticHead = CurvePower * 1000 * Wi / 9.8
+                            AdiabaticHead = CurvePower * 1000 / Wi / 9.8
                         Else
-                            PolytropicHead = CurvePower * 1000 * Wi / 9.8
+                            PolytropicHead = CurvePower * 1000 / Wi / 9.8
                         End If
                     End If
 
@@ -565,6 +570,7 @@ Curves:             If CalcMode = CalculationMode.Head Then
             PropertyPackage.CurrentMaterialStream = tms
             tms.Phases(0).Properties.temperature = T2s
             tms.Phases(0).Properties.pressure = P2
+            tms.Phases(0).Properties.enthalpy = H2s
             tms.Calculate()
 
             rho2i = tms.GetPhase("Mixture").Properties.density.GetValueOrDefault
@@ -573,6 +579,7 @@ Curves:             If CalcMode = CalculationMode.Head Then
             PropertyPackage.CurrentMaterialStream = tms
             tms.Phases(0).Properties.temperature = T2
             tms.Phases(0).Properties.pressure = P2
+            tms.Phases(0).Properties.enthalpy = H2
             tms.Calculate()
 
             rho2 = tms.GetPhase("Mixture").Properties.density.GetValueOrDefault
@@ -599,27 +606,27 @@ Curves:             If CalcMode = CalculationMode.Head Then
 
             End If
 
-            Wic = DeltaQ * (AdiabaticEfficiency / 100)
+            Wic = -Wi * n_isent / (n_isent - 1) * fce * (Pi / rho1) * ((P2 / Pi) ^ ((n_isent - 1) / n_isent) - 1) / 1000
 
-            Wpc = DeltaQ * (PolytropicEfficiency / 100)
+            Wpc = -Wi * n_poly / (n_poly - 1) * fce * (Pi / rho1) * ((P2 / Pi) ^ ((n_poly - 1) / n_poly) - 1) / 1000
 
             ' heads
 
             If CalcMode <> CalculationMode.Head Then
 
-                AdiabaticHead = Wic * 1000 * Wi / 9.8 ' m
+                AdiabaticHead = Wic * 1000 / Wi / 9.8 ' m
 
-                PolytropicHead = Wpc * 1000 * Wi / 9.8 ' m
+                PolytropicHead = Wpc * 1000 / Wi / 9.8 ' m
 
             Else
 
                 If ProcessPath = ProcessPathType.Adiabatic Then
 
-                    PolytropicHead = Wpc * 1000 * Wi / 9.8 ' m
+                    PolytropicHead = Wpc * 1000 / Wi / 9.8 ' m
 
                 Else
 
-                    AdiabaticHead = Wic * 1000 * Wi / 9.8 ' m
+                    AdiabaticHead = Wic * 1000 / Wi / 9.8 ' m
 
                 End If
 
@@ -794,6 +801,7 @@ Curves:             If CalcMode = CalculationMode.Head Then
                     For i = 0 To 1
                         proplist.Add("PROP_TU_" + CStr(i))
                     Next
+                    proplist.Add("PROP_TU_3")
                     proplist.Add("PROP_TU_4")
                     proplist.Add("AdiabaticHead")
                     proplist.Add("PolytropicHead")
@@ -831,6 +839,8 @@ Curves:             If CalcMode = CalculationMode.Head Then
                     Case 1
                         'PROP_CO_1(Efficiency)
                         Me.AdiabaticEfficiency = propval
+                    Case 3
+                        DeltaQ = SystemsOfUnits.Converter.ConvertToSI(su.heatflow, propval)
                     Case 4
                         'PROP_CO_4(Pressure Out)
                         Me.POut = SystemsOfUnits.Converter.ConvertToSI(su.pressure, propval)

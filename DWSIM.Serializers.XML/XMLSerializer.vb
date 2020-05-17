@@ -270,6 +270,12 @@ Public Class XMLSerializer
                                     Dim val As Date = Date.Parse(xel.Value, CultureInfo.InvariantCulture)
                                     typeAccessor(obj,propname) = val ' propertyInfo.SetValue(obj, val, Nothing)
                                 End If
+                            ElseIf TypeOf obj.GetType.GetProperty(prop.Name).GetValue(obj, Nothing) Is TimeSpan Then
+                                Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                                If Not xel Is Nothing Then
+                                    Dim val As TimeSpan = TimeSpan.FromMilliseconds(xel.Value)
+                                    obj.GetType.GetProperty(prop.Name).SetValue(obj, val, Nothing)
+                                End If
                             ElseIf TypeOf propertyValue Is OxyPlot.OxyColor Then
                                 'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
                                 Dim xel As XElement = OnitUtilities.GetFilteredXElementsEnumerable(xmlprops, propname).FirstOrDefault
@@ -466,6 +472,12 @@ Public Class XMLSerializer
                                 Dim val As Date = Date.Parse(xel.Value, CultureInfo.InvariantCulture)
                                 typeAccessor(obj,propname) = val ' fieldInfo.SetValue(obj, val)
                             End If
+                        ElseIf TypeOf obj.GetType.GetField(prop.Name).GetValue(obj) Is TimeSpan Then
+                            Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
+                            If Not xel Is Nothing Then
+                                Dim val As TimeSpan = TimeSpan.FromMilliseconds(xel.Value)
+                                obj.GetType.GetField(prop.Name).SetValue(obj, val)
+                            End If
                         End If
                     End If
                 End If
@@ -537,6 +549,8 @@ Public Class XMLSerializer
                                 .Add(New XElement(prop.Name, obj.GetType.GetProperty(prop.Name).GetValue(obj, Nothing)))
                             ElseIf TypeOf obj.GetType.GetProperty(prop.Name).GetValue(obj, Nothing) Is Date Then
                                 .Add(New XElement(prop.Name, DirectCast(obj.GetType.GetProperty(prop.Name).GetValue(obj, Nothing), Date).ToString(CultureInfo.InvariantCulture)))
+                            ElseIf TypeOf obj.GetType.GetProperty(prop.Name).GetValue(obj, Nothing) Is TimeSpan Then
+                                .Add(New XElement(prop.Name, DirectCast(obj.GetType.GetProperty(prop.Name).GetValue(obj, Nothing), TimeSpan).TotalMilliseconds))
                             ElseIf TypeOf obj.GetType.GetProperty(prop.Name).GetValue(obj, Nothing) Is OxyPlot.OxyColor Then
                                 .Add(New XElement(prop.Name, DirectCast(obj.GetType.GetProperty(prop.Name).GetValue(obj, Nothing), OxyPlot.OxyColor).ToString()))
                             ElseIf TypeOf obj.GetType.GetProperty(prop.Name).GetValue(obj, Nothing) Is List(Of String) Then
@@ -625,6 +639,8 @@ Public Class XMLSerializer
                             .Add(New XElement(prop.Name, obj.GetType.GetField(prop.Name).GetValue(obj)))
                         ElseIf TypeOf obj.GetType.GetField(prop.Name).GetValue(obj) Is Date Then
                             .Add(New XElement(prop.Name, DirectCast(obj.GetType.GetField(prop.Name).GetValue(obj), Date).ToString(CultureInfo.InvariantCulture)))
+                        ElseIf TypeOf obj.GetType.GetField(prop.Name).GetValue(obj) Is TimeSpan Then
+                            .Add(New XElement(prop.Name, DirectCast(obj.GetType.GetField(prop.Name).GetValue(obj), TimeSpan).TotalMilliseconds))
                         End If
                     End If
                 Next

@@ -74,7 +74,12 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
                                 gobj = myUnitOp.GraphicObject
                                 gobj.Calculated = False
                                 myUnitOp.Calculated = False
-                                myUnitOp.Solve()
+
+                                If fbag.DynamicMode Then
+                                    myUnitOp.RunDynamicModel()
+                                Else
+                                    myUnitOp.Solve()
+                                End If
 
                                 For Each utility In myUnitOp.AttachedUtilities
                                     If utility.AutoUpdate Then utility.Update()
@@ -104,7 +109,12 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
                         If objArgs.Calculated = True Then
                             myUnitOp.GraphicObject.Calculated = False
                             myUnitOp.Calculated = True
-                            myUnitOp.Solve()
+
+                            If fbag.DynamicMode Then
+                                myUnitOp.RunDynamicModel()
+                            Else
+                                myUnitOp.Solve()
+                            End If
 
                             For Each utility In myUnitOp.AttachedUtilities
                                 If utility.AutoUpdate Then utility.Update()
@@ -129,7 +139,12 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
                     Dim myObj As ISimulationObject = fbag.SimulationObjects(objArgs.Name)
                     myObj.GraphicObject.Calculated = False
                     myObj.Calculated = False
-                    myObj.Solve()
+
+                    If fbag.DynamicMode Then
+                        myObj.RunDynamicModel()
+                    Else
+                        myObj.Solve()
+                    End If
 
                     For Each utility In myObj.AttachedUtilities
                         If utility.AutoUpdate Then utility.Update()
@@ -149,7 +164,11 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
                                 If obj.GraphicObject.ObjectType = ObjectType.MaterialStream Then
                                     obj.GraphicObject.Calculated = False
                                     obj.Calculated = False
-                                    obj.Solve()
+                                    If fbag.DynamicMode Then
+                                        obj.RunDynamicModel()
+                                    Else
+                                        obj.Solve()
+                                    End If
                                     obj.Calculated = True
                                     obj.GraphicObject.Calculated = True
                                 End If
@@ -196,7 +215,11 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
                 Case Else
                     Dim myObj As ISimulationObject = fbag.SimulationObjects(objArgs.Name)
                     RaiseEvent UnitOpCalculationStarted(fobj, New System.EventArgs(), objArgs)
-                    myObj.Solve()
+                    If fbag.DynamicMode Then
+                        myObj.RunDynamicModel()
+                    Else
+                        myObj.Solve()
+                    End If
                     For Each utility In myObj.AttachedUtilities
                         If utility.AutoUpdate Then utility.Update()
                     Next
@@ -229,7 +252,11 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
 
         ms.GraphicObject.Calculated = False
 
-        ms.Solve()
+        If fbag.DynamicMode Then
+            ms.RunDynamicModel()
+        Else
+            ms.Solve()
+        End If
 
         fgui.ShowMessage(ms.GraphicObject.Tag & ": " & fgui.GetTranslatedString("Calculadocomsucesso"), IFlowsheet.MessageType.Information)
 
@@ -272,7 +299,11 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
 
         fgui.ProcessScripts(Scripts.EventType.ObjectCalculationStarted, Scripts.ObjectType.FlowsheetObject, ms.Name)
 
-        ms.Solve()
+        If fbag.DynamicMode Then
+            ms.RunDynamicModel()
+        Else
+            ms.Solve()
+        End If
 
         fgui.ProcessScripts(Scripts.EventType.ObjectCalculationFinished, Scripts.ObjectType.FlowsheetObject, ms.Name)
 
@@ -379,6 +410,7 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
                         myobj.GraphicObject.Calculated = True
                         myobj.LastUpdated = Date.Now
                         myobj.UpdateEditForm()
+                        If fbag.DynamicMode Then myobj.UpdateDynamicsEditForm()
                     End If
                 Catch ex As AggregateException
                     myobj.ErrorMessage = ""
@@ -483,6 +515,7 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
                     myobj.GraphicObject.Calculated = True
                     myobj.LastUpdated = Date.Now
                     myobj.UpdateEditForm()
+                    If fbag.DynamicMode Then myobj.UpdateDynamicsEditForm()
                 End If
             Catch ex As AggregateException
                 fgui.ProcessScripts(Scripts.EventType.ObjectCalculationError, Scripts.ObjectType.FlowsheetObject, myobj.Name)
@@ -589,6 +622,7 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
                                                              myobj.GraphicObject.Calculated = True
                                                              myobj.LastUpdated = Date.Now
                                                              myobj.UpdateEditForm()
+                                                             If fbag.DynamicMode Then myobj.UpdateDynamicsEditForm()
                                                          End If
                                                      Catch ex As AggregateException
                                                          fgui.ProcessScripts(Scripts.EventType.ObjectCalculationError, Scripts.ObjectType.FlowsheetObject, myobj.Name)
@@ -881,7 +915,7 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
 
         Dim speclist = (From s In fbag.SimulationObjects.Values Select s Where s.GraphicObject.ObjectType = ObjectType.OT_Spec).ToArray
 
-        If speclist.Count > 0 Then
+        If speclist.Count > 0 And Not fbag.DynamicMode Then
             Dim newstack As New List(Of String)
             For Each o In objstack
                 newstack.Add(o)
@@ -1161,7 +1195,7 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
 
                                                      'throws exceptions if any
 
-                                                     If GlobalSettings.Settings.SolverBreakOnException And exlist.Count > 0 Then Throw New AggregateException(exlist)
+                                                     If Settings.SolverBreakOnException And exlist.Count > 0 Then Throw New AggregateException(exlist)
 
                                                      'checks for recycle convergence.
 
@@ -1171,6 +1205,10 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
                                                          converged = DirectCast(obj, IRecycle).Converged
                                                          If Not converged Then Exit For
                                                      Next
+
+                                                     'in dynamic mode, recycles are redundant
+
+                                                     If fbag.DynamicMode Then converged = True
 
                                                      If Not converged Then
 

@@ -32,6 +32,8 @@ Namespace UnitOperations
 
         <NonSerialized> <Xml.Serialization.XmlIgnore> Public f As EditingForm_Splitter
 
+        Public Overrides ReadOnly Property SupportsDynamicMode As Boolean = True
+
         Public Enum OpMode
             SplitRatios = 0
             StreamMassFlowSpec = 1
@@ -118,6 +120,59 @@ Namespace UnitOperations
             MyBase.New()
         End Sub
 
+        Public Overrides Sub RunDynamicModel()
+
+            OutCount = 0
+            For Each cp In GraphicObject.OutputConnectors
+                If cp.IsAttached Then OutCount += 1
+            Next
+
+            If OutCount = 1 Then
+
+                GetInletMaterialStream(0).SetMassFlow(GetOutletMaterialStream(0).GetMassFlow)
+
+                GetOutletMaterialStream(0).SetPressure(GetInletMaterialStream(0).GetPressure)
+                GetOutletMaterialStream(0).SetTemperature(GetInletMaterialStream(0).GetTemperature)
+                GetOutletMaterialStream(0).SetMassEnthalpy(GetInletMaterialStream(0).GetMassEnthalpy)
+                GetOutletMaterialStream(0).AssignFromPhase(PhaseLabel.Mixture, GetInletMaterialStream(0), False)
+
+            ElseIf OutCount = 2 Then
+
+                GetInletMaterialStream(0).SetMassFlow(GetOutletMaterialStream(0).GetMassFlow + GetOutletMaterialStream(1).GetMassFlow)
+
+                GetOutletMaterialStream(0).SetPressure(GetInletMaterialStream(0).GetPressure)
+                GetOutletMaterialStream(0).SetTemperature(GetInletMaterialStream(0).GetTemperature)
+                GetOutletMaterialStream(0).SetMassEnthalpy(GetInletMaterialStream(0).GetMassEnthalpy)
+                GetOutletMaterialStream(0).AssignFromPhase(PhaseLabel.Mixture, GetInletMaterialStream(0), False)
+
+                GetOutletMaterialStream(1).SetPressure(GetInletMaterialStream(0).GetPressure)
+                GetOutletMaterialStream(1).SetTemperature(GetInletMaterialStream(0).GetTemperature)
+                GetOutletMaterialStream(1).SetMassEnthalpy(GetInletMaterialStream(0).GetMassEnthalpy)
+                GetOutletMaterialStream(1).AssignFromPhase(PhaseLabel.Mixture, GetInletMaterialStream(0), False)
+
+            ElseIf OutCount = 3 Then
+
+                GetInletMaterialStream(0).SetMassFlow(GetOutletMaterialStream(0).GetMassFlow + GetOutletMaterialStream(1).GetMassFlow + GetOutletMaterialStream(2).GetMassFlow)
+
+                GetOutletMaterialStream(0).SetPressure(GetInletMaterialStream(0).GetPressure)
+                GetOutletMaterialStream(0).SetTemperature(GetInletMaterialStream(0).GetTemperature)
+                GetOutletMaterialStream(0).SetMassEnthalpy(GetInletMaterialStream(0).GetMassEnthalpy)
+                GetOutletMaterialStream(0).AssignFromPhase(PhaseLabel.Mixture, GetInletMaterialStream(0), False)
+
+                GetOutletMaterialStream(1).SetPressure(GetInletMaterialStream(0).GetPressure)
+                GetOutletMaterialStream(1).SetTemperature(GetInletMaterialStream(0).GetTemperature)
+                GetOutletMaterialStream(1).SetMassEnthalpy(GetInletMaterialStream(0).GetMassEnthalpy)
+                GetOutletMaterialStream(1).AssignFromPhase(PhaseLabel.Mixture, GetInletMaterialStream(0), False)
+
+                GetOutletMaterialStream(2).SetPressure(GetInletMaterialStream(0).GetPressure)
+                GetOutletMaterialStream(2).SetTemperature(GetInletMaterialStream(0).GetTemperature)
+                GetOutletMaterialStream(2).SetMassEnthalpy(GetInletMaterialStream(0).GetMassEnthalpy)
+                GetOutletMaterialStream(2).AssignFromPhase(PhaseLabel.Mixture, GetInletMaterialStream(0), False)
+
+            End If
+
+        End Sub
+
         Public Overrides Sub Calculate(Optional ByVal args As Object = Nothing)
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
@@ -127,7 +182,7 @@ Namespace UnitOperations
             IObj?.SetCurrent()
 
             IObj?.Paragraphs.Add("The splitter is a mass balance unit operation - divides a 
-                                    material stream into two or three other streams.")
+                                    material stream into two or three other streams with different overall flow rates but with the same composition.")
 
             If Not Me.GraphicObject.OutputConnectors(0).IsAttached Then
                 Throw New Exception(FlowSheet.GetTranslatedString("Nohcorrentedematriac8"))

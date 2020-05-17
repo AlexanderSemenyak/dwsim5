@@ -470,6 +470,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Ativar.
+        '''</summary>
+        Friend Shared ReadOnly Property Activate() As String
+            Get
+                Return ResourceManager.GetString("Activate", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Coeficientes de Atividade.
         '''</summary>
         Friend Shared ReadOnly Property ActivityCoefficients() As String
@@ -1604,6 +1613,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Mudar Propriedade.
+        '''</summary>
+        Friend Shared ReadOnly Property ChangeProperty() As String
+            Get
+                Return ResourceManager.GetString("ChangeProperty", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Mudanças em relação à versão anterior.
         '''</summary>
         Friend Shared ReadOnly Property Changes() As String
@@ -2383,6 +2401,15 @@ Namespace My.Resources
         Friend Shared ReadOnly Property Condies1() As String
             Get
                 Return ResourceManager.GetString("Condies1", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Condutância.
+        '''</summary>
+        Friend Shared ReadOnly Property Conductance() As String
+            Get
+                Return ResourceManager.GetString("Conductance", resourceCulture)
             End Get
         End Property
         
@@ -4178,6 +4205,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Desativar.
+        '''</summary>
+        Friend Shared ReadOnly Property Deactivate() As String
+            Get
+                Return ResourceManager.GetString("Deactivate", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Depurando objeto.
         '''</summary>
         Friend Shared ReadOnly Property Debugging() As String
@@ -4947,6 +4983,42 @@ Namespace My.Resources
         Friend Shared ReadOnly Property DWSIMUtilitriosPonto() As String
             Get
                 Return ResourceManager.GetString("DWSIMUtilitriosPonto", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Propriedades p/ Modo Dinâmico.
+        '''</summary>
+        Friend Shared ReadOnly Property DynamicProperties() As String
+            Get
+                Return ResourceManager.GetString("DynamicProperties", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to O Modo Dinâmico está inativo..
+        '''</summary>
+        Friend Shared ReadOnly Property DynamicsDisabled() As String
+            Get
+                Return ResourceManager.GetString("DynamicsDisabled", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to O Modo Dinâmico está desativado..
+        '''</summary>
+        Friend Shared ReadOnly Property DynDisabled() As String
+            Get
+                Return ResourceManager.GetString("DynDisabled", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to O Modo Dinâmico está ativado..
+        '''</summary>
+        Friend Shared ReadOnly Property DynEnabled() As String
+            Get
+                Return ResourceManager.GetString("DynEnabled", resourceCulture)
             End Get
         End Property
         
@@ -8214,6 +8286,15 @@ Namespace My.Resources
         Friend Shared ReadOnly Property InvalidFlashResult() As String
             Get
                 Return ResourceManager.GetString("InvalidFlashResult", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to O nome informado não é valido..
+        '''</summary>
+        Friend Shared ReadOnly Property InvalidName() As String
+            Get
+                Return ResourceManager.GetString("InvalidName", resourceCulture)
             End Get
         End Property
         
@@ -13159,6 +13240,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Executar Script.
+        '''</summary>
+        Friend Shared ReadOnly Property RunScript() As String
+            Get
+                Return ResourceManager.GetString("RunScript", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Tempo de cálculo da última execução.
         '''</summary>
         Friend Shared ReadOnly Property Runtime() As String
@@ -14082,6 +14172,24 @@ Namespace My.Resources
         Friend Shared ReadOnly Property Soloseco() As String
             Get
                 Return ResourceManager.GetString("Soloseco", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Estado restaurado com sucesso..
+        '''</summary>
+        Friend Shared ReadOnly Property SolutionRestored() As String
+            Get
+                Return ResourceManager.GetString("SolutionRestored", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Estado salvo com sucesso..
+        '''</summary>
+        Friend Shared ReadOnly Property SolutionStored() As String
+            Get
+                Return ResourceManager.GetString("SolutionStored", resourceCulture)
             End Get
         End Property
         

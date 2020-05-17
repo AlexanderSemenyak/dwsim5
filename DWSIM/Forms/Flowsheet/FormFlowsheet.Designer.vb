@@ -59,6 +59,11 @@ Partial Class FormFlowsheet
         Me.GerenciadorDeAmostrasDePetroleoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.InspectorTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator15 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ModoDinâmicoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ModoDinamicoAtivoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.GerenciadorDoModoDinamicoToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ControlesDoIntegradorToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.FerramentaParaSintoniaDeControladoresPIDToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.UtilitiesTSMI = New System.Windows.Forms.ToolStripMenuItem()
         Me.TSMIAddUtility = New System.Windows.Forms.ToolStripMenuItem()
         Me.OtimizaToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -112,6 +117,17 @@ Partial Class FormFlowsheet
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.tsbUndo = New System.Windows.Forms.ToolStripDropDownButton()
         Me.tsbRedo = New System.Windows.Forms.ToolStripDropDownButton()
+        Me.ToolStripSeparator3 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripLabel2 = New System.Windows.Forms.ToolStripLabel()
+        Me.tsbDynamics = New System.Windows.Forms.ToolStripButton()
+        Me.tsbDynManager = New System.Windows.Forms.ToolStripButton()
+        Me.tsbDynIntegrator = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
+        Me.ToolStripLabel1 = New System.Windows.Forms.ToolStripLabel()
+        Me.tscbStoredSolutions = New System.Windows.Forms.ToolStripComboBox()
+        Me.tsbStoreSolution = New System.Windows.Forms.ToolStripButton()
+        Me.tsbLoadSolution = New System.Windows.Forms.ToolStripButton()
+        Me.tsbDeleteSolution = New System.Windows.Forms.ToolStripButton()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TSTable.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
@@ -165,7 +181,7 @@ Partial Class FormFlowsheet
         resources.ApplyResources(Me.MenuStrip1, "MenuStrip1")
         Me.MenuStrip1.AllowItemReorder = True
         Me.MenuStrip1.ImageScalingSize = New System.Drawing.Size(20, 20)
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ArquivoToolStripMenuItem, Me.EditarToolStripMenuItem, Me.InserirToolStripMenuItem, Me.FerramentasToolStripMenuItem, Me.UtilitiesTSMI, Me.OtimizaToolStripMenuItem, Me.ResultadosToolStripMenuItem, Me.PluginsToolStripMenuItem, Me.ExibirToolStripMenuItem})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ArquivoToolStripMenuItem, Me.EditarToolStripMenuItem, Me.InserirToolStripMenuItem, Me.FerramentasToolStripMenuItem, Me.ModoDinâmicoToolStripMenuItem, Me.UtilitiesTSMI, Me.OtimizaToolStripMenuItem, Me.ResultadosToolStripMenuItem, Me.PluginsToolStripMenuItem, Me.ExibirToolStripMenuItem})
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.ShowItemToolTips = True
         '
@@ -408,12 +424,42 @@ Partial Class FormFlowsheet
         Me.ToolStripSeparator15.MergeIndex = 7
         Me.ToolStripSeparator15.Name = "ToolStripSeparator15"
         '
+        'ModoDinâmicoToolStripMenuItem
+        '
+        resources.ApplyResources(Me.ModoDinâmicoToolStripMenuItem, "ModoDinâmicoToolStripMenuItem")
+        Me.ModoDinâmicoToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ModoDinamicoAtivoToolStripMenuItem, Me.GerenciadorDoModoDinamicoToolStripMenuItem, Me.ControlesDoIntegradorToolStripMenuItem, Me.FerramentaParaSintoniaDeControladoresPIDToolStripMenuItem})
+        Me.ModoDinâmicoToolStripMenuItem.MergeAction = System.Windows.Forms.MergeAction.Insert
+        Me.ModoDinâmicoToolStripMenuItem.MergeIndex = 4
+        Me.ModoDinâmicoToolStripMenuItem.Name = "ModoDinâmicoToolStripMenuItem"
+        '
+        'ModoDinamicoAtivoToolStripMenuItem
+        '
+        resources.ApplyResources(Me.ModoDinamicoAtivoToolStripMenuItem, "ModoDinamicoAtivoToolStripMenuItem")
+        Me.ModoDinamicoAtivoToolStripMenuItem.CheckOnClick = True
+        Me.ModoDinamicoAtivoToolStripMenuItem.Name = "ModoDinamicoAtivoToolStripMenuItem"
+        '
+        'GerenciadorDoModoDinamicoToolStripMenuItem
+        '
+        resources.ApplyResources(Me.GerenciadorDoModoDinamicoToolStripMenuItem, "GerenciadorDoModoDinamicoToolStripMenuItem")
+        Me.GerenciadorDoModoDinamicoToolStripMenuItem.Name = "GerenciadorDoModoDinamicoToolStripMenuItem"
+        '
+        'ControlesDoIntegradorToolStripMenuItem
+        '
+        resources.ApplyResources(Me.ControlesDoIntegradorToolStripMenuItem, "ControlesDoIntegradorToolStripMenuItem")
+        Me.ControlesDoIntegradorToolStripMenuItem.Name = "ControlesDoIntegradorToolStripMenuItem"
+        '
+        'FerramentaParaSintoniaDeControladoresPIDToolStripMenuItem
+        '
+        resources.ApplyResources(Me.FerramentaParaSintoniaDeControladoresPIDToolStripMenuItem, "FerramentaParaSintoniaDeControladoresPIDToolStripMenuItem")
+        Me.FerramentaParaSintoniaDeControladoresPIDToolStripMenuItem.Image = Global.DWSIM.My.Resources.Resources.icons8_slider
+        Me.FerramentaParaSintoniaDeControladoresPIDToolStripMenuItem.Name = "FerramentaParaSintoniaDeControladoresPIDToolStripMenuItem"
+        '
         'UtilitiesTSMI
         '
         resources.ApplyResources(Me.UtilitiesTSMI, "UtilitiesTSMI")
         Me.UtilitiesTSMI.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TSMIAddUtility})
         Me.UtilitiesTSMI.MergeAction = System.Windows.Forms.MergeAction.Insert
-        Me.UtilitiesTSMI.MergeIndex = 4
+        Me.UtilitiesTSMI.MergeIndex = 5
         Me.UtilitiesTSMI.Name = "UtilitiesTSMI"
         '
         'TSMIAddUtility
@@ -427,7 +473,7 @@ Partial Class FormFlowsheet
         resources.ApplyResources(Me.OtimizaToolStripMenuItem, "OtimizaToolStripMenuItem")
         Me.OtimizaToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AnaliseDeSensibilidadeToolStripMenuItem, Me.MultivariateOptimizerToolStripMenuItem})
         Me.OtimizaToolStripMenuItem.MergeAction = System.Windows.Forms.MergeAction.Insert
-        Me.OtimizaToolStripMenuItem.MergeIndex = 5
+        Me.OtimizaToolStripMenuItem.MergeIndex = 6
         Me.OtimizaToolStripMenuItem.Name = "OtimizaToolStripMenuItem"
         '
         'AnaliseDeSensibilidadeToolStripMenuItem
@@ -668,7 +714,7 @@ Partial Class FormFlowsheet
         '
         resources.ApplyResources(Me.ToolStrip1, "ToolStrip1")
         Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.ToolStripSeparator1, Me.tsbAtivar, Me.tsbCalcF, Me.tsbCalc, Me.tsbAbortCalc, Me.tsbSimultAdjustSolver, Me.ToolStripSeparator2, Me.tsbUndo, Me.tsbRedo})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.ToolStripSeparator1, Me.tsbAtivar, Me.tsbCalcF, Me.tsbCalc, Me.tsbAbortCalc, Me.tsbSimultAdjustSolver, Me.ToolStripSeparator2, Me.tsbUndo, Me.tsbRedo, Me.ToolStripSeparator3, Me.ToolStripLabel2, Me.tsbDynamics, Me.tsbDynManager, Me.tsbDynIntegrator, Me.ToolStripSeparator4, Me.ToolStripLabel1, Me.tscbStoredSolutions, Me.tsbStoreSolution, Me.tsbLoadSolution, Me.tsbDeleteSolution})
         Me.ToolStrip1.Name = "ToolStrip1"
         '
         'ToolStripButton1
@@ -737,6 +783,73 @@ Partial Class FormFlowsheet
         Me.tsbRedo.Image = Global.DWSIM.My.Resources.Resources.redo_16
         Me.tsbRedo.Name = "tsbRedo"
         '
+        'ToolStripSeparator3
+        '
+        resources.ApplyResources(Me.ToolStripSeparator3, "ToolStripSeparator3")
+        Me.ToolStripSeparator3.Name = "ToolStripSeparator3"
+        '
+        'ToolStripLabel2
+        '
+        resources.ApplyResources(Me.ToolStripLabel2, "ToolStripLabel2")
+        Me.ToolStripLabel2.Name = "ToolStripLabel2"
+        '
+        'tsbDynamics
+        '
+        resources.ApplyResources(Me.tsbDynamics, "tsbDynamics")
+        Me.tsbDynamics.CheckOnClick = True
+        Me.tsbDynamics.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.tsbDynamics.Image = Global.DWSIM.My.Resources.Resources.icons8_exercise
+        Me.tsbDynamics.Name = "tsbDynamics"
+        '
+        'tsbDynManager
+        '
+        resources.ApplyResources(Me.tsbDynManager, "tsbDynManager")
+        Me.tsbDynManager.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.tsbDynManager.Name = "tsbDynManager"
+        '
+        'tsbDynIntegrator
+        '
+        resources.ApplyResources(Me.tsbDynIntegrator, "tsbDynIntegrator")
+        Me.tsbDynIntegrator.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.tsbDynIntegrator.Name = "tsbDynIntegrator"
+        '
+        'ToolStripSeparator4
+        '
+        resources.ApplyResources(Me.ToolStripSeparator4, "ToolStripSeparator4")
+        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
+        '
+        'ToolStripLabel1
+        '
+        resources.ApplyResources(Me.ToolStripLabel1, "ToolStripLabel1")
+        Me.ToolStripLabel1.Name = "ToolStripLabel1"
+        '
+        'tscbStoredSolutions
+        '
+        resources.ApplyResources(Me.tscbStoredSolutions, "tscbStoredSolutions")
+        Me.tscbStoredSolutions.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.tscbStoredSolutions.Name = "tscbStoredSolutions"
+        '
+        'tsbStoreSolution
+        '
+        resources.ApplyResources(Me.tsbStoreSolution, "tsbStoreSolution")
+        Me.tsbStoreSolution.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.tsbStoreSolution.Image = Global.DWSIM.My.Resources.Resources.arrow_up1
+        Me.tsbStoreSolution.Name = "tsbStoreSolution"
+        '
+        'tsbLoadSolution
+        '
+        resources.ApplyResources(Me.tsbLoadSolution, "tsbLoadSolution")
+        Me.tsbLoadSolution.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.tsbLoadSolution.Image = Global.DWSIM.My.Resources.Resources.arrow_down
+        Me.tsbLoadSolution.Name = "tsbLoadSolution"
+        '
+        'tsbDeleteSolution
+        '
+        resources.ApplyResources(Me.tsbDeleteSolution, "tsbDeleteSolution")
+        Me.tsbDeleteSolution.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.tsbDeleteSolution.Image = Global.DWSIM.My.Resources.Resources.cross
+        Me.tsbDeleteSolution.Name = "tsbDeleteSolution"
+        '
         'FormFlowsheet
         '
         resources.ApplyResources(Me, "$this")
@@ -749,6 +862,7 @@ Partial Class FormFlowsheet
         Me.DoubleBuffered = True
         Me.MainMenuStrip = Me.MenuStrip1
         Me.Name = "FormFlowsheet"
+        Me.WindowState = System.Windows.Forms.FormWindowState.Maximized
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TSTable.ResumeLayout(False)
         Me.MenuStrip1.ResumeLayout(False)
@@ -853,4 +967,20 @@ Partial Class FormFlowsheet
     Friend WithEvents tsbUndo As ToolStripDropDownButton
     Friend WithEvents tsbRedo As ToolStripDropDownButton
     Friend WithEvents tsbCalcF As ToolStripButton
+    Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
+    Friend WithEvents ToolStripLabel1 As ToolStripLabel
+    Friend WithEvents tscbStoredSolutions As ToolStripComboBox
+    Friend WithEvents tsbStoreSolution As ToolStripButton
+    Friend WithEvents tsbLoadSolution As ToolStripButton
+    Friend WithEvents tsbDeleteSolution As ToolStripButton
+    Friend WithEvents ModoDinâmicoToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents GerenciadorDoModoDinamicoToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ControlesDoIntegradorToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ModoDinamicoAtivoToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents ToolStripLabel2 As ToolStripLabel
+    Friend WithEvents tsbDynamics As ToolStripButton
+    Friend WithEvents tsbDynManager As ToolStripButton
+    Friend WithEvents tsbDynIntegrator As ToolStripButton
+    Friend WithEvents ToolStripSeparator4 As ToolStripSeparator
+    Friend WithEvents FerramentaParaSintoniaDeControladoresPIDToolStripMenuItem As ToolStripMenuItem
 End Class

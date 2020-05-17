@@ -64,6 +64,8 @@ Namespace Streams
 
         Public Overrides Property ObjectClass As SimulationObjectClass = SimulationObjectClass.Streams
 
+        Public Overrides ReadOnly Property SupportsDynamicMode As Boolean = True
+
 #Region "    XML serialization"
 
         Public Overrides Function LoadData(data As ICollection(Of XElement)) As Boolean
@@ -337,6 +339,26 @@ Namespace Streams
                     Return Phases(0)
             End Select
         End Function
+
+        Public Overrides Sub RunDynamicModel()
+
+            If FlowSheet IsNot Nothing Then
+
+                Dim integratorID = FlowSheet.DynamicsManager.ScheduleList(FlowSheet.DynamicsManager.CurrentSchedule).CurrentIntegrator
+                Dim integrator = FlowSheet.DynamicsManager.IntegratorList(integratorID)
+
+                If integrator.ShouldCalculateEquilibrium Then
+                    If GetPressure() > 0.0 And GetTemperature() > 0 And GetMassFlow() > 0 Then
+                        Calculate()
+                    Else
+                        'Clear()
+                        'ClearAllProps()
+                    End If
+                End If
+
+            End If
+
+        End Sub
 
         Public Overrides Sub Calculate(Optional ByVal args As Object = Nothing)
             Calculate(True, True)
@@ -832,6 +854,8 @@ Namespace Streams
                 For Each comp In Phases(i).Compounds.Values
                     comp.MoleFraction = Nothing
                     comp.MassFraction = Nothing
+                    comp.MolarFlow = Nothing
+                    comp.MassFlow = Nothing
                 Next
 
                 'Should be define after concentrations?!?!
@@ -6167,6 +6191,8 @@ Namespace Streams
             Dim overallprops As String() = PropertyPackage.GetOverallPropList()
             Dim comps As String() = PropertyPackage.RET_VNAMES2(GetFlowsheet().FlowsheetOptions.CompoundOrderingMode)
 
+            Dim comps0 = PropertyPackage.RET_VNAMES2(CompoundOrdering.AsAdded).ToList
+
             Dim units As IUnitsOfMeasure = GetFlowsheet().FlowsheetOptions.SelectedUnitSystem
 
             Dim results As New CalculationResults
@@ -6197,7 +6223,6 @@ Namespace Streams
             results.Data.Add("Solid Phase Molar Fraction", New List(Of Double) From {Me.Phases(7).Properties.molarfraction.GetValueOrDefault})
             results.DataUnits.Add("Solid Phase Molar Fraction", "")
 
-
             If (ny > 0.0000000001# And ny < 0.9999999999#) OrElse nl2 > 0.000000001# OrElse ns > 0.0# Then
 
                 results.Data.Add("SPACE00000000", Nothing)
@@ -6216,28 +6241,28 @@ Namespace Streams
                 results.Data.Add("SPACE1", Nothing)
                 i = 0
                 For Each comp As String In comps
-                    results.Data.Add("[Overall] " + comp + " Mole Frac", New List(Of Double)({vz(i)}))
+                    results.Data.Add("[Overall] " + comp + " Mole Frac", New List(Of Double)({vz(comps0.IndexOf(comp))}))
                     results.DataUnits.Add("[Overall] " + comp + " Mole Frac", "")
                     i += 1
                 Next
                 results.Data.Add("SPACE2", Nothing)
                 i = 0
                 For Each comp As String In comps
-                    results.Data.Add("[Overall] " + comp + " Mass Frac", New List(Of Double)({wz(i)}))
+                    results.Data.Add("[Overall] " + comp + " Mass Frac", New List(Of Double)({wz(comps0.IndexOf(comp))}))
                     results.DataUnits.Add("[Overall] " + comp + " Mass Frac", "")
                     i += 1
                 Next
                 results.Data.Add("SPACE3", Nothing)
                 i = 0
                 For Each comp As String In comps
-                    results.Data.Add("[Overall] " + comp + " Mole Flow", New List(Of Double)({vnz(i)}))
+                    results.Data.Add("[Overall] " + comp + " Mole Flow", New List(Of Double)({vnz(comps0.IndexOf(comp))}))
                     results.DataUnits.Add("[Overall] " + comp + " Mole Flow", units.molarflow)
                     i += 1
                 Next
                 results.Data.Add("SPACE4", Nothing)
                 i = 0
                 For Each comp As String In comps
-                    results.Data.Add("[Overall] " + comp + " Mass Flow", New List(Of Double)({wnz(i)}))
+                    results.Data.Add("[Overall] " + comp + " Mass Flow", New List(Of Double)({wnz(comps0.IndexOf(comp))}))
                     results.DataUnits.Add("[Overall] " + comp + " Mass Flow", units.massflow)
                     i += 1
                 Next
@@ -6270,28 +6295,28 @@ Namespace Streams
                 results.Data.Add("SPACE11", Nothing)
                 i = 0
                 For Each comp As String In comps
-                    results.Data.Add("[Vapor Phase] " + comp + " Mole Frac", New List(Of Double)({vz(i)}))
+                    results.Data.Add("[Vapor Phase] " + comp + " Mole Frac", New List(Of Double)({vz(comps0.IndexOf(comp))}))
                     results.DataUnits.Add("[Vapor Phase] " + comp + " Mole Frac", "")
                     i += 1
                 Next
                 results.Data.Add("SPACE21", Nothing)
                 i = 0
                 For Each comp As String In comps
-                    results.Data.Add("[Vapor Phase] " + comp + " Mass Frac", New List(Of Double)({wz(i)}))
+                    results.Data.Add("[Vapor Phase] " + comp + " Mass Frac", New List(Of Double)({wz(comps0.IndexOf(comp))}))
                     results.DataUnits.Add("[Vapor Phase] " + comp + " Mass Frac", "")
                     i += 1
                 Next
                 results.Data.Add("SPACE31", Nothing)
                 i = 0
                 For Each comp As String In comps
-                    results.Data.Add("[Vapor Phase] " + comp + " Mole Flow", New List(Of Double)({vnz(i)}))
+                    results.Data.Add("[Vapor Phase] " + comp + " Mole Flow", New List(Of Double)({vnz(comps0.IndexOf(comp))}))
                     results.DataUnits.Add("[Vapor Phase] " + comp + " Mole Flow", units.molarflow)
                     i += 1
                 Next
                 results.Data.Add("SPACE41", Nothing)
                 i = 0
                 For Each comp As String In comps
-                    results.Data.Add("[Vapor Phase] " + comp + " Mass Flow", New List(Of Double)({wnz(i)}))
+                    results.Data.Add("[Vapor Phase] " + comp + " Mass Flow", New List(Of Double)({wnz(comps0.IndexOf(comp))}))
                     results.DataUnits.Add("[Vapor Phase] " + comp + " Mass Flow", units.massflow)
                     i += 1
                 Next
@@ -6324,28 +6349,28 @@ Namespace Streams
                 results.Data.Add("SPACE12", Nothing)
                 i = 0
                 For Each comp As String In comps
-                    results.Data.Add("[Liquid Phase] " + comp + " Mole Frac", New List(Of Double)({vz(i)}))
+                    results.Data.Add("[Liquid Phase] " + comp + " Mole Frac", New List(Of Double)({vz(comps0.IndexOf(comp))}))
                     results.DataUnits.Add("[Liquid Phase] " + comp + " Mole Frac", "")
                     i += 1
                 Next
                 results.Data.Add("SPACE22", Nothing)
                 i = 0
                 For Each comp As String In comps
-                    results.Data.Add("[Liquid Phase] " + comp + " Mass Frac", New List(Of Double)({wz(i)}))
+                    results.Data.Add("[Liquid Phase] " + comp + " Mass Frac", New List(Of Double)({wz(comps0.IndexOf(comp))}))
                     results.DataUnits.Add("[Liquid Phase] " + comp + " Mass Frac", "")
                     i += 1
                 Next
                 results.Data.Add("SPACE32", Nothing)
                 i = 0
                 For Each comp As String In comps
-                    results.Data.Add("[Liquid Phase] " + comp + " Mole Flow", New List(Of Double)({vnz(i)}))
+                    results.Data.Add("[Liquid Phase] " + comp + " Mole Flow", New List(Of Double)({vnz(comps0.IndexOf(comp))}))
                     results.DataUnits.Add("[Liquid Phase] " + comp + " Mole Flow", units.molarflow)
                     i += 1
                 Next
                 results.Data.Add("SPACE42", Nothing)
                 i = 0
                 For Each comp As String In comps
-                    results.Data.Add("[Liquid Phase] " + comp + " Mass Flow", New List(Of Double)({wnz(i)}))
+                    results.Data.Add("[Liquid Phase] " + comp + " Mass Flow", New List(Of Double)({wnz(comps0.IndexOf(comp))}))
                     results.DataUnits.Add("[Liquid Phase] " + comp + " Mass Flow", units.massflow)
                     i += 1
                 Next
@@ -6379,28 +6404,28 @@ Namespace Streams
                 results.Data.Add("SPACE13", Nothing)
                 i = 0
                 For Each comp As String In comps
-                    results.Data.Add("[Liquid Phase 2] " + comp + " Mole Frac", New List(Of Double)({vz(i)}))
+                    results.Data.Add("[Liquid Phase 2] " + comp + " Mole Frac", New List(Of Double)({vz(comps0.IndexOf(comp))}))
                     results.DataUnits.Add("[Liquid Phase 2] " + comp + " Mole Frac", "")
                     i += 1
                 Next
                 results.Data.Add("SPACE23", Nothing)
                 i = 0
                 For Each comp As String In comps
-                    results.Data.Add("[Liquid Phase 2] " + comp + " Mass Frac", New List(Of Double)({wz(i)}))
+                    results.Data.Add("[Liquid Phase 2] " + comp + " Mass Frac", New List(Of Double)({wz(comps0.IndexOf(comp))}))
                     results.DataUnits.Add("[Liquid Phase 2] " + comp + " Mass Frac", "")
                     i += 1
                 Next
                 results.Data.Add("SPACE33", Nothing)
                 i = 0
                 For Each comp As String In comps
-                    results.Data.Add("[Liquid Phase 2] " + comp + " Mole Flow", New List(Of Double)({vnz(i)}))
+                    results.Data.Add("[Liquid Phase 2] " + comp + " Mole Flow", New List(Of Double)({vnz(comps0.IndexOf(comp))}))
                     results.DataUnits.Add("[Liquid Phase 2] " + comp + " Mole Flow", units.molarflow)
                     i += 1
                 Next
                 results.Data.Add("SPACE43", Nothing)
                 i = 0
                 For Each comp As String In comps
-                    results.Data.Add("[Liquid Phase 2] " + comp + " Mass Flow", New List(Of Double)({wnz(i)}))
+                    results.Data.Add("[Liquid Phase 2] " + comp + " Mass Flow", New List(Of Double)({wnz(comps0.IndexOf(comp))}))
                     results.DataUnits.Add("[Liquid Phase 2] " + comp + " Mass Flow", units.massflow)
                     i += 1
                 Next
@@ -6433,28 +6458,28 @@ Namespace Streams
                 results.Data.Add("SPACE12S", Nothing)
                 i = 0
                 For Each comp As String In comps
-                    results.Data.Add("[Solid Phase] " + comp + " Mole Frac", New List(Of Double)({vz(i)}))
+                    results.Data.Add("[Solid Phase] " + comp + " Mole Frac", New List(Of Double)({vz(comps0.IndexOf(comp))}))
                     results.DataUnits.Add("[Solid Phase] " + comp + " Mole Frac", "")
                     i += 1
                 Next
                 results.Data.Add("SPACE22S", Nothing)
                 i = 0
                 For Each comp As String In comps
-                    results.Data.Add("[Solid Phase] " + comp + " Mass Frac", New List(Of Double)({wz(i)}))
+                    results.Data.Add("[Solid Phase] " + comp + " Mass Frac", New List(Of Double)({wz(comps0.IndexOf(comp))}))
                     results.DataUnits.Add("[Solid Phase] " + comp + " Mass Frac", "")
                     i += 1
                 Next
                 results.Data.Add("SPACE32S", Nothing)
                 i = 0
                 For Each comp As String In comps
-                    results.Data.Add("[Solid Phase] " + comp + " Mole Flow", New List(Of Double)({vnz(i)}))
+                    results.Data.Add("[Solid Phase] " + comp + " Mole Flow", New List(Of Double)({vnz(comps0.IndexOf(comp))}))
                     results.DataUnits.Add("[Solid Phase] " + comp + " Mole Flow", units.molarflow)
                     i += 1
                 Next
                 results.Data.Add("SPACE42S", Nothing)
                 i = 0
                 For Each comp As String In comps
-                    results.Data.Add("[Solid Phase] " + comp + " Mass Flow", New List(Of Double)({wnz(i)}))
+                    results.Data.Add("[Solid Phase] " + comp + " Mass Flow", New List(Of Double)({wnz(comps0.IndexOf(comp))}))
                     results.DataUnits.Add("[Solid Phase] " + comp + " Mass Flow", units.massflow)
                     i += 1
                 Next
@@ -6521,6 +6546,7 @@ Namespace Streams
             Dim props As String() = PropertyPackage.GetSinglePhasePropList()
             Dim overallprops As String() = PropertyPackage.GetOverallPropList()
             Dim comps As String() = PropertyPackage.RET_VNAMES2(GetFlowsheet().FlowsheetOptions.CompoundOrderingMode)
+            Dim comps0 = PropertyPackage.RET_VNAMES2(CompoundOrdering.AsAdded).ToList
 
             Dim units As IUnitsOfMeasure = GetFlowsheet().FlowsheetOptions.SelectedUnitSystem
             Dim nf = GetFlowsheet().FlowsheetOptions.NumberFormat
@@ -6618,7 +6644,7 @@ Namespace Streams
                 For Each comp As String In comps
                     list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.DoubleColumn,
                     New String() {comp,
-                    vz(i).ToString(nff)}))
+                    vz(comps0.IndexOf(comp)).ToString(nff)}))
                     i += 1
                 Next
 
@@ -6628,7 +6654,7 @@ Namespace Streams
                 For Each comp As String In comps
                     list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.DoubleColumn,
                     New String() {comp,
-                    wz(i).ToString(nff)}))
+                    wz(comps0.IndexOf(comp)).ToString(nff)}))
                     i += 1
                 Next
 
@@ -6638,7 +6664,7 @@ Namespace Streams
                 For Each comp As String In comps
                     list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.DoubleColumn,
                     New String() {comp,
-                    vnz(i).ToString(nff)}))
+                    vnz(comps0.IndexOf(comp)).ToString(nff)}))
                     i += 1
                 Next
 
@@ -6648,7 +6674,7 @@ Namespace Streams
                 For Each comp As String In comps
                     list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.DoubleColumn,
                     New String() {comp,
-                    wnz(i).ToString(nff)}))
+                    wnz(comps0.IndexOf(comp)).ToString(nff)}))
                     i += 1
                 Next
 
@@ -6697,7 +6723,7 @@ Namespace Streams
                 For Each comp As String In comps
                     list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.DoubleColumn,
                     New String() {comp,
-                    vz(i).ToString(nff)}))
+                    vz(comps0.IndexOf(comp)).ToString(nff)}))
                     i += 1
                 Next
 
@@ -6707,7 +6733,7 @@ Namespace Streams
                 For Each comp As String In comps
                     list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.DoubleColumn,
                     New String() {comp,
-                    wz(i).ToString(nff)}))
+                    wz(comps0.IndexOf(comp)).ToString(nff)}))
                     i += 1
                 Next
 
@@ -6717,7 +6743,7 @@ Namespace Streams
                 For Each comp As String In comps
                     list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.DoubleColumn,
                     New String() {comp,
-                    vnz(i).ToString(nff)}))
+                    vnz(comps0.IndexOf(comp)).ToString(nff)}))
                     i += 1
                 Next
 
@@ -6727,7 +6753,7 @@ Namespace Streams
                 For Each comp As String In comps
                     list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.DoubleColumn,
                     New String() {comp,
-                    wnz(i).ToString(nff)}))
+                    wnz(comps0.IndexOf(comp)).ToString(nff)}))
                     i += 1
                 Next
 
@@ -6794,7 +6820,7 @@ Namespace Streams
                 For Each comp As String In comps
                     list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.DoubleColumn,
                     New String() {comp,
-                    vz(i).ToString(nff)}))
+                    vz(comps0.IndexOf(comp)).ToString(nff)}))
                     i += 1
                 Next
 
@@ -6804,7 +6830,7 @@ Namespace Streams
                 For Each comp As String In comps
                     list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.DoubleColumn,
                     New String() {comp,
-                    wz(i).ToString(nff)}))
+                    wz(comps0.IndexOf(comp)).ToString(nff)}))
                     i += 1
                 Next
 
@@ -6814,7 +6840,7 @@ Namespace Streams
                 For Each comp As String In comps
                     list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.DoubleColumn,
                     New String() {comp,
-                    vnz(i).ToString(nff)}))
+                    vnz(comps0.IndexOf(comp)).ToString(nff)}))
                     i += 1
                 Next
 
@@ -6824,7 +6850,7 @@ Namespace Streams
                 For Each comp As String In comps
                     list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.DoubleColumn,
                     New String() {comp,
-                    wnz(i).ToString(nff)}))
+                    wnz(comps0.IndexOf(comp)).ToString(nff)}))
                     i += 1
                 Next
 
@@ -6891,7 +6917,7 @@ Namespace Streams
                 For Each comp As String In comps
                     list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.DoubleColumn,
                     New String() {comp,
-                    vz(i).ToString(nff)}))
+                    vz(comps0.IndexOf(comp)).ToString(nff)}))
                     i += 1
                 Next
 
@@ -6901,7 +6927,7 @@ Namespace Streams
                 For Each comp As String In comps
                     list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.DoubleColumn,
                     New String() {comp,
-                    wz(i).ToString(nff)}))
+                    wz(comps0.IndexOf(comp)).ToString(nff)}))
                     i += 1
                 Next
 
@@ -6911,7 +6937,7 @@ Namespace Streams
                 For Each comp As String In comps
                     list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.DoubleColumn,
                     New String() {comp,
-                    vnz(i).ToString(nff)}))
+                    vnz(comps0.IndexOf(comp)).ToString(nff)}))
                     i += 1
                 Next
 
@@ -6921,7 +6947,7 @@ Namespace Streams
                 For Each comp As String In comps
                     list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.DoubleColumn,
                     New String() {comp,
-                    wnz(i).ToString(nff)}))
+                    wnz(comps0.IndexOf(comp)).ToString(nff)}))
                     i += 1
                 Next
 
@@ -6987,7 +7013,7 @@ Namespace Streams
                 For Each comp As String In comps
                     list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.DoubleColumn,
                     New String() {comp,
-                    vz(i).ToString(nff)}))
+                    vz(comps0.IndexOf(comp)).ToString(nff)}))
                     i += 1
                 Next
 
@@ -6997,7 +7023,7 @@ Namespace Streams
                 For Each comp As String In comps
                     list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.DoubleColumn,
                     New String() {comp,
-                    wz(i).ToString(nff)}))
+                    wz(comps0.IndexOf(comp)).ToString(nff)}))
                     i += 1
                 Next
 
@@ -7007,7 +7033,7 @@ Namespace Streams
                 For Each comp As String In comps
                     list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.DoubleColumn,
                     New String() {comp,
-                    vnz(i).ToString(nff)}))
+                    vnz(comps0.IndexOf(comp)).ToString(nff)}))
                     i += 1
                 Next
 
@@ -7017,7 +7043,7 @@ Namespace Streams
                 For Each comp As String In comps
                     list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.DoubleColumn,
                     New String() {comp,
-                    wnz(i).ToString(nff)}))
+                    wnz(comps0.IndexOf(comp)).ToString(nff)}))
                     i += 1
                 Next
 
@@ -7474,7 +7500,7 @@ Namespace Streams
             Phases(0).Properties.volumetric_flow = Nothing
         End Sub
 
-        Public Function GetEnthalpy() As Double
+        Public Function GetMassEnthalpy() As Double
             Return Phases(0).Properties.enthalpy.GetValueOrDefault
         End Function
 
@@ -7551,11 +7577,11 @@ Namespace Streams
 
             Dim W1 = withstream.GetMassFlow()
             Dim T1 = withstream.GetTemperature()
-            Dim H1 = withstream.GetEnthalpy()
+            Dim H1 = withstream.GetMassEnthalpy()
 
             Dim W0 = Me.GetMassFlow()
             Dim T0 = Me.GetTemperature()
-            Dim H0 = Me.GetEnthalpy()
+            Dim H0 = Me.GetMassEnthalpy()
 
             Dim comp As BaseClasses.Compound
             For Each comp In withstream.Phases(0).Compounds.Values
@@ -7605,6 +7631,281 @@ Namespace Streams
 
         End Sub
 
+        Public Function Add(stream As MaterialStream, Optional ByVal Factor As Double = 1.0) As MaterialStream
+
+            Dim newstream = DirectCast(CloneXML(), MaterialStream)
+
+            Dim W1 = stream.GetMassFlow()
+            Dim M1 = stream.GetMolarFlow()
+
+            Dim T1 = stream.GetTemperature()
+            Dim H1 = stream.GetMassEnthalpy()
+
+            Dim W0 = newstream.GetMassFlow()
+            Dim M0 = newstream.GetMolarFlow()
+
+            Dim T0 = newstream.GetTemperature()
+            Dim H0 = newstream.GetMassEnthalpy()
+
+            Dim Vw As New Dictionary(Of String, Double)
+
+            Dim Vm As New Dictionary(Of String, Double)
+
+            Dim comp As BaseClasses.Compound
+
+            For Each comp In stream.Phases(0).Compounds.Values
+                If Not Vw.ContainsKey(comp.Name) Then
+                    Vw.Add(comp.Name, 0)
+                End If
+                Vw(comp.Name) += Factor * comp.MassFlow.GetValueOrDefault
+            Next
+
+            For Each comp In stream.Phases(0).Compounds.Values
+                If Not Vm.ContainsKey(comp.Name) Then
+                    Vm.Add(comp.Name, 0)
+                End If
+                Vm(comp.Name) += Factor * comp.MolarFlow.GetValueOrDefault
+            Next
+
+            For Each comp In newstream.Phases(0).Compounds.Values
+                comp.MassFlow += Vw(comp.Name)
+            Next
+
+            For Each comp In newstream.Phases(0).Compounds.Values
+                comp.MolarFlow += Vm(comp.Name)
+            Next
+
+            With newstream
+                Dim sub1 As BaseClasses.Compound
+                Dim p = .Phases(0)
+                Dim mass_div_mm As Double = 0
+                Dim total As Double = 0
+                For Each sub1 In p.Compounds.Values
+                    total += sub1.MassFlow.GetValueOrDefault
+                Next
+                Dim totalm As Double = 0
+                For Each sub1 In p.Compounds.Values
+                    totalm += sub1.MolarFlow.GetValueOrDefault
+                Next
+                For Each sub1 In p.Compounds.Values
+                    sub1.MassFraction = sub1.MassFlow.GetValueOrDefault / total
+                Next
+                For Each sub1 In p.Compounds.Values
+                    mass_div_mm += sub1.MassFraction.GetValueOrDefault / sub1.ConstantProperties.Molar_Weight
+                Next
+                For Each sub1 In p.Compounds.Values
+                    sub1.MoleFraction = sub1.MassFraction.GetValueOrDefault / sub1.ConstantProperties.Molar_Weight / mass_div_mm
+                Next
+                .Phases(0).Properties.massflow = total
+                .Phases(0).Properties.molarflow = totalm
+                .SpecType = StreamSpec.Temperature_and_Pressure
+            End With
+
+            Return newstream
+
+        End Function
+
+        Public Function Subtract(stream As MaterialStream, Optional ByVal Factor As Double = 1.0) As MaterialStream
+
+            Dim newstream = DirectCast(CloneXML(), MaterialStream)
+
+            Dim W1 = stream.GetMassFlow()
+            Dim M1 = stream.GetMolarFlow()
+
+            Dim T1 = stream.GetTemperature()
+            Dim H1 = stream.GetMassEnthalpy()
+
+            Dim W0 = newstream.GetMassFlow()
+            Dim M0 = newstream.GetMolarFlow()
+
+            Dim T0 = newstream.GetTemperature()
+            Dim H0 = newstream.GetMassEnthalpy()
+
+            Dim Vw As New Dictionary(Of String, Double)
+
+            Dim Vm As New Dictionary(Of String, Double)
+
+            Dim comp As BaseClasses.Compound
+
+            For Each comp In stream.Phases(0).Compounds.Values
+                If Not Vw.ContainsKey(comp.Name) Then
+                    Vw.Add(comp.Name, 0)
+                End If
+                Vw(comp.Name) += Factor * comp.MassFlow.GetValueOrDefault
+            Next
+
+            For Each comp In stream.Phases(0).Compounds.Values
+                If Not Vm.ContainsKey(comp.Name) Then
+                    Vm.Add(comp.Name, 0)
+                End If
+                Vm(comp.Name) += Factor * comp.MolarFlow.GetValueOrDefault
+            Next
+
+            For Each comp In newstream.Phases(0).Compounds.Values
+                comp.MassFlow -= Vw(comp.Name)
+                If comp.MassFlow < 0.0 Then comp.MassFlow = 0.0
+            Next
+
+            For Each comp In newstream.Phases(0).Compounds.Values
+                comp.MolarFlow -= Vm(comp.Name)
+                If comp.MolarFlow < 0.0 Then comp.MolarFlow = 0.0
+            Next
+
+            With newstream
+                Dim sub1 As BaseClasses.Compound
+                Dim p = .Phases(0)
+                Dim mass_div_mm As Double = 0
+                    Dim total As Double = 0
+                For Each sub1 In p.Compounds.Values
+                    total += sub1.MassFlow.GetValueOrDefault
+                Next
+                Dim totalm As Double = 0
+                For Each sub1 In p.Compounds.Values
+                    totalm += sub1.MolarFlow.GetValueOrDefault
+                Next
+                For Each sub1 In p.Compounds.Values
+                        sub1.MassFraction = sub1.MassFlow.GetValueOrDefault / total
+                    Next
+                    For Each sub1 In p.Compounds.Values
+                        mass_div_mm += sub1.MassFraction.GetValueOrDefault / sub1.ConstantProperties.Molar_Weight
+                    Next
+                For Each sub1 In p.Compounds.Values
+                    sub1.MoleFraction = sub1.MassFraction.GetValueOrDefault / sub1.ConstantProperties.Molar_Weight / mass_div_mm
+                Next
+                .Phases(0).Properties.massflow = total
+                .Phases(0).Properties.molarflow = totalm
+                .SpecType = StreamSpec.Temperature_and_Pressure
+            End With
+
+            Return newstream
+
+        End Function
+
+        Public Sub AssignFromPhase(phase As Enums.PhaseLabel, stream As MaterialStream, SetW As Boolean)
+
+            Dim prevW As Double = GetMassFlow()
+
+            Clear()
+            ClearAllProps()
+
+            SetTemperature(stream.GetTemperature)
+            SetPressure(stream.GetPressure)
+
+            Dim W = stream.GetMassFlow
+            Dim M = stream.GetMolarFlow
+            Dim H = stream.GetMassEnthalpy
+
+            Select Case phase
+
+                Case PhaseLabel.Mixture
+
+                    Dim wfrac = 1.0
+                    Dim mfrac = 1.0
+
+                    If SetW Then W = prevW
+                    SetMassFlow(W * wfrac)
+                    SetMassEnthalpy(H * wfrac)
+
+                    For Each sub1 In Me.Phases(0).Compounds.Values
+                        sub1.MoleFraction = stream.Phases(0).Compounds(sub1.Name).MoleFraction.GetValueOrDefault
+                        sub1.MassFraction = stream.Phases(0).Compounds(sub1.Name).MassFraction.GetValueOrDefault
+                        sub1.MolarFlow = M * mfrac * sub1.MoleFraction
+                        sub1.MassFlow = W * wfrac * sub1.MassFraction
+                    Next
+
+                Case PhaseLabel.Vapor
+
+                    Dim wfrac = stream.Phases(2).Properties.massfraction.GetValueOrDefault
+                    Dim mfrac = stream.Phases(2).Properties.molarfraction.GetValueOrDefault
+
+                    If SetW Then W = prevW
+                    SetMassFlow(W * wfrac)
+                    SetMassEnthalpy(stream.Phases(2).Properties.enthalpy.GetValueOrDefault)
+
+                    For Each sub1 In Me.Phases(0).Compounds.Values
+                        sub1.MoleFraction = stream.Phases(2).Compounds(sub1.Name).MoleFraction.GetValueOrDefault
+                        sub1.MassFraction = stream.Phases(2).Compounds(sub1.Name).MassFraction.GetValueOrDefault
+                        sub1.MolarFlow = M * mfrac * sub1.MoleFraction
+                        sub1.MassFlow = W * wfrac * sub1.MassFraction
+                    Next
+
+                Case PhaseLabel.LiquidMixture
+
+                    Dim wfrac = stream.Phases(1).Properties.massfraction.GetValueOrDefault
+                    Dim mfrac = stream.Phases(1).Properties.molarfraction.GetValueOrDefault
+
+                    If SetW Then W = prevW
+                    SetMassFlow(W * wfrac)
+                    SetMassEnthalpy(stream.Phases(1).Properties.enthalpy.GetValueOrDefault)
+
+                    For Each sub1 In Me.Phases(0).Compounds.Values
+                        sub1.MoleFraction = stream.Phases(1).Compounds(sub1.Name).MoleFraction.GetValueOrDefault
+                        sub1.MassFraction = stream.Phases(1).Compounds(sub1.Name).MassFraction.GetValueOrDefault
+                        sub1.MolarFlow = M * mfrac * sub1.MoleFraction
+                        sub1.MassFlow = W * wfrac * sub1.MassFraction
+                    Next
+
+                Case PhaseLabel.Liquid1
+
+                    Dim wfrac = stream.Phases(3).Properties.massfraction.GetValueOrDefault
+                    Dim mfrac = stream.Phases(3).Properties.molarfraction.GetValueOrDefault
+
+                    If SetW Then W = prevW
+                    SetMassFlow(W * wfrac)
+                    SetMassEnthalpy(stream.Phases(3).Properties.enthalpy.GetValueOrDefault)
+
+                    For Each sub1 In Me.Phases(0).Compounds.Values
+                        sub1.MoleFraction = stream.Phases(3).Compounds(sub1.Name).MoleFraction.GetValueOrDefault
+                        sub1.MassFraction = stream.Phases(3).Compounds(sub1.Name).MassFraction.GetValueOrDefault
+                        sub1.MolarFlow = M * mfrac * sub1.MoleFraction
+                        sub1.MassFlow = W * wfrac * sub1.MassFraction
+                    Next
+
+                Case PhaseLabel.Liquid2
+
+                    Dim wfrac = stream.Phases(4).Properties.massfraction.GetValueOrDefault
+                    Dim mfrac = stream.Phases(4).Properties.molarfraction.GetValueOrDefault
+
+                    If SetW Then W = prevW
+                    SetMassFlow(W * wfrac)
+                    SetMassEnthalpy(stream.Phases(4).Properties.enthalpy.GetValueOrDefault)
+
+                    For Each sub1 In Me.Phases(0).Compounds.Values
+                        sub1.MoleFraction = stream.Phases(4).Compounds(sub1.Name).MoleFraction.GetValueOrDefault
+                        sub1.MassFraction = stream.Phases(4).Compounds(sub1.Name).MassFraction.GetValueOrDefault
+                        sub1.MolarFlow = M * mfrac * sub1.MoleFraction
+                        sub1.MassFlow = W * wfrac * sub1.MassFraction
+                    Next
+
+                Case PhaseLabel.Solid
+
+                    Dim wfrac = stream.Phases(7).Properties.massfraction.GetValueOrDefault
+                    Dim mfrac = stream.Phases(7).Properties.molarfraction.GetValueOrDefault
+
+                    If SetW Then W = prevW
+                    SetMassFlow(W * wfrac)
+                    SetMassEnthalpy(stream.Phases(7).Properties.enthalpy.GetValueOrDefault)
+
+                    For Each sub1 In Me.Phases(0).Compounds.Values
+                        sub1.MoleFraction = stream.Phases(7).Compounds(sub1.Name).MoleFraction.GetValueOrDefault
+                        sub1.MassFraction = stream.Phases(7).Compounds(sub1.Name).MassFraction.GetValueOrDefault
+                        sub1.MolarFlow = M * mfrac * sub1.MoleFraction
+                        sub1.MassFlow = W * wfrac * sub1.MassFraction
+                    Next
+
+                Case Else
+
+                    Throw New Exception("Unsupported Phase")
+
+            End Select
+
+        End Sub
+
+        Public Overrides Function ToString() As String
+
+            Return MyBase.ToString() + String.Format(": T = {0} K, P = {1} Pa, W = {2} kg/s, M = {3} mol/s, Q = {4} m3/s", GetTemperature, GetPressure, GetMassFlow, GetMolarFlow, GetVolumetricFlow)
+
+        End Function
 
     End Class
 

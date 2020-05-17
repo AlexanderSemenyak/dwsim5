@@ -32,6 +32,8 @@
 
     Property DynamicMode As Boolean
 
+    Property DynamicsManager As IDynamicsManager
+
     Property ExtraProperties As Dynamic.ExpandoObject
 
     Function GetApplicationObject() As Object
@@ -65,6 +67,8 @@
     Property SelectedCompounds As Dictionary(Of String, ICompoundConstantProperties)
 
     Property SimulationObjects As Dictionary(Of String, ISimulationObject)
+
+    Property StoredSolutions As Dictionary(Of String, List(Of XElement))
 
     Property Charts As Dictionary(Of String, IChart)
 
@@ -157,6 +161,10 @@
     Function GetFlowsheetSurfaceHeight() As Integer
 
     Function ChangeCalculationOrder(objects As List(Of String)) As List(Of String)
+
+    Function GetProcessData() As List(Of XElement)
+
+    Sub LoadProcessData(data As List(Of XElement))
 
 End Interface
 

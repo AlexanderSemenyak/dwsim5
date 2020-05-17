@@ -5625,4 +5625,40 @@ In this model, chemical and physical equilibria of NH3, CO2, and H2S in sour wat
   <data name="CompoundUpdated" xml:space="preserve">
     <value>Dados da substância atualizados com sucesso.</value>
   </data>
+  <data name="Activate" xml:space="preserve">
+    <value>Ativar</value>
+  </data>
+  <data name="Deactivate" xml:space="preserve">
+    <value>Desativar</value>
+  </data>
+  <data name="DynDisabled" xml:space="preserve">
+    <value>O Modo Dinâmico está desativado.</value>
+  </data>
+  <data name="DynEnabled" xml:space="preserve">
+    <value>O Modo Dinâmico está ativado.</value>
+  </data>
+  <data name="DynamicProperties" xml:space="preserve">
+    <value>Propriedades p/ Modo Dinâmico</value>
+  </data>
+  <data name="Conductance" xml:space="preserve">
+    <value>Condutância</value>
+  </data>
+  <data name="InvalidName" xml:space="preserve">
+    <value>O nome informado não é valido.</value>
+  </data>
+  <data name="SolutionRestored" xml:space="preserve">
+    <value>Estado restaurado com sucesso.</value>
+  </data>
+  <data name="SolutionStored" xml:space="preserve">
+    <value>Estado salvo com sucesso.</value>
+  </data>
+  <data name="ChangeProperty" xml:space="preserve">
+    <value>Mudar Propriedade</value>
+  </data>
+  <data name="RunScript" xml:space="preserve">
+    <value>Executar Script</value>
+  </data>
+  <data name="DynamicsDisabled" xml:space="preserve">
+    <value>O Modo Dinâmico está inativo.</value>
+  </data>
 </root>

@@ -299,6 +299,24 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Display Digital.
+        '''</summary>
+        Friend Shared ReadOnly Property DG_Desc() As String
+            Get
+                Return ResourceManager.GetString("DG_Desc", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Display Digital.
+        '''</summary>
+        Friend Shared ReadOnly Property DG_Name() As String
+            Get
+                Return ResourceManager.GetString("DG_Name", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Suporta reações definidas por constantes de equilíbrio.
         '''</summary>
         Friend Shared ReadOnly Property EQUIL_Desc() As String
@@ -479,6 +497,24 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Atualiza o valor de uma variável diretamente do fluxograma.
+        '''</summary>
+        Friend Shared ReadOnly Property IN_Desc() As String
+            Get
+                Return ResourceManager.GetString("IN_Desc", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Caixa de Texto.
+        '''</summary>
+        Friend Shared ReadOnly Property IN_Name() As String
+            Get
+                Return ResourceManager.GetString("IN_Name", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Operação unitária definida por um script Python.
         '''</summary>
         Friend Shared ReadOnly Property IPUO_Desc() As String
@@ -493,6 +529,24 @@ Namespace My.Resources
         Friend Shared ReadOnly Property IPUO_Name() As String
             Get
                 Return ResourceManager.GetString("IPUO_Name", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Medidor de Nível.
+        '''</summary>
+        Friend Shared ReadOnly Property LG_Desc() As String
+            Get
+                Return ResourceManager.GetString("LG_Desc", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Medidor de Nível.
+        '''</summary>
+        Friend Shared ReadOnly Property LG_Name() As String
+            Get
+                Return ResourceManager.GetString("LG_Name", resourceCulture)
             End Get
         End Property
         
@@ -565,6 +619,24 @@ Namespace My.Resources
         Friend Shared ReadOnly Property PFR_Name() As String
             Get
                 Return ResourceManager.GetString("PFR_Name", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Controlador PID.
+        '''</summary>
+        Friend Shared ReadOnly Property PID_Desc() As String
+            Get
+                Return ResourceManager.GetString("PID_Desc", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Controlador PID.
+        '''</summary>
+        Friend Shared ReadOnly Property PID_Name() As String
+            Get
+                Return ResourceManager.GetString("PID_Name", resourceCulture)
             End Get
         End Property
         
@@ -718,6 +790,24 @@ Namespace My.Resources
         Friend Shared ReadOnly Property SSEP_Name() As String
             Get
                 Return ResourceManager.GetString("SSEP_Name", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Muda o valor de uma variável entre dois valores.
+        '''</summary>
+        Friend Shared ReadOnly Property SW_Desc() As String
+            Get
+                Return ResourceManager.GetString("SW_Desc", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Interruptor.
+        '''</summary>
+        Friend Shared ReadOnly Property SW_Name() As String
+            Get
+                Return ResourceManager.GetString("SW_Name", resourceCulture)
             End Get
         End Property
         

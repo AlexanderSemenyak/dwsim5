@@ -33,6 +33,8 @@ Namespace UnitOperations
         Inherits UnitOperations.UnitOpBaseClass
         Public Overrides Property ObjectClass As SimulationObjectClass = SimulationObjectClass.Separators
 
+        Public Overrides ReadOnly Property SupportsDynamicMode As Boolean = True
+
         <NonSerialized> <Xml.Serialization.XmlIgnore> Public f As EditingForm_Tank
 
         Protected m_dp As Nullable(Of Double)
@@ -110,6 +112,102 @@ Namespace UnitOperations
             MyBase.New()
         End Sub
 
+
+        Public Overrides Sub CreateDynamicProperties()
+
+            AddDynamicProperty("Liquid Level", "Current Liquid Level", 0, UnitOfMeasure.distance)
+            AddDynamicProperty("Height", "Available Liquid Height", 2, UnitOfMeasure.distance)
+            AddDynamicProperty("Initialize using Inlet Stream", "Initializes the tank's content with information from the inlet stream, if the vessel content is null.", 1, UnitOfMeasure.none)
+            AddDynamicProperty("Reset Content", "Empties the tank's content on the next run.", 0, UnitOfMeasure.none)
+
+        End Sub
+
+        Private prevM, currentM As Double
+
+        Public Overrides Sub RunDynamicModel()
+
+            Dim integratorID = FlowSheet.DynamicsManager.ScheduleList(FlowSheet.DynamicsManager.CurrentSchedule).CurrentIntegrator
+            Dim integrator = FlowSheet.DynamicsManager.IntegratorList(integratorID)
+
+            Dim timestep = integrator.IntegrationStep.TotalSeconds
+
+            Dim ims As MaterialStream = Me.GetInletMaterialStream(0)
+            Dim oms1 As MaterialStream = Me.GetOutletMaterialStream(0)
+
+            Dim s1, s2, s3 As Enums.Dynamics.DynamicsSpecType
+
+            s1 = ims.DynamicsSpec
+            s2 = oms1.DynamicsSpec
+
+            Dim Height As Double = GetDynamicProperty("Height")
+            Dim InitializeFromInlet As Boolean = GetDynamicProperty("Initialize using Inlet Stream")
+
+            Dim Reset As Boolean = GetDynamicProperty("Reset Content")
+
+            If Reset Then
+                AccumulationStream = Nothing
+                SetDynamicProperty("Reset Content", 0)
+            End If
+
+            If s2 = Dynamics.DynamicsSpecType.Pressure And s3 = Dynamics.DynamicsSpecType.Pressure Then
+
+                If AccumulationStream Is Nothing Then
+
+                    If InitializeFromInlet Then
+
+                        AccumulationStream = ims.CloneXML
+
+                    Else
+
+                        AccumulationStream = ims.Subtract(oms1, timestep)
+
+                    End If
+
+                Else
+
+                    AccumulationStream.SetFlowsheet(FlowSheet)
+                    AccumulationStream = AccumulationStream.Add(ims, timestep)
+                    AccumulationStream = AccumulationStream.Subtract(oms1, timestep)
+                    If AccumulationStream.GetMassFlow <= 0.0 Then AccumulationStream.SetMassFlow(0.0)
+
+                End If
+
+                AccumulationStream.SetFlowsheet(FlowSheet)
+
+                ' atmospheric tank
+
+                AccumulationStream.SetTemperature(ims.GetTemperature)
+                AccumulationStream.SetPressure(101325)
+
+                AccumulationStream.SpecType = StreamSpec.Temperature_and_Pressure
+
+                AccumulationStream.PropertyPackage = PropertyPackage
+                AccumulationStream.PropertyPackage.CurrentMaterialStream = AccumulationStream
+
+                If integrator.ShouldCalculateEquilibrium Then
+
+                    AccumulationStream.Calculate(True, True)
+
+                End If
+
+                Dim LiquidVolume, RelativeLevel As Double
+
+                LiquidVolume = AccumulationStream.Phases(3).Properties.volumetric_flow.GetValueOrDefault
+
+                RelativeLevel = LiquidVolume / Volume
+
+                SetDynamicProperty("Liquid Level", RelativeLevel * Height)
+
+                Dim liqdens = AccumulationStream.Phases(3).Properties.density.GetValueOrDefault
+
+                oms1.AssignFromPhase(PhaseLabel.Mixture, AccumulationStream, False)
+
+                oms1.SetPressure(AccumulationStream.GetPressure + liqdens * 9.8 * RelativeLevel * Height)
+
+            End If
+
+        End Sub
+
         Public Overrides Sub Calculate(Optional ByVal args As Object = Nothing)
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
@@ -120,11 +218,10 @@ Namespace UnitOperations
 
             Dim Ti, Pi, Hi, Wi, rho_li, qli, qvi, ei, ein, P2, Q As Double
 
-            Dim ims, oms As MaterialStream, es As Streams.EnergyStream
+            Dim ims, oms As MaterialStream
 
             ims = GetInletMaterialStream(0)
             oms = GetOutletMaterialStream(0)
-            es = GetEnergyStream()
 
             qvi = ims.Phases(2).Properties.volumetric_flow.GetValueOrDefault.ToString
 

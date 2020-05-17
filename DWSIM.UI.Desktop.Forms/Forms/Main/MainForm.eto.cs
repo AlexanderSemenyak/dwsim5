@@ -14,9 +14,9 @@ using DWSIM.Thermodynamics.BaseClasses;
 using DWSIM.Interfaces;
 using System.Reflection;
 using System.Text;
-using DWSIM.SharedClasses;
 using s = DWSIM.GlobalSettings.Settings;
 using c = DWSIM.UI.Shared.Common;
+using DWSIM.ExtensionMethods;
 
 namespace DWSIM.UI
 {
@@ -60,6 +60,11 @@ namespace DWSIM.UI
             ClientSize = new Size((int)(width * sf), (int)(height * sf));
 
             Icon = Eto.Drawing.Icon.FromResource(imgprefix + "DWSIM_ico.ico");
+
+            if (Application.Instance.Platform.IsGtk)
+            {
+                BackgroundColor = Colors.White;
+            }
 
             var abslayout = new PixelLayout();
 
@@ -111,8 +116,8 @@ namespace DWSIM.UI
             {
                 var dialog = new OpenFileDialog();
                 dialog.Title = "Open File".Localize();
-                dialog.Filters.Add(new FileFilter("XML Simulation File".Localize(), new[] { ".armxml", ".armgz" }));
-                //dialog.Filters.Add(new FileFilter("Mobile XML Simulation File (Android/iOS)", new[] { ".xml" }));
+                dialog.Filters.Add(new FileFilter("XML Simulation File".Localize(), new[] { ".dwxml", ".dwxmz" }));
+                dialog.Filters.Add(new FileFilter("Mobile XML Simulation File (Android/iOS)", new[] { ".xml" }));
                 dialog.MultiSelect = false;
                 dialog.CurrentFilterIndex = 0;
                 if (dialog.ShowDialog(this) == DialogResult.Ok)
@@ -145,6 +150,11 @@ namespace DWSIM.UI
             var link3 = new LinkButton { Text = "Create New", Width = (int)(140 * sf), Font = boldfont2 };
             pccreator.Add(link3, dx2, (int)(100 * sf - rfh - dy));
 
+            link3.Click += (sender, e) => {
+                var form = new Desktop.Editors.CompoundCreatorWizard(null);
+                form.SetupAndDisplayPage(1);
+            };
+
             abslayout.Add(pccreator, dx, dy * 3 + bfh + (int)(100 * sf));
 
             ppatreon = new PixelLayout { BackgroundColor = Colors.White, Width = (int)(500 * sf), Height = (int)(100 * sf) };
@@ -155,7 +165,7 @@ namespace DWSIM.UI
             var link4 = new LinkButton { Text = "Go to Patreon.com/DWSIM", Width = (int)(250 * sf), Font = boldfont2 };
             ppatreon.Add(link4, dx2, (int)(100 * sf - rfh - dy));
 
-            link4.Click += (sender, e) => Process.Start("https://patreon.com/dwsim");
+            link4.Click += (sender, e) => "https://patreon.com/dwsim".OpenURL();
 
             abslayout.Add(ppatreon, dx, dy * 4 + bfh + 2 * (int)(100 * sf));
 
@@ -169,7 +179,7 @@ namespace DWSIM.UI
             var link6 = new LinkButton { Text = "Online Help", Width = (int)(140 * sf), Font = boldfont2 };
             pdocs.Add(link6, dx2 + (int)(150 * sf), (int)(100 * sf - rfh - dy));
 
-            link6.Click += (sender, e) => Process.Start("http://dwsim.inforside.com.br");
+            link6.Click += (sender, e) => "http://dwsim.inforside.com.br".OpenURL();
 
             link5.Click += (sender, e) =>
             {
@@ -184,7 +194,7 @@ namespace DWSIM.UI
             pabout.Add(new Label { Size = lsize, Font = regularfont, Wrap = WrapMode.Word, Text = "Adjust Global Settings and view DWSIM licensing and version information." }, dx2, dy2 * 2 + bfh);
             var img6 = new ImageView { Size = psize, Image = new Bitmap(Bitmap.FromResource(imgprefix + "DWSIM_ico.png")) };
             pabout.Add(img6, (int)(400 * sf), 0);
-            var link7 = new LinkButton { Text = "Adjust Global Settings", Width = (int)(140 * sf), Font = boldfont2 };
+            var link7 = new LinkButton { Text = "Global Settings", Width = (int)(140 * sf), Font = boldfont2 };
             pabout.Add(link7, dx2, (int)(100 * sf - rfh - dy));
             var link8 = new LinkButton { Text = "About DWSIM", Width = (int)(140 * sf), Font = boldfont2 };
             pabout.Add(link8, dx2 + (int)(150 * sf), (int)(100 * sf - rfh - dy));
@@ -221,60 +231,52 @@ namespace DWSIM.UI
             {
                 if (File.Exists(item))
                 {
-                    var li = new TreeGridItem();
-                    var data = new Dictionary<string, string>();
-                    if (Path.GetExtension(item).ToLower() == ".dwxmz" || Path.GetExtension(item).ToLower() == ".armgz")
+                    try
                     {
-                        data = SharedClasses.Utility.GetSimulationFileDetails(FlowsheetBase.FlowsheetBase.LoadZippedXMLDoc(item));
-                    }
-                    else
-                    {
-#if DEBUG
-                        try
+                        var li = new TreeGridItem();
+                        var data = new Dictionary<string, string>();
+                        if (Path.GetExtension(item).ToLower() == ".dwxmz")
                         {
-#endif
-                            data = Utility.GetSimulationFileDetails(XDocument.Load(item));
-#if DEBUG
+                            data = SharedClasses.Utility.GetSimulationFileDetails(FlowsheetBase.FlowsheetBase.LoadZippedXMLDoc(item));
                         }
-                        catch (Exception e)
+                        else
                         {
-                            
-                            throw;
+                            data = SharedClasses.Utility.GetSimulationFileDetails(XDocument.Load(item));
                         }
-#endif
-                    }
-                    li.Tag = data;
-                    data.Add("Path", item);
-                    DateTime dt;
-                    if (data.ContainsKey("SavedOn"))
-                    {
-                        dt = DateTime.Parse(data["SavedOn"]);
-                    }
-                    else
-                    {
-                        dt = File.GetLastWriteTime(item);
-                    }
-                    string dwsimver, osver;
-                    if (data.ContainsKey("DWSIMVersion"))
-                    {
-                        dwsimver = data["DWSIMVersion"];
-                    }
-                    else
-                    {
-                        dwsimver = "N/A";
-                    }
-                    if (data.ContainsKey("OSInfo"))
-                    {
-                        osver = data["OSInfo"];
-                    }
-                    else
-                    {
-                        osver = "N/A";
-                    }
-                    li.Values = new object[] {new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-workflow.png")).WithSize(16, 16),
+                        li.Tag = data;
+                        data.Add("Path", item);
+                        DateTime dt;
+                        if (data.ContainsKey("SavedOn"))
+                        {
+                            dt = DateTime.Parse(data["SavedOn"]);
+                        }
+                        else
+                        {
+                            dt = File.GetLastWriteTime(item);
+                        }
+                        string dwsimver, osver;
+                        if (data.ContainsKey("DWSIMVersion"))
+                        {
+                            dwsimver = data["DWSIMVersion"];
+                        }
+                        else
+                        {
+                            dwsimver = "N/A";
+                        }
+                        if (data.ContainsKey("OSInfo"))
+                        {
+                            osver = data["OSInfo"];
+                        }
+                        else
+                        {
+                            osver = "N/A";
+                        }
+                        li.Values = new object[] {new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-workflow.png")).WithSize(16, 16),
                             System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(Path.GetFileNameWithoutExtension(item)),
                             dt, dwsimver, osver};
-                    tgc.Add(li);
+                        tgc.Add(li);
+                    }
+                    catch { }
                 }
             }
 
@@ -343,7 +345,7 @@ namespace DWSIM.UI
                     var dialog = new OpenFileDialog();
                     dialog.Title = "Open File".Localize();
                     dialog.Directory = new Uri(FoldersList.SelectedKey);
-                    dialog.Filters.Add(new FileFilter("XML Simulation File".Localize(), new[] { ".armxml", ".armgz" }));
+                    dialog.Filters.Add(new FileFilter("XML Simulation File".Localize(), new[] { ".dwxml", ".dwxmz" }));
                     dialog.MultiSelect = false;
                     dialog.CurrentFilterIndex = 0;
                     if (dialog.ShowDialog(this) == DialogResult.Ok)
@@ -360,7 +362,7 @@ namespace DWSIM.UI
                     var si = (TreeGridItem)MostRecentList.SelectedItem;
                     var data = (Dictionary<string, string>)si.Tag;
                     LoadSimulation(data["Path"]);
-                    //MostRecentList.SelectedIndex = -1;
+                    MostRecentList.UnselectAll();
                 };
             };
 
@@ -369,7 +371,7 @@ namespace DWSIM.UI
                 if (SampleList.SelectedIndex >= 0)
                 {
                     LoadSimulation(SampleList.SelectedKey);
-                    //MostRecentList.SelectedIndex = -1;
+                    SampleList.SelectedValue = null;
                 };
             };
 
@@ -432,7 +434,15 @@ namespace DWSIM.UI
             tabview.Pages.Add(tab2);
             tabview.Pages.Add(tab2a);
             tabview.Pages.Add(tab3);
-            tabview.Size = new Size((int)(480 * sf), (int)(ClientSize.Height - dy * 4 - bfh));
+
+            if (Application.Instance.Platform.IsGtk)
+            {
+                tabview.Size = new Size((int)(480 * sf), (int)(636 - dy * 4 - bfh));
+            }
+            else
+            {
+                tabview.Size = new Size((int)(480 * sf), (int)(ClientSize.Height - dy * 4 - bfh));
+            }
 
             abslayout.Add(tabview, dx * 2 + (int)(500 * sf), dy * 2 + bfh);
 
@@ -474,19 +484,19 @@ namespace DWSIM.UI
             var hitem2 = new ButtonMenuItem { Text = "Support".Localize(), Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "help_browser.png")) };
             hitem2.Click += (sender, e) =>
             {
-                Process.Start("http://dwsim.inforside.com.br/wiki/index.php?title=Support");
+                "http://dwsim.inforside.com.br/wiki/index.php?title=Support".OpenURL();
             };
 
             var hitem3 = new ButtonMenuItem { Text = "Report a Bug".Localize(), Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "help_browser.png")) };
             hitem3.Click += (sender, e) =>
             {
-                Process.Start("https://sourceforge.net/p/dwsim/tickets/");
+                "https://sourceforge.net/p/dwsim/tickets/".OpenURL();
             };
 
             var hitem4 = new ButtonMenuItem { Text = "Go to DWSIM's Website".Localize(), Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "help_browser.png")) };
             hitem4.Click += (sender, e) =>
             {
-                Process.Start("http://dwsim.inforside.com.br");
+               "http://dwsim.inforside.com.br".OpenURL();
             };
 
             // create menu
@@ -541,8 +551,8 @@ namespace DWSIM.UI
                 //        ClientSize = new Size((int)(s.UIScalingFactor * 700), (int)(s.UIScalingFactor * 400));
                 //        break;
                 //}
-                //var splash = new SplashScreen { MainFrm = this };
-                //splash.Show();
+                var splash = new SplashScreen { MainFrm = this };
+                splash.Show();
             });
 
         }
@@ -571,16 +581,15 @@ namespace DWSIM.UI
 
             Task.Factory.StartNew(() =>
             {
-                var ext = System.IO.Path.GetExtension(path).ToLower();
-                if (ext == ".dwxmz" || ext == ".armgz")
+                if (System.IO.Path.GetExtension(path).ToLower() == ".dwxmz")
                 {
                     var xdoc = form.FlowsheetObject.LoadZippedXML(path);
                 }
-                else if (ext == ".dwxml")
+                else if (System.IO.Path.GetExtension(path).ToLower() == ".dwxml")
                 {
                     form.FlowsheetObject.LoadFromXML(XDocument.Load(path));
                 }
-                else if (ext == ".xml")
+                else if (System.IO.Path.GetExtension(path).ToLower() == ".xml")
                 {
                     form.FlowsheetObject.LoadFromMXML(XDocument.Load(path));
                 }
@@ -603,7 +612,7 @@ namespace DWSIM.UI
                         var ds = (TreeGridItemCollection)MostRecentList.DataStore;
                         var li = new TreeGridItem();
                         var data = new Dictionary<string, string>();
-                        if (Path.GetExtension(path).ToLower() == ".dwxmz" || Path.GetExtension(path).ToLower() == ".armgz")
+                        if (Path.GetExtension(path).ToLower() == ".dwxmz")
                         {
                             data = SharedClasses.Utility.GetSimulationFileDetails(FlowsheetBase.FlowsheetBase.LoadZippedXMLDoc(path));
                         }

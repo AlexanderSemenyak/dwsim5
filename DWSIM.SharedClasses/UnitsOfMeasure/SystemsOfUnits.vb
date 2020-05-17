@@ -183,6 +183,8 @@ Namespace SystemsOfUnits
 
         Public Property diffusivity As String Implements IUnitsOfMeasure.diffusivity
 
+        Public Property conductance As String = "[kg/s]/[Pa^0.5]" Implements IUnitsOfMeasure.conductance
+
         Public Function GetUnitSet(measureID As Enums.UnitOfMeasure) As List(Of String) Implements IUnitsOfMeasure.GetUnitSet
 
             Dim units As New List(Of String)
@@ -268,6 +270,8 @@ Namespace SystemsOfUnits
                     units.AddRange(New String() {"1/Pa", "1/atm", "1/kPa", "1/bar", "1/MPa", "1/psi"})
                 Case Enums.UnitOfMeasure.reac_rate_heterog
                     units.AddRange(New String() {"kmol/[kg.s]", "kmol/[kg.min.]", "kmol/[kg.h]", "mol/[kg.s]", "mol/[kg.min.]", "mol/[kg.h]", "lbmol/[lbm.h]"})
+                Case Enums.UnitOfMeasure.conductance
+                    units.AddRange(New String() {"[kg/s]/[Pa^0.5]", "[lbm/h]/[psi^0.5]", "[kg/h]/[atm^0.5]", "[kg/h]/[bar^0.5]", "[kg/h]/[[kgf/cm2]^0.5]"})
             End Select
 
             Return units
@@ -357,12 +361,106 @@ Namespace SystemsOfUnits
                     Return Enums.UnitOfMeasure.compressibility
                 Case "kmol/[kg.s]", "kmol/[kg.min.]", "kmol/[kg.h]", "mol/[kg.s]", "mol/[kg.min.]", "mol/[kg.h]", "lbmol/[lbm.h]"
                     Return Enums.UnitOfMeasure.reac_rate_heterog
+                Case "[kg/s]/[Pa^0.5]", "[lbm/h]/[psi^0.5]", "[kg/h]/[atm^0.5]", "[kg/h]/[bar^0.5]", "[kg/h]/[[kgf/cm2]^0.5]"
+                    Return Enums.UnitOfMeasure.conductance
                 Case Else
                     Return Enums.UnitOfMeasure.none
             End Select
 
         End Function
 
+        Public Function GetCurrentUnits(measureID As Enums.UnitOfMeasure) As String Implements IUnitsOfMeasure.GetCurrentUnits
+
+            Dim units As New List(Of String)
+
+            Select Case measureID
+                Case Enums.UnitOfMeasure.temperature
+                    Return temperature
+                Case Enums.UnitOfMeasure.pressure
+                    Return pressure
+                Case Enums.UnitOfMeasure.massflow
+                    Return massflow
+                Case Enums.UnitOfMeasure.molarflow
+                    Return molarflow
+                Case Enums.UnitOfMeasure.volumetricFlow
+                    Return volumetricFlow
+                Case Enums.UnitOfMeasure.enthalpy
+                    Return enthalpy
+                Case Enums.UnitOfMeasure.entropy
+                    Return entropy
+                Case Enums.UnitOfMeasure.molecularWeight
+                    Return molecularWeight
+                Case Enums.UnitOfMeasure.surfaceTension
+                    Return surfaceTension
+                Case Enums.UnitOfMeasure.density
+                    Return density
+                Case Enums.UnitOfMeasure.heatCapacityCp
+                    Return heatCapacityCp
+                Case Enums.UnitOfMeasure.thermalConductivity
+                    Return thermalConductivity
+                Case Enums.UnitOfMeasure.cinematic_viscosity, Enums.UnitOfMeasure.diffusivity
+                    Return cinematic_viscosity
+                Case Enums.UnitOfMeasure.viscosity
+                    Return viscosity
+                Case Enums.UnitOfMeasure.deltaP
+                    Return deltaP
+                Case Enums.UnitOfMeasure.deltaT
+                    Return deltaT
+                Case Enums.UnitOfMeasure.distance
+                    Return distance
+                Case Enums.UnitOfMeasure.heatflow
+                    Return heatflow
+                Case Enums.UnitOfMeasure.time
+                    Return time
+                Case Enums.UnitOfMeasure.volume
+                    Return volume
+                Case Enums.UnitOfMeasure.molar_volume
+                    Return molar_volume
+                Case Enums.UnitOfMeasure.area
+                    Return area
+                Case Enums.UnitOfMeasure.diameter
+                    Return diameter
+                Case Enums.UnitOfMeasure.force
+                    Return force
+                Case Enums.UnitOfMeasure.heat_transf_coeff
+                    Return heat_transf_coeff
+                Case Enums.UnitOfMeasure.accel
+                    Return accel
+                Case Enums.UnitOfMeasure.spec_vol
+                    Return spec_vol
+                Case Enums.UnitOfMeasure.molar_conc
+                    Return molar_conc
+                Case Enums.UnitOfMeasure.mass_conc
+                    Return mass_conc
+                Case Enums.UnitOfMeasure.reac_rate
+                    Return reac_rate
+                Case Enums.UnitOfMeasure.molar_enthalpy
+                    Return molar_enthalpy
+                Case Enums.UnitOfMeasure.molar_entropy
+                    Return molar_entropy
+                Case Enums.UnitOfMeasure.velocity, Enums.UnitOfMeasure.speedOfSound
+                    Return velocity
+                Case Enums.UnitOfMeasure.foulingfactor
+                    Return foulingfactor
+                Case Enums.UnitOfMeasure.cakeresistance
+                    Return cakeresistance
+                Case Enums.UnitOfMeasure.mediumresistance
+                    Return mediumresistance
+                Case Enums.UnitOfMeasure.mass
+                    Return mass
+                Case Enums.UnitOfMeasure.jouleThomsonCoefficient
+                    Return jouleThomsonCoefficient
+                Case Enums.UnitOfMeasure.compressibility
+                    Return compressibility
+                Case Enums.UnitOfMeasure.reac_rate_heterog
+                    Return reac_rate_heterog
+                Case Enums.UnitOfMeasure.conductance
+                    Return conductance
+                Case Else
+                    Return ""
+            End Select
+
+        End Function
 
     End Class
 
@@ -379,6 +477,7 @@ Namespace SystemsOfUnits
                 .diffusivity = "m2/s"
                 .accel = "m2/s"
                 .area = "m2"
+                .conductance = "[kg/s]/[Pa^0.5]"
                 .diameter = "mm"
                 .distance = "m"
                 .force = "N"
@@ -462,7 +561,7 @@ Namespace SystemsOfUnits
                 .Name = "C1"
                 .jouleThomsonCoefficient = "K/Pa"
                 .diffusivity = "m2/s"
-
+                .conductance = "[kg/s]/[Pa^0.5]"
                 .accel = "m2/s"
                 .area = "m2"
                 .diameter = "mm"
@@ -547,7 +646,7 @@ Namespace SystemsOfUnits
 
                 .Name = "C2"
                 .jouleThomsonCoefficient = "K/Pa"
-
+                .conductance = "[kg/s]/[Pa^0.5]"
                 .diffusivity = "m2/s"
                 .accel = "m2/s"
                 .area = "m2"
@@ -633,7 +732,7 @@ Namespace SystemsOfUnits
 
                 .Name = "C3"
                 .jouleThomsonCoefficient = "K/Pa"
-
+                .conductance = "[kg/s]/[Pa^0.5]"
                 .diffusivity = "m2/s"
                 .accel = "m/s2"
                 .area = "m2"
@@ -719,7 +818,7 @@ Namespace SystemsOfUnits
 
                 .Name = "C4"
                 .jouleThomsonCoefficient = "K/Pa"
-
+                .conductance = "[kg/s]/[Pa^0.5]"
                 .diffusivity = "m2/s"
                 .accel = "m/s2"
                 .area = "m2"
@@ -804,7 +903,7 @@ Namespace SystemsOfUnits
             With Me
 
                 .Name = "C5"
-
+                .conductance = "[kg/s]/[Pa^0.5]"
                 .diffusivity = "m2/s"
                 .jouleThomsonCoefficient = "K/Pa"
                 .accel = "m/s2"
@@ -890,7 +989,7 @@ Namespace SystemsOfUnits
             With Me
 
                 .Name = "ENG"
-
+                .conductance = "[lbm/h]/[psi^0.5]"
                 .diffusivity = "ft2/s"
 
                 .jouleThomsonCoefficient = "F/psi"
@@ -980,7 +1079,7 @@ Namespace SystemsOfUnits
 
                 .Name = "CGS"
                 .diffusivity = "cm2/s"
-
+                .conductance = "[kg/h]/[atm^0.5]"
                 .jouleThomsonCoefficient = "C/atm"
                 .accel = "cm/s2"
                 .area = "cm2"
@@ -1078,6 +1177,17 @@ Namespace SystemsOfUnits
 
             Select Case units
 
+                Case "[kg/s]/[Pa^0.5]"
+                    Return value
+                Case "[lbm/h]/[psi^0.5]"
+                    Return value / 7936.64 * 0.000145038 ^ 0.5
+                Case "[kg/h]/[atm^0.5]"
+                    Return value / 3600.0 / 101325.0 ^ 0.5
+                Case "[kg/h]/[bar^0.5]"
+                    Return value / 3600.0 / 10000.0 ^ 0.5
+                Case "[kg/h]/[[kgf/cm2]^0.5]"
+                    Return value / 3600.0 * (1.033 / 101325) ^ 0.5
+
                 Case "K/Pa"
                     Return value
                 Case "C/atm"
@@ -1156,7 +1266,7 @@ Namespace SystemsOfUnits
                     Return value / 60 / 60 / 24
                 Case "kg/min"
                     Return value / 60
-                Case "lb/h"
+                Case "lb/h", "lbm/h"
                     Return value / 7936.64
                 Case "lb/min"
                     Return value / 132.277
@@ -1517,6 +1627,17 @@ Namespace SystemsOfUnits
         Public Shared Function ConvertFromSI(ByVal units As String, ByVal value As Double) As Double
 
             Select Case units
+
+                Case "[kg/s]/[Pa^0.5]"
+                    Return value
+                Case "[lbm/h]/[psi^0.5]"
+                    Return value * 7936.64 / 0.000145038 ^ 0.5
+                Case "[kg/h]/[atm^0.5]"
+                    Return value * 3600.0 * 101325.0 ^ 0.5
+                Case "[kg/h]/[bar^0.5]"
+                    Return value * 3600.0 * 10000.0 ^ 0.5
+                Case "[kg/h]/[[kgf/cm2]^0.5]"
+                    Return value * 3600.0 / (1.033 * 101325) ^ 0.5
 
                 Case "K/Pa"
                     Return value

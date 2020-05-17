@@ -1,5 +1,4 @@
 ﻿Imports DWSIM.Interfaces.Enums.GraphicObjects
-Imports System.Windows.Forms
 Imports DotNumerics.ODE.Radau5
 Imports DWSIM.Interfaces
 Imports Converter = DWSIM.SharedClasses.SystemsOfUnits.Converter
@@ -374,6 +373,20 @@ Public Class MaterialStreamEditor
                 tbMoleFlow.Enabled = True
                 tbVolFlow.Enabled = True
                 TabPageInputComposition.Enabled = True
+            End If
+
+            If MatStream.FlowSheet.DynamicMode Then
+                If MatStream.DynamicsSpec = Interfaces.Enums.Dynamics.DynamicsSpecType.Flow Then
+                    tbMassFlow.Enabled = True
+                    tbMoleFlow.Enabled = True
+                    tbVolFlow.Enabled = True
+                    tbPressure.Enabled = False
+                Else
+                    tbMassFlow.Enabled = False
+                    tbMoleFlow.Enabled = False
+                    tbVolFlow.Enabled = False
+                    tbPressure.Enabled = True
+                End If
             End If
 
         End With
@@ -1164,6 +1177,7 @@ Public Class MaterialStreamEditor
     Sub RequestCalc()
 
         SaveViewState()
+
         MatStream.FlowSheet.RequestCalculation(MatStream)
 
     End Sub

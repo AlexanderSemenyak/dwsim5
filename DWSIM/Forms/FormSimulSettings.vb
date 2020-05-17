@@ -322,6 +322,7 @@ Public Class FormSimulSettings
             .Add(New String() {DWSIM.App.GetLocalString("Velocity"), su.velocity, DWSIM.App.GetLocalString("HXFoulingFactor"), su.foulingfactor})
             .Add(New String() {DWSIM.App.GetLocalString("FilterSpecificCakeResistance"), su.cakeresistance, DWSIM.App.GetLocalString("FilterMediumResistance"), su.mediumresistance})
             .Add(New String() {DWSIM.App.GetLocalString("IsothermalCompressibility"), su.compressibility, DWSIM.App.GetLocalString("JouleThomsonCoefficient"), su.jouleThomsonCoefficient})
+            .Add(New String() {DWSIM.App.GetLocalString("Conductance"), su.conductance, "", ""})
         End With
 
         If ComboBox2.SelectedIndex <= 2 Then
@@ -633,6 +634,13 @@ Public Class FormSimulSettings
             .Style.Tag = 38
         End With
 
+        With DirectCast(Me.DataGridView1.Rows.Item(19).Cells(1), DataGridViewComboBoxCell)
+            .Items.Clear()
+            .Items.AddRange(su.GetUnitSet(UnitOfMeasure.conductance).ToArray)
+            .Value = su.conductance
+            .Style.Tag = 39
+        End With
+
         FrmChild.UpdateOpenEditForms()
 
         My.Application.PushUndoRedoAction = True
@@ -802,6 +810,10 @@ Public Class FormSimulSettings
                     member = "jouleThomsonCoefficient"
                     oldvalue = su.jouleThomsonCoefficient
                     su.jouleThomsonCoefficient = cell.Value
+                Case 39
+                    member = "conductance"
+                    oldvalue = su.conductance
+                    su.conductance = cell.Value
             End Select
 
             If initialized And Not DWSIM.App.IsRunningOnMono And My.Application.PushUndoRedoAction Then FrmChild.AddUndoRedoAction(New UndoRedoAction() With {.AType = UndoRedoActionType.SystemOfUnitsChanged,
@@ -963,14 +975,16 @@ Public Class FormSimulSettings
         ogc1.SuspendLayout()
         Dim needselecting As Boolean = True
         For Each r As DataGridViewRow In ogc1.Rows
-            If Not r.Cells(1).Value Is Nothing Then
-                If r.Cells(1).Value.ToString.ToLower.Contains(Me.TextBox1.Text.ToLower) Or
-                   r.Cells(2).Value.ToString.ToLower.Contains(Me.TextBox1.Text.ToLower) Or
-                   r.Cells(4).Value.ToString.ToLower.Contains(Me.TextBox1.Text.ToLower) Then
+            If Not r.Cells(2).Value Is Nothing Then
+                If r.Cells(2).Value.ToString.ToLower.Contains(Me.TextBox1.Text.ToLower) Or
+                   r.Cells(3).Value.ToString.ToLower.Contains(Me.TextBox1.Text.ToLower) Or
+                   r.Cells(4).Value.ToString.ToLower.Contains(Me.TextBox1.Text.ToLower) Or
+                   r.Cells(6).Value.ToString.ToLower.Contains(Me.TextBox1.Text.ToLower) Then
                     r.Visible = True
-                    If r.Cells(1).Value.ToString.Equals(Me.TextBox1.Text) Or
-                    r.Cells(2).Value.ToString.Equals(Me.TextBox1.Text) Or
-                    r.Cells(4).Value.ToString.Equals(Me.TextBox1.Text) Then
+                    If r.Cells(2).Value.ToString.Equals(Me.TextBox1.Text) Or
+                    r.Cells(3).Value.ToString.Equals(Me.TextBox1.Text) Or
+                    r.Cells(4).Value.ToString.Equals(Me.TextBox1.Text) Or
+                    r.Cells(6).Value.ToString.Equals(Me.TextBox1.Text) Then
                         r.Selected = True
                         needselecting = False
                     End If

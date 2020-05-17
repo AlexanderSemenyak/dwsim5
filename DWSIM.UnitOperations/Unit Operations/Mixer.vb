@@ -32,6 +32,8 @@ Namespace UnitOperations
 
         Public Overrides Property ObjectClass As SimulationObjectClass = SimulationObjectClass.MixersSplitters
 
+        Public Overrides ReadOnly Property SupportsDynamicMode As Boolean = True
+
         <NonSerialized> <Xml.Serialization.XmlIgnore> Public f As EditingForm_Mixer
 
         Public Enum PressureBehavior
@@ -72,6 +74,12 @@ Namespace UnitOperations
         Public Overrides Function CloneJSON() As Object
             Return Newtonsoft.Json.JsonConvert.DeserializeObject(Of Mixer)(Newtonsoft.Json.JsonConvert.SerializeObject(Me))
         End Function
+
+        Public Overrides Sub RunDynamicModel()
+
+            Calculate()
+
+        End Sub
 
         Public Overrides Sub Calculate(Optional ByVal args As Object = Nothing)
 

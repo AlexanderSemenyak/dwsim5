@@ -57,8 +57,12 @@ Public Class FormFlowsheet
 
     Public Property ExtraProperties As New ExpandoObject Implements IFlowsheet.ExtraProperties
 
+    Public Property StoredSolutions As Dictionary(Of String, List(Of XElement)) = New Dictionary(Of String, List(Of XElement)) Implements IFlowsheet.StoredSolutions
+
     Public Property MasterFlowsheet As IFlowsheet = Nothing Implements IFlowsheet.MasterFlowsheet
+
     <Xml.Serialization.XmlIgnore> Public Property MasterUnitOp As ISimulationObject = Nothing Implements IFlowsheet.MasterUnitOp
+
     Public Property RedirectMessages As Boolean = False Implements IFlowsheet.RedirectMessages
 
     Public FrmStSim1 As FormSimulSettings
@@ -75,6 +79,8 @@ Public Class FormFlowsheet
     Public FormMatList As New MaterialStreamPanel
     Public FormSpreadsheet As New FormNewSpreadsheet
     Public FormCharts As New FormCharts
+    Public FormDynamics As New FormDynamicsManager
+    Public FormIntegratorControls As New FormDynamicsIntegratorControl
 
     Public FormProps As New frmProps
 
@@ -195,6 +201,8 @@ Public Class FormFlowsheet
 
         FormCharts.Flowsheet = Me
         FormSpreadsheet.Flowsheet = Me
+        FormDynamics.Flowsheet = Me
+        FormIntegratorControls.Flowsheet = Me
 
         Me.MdiParent = FormMain
 
@@ -289,16 +297,20 @@ Public Class FormFlowsheet
             FormWatch.DockPanel = Nothing
             FormSurface.DockPanel = Nothing
             FormCharts.DockPanel = Nothing
+            FormDynamics.DockPanel = Nothing
+            FormIntegratorControls.DockPanel = Nothing
 
             Dim myfile As String = Path.Combine(My.Application.Info.DirectoryPath, "layout.xml")
             dckPanel.LoadFromXml(myfile, New DeserializeDockContent(AddressOf ReturnForm))
 
             FormLog.Show(dckPanel)
             FormSurface.Show(dckPanel)
+            FormDynamics.Show(FormSurface.Pane, Nothing)
             FormMatList.Show(FormSurface.Pane, Nothing)
             FormSpreadsheet.Show(FormSurface.Pane, Nothing)
             FormCharts.Show(FormSurface.Pane, Nothing)
             FormWatch.Show(dckPanel)
+            FormIntegratorControls.Show(dckPanel)
             FormProps.Show(dckPanel, DockState.DockLeft)
 
             FormSurface.Activate()
@@ -344,10 +356,20 @@ Public Class FormFlowsheet
                 Return Me.FormProps
             Case "DWSIM.FormCharts"
                 Return Me.FormCharts
+            Case "DWSIM.FormDynamics", "DWSIM.FormDynamicsManager"
+                Return Me.FormDynamics
+            Case "DWSIM.FormDynamicsIntegratorControl"
+                Return Me.FormIntegratorControls
         End Select
         Return Nothing
     End Function
     Public Sub FormChild_Shown(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Shown
+
+        Me.WindowState = FormWindowState.Maximized
+
+        For Each item In StoredSolutions
+            tscbStoredSolutions.Items.Add(item.Key)
+        Next
 
         If Not Me.m_IsLoadedFromFile Then
 
@@ -711,6 +733,10 @@ Public Class FormFlowsheet
                                                                  strtipo = DWSIM.App.GetLocalString("Mensagem")
                                                          End Select
 
+                                                         If frlog.Grid1.Rows.Count > 1500 Then
+                                                             frlog.Grid1.Rows.Clear()
+                                                         End If
+
                                                          frlog.Grid1.Rows.Insert(0, New Object() {img, frlog.Grid1.Rows.Count, Date.Now, strtipo, texto})
 
                                                          If frlog.Grid1.Rows.Count > 0 Then
@@ -784,10 +810,11 @@ Public Class FormFlowsheet
     End Sub
 
     Private Sub tsbCalcF_Click(sender As Object, e As EventArgs) Handles tsbCalcF.Click
-        GlobalSettings.Settings.TaskCancellationTokenSource = Nothing
-        GlobalSettings.Settings.CalculatorBusy = False
-        My.Application.ActiveSimulation = Me
-        FlowsheetSolver.FlowsheetSolver.SolveFlowsheet(Me, My.Settings.SolverMode, Nothing, False, False, Nothing, Nothing,
+        If Not DynamicMode Then
+            GlobalSettings.Settings.TaskCancellationTokenSource = Nothing
+            GlobalSettings.Settings.CalculatorBusy = False
+            My.Application.ActiveSimulation = Me
+            FlowsheetSolver.FlowsheetSolver.SolveFlowsheet(Me, My.Settings.SolverMode, Nothing, False, False, Nothing, Nothing,
                                                         Sub()
                                                             If My.Settings.ObjectEditor = 1 Then
                                                                 Me.UIThread(Sub()
@@ -796,6 +823,9 @@ Public Class FormFlowsheet
                                                                             End Sub)
                                                             End If
                                                         End Sub, My.Computer.Keyboard.ShiftKeyDown And My.Computer.Keyboard.AltKeyDown)
+        Else
+            ShowMessage(DWSIM.App.GetLocalString("DynEnabled"), IFlowsheet.MessageType.Warning)
+        End If
     End Sub
 
     Public Sub RectangleToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RectangleToolStripMenuItem.Click
@@ -888,10 +918,11 @@ Public Class FormFlowsheet
     End Sub
 
     Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles tsbCalc.Click
-        GlobalSettings.Settings.TaskCancellationTokenSource = Nothing
-        My.Application.ActiveSimulation = Me
-        If My.Computer.Keyboard.ShiftKeyDown Then GlobalSettings.Settings.CalculatorBusy = False
-        FlowsheetSolver.FlowsheetSolver.SolveFlowsheet(Me, My.Settings.SolverMode, Nothing, False, False, Nothing, Nothing,
+        If Not DynamicMode Then
+            GlobalSettings.Settings.TaskCancellationTokenSource = Nothing
+            My.Application.ActiveSimulation = Me
+            If My.Computer.Keyboard.ShiftKeyDown Then GlobalSettings.Settings.CalculatorBusy = False
+            FlowsheetSolver.FlowsheetSolver.SolveFlowsheet(Me, My.Settings.SolverMode, Nothing, False, False, Nothing, Nothing,
                                                         Sub()
                                                             If My.Settings.ObjectEditor = 1 Then
                                                                 Me.UIThread(Sub()
@@ -900,6 +931,9 @@ Public Class FormFlowsheet
                                                                             End Sub)
                                                             End If
                                                         End Sub, My.Computer.Keyboard.CtrlKeyDown And My.Computer.Keyboard.AltKeyDown)
+        Else
+            ShowMessage(DWSIM.App.GetLocalString("DynEnabled"), IFlowsheet.MessageType.Warning)
+        End If
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
@@ -1182,16 +1216,6 @@ Public Class FormFlowsheet
         End If
     End Sub
 
-    Public Sub tsbCalc_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        GlobalSettings.Settings.TaskCancellationTokenSource = Nothing
-        If My.Computer.Keyboard.ShiftKeyDown Then GlobalSettings.Settings.CalculatorBusy = False
-        If My.Computer.Keyboard.CtrlKeyDown And My.Computer.Keyboard.AltKeyDown Then
-            FlowsheetSolver.FlowsheetSolver.SolveFlowsheet(Me, My.Settings.SolverMode, ChangeCalcOrder:=True)
-        Else
-            FlowsheetSolver.FlowsheetSolver.SolveFlowsheet(Me, My.Settings.SolverMode)
-        End If
-    End Sub
-
     Private Sub AnaliseDeSensibilidadeToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AnaliseDeSensibilidadeToolStripMenuItem.Click
         Me.FormSensAnalysis0 = New FormSensAnalysis
         Me.FormSensAnalysis0.Show(Me.dckPanel)
@@ -1455,6 +1479,20 @@ Public Class FormFlowsheet
                                 End If
                             ElseIf gobj.ObjectType = ObjectType.OT_Adjust Then
                                 Dim adjobj As Adjust = Me.Collections.FlowsheetObjectCollection(namesel)
+                                If Me.Collections.FlowsheetObjectCollection.ContainsKey(adjobj.ManipulatedObjectData.ID) Then
+                                    Me.Collections.FlowsheetObjectCollection(adjobj.ManipulatedObjectData.ID).IsAdjustAttached = False
+                                    Me.Collections.FlowsheetObjectCollection(adjobj.ManipulatedObjectData.ID).AttachedAdjustId = ""
+                                End If
+                                If Me.Collections.FlowsheetObjectCollection.ContainsKey(adjobj.ControlledObjectData.ID) Then
+                                    Me.Collections.FlowsheetObjectCollection(adjobj.ControlledObjectData.ID).IsAdjustAttached = False
+                                    Me.Collections.FlowsheetObjectCollection(adjobj.ControlledObjectData.ID).AttachedAdjustId = ""
+                                End If
+                                If Me.Collections.FlowsheetObjectCollection.ContainsKey(adjobj.ReferencedObjectData.ID) Then
+                                    Me.Collections.FlowsheetObjectCollection(adjobj.ReferencedObjectData.ID).IsAdjustAttached = False
+                                    Me.Collections.FlowsheetObjectCollection(adjobj.ReferencedObjectData.ID).AttachedAdjustId = ""
+                                End If
+                            ElseIf gobj.ObjectType = ObjectType.Controller_PID Then
+                                Dim adjobj As PIDController = Me.Collections.FlowsheetObjectCollection(namesel)
                                 If Me.Collections.FlowsheetObjectCollection.ContainsKey(adjobj.ManipulatedObjectData.ID) Then
                                     Me.Collections.FlowsheetObjectCollection(adjobj.ManipulatedObjectData.ID).IsAdjustAttached = False
                                     Me.Collections.FlowsheetObjectCollection(adjobj.ManipulatedObjectData.ID).AttachedAdjustId = ""
@@ -2860,12 +2898,14 @@ Public Class FormFlowsheet
 
     Public Sub RequestCalculation(Optional sender As ISimulationObject = Nothing, Optional changecalcorder As Boolean = False) Implements IFlowsheet.RequestCalculation
 
-        If Not sender Is Nothing Then
-            FlowsheetSolver.FlowsheetSolver.CalculateObject(Me, sender.Name)
-        Else
-            FlowsheetSolver.FlowsheetSolver.SolveFlowsheet(Me, Settings.SolverMode)
+        If Not DynamicMode Then
+            If Not sender Is Nothing Then
+                FlowsheetSolver.FlowsheetSolver.CalculateObject(Me, sender.Name)
+            Else
+                FlowsheetSolver.FlowsheetSolver.SolveFlowsheet(Me, Settings.SolverMode)
+            End If
+            FormSurface.Invalidate()
         End If
-        FormSurface.Invalidate()
 
     End Sub
 
@@ -2906,7 +2946,7 @@ Public Class FormFlowsheet
     End Sub
 
     Public Function GetSurface() As Object Implements IFlowsheetBag.GetSurface, IFlowsheet.GetSurface
-        Return Me.FormSurface
+        Return Me.FormSurface.FlowsheetSurface
     End Function
 
     Public Function GetNewInstance() As IFlowsheet Implements IFlowsheet.GetNewInstance
@@ -3089,12 +3129,14 @@ Public Class FormFlowsheet
         End Set
     End Property
 
-    Public Sub DeleteSelectedObject1(sender As Object, e As EventArgs, gobj As IGraphicObject, Optional confirmation As Boolean = True, Optional triggercalc As Boolean = False) Implements IFlowsheet.DeleteSelectedObject
+    Public Property DynamicsManager As IDynamicsManager = New DynamicsManager.Manager Implements IFlowsheet.DynamicsManager
 
+    Public Sub DeleteSelectedObject1(sender As Object, e As EventArgs, gobj As IGraphicObject, Optional confirmation As Boolean = True, Optional triggercalc As Boolean = False) Implements IFlowsheet.DeleteSelectedObject
+        DeleteSelectedObject(sender, e, gobj, confirmation, triggercalc)
     End Sub
 
     Public Sub Initialize() Implements IFlowsheet.Initialize
-        Throw New NotImplementedException()
+
     End Sub
 
     Public Sub LoadFromXML(xdoc As XDocument) Implements IFlowsheet.LoadFromXML
@@ -3108,6 +3150,131 @@ Public Class FormFlowsheet
     Public Function SaveToXML1() As XDocument Implements IFlowsheet.SaveToXML
         Throw New NotImplementedException()
     End Function
+
+    Public Function GetProcessData() As List(Of XElement) Implements IFlowsheet.GetProcessData
+
+        Dim dlist As New List(Of XElement)
+
+        For Each so As SharedClasses.UnitOperations.BaseClass In SimulationObjects.Values
+            so.SetFlowsheet(Me)
+            dlist.Add(New XElement("SimulationObject", {so.SaveData().ToArray()}))
+        Next
+
+        Return dlist
+
+    End Function
+
+    Private Sub tsbStoreSolution_Click(sender As Object, e As EventArgs) Handles tsbStoreSolution.Click
+
+        Dim data = GetProcessData()
+
+        Dim f As New FormEnterName
+
+        If f.ShowDialog(Me) = DialogResult.OK Then
+            Dim name = f.tbName.Text
+            If name <> "" Then
+                If Not StoredSolutions.ContainsKey(name) Then
+                    StoredSolutions.Add(name, data)
+                    tscbStoredSolutions.Items.Add(name)
+                    MessageBox.Show(GetTranslatedString1("SolutionStored"), "DWSIM", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                    FormDynamics.UpdateSelectables()
+                Else
+                    MessageBox.Show(GetTranslatedString1("InvalidName"), GetTranslatedString1("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End If
+            Else
+                MessageBox.Show(GetTranslatedString1("InvalidName"), GetTranslatedString1("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End If
+        End If
+
+    End Sub
+
+    Private Sub tsbLoadSolution_Click(sender As Object, e As EventArgs) Handles tsbLoadSolution.Click
+
+        If tscbStoredSolutions.SelectedItem IsNot Nothing Then
+            If StoredSolutions.ContainsKey(tscbStoredSolutions.SelectedItem.ToString) Then
+                Try
+                    LoadProcessData(StoredSolutions(tscbStoredSolutions.SelectedItem.ToString))
+                    UpdateInterface()
+                    UpdateOpenEditForms()
+                    MessageBox.Show(GetTranslatedString1("SolutionRestored"), "DWSIM", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Catch ex As Exception
+                    MessageBox.Show(ex.Message, GetTranslatedString1("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End Try
+            End If
+        End If
+
+    End Sub
+
+    Private Sub tsbDeleteSolution_Click(sender As Object, e As EventArgs) Handles tsbDeleteSolution.Click
+
+        If StoredSolutions.ContainsKey(tscbStoredSolutions.SelectedItem.ToString) Then
+            If MessageBox.Show(GetTranslatedString1("ConfirmOperation"), "DWSIM", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = DialogResult.Yes Then
+                StoredSolutions.Remove(tscbStoredSolutions.SelectedItem.ToString)
+                tscbStoredSolutions.Items.Remove(tscbStoredSolutions.SelectedItem)
+                FormDynamics.UpdateSelectables()
+            End If
+        End If
+
+    End Sub
+
+    Private Sub GerenciadorDoModoDinâmicoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles GerenciadorDoModoDinamicoToolStripMenuItem.Click
+        FormDynamics.Activate()
+    End Sub
+
+    Private Sub ControlesDoIntegradorToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ControlesDoIntegradorToolStripMenuItem.Click
+        FormIntegratorControls.Show(GetDockPanel)
+    End Sub
+
+    Private Sub ModoDinamicoAtivoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ModoDinamicoAtivoToolStripMenuItem.Click
+        Me.DynamicMode = ModoDinamicoAtivoToolStripMenuItem.Checked
+        Me.FormDynamics.chkDynamics.Checked = ModoDinamicoAtivoToolStripMenuItem.Checked
+    End Sub
+
+    Public Sub LoadProcessData(data As List(Of XElement)) Implements IFlowsheet.LoadProcessData
+
+        For Each xel In data
+            Dim id As String = xel.<Name>.Value
+            Dim obj = SimulationObjects(id)
+            obj.LoadData(xel.Elements.ToList)
+            If TypeOf obj Is Streams.MaterialStream Then
+                Dim stream = DirectCast(obj, Streams.MaterialStream)
+                For Each p In stream.Phases.Values
+                    For Each c In p.Compounds.Values
+                        c.ConstantProperties = SelectedCompounds(c.Name)
+                    Next
+                Next
+            End If
+        Next
+
+    End Sub
+
+    Private Sub ToolStripButton2_CheckedChanged(sender As Object, e As EventArgs) Handles tsbDynamics.CheckedChanged
+        Me.DynamicMode = tsbDynamics.Checked
+        Me.FormDynamics.chkDynamics.Checked = Me.DynamicMode
+        Me.ModoDinamicoAtivoToolStripMenuItem.Checked = Me.DynamicMode
+    End Sub
+
+    Private Sub tsbDynManager_Click(sender As Object, e As EventArgs) Handles tsbDynManager.Click
+        FormDynamics.Activate()
+    End Sub
+
+    Private Sub tsbDynIntegrator_Click(sender As Object, e As EventArgs) Handles tsbDynIntegrator.Click
+        FormIntegratorControls.Show(GetDockPanel)
+    End Sub
+
+    Private Sub FerramentaParaSintoniaDeControladoresPIDToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FerramentaParaSintoniaDeControladoresPIDToolStripMenuItem.Click
+
+        Dim ft As New FormPIDTuning With {.Flowsheet = Me}
+
+        ft.Show(dckPanel)
+
+    End Sub
+
+    Private Sub ModoDinamicoAtivoToolStripMenuItem_CheckedChanged(sender As Object, e As EventArgs) Handles ModoDinamicoAtivoToolStripMenuItem.CheckedChanged
+        Me.DynamicMode = ModoDinamicoAtivoToolStripMenuItem.Checked
+        Me.FormDynamics.chkDynamics.Checked = Me.DynamicMode
+        Me.tsbDynamics.Checked = Me.DynamicMode
+    End Sub
 
 #End Region
 

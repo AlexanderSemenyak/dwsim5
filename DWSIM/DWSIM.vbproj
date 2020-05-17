@@ -305,8 +305,8 @@
     <Reference Include="GenericDictionaryEditor">
       <HintPath>References\GenericDictionaryEditor.dll</HintPath>
     </Reference>
-    <Reference Include="HtmlAgilityPack, Version=1.8.14.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
-      <HintPath>..\packages\HtmlAgilityPack.1.8.14\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    <Reference Include="HtmlAgilityPack, Version=1.11.23.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.11.23\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=1.1.0.145, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpZipLib.1.1.0\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
@@ -373,12 +373,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>References\Nini.dll</HintPath>
     </Reference>
-    <Reference Include="OpenTK, Version=3.0.1.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <HintPath>..\packages\OpenTK.3.0.1\lib\net20\OpenTK.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="OpenTK, Version=3.2.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenTK.3.2\lib\net20\OpenTK.dll</HintPath>
     </Reference>
-    <Reference Include="OpenTK.GLControl, Version=3.0.1.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <HintPath>..\packages\OpenTK.GLControl.3.0.1\lib\net20\OpenTK.GLControl.dll</HintPath>
+    <Reference Include="OpenTK.GLControl, Version=3.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenTK.GLControl.3.1.0\lib\net20\OpenTK.GLControl.dll</HintPath>
     </Reference>
     <Reference Include="OxyPlot, Version=2.0.0.0, Culture=neutral, PublicKeyToken=638079a8f0bd61e9, processorArchitecture=MSIL">
       <HintPath>..\packages\OxyPlot.Core.2.0.0-unstable1035\lib\net45\OxyPlot.dll</HintPath>
@@ -410,9 +409,8 @@
       <HintPath>..\packages\jacobslusser.ScintillaNET.3.6.3\lib\net40\ScintillaNET.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SkiaSharp, Version=1.60.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\packages\SkiaSharp.1.60.0\lib\net45\SkiaSharp.dll</HintPath>
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="SkiaSharp, Version=1.68.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\packages\SkiaSharp.1.68.2.1\lib\net45\SkiaSharp.dll</HintPath>
     </Reference>
     <Reference Include="SkiaSharp.Extended, Version=1.60.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\packages\SkiaSharp.Extended.1.60.0\lib\netstandard2.0\SkiaSharp.Extended.dll</HintPath>
@@ -422,13 +420,25 @@
       <HintPath>References\SpinningProgress.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.4.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
+    </Reference>
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.3\lib\netstandard2.0\System.Memory.dll</HintPath>
+    </Reference>
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.4.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.XML" />
@@ -550,6 +560,18 @@
     <Compile Include="Forms\Flowsheet Components\FormCharts.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\Flowsheet Components\FormDynamicsIntegratorControl.Designer.vb">
+      <DependentUpon>FormDynamicsIntegratorControl.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Flowsheet Components\FormDynamicsIntegratorControl.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Flowsheet Components\FormDynamicsManager.Designer.vb">
+      <DependentUpon>FormDynamicsManager.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Flowsheet Components\FormDynamicsManager.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\Flowsheet Components\FormNewSpreadsheet.Designer.vb">
       <DependentUpon>FormNewSpreadsheet.vb</DependentUpon>
     </Compile>
@@ -610,6 +632,12 @@
     <Compile Include="Forms\FormEditGraphicObject.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\FormEnterName.Designer.vb">
+      <DependentUpon>FormEnterName.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormEnterName.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\FormEventDescription.Designer.vb">
       <DependentUpon>FormEventDescription.vb</DependentUpon>
     </Compile>
@@ -626,6 +654,18 @@
       <DependentUpon>FormLoadingSimulation.vb</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormLoadingSimulation.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormPIDCPEditor.Designer.vb">
+      <DependentUpon>FormPIDCPEditor.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormPIDCPEditor.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormPIDTuning.Designer.vb">
+      <DependentUpon>FormPIDTuning.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormPIDTuning.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormSearchingChemeo.Designer.vb">
@@ -700,10 +740,16 @@
     <Compile Include="Forms\FormConfigurePropertyTable.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormTextBox.Designer.vb">
+    <Compile Include="Forms\FormTextBox.designer.vb">
       <DependentUpon>FormTextBox.vb</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormTextBox.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormTextBoxInput.Designer.vb">
+      <DependentUpon>FormTextBoxInput.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormTextBoxInput.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormUpgradeWarning.Designer.vb">
@@ -943,6 +989,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Objects\Classes\Shared\GraphicObjectControlPanelModeEditors.vb" />
     <Compile Include="Objects\Classes\Shared\SharedFunctions.vb" />
     <Compile Include="Objects\Classes\TreeViewModels\BaseItem.vb" />
     <Compile Include="Objects\Classes\TreeViewModels\TreeModel.vb" />
@@ -1193,6 +1240,18 @@
     <EmbeddedResource Include="Forms\Flowsheet Components\FormCharts.resx">
       <DependentUpon>FormCharts.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Flowsheet Components\FormDynamicsIntegratorControl.en.resx">
+      <DependentUpon>FormDynamicsIntegratorControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Flowsheet Components\FormDynamicsIntegratorControl.resx">
+      <DependentUpon>FormDynamicsIntegratorControl.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Flowsheet Components\FormDynamicsManager.en.resx">
+      <DependentUpon>FormDynamicsManager.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Flowsheet Components\FormDynamicsManager.resx">
+      <DependentUpon>FormDynamicsManager.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Flowsheet Components\FormNewSpreadsheet.en.resx">
       <DependentUpon>FormNewSpreadsheet.vb</DependentUpon>
     </EmbeddedResource>
@@ -1311,6 +1370,12 @@
       <DependentUpon>FormEditGraphicObject.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormEnterName.en.resx">
+      <DependentUpon>FormEnterName.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormEnterName.resx">
+      <DependentUpon>FormEnterName.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormEventDescription.en.resx">
       <DependentUpon>FormEventDescription.vb</DependentUpon>
     </EmbeddedResource>
@@ -1328,6 +1393,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormPassword.de.resx">
       <DependentUpon>FormPassword.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormPIDCPEditor.resx">
+      <DependentUpon>FormPIDCPEditor.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormPIDTuning.en.resx">
+      <DependentUpon>FormPIDTuning.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormPIDTuning.resx">
+      <DependentUpon>FormPIDTuning.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormSearchingChemeo.de.resx">
       <DependentUpon>FormSearchingChemeo.vb</DependentUpon>
@@ -1396,6 +1470,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormTextBox.de.resx">
       <DependentUpon>FormTextBox.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormTextBox.resx">
+      <DependentUpon>FormTextBox.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormTextBoxInput.de.resx">
+      <DependentUpon>FormTextBoxInput.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormUpgradeWarning.de.resx">
       <DependentUpon>FormUpgradeWarning.vb</DependentUpon>
@@ -1537,8 +1617,8 @@
     <EmbeddedResource Include="Forms\FormConfigurePropertyTable.resx">
       <DependentUpon>FormConfigurePropertyTable.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormTextBox.resx">
-      <DependentUpon>FormTextBox.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\FormTextBoxInput.resx">
+      <DependentUpon>FormTextBoxInput.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormUpgradeWarning.en.resx">
       <DependentUpon>FormUpgradeWarning.vb</DependentUpon>
@@ -1643,6 +1723,10 @@
     <ProjectReference Include="..\DWSIM.DrawingTools.SkiaSharp.Extended\DWSIM.DrawingTools.SkiaSharp.Extended.csproj">
       <Project>{a58eb237-f703-45cf-89f9-e8b91bff76c1}</Project>
       <Name>DWSIM.DrawingTools.SkiaSharp.Extended</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DWSIM.DynamicsManager\DWSIM.DynamicsManager.vbproj">
+      <Project>{654c0d60-c94b-4a0b-b34d-1d71a6a20420}</Project>
+      <Name>DWSIM.DynamicsManager</Name>
     </ProjectReference>
     <ProjectReference Include="..\DWSIM.ExtensionMethods.Eto\DWSIM.ExtensionMethods.Eto.csproj">
       <Project>{5ba7546b-010c-4197-975e-f462bbea1ec4}</Project>
@@ -2981,9 +3065,20 @@
     <None Include="Resources\icons8-books.png" />
     <None Include="Resources\icons8-chemical_plant.png" />
     <None Include="Resources\icons8-line_chart.png" />
-    <None Include="Resources\icons8-module.png" />
     <None Include="Resources\icons8-test_tube.png" />
     <None Include="Resources\Patreon_Navy.jpg" />
+    <None Include="Resources\icons8-pause.png" />
+    <None Include="Resources\icons8-play.png" />
+    <None Include="Resources\icons8-stop.png" />
+    <None Include="Resources\icons8-module1.png" />
+    <None Include="Resources\icons8-exercise.png" />
+    <None Include="Resources\icons8-module2.png" />
+    <None Include="Resources\icons8-ecg.png" />
+    <None Include="Resources\icons8-module.png" />
+    <None Include="Resources\icons8-cancel.png" />
+    <None Include="Resources\icons8-ok.png" />
+    <None Include="Resources\icons8-realtime.png" />
+    <None Include="Resources\icons8-slider.png" />
     <Content Include="Resources\ru.png" />
     <None Include="Resources\zoom.png" />
     <None Include="Resources\Services.png" />
@@ -3454,7 +3549,7 @@ erase /S  /Q "$(SolutionDir)DistPackages\Windows_32\*.dylib" 2&gt;nul 1&gt;nul 4
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-    <Error Condition="!Exists('..\packages\SkiaSharp.1.60.0\build\net45\SkiaSharp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SkiaSharp.1.60.0\build\net45\SkiaSharp.targets'))" />
+    <Error Condition="!Exists('..\packages\SkiaSharp.1.68.2.1\build\net45\SkiaSharp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\SkiaSharp.1.68.2.1\build\net45\SkiaSharp.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -3475,5 +3570,5 @@ erase /S  /Q "$(SolutionDir)DistPackages\Windows_32\*.dylib" 2&gt;nul 1&gt;nul 4
     </ItemGroup>
     <Message Importance="normal" Text="Adding back DesignTimeFacades from ReferencePath now that SGen has run." />
   </Target>
-  <Import Project="..\packages\SkiaSharp.1.60.0\build\net45\SkiaSharp.targets" Condition="Exists('..\packages\SkiaSharp.1.60.0\build\net45\SkiaSharp.targets')" />
+  <Import Project="..\packages\SkiaSharp.1.68.2.1\build\net45\SkiaSharp.targets" Condition="Exists('..\packages\SkiaSharp.1.68.2.1\build\net45\SkiaSharp.targets')" />
 </Project>

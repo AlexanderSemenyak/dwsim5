@@ -34,7 +34,13 @@ Namespace UnitOperations
 
         <System.NonSerialized()> Protected Friend m_flowsheet As Interfaces.IFlowsheet
 
+        Public Property DynamicsSpec As Enums.Dynamics.DynamicsSpecType = Dynamics.DynamicsSpecType.Pressure Implements ISimulationObject.DynamicsSpec
+
+        Public Property DynamicsOnly As Boolean = False Implements ISimulationObject.DynamicsOnly
+
         Public Property ExtraProperties As New ExpandoObject Implements ISimulationObject.ExtraProperties
+
+        Public Property ExtraPropertiesUnitTypes As New ExpandoObject Implements ISimulationObject.ExtraPropertiesUnitTypes
 
         Public Property ExtraPropertiesDescriptions As New ExpandoObject Implements ISimulationObject.ExtraPropertiesDescriptions
 
@@ -53,6 +59,8 @@ Namespace UnitOperations
         End Sub
 
         Sub CreateNew()
+
+            If ExtraProperties.Count = 0 Then CreateDynamicProperties()
 
         End Sub
 
@@ -73,6 +81,65 @@ Namespace UnitOperations
         End Function
 
 #Region "    ISimulationObject"
+
+        Public Sub AddDynamicProperty(pname As String, pdesc As String, pvalue As Double,
+                               punittype As Enums.UnitOfMeasure) Implements ISimulationObject.AddDynamicProperty
+
+            Dim col1 = DirectCast(ExtraProperties, IDictionary(Of String, Object))
+            Dim col2 = DirectCast(ExtraPropertiesDescriptions, IDictionary(Of String, Object))
+            Dim col3 = DirectCast(ExtraPropertiesUnitTypes, IDictionary(Of String, Object))
+
+            If Not col1.ContainsKey(pname) Then
+                col1.Add(pname, pvalue)
+                col2.Add(pname, pdesc)
+                col3.Add(pname, punittype)
+            Else
+                'Throw New Exception("Property already exists.")
+            End If
+
+        End Sub
+
+        Public Function SetDynamicProperty(id As String, value As Object) As Boolean
+
+            Dim col1 = DirectCast(ExtraProperties, IDictionary(Of String, Object))
+
+            col1(id) = value
+
+            Return True
+
+        End Function
+
+        Public Function GetDynamicProperty(id As String) As Object
+
+            Dim col1 = DirectCast(ExtraProperties, IDictionary(Of String, Object))
+
+            Return col1(id)
+
+        End Function
+
+        Public Function GetDynamicPropertyUnitType(id As String) As Enums.UnitOfMeasure
+
+            Dim col1 = DirectCast(ExtraPropertiesUnitTypes, IDictionary(Of String, Object))
+
+            Return col1(id)
+
+        End Function
+
+        Public Sub RemoveDynamicProperty(pname As String) Implements ISimulationObject.RemoveDynamicProperty
+
+            Dim col1 = DirectCast(ExtraProperties, IDictionary(Of String, Object))
+            Dim col2 = DirectCast(ExtraPropertiesDescriptions, IDictionary(Of String, Object))
+            Dim col3 = DirectCast(ExtraPropertiesUnitTypes, IDictionary(Of String, Object))
+
+            If col1.ContainsKey(pname) Then
+                col1.Remove(pname)
+                col2.Remove(pname)
+                col3.Remove(pname)
+            Else
+                Throw New Exception("Property doesn't exist.")
+            End If
+
+        End Sub
 
         Public Overridable Function GetChartModel(name As String) As Object Implements ISimulationObject.GetChartModel
             Return Nothing
@@ -129,6 +196,12 @@ Namespace UnitOperations
 
         Public Sub DeCalculate(Optional args As Object = Nothing) Implements ISimulationObject.DeCalculate
             Throw New NotImplementedException
+        End Sub
+
+        Public Overridable Sub RunDynamicModel() Implements ISimulationObject.RunDynamicModel
+
+            Throw New Exception("This Unit Operation is not yet supported in Dynamic Mode.")
+
         End Sub
 
         Public Overridable Sub PerformPostCalcValidation() Implements ISimulationObject.PerformPostCalcValidation
@@ -242,6 +315,49 @@ Namespace UnitOperations
             End If
             Calculated = True
             PerformPostCalcValidation()
+        End Sub
+
+        <NonSerialized> <Xml.Serialization.XmlIgnore> Public f As DynamicsPropertyEditor
+
+        Public Sub DisplayDynamicsEditForm() Implements ISimulationObject.DisplayDynamicsEditForm
+
+            If f Is Nothing Then
+                f = New DynamicsPropertyEditor With {.SimObject = Me}
+                f.ShowHint = WeifenLuo.WinFormsUI.Docking.DockState.DockRight
+                f.Tag = "ObjectEditor"
+                Me.FlowSheet.DisplayForm(f)
+            Else
+                If f.IsDisposed Then
+                    f = New DynamicsPropertyEditor With {.SimObject = Me}
+                    f.ShowHint = WeifenLuo.WinFormsUI.Docking.DockState.DockRight
+                    f.Tag = "ObjectEditor"
+                    Me.FlowSheet.DisplayForm(f)
+                Else
+                    f.Activate()
+                End If
+            End If
+
+        End Sub
+
+        Public Sub UpdateDynamicsEditForm() Implements ISimulationObject.UpdateDynamicsEditForm
+
+            If f IsNot Nothing Then
+                If Not f.IsDisposed Then
+                    f.UIThread(Sub() f.UpdateInfo())
+                End If
+            End If
+
+        End Sub
+
+        Public Sub CloseDynamicsEditForm() Implements ISimulationObject.CloseDynamicsEditForm
+
+            If f IsNot Nothing Then
+                If Not f.IsDisposed Then
+                    f.Close()
+                    f = Nothing
+                End If
+            End If
+
         End Sub
 
         Public MustOverride Sub DisplayEditForm() Implements ISimulationObject.DisplayEditForm
@@ -426,10 +542,20 @@ Namespace UnitOperations
 
         Public Overridable Function GetPropertyUnit(prop As String, Optional su As Interfaces.IUnitsOfMeasure = Nothing) As String Implements Interfaces.ISimulationObject.GetPropertyUnit
 
+            If su Is Nothing Then
+                su = FlowSheet.FlowsheetOptions.SelectedUnitSystem
+            End If
+
             Dim epcol = DirectCast(ExtraProperties, IDictionary(Of String, Object))
+            Dim epucol = DirectCast(ExtraPropertiesUnitTypes, IDictionary(Of String, Object))
 
             If epcol.ContainsKey(prop) Then
-                Return ""
+                If epucol.ContainsKey(prop) Then
+                    Dim utype = epucol(prop)
+                    Return su.GetCurrentUnits(utype)
+                Else
+                    Return ""
+                End If
             End If
 
             For Each item In AttachedUtilities
@@ -600,6 +726,28 @@ Namespace UnitOperations
                 Next
             End If
 
+            ExtraPropertiesUnitTypes = New ExpandoObject
+
+            Dim xel_ddt = (From xel2 As XElement In data Select xel2 Where xel2.Name = "DynamicPropertiesUnitTypes")
+
+            If Not xel_ddt Is Nothing Then
+                Dim dataDyn As List(Of XElement) = xel_ddt.Elements.ToList
+                For Each xel As XElement In dataDyn
+                    Try
+                        Dim propname = xel.Element("Name").Value
+                        Dim proptype = xel.Element("PropertyType").Value
+                        Dim ptype As Type = Type.GetType(proptype)
+                        Dim propval = Newtonsoft.Json.JsonConvert.DeserializeObject(xel.Element("Data").Value, ptype)
+                        DirectCast(ExtraPropertiesUnitTypes, IDictionary(Of String, Object))(propname) = propval
+                    Catch ex As Exception
+                    End Try
+                Next
+            End If
+
+            'If ExtraProperties.Count = 0 Then
+            CreateDynamicProperties()
+            'End If
+
             Dim xel_u = (From xel2 As XElement In data Select xel2 Where xel2.Name = "AttachedUtilities")
 
             If Not xel_u Is Nothing Then
@@ -649,6 +797,17 @@ Namespace UnitOperations
                 .Add(New XElement("DynamicPropertiesDescriptions"))
                 Dim extrapropsdesc = DirectCast(ExtraPropertiesDescriptions, IDictionary(Of String, Object))
                 For Each item In extrapropsdesc
+                    Try
+                        .Item(.Count - 1).Add(New XElement("Property", {New XElement("Name", item.Key),
+                                                                               New XElement("PropertyType", item.Value.GetType.ToString),
+                                                                               New XElement("Data", Newtonsoft.Json.JsonConvert.SerializeObject(item.Value))}))
+                    Catch ex As Exception
+                    End Try
+                Next
+
+                .Add(New XElement("DynamicPropertiesUnitTypes"))
+                Dim extrapropsunits = DirectCast(ExtraPropertiesUnitTypes, IDictionary(Of String, Object))
+                For Each item In extrapropsunits
                     Try
                         .Item(.Count - 1).Add(New XElement("Property", {New XElement("Name", item.Key),
                                                                                New XElement("PropertyType", item.Value.GetType.ToString),
@@ -837,6 +996,10 @@ Namespace UnitOperations
             Return New List(Of Tuple(Of ReportItemType, String()))
         End Function
 
+        Public Overridable Sub CreateDynamicProperties() Implements ISimulationObject.CreateDynamicProperties
+
+        End Sub
+
         ''' <summary>
         ''' Gets the current flowsheet where this object is located.
         ''' </summary>
@@ -854,6 +1017,8 @@ Namespace UnitOperations
         End Property
 
         Public Overridable Property ObjectClass As SimulationObjectClass = SimulationObjectClass.Other Implements ISimulationObject.ObjectClass
+
+        Public Overridable ReadOnly Property SupportsDynamicMode As Boolean = False Implements ISimulationObject.SupportsDynamicMode
 
 #End Region
 

@@ -18,8 +18,6 @@ namespace DWSIM.UI.Forms
 
         public MainForm MainFrm;
 
-        private Label lblMessage;
-
         void InitializeComponent()
         {
 
@@ -35,10 +33,10 @@ namespace DWSIM.UI.Forms
 
             if (Application.Instance.Platform.IsGtk)
             {
-                w = (int)(sf * 916);
-                h = (int)(sf * 426);
-                dx = 83;
-                dy = 32;
+                w = (int)(sf * 1088);
+                h = (int)(sf * 509);
+                dx = 20;
+                dy = 0;
             }
             else
             {
@@ -50,14 +48,12 @@ namespace DWSIM.UI.Forms
 
             ClientSize = new Size(w, h);
 
-            var lbl1 = new Label { Style = "splashlabels2", Text = "ApplicationVersion".Localize() + Assembly.GetExecutingAssembly().GetName().Version.ToString() };
-
             var lbl1a = new Label { Style = "splashlabels1", Text = "Version".Localize() + " " + Assembly.GetExecutingAssembly().GetName().Version.Major.ToString() + "." + Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString() };
 
             var updfile = AppDomain.CurrentDomain.BaseDirectory + Path.DirectorySeparatorChar + "version.info";
 
 #if PREVIEW
-            lbl1a.Text += " Preview 1";
+            lbl1a.Text += " (Preview)";
 #else
             if (File.Exists(updfile))
             {
@@ -69,27 +65,19 @@ namespace DWSIM.UI.Forms
 
             if (Environment.Is64BitProcess)
             {
-                lbl1a.Text += " (64-bit)";
+                lbl1a.Text +=  " (" + Assembly.GetExecutingAssembly().GetName().Version.ToString() + ", Cross-Platform UI, (64-bit)";
             }
             else {
-                lbl1a.Text += " (32-bit)";
+                lbl1a.Text += " (" + Assembly.GetExecutingAssembly().GetName().Version.ToString() + ", Cross-Platform UI, (32-bit)";
             }
-
-            var lbl2 = new Label { Style = "splashlabels2", Text = SharedClasses.Utility.GetRuntimeVersion() };
 
             var lbl3 = new Label { Style = "fixedwidth", Text = "GPLNotice".Localize() };
 
-            lbl1.TextColor = Colors.White;
-            lbl2.TextColor = Colors.White;
             lbl1a.TextColor = new Color(0.051f, 0.447f, 0.651f);
             lbl3.TextColor = new Color(0.051f, 0.447f, 0.651f);
 
             lbl3.Width = (int)(sf * 576);
             lbl3.Height = (int)(sf * 40);
-
-            lblMessage = new Label { Style = "splashlabels2", Text = "LoadingComponents".Localize() };
-
-            lblMessage.TextColor = Colors.White;
 
             var lbl5 = new Label { Style = "splashlabels1", Text = Shared.AssemblyCopyright };
 
@@ -97,15 +85,25 @@ namespace DWSIM.UI.Forms
 
             var layout = new PixelLayout();
 
-            var img = new ImageView { Image = Bitmap.FromResource(imgprefix + "DWSIM_splash.png") };
-            
-            layout.Add(img, (int)(sf *( 0 - dx)), (int)(sf * (0 - dy)));
-            layout.Add(lblMessage, (int)(sf * (101 - dx)), (int)(sf * (185 - dy)));
-            layout.Add(lbl1, (int)(sf * (101 - dx)), (int)(sf * (381 - dy)));
-            layout.Add(lbl2, (int)(sf * (101 - dx)), (int)(sf * (403 - dy)));
-            layout.Add(lbl1a, (int)(sf * (419 - dx)), (int)(sf * (185 - dy)));
-            layout.Add(lbl5, (int)(sf * (419 - dx)), (int)(sf * (213 - dy)));
-            layout.Add(lbl3, (int)(sf * (419 - dx)), (int)(sf * (381 - dy)));
+            ImageView img;
+
+            if (Application.Instance.Platform.IsGtk)
+            {
+                img = new ImageView { Image = Bitmap.FromResource(imgprefix + "DWSIM_splash_gtk.png").WithSize(w, h) };
+                layout.Add(img, 0, 0);
+                lbl1a.BackgroundColor = Colors.WhiteSmoke;
+                lbl5.BackgroundColor = Colors.WhiteSmoke;
+                lbl3.BackgroundColor = Colors.WhiteSmoke;
+            }
+            else
+            {
+                img = new ImageView { Image = Bitmap.FromResource(imgprefix + "DWSIM_splash.png").WithSize(w, h) };
+                layout.Add(img, (int)(sf * (0 - dx)), (int)(sf * (0 - dy)));
+            }
+
+            layout.Add(lbl1a, (int)(sf * (385 - dx)), (int)(sf * (114 - dy)));
+            layout.Add(lbl5, (int)(sf * (385 - dx)), (int)(sf * (139 - dy)));
+            layout.Add(lbl3, (int)(sf * (385 - dx)), (int)(sf * (381 - dy)));
 
             Content = layout;
 
@@ -138,7 +136,7 @@ namespace DWSIM.UI.Forms
         {
             Task.Factory.StartNew(() =>
             {
-                Thread.Sleep(2000);
+                Thread.Sleep(3500);
                 PerformExtraTasks();
             }).ContinueWith((t) => Application.Instance.Invoke(() =>
             {
@@ -157,10 +155,7 @@ namespace DWSIM.UI.Forms
         void PerformExtraTasks()
         {
 
-
             //Read user compounds
-
-            Application.Instance.AsyncInvoke(() => lblMessage.Text = "Reading User Compounds...");
 
             foreach (var path in GlobalSettings.Settings.UserDatabases)
             {

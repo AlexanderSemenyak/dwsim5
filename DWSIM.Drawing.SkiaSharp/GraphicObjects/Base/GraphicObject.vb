@@ -70,6 +70,9 @@ Namespace GraphicObjects
         Public Function MeasureString(text As String, paint As SKPaint) As SKSize
 
             Dim trect As New SKRect(0, 0, 2, 2)
+
+            if text = Nothing Then Return SKSize.Empty 
+
             paint.GetTextPath(text, 0, 0).GetBounds(trect)
 
             Return New SKSize(trect.Width, trect.Height)
@@ -392,6 +395,12 @@ Namespace GraphicObjects
             Return newobj
         End Function
 
+        Public Overridable Sub DisplayControlPanelModeEditor() Implements IGraphicObject.DisplayControlPanelModeEditor
+
+            ControlPanelModeEditorDisplayDelegate?.Invoke()
+
+        End Sub
+
         Public Property Editor As Object Implements IGraphicObject.Editor
 
         Public Property Rotation As Integer Implements IGraphicObject.Rotation
@@ -399,6 +408,20 @@ Namespace GraphicObjects
         Public Property DrawOverride As Action(Of Object) Implements IGraphicObject.DrawOverride
 
         Public Property Extensions As Dictionary(Of String, IGraphicObjectExtension) Implements IGraphicObject.Extensions
+
+        Public Property ControlPanelModeEditorDisplayDelegate As Action Implements IGraphicObject.ControlPanelModeEditorDisplayDelegate
+
+        Public Function GetForeColor() As SKColor
+
+            Return Drawing.SkiaSharp.GraphicsSurface.ForegroundColor
+
+        End Function
+
+        Public Function GetBackColor() As SKColor
+
+            Return Drawing.SkiaSharp.GraphicsSurface.BackgroundColor
+
+        End Function
 
     End Class
 
