@@ -145,7 +145,7 @@
     <value>Benzene</value>
   </data>
   <data name="_DioxidoDeCarbono" xml:space="preserve">
-    <value>Carbon Dioxide</value>
+    <value>Диоксид углерода</value>
   </data>
   <data name="_Etano" xml:space="preserve">
     <value>Этан</value>
@@ -238,7 +238,7 @@
     <value>Opening simulation file</value>
   </data>
   <data name="AbrirSalvar" xml:space="preserve">
-    <value>Open/Save</value>
+    <value>Открыть/Сохранить</value>
   </data>
   <data name="AbsorptionColumn" xml:space="preserve">
     <value>Absorption Column</value>
@@ -319,13 +319,13 @@
     <value>Heater</value>
   </data>
   <data name="Aquecedores" xml:space="preserve">
-    <value>Heaters</value>
+    <value>Нагреватели</value>
   </data>
   <data name="AquecimentoResfriame" xml:space="preserve">
-    <value>Heating/Cooling</value>
+    <value>Нагревание/Охлаждение</value>
   </data>
   <data name="AquecResfr" xml:space="preserve">
-    <value>Heating/Cooling</value>
+    <value>Нагревание/Охлаждение</value>
   </data>
   <data name="Aqueous" xml:space="preserve">
     <value>Aqueous</value>
@@ -487,7 +487,7 @@
     <value>Cancelled.</value>
   </data>
   <data name="CapacidadeCalorfica" xml:space="preserve">
-    <value>Heat Capacity</value>
+    <value>Теплоемкость</value>
   </data>
   <data name="Capacidadecalorficad" xml:space="preserve">
     <value>Heat Capacity at Constant Pressure</value>
@@ -685,7 +685,7 @@
     <value>1. Conditions</value>
   </data>
   <data name="Condutividadetrmica" xml:space="preserve">
-    <value>Thermal Conductivity</value>
+    <value>Теплопроводность</value>
   </data>
   <data name="Condutividadetrmicad" xml:space="preserve">
     <value>Thermal Conductivity of the mixture</value>
@@ -1168,7 +1168,7 @@
     <value>Continue the process of adjustment anyway?</value>
   </data>
   <data name="Desejasalvarasaltera" xml:space="preserve">
-    <value>Save current simulation?</value>
+    <value>Save changes (if any)?</value>
   </data>
   <data name="Destino" xml:space="preserve">
     <value>Target</value>
@@ -1360,25 +1360,25 @@
     <value>Vaporization Enthalpy at 25 °C</value>
   </data>
   <data name="EntalpiaEspecfica" xml:space="preserve">
-    <value>Specific Enthalpy</value>
+    <value>Удельная энтальпия</value>
   </data>
   <data name="EntalpiaEspecficadaf" xml:space="preserve">
-    <value>Specific Enthalpy of the vapor phase</value>
+    <value>Удельная энтальпия паровой фазы</value>
   </data>
   <data name="EntalpiaEspecficadaf2" xml:space="preserve">
-    <value>Specific Enthalpy of the liquid phase</value>
+    <value>Удельная энтальпия жидкой фазы</value>
   </data>
   <data name="EntalpiaEspecficadam" xml:space="preserve">
-    <value>Specific Enthalpy of the mixture</value>
+    <value>Удельная энтальпия смеси</value>
   </data>
   <data name="EntalpiaEspecficaFas" xml:space="preserve">
-    <value>Specific Enthalpy (Vapor Phase)</value>
+    <value>Удельная энтальпия (паровая фаза)</value>
   </data>
   <data name="EntalpiaEspecficaFas2" xml:space="preserve">
-    <value>Specific Enthalpy (Liquid Phase)</value>
+    <value>Удельная энтальпия (жидкая фаза)</value>
   </data>
   <data name="EntalpiaEspecficaMis" xml:space="preserve">
-    <value>Specific Enthalpy (mixture)</value>
+    <value>Удельная энтальпия (смесь)</value>
   </data>
   <data name="EntradaBorda" xml:space="preserve">
     <value>Edged Inlet</value>
@@ -1387,25 +1387,25 @@
     <value>Normal Inlet</value>
   </data>
   <data name="EntropiaEspecfica" xml:space="preserve">
-    <value>Specific Entropy</value>
+    <value>Удельная энтропия</value>
   </data>
   <data name="EntropiaEspecficadaf" xml:space="preserve">
-    <value>Specific entropy of the vapor phase</value>
+    <value>Удельная энтропия паровой фазы</value>
   </data>
   <data name="EntropiaEspecficadaf2" xml:space="preserve">
-    <value>Specific entropy of the liquid phase</value>
+    <value>Удельная энтропия жидкой фазы</value>
   </data>
   <data name="EntropiaEspecficadam" xml:space="preserve">
-    <value>Specific entropy of the mixture</value>
+    <value>Удельная энтропия смеси</value>
   </data>
   <data name="EntropiaEspecficaFas" xml:space="preserve">
-    <value>Specific entropy (Vapor Phase)</value>
+    <value>Удельная энтропия (Паровая фаза)</value>
   </data>
   <data name="EntropiaEspecficaFas2" xml:space="preserve">
-    <value>Specific entropy (Liquid Phase)</value>
+    <value>Удельная энтропия (Жидкая фаза)</value>
   </data>
   <data name="EntropiaEspecficaMis" xml:space="preserve">
-    <value>Specific entropy (mixture)</value>
+    <value>Удельная энтропия (смесь)</value>
   </data>
   <data name="Equacao" xml:space="preserve">
     <value>Equation</value>
@@ -1480,7 +1480,7 @@
     <value>Temperature error</value>
   </data>
   <data name="Erronavazomssica" xml:space="preserve">
-    <value>Mass flow rate error</value>
+    <value>Ошибка (массовый расход)</value>
   </data>
   <data name="Erronocalculodasconc" xml:space="preserve">
     <value>Error calculating equilibrium composition.</value>
@@ -1657,7 +1657,7 @@
     <value>Acentric Factor</value>
   </data>
   <data name="Fatordecompressibili" xml:space="preserve">
-    <value>Compressibility Factor (Z) of the vapor phase</value>
+    <value>Коэффициент сжимаемости (Z) паровой фазы</value>
   </data>
   <data name="Fechando" xml:space="preserve">
     <value>Closing</value>
@@ -1840,22 +1840,22 @@
     <value>Cumulative Molar Fraction</value>
   </data>
   <data name="FraomolardaPhase" xml:space="preserve">
-    <value>Phase Molar Fraction</value>
+    <value>Молярная доля фазы</value>
   </data>
   <data name="FraomolardaPhasePhaseL" xml:space="preserve">
-    <value>Phase molar fraction (Liquid Phase)</value>
+    <value>Молярная доля фазы (Жидкая фаза)</value>
   </data>
   <data name="FraomolardaPhasePhaseV" xml:space="preserve">
-    <value>Phase molar fraction (Vapor Phase)</value>
+    <value>Молярная доля фазы (Паровая фаза)</value>
   </data>
   <data name="FraomolardaPhasenamis" xml:space="preserve">
-    <value>Phase molar fraction in the mixture</value>
+    <value>Молярная доля фазы в смеси</value>
   </data>
   <data name="FraomolarnaPhaseLquid" xml:space="preserve">
-    <value>Liquid Phase Molar Fraction</value>
+    <value>Молярная доля жидкой фазы</value>
   </data>
   <data name="FraomolarnaPhaseVapor" xml:space="preserve">
-    <value>Vapor Phase Molar Fraction</value>
+    <value>Молярная доля паровой фазы</value>
   </data>
   <data name="FraomolarnaMistura" xml:space="preserve">
     <value>Mixture Molar Fraction</value>
@@ -1873,28 +1873,28 @@
     <value>Mass Fraction</value>
   </data>
   <data name="FraomssicadaPhase" xml:space="preserve">
-    <value>Phase Mass Fraction</value>
+    <value>Массовая доля фазы</value>
   </data>
   <data name="FraomssicadaPhasePhase" xml:space="preserve">
-    <value>Phase mass fraction (Vapor Phase)</value>
+    <value>Массовая доля фазы (Паровая фаза)</value>
   </data>
   <data name="FraomssicadaPhasePhase2" xml:space="preserve">
-    <value>Phase mass fraction (Liquid Phase)</value>
+    <value>Массовая доля фазы (Жидкая фаза)</value>
   </data>
   <data name="FraomssicadaPhasePhase3" xml:space="preserve">
     <value>Phase mass fraction (Phase Steam)</value>
   </data>
   <data name="FraomssicadaPhasePhase4" xml:space="preserve">
-    <value>Phase mass fraction (Liquid Phase)</value>
+    <value>Массовая доля фазы (Жидкая фаза)</value>
   </data>
   <data name="FraomssicadaPhasenami" xml:space="preserve">
-    <value>Phase mass fraction in the mixture</value>
+    <value>Массовая доля фазы в смеси</value>
   </data>
   <data name="FraomssicanaPhaseLqui" xml:space="preserve">
-    <value>Liquid Phase Mass Fraction</value>
+    <value>Массовая доля жидкой фазы</value>
   </data>
   <data name="FraomssicanaPhaseVapo" xml:space="preserve">
-    <value>Vapor Phase Mass Fraction</value>
+    <value>Массовая доля паровой фазы</value>
   </data>
   <data name="FraomssicanaMistura" xml:space="preserve">
     <value>Mass Fraction in the mixture</value>
@@ -2167,49 +2167,49 @@
     <value>ManipulatedObjectData</value>
   </data>
   <data name="Massaespecfica" xml:space="preserve">
-    <value>Density</value>
+    <value>Плотность</value>
   </data>
   <data name="MassaespecficadaPhase" xml:space="preserve">
     <value>Плотность паровой фазы</value>
   </data>
   <data name="MassaespecficadaPhase2" xml:space="preserve">
-    <value>Density of liquid phase</value>
+    <value>Плотность жидкой фазы</value>
   </data>
   <data name="MassaEspecficadaPhase3" xml:space="preserve">
     <value>Density of Liquid Phase: Rackett</value>
   </data>
   <data name="Massaespecficadamist" xml:space="preserve">
-    <value>Density of the mixture</value>
+    <value>Плотность смеси</value>
   </data>
   <data name="MassaespecficaPhaseLq" xml:space="preserve">
-    <value>Density (Liquid Phase)</value>
+    <value>Плотность (жидкая фаза)</value>
   </data>
   <data name="MassaespecficaPhaseVa" xml:space="preserve">
-    <value>Density (Vapor Phase)</value>
+    <value>Плотность (паровая фаза)</value>
   </data>
   <data name="MassaespecficaMistur" xml:space="preserve">
-    <value>Density (mixture)</value>
+    <value>Плотность (смесь)</value>
   </data>
   <data name="Massamolar" xml:space="preserve">
-    <value>Molecular Weight</value>
+    <value>Молекулярная масса</value>
   </data>
   <data name="MassamolardaPhaselqui" xml:space="preserve">
-    <value>Molecular Weight of the liquid phase</value>
+    <value>Молекулярная масса жидкой фазы</value>
   </data>
   <data name="MassamolardaPhasevapo" xml:space="preserve">
-    <value>Molecular Weight of the vapor phase</value>
+    <value>Молекулярная масса паровой фазы</value>
   </data>
   <data name="Massamolardamistura" xml:space="preserve">
-    <value>Molecular Weight of the mixture</value>
+    <value>Молекулярная масса смеси</value>
   </data>
   <data name="MassamolarPhaseLquida" xml:space="preserve">
-    <value>Molecular Weight (Liquid Phase)</value>
+    <value>Молекулярная масса (жидкая фаза)</value>
   </data>
   <data name="MassamolarPhaseVapor" xml:space="preserve">
-    <value>Molecular Weight (Vapor Phase)</value>
+    <value>Молекулярная масса (паровая фаза)</value>
   </data>
   <data name="MassamolarMistura" xml:space="preserve">
-    <value>Molecular Weight (mixture)</value>
+    <value>Молекулярная масса (смесь)</value>
   </data>
   <data name="Material" xml:space="preserve">
     <value>Материал</value>
@@ -2704,7 +2704,7 @@
     <value>Vaporized Fraction</value>
   </data>
   <data name="PF_MW" xml:space="preserve">
-    <value>Molar Weight</value>
+    <value>Молярная масса</value>
   </data>
   <data name="PF_PVAP" xml:space="preserve">
     <value>Percent Vaporized</value>
@@ -2845,7 +2845,7 @@
     <value>Pressure (Pa)</value>
   </data>
   <data name="PressovsEntalpia" xml:space="preserve">
-    <value>Pressure vs. Enthalpy</value>
+    <value>Давление к Энтальпии</value>
   </data>
   <data name="PressovsTemperatura" xml:space="preserve">
     <value>Pressure vs. Temperature</value>
@@ -3010,7 +3010,7 @@
     <value>Rackett Compressibility</value>
   </data>
   <data name="Razoentreascapacidad" xml:space="preserve">
-    <value>Heat Capacity Ratio (Cp/Cv)</value>
+    <value>Коэффициент теплоемкости (Cp / Cv)</value>
   </data>
   <data name="RConvPGridItem1" xml:space="preserve">
     <value>Reaction Set</value>
@@ -3064,7 +3064,7 @@
     <value>Equilibrium Reactor</value>
   </data>
   <data name="ReatorGibbs" xml:space="preserve">
-    <value>Gibbs Reactor</value>
+    <value>Реактор Гиббса</value>
   </data>
   <data name="ReatorPFR" xml:space="preserve">
     <value>PFR</value>
@@ -3487,10 +3487,10 @@
     <value>Normal Boiling Temperature</value>
   </data>
   <data name="TemperaturavsEntalpi" xml:space="preserve">
-    <value>Temperature vs. Enthalpy</value>
+    <value>Давление к Энтальпии</value>
   </data>
   <data name="TemperaturavsEntropi" xml:space="preserve">
-    <value>Temperature vs. Entropy</value>
+    <value>Температура к Энтропии</value>
   </data>
   <data name="TemperaturavsPresso" xml:space="preserve">
     <value>Temperature vs. Pressure</value>
@@ -3502,16 +3502,16 @@
     <value>Time</value>
   </data>
   <data name="Tensosuperficial" xml:space="preserve">
-    <value>Surface Tension</value>
+    <value>Поверхностное натяжение</value>
   </data>
   <data name="TensoSuperficialdaFa" xml:space="preserve">
     <value>Surface tension of the Liquid Phase: Brock-Bird method</value>
   </data>
   <data name="Tensosuperficialentr" xml:space="preserve">
-    <value>Surface tension between phases</value>
+    <value>Поверхностное натяжение между фазами</value>
   </data>
   <data name="TensosuperficialMist" xml:space="preserve">
-    <value>Surface Tension (mixture)</value>
+    <value>Поверхностное натяжение (смесь)</value>
   </data>
   <data name="Texto" xml:space="preserve">
     <value>Text</value>
@@ -3745,67 +3745,67 @@
     <value>&lt;empty&gt;</value>
   </data>
   <data name="Vazomolar" xml:space="preserve">
-    <value>Molar Flow Rate</value>
+    <value>Молярный расход</value>
   </data>
   <data name="Vazomolardacorrente" xml:space="preserve">
     <value>Molar flow rate of the stream</value>
   </data>
   <data name="Vazomssica" xml:space="preserve">
-    <value>Mass Flow Rate</value>
+    <value>Массовый расход</value>
   </data>
   <data name="Vazomssicadacorrente" xml:space="preserve">
-    <value>Mass flow rate of the stream</value>
+    <value>Массовый расход в потоке</value>
   </data>
   <data name="Vazomssicadamistura" xml:space="preserve">
-    <value>Mass flow rate of the mixture</value>
+    <value>Массовый расход смеси</value>
   </data>
   <data name="VazomssicaPhaseLquida" xml:space="preserve">
-    <value>Mass flow rate (Liquid Phase)</value>
+    <value>Массовый расход (Жидкая фаза)</value>
   </data>
   <data name="VazomssicaPhaseVapor" xml:space="preserve">
-    <value>Mass flow rate (Vapor Phase)</value>
+    <value>Массовый расход (Паровая фаза)</value>
   </data>
   <data name="VazomssicaMistura" xml:space="preserve">
-    <value>Mass flow rate (Mixture)</value>
+    <value>Массовый расход (Смесь)</value>
   </data>
   <data name="VazomssicanaPhaseLqui" xml:space="preserve">
-    <value>Mass flow rate in Liquid Phase</value>
+    <value>Массовый расход жидкой фазы</value>
   </data>
   <data name="VazomssicanaPhaseVapo" xml:space="preserve">
-    <value>Mass flow rate in Vapor Phase</value>
+    <value>Массовый расход в паровой фазе</value>
   </data>
   <data name="VazomssicanaMistura" xml:space="preserve">
-    <value>Mass flow rate in the Mixture</value>
+    <value>Массовый расход в смеси</value>
   </data>
   <data name="VazoTP" xml:space="preserve">
-    <value>Volumetric Flow Rate @ T, P</value>
+    <value>Объемный расход @ T, P</value>
   </data>
   <data name="VazoTPPhaseLquida" xml:space="preserve">
-    <value>Volumetric Flow Rate @ T, P (Liquid Phase)</value>
+    <value>Объемный расход @ T, P (Жидкая фаза)</value>
   </data>
   <data name="VazoTPPhaseVapor" xml:space="preserve">
-    <value>Volumetric Flow Rate @ T, P (Vapor Phase)</value>
+    <value>Объемный расход  @ T, P (Паровая фаза)</value>
   </data>
   <data name="Vazovolumtrica" xml:space="preserve">
-    <value>Volumetric flow rate</value>
+    <value>Объемный расход </value>
   </data>
   <data name="Vazovolumtricadacorr" xml:space="preserve">
     <value>Volumetric flow rate of the stream</value>
   </data>
   <data name="Vazovolumtricadamist" xml:space="preserve">
-    <value>Volumetric flow rate in the mixture</value>
+    <value>Объемный расход в смеси</value>
   </data>
   <data name="VazovolumtricanaPhase" xml:space="preserve">
-    <value>Volumetric flow rate in the vapor phase</value>
+    <value>Объемный расход в паровой фазе</value>
   </data>
   <data name="VazovolumtricanaPhase1" xml:space="preserve">
-    <value>Volumetric flow rate in the liquid phase</value>
+    <value>Объемный расход в жидкой фазе</value>
   </data>
   <data name="VazovolumtricanaMist" xml:space="preserve">
-    <value>Volumetric flow rate in the mixture</value>
+    <value>Объемный расход в смеси</value>
   </data>
   <data name="Vazovolumtricanascon" xml:space="preserve">
-    <value>Volumetric flow rate at current conditions</value>
+    <value>Объемный расход в текущих условиях</value>
   </data>
   <data name="Vbolm3mol" xml:space="preserve">
     <value>Vbol (m3/mol)</value>
@@ -3847,37 +3847,37 @@
     <value>Visc 2</value>
   </data>
   <data name="Viscosidadecinemtica" xml:space="preserve">
-    <value>Kinematic Viscosity</value>
+    <value>Кинетическая вязкость</value>
   </data>
   <data name="Viscosidadecinemtica1" xml:space="preserve">
-    <value>Kinematic viscosity (Vapor Phase)</value>
+    <value>Кинетическая вязкость (паровая фаза)</value>
   </data>
   <data name="Viscosidadecinemtica2" xml:space="preserve">
-    <value>Kinematic viscosity of phase</value>
+    <value>Кинетическая вязкость паровой фазы</value>
   </data>
   <data name="Viscosidadecinemtica3" xml:space="preserve">
-    <value>Kinematic viscosity (Liquid Phase)</value>
+    <value>Кинетическая вязкость (Жидкая фаза)</value>
   </data>
   <data name="Viscosidadedinmica" xml:space="preserve">
-    <value>Dynamic Viscosity</value>
+    <value>Динамическая вязкость</value>
   </data>
   <data name="ViscosidadeDinmica1" xml:space="preserve">
-    <value>Dynamic Viscosity</value>
+    <value>Динамическая вязкость</value>
   </data>
   <data name="Viscosidadedinmicada" xml:space="preserve">
-    <value>Dynamic viscosity of phase</value>
+    <value>Динамическая вязкость фазы</value>
   </data>
   <data name="ViscosidadedinmicaFa" xml:space="preserve">
-    <value>Dynamic viscosity (Vapor Phase)</value>
+    <value>Динамическая вязкость (Паровая фаза)</value>
   </data>
   <data name="ViscosidadedinmicaFa2" xml:space="preserve">
-    <value>Dynamic viscosity (Liquid Phase)</value>
+    <value>Динамическая вязкость (Жидкая фаза)</value>
   </data>
   <data name="ViscosidadedinmicaFa3" xml:space="preserve">
-    <value>Dynamic viscosity (Vapor Phase)</value>
+    <value>Динамическая вязкость (Паровая фаза)</value>
   </data>
   <data name="ViscosidadedinmicaFa4" xml:space="preserve">
-    <value>Dynamic viscosity (Liquid Phase)</value>
+    <value>Динамическая вязкость (Жидкая фаза)</value>
   </data>
   <data name="ViscosidadeLquido" xml:space="preserve">
     <value>Viscosity (Liquid)</value>
@@ -3970,10 +3970,10 @@
     <value>Molar Volume</value>
   </data>
   <data name="VolumevsEntalpia" xml:space="preserve">
-    <value>Volume vs. Enthalpy</value>
+    <value>Объем к Энтальпии</value>
   </data>
   <data name="VolumevsEntropia" xml:space="preserve">
-    <value>Volume vs. Entropy</value>
+    <value>Объем к Энтропии</value>
   </data>
   <data name="VolumevsPresso" xml:space="preserve">
     <value>Volume vs. Pressure</value>
@@ -4054,10 +4054,10 @@
     <value>Hot fluid outlet temperature</value>
   </data>
   <data name="MolarEnthalpy" xml:space="preserve">
-    <value>Molar Enthalpy</value>
+    <value>Молярная энтальпия</value>
   </data>
   <data name="MolarEntropy" xml:space="preserve">
-    <value>Molar Entropy</value>
+    <value>Молярная энтропия</value>
   </data>
   <data name="HXCalcError" xml:space="preserve">
     <value>Error calculating the exchanger: input parameters generated a physically inconsistent solution.</value>
@@ -4240,7 +4240,7 @@
     <value>Gibbs Free Energy after reaction(s).</value>
   </data>
   <data name="RGInitialG" xml:space="preserve">
-    <value>Initial Gibbs Free Energy</value>
+    <value>Начальная свободная энергия Гиббса</value>
   </data>
   <data name="RGInitialG_description" xml:space="preserve">
     <value>Gibbs Free Energy before reaction(s).</value>
@@ -4732,10 +4732,10 @@ FPROPS is Copyright (C) 2011 - Carnegie Mellon University</value>
     <value>Use Ideal Vapor Phase Fugacity Model (0 = Disabled, 1 = Enabled)</value>
   </data>
   <data name="LiquidDensity" xml:space="preserve">
-    <value>Liquid Density</value>
+    <value>Плотность жидкости</value>
   </data>
   <data name="SolidDensity" xml:space="preserve">
-    <value>Плотность твердой фазы</value>
+    <value>Solid Density</value>
   </data>
   <data name="SolidCp" xml:space="preserve">
     <value>Heat Capacity Solid</value>
@@ -5388,43 +5388,43 @@ In this model, chemical and physical equilibria of NH3, CO2, and H2S in sour wat
     <value>Multiple reaction phases are not supported.</value>
   </data>
   <data name="BulkModulus" xml:space="preserve">
-    <value>Bulk Modulus</value>
+    <value>Объемный модуль (Bulk Modulus)</value>
   </data>
   <data name="GibbsEnergy" xml:space="preserve">
-    <value>Gibbs Free Energy</value>
+    <value>Свободная энергия Гиббса</value>
   </data>
   <data name="HelmholtzEnergy" xml:space="preserve">
-    <value>Helmholtz Free Energy</value>
+    <value>Высвобожденная энергия (Гельмгольц)</value>
   </data>
   <data name="InternalEnergy" xml:space="preserve">
-    <value>Internal Energy</value>
+    <value>Внутренняя энергия</value>
   </data>
   <data name="IsothermalCompressibility" xml:space="preserve">
-    <value>Isothermal Compressibility</value>
+    <value>Изотермическая сжимаемость</value>
   </data>
   <data name="JouleThomsonCoefficient" xml:space="preserve">
-    <value>Joule Thomson Coefficient</value>
+    <value>Коэффициент Джоуля-Томсона</value>
   </data>
   <data name="MolarGibbsEnergy" xml:space="preserve">
-    <value>Molar Gibbs Free Energy</value>
+    <value>Молярная свободная энергия Гиббса</value>
   </data>
   <data name="MolarHelmholtzEnergy" xml:space="preserve">
-    <value>Мольная высвобожденная энергия (Гельмгольц)</value>
+    <value>Молярная свободная энергия Гельмгольца</value>
   </data>
   <data name="MolarInternalEnergy" xml:space="preserve">
-    <value>Molar Internal Energy</value>
+    <value>Молярная внутренняя энергия</value>
   </data>
   <data name="SpeedOfSound" xml:space="preserve">
-    <value>Speed of Sound</value>
+    <value>Скорость звука</value>
   </data>
   <data name="CompressibilityFactor" xml:space="preserve">
-    <value>Compressibility Factor</value>
+    <value>Коэффициент сжимаемости</value>
   </data>
   <data name="HeatCapacityCp" xml:space="preserve">
-    <value>Heat Capacity (Cp)</value>
+    <value>Теплоемкость (Cp)</value>
   </data>
   <data name="HeatCapacityRatio" xml:space="preserve">
-    <value>Heat Capacity Ratio (Cp/Cv)</value>
+    <value>Коэффициент теплоемкости (Cp / Cv)</value>
   </data>
   <data name="CommitChangesWarning" xml:space="preserve">
     <value>There are uncommitted amount changes. Click on 'Accept Changes' to update.</value>
@@ -5475,10 +5475,10 @@ In this model, chemical and physical equilibria of NH3, CO2, and H2S in sour wat
     <value>Diffusion Coefficient</value>
   </data>
   <data name="EnergyBalanceMessage" xml:space="preserve">
-    <value>the energy balance did not converge within tolerance.</value>
+    <value>энергетический баланс не сошелся в пределах допуска.</value>
   </data>
   <data name="MassBalanceMessage" xml:space="preserve">
-    <value>the mass balance did not converge within tolerance.</value>
+    <value>баланс массы не сошелся в пределах допуска.</value>
   </data>
   <data name="UnsupportedSolver" xml:space="preserve">
     <value>The selected column solver is not supported by this object.</value>
@@ -5535,22 +5535,22 @@ In this model, chemical and physical equilibria of NH3, CO2, and H2S in sour wat
     <value>Molar Fraction -</value>
   </data>
   <data name="Fraomolardafase" xml:space="preserve">
-    <value>Phase Molar Fraction</value>
+    <value>Молярная доля фазы</value>
   </data>
   <data name="FraomolardafaseFaseL" xml:space="preserve">
-    <value>Phase molar fraction (Liquid Phase)</value>
+    <value>Молярная доля фазы (Жидкая фаза)</value>
   </data>
   <data name="FraomolardafaseFaseV" xml:space="preserve">
-    <value>Phase molar fraction (Vapor Phase)</value>
+    <value>Молярная доля фазы (Паровая фаза)</value>
   </data>
   <data name="Fraomolardafasenamis" xml:space="preserve">
-    <value>Phase molar fraction in the mixture</value>
+    <value>Молярная доля фазы в смеси</value>
   </data>
   <data name="FraomolarnaFaseLquid" xml:space="preserve">
-    <value>Liquid Phase Molar Fraction</value>
+    <value>Молярная доля жидкой фазы</value>
   </data>
   <data name="FraomolarnaFaseVapor" xml:space="preserve">
-    <value>Vapor Phase Molar Fraction</value>
+    <value>Молярная доля паровой фазы</value>
   </data>
   <data name="FraomolarnaMistura1" xml:space="preserve">
     <value>Mixture Molar Fraction</value>
@@ -5568,28 +5568,28 @@ In this model, chemical and physical equilibria of NH3, CO2, and H2S in sour wat
     <value>Mass Fraction</value>
   </data>
   <data name="Fraomssicadafase" xml:space="preserve">
-    <value>Phase Mass Fraction</value>
+    <value>Массовая доля фазы</value>
   </data>
   <data name="FraomssicadafaseFase" xml:space="preserve">
-    <value>Phase mass fraction (Vapor Phase)</value>
+    <value>Массовая доля фазы (паровая фаза)</value>
   </data>
   <data name="FraomssicadafaseFase2" xml:space="preserve">
-    <value>Phase mass fraction (Liquid Phase)</value>
+    <value>Массовая доля фазы (жидкая фаза)</value>
   </data>
   <data name="FraomssicadafaseFase3" xml:space="preserve">
     <value>Phase mass fraction (Phase Steam)</value>
   </data>
   <data name="FraomssicadafaseFase4" xml:space="preserve">
-    <value>Phase mass fraction (Liquid Phase)</value>
+    <value>Массовая доля фазы (Жидкая фаза)</value>
   </data>
   <data name="Fraomssicadafasenami" xml:space="preserve">
-    <value>Phase mass fraction in the mixture</value>
+    <value>Массовая доля фазы в смеси</value>
   </data>
   <data name="FraomssicanaFaseLqui" xml:space="preserve">
-    <value>Liquid Phase Mass Fraction</value>
+    <value>Массовая доля жидкой фазы</value>
   </data>
   <data name="FraomssicanaFaseVapo" xml:space="preserve">
-    <value>Vapor Phase Mass Fraction</value>
+    <value>Массовая доля паровой фазы</value>
   </data>
   <data name="FraomssicanaMistura1" xml:space="preserve">
     <value>Mass Fraction in the mixture</value>
@@ -5650,5 +5650,77 @@ In this model, chemical and physical equilibria of NH3, CO2, and H2S in sour wat
   </data>
   <data name="CompoundOnlineSourceError" xml:space="preserve">
     <value>DWSIM could not retrieve the compound data from the online source. Either the compound is not present in the source or an unknown error occurred.</value>
+  </data>
+  <data name="CreateFromUNIFACWarning" xml:space="preserve">
+    <value>A new Compound Creator window will appear and this wizard will be closed. After entering all the required data, export the compound to a JSON file, open the Simulation Settings panel for this Flowsheet and load the saved JSON file. Click 'Yes' to proceed.</value>
+  </data>
+  <data name="inspectordisabled" xml:space="preserve">
+    <value>Inspector is disabled.</value>
+  </data>
+  <data name="noreportsavailable" xml:space="preserve">
+    <value>No reports found.</value>
+  </data>
+  <data name="reportsavailable" xml:space="preserve">
+    <value>{0} report(s) available.</value>
+  </data>
+  <data name="AdiabaticCoefficient" xml:space="preserve">
+    <value>Adiabatic Coefficient</value>
+  </data>
+  <data name="AdiabaticHead" xml:space="preserve">
+    <value>Adiabatic Head</value>
+  </data>
+  <data name="PolytropicCoefficient" xml:space="preserve">
+    <value>Polytropic Coefficient</value>
+  </data>
+  <data name="PolytropicEfficiency" xml:space="preserve">
+    <value>Polytropic Efficiency</value>
+  </data>
+  <data name="PolytropicHead" xml:space="preserve">
+    <value>Polytropic Head</value>
+  </data>
+  <data name="RotationSpeed" xml:space="preserve">
+    <value>Rotation Speed</value>
+  </data>
+  <data name="UpdateFromJSON" xml:space="preserve">
+    <value>The compound already exists in the simulation. Do you want to update it using the data contained in the JSON file?</value>
+  </data>
+  <data name="CompoundUpdated" xml:space="preserve">
+    <value>Compound data updated successfully.</value>
+  </data>
+  <data name="Activate" xml:space="preserve">
+    <value>Activate</value>
+  </data>
+  <data name="Deactivate" xml:space="preserve">
+    <value>Deactivate</value>
+  </data>
+  <data name="DynDisabled" xml:space="preserve">
+    <value>Dynamic Mode is currently disabled.</value>
+  </data>
+  <data name="DynEnabled" xml:space="preserve">
+    <value>Dynamic Mode is currently enabled.</value>
+  </data>
+  <data name="DynamicProperties" xml:space="preserve">
+    <value>Dynamic Mode Properties</value>
+  </data>
+  <data name="Conductance" xml:space="preserve">
+    <value>Conductance</value>
+  </data>
+  <data name="InvalidName" xml:space="preserve">
+    <value>Invalid name.</value>
+  </data>
+  <data name="SolutionRestored" xml:space="preserve">
+    <value>Flowsheet State restored sucessfully.</value>
+  </data>
+  <data name="SolutionStored" xml:space="preserve">
+    <value>Flowsheet State saved sucessfully.</value>
+  </data>
+  <data name="ChangeProperty" xml:space="preserve">
+    <value>Change Property</value>
+  </data>
+  <data name="RunScript" xml:space="preserve">
+    <value>Run Script</value>
+  </data>
+  <data name="DynamicsDisabled" xml:space="preserve">
+    <value>Dynamic Mode is inactive.</value>
   </data>
 </root>

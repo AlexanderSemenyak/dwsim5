@@ -35,6 +35,8 @@ Namespace UnitOperations
 
         Public Overrides ReadOnly Property SupportsDynamicMode As Boolean = True
 
+        Public Overrides ReadOnly Property HasPropertiesForDynamicMode As Boolean = True
+
         <NonSerialized> <Xml.Serialization.XmlIgnore> Public f As EditingForm_HeaterCooler
 
         Public Enum CalculationMode
@@ -43,6 +45,7 @@ Namespace UnitOperations
             EnergyStream = 2
             OutletVaporFraction = 3
             TemperatureChange = 4
+            HeatAddedRemoved = 5 'for mobile compatibility
         End Enum
 
         Protected m_dp As Nullable(Of Double)
@@ -154,6 +157,7 @@ Namespace UnitOperations
 
             AddDynamicProperty("Flow Conductance", "Flow Conductance (inverse of Resistance) of this Unit Operation.", 1, UnitOfMeasure.conductance)
             AddDynamicProperty("Volume", "Heater Volume", 1, UnitOfMeasure.volume)
+            AddDynamicProperty("Minimum Pressure", "Minimum Dynamic Pressure for this Unit Operation.", 101325, UnitOfMeasure.pressure)
             AddDynamicProperty("Initialize using Inlet Stream", "Initializes the volume content with information from the inlet stream, if the content is null.", 1, UnitOfMeasure.none)
             AddDynamicProperty("Reset Content", "Empties the volume content on the next run.", 0, UnitOfMeasure.none)
 
@@ -168,6 +172,8 @@ Namespace UnitOperations
 
             Dim timestep = integrator.IntegrationStep.TotalSeconds
 
+            If integrator.RealTime Then timestep = Convert.ToDouble(integrator.RealTimeStepMs) / 1000.0
+
             Dim ims As MaterialStream = Me.GetInletMaterialStream(0)
             Dim oms As MaterialStream = Me.GetOutletMaterialStream(0)
 
@@ -179,6 +185,8 @@ Namespace UnitOperations
             Dim Kr As Double = GetDynamicProperty("Flow Conductance")
             Dim Vol As Double = GetDynamicProperty("Volume")
             Dim InitializeFromInlet As Boolean = GetDynamicProperty("Initialize using Inlet Stream")
+
+            Dim Pmin = GetDynamicProperty("Minimum Pressure")
 
             Dim Reset As Boolean = GetDynamicProperty("Reset Content")
 
@@ -211,8 +219,10 @@ Namespace UnitOperations
             Else
 
                 AccumulationStream.SetFlowsheet(FlowSheet)
-                AccumulationStream = AccumulationStream.Add(ims, timestep)
-                AccumulationStream = AccumulationStream.Subtract(oms, timestep)
+                If ims.GetMassFlow() > 0 Then AccumulationStream = AccumulationStream.Add(ims, timestep)
+                AccumulationStream.PropertyPackage.CurrentMaterialStream = AccumulationStream
+                AccumulationStream.Calculate()
+                If oms.GetMassFlow() > 0 Then AccumulationStream = AccumulationStream.Subtract(oms, timestep)
                 If AccumulationStream.GetMassFlow <= 0.0 Then AccumulationStream.SetMassFlow(0.0)
 
             End If
@@ -295,13 +305,13 @@ Namespace UnitOperations
 
                 Else
 
-                    Pressure = 0.01
+                    Pressure = Pmin
 
                 End If
 
             Else
 
-                Pressure = 0.01
+                Pressure = Pmin
 
             End If
 
@@ -380,7 +390,7 @@ Namespace UnitOperations
 
             Select Case Me.CalcMode
 
-                Case CalculationMode.HeatAdded
+                Case CalculationMode.HeatAdded, CalculationMode.HeatAddedRemoved
 
                     IObj?.Paragraphs.Add("Calculation Mode: Heat Added")
 

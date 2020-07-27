@@ -1177,7 +1177,7 @@ Label_00CC:
                 istr.PropertyPackage.CurrentMaterialStream = istr
 
                 str.AppendLine("Flowsheet Block: " & Me.GraphicObject.Tag)
-                str.AppendLine("Property Package: " & Me.PropertyPackage.ComponentName)
+                str.AppendLine("Property Package: " & Me.PropertyPackage.Name)
                 str.AppendLine()
                 str.AppendLine("Calculation parameters")
                 str.AppendLine()

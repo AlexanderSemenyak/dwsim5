@@ -32,6 +32,8 @@ Namespace UnitOperations
 
         Public Overrides ReadOnly Property SupportsDynamicMode As Boolean = True
 
+        Public Overrides ReadOnly Property HasPropertiesForDynamicMode As Boolean = False
+
         <NonSerialized> <Xml.Serialization.XmlIgnore> Public f As EditingForm_Valve
 
         Protected m_dp As Double?
@@ -304,7 +306,7 @@ Namespace UnitOperations
                             comp.MolarFlow = comp.MassFlow / comp.ConstantProperties.Molar_Weight * 1000
                             i += 1
                         Next
-                        .SpecType = Interfaces.Enums.StreamSpec.Pressure_and_Enthalpy
+                        If .GraphicObject.InputConnectors(0).IsAttached Then .SpecType = Interfaces.Enums.StreamSpec.Pressure_and_Enthalpy
                     End With
 
             End Select
@@ -362,16 +364,24 @@ Namespace UnitOperations
                                 doing a PH Flash. This way, in the majority of cases, the outlet 
                                 temperature will be less than or equal to the inlet one.")
 
-            If Not Me.GraphicObject.OutputConnectors(0).IsAttached Then
-                Throw New Exception(FlowSheet.GetTranslatedString("Verifiqueasconexesdo"))
-            ElseIf Not Me.GraphicObject.InputConnectors(0).IsAttached Then
-                Throw New Exception(FlowSheet.GetTranslatedString("Verifiqueasconexesdo"))
+            If args Is Nothing Then
+                If Not Me.GraphicObject.OutputConnectors(0).IsAttached Then
+                    Throw New Exception(FlowSheet.GetTranslatedString("Verifiqueasconexesdo"))
+                ElseIf Not Me.GraphicObject.InputConnectors(0).IsAttached Then
+                    Throw New Exception(FlowSheet.GetTranslatedString("Verifiqueasconexesdo"))
+                End If
             End If
 
             Dim Ti, Pi, Hi, Wi, ei, ein, T2, P2, H2, H2c, rho, volf, rhog20, P2ant, v2, Kvc As Double
             Dim icount As Integer
 
-            Dim ims As MaterialStream = Me.GetInletMaterialStream(0)
+            Dim ims As MaterialStream
+
+            If args IsNot Nothing Then
+                ims = args(0)
+            Else
+                ims = Me.GetInletMaterialStream(0)
+            End If
 
             Me.PropertyPackage.CurrentMaterialStream = ims
             Me.PropertyPackage.CurrentMaterialStream.Validate()
@@ -500,12 +510,21 @@ Namespace UnitOperations
 
             OutletTemperature = T2
 
+            Dim oms As IMaterialStream
+
+            If args IsNot Nothing Then
+                oms = args(1)
+            Else
+                oms = Me.GetOutletMaterialStream(0)
+            End If
+
             If Not DebugMode Then
 
-                With Me.GetOutletMaterialStream(0)
+                With oms
                     .Phases(0).Properties.temperature = T2
                     .Phases(0).Properties.pressure = P2
                     .Phases(0).Properties.enthalpy = H2
+                    .Phases(0).Properties.massflow = ims.Phases(0).Properties.massflow.GetValueOrDefault
                     Dim comp As BaseClasses.Compound
                     Dim i As Integer = 0
                     For Each comp In .Phases(0).Compounds.Values
@@ -513,8 +532,7 @@ Namespace UnitOperations
                         comp.MassFraction = ims.Phases(0).Compounds(comp.Name).MassFraction
                         i += 1
                     Next
-                    .SpecType = Interfaces.Enums.StreamSpec.Pressure_and_Enthalpy
-                    .Phases(0).Properties.massflow = ims.Phases(0).Properties.massflow.GetValueOrDefault
+                    .SpecType = StreamSpec.Pressure_and_Enthalpy
                 End With
 
             Else
@@ -526,7 +544,6 @@ Namespace UnitOperations
             IObj?.Close()
 
         End Sub
-
 
         Public Overrides Sub DeCalculate()
 
@@ -812,7 +829,7 @@ Namespace UnitOperations
 
             Dim list As New List(Of Tuple(Of ReportItemType, String()))
 
-            list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.Label, New String() {"Results Report for Adiabatic Valve '" & Me.GraphicObject.Tag + "'"}))
+            list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.Label, New String() {"Results Report for Adiabatic Valve '" & Me.GraphicObject?.Tag + "'"}))
             list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.SingleColumn, New String() {"Calculated successfully on " & LastUpdated.ToString}))
 
             list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.Label, New String() {"Calculation Parameters"}))
@@ -847,9 +864,9 @@ Namespace UnitOperations
                             New String() {"Outlet Pressure",
                             Me.OutletPressure.GetValueOrDefault.ConvertFromSI(su.pressure).ToString(nf),
                             su.pressure}))
-                Case CalculationMode.OutletPressure
+                Case Else
                     list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.TripleColumn,
-                            New String() {"Pressure Increase",
+                            New String() {"Pressure Drop",
                             Me.DeltaP.GetValueOrDefault.ConvertFromSI(su.deltaP).ToString(nf),
                             su.deltaP}))
             End Select

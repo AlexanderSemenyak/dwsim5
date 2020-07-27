@@ -35,6 +35,8 @@ Namespace UnitOperations
 
         Public Overrides ReadOnly Property SupportsDynamicMode As Boolean = True
 
+        Public Overrides ReadOnly Property HasPropertiesForDynamicMode As Boolean = True
+
         <NonSerialized> <Xml.Serialization.XmlIgnore> Public f As EditingForm_Tank
 
         Protected m_dp As Nullable(Of Double)
@@ -117,7 +119,7 @@ Namespace UnitOperations
 
             AddDynamicProperty("Liquid Level", "Current Liquid Level", 0, UnitOfMeasure.distance)
             AddDynamicProperty("Height", "Available Liquid Height", 2, UnitOfMeasure.distance)
-            AddDynamicProperty("Initialize using Inlet Stream", "Initializes the tank's content with information from the inlet stream, if the vessel content is null.", 1, UnitOfMeasure.none)
+            AddDynamicProperty("Initialize using Inlet Stream", "Initializes the tank's content with information from the inlet stream, if the vessel content is null.", 0, UnitOfMeasure.none)
             AddDynamicProperty("Reset Content", "Empties the tank's content on the next run.", 0, UnitOfMeasure.none)
 
         End Sub
@@ -130,6 +132,8 @@ Namespace UnitOperations
             Dim integrator = FlowSheet.DynamicsManager.IntegratorList(integratorID)
 
             Dim timestep = integrator.IntegrationStep.TotalSeconds
+
+            If integrator.RealTime Then timestep = Convert.ToDouble(integrator.RealTimeStepMs) / 1000.0
 
             Dim ims As MaterialStream = Me.GetInletMaterialStream(0)
             Dim oms1 As MaterialStream = Me.GetOutletMaterialStream(0)
@@ -166,8 +170,10 @@ Namespace UnitOperations
                 Else
 
                     AccumulationStream.SetFlowsheet(FlowSheet)
-                    AccumulationStream = AccumulationStream.Add(ims, timestep)
-                    AccumulationStream = AccumulationStream.Subtract(oms1, timestep)
+                    If ims.GetMassFlow() > 0 Then AccumulationStream = AccumulationStream.Add(ims, timestep)
+                    AccumulationStream.PropertyPackage.CurrentMaterialStream = AccumulationStream
+                    AccumulationStream.Calculate()
+                    If oms1.GetMassFlow() > 0 Then AccumulationStream = AccumulationStream.Subtract(oms1, timestep)
                     If AccumulationStream.GetMassFlow <= 0.0 Then AccumulationStream.SetMassFlow(0.0)
 
                 End If

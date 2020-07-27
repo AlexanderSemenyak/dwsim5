@@ -66,6 +66,8 @@ Namespace Streams
 
         Public Overrides ReadOnly Property SupportsDynamicMode As Boolean = True
 
+        Public Overrides ReadOnly Property HasPropertiesForDynamicMode As Boolean = False
+
 #Region "    XML serialization"
 
         Public Overrides Function LoadData(data As ICollection(Of XElement)) As Boolean
@@ -348,7 +350,7 @@ Namespace Streams
                 Dim integrator = FlowSheet.DynamicsManager.IntegratorList(integratorID)
 
                 If integrator.ShouldCalculateEquilibrium Then
-                    If GetPressure() > 0.0 And GetTemperature() > 0 And GetMassFlow() > 0 Then
+                    If GetPressure() > 0.0 And GetTemperature() > 0 Then
                         Calculate()
                     Else
                         'Clear()
@@ -4657,9 +4659,16 @@ Namespace Streams
                     units = "m/s"
                 Case "heatofvaporization"
                     units = "kJ/mol"
-                Case "heatcapacity", "heatcapacitycp", "heatcapacitycv", "idealgasheatcapacity", "idealgasenthalpy",
-                     "excessenthalpy", "excessentropy", "enthalpy", "enthalpynf", "entropy", "entropynf", "enthalpyf",
-                     "entropyf", "internalenergy", "gibbsenergy", "helmholtzenergy"
+                Case "heatcapacity", "heatcapacitycp", "heatcapacitycv", "idealgasheatcapacity",
+                     "excessentropy", "entropy", "entropyf", "entropynf"
+                    Select Case basis
+                        Case "Molar", "molar", "mole", "Mole"
+                            units = "J/[mol.K]"
+                        Case "Mass", "mass"
+                            units = "J/[kg.K]"
+                    End Select
+                Case "idealgasenthalpy", "excessenthalpy", "enthalpy", "enthalpynf", "enthalpyf",
+                          "internalenergy", "gibbsenergy", "helmholtzenergy"
                     Select Case basis
                         Case "Molar", "molar", "mole", "Mole"
                             units = "J/mol"
@@ -6552,7 +6561,7 @@ Namespace Streams
             Dim nf = GetFlowsheet().FlowsheetOptions.NumberFormat
             Dim nff = GetFlowsheet().FlowsheetOptions.FractionNumberFormat
 
-            list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.Label, New String() {"Results Report for Material Stream '" & Me.GraphicObject.Tag + "'"}))
+            list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.Label, New String() {"Results Report for Material Stream '" & Me.GraphicObject?.Tag + "'"}))
 
             list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.SingleColumn, New String() {"Calculated successfully on " & LastUpdated.ToString}))
 
@@ -7496,8 +7505,8 @@ Namespace Streams
         ''' <param name="value">Flow in kg/s</param>
         Public Sub SetMassFlow(value As Double)
             Phases(0).Properties.massflow = value
-            Phases(0).Properties.molarflow = Nothing
-            Phases(0).Properties.volumetric_flow = Nothing
+            Phases(0).Properties.molarflow = value / Phases(0).Properties.molecularWeight * 1000
+            Phases(0).Properties.volumetric_flow = value / Phases(0).Properties.density.GetValueOrDefault
         End Sub
 
         Public Function GetMassEnthalpy() As Double
@@ -7529,9 +7538,9 @@ Namespace Streams
         ''' </summary>
         ''' <param name="value">Flow in mol/s</param>
         Public Sub SetMolarFlow(value As Double)
-            Phases(0).Properties.massflow = Nothing
+            Phases(0).Properties.massflow = value * Phases(0).Properties.molecularWeight / 1000
             Phases(0).Properties.molarflow = value
-            Phases(0).Properties.volumetric_flow = Nothing
+            Phases(0).Properties.volumetric_flow = value * Phases(0).Properties.molecularWeight / 1000 / Phases(0).Properties.density.GetValueOrDefault
         End Sub
 
         ''' <summary>
@@ -7698,7 +7707,8 @@ Namespace Streams
                 Next
                 .Phases(0).Properties.massflow = total
                 .Phases(0).Properties.molarflow = totalm
-                .SpecType = StreamSpec.Temperature_and_Pressure
+                .SetMassEnthalpy((H0 * W0 + H1 * W1) / total)
+                .SpecType = StreamSpec.Pressure_and_Enthalpy
             End With
 
             Return newstream
@@ -7755,7 +7765,7 @@ Namespace Streams
                 Dim sub1 As BaseClasses.Compound
                 Dim p = .Phases(0)
                 Dim mass_div_mm As Double = 0
-                    Dim total As Double = 0
+                Dim total As Double = 0
                 For Each sub1 In p.Compounds.Values
                     total += sub1.MassFlow.GetValueOrDefault
                 Next
@@ -7764,11 +7774,11 @@ Namespace Streams
                     totalm += sub1.MolarFlow.GetValueOrDefault
                 Next
                 For Each sub1 In p.Compounds.Values
-                        sub1.MassFraction = sub1.MassFlow.GetValueOrDefault / total
-                    Next
-                    For Each sub1 In p.Compounds.Values
-                        mass_div_mm += sub1.MassFraction.GetValueOrDefault / sub1.ConstantProperties.Molar_Weight
-                    Next
+                    sub1.MassFraction = sub1.MassFlow.GetValueOrDefault / total
+                Next
+                For Each sub1 In p.Compounds.Values
+                    mass_div_mm += sub1.MassFraction.GetValueOrDefault / sub1.ConstantProperties.Molar_Weight
+                Next
                 For Each sub1 In p.Compounds.Values
                     sub1.MoleFraction = sub1.MassFraction.GetValueOrDefault / sub1.ConstantProperties.Molar_Weight / mass_div_mm
                 Next
@@ -7802,7 +7812,7 @@ Namespace Streams
                     Dim wfrac = 1.0
                     Dim mfrac = 1.0
 
-                    If SetW Then W = prevW
+                    If Not SetW Then W = prevW
                     SetMassFlow(W * wfrac)
                     SetMassEnthalpy(H * wfrac)
 
@@ -7818,7 +7828,7 @@ Namespace Streams
                     Dim wfrac = stream.Phases(2).Properties.massfraction.GetValueOrDefault
                     Dim mfrac = stream.Phases(2).Properties.molarfraction.GetValueOrDefault
 
-                    If SetW Then W = prevW
+                    If Not SetW Then W = prevW
                     SetMassFlow(W * wfrac)
                     SetMassEnthalpy(stream.Phases(2).Properties.enthalpy.GetValueOrDefault)
 
@@ -7834,7 +7844,7 @@ Namespace Streams
                     Dim wfrac = stream.Phases(1).Properties.massfraction.GetValueOrDefault
                     Dim mfrac = stream.Phases(1).Properties.molarfraction.GetValueOrDefault
 
-                    If SetW Then W = prevW
+                    If Not SetW Then W = prevW
                     SetMassFlow(W * wfrac)
                     SetMassEnthalpy(stream.Phases(1).Properties.enthalpy.GetValueOrDefault)
 
@@ -7850,7 +7860,7 @@ Namespace Streams
                     Dim wfrac = stream.Phases(3).Properties.massfraction.GetValueOrDefault
                     Dim mfrac = stream.Phases(3).Properties.molarfraction.GetValueOrDefault
 
-                    If SetW Then W = prevW
+                    If Not SetW Then W = prevW
                     SetMassFlow(W * wfrac)
                     SetMassEnthalpy(stream.Phases(3).Properties.enthalpy.GetValueOrDefault)
 
@@ -7866,7 +7876,7 @@ Namespace Streams
                     Dim wfrac = stream.Phases(4).Properties.massfraction.GetValueOrDefault
                     Dim mfrac = stream.Phases(4).Properties.molarfraction.GetValueOrDefault
 
-                    If SetW Then W = prevW
+                    If Not SetW Then W = prevW
                     SetMassFlow(W * wfrac)
                     SetMassEnthalpy(stream.Phases(4).Properties.enthalpy.GetValueOrDefault)
 
@@ -7882,7 +7892,7 @@ Namespace Streams
                     Dim wfrac = stream.Phases(7).Properties.massfraction.GetValueOrDefault
                     Dim mfrac = stream.Phases(7).Properties.molarfraction.GetValueOrDefault
 
-                    If SetW Then W = prevW
+                    If Not SetW Then W = prevW
                     SetMassFlow(W * wfrac)
                     SetMassEnthalpy(stream.Phases(7).Properties.enthalpy.GetValueOrDefault)
 
@@ -7903,7 +7913,11 @@ Namespace Streams
 
         Public Overrides Function ToString() As String
 
-            Return MyBase.ToString() + String.Format(": T = {0} K, P = {1} Pa, W = {2} kg/s, M = {3} mol/s, Q = {4} m3/s", GetTemperature, GetPressure, GetMassFlow, GetMolarFlow, GetVolumetricFlow)
+            If GraphicObject IsNot Nothing Then
+                Return GraphicObject.Tag + String.Format(": T = {0} K, P = {1} Pa, W = {2} kg/s, M = {3} mol/s, Q = {4} m3/s", GetTemperature, GetPressure, GetMassFlow, GetMolarFlow, GetVolumetricFlow)
+            Else
+                Return String.Format("Material Stream: T = {0} K, P = {1} Pa, W = {2} kg/s, M = {3} mol/s, Q = {4} m3/s", GetTemperature, GetPressure, GetMassFlow, GetMolarFlow, GetVolumetricFlow)
+            End If
 
         End Function
 

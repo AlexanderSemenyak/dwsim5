@@ -45,6 +45,7 @@ namespace DWSIM.UI.Forms
             if (obj.GraphicObject.ObjectType != Interfaces.Enums.GraphicObjects.ObjectType.MaterialStream &&
                 obj.GraphicObject.ObjectType != Interfaces.Enums.GraphicObjects.ObjectType.EnergyStream &&
                 obj.GraphicObject.ObjectType != Interfaces.Enums.GraphicObjects.ObjectType.OT_Adjust &&
+                obj.GraphicObject.ObjectType != Interfaces.Enums.GraphicObjects.ObjectType.Controller_PID &&
                 obj.GraphicObject.ObjectType != Interfaces.Enums.GraphicObjects.ObjectType.LevelGauge &&
                 obj.GraphicObject.ObjectType != Interfaces.Enums.GraphicObjects.ObjectType.AnalogGauge &&
                 obj.GraphicObject.ObjectType != Interfaces.Enums.GraphicObjects.ObjectType.DigitalGauge &&
@@ -155,7 +156,7 @@ namespace DWSIM.UI.Forms
                 var cont3 = UI.Shared.Common.GetDefaultContainer();
                 cont3.Tag = "Thermal Profile";
                 cont3.Width = this.Width - 30;
-                new PipeThermalProfile(obj, cont3);
+                new PipeThermalProfile(obj, ((Pipe)obj).ThermalProfile, cont3);
                 Pages.Add(new DocumentPage(new Scrollable() { Content = cont3, Width = this.Width - 30 }) { Text = "Thermal Profile", Closable = false });
             }
             else if (obj.GraphicObject.ObjectType == Interfaces.Enums.GraphicObjects.ObjectType.CustomUO)
@@ -211,10 +212,9 @@ namespace DWSIM.UI.Forms
 
             // dynamics
 
-            if (obj.SupportsDynamicMode)
+            if ((obj.SupportsDynamicMode && obj.HasPropertiesForDynamicMode) || obj.GraphicObject.ObjectType == Interfaces.Enums.GraphicObjects.ObjectType.MaterialStream)
             {
-                if (obj.ExtraPropertiesDescriptions.Count() > 0 || 
-                    obj.GraphicObject.ObjectType == Interfaces.Enums.GraphicObjects.ObjectType.MaterialStream)
+                if (obj.ExtraPropertiesDescriptions.Count() > 0 || obj.GraphicObject.ObjectType == Interfaces.Enums.GraphicObjects.ObjectType.MaterialStream)
                 {
 
                     var tabd = new DocumentPage { Closable = false };
@@ -278,6 +278,12 @@ namespace DWSIM.UI.Forms
                 if (obj.GraphicObject.ObjectType != Interfaces.Enums.GraphicObjects.ObjectType.MaterialStream &&
                     obj.GraphicObject.ObjectType != Interfaces.Enums.GraphicObjects.ObjectType.EnergyStream &&
                     obj.GraphicObject.ObjectType != Interfaces.Enums.GraphicObjects.ObjectType.OT_Adjust &&
+                    obj.GraphicObject.ObjectType != Interfaces.Enums.GraphicObjects.ObjectType.Controller_PID &&
+                    obj.GraphicObject.ObjectType != Interfaces.Enums.GraphicObjects.ObjectType.LevelGauge &&
+                    obj.GraphicObject.ObjectType != Interfaces.Enums.GraphicObjects.ObjectType.AnalogGauge &&
+                    obj.GraphicObject.ObjectType != Interfaces.Enums.GraphicObjects.ObjectType.DigitalGauge &&
+                    obj.GraphicObject.ObjectType != Interfaces.Enums.GraphicObjects.ObjectType.Input &&
+                    obj.GraphicObject.ObjectType != Interfaces.Enums.GraphicObjects.ObjectType.Switch &&
                     obj.GraphicObject.ObjectType != Interfaces.Enums.GraphicObjects.ObjectType.OT_Spec)
                 {
 
@@ -330,6 +336,10 @@ namespace DWSIM.UI.Forms
                 {
                     new DWSIM.UI.Desktop.Editors.AbsorptionColumnEditor(obj, cont);
                 }
+                else if (obj.GraphicObject.ObjectType == Interfaces.Enums.GraphicObjects.ObjectType.Controller_PID)
+                {
+                    DWSIM.UI.Desktop.Editors.LogicalBlocks.PIDControllerEditor.Populate(obj, cont);
+                }
                 else if (obj.GraphicObject.ObjectType == Interfaces.Enums.GraphicObjects.ObjectType.OT_Adjust)
                 {
                     DWSIM.UI.Desktop.Editors.LogicalBlocks.AdjustEditor.Populate(obj, cont);
@@ -346,12 +356,54 @@ namespace DWSIM.UI.Forms
                 {
                     DWSIM.UI.Desktop.Editors.LogicalBlocks.EnergyRecycleEditor.Populate(obj, cont);
                 }
+                else if (obj.GraphicObject.ObjectType == Interfaces.Enums.GraphicObjects.ObjectType.LevelGauge)
+                {
+                    DWSIM.UI.Desktop.Editors.LogicalBlocks.LevelGaugeEditor.Populate(obj, cont);
+                }
+                else if (obj.GraphicObject.ObjectType == Interfaces.Enums.GraphicObjects.ObjectType.AnalogGauge)
+                {
+                    DWSIM.UI.Desktop.Editors.LogicalBlocks.AnalogGaugeEditor.Populate(obj, cont);
+                }
+                else if (obj.GraphicObject.ObjectType == Interfaces.Enums.GraphicObjects.ObjectType.DigitalGauge)
+                {
+                    DWSIM.UI.Desktop.Editors.LogicalBlocks.DigitalGaugeEditor.Populate(obj, cont);
+                }
+                else if (obj.GraphicObject.ObjectType == Interfaces.Enums.GraphicObjects.ObjectType.Switch)
+                {
+                    DWSIM.UI.Desktop.Editors.LogicalBlocks.SwitchEditor.Populate(obj, cont);
+                }
+                else if (obj.GraphicObject.ObjectType == Interfaces.Enums.GraphicObjects.ObjectType.Input)
+                {
+                    DWSIM.UI.Desktop.Editors.LogicalBlocks.InputEditor.Populate(obj, cont);
+                }
                 else
                 {
                     new DWSIM.UI.Desktop.Editors.GeneralEditors(obj, cont);
                 }
 
                 PageEditor.Content = new Scrollable() { Content = cont, Width = this.Width - 30 };
+
+            }
+
+            // dynamics
+
+            if (PageDynamics != null)
+            {
+
+                PageDynamics.Content = null;
+
+                if (obj.ExtraPropertiesDescriptions.Count() > 0 || obj.GraphicObject.ObjectType == Interfaces.Enums.GraphicObjects.ObjectType.MaterialStream)
+                {
+
+                    var contd = UI.Shared.Common.GetDefaultContainer();
+
+                    contd.Width = this.Width - 30;
+
+                    new DynamicPropertiesEditor(obj, contd);
+
+                    PageDynamics.Content = new Scrollable() { Content = contd, Width = this.Width - 30 };
+
+                }
 
             }
 

@@ -37,6 +37,9 @@ Namespace UnitOperations
 
         Public Overrides ReadOnly Property SupportsDynamicMode As Boolean = True
 
+        Public Overrides ReadOnly Property HasPropertiesForDynamicMode As Boolean = False
+
+
         <NonSerialized> <Xml.Serialization.XmlIgnore> Public f As EditingForm_ComprExpndr
 
         Public Enum CalculationMode
@@ -393,7 +396,7 @@ Curves:             If CalcMode = CalculationMode.Head Then
                         If icnt <= 2 Then
                             P2i *= 1.01
                         Else
-                            P2i = P2i - fx / ((fx - fx00) / (P2i - P2i00))
+                            P2i = P2i - 0.3 * fx / ((fx - fx00) / (P2i - P2i00))
                         End If
 
                         If DebugMode Then AppendDebugLine(String.Format("P2i: {0}", P2i))

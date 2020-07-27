@@ -79,6 +79,14 @@ Public Class MaterialStreamEditor
 
         With MatStream
 
+            'dynamics
+
+            If .DynamicsSpec = Interfaces.Enums.Dynamics.DynamicsSpecType.Flow Then
+                cbDynSpec.SelectedIndex = 1
+            Else
+                cbDynSpec.SelectedIndex = 0
+            End If
+
             'first block
 
             chkActive.Checked = MatStream.GraphicObject.Active
@@ -353,40 +361,37 @@ Public Class MaterialStreamEditor
 
             End If
 
-            If .GraphicObject.InputConnectors(0).IsAttached Then
-                If .GraphicObject.InputConnectors(0).AttachedConnector.AttachedFrom.ObjectType = ObjectType.OT_Recycle Then
+            If Not .FlowSheet.DynamicMode Then
+                If .GraphicObject.InputConnectors(0).IsAttached Then
+                    If .GraphicObject.InputConnectors(0).AttachedConnector.AttachedFrom.ObjectType = ObjectType.OT_Recycle Then
+                        UpdateEditableStatus()
+                        tbMassFlow.Enabled = True
+                        tbMoleFlow.Enabled = True
+                        tbVolFlow.Enabled = True
+                        TabPageInputComposition.Enabled = True
+                    Else
+                        DisableEditableStatus()
+                        tbMassFlow.Enabled = False
+                        tbMoleFlow.Enabled = False
+                        tbVolFlow.Enabled = False
+                        TabPageInputComposition.Enabled = False
+                    End If
+                Else
                     UpdateEditableStatus()
                     tbMassFlow.Enabled = True
                     tbMoleFlow.Enabled = True
                     tbVolFlow.Enabled = True
                     TabPageInputComposition.Enabled = True
-                Else
-                    DisableEditableStatus()
-                    tbMassFlow.Enabled = False
-                    tbMoleFlow.Enabled = False
-                    tbVolFlow.Enabled = False
-                    TabPageInputComposition.Enabled = False
                 End If
             Else
-                UpdateEditableStatus()
+                tbTemp.Enabled = True
+                tbPressure.Enabled = True
+                tbEnth.Enabled = True
+                tbEntr.Enabled = True
                 tbMassFlow.Enabled = True
                 tbMoleFlow.Enabled = True
                 tbVolFlow.Enabled = True
                 TabPageInputComposition.Enabled = True
-            End If
-
-            If MatStream.FlowSheet.DynamicMode Then
-                If MatStream.DynamicsSpec = Interfaces.Enums.Dynamics.DynamicsSpecType.Flow Then
-                    tbMassFlow.Enabled = True
-                    tbMoleFlow.Enabled = True
-                    tbVolFlow.Enabled = True
-                    tbPressure.Enabled = False
-                Else
-                    tbMassFlow.Enabled = False
-                    tbMoleFlow.Enabled = False
-                    tbVolFlow.Enabled = False
-                    tbPressure.Enabled = True
-                End If
             End If
 
         End With
@@ -1477,7 +1482,6 @@ Public Class MaterialStreamEditor
 
     Sub UpdateCompPropBasis(cb As ComboBox, grid As DataGridView, phase As Interfaces.IPhase)
 
-
         Dim W, Q As Double, suffix As String = ""
         W = phase.Properties.massflow.GetValueOrDefault
         Q = phase.Properties.molarflow.GetValueOrDefault
@@ -1577,6 +1581,13 @@ Public Class MaterialStreamEditor
 
     End Sub
 
+    Private Sub cbDynSpec_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbDynSpec.SelectedIndexChanged
+        If Loaded Then
+            MatStream.DynamicsSpec = cbDynSpec.SelectedIndex
+            MatStream.FlowSheet.UpdateInterface()
+        End If
+    End Sub
+
     Private Sub lblTag_KeyPress(sender As Object, e As KeyEventArgs) Handles lblTag.KeyUp
 
         If e.KeyCode = Keys.Enter Then
@@ -1584,7 +1595,7 @@ Public Class MaterialStreamEditor
             If Loaded Then MatStream.GraphicObject.Tag = lblTag.Text
             If Loaded Then MatStream.FlowSheet.UpdateOpenEditForms()
             Me.Text = MatStream.GraphicObject.Tag & " (" & MatStream.GetDisplayName() & ")"
-            DirectCast(MatStream.FlowSheet, Interfaces.IFlowsheetGUI).UpdateInterface()
+            MatStream.FlowSheet.UpdateInterface()
 
         End If
 

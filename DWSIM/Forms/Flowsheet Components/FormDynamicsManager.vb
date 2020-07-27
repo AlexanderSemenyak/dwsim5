@@ -577,6 +577,8 @@ Public Class FormDynamicsManager
 
         dtpIntegratorDuration.Value = dtpIntegratorDuration.MinDate.Add(i1.Duration)
 
+        nupRTStep.Value = i1.RealTimeStepMs
+
         nupCalcBalFreq.Value = i1.CalculationRatePressureFlow
 
         nupCalcControlFreq.Value = i1.CalculationRateControl
@@ -970,7 +972,7 @@ Public Class FormDynamicsManager
                 Case 2
                     If value <> "" Then
                         v1.ObjectID = Flowsheet.GetFlowsheetGraphicObject(value).Name
-                        Dim props = Flowsheet.SimulationObjects(v1.ObjectID).GetProperties(PropertyType.WR)
+                        Dim props = Flowsheet.SimulationObjects(v1.ObjectID).GetProperties(PropertyType.ALL)
                         Dim cbcell = DirectCast(gridMonitoredVariables.Rows(e.RowIndex).Cells(3), DataGridViewComboBoxCell)
                         cbcell.Items.Clear()
                         cbcell.Items.AddRange("")
@@ -978,7 +980,7 @@ Public Class FormDynamicsManager
                     End If
                 Case 3
                     If value <> "" Then
-                        Dim props = Flowsheet.SimulationObjects(v1.ObjectID).GetProperties(PropertyType.WR)
+                        Dim props = Flowsheet.SimulationObjects(v1.ObjectID).GetProperties(PropertyType.ALL)
                         Dim cbcell = DirectCast(gridMonitoredVariables.Rows(e.RowIndex).Cells(3), DataGridViewComboBoxCell)
                         v1.PropertyID = props(cbcell.Items.IndexOf(value) - 1)
                     End If
@@ -1087,6 +1089,28 @@ Public Class FormDynamicsManager
     End Sub
 
     Private Sub FormDynamicsManager_Activated(sender As Object, e As EventArgs) Handles Me.Activated
+
+        CheckModelStatus()
+
+    End Sub
+
+    Private Sub TabPage1_MouseHover(sender As Object, e As EventArgs) Handles TabPage1.MouseHover
+
+        CheckModelStatus()
+
+    End Sub
+
+    Private Sub nupRTStep_ValueChanged(sender As Object, e As EventArgs) Handles nupRTStep.ValueChanged
+
+        Try
+            Dim i1 = Manager.IntegratorList(gridintegrators.Rows(gridintegrators.SelectedCells(0).RowIndex).Cells(0).Value)
+            i1.RealTimeStepMs = nupRTStep.Value
+        Catch ex As Exception
+        End Try
+
+    End Sub
+
+    Private Sub FormDynamicsManager_MouseEnter(sender As Object, e As EventArgs) Handles Me.MouseEnter
 
         CheckModelStatus()
 

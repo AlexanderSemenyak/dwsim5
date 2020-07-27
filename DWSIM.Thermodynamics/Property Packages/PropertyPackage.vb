@@ -16,7 +16,6 @@
 '    You should have received a copy of the GNU General Public License
 '    along with DWSIM.  If not, see <http://www.gnu.org/licenses/>.
 
-Imports System.Buffers
 Imports System.Runtime.Serialization.Formatters.Binary
 Imports System.Runtime.Serialization
 Imports System.IO
@@ -34,7 +33,6 @@ Imports DWSIM.Thermodynamics.PropertyPackages.Auxiliary.FlashAlgorithms
 Imports DWSIM.Interfaces
 Imports DWSIM.Interfaces.Interfaces2
 Imports System.Reflection
-Imports System.Runtime.CompilerServices
 Imports System.Runtime.InteropServices
 Imports DWSIM.Thermodynamics.Streams
 
@@ -46,9 +44,6 @@ Imports Microsoft.Scripting.Hosting
 Imports sui = DWSIM.UI.Shared.Common
 Imports DWSIM.UI.Shared
 Imports DWSIM.Interfaces.Enums
-Imports DWSIM.Interfaces.My.Resources
-Imports Sysytem
-Imports XMLSerializer
 
 Namespace PropertyPackages
 
@@ -248,7 +243,7 @@ Namespace PropertyPackages
         Private m_ss As New System.Collections.Generic.List(Of String)
         Private m_configurable As Boolean = False
 
-        Public m_Henry As New System.Collections.Generic.Dictionary(Of String, HenryParam)(StringComparer.Ordinal)
+        Public m_Henry As New System.Collections.Generic.Dictionary(Of String, HenryParam)
 
         <NonSerialized> Private m_ip As DataTable
 
@@ -257,7 +252,7 @@ Namespace PropertyPackages
         Public _tpseverity As Integer = 0
         Public _tpcompids As String() = New String() {}
 
-        <JsonIgnore> Public _phasemappings As New Dictionary(Of String, PhaseInfo)(StringComparer.Ordinal)
+        <JsonIgnore> Public _phasemappings As New Dictionary(Of String, PhaseInfo)
 
         Public IsElectrolytePP As Boolean = False
 
@@ -292,8 +287,8 @@ Namespace PropertyPackages
 
             'initialize collections
 
-            _selectedcomps = New Dictionary(Of String, BaseClasses.ConstantProperties)(StringComparer.Ordinal)
-            _availablecomps = New Dictionary(Of String, BaseClasses.ConstantProperties)(StringComparer.Ordinal)
+            _selectedcomps = New Dictionary(Of String, BaseClasses.ConstantProperties)
+            _availablecomps = New Dictionary(Of String, BaseClasses.ConstantProperties)
 
             'load chempsep database if existent
 
@@ -421,7 +416,7 @@ Namespace PropertyPackages
         End Sub
 
         Public Sub CreatePhaseMappings()
-            Me._phasemappings = New Dictionary(Of String, PhaseInfo)(StringComparer.Ordinal)
+            Me._phasemappings = New Dictionary(Of String, PhaseInfo)
             With Me._phasemappings
                 .Add("Vapor", New PhaseInfo("", 2, Phase.Vapor))
                 .Add("Liquid1", New PhaseInfo("", 3, Phase.Liquid1))
@@ -433,7 +428,7 @@ Namespace PropertyPackages
         End Sub
 
         Public Sub CreatePhaseMappingsDW()
-            Me._phasemappings = New Dictionary(Of String, PhaseInfo)(StringComparer.Ordinal)
+            Me._phasemappings = New Dictionary(Of String, PhaseInfo)
             With Me._phasemappings
                 .Add("Vapor", New PhaseInfo("Vapor", 2, Phase.Vapor))
                 .Add("Liquid1", New PhaseInfo("Liquid", 3, Phase.Liquid1))
@@ -468,7 +463,7 @@ Namespace PropertyPackages
         Public Property ForcedSolids As New List(Of String)
 
         'overriden phase properties' calculation routines
-        Public Property PropertyOverrides As New Dictionary(Of String, String)(StringComparer.Ordinal)
+        Public Property PropertyOverrides As New Dictionary(Of String, String)
 
         Public ReadOnly Property PhaseMappings() As Dictionary(Of String, PhaseInfo)
             Get
@@ -664,7 +659,7 @@ Namespace PropertyPackages
 
             IObj?.Paragraphs.Add("<m>c=\sqrt{\frac{K}{\rho}},</m>")
 
-            IObj?.Paragraphs.Add(SolutionInspector.where)
+            IObj?.Paragraphs.Add("where:")
 
             IObj?.Paragraphs.Add("<mi>c</mi> Speed of sound (m/s)")
 
@@ -701,7 +696,7 @@ Namespace PropertyPackages
 
             IObj?.Paragraphs.Add("for liquids.")
 
-            IObj?.Paragraphs.Add(SolutionInspector.Results)
+            IObj?.Paragraphs.Add("<h2>Results</h2>")
 
             For Each p As IPhase In Me.CurrentMaterialStream.Phases.Values
                 IObj?.Paragraphs.Add(String.Format("<h3>{0}</h3>", p.Name))
@@ -1118,13 +1113,13 @@ Namespace PropertyPackages
 
             IObj?.Paragraphs.Add("The fugacity coefficients also depend on x and y, and are used to calculate updated K-values, which is why this routine is always called from a successive substitution procedure.")
 
-            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
+            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
 
-            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
-            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
-            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Phase_1_composition_0, Vx.ToMathArrayString()))
-            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Phase_2_composition_0, Vy.ToMathArrayString()))
-            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Calculation_Type_0, type))
+            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
+            IObj?.Paragraphs.Add(String.Format("Pressure: {0} Pa", P))
+            IObj?.Paragraphs.Add(String.Format("Phase 1 composition: {0}", Vx.ToMathArrayString()))
+            IObj?.Paragraphs.Add(String.Format("Phase 2 composition: {0}", Vy.ToMathArrayString()))
+            IObj?.Paragraphs.Add(String.Format("Calculation Type: {0}", type))
 
             Dim fugvap As Double() = Nothing
             Dim fugliq As Double() = Nothing
@@ -1246,7 +1241,7 @@ Namespace PropertyPackages
                 If K(i) < 0.0000000001 Then K(i) = 0.0000000001
             Next
 
-            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Results))
+            IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
 
             IObj?.Paragraphs.Add(String.Format("Calculated K-values: {0}", K.ToMathArrayString()))
 
@@ -2031,14 +2026,14 @@ Namespace PropertyPackages
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-            Inspector.Host.CheckAndAdd(IObj, "", "DW_CalcEquilibrium", ComponentName & SolutionInspector.Phase_Equilibria, SolutionInspector.Property_Package_Equilibrium_Calculation_Routine)
+            Inspector.Host.CheckAndAdd(IObj, "", "DW_CalcEquilibrium", ComponentName & " (Phase Equilibria)", "Property Package Equilibrium Calculation Routine")
 
             Me.CurrentMaterialStream.AtEquilibrium = False
 
             If Not Settings.CAPEOPENMode Then
                 Try
                     Me._tpseverity = Me.FlashBase.FlashSettings(Enums.FlashSetting.ThreePhaseFlashStabTestSeverity)
-                    Me._tpcompids = Me.FlashBase.FlashSettings(Enums.FlashSetting.ThreePhaseFlashStabTestCompIds).ToArray(Globalization.CultureInfo.CurrentCulture, GetType(String))
+                    Me._tpcompids = Me.FlashBase.FlashSettings(Enums.FlashSetting.ThreePhaseFlashStabTestCompIds).ToArray(Globalization.CultureInfo.CurrentCulture, Type.GetType("System.String"))
                     Dim newlist = Me._tpcompids.ToList
                     newlist.Remove("")
                     Me._tpcompids = newlist.ToArray()
@@ -2060,11 +2055,11 @@ Namespace PropertyPackages
             H = Me.CurrentMaterialStream.Phases(0).Properties.enthalpy.GetValueOrDefault
             S = Me.CurrentMaterialStream.Phases(0).Properties.entropy.GetValueOrDefault
 
-            IObj?.Paragraphs.Add(SolutionInspector.DW_CalcEquilibrium_Paragraph_01)
+            IObj?.Paragraphs.Add("This is the routine responsible for the calculation of phase distribution in the currently associated Material Stream, using the specified Flash Algorithm.")
 
-            IObj?.Paragraphs.Add(SolutionInspector.DW_CalcEquilibrium_Paragraph_02)
+            IObj?.Paragraphs.Add("The first thing that the routine does is to erase all previously calculated phase distribution and properties on the stream, if they exist.")
 
-            IObj?.Paragraphs.Add(SolutionInspector.DW_CalcEquilibrium_Paragraph_03)
+            IObj?.Paragraphs.Add("Erasing properties...")
 
             Me.DW_ZerarPhaseProps(Phase.Vapor)
             Me.DW_ZerarPhaseProps(Phase.Liquid)
@@ -2081,7 +2076,7 @@ Namespace PropertyPackages
             Me.DW_ZerarComposicoes(Phase.Aqueous)
             Me.DW_ZerarComposicoes(Phase.Solid)
 
-            IObj?.Paragraphs.Add(SolutionInspector.DW_CalcEquilibrium_Paragraph_04)
+            IObj?.Paragraphs.Add("It then checks for the Material Stream State Specification, in order to proceed with the correct flash (equilibrium) calculation.")
 
             Select Case spec1
 
@@ -2091,7 +2086,7 @@ Namespace PropertyPackages
 
                         Case FlashSpec.P
 
-                            IObj?.Paragraphs.Add(SolutionInspector.DW_CalcEquilibrium_Paragraph_05)
+                            IObj?.Paragraphs.Add("The defined specification is TP (Temperature and Pressure). DWSIM will call the 'Flash_PT' routine from the currently associated Flash Algorithm instance.")
 
                             T = Me.CurrentMaterialStream.Phases(0).Properties.temperature.GetValueOrDefault
                             P = Me.CurrentMaterialStream.Phases(0).Properties.pressure.GetValueOrDefault
@@ -2107,7 +2102,7 @@ Namespace PropertyPackages
                                 If Me.FlashBase.FlashSettings(Enums.FlashSetting.ValidateEquilibriumCalc) = True Then
 
                                     IObj?.SetCurrent()
-                                    IObj?.Paragraphs.Add(SolutionInspector.DW_CalcEquilibrium_Paragraph_06)
+                                    IObj?.Paragraphs.Add("Calculating Mixture Initial Gibbs Energy...")
 
                                     ige = Me.DW_CalcGibbsEnergy(RET_VMOL(Phase.Mixture), T, P)
 
@@ -2202,7 +2197,7 @@ Namespace PropertyPackages
 
                                     dge = fge - ige
 
-                                    Dim dgtol As Double = Me.FlashBase.FlashSettings(Enums.FlashSetting.ValidationGibbsTolerance).ToDoubleFromInvariant()
+                                    Dim dgtol As Double = Me.FlashBase.FlashSettings(Enums.FlashSetting.ValidationGibbsTolerance)
 
                                     If dge > 0.0# And Math.Abs(dge / ige * 100) > Math.Abs(dgtol) Then
                                         Dim ex As New Exception(Calculator.GetLocalString("InvalidFlashResult") & "(DGE = " & dge & " kJ/kg, " & Format(dge / ige * 100, "0.00") & "%)")
@@ -2572,7 +2567,7 @@ Namespace PropertyPackages
                             If Not T.IsValid Or Not H.IsValid Then Throw New ArgumentException("PH Flash: " & Calculator.GetLocalString("ErrorInvalidFlashSpecValue"))
                             'If Not T.IsPositive Then Throw New ArgumentException("PH Flash: " & Calculator.GetLocalString("ErrorInvalidFlashSpecValue"))
 
-                            If Me.AUX_IS_SINGLECOMP(Phase.Mixture) And Not Me.ComponentName.Contains("Incompressible") Then
+                            If Me.AUX_IS_SINGLECOMP(Phase.Mixture) And Not Me.ComponentName.Contains("Incompressible") And Not Me.ComponentName.Contains("Black Oil") Then
 
                                 Dim brentsolverT As New BrentOpt.Brent
                                 brentsolverT.DefineFuncDelegate(AddressOf EnthalpyTx)
@@ -2846,7 +2841,7 @@ redirect:                       IObj?.SetCurrent()
                             If Not T.IsValid Or Not S.IsValid Then Throw New ArgumentException("PS Flash: " & Calculator.GetLocalString("ErrorInvalidFlashSpecValue"))
                             'If Not T.IsPositive Then Throw New ArgumentException("PS Flash: " & Calculator.GetLocalString("ErrorInvalidFlashSpecValue"))
 
-                            If Me.AUX_IS_SINGLECOMP(Phase.Mixture) And Me.ComponentName <> "FPROPS" And Me.ComponentName <> "CoolProp" Then
+                            If Me.AUX_IS_SINGLECOMP(Phase.Mixture) And Not Me.ComponentName.Contains("Incompressible") And Not Me.ComponentName.Contains("Black Oil") Then
 
                                 Dim brentsolverT As New BrentOpt.Brent
                                 brentsolverT.DefineFuncDelegate(AddressOf EntropyTx)
@@ -3360,7 +3355,7 @@ redirect2:                      IObj?.SetCurrent()
 
             Try
                 Me._tpseverity = Me.FlashBase.FlashSettings(Enums.FlashSetting.ThreePhaseFlashStabTestSeverity)
-                Me._tpcompids = Me.FlashBase.FlashSettings(Enums.FlashSetting.ThreePhaseFlashStabTestCompIds).ToArray(Globalization.CultureInfo.CurrentCulture, GetType(String))
+                Me._tpcompids = Me.FlashBase.FlashSettings(Enums.FlashSetting.ThreePhaseFlashStabTestCompIds).ToArray(Globalization.CultureInfo.CurrentCulture, Type.GetType("System.String"))
             Catch ex As Exception
                 Me._tpseverity = 0
                 Me._tpcompids = New String() {}
@@ -3419,7 +3414,7 @@ redirect2:                      IObj?.SetCurrent()
 
                                     dge = fge - ige
 
-                                    Dim dgtol As Double = Me.FlashBase.FlashSettings(Enums.FlashSetting.ValidationGibbsTolerance).ToDoubleFromInvariant()
+                                    Dim dgtol As Double = Me.FlashBase.FlashSettings(Enums.FlashSetting.ValidationGibbsTolerance)
 
                                     If dge > 0.0# And Math.Abs(dge / ige * 100) > Math.Abs(dgtol) Then
                                         Throw New Exception(Calculator.GetLocalString("InvalidFlashResult") & "(DGE = " & dge & " kJ/kg, " & Format(dge / ige * 100, "0.00") & "%)")
@@ -5603,96 +5598,94 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
 
         End Function
 
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Overridable Function AUX_CPi(ByVal sub1 As String, ByVal T As Double) As Double
 
-            Dim compoundConstantProperties  = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties
-            If compoundConstantProperties.IsPF = 1 Then
+            If Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.IsPF = 1 Then
 
-                With compoundConstantProperties
+                With Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties
                     Return Auxiliary.PROPS.Cpig_lk(.PF_Watson_K, .Acentric_Factor, T) '* .Molar_Weight
                 End With
 
             Else
 
-                If compoundConstantProperties.OriginalDB = "DWSIM" Or
-                compoundConstantProperties.OriginalDB = "" Then
+                If Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.OriginalDB = "DWSIM" Or
+                Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.OriginalDB = "" Then
                     Dim A, B, C, D, E, result As Double
-                    A = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
-                    B = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
-                    C = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
-                    D = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
-                    E = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
+                    A = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
+                    B = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
+                    C = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
+                    D = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
+                    E = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
                     'Cp = A + B*T + C*T^2 + D*T^3 + E*T^4 where Cp in kJ/kg-mol , T in K 
                     result = A + B * T + C * T ^ 2 + D * T ^ 3 + E * T ^ 4
-                    Return result / compoundConstantProperties.Molar_Weight 'kJ/kg.K
-                ElseIf compoundConstantProperties.OriginalDB = "CoolProp" Then
+                    Return result / Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Molar_Weight 'kJ/kg.K
+                ElseIf Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.OriginalDB = "CheResources" Then
                     Dim A, B, C, D, E, result As Double
-                    Dim eqno As String = compoundConstantProperties.IdealgasCpEquation
-                    Dim mw As Double = compoundConstantProperties.Molar_Weight
-                    A = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
-                    B = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
-                    C = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
-                    D = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
-                    E = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
-                    result = Me.CalcCSTDepProp(eqno, A, B, C, D, E, T, 0) 'kJ/kg.K
-                    Return result
-                ElseIf compoundConstantProperties.OriginalDB = "CheResources" Then
-                    Dim A, B, C, D, E, result As Double
-                    A = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
-                    B = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
-                    C = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
-                    D = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
-                    E = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
+                    A = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
+                    B = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
+                    C = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
+                    D = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
+                    E = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
                     'CAL/MOL.K [CP=A+(B*T)+(C*T^2)+(D*T^3)], T in K
                     result = A + B * T + C * T ^ 2 + D * T ^ 3
-                    Return result / compoundConstantProperties.Molar_Weight * 4.1868 'kJ/kg.K
-                ElseIf compoundConstantProperties.OriginalDB = "ChemSep" Or
-                compoundConstantProperties.OriginalDB = "ChEDL Thermo" Or
-                compoundConstantProperties.OriginalDB = "User" Then
+                    Return result / Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Molar_Weight * 4.1868 'kJ/kg.K
+                ElseIf Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.OriginalDB = "ChemSep" Or
+                Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.OriginalDB = "ChEDL Thermo" Or
+                Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.OriginalDB = "User" Then
                     Dim A, B, C, D, E, result As Double
-                    Dim eqno As String = compoundConstantProperties.IdealgasCpEquation
-                    Dim mw As Double = compoundConstantProperties.Molar_Weight
-                    A = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
-                    B = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
-                    C = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
-                    D = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
-                    E = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
+                    Dim eqno As String = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.IdealgasCpEquation
+                    Dim mw As Double = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Molar_Weight
+                    A = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
+                    B = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
+                    C = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
+                    D = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
+                    E = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
                     If Integer.TryParse(eqno, New Integer) Then
                         result = Me.CalcCSTDepProp(eqno, A, B, C, D, E, T, 0) / 1000 / mw 'kJ/kg.K
                     Else
                         result = Me.ParseEquation(eqno, A, B, C, D, E, T) / mw
                     End If
                     If result = 0.0 Then Return 3.5 * 8.314 / mw Else Return result
-                ElseIf compoundConstantProperties.OriginalDB = "ChEDL Thermo" Then
+                ElseIf Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.OriginalDB = "ChEDL Thermo" Then
                     Dim A, B, C, D, E, result As Double
-                    Dim eqno As String = compoundConstantProperties.IdealgasCpEquation
-                    A = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
-                    B = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
-                    C = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
-                    D = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
-                    E = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
+                    Dim eqno As String = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.IdealgasCpEquation
+                    A = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
+                    B = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
+                    C = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
+                    D = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
+                    E = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
                     result = Me.CalcCSTDepProp(eqno, A, B, C, D, E, T, 0) 'kJ/kg.K
                     Return result
-                ElseIf compoundConstantProperties.OriginalDB = "Biodiesel" Then
+                ElseIf Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.OriginalDB = "CoolProp" Then
                     Dim A, B, C, D, E, result As Double
-                    Dim eqno As String = compoundConstantProperties.IdealgasCpEquation
-                    A = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
-                    B = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
-                    C = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
-                    D = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
-                    E = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
+                    Dim eqno As String = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.IdealgasCpEquation
+                    Dim mw As Double = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Molar_Weight
+                    A = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
+                    B = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
+                    C = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
+                    D = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
+                    E = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
                     result = Me.CalcCSTDepProp(eqno, A, B, C, D, E, T, 0) 'kJ/kg.K
                     Return result
-                ElseIf compoundConstantProperties.OriginalDB = "KDB" Then
+                ElseIf Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.OriginalDB = "Biodiesel" Then
+                    Dim A, B, C, D, E, result As Double
+                    Dim eqno As String = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.IdealgasCpEquation
+                    A = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
+                    B = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
+                    C = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
+                    D = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
+                    E = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
+                    result = Me.CalcCSTDepProp(eqno, A, B, C, D, E, T, 0) 'kJ/kg.K
+                    Return result
+                ElseIf Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.OriginalDB = "KDB" Then
                     Dim A, B, C, D, E As Double
-                    Dim eqno As String = compoundConstantProperties.IdealgasCpEquation
-                    A = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
-                    B = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
-                    C = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
-                    D = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
-                    E = compoundConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
-                    Dim mw As Double = compoundConstantProperties.Molar_Weight
+                    Dim eqno As String = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.IdealgasCpEquation
+                    A = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
+                    B = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
+                    C = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_C
+                    D = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_D
+                    E = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
+                    Dim mw As Double = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Molar_Weight
                     Return Me.ParseEquation(eqno, A, B, C, D, E, T) / mw
                 Else
                     Return 0
@@ -6318,7 +6311,7 @@ Final3:
                     result = Exp(1.0 / val)
             End Select
 
-            IObj?.Paragraphs.Add(SolutionInspector.Results)
+            IObj?.Paragraphs.Add("<h2>Results</h2>")
 
             IObj?.Paragraphs.Add(String.Format("Liquid Phase Viscosity: {0} Pa.s", result))
 
@@ -6385,7 +6378,7 @@ Final3:
                 val += subst.MoleFraction.GetValueOrDefault * tmpval / ftotal
             Next
 
-            IObj?.Paragraphs.Add(SolutionInspector.Results)
+            IObj?.Paragraphs.Add("<h2>Results</h2>")
 
             IObj?.Paragraphs.Add(String.Format("Liquid Phase Surface Tension: {0} N/m", val))
 
@@ -6477,7 +6470,7 @@ Final3:
 
             val = Auxiliary.PROPS.condlm_li(Me.RET_VVC, vcl, Me.RET_VMOL(Me.RET_PHASECODE(phaseid)))
 
-            IObj?.Paragraphs.Add(SolutionInspector.Results)
+            IObj?.Paragraphs.Add("<h2>Results</h2>")
 
             IObj?.Paragraphs.Add(String.Format("Average Mixture Value from Li's mixing rule: {0} W/[m.K]", val))
 
@@ -6520,7 +6513,7 @@ Final3:
                 i = i + 1
             Next
 
-            IObj?.Paragraphs.Add(SolutionInspector.Results)
+            IObj?.Paragraphs.Add("<h2>Results</h2>")
 
             IObj?.Paragraphs.Add(String.Format("Molar Average Value: {0} W/[m.K]", val))
 
@@ -6622,7 +6615,7 @@ Final3:
 
             val = Auxiliary.PROPS.viscg_jossi_stiel_thodos(val, T, MM / RHO / 1000, AUX_TCM(Phase.Vapor), AUX_PCM(Phase.Vapor), AUX_VCM(Phase.Vapor), AUX_MMM(Phase.Vapor))
 
-            IObj?.Paragraphs.Add(SolutionInspector.Results)
+            IObj?.Paragraphs.Add("<h2>Results</h2>")
 
             IObj?.Paragraphs.Add(String.Format("Molar Average Value: {0} Pa.s", val))
 
@@ -6802,7 +6795,7 @@ Final3:
 
             IObj?.Paragraphs.Add("<m>V_{s}=\frac{RT_{C}}{P_{C}}Z_{RA}^{[1+(1-T_{r})^{2/7}]},</m>")
 
-            IObj?.Paragraphs.Add(SolutionInspector.where)
+            IObj?.Paragraphs.Add("where:")
 
             IObj?.Paragraphs.Add("<mi>V_{s}</mi> Saturated molar volume (m³/mol)")
 
@@ -6832,7 +6825,7 @@ Final3:
 
             IObj?.Paragraphs.Add("<m>T_{c_{ij}}=[\frac{8(V_{c_{i}}V_{c_{j}})^{1/2}}{(V_{c_{i}}^{1/3}+V_{c_{j}}^{1/3})^{3}}](T_{c_{i}}T_{c_{j}})^{1/2},</m>")
 
-            IObj?.Paragraphs.Add(SolutionInspector.where)
+            IObj?.Paragraphs.Add("where:")
 
             IObj?.Paragraphs.Add("<mi>x_{i}</mi> Molar fraction")
 
@@ -6853,7 +6846,7 @@ Final3:
             IObj?.Paragraphs.Add("<mi>\frac{\beta}{P}	=	-1-9.070217(1-T_{r})^{1/3}+62.45326(1-T_{r})^{2/3}-135.1102(1-T_{r})+
 		                        +\exp(4.79594+0.250047\omega+1.14188\omega^{2})(1-T_{r})^{4/3},</mi>")
 
-            IObj?.Paragraphs.Add(SolutionInspector.where)
+            IObj?.Paragraphs.Add("where:")
 
             IObj?.Paragraphs.Add("<mi>V</mi> Compressed liquid volume (m³/mol)")
 
@@ -6866,7 +6859,7 @@ Final3:
 
             IObj?.Paragraphs.Add("<m>\rho=\frac{MM}{1000V},<m>")
 
-            IObj?.Paragraphs.Add(SolutionInspector.where)
+            IObj?.Paragraphs.Add("where:")
 
             IObj?.Paragraphs.Add("<mi>\rho</mi> Density (kg/m³)")
 
@@ -6922,7 +6915,7 @@ Final3:
                 End If
             End If
 
-            IObj?.Paragraphs.Add(SolutionInspector.Results)
+            IObj?.Paragraphs.Add("<h2>Results</h2>")
 
             IObj?.Paragraphs.Add(String.Format("Liquid Phase Density: {0} kg/m3", val))
 
@@ -7017,21 +7010,13 @@ Final3:
                 Dim Ti As Double
 
                 Ti = T1 + deltaT / 2
-                'Using filestr As Stream = Assembly.GetAssembly(t0).GetManifestResourceStream("DWSIM.Thermodynamics.henry.txt")
-                ' Using ArrayPool(Of Double).Shared.Rent(nsteps - 1)
-                ' alexander speed of memory allocation https://adamsitnik.com/Array-Pool/
-                'alexander grab array from pool
-                Dim samePool = ArrayPool(Of Double).Shared
-                Dim integrals = samePool.Rent(nsteps - 1)
-                ' Dim integrals(nsteps - 1) As Double
+
+                Dim integrals(nsteps - 1) As Double
                 Parallel.For(0, nsteps, Sub(ii)
                                             integrals(ii) = AUX_CPi(subst, Ti + ii * deltaT)
                                         End Sub)
 
-                Dim outval = integrals.SumY(nsteps - 1) * deltaT
-
-                'alexander release array to pool
-                samePool.Return(integrals)
+                Dim outval = integrals.SumY * deltaT
 
                 Return outval
 
@@ -7872,21 +7857,18 @@ Final3:
 
         End Function
 
-'        <MethodImpl(MethodImplOptions.AggressiveInlining)>
-        Public Function RET_VNAMES() As StringListFastComparable
+        Public Function RET_VNAMES() As String()
 
-            Return Me.CurrentMaterialStream.Phases(0).Compounds.RET_VNAMES()
+            Dim val(Me.CurrentMaterialStream.Phases(0).Compounds.Count - 1) As String
+            Dim subst As Interfaces.ICompound
+            Dim i As Integer = 0
 
-            'Dim val(Me.CurrentMaterialStream.Phases(0).Compounds.Count - 1) As String
-            'Dim subst As Interfaces.ICompound
-            'Dim i As Integer = 0
+            For Each subst In Me.CurrentMaterialStream.Phases(0).Compounds.Values
+                val(i) = subst.ConstantProperties.Name
+                i += 1
+            Next
 
-            'For Each subst In Me.CurrentMaterialStream.Phases(0).Compounds.Values
-            '    val(i) = subst.ConstantProperties.Name
-            '    i += 1
-            'Next
-
-            'Return val
+            Return val
 
         End Function
 
@@ -8181,30 +8163,21 @@ Final3:
 
         End Function
 
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Function CalcCSTDepProp(ByVal eqno As String, ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double, ByVal Tc As Double) As Double
 
             Dim Tr As Double = T / Tc
-            'if eqNoInt>231 then Return 0.0# - possible damage - if in future added eqno>231
 
             Select Case eqno
-                'alexander fix order for compare for speedup
-                Case "16"
-                    Return A + Exp(B / T + C + D * T + E * T ^ 2)
-                Case "5"
-                    Return A + B * T + C * T ^ 2 + D * T ^ 3 + E * T ^ 4
-                Case "3"
-                    Return A + B * T + C * T ^ 2
-                Case "101"
-                    Return Exp(A + B / T + C * Log(T) + D * T ^ E)
-                Case "102"
-                    Return A * T ^ B / (1 + C / T + D / T ^ 2)
                 Case "1"
                     Return A
                 Case "2"
                     Return A + B * T
+                Case "3"
+                    Return A + B * T + C * T ^ 2
                 Case "4"
                     Return A + B * T + C * T ^ 2 + D * T ^ 3
+                Case "5"
+                    Return A + B * T + C * T ^ 2 + D * T ^ 3 + E * T ^ 4
                 Case "6"
                     Return A + B * T + C * T ^ 2 + D * T ^ 3 + E / T ^ 2
                 Case "10"
@@ -8219,6 +8192,8 @@ Final3:
                     Return Exp(A + B * T + C * T ^ 2 + D * T ^ 3)
                 Case "15"
                     Return Exp(A + B * T + C * T ^ 2 + D * T ^ 3 + E * T ^ 4)
+                Case "16"
+                    Return A + Exp(B / T + C + D * T + E * T ^ 2)
                 Case "17"
                     Return A + Exp(B + C * T + D * T ^ 2 + E * T ^ 3)
                 Case "45"
@@ -8227,6 +8202,10 @@ Final3:
                     Return B + 2 * C * T + 3 * D * T ^ 2 + 4 * E * T ^ 3
                 Case "100"
                     Return A + B * T + C * T ^ 2 + D * T ^ 3 + E * T ^ 4
+                Case "101"
+                    Return Exp(A + B / T + C * Log(T) + D * T ^ E)
+                Case "102"
+                    Return A * T ^ B / (1 + C / T + D / T ^ 2)
                 Case "103"
                     Return A + B * Exp(-C / (T ^ D))
                 Case "104"
@@ -8273,7 +8252,6 @@ Final3:
 
         End Function
 
-        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Function ParseEquation(ByVal expression As String, ByVal A As Double, ByVal B As Double, ByVal C As Double, ByVal D As Double, ByVal E As Double, ByVal T As Double) As Double
 
             If expression = "" Then Return 0.0
@@ -10600,8 +10578,8 @@ Final3:
 
 #Region "   CAPE-OPEN ICapeUtilities Implementation"
 
-        Public _availablecomps As New Dictionary(Of String, BaseClasses.ConstantProperties)(StringComparer.Ordinal)
-        Public _selectedcomps As New Dictionary(Of String, BaseClasses.ConstantProperties)(StringComparer.Ordinal)
+        Public _availablecomps As New Dictionary(Of String, BaseClasses.ConstantProperties)
+        Public _selectedcomps As New Dictionary(Of String, BaseClasses.ConstantProperties)
 
         <System.NonSerialized()> Protected Friend _pme As Object
 
@@ -11066,185 +11044,132 @@ Final3:
             Dim ci As Globalization.CultureInfo = Globalization.CultureInfo.InvariantCulture
 
             Try
-                'Me.UniqueID = (From el As XElement In data Select el Where el.Name = "ID").FirstOrDefault.Value
-                Me.UniqueID = OnitUtilities.GetFilteredXElementsEnumerable (data, "ID").FirstOrDefault.Value
-                'Me.Tag = (From el As XElement In data Select el Where el.Name = "Tag").FirstOrDefault.Value
-                Me.Tag = OnitUtilities.GetFilteredXElementsEnumerable (data, "Tag").FirstOrDefault.Value
+                Me.UniqueID = (From el As XElement In data Select el Where el.Name = "ID").FirstOrDefault.Value
+                Me.Tag = (From el As XElement In data Select el Where el.Name = "Tag").FirstOrDefault.Value
             Catch ex As Exception
             End Try
-            'Me.ComponentName = (From el As XElement In data Select el Where el.Name = "ComponentName").FirstOrDefault.Value
-            try
-            Me.ComponentName = OnitUtilities.GetFilteredXElementsEnumerable (data, "ComponentName").FirstOrDefault.Value
-            Catch ex As Exception
-            End Try
-
-            'Me.ComponentDescription = (From el As XElement In data Select el Where el.Name = "ComponentDescription").FirstOrDefault.Value
-            Me.ComponentDescription = OnitUtilities.GetFilteredXElementsEnumerable (data, "ComponentDescription").FirstOrDefault.Value
+            Me.ComponentName = (From el As XElement In data Select el Where el.Name = "ComponentName").FirstOrDefault.Value
+            Me.ComponentDescription = (From el As XElement In data Select el Where el.Name = "ComponentDescription").FirstOrDefault.Value
             Try
-                'Me._tpseverity = (From el As XElement In data Select el Where el.Name = "TPSeverity").FirstOrDefault.Value
-                Me._tpseverity = OnitUtilities.GetFilteredXElementsEnumerable (data, "TPSeverity").FirstOrDefault.Value
-                'Me._tpcompids = XMLSerializer.XMLSerializer.StringToArray2((From el As XElement In data Select el Where el.Name = "TPCompIDs").FirstOrDefault.Value, ci, GetType(String))
-                Me._tpcompids = XMLSerializer.XMLSerializer.StringToArray2(OnitUtilities.GetFilteredXElementsEnumerable (data, "TPCompIDs").FirstOrDefault.Value, ci, GetType(String))
+                Me._tpseverity = (From el As XElement In data Select el Where el.Name = "TPSeverity").FirstOrDefault.Value
+                Me._tpcompids = XMLSerializer.XMLSerializer.StringToArray2((From el As XElement In data Select el Where el.Name = "TPCompIDs").FirstOrDefault.Value, ci, Type.GetType("System.String"))
             Catch ex As Exception
             End Try
 
             Try
-                'Me.ParametersXMLString = (From el As XElement In data Select el Where el.Name = "Parameters").FirstOrDefault.ToString()
-                Dim parameters  = OnitUtilities.GetFilteredXElementsEnumerable (data,  "Parameters").FirstOrDefault
-                IF parameters  then Me.ParametersXMLString = parameters.ToString()
+                Me.ParametersXMLString = (From el As XElement In data Select el Where el.Name = "Parameters").FirstOrDefault?.ToString()
             Catch ex As Exception
             End Try
 
             Try
-                'OverrideKvalFugCoeff = (From el As XElement In data Select el Where el.Name = "OverrideKvalFugCoeff").FirstOrDefault.Value
-                OverrideKvalFugCoeff = [Boolean].Parse(OnitUtilities.GetFilteredXElementsEnumerable (data,  "OverrideKvalFugCoeff").FirstOrDefault.Value)
+                OverrideKvalFugCoeff = (From el As XElement In data Select el Where el.Name = "OverrideKvalFugCoeff").FirstOrDefault?.Value
             Catch ex As Exception
             End Try
 
             Try
-                'OverrideEnthalpyCalculation = (From el As XElement In data Select el Where el.Name = "OverrideEnthalpyCalculation").FirstOrDefault.Value
-                OverrideEnthalpyCalculation = [Boolean].Parse(OnitUtilities.GetFilteredXElementsEnumerable (data,  "OverrideEnthalpyCalculation").FirstOrDefault.Value)
+                OverrideEnthalpyCalculation = (From el As XElement In data Select el Where el.Name = "OverrideEnthalpyCalculation").FirstOrDefault.Value
             Catch ex As Exception
             End Try
 
             Try
-                'OverrideEntropyCalculation = (From el As XElement In data Select el Where el.Name = "OverrideEntropyCalculation").FirstOrDefault.Value
-                OverrideEntropyCalculation = [Boolean].Parse(OnitUtilities.GetFilteredXElementsEnumerable (data,  "OverrideEntropyCalculation").FirstOrDefault.Value)
-
+                OverrideEntropyCalculation = (From el As XElement In data Select el Where el.Name = "OverrideEntropyCalculation").FirstOrDefault.Value
             Catch ex As Exception
             End Try
 
             Try
-                'LiquidDensityCalculationMode_Subcritical = (From el As XElement In data Select el Where el.Name = "LiquidDensityCalculationMode_Supercritical").FirstOrDefault.Value
-                LiquidDensityCalculationMode_Subcritical = [Enum].Parse(LiquidDensityCalculationMode_Subcritical.GetType(), OnitUtilities.GetFilteredXElementsEnumerable (data,  "LiquidDensityCalculationMode_Supercritical").FirstOrDefault.Value)
-
+                LiquidDensityCalculationMode_Subcritical = [Enum].Parse(LiquidDensityCalculationMode_Subcritical.GetType, (From el As XElement In data Select el Where el.Name = "LiquidDensityCalculationMode_Supercritical").FirstOrDefault.Value)
             Catch ex As Exception
             End Try
 
             Try
-                'LiquidDensityCalculationMode_Supercritical = (From el As XElement In data Select el Where el.Name = "LiquidDensityCalculationMode_Supercritical").FirstOrDefault.Value
-                LiquidDensityCalculationMode_Supercritical = [Enum].Parse(LiquidDensityCalculationMode_Supercritical.GetType(), OnitUtilities.GetFilteredXElementsEnumerable (data,  "LiquidDensityCalculationMode_Supercritical").FirstOrDefault.Value)
+                LiquidDensityCalculationMode_Supercritical = [Enum].Parse(LiquidDensityCalculationMode_Supercritical.GetType, (From el As XElement In data Select el Where el.Name = "LiquidDensityCalculationMode_Supercritical").FirstOrDefault.Value)
             Catch ex As Exception
             End Try
 
             Try
-                'LiquidDensity_CorrectExpDataForPressure = (From el As XElement In data Select el Where el.Name = "LiquidDensity_CorrectExpDataForPressure").FirstOrDefault.Value
-                LiquidDensity_CorrectExpDataForPressure = [Boolean].Parse(OnitUtilities.GetFilteredXElementsEnumerable (data,  "LiquidDensity_CorrectExpDataForPressure").FirstOrDefault.Value)
-
+                LiquidDensity_CorrectExpDataForPressure = (From el As XElement In data Select el Where el.Name = "LiquidDensity_CorrectExpDataForPressure").FirstOrDefault.Value
             Catch ex As Exception
             End Try
 
             Try
-                'LiquidDensity_UsePenelouxVolumeTranslation = (From el As XElement In data Select el Where el.Name = "LiquidDensity_UsePenelouxVolumeTranslation").FirstOrDefault.Value
-                LiquidDensity_UsePenelouxVolumeTranslation = [Boolean].Parse(OnitUtilities.GetFilteredXElementsEnumerable (data,  "LiquidDensity_UsePenelouxVolumeTranslation").FirstOrDefault.Value)
-
+                LiquidDensity_UsePenelouxVolumeTranslation = (From el As XElement In data Select el Where el.Name = "LiquidDensity_UsePenelouxVolumeTranslation").FirstOrDefault.Value
             Catch ex As Exception
             End Try
 
             Try
-                'LiquidViscosityCalculationMode_Subcritical = (From el As XElement In data Select el Where el.Name = "LiquidViscosityCalculationMode_Subcritical").FirstOrDefault.Value
-                LiquidViscosityCalculationMode_Subcritical = [Enum].Parse(LiquidViscosityCalculationMode_Subcritical.GetType(),OnitUtilities.GetFilteredXElementsEnumerable (data,  "LiquidViscosityCalculationMode_Subcritical").FirstOrDefault.Value)
-
+                LiquidViscosityCalculationMode_Subcritical = [Enum].Parse(LiquidViscosityCalculationMode_Subcritical.GetType, (From el As XElement In data Select el Where el.Name = "LiquidViscosityCalculationMode_Subcritical").FirstOrDefault.Value)
             Catch ex As Exception
             End Try
 
             Try
-                'LiquidViscosityCalculationMode_Supercritical = (From el As XElement In data Select el Where el.Name = "LiquidViscosityCalculationMode_Supercritical").FirstOrDefault.Value
-                LiquidViscosityCalculationMode_Supercritical = [Enum].Parse(LiquidViscosityCalculationMode_Supercritical.GetType(),OnitUtilities.GetFilteredXElementsEnumerable (data,  "LiquidViscosityCalculationMode_Supercritical").FirstOrDefault.Value)
-
+                LiquidViscosityCalculationMode_Supercritical = [Enum].Parse(LiquidViscosityCalculationMode_Supercritical.GetType, (From el As XElement In data Select el Where el.Name = "LiquidViscosityCalculationMode_Supercritical").FirstOrDefault.Value)
             Catch ex As Exception
             End Try
 
             Try
-               ' LiquidViscosity_CorrectExpDataForPressure = (From el As XElement In data Select el Where el.Name = "LiquidViscosity_CorrectExpDataForPressure").FirstOrDefault.Value
-                LiquidViscosity_CorrectExpDataForPressure = [Boolean].Parse(OnitUtilities.GetFilteredXElementsEnumerable (data,  "LiquidViscosity_CorrectExpDataForPressure").FirstOrDefault.Value)
-
+                LiquidViscosity_CorrectExpDataForPressure = (From el As XElement In data Select el Where el.Name = "LiquidViscosity_CorrectExpDataForPressure").FirstOrDefault.Value
             Catch ex As Exception
             End Try
 
             Try
-               ' LiquidViscosity_MixingRule = (From el As XElement In data Select el Where el.Name = "LiquidViscosity_MixingRule").FirstOrDefault.Value
-                LiquidViscosity_MixingRule =  [Enum].Parse(LiquidViscosity_MixingRule.GetType(),OnitUtilities.GetFilteredXElementsEnumerable (data,  "LiquidViscosity_MixingRule")?.FirstOrDefault.Value)
-
+                LiquidViscosity_MixingRule = [Enum].Parse(LiquidViscosity_MixingRule.GetType, (From el As XElement In data Select el Where el.Name = "LiquidViscosity_MixingRule").FirstOrDefault.Value)
             Catch ex As Exception
             End Try
 
             Try
-               ' VaporPhaseFugacityCalculationMode = (From el As XElement In data Select el Where el.Name = "VaporPhaseFugacityCalculationMode").FirstOrDefault.Value
-                VaporPhaseFugacityCalculationMode =[Enum].Parse(VaporPhaseFugacityCalculationMode.GetType(),OnitUtilities.GetFilteredXElementsEnumerable (data,  "VaporPhaseFugacityCalculationMode").FirstOrDefault.Value)
-
+                VaporPhaseFugacityCalculationMode = [Enum].Parse(VaporPhaseFugacityCalculationMode.GetType, (From el As XElement In data Select el Where el.Name = "VaporPhaseFugacityCalculationMode").FirstOrDefault.Value)
             Catch ex As Exception
             End Try
 
             Try
-                'SolidPhaseFugacityCalculationMethod = (From el As XElement In data Select el Where el.Name = "SolidPhaseFugacityCalculationMethod").FirstOrDefault.Value
-                SolidPhaseFugacityCalculationMethod = [Enum].Parse(SolidPhaseFugacityCalculationMethod.GetType(),OnitUtilities.GetFilteredXElementsEnumerable (data,  "SolidPhaseFugacityCalculationMethod").FirstOrDefault.Value)
-
+                SolidPhaseFugacityCalculationMethod = [Enum].Parse(SolidPhaseFugacityCalculationMethod.GetType, (From el As XElement In data Select el Where el.Name = "SolidPhaseFugacityCalculationMethod").FirstOrDefault.Value)
             Catch ex As Exception
             End Try
 
             Try
-                'SolidPhaseFugacity_UseIdealLiquidPhaseFugacity = (From el As XElement In data Select el Where el.Name = "SolidPhaseFugacity_UseIdealLiquidPhaseFugacity").FirstOrDefault.Value
-                SolidPhaseFugacity_UseIdealLiquidPhaseFugacity = [Boolean].Parse(OnitUtilities.GetFilteredXElementsEnumerable (data,  "SolidPhaseFugacity_UseIdealLiquidPhaseFugacity").FirstOrDefault.Value)
-
+                SolidPhaseFugacity_UseIdealLiquidPhaseFugacity = (From el As XElement In data Select el Where el.Name = "SolidPhaseFugacity_UseIdealLiquidPhaseFugacity").FirstOrDefault.Value
             Catch ex As Exception
             End Try
 
             Try
-                'SolidPhaseEnthalpy_UsesCp = (From el As XElement In data Select el Where el.Name = "SolidPhaseEnthalpy_UsesCp").FirstOrDefault.Value
-                SolidPhaseEnthalpy_UsesCp = [Boolean].Parse(OnitUtilities.GetFilteredXElementsEnumerable (data,  "SolidPhaseEnthalpy_UsesCp").FirstOrDefault.Value)
-
+                SolidPhaseEnthalpy_UsesCp = (From el As XElement In data Select el Where el.Name = "SolidPhaseEnthalpy_UsesCp").FirstOrDefault.Value
             Catch ex As Exception
             End Try
 
             Try
-                'EnthalpyEntropyCpCvCalculationMode = (From el As XElement In data Select el Where el.Name = "EnthalpyEntropyCpCvCalculationMode").FirstOrDefault.Value
-                EnthalpyEntropyCpCvCalculationMode = [Enum].Parse(EnthalpyEntropyCpCvCalculationMode.GetType(),OnitUtilities.GetFilteredXElementsEnumerable (data,  "EnthalpyEntropyCpCvCalculationMode").FirstOrDefault.Value)
-
+                EnthalpyEntropyCpCvCalculationMode = [Enum].Parse(EnthalpyEntropyCpCvCalculationMode.GetType, (From el As XElement In data Select el Where el.Name = "EnthalpyEntropyCpCvCalculationMode").FirstOrDefault.Value)
             Catch ex As Exception
             End Try
 
             Try
-                'LiquidFugacity_UsePoyntingCorrectionFactor = (From el As XElement In data Select el Where el.Name = "LiquidFugacity_UsePoyntingCorrectionFactor").FirstOrDefault.Value
-                LiquidFugacity_UsePoyntingCorrectionFactor = [Boolean].Parse(OnitUtilities.GetFilteredXElementsEnumerable (data,  "LiquidFugacity_UsePoyntingCorrectionFactor").FirstOrDefault.Value)
-
+                LiquidFugacity_UsePoyntingCorrectionFactor = (From el As XElement In data Select el Where el.Name = "LiquidFugacity_UsePoyntingCorrectionFactor").FirstOrDefault.Value
             Catch ex As Exception
             End Try
 
             Try
-                'ActivityCoefficientModels_IgnoreMissingInteractionParameters = (From el As XElement In data Select el Where el.Name = "ActivityCoefficientModels_IgnoreMissingInteractionParameters").FirstOrDefault.Value
-                ActivityCoefficientModels_IgnoreMissingInteractionParameters = [Boolean].Parse(OnitUtilities.GetFilteredXElementsEnumerable (data,  "ActivityCoefficientModels_IgnoreMissingInteractionParameters")?.FirstOrDefault.Value)
-
+                ActivityCoefficientModels_IgnoreMissingInteractionParameters = (From el As XElement In data Select el Where el.Name = "ActivityCoefficientModels_IgnoreMissingInteractionParameters").FirstOrDefault.Value
             Catch ex As Exception
             End Try
 
             Try
-                'IgnoreVaporFractionLimit = (From el As XElement In data Select el Where el.Name = "IgnoreVaporFractionLimit").FirstOrDefault.Value
-                IgnoreVaporFractionLimit = [Boolean].Parse(OnitUtilities.GetFilteredXElementsEnumerable (data,  "IgnoreVaporFractionLimit").FirstOrDefault.Value)
-
+                IgnoreVaporFractionLimit = (From el As XElement In data Select el Where el.Name = "IgnoreVaporFractionLimit").FirstOrDefault.Value
             Catch ex As Exception
             End Try
 
             Try
-                'IgnoreSalinityLimit = (From el As XElement In data Select el Where el.Name = "IgnoreSalinityLimit").FirstOrDefault.Value
-                IgnoreSalinityLimit = [Boolean].Parse(OnitUtilities.GetFilteredXElementsEnumerable (data,  "IgnoreSalinityLimit").FirstOrDefault.Value)
-
+                IgnoreSalinityLimit = (From el As XElement In data Select el Where el.Name = "IgnoreSalinityLimit").FirstOrDefault.Value
             Catch ex As Exception
             End Try
 
-            'Dim jsonoptions As New JsonSerializerSettings With {.StringEscapeHandling = StringEscapeHandling.EscapeHtml, .Formatting = Formatting.Indented}
+            Dim jsonoptions As New JsonSerializerSettings With {.StringEscapeHandling = StringEscapeHandling.EscapeHtml, .Formatting = Formatting.Indented}
 
             Try
-                'ForcedSolids = JsonConvert.DeserializeObject(Of List(Of String))((From el As XElement In data Select el Where el.Name = "ForcedSolids").FirstOrDefault.Value)
-                ForcedSolids = JsonConvert.DeserializeObject(Of List(Of String))(OnitUtilities.GetFilteredXElementsEnumerable (data,  "ForcedSolids").FirstOrDefault.Value)
-
+                ForcedSolids = JsonConvert.DeserializeObject(Of List(Of String))((From el As XElement In data Select el Where el.Name = "ForcedSolids").FirstOrDefault.Value)
             Catch ex As Exception
             End Try
 
             Try
-                'PropertyOverrides = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))((From el As XElement In data Select el Where el.Name = "PropertyOverrides").FirstOrDefault.Value)
-                PropertyOverrides = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(OnitUtilities.GetFilteredXElementsEnumerable (data,  "PropertyOverrides").FirstOrDefault.Value)
-
+                PropertyOverrides = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))((From el As XElement In data Select el Where el.Name = "PropertyOverrides").FirstOrDefault.Value)
             Catch ex As Exception
             End Try
 
@@ -11262,10 +11187,9 @@ Final3:
                     Try
                         Dim pp As PengRobinsonPropertyPackage = Me
                         'pp.m_pr.InteractionParameters.Clear()
-                        'For Each xel As XElement In (From xel2 As XElement In data Select xel2 Where xel2.Name = "InteractionParameters").FirstOrDefault.Elements.ToList
-                        For Each xel As XElement In OnitUtilities.GetFilteredXElementsEnumerable (data, "InteractionParameters").FirstOrDefault.Elements'.ToList
-                            Dim ip As New Auxiliary.PR_IPData() With {.kij = xel.@Value.ToDoubleFromInvariant}
-                            Dim dic As New Dictionary(Of String, Auxiliary.PR_IPData)(StringComparer.Ordinal)
+                        For Each xel As XElement In (From xel2 As XElement In data Select xel2 Where xel2.Name = "InteractionParameters").FirstOrDefault.Elements.ToList
+                            Dim ip As New Auxiliary.PR_IPData() With {.kij = Double.Parse(xel.@Value, ci)}
+                            Dim dic As New Dictionary(Of String, Auxiliary.PR_IPData)
                             dic.Add(xel.@Compound2, ip)
                             If Not pp.m_pr.InteractionParameters.ContainsKey(xel.@Compound1) Then
                                 pp.m_pr.InteractionParameters.Add(xel.@Compound1, dic)
@@ -11285,10 +11209,9 @@ Final3:
 
                     Dim pp As PRSV2PropertyPackage = Me
                     'pp.m_pr.InteractionParameters.Clear()
-                    'For Each xel As XElement In (From xel2 As XElement In data Select xel2 Where xel2.Name = "InteractionParameters").FirstOrDefault.Elements.ToList
-                    For Each xel As XElement In OnitUtilities.GetFilteredXElementsEnumerable (data,  "InteractionParameters").FirstOrDefault.Elements'.ToList
+                    For Each xel As XElement In (From xel2 As XElement In data Select xel2 Where xel2.Name = "InteractionParameters").FirstOrDefault.Elements.ToList
                         Dim ip As New Auxiliary.PRSV2_IPData() With {.id1 = xel.@Compound1, .id2 = xel.@Compound2, .kij = Double.Parse(xel.@Value, ci)}
-                        Dim dic As New Dictionary(Of String, Auxiliary.PRSV2_IPData)(StringComparer.Ordinal)
+                        Dim dic As New Dictionary(Of String, Auxiliary.PRSV2_IPData)
                         dic.Add(xel.@Compound2, ip)
                         If Not pp.m_pr.InteractionParameters.ContainsKey(xel.@Compound1) Then
                             pp.m_pr.InteractionParameters.Add(xel.@Compound1, dic)
@@ -11305,10 +11228,9 @@ Final3:
 
                     Dim pp As PRSV2VLPropertyPackage = Me
                     'pp.m_pr.InteractionParameters.Clear()
-                    'For Each xel As XElement In (From xel2 As XElement In data Select xel2 Where xel2.Name = "InteractionParameters").FirstOrDefault.Elements.ToList
-                    For Each xel As XElement In OnitUtilities.GetFilteredXElementsEnumerable (data, "InteractionParameters").FirstOrDefault.Elements'.ToList
+                    For Each xel As XElement In (From xel2 As XElement In data Select xel2 Where xel2.Name = "InteractionParameters").FirstOrDefault.Elements.ToList
                         Dim ip As New Auxiliary.PRSV2_IPData() With {.id1 = xel.@Compound1, .id2 = xel.@Compound2, .kij = Double.Parse(xel.@kij, ci), .kji = Double.Parse(xel.@kji, ci)}
-                        Dim dic As New Dictionary(Of String, Auxiliary.PRSV2_IPData)(StringComparer.Ordinal)
+                        Dim dic As New Dictionary(Of String, Auxiliary.PRSV2_IPData)
                         dic.Add(xel.@Compound2, ip)
                         If Not pp.m_pr.InteractionParameters.ContainsKey(xel.@Compound1) Then
                             pp.m_pr.InteractionParameters.Add(xel.@Compound1, dic)
@@ -11326,10 +11248,9 @@ Final3:
                     Try
                         Dim pp As SRKPropertyPackage = Me
                         'pp.m_pr.InteractionParameters.Clear()
-                        'For Each xel As XElement In (From xel2 As XElement In data Select xel2 Where xel2.Name = "InteractionParameters").FirstOrDefault.Elements.ToList
-                        For Each xel As XElement In OnitUtilities.GetFilteredXElementsEnumerable (data,  "InteractionParameters").FirstOrDefault.Elements'.ToList
-                            Dim ip As New Auxiliary.PR_IPData() With {.kij = xel.@Value.ToDoubleFromInvariant}
-                            Dim dic As New Dictionary(Of String, Auxiliary.PR_IPData)(StringComparer.Ordinal)
+                        For Each xel As XElement In (From xel2 As XElement In data Select xel2 Where xel2.Name = "InteractionParameters").FirstOrDefault.Elements.ToList
+                            Dim ip As New Auxiliary.PR_IPData() With {.kij = Double.Parse(xel.@Value, ci)}
+                            Dim dic As New Dictionary(Of String, Auxiliary.PR_IPData)
                             dic.Add(xel.@Compound2, ip)
                             If Not pp.m_pr.InteractionParameters.ContainsKey(xel.@Compound1) Then
                                 pp.m_pr.InteractionParameters.Add(xel.@Compound1, dic)
@@ -11349,10 +11270,9 @@ Final3:
 
                     Dim pp As PengRobinsonLKPropertyPackage = Me
                     'pp.m_pr.InteractionParameters.Clear()
-                    'For Each xel As XElement In (From xel2 As XElement In data Select xel2 Where xel2.Name = "InteractionParameters").FirstOrDefault.Elements.ToList
-                    For Each xel As XElement In OnitUtilities.GetFilteredXElementsEnumerable (data,  "InteractionParameters").FirstOrDefault.Elements'.ToList
-                        Dim ip As New Auxiliary.PR_IPData() With {.kij = xel.@Value.ToDoubleFromInvariant}
-                        Dim dic As New Dictionary(Of String, Auxiliary.PR_IPData)(StringComparer.Ordinal)
+                    For Each xel As XElement In (From xel2 As XElement In data Select xel2 Where xel2.Name = "InteractionParameters").FirstOrDefault.Elements.ToList
+                        Dim ip As New Auxiliary.PR_IPData() With {.kij = Double.Parse(xel.@Value, ci)}
+                        Dim dic As New Dictionary(Of String, Auxiliary.PR_IPData)
                         dic.Add(xel.@Compound2, ip)
                         If Not pp.m_pr.InteractionParameters.ContainsKey(xel.@Compound1) Then
                             pp.m_pr.InteractionParameters.Add(xel.@Compound1, dic)
@@ -11372,7 +11292,7 @@ Final3:
                     'pp.m_pr.InteractionParameters.Clear()
                     For Each xel As XElement In (From xel2 As XElement In data Select xel2 Where xel2.Name = "InteractionParameters").FirstOrDefault.Elements.ToList
                         Dim ip As New Auxiliary.PR_IPData() With {.kij = Double.Parse(xel.@Value, ci)}
-                        Dim dic As New Dictionary(Of String, Auxiliary.PR_IPData)(StringComparer.Ordinal)
+                        Dim dic As New Dictionary(Of String, Auxiliary.PR_IPData)
                         dic.Add(xel.@Compound2, ip)
                         If Not pp.m_pr.InteractionParameters.ContainsKey(xel.@Compound1) Then
                             pp.m_pr.InteractionParameters.Add(xel.@Compound1, dic)
@@ -11391,7 +11311,7 @@ Final3:
                     'pp.m_pr.InteractionParameters.Clear()
                     For Each xel As XElement In (From xel2 As XElement In data Select xel2 Where xel2.Name = "InteractionParameters").FirstOrDefault.Elements.ToList
                         Dim ip As New Auxiliary.PR_IPData() With {.kij = Double.Parse(xel.@Value, ci)}
-                        Dim dic As New Dictionary(Of String, Auxiliary.PR_IPData)(StringComparer.Ordinal)
+                        Dim dic As New Dictionary(Of String, Auxiliary.PR_IPData)
                         dic.Add(xel.@Compound2, ip)
                         If Not pp.m_pr.InteractionParameters.ContainsKey(xel.@Compound1) Then
                             pp.m_pr.InteractionParameters.Add(xel.@Compound1, dic)
@@ -11411,7 +11331,7 @@ Final3:
                         'pp.m_pr.InteractionParameters.Clear()
                         For Each xel As XElement In (From xel2 As XElement In data Select xel2 Where xel2.Name = "InteractionParameters_PR").FirstOrDefault.Elements.ToList
                             Dim ip As New Auxiliary.PR_IPData() With {.kij = Double.Parse(xel.@Value, ci)}
-                            Dim dic As New Dictionary(Of String, Auxiliary.PR_IPData)(StringComparer.Ordinal)
+                            Dim dic As New Dictionary(Of String, Auxiliary.PR_IPData)
                             dic.Add(xel.@Compound2, ip)
                             If Not pp.m_pr.InteractionParameters.ContainsKey(xel.@Compound1) Then
                                 pp.m_pr.InteractionParameters.Add(xel.@Compound1, dic)
@@ -11430,7 +11350,7 @@ Final3:
                                                                         .B12 = Double.Parse(xel.@B12, ci), .B21 = Double.Parse(xel.@B21, ci),
                                                                         .C12 = Double.Parse(xel.@C12, ci), .C21 = Double.Parse(xel.@C21, ci),
                                                                         .alpha12 = Double.Parse(xel.@alpha12, ci)}
-                            Dim dic As New Dictionary(Of String, Auxiliary.NRTL_IPData)(StringComparer.Ordinal)
+                            Dim dic As New Dictionary(Of String, Auxiliary.NRTL_IPData)
                             dic.Add(xel.@Compound2, ip)
                             If Not pp.m_uni.InteractionParameters.ContainsKey(xel.@Compound1) Then
                                 pp.m_uni.InteractionParameters.Add(xel.@Compound1, dic)
@@ -11454,8 +11374,8 @@ Final3:
 
                         'pp.m_pr.InteractionParameters.Clear()
                         For Each xel As XElement In (From xel2 As XElement In data Select xel2 Where xel2.Name = "InteractionParameters_PR").FirstOrDefault.Elements.ToList
-                            Dim ip As New Auxiliary.PR_IPData() With {.kij = xel.@Value.ToDoubleFromInvariant}
-                            Dim dic As New Dictionary(Of String, Auxiliary.PR_IPData)(StringComparer.Ordinal)
+                            Dim ip As New Auxiliary.PR_IPData() With {.kij = Double.Parse(xel.@Value, ci)}
+                            Dim dic As New Dictionary(Of String, Auxiliary.PR_IPData)
                             dic.Add(xel.@Compound2, ip)
                             If Not pp.m_pr.InteractionParameters.ContainsKey(xel.@Compound1) Then
                                 pp.m_pr.InteractionParameters.Add(xel.@Compound1, dic)
@@ -11473,7 +11393,7 @@ Final3:
                             Dim ip As New Auxiliary.UNIQUAC_IPData() With {.ID1 = xel.@ID1, .ID2 = xel.@ID2, .A12 = Double.Parse(xel.@A12, ci), .A21 = Double.Parse(xel.@A21, ci),
                                                                            .B12 = Double.Parse(xel.@B12, ci), .B21 = Double.Parse(xel.@B21, ci),
                                                                            .C12 = Double.Parse(xel.@C12, ci), .C21 = Double.Parse(xel.@C21, ci)}
-                            Dim dic As New Dictionary(Of String, Auxiliary.UNIQUAC_IPData)(StringComparer.Ordinal)
+                            Dim dic As New Dictionary(Of String, Auxiliary.UNIQUAC_IPData)
                             dic.Add(xel.@Compound2, ip)
                             If Not pp.m_uni.InteractionParameters.ContainsKey(xel.@Compound1) Then
                                 pp.m_uni.InteractionParameters.Add(xel.@Compound1, dic)
@@ -11495,8 +11415,8 @@ Final3:
                     Dim pp As MODFACPropertyPackage = Me
                     'pp.m_pr.InteractionParameters.Clear()
                     For Each xel As XElement In (From xel2 As XElement In data Select xel2 Where xel2.Name = "InteractionParameters").FirstOrDefault.Elements.ToList
-                        Dim ip As New Auxiliary.PR_IPData() With {.kij = xel.@Value.ToDoubleFromInvariant}
-                        Dim dic As New Dictionary(Of String, Auxiliary.PR_IPData)(StringComparer.Ordinal)
+                        Dim ip As New Auxiliary.PR_IPData() With {.kij = Double.Parse(xel.@Value, ci)}
+                        Dim dic As New Dictionary(Of String, Auxiliary.PR_IPData)
                         dic.Add(xel.@Compound2, ip)
                         If Not pp.m_pr.InteractionParameters.ContainsKey(xel.@Compound1) Then
                             pp.m_pr.InteractionParameters.Add(xel.@Compound1, dic)
@@ -11515,14 +11435,13 @@ Final3:
                         Dim pp As LKPPropertyPackage = Me
                         'pp.m_pr.InteractionParameters.Clear()
 
-                        'Dim el = (From xel2 As XElement In data Select xel2 Where xel2.Name = "InteractionParameters").FirstOrDefault
-                        Dim el = OnitUtilities.GetFilteredXElementsEnumerable (data, "InteractionParameters").FirstOrDefault
+                        Dim el = (From xel2 As XElement In data Select xel2 Where xel2.Name = "InteractionParameters").FirstOrDefault
 
                         If Not el Is Nothing Then
-                            
-                            For Each xel As XElement In el.Elements'.ToList
-                                Dim ip As New Auxiliary.LKP_IPData() With {.kij = xel.@Value.ToDoubleFromInvariant}
-                                Dim dic As New Dictionary(Of String, Auxiliary.LKP_IPData)(StringComparer.Ordinal)
+
+                            For Each xel As XElement In el.Elements.ToList
+                                Dim ip As New Auxiliary.LKP_IPData() With {.kij = Double.Parse(xel.@Value, ci)}
+                                Dim dic As New Dictionary(Of String, Auxiliary.LKP_IPData)
                                 dic.Add(xel.@Compound2, ip)
                                 If Not pp.m_lk.InteractionParameters.ContainsKey(xel.@Compound1) Then
                                     pp.m_lk.InteractionParameters.Add(xel.@Compound1, dic)

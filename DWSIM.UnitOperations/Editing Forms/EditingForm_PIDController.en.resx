@@ -235,9 +235,6 @@
   <data name="GroupBox1.Text" xml:space="preserve">
     <value>Linked Objects</value>
   </data>
-  <data name="GroupBox5.Text" xml:space="preserve">
-    <value>General Info</value>
-  </data>
   <data name="lblTag.Location" type="System.Drawing.Point, System.Drawing">
     <value>129, 19</value>
   </data>
@@ -253,8 +250,17 @@
   <data name="Label11.Text" xml:space="preserve">
     <value>Name</value>
   </data>
+  <data name="GroupBox5.Text" xml:space="preserve">
+    <value>General Info</value>
+  </data>
   <data name="GroupBox4.Text" xml:space="preserve">
     <value>Notes</value>
+  </data>
+  <data name="Label18.Size" type="System.Drawing.Size, System.Drawing">
+    <value>81, 13</value>
+  </data>
+  <data name="Label18.Text" xml:space="preserve">
+    <value>Wind-Up Guard</value>
   </data>
   <data name="chkReverse.Size" type="System.Drawing.Size, System.Drawing">
     <value>99, 17</value>
@@ -300,6 +306,13 @@
   </data>
   <data name="GroupBox2.Text" xml:space="preserve">
     <value>Parameters</value>
+  </data>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>96, 96</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="$this.AutoScroll" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
     <value>EditingForm_PIDController2</value>

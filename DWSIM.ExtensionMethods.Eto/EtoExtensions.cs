@@ -104,7 +104,7 @@ namespace DWSIM.UI.Shared
 
         public static Form GetDefaultTabbedForm(string title, int width, int height, Control[] contents)
         {
-            List<TabPage> tabs = new List<TabPage>();
+            List<DocumentPage> tabs = new List<DocumentPage>();
 
             foreach (var content in contents)
             {
@@ -115,7 +115,7 @@ namespace DWSIM.UI.Shared
                     dyncontent.EndVertical();
                     dyncontent.Width = width - dyncontent.Padding.Value.Left * 2 - dyncontent.Padding.Value.Right * 2;
                 }
-                tabs.Add(new TabPage(new Scrollable { Content = content, Border = BorderType.None }) { Text = (string)content.Tag });
+                tabs.Add(new DocumentPage(new Scrollable { Content = content, Border = BorderType.None }) { Text = (string)content.Tag, Closable = false });
             }
 
             var form = new Form()
@@ -130,7 +130,7 @@ namespace DWSIM.UI.Shared
                 //Resizable = true
             };
 
-            var tabctrl = new TabControl();
+            var tabctrl = new DocumentControl { DisplayArrows = false, AllowReordering = true };
             foreach (var tab in tabs)
             {
                 tabctrl.Pages.Add(tab);
@@ -808,7 +808,7 @@ namespace DWSIM.UI.Shared
         {
 
             var txt = new Label { Text = text1, VerticalAlignment = VerticalAlignment.Center };
-            txt.Font = new Font(SystemFont.Default, GetEditorFontSize());
+            txt.Font = new Font(SystemFont.Bold, GetEditorFontSize());
             var txt2 = new Label { Text = text2, Width = (int)(sf * 140), VerticalAlignment = VerticalAlignment.Center };
             txt2.Font = new Font(SystemFont.Default, GetEditorFontSize());
 
@@ -843,8 +843,8 @@ namespace DWSIM.UI.Shared
         public static Label CreateAndAddTwoLabelsRow2(this DynamicLayout container, String text1, String text2)
         {
 
-            var txt = new Label { Text = text1, VerticalAlignment = VerticalAlignment.Center, Font = SystemFonts.Bold(null, FontDecoration.None) };
-            txt.Font = new Font(SystemFont.Default, GetEditorFontSize());
+            var txt = new Label { Text = text1, VerticalAlignment = VerticalAlignment.Center  };
+            txt.Font = new Font(SystemFont.Bold, GetEditorFontSize());
             var txt2 = new Label { Text = text2, Width = (int)(sf * 350), VerticalAlignment = VerticalAlignment.Center };
             txt2.Font = new Font(SystemFont.Default, GetEditorFontSize());
 
@@ -910,7 +910,7 @@ namespace DWSIM.UI.Shared
             txt.Font = new Font(SystemFont.Default, GetEditorFontSize());
             var btn = new Button { Text = buttonlabel };
             btn.Font = new Font(SystemFont.Default, DWSIM.UI.Shared.Common.GetEditorFontSize());
-            if (GlobalSettings.Settings.EditorTextBoxFixedSize) btn.Width = (int)(sf * 140);
+            if (GlobalSettings.Settings.EditorTextBoxFixedSize) btn.Width = (int)(sf * 300);
             if (Eto.Forms.Application.Instance.Platform.IsGtk)
             {
                 btn.Height = (int)(sf * 28);
@@ -937,7 +937,7 @@ namespace DWSIM.UI.Shared
             txt.Font = new Font(SystemFont.Default, GetEditorFontSize());
             var btn = new Button { Text = buttonlabel };
             btn.Font = new Font(SystemFont.Default, DWSIM.UI.Shared.Common.GetEditorFontSize());
-            if (GlobalSettings.Settings.EditorTextBoxFixedSize) btn.Width = (int)(sf * 140);
+            if (GlobalSettings.Settings.EditorTextBoxFixedSize) btn.Width = (int)(sf * 240);
             if (Eto.Forms.Application.Instance.Platform.IsGtk)
             {
                 btn.Height = (int)(sf * 28);
@@ -1027,6 +1027,33 @@ namespace DWSIM.UI.Shared
 
         }
 
+        public static TextBox CreateAndAddLabelAndTextBoxAndButtonRow2(this DynamicLayout container, String label, String textboxvalue, String buttonlabel, String imageResID, Action<TextBox, EventArgs> txteditcommand, Action<Button, EventArgs> command)
+        {
+
+            var txt = new Label { Text = label, VerticalAlignment = VerticalAlignment.Center };
+            txt.Font = new Font(SystemFont.Bold, GetEditorFontSize());
+            var tbox = new TextBox { Width = 120, Text = textboxvalue };
+            tbox.Font = new Font(SystemFont.Default, GetEditorFontSize());
+            var btn = new Button { Width = 80, Text = buttonlabel };
+
+            if (imageResID != null) btn.Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imageResID), 22, 22, ImageInterpolation.Default);
+
+            if (txteditcommand != null) tbox.TextChanged += (sender, e) => txteditcommand.Invoke((TextBox)sender, e);
+            if (command != null) btn.Click += (sender, e) => command.Invoke((Button)sender, e);
+
+            var tr = new TableRow(txt, GetPlaceHolderLabel(), null, tbox, GetPlaceHolderLabel(), btn);
+
+            tr.Cells[2].ScaleWidth = true;
+
+            container.AddRow(tr);
+            container.CreateAndAddEmptySpace();
+
+            return tbox;
+
+
+        }
+
+
         public static TableRow CreateAndAddTextBoxAndTwoButtonsRow(this DynamicLayout container, String label, String buttonlabel, String imageResID, String buttonlabel2, String imageResID2, Action<TextBox, EventArgs> command0, Action<Button, EventArgs> command, Action<Button, EventArgs> command2)
         {
 
@@ -1068,10 +1095,10 @@ namespace DWSIM.UI.Shared
             if (command3 != null) btn3.Click += (sender, e) => command3.Invoke((Button)sender, e);
 
             var tr = new TableRow(txt, GetPlaceHolderLabel(), null, btn, GetPlaceHolderLabel(), btn2, GetPlaceHolderLabel(), btn3);
-            if (Application.Instance.Platform.IsMac)
-            {
-                txt.Height = (int)(sf * 28);
-            }
+            //if (Application.Instance.Platform.IsMac)
+            //{
+            //    txt.Height = (int)(sf * 28);
+            //}
             container.AddRow(tr);
             container.CreateAndAddEmptySpace();
             return tr;
@@ -1085,6 +1112,11 @@ namespace DWSIM.UI.Shared
             var btn2 = new Button { Width = (int)(sf * 100), Text = buttonlabel2 };
             btn.Font = new Font(SystemFont.Default, GetEditorFontSize());
             btn2.Font = new Font(SystemFont.Default, GetEditorFontSize());
+            if (Eto.Forms.Application.Instance.Platform.IsGtk)
+            {
+                btn.Height = (int)(sf * 28);
+                btn2.Height = (int)(sf * 28);
+            }
 
             if (imageResID != null) btn.Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imageResID), (int)(sf * 22), (int)(sf * 22), ImageInterpolation.Default);
             if (imageResID2 != null) btn.Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imageResID2), (int)(sf * 22), (int)(sf * 22), ImageInterpolation.Default);
@@ -1108,10 +1140,10 @@ namespace DWSIM.UI.Shared
             var btn2 = new Button { Text = buttonlabel2 };
 
             btn.Font = new Font(SystemFont.Default, GetEditorFontSize());
-            if (GlobalSettings.Settings.EditorTextBoxFixedSize) btn.Width = (int)(sf * 100);
+            if (GlobalSettings.Settings.EditorTextBoxFixedSize) btn.Width = (int)(sf * 120);
 
             btn2.Font = new Font(SystemFont.Default, GetEditorFontSize());
-            if (GlobalSettings.Settings.EditorTextBoxFixedSize) btn2.Width = (int)(sf * 100);
+            if (GlobalSettings.Settings.EditorTextBoxFixedSize) btn2.Width = (int)(sf * 120);
 
             if (imageResID != null) btn.Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imageResID), (int)(sf * 22), (int)(sf * 22), ImageInterpolation.Default);
             if (imageResID2 != null) btn.Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imageResID2), (int)(sf * 22), (int)(sf * 22), ImageInterpolation.Default);

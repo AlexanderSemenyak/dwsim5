@@ -124,7 +124,6 @@ namespace DWSIM.UI
                 {
                     LoadSimulation(dialog.FileName);
                 }
-
             };
 
             link1.Click += (sender, e) =>
@@ -162,10 +161,15 @@ namespace DWSIM.UI
             ppatreon.Add(new Label { Size = lsize, Font = regularfont, Wrap = WrapMode.Word, Text = "Become a Patron and get access to exclusive Unit Operations, Property Packages and Plugins/Add-Ins!" }, dx2, dy2 * 2 + bfh);
             var img4 = new ImageView { Size = psize, Image = new Bitmap(Bitmap.FromResource(imgprefix + "Patreon_Navy.jpg")) };
             ppatreon.Add(img4, (int)(400 * sf), 0);
-            var link4 = new LinkButton { Text = "Go to Patreon.com/DWSIM", Width = (int)(250 * sf), Font = boldfont2 };
+            var link4 = new LinkButton { Text = "Support the Project", Width = (int)(140 * sf), Font = boldfont2 };
             ppatreon.Add(link4, dx2, (int)(100 * sf - rfh - dy));
+            var bwidth = 70;
+            if (Application.Instance.Platform.IsGtk) bwidth = 140;
+            var link4a = new LinkButton { Text = "Get Benefits", Width = bwidth, Font = boldfont2, BackgroundColor = Colors.DodgerBlue, TextColor = Colors.White };
+            ppatreon.Add(link4a, dx2 + (int)(150 * sf), (int)(100 * sf - rfh - dy));
 
             link4.Click += (sender, e) => "https://patreon.com/dwsim".OpenURL();
+            link4a.Click += (sender, e) => "https://www.patreon.com/join/dwsim?".OpenURL();
 
             abslayout.Add(ppatreon, dx, dy * 4 + bfh + 2 * (int)(100 * sf));
 
@@ -174,17 +178,23 @@ namespace DWSIM.UI
             pdocs.Add(new Label { Size = lsize, Font = regularfont, Wrap = WrapMode.Word, Text = "View DWSIM's User Guide in PDF format." }, dx2, dy2 * 2 + bfh);
             var img5 = new ImageView { Size = psize, Image = new Bitmap(Bitmap.FromResource(imgprefix + "icons8-books.png")) };
             pdocs.Add(img5, (int)(400 * sf), 0);
-            var link5 = new LinkButton { Text = "View the User Guide", Width = (int)(140 * sf), Font = boldfont2 };
+            var link5 = new LinkButton { Text = "User Guide", Width = (int)(140 * sf), Font = boldfont2 };
             pdocs.Add(link5, dx2, (int)(100 * sf - rfh - dy));
-            var link6 = new LinkButton { Text = "Online Help", Width = (int)(140 * sf), Font = boldfont2 };
+            var link6 = new LinkButton { Text = "Learning Resources", Width = (int)(140 * sf), Font = boldfont2 };
             pdocs.Add(link6, dx2 + (int)(150 * sf), (int)(100 * sf - rfh - dy));
 
-            link6.Click += (sender, e) => "http://dwsim.inforside.com.br".OpenURL();
+            link6.Click += (sender, e) => "http://dwsim.inforside.com.br/wiki/index.php?title=Tutorials".OpenURL();
 
             link5.Click += (sender, e) =>
             {
                 var basepath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                Process.Start(basepath + Path.DirectorySeparatorChar + "docs" + Path.DirectorySeparatorChar + "user_guide.pdf");
+                try
+                {
+                    Process.Start(basepath + Path.DirectorySeparatorChar + "docs" + Path.DirectorySeparatorChar + "user_guide.pdf");
+                }
+                catch (Exception ex) {
+                    MessageBox.Show(ex.Message, "Error opening User Guide", MessageBoxButtons.OK, MessageBoxType.Error, MessageBoxDefaultButton.OK);
+                }
             };
 
             abslayout.Add(pdocs, dx, dy * 5 + bfh + 3 * (int)(100 * sf));
@@ -292,7 +302,7 @@ namespace DWSIM.UI
             catch
             { }
 
-            foreach (var item in samplist)
+            foreach (var item in samplist.OrderBy((x) => Path.GetFileNameWithoutExtension(x)))
             {
                 if (File.Exists(item)) SampleList.Items.Add(new ListItem { Text = Path.GetFileNameWithoutExtension(item), Key = item });
             }

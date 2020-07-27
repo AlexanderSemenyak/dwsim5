@@ -152,7 +152,10 @@ Namespace GraphicObjects.Tables
 
                     props.AddRange(DirectCast(Owner.ExtraProperties, IDictionary(Of String, Object)).Keys.ToArray)
 
-                    If Owner.GraphicObject.ObjectType = Enums.GraphicObjects.ObjectType.CapeOpenUO Then props = Owner.GetProperties(PropertyType.ALL).ToList
+                    If Owner.GraphicObject.ObjectType = Enums.GraphicObjects.ObjectType.CapeOpenUO Or
+                        Owner.GraphicObject.ObjectType = Enums.GraphicObjects.ObjectType.External Then
+                        props = Owner.GetProperties(PropertyType.ALL).ToList()
+                    End If
 
                     Dim propstoremove As New List(Of String)
 

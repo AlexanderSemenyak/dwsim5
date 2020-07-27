@@ -1,6 +1,6 @@
 ﻿==================================================
 DWSIM - Open Source Process Simulator
-Version 6.0
+Version 6.0 Update 7
 Copyright (c) 2017-2020 Daniel Medeiros
 Copyright (c) 2008-2016 Daniel Medeiros, Gregor Reichert, Gustavo Leon
 ==================================================
@@ -34,7 +34,7 @@ macOS: 10.7 (OS X Lion) or newer
 Software:
 
 Microsoft .NET Framework 4.6.1 or newer (Windows) 
-Mono Framework 5.14.0 or newer (Linux)
+Mono Framework 6.8.0 or newer (Linux)
 
 CPU:			
 
@@ -61,6 +61,50 @@ VERSION HISTORY / CHANGELOG
 ==================================================
 
 The full changelog, including code changes and their authors can be viewed at https://github.com/DanWBR/dwsim5/commits/windows
+
+Version 6.0 Update 7
+
+- [FIX] Bug fixes and adjustments
+
+Version 6.0 Update 6
+
+- [FIX] Fixed a bug in Dynamic Mode
+- [FIX] Other fixes and enhancements
+
+Version 6.0 Update 5
+
+- [NEW] Added new Automation interface (Automation2), works on Linux and macOS
+- [FIX] Fixed Energy Stream editor (Classic UI)
+- [FIX] Fixed a bug with Black Oil Property Package
+- [FIX] Fixed Compound Creator's Liquid Cp regression (Classic UI)
+- [FIX] Fixed PFD definition on macOS when using CPU Renderer
+- [FIX] Other fixes and enhancements
+
+Version 6.0 Update 4
+
+- [FIX] Fixed default units for Cp, Cv and entropy (Excel Add-In)
+- [FIX] Fixed Material Stream editor not showing the Dynamic Spec tab (CPUI)
+- [FIX] Fixed/Updated some dynamic models
+
+Version 6.0 Update 3
+
+- [NEW] Dynamic Models for CSTR and PFR
+- [NEW] Added Search Box to Cross-Platform UI PFD
+- [FIX] Bug fixes and enhancements
+
+Version 6.0 Update 2
+
+- [NEW] Dynamic Model for Heat Exchanger
+- [NEW] PID Controller Wind-Up Guard
+- [NEW] Dynamic Integrator flowsheet charts for Monitored Variables
+- [FIX] Bug fixes and enhancements
+
+Version 6.0 Update 1
+
+- [NEW] Added a Real-Time Step Duration property to Dynamic Integrator
+- [FIX] Fixed PID Controller Manual Mode
+- [FIX] Fixed Material Stream editor issues when in Dynamic Mode
+- [FIX] Other fixes
 
 Version 6.0
 

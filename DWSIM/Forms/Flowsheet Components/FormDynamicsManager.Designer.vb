@@ -22,19 +22,19 @@ Partial Class FormDynamicsManager
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormDynamicsManager))
-        Dim DataGridViewCellStyle14 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle15 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle16 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle17 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle18 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle19 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle20 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle21 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle22 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle23 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle24 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle26 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle25 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle7 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle8 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle9 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle10 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle11 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle13 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle12 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
         Me.Label12 = New System.Windows.Forms.Label()
@@ -96,6 +96,8 @@ Partial Class FormDynamicsManager
         Me.panelSelIntegrator = New System.Windows.Forms.Panel()
         Me.TabControl2 = New System.Windows.Forms.TabControl()
         Me.TabPage5 = New System.Windows.Forms.TabPage()
+        Me.Label14 = New System.Windows.Forms.Label()
+        Me.nupRTStep = New System.Windows.Forms.NumericUpDown()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.dtpIntegratorDuration = New System.Windows.Forms.DateTimePicker()
         Me.Label1 = New System.Windows.Forms.Label()
@@ -168,6 +170,7 @@ Partial Class FormDynamicsManager
         Me.Button1 = New System.Windows.Forms.Button()
         Me.lblStatus = New System.Windows.Forms.Label()
         Me.chkDynamics = New System.Windows.Forms.CheckBox()
+        Me.Label13 = New System.Windows.Forms.Label()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         CType(Me.pbUnitOps, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -192,6 +195,7 @@ Partial Class FormDynamicsManager
         Me.panelSelIntegrator.SuspendLayout()
         Me.TabControl2.SuspendLayout()
         Me.TabPage5.SuspendLayout()
+        CType(Me.nupRTStep, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nupCalcControlFreq, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nupCalcBalFreq, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.nupCalcEqFreq, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -229,13 +233,13 @@ Partial Class FormDynamicsManager
         '
         'TabPage1
         '
-        resources.ApplyResources(Me.TabPage1, "TabPage1")
         Me.TabPage1.Controls.Add(Me.Label12)
         Me.TabPage1.Controls.Add(Me.pbUnitOps)
         Me.TabPage1.Controls.Add(Me.Label11)
         Me.TabPage1.Controls.Add(Me.pbValves)
         Me.TabPage1.Controls.Add(Me.Label10)
         Me.TabPage1.Controls.Add(Me.pbStreamValves)
+        resources.ApplyResources(Me.TabPage1, "TabPage1")
         Me.TabPage1.Name = "TabPage1"
         Me.TabPage1.UseVisualStyleBackColor = True
         '
@@ -246,8 +250,8 @@ Partial Class FormDynamicsManager
         '
         'pbUnitOps
         '
-        resources.ApplyResources(Me.pbUnitOps, "pbUnitOps")
         Me.pbUnitOps.Image = Global.DWSIM.My.Resources.Resources.icons8_ok
+        resources.ApplyResources(Me.pbUnitOps, "pbUnitOps")
         Me.pbUnitOps.Name = "pbUnitOps"
         Me.pbUnitOps.TabStop = False
         '
@@ -258,8 +262,8 @@ Partial Class FormDynamicsManager
         '
         'pbValves
         '
-        resources.ApplyResources(Me.pbValves, "pbValves")
         Me.pbValves.Image = Global.DWSIM.My.Resources.Resources.icons8_ok
+        resources.ApplyResources(Me.pbValves, "pbValves")
         Me.pbValves.Name = "pbValves"
         Me.pbValves.TabStop = False
         '
@@ -270,16 +274,16 @@ Partial Class FormDynamicsManager
         '
         'pbStreamValves
         '
-        resources.ApplyResources(Me.pbStreamValves, "pbStreamValves")
         Me.pbStreamValves.Image = Global.DWSIM.My.Resources.Resources.icons8_ok
+        resources.ApplyResources(Me.pbStreamValves, "pbStreamValves")
         Me.pbStreamValves.Name = "pbStreamValves"
         Me.pbStreamValves.TabStop = False
         '
         'TabPage3
         '
-        resources.ApplyResources(Me.TabPage3, "TabPage3")
         Me.TabPage3.Controls.Add(Me.GroupBox1)
         Me.TabPage3.Controls.Add(Me.GroupBox2)
+        resources.ApplyResources(Me.TabPage3, "TabPage3")
         Me.TabPage3.Name = "TabPage3"
         Me.TabPage3.UseVisualStyleBackColor = True
         '
@@ -293,10 +297,10 @@ Partial Class FormDynamicsManager
         '
         'gridselectedset
         '
-        resources.ApplyResources(Me.gridselectedset, "gridselectedset")
         Me.gridselectedset.AllowUserToAddRows = False
         Me.gridselectedset.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells
         Me.gridselectedset.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.id, Me.active, Me.itemname, Me.coleventstamp, Me.coleventtype, Me.associatedobject, Me.associatedproperty, Me.failsafevalue, Me.unit})
+        resources.ApplyResources(Me.gridselectedset, "gridselectedset")
         Me.gridselectedset.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter
         Me.gridselectedset.Name = "gridselectedset"
         Me.gridselectedset.RowHeadersVisible = False
@@ -322,10 +326,10 @@ Partial Class FormDynamicsManager
         '
         'coleventstamp
         '
-        DataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle14.Format = "T"
-        DataGridViewCellStyle14.NullValue = "00:00:00"
-        Me.coleventstamp.DefaultCellStyle = DataGridViewCellStyle14
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle1.Format = "T"
+        DataGridViewCellStyle1.NullValue = "00:00:00"
+        Me.coleventstamp.DefaultCellStyle = DataGridViewCellStyle1
         Me.coleventstamp.FillWeight = 30.0!
         resources.ApplyResources(Me.coleventstamp, "coleventstamp")
         Me.coleventstamp.Name = "coleventstamp"
@@ -352,8 +356,8 @@ Partial Class FormDynamicsManager
         '
         'failsafevalue
         '
-        DataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.failsafevalue.DefaultCellStyle = DataGridViewCellStyle15
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.failsafevalue.DefaultCellStyle = DataGridViewCellStyle2
         Me.failsafevalue.FillWeight = 54.21845!
         resources.ApplyResources(Me.failsafevalue, "failsafevalue")
         Me.failsafevalue.Name = "failsafevalue"
@@ -367,29 +371,29 @@ Partial Class FormDynamicsManager
         '
         'ToolStrip2
         '
-        resources.ApplyResources(Me.ToolStrip2, "ToolStrip2")
         Me.ToolStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.btnAddEvent, Me.btnCopyEvent, Me.btnRemoveEvent})
+        resources.ApplyResources(Me.ToolStrip2, "ToolStrip2")
         Me.ToolStrip2.Name = "ToolStrip2"
         '
         'btnAddEvent
         '
-        resources.ApplyResources(Me.btnAddEvent, "btnAddEvent")
         Me.btnAddEvent.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.btnAddEvent.Image = Global.DWSIM.My.Resources.Resources.add
+        resources.ApplyResources(Me.btnAddEvent, "btnAddEvent")
         Me.btnAddEvent.Name = "btnAddEvent"
         '
         'btnCopyEvent
         '
-        resources.ApplyResources(Me.btnCopyEvent, "btnCopyEvent")
         Me.btnCopyEvent.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.btnCopyEvent.Image = Global.DWSIM.My.Resources.Resources.copy
+        resources.ApplyResources(Me.btnCopyEvent, "btnCopyEvent")
         Me.btnCopyEvent.Name = "btnCopyEvent"
         '
         'btnRemoveEvent
         '
-        resources.ApplyResources(Me.btnRemoveEvent, "btnRemoveEvent")
         Me.btnRemoveEvent.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.btnRemoveEvent.Image = Global.DWSIM.My.Resources.Resources.cross
+        resources.ApplyResources(Me.btnRemoveEvent, "btnRemoveEvent")
         Me.btnRemoveEvent.Name = "btnRemoveEvent"
         '
         'GroupBox2
@@ -402,7 +406,6 @@ Partial Class FormDynamicsManager
         '
         'gridsets
         '
-        resources.ApplyResources(Me.gridsets, "gridsets")
         Me.gridsets.AllowUserToAddRows = False
         Me.gridsets.AllowUserToDeleteRows = False
         Me.gridsets.AllowUserToResizeColumns = False
@@ -412,6 +415,7 @@ Partial Class FormDynamicsManager
         Me.gridsets.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.gridsets.ColumnHeadersVisible = False
         Me.gridsets.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.colid, Me.colname})
+        resources.ApplyResources(Me.gridsets, "gridsets")
         Me.gridsets.MultiSelect = False
         Me.gridsets.Name = "gridsets"
         Me.gridsets.RowHeadersVisible = False
@@ -430,36 +434,36 @@ Partial Class FormDynamicsManager
         '
         'ToolStrip1
         '
-        resources.ApplyResources(Me.ToolStrip1, "ToolStrip1")
         Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.btnAddEventSet, Me.btnCopyEventSet, Me.btnRemoveEventSet})
+        resources.ApplyResources(Me.ToolStrip1, "ToolStrip1")
         Me.ToolStrip1.Name = "ToolStrip1"
         '
         'btnAddEventSet
         '
-        resources.ApplyResources(Me.btnAddEventSet, "btnAddEventSet")
         Me.btnAddEventSet.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.btnAddEventSet.Image = Global.DWSIM.My.Resources.Resources.add
+        resources.ApplyResources(Me.btnAddEventSet, "btnAddEventSet")
         Me.btnAddEventSet.Name = "btnAddEventSet"
         '
         'btnCopyEventSet
         '
-        resources.ApplyResources(Me.btnCopyEventSet, "btnCopyEventSet")
         Me.btnCopyEventSet.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.btnCopyEventSet.Image = Global.DWSIM.My.Resources.Resources.copy
+        resources.ApplyResources(Me.btnCopyEventSet, "btnCopyEventSet")
         Me.btnCopyEventSet.Name = "btnCopyEventSet"
         '
         'btnRemoveEventSet
         '
-        resources.ApplyResources(Me.btnRemoveEventSet, "btnRemoveEventSet")
         Me.btnRemoveEventSet.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.btnRemoveEventSet.Image = Global.DWSIM.My.Resources.Resources.cross
+        resources.ApplyResources(Me.btnRemoveEventSet, "btnRemoveEventSet")
         Me.btnRemoveEventSet.Name = "btnRemoveEventSet"
         '
         'TabPage6
         '
-        resources.ApplyResources(Me.TabPage6, "TabPage6")
         Me.TabPage6.Controls.Add(Me.GroupBox3)
         Me.TabPage6.Controls.Add(Me.GroupBox4)
+        resources.ApplyResources(Me.TabPage6, "TabPage6")
         Me.TabPage6.Name = "TabPage6"
         Me.TabPage6.UseVisualStyleBackColor = True
         '
@@ -473,10 +477,10 @@ Partial Class FormDynamicsManager
         '
         'grdiselmatrix
         '
-        resources.ApplyResources(Me.grdiselmatrix, "grdiselmatrix")
         Me.grdiselmatrix.AllowUserToAddRows = False
         Me.grdiselmatrix.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells
         Me.grdiselmatrix.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn1, Me.DataGridViewCheckBoxColumn1, Me.DataGridViewTextBoxColumn2, Me.colmatind, Me.colalarm, Me.DataGridViewComboBoxColumn2, Me.DataGridViewComboBoxColumn3, Me.DataGridViewTextBoxColumn5, Me.DataGridViewComboBoxColumn4})
+        resources.ApplyResources(Me.grdiselmatrix, "grdiselmatrix")
         Me.grdiselmatrix.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter
         Me.grdiselmatrix.Name = "grdiselmatrix"
         Me.grdiselmatrix.RowHeadersVisible = False
@@ -527,8 +531,8 @@ Partial Class FormDynamicsManager
         '
         'DataGridViewTextBoxColumn5
         '
-        DataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
-        Me.DataGridViewTextBoxColumn5.DefaultCellStyle = DataGridViewCellStyle16
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight
+        Me.DataGridViewTextBoxColumn5.DefaultCellStyle = DataGridViewCellStyle3
         Me.DataGridViewTextBoxColumn5.FillWeight = 54.21845!
         resources.ApplyResources(Me.DataGridViewTextBoxColumn5, "DataGridViewTextBoxColumn5")
         Me.DataGridViewTextBoxColumn5.Name = "DataGridViewTextBoxColumn5"
@@ -543,29 +547,29 @@ Partial Class FormDynamicsManager
         '
         'ToolStrip3
         '
-        resources.ApplyResources(Me.ToolStrip3, "ToolStrip3")
         Me.ToolStrip3.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.btnAddMatrixItem, Me.btnCopyMatrixItem, Me.btnRemoveMatrixItem})
+        resources.ApplyResources(Me.ToolStrip3, "ToolStrip3")
         Me.ToolStrip3.Name = "ToolStrip3"
         '
         'btnAddMatrixItem
         '
-        resources.ApplyResources(Me.btnAddMatrixItem, "btnAddMatrixItem")
         Me.btnAddMatrixItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.btnAddMatrixItem.Image = Global.DWSIM.My.Resources.Resources.add
+        resources.ApplyResources(Me.btnAddMatrixItem, "btnAddMatrixItem")
         Me.btnAddMatrixItem.Name = "btnAddMatrixItem"
         '
         'btnCopyMatrixItem
         '
-        resources.ApplyResources(Me.btnCopyMatrixItem, "btnCopyMatrixItem")
         Me.btnCopyMatrixItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.btnCopyMatrixItem.Image = Global.DWSIM.My.Resources.Resources.copy
+        resources.ApplyResources(Me.btnCopyMatrixItem, "btnCopyMatrixItem")
         Me.btnCopyMatrixItem.Name = "btnCopyMatrixItem"
         '
         'btnRemoveMatrixItem
         '
-        resources.ApplyResources(Me.btnRemoveMatrixItem, "btnRemoveMatrixItem")
         Me.btnRemoveMatrixItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.btnRemoveMatrixItem.Image = Global.DWSIM.My.Resources.Resources.cross
+        resources.ApplyResources(Me.btnRemoveMatrixItem, "btnRemoveMatrixItem")
         Me.btnRemoveMatrixItem.Name = "btnRemoveMatrixItem"
         '
         'GroupBox4
@@ -578,7 +582,6 @@ Partial Class FormDynamicsManager
         '
         'gridmatrices
         '
-        resources.ApplyResources(Me.gridmatrices, "gridmatrices")
         Me.gridmatrices.AllowUserToAddRows = False
         Me.gridmatrices.AllowUserToDeleteRows = False
         Me.gridmatrices.AllowUserToResizeColumns = False
@@ -588,6 +591,7 @@ Partial Class FormDynamicsManager
         Me.gridmatrices.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.gridmatrices.ColumnHeadersVisible = False
         Me.gridmatrices.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn7, Me.DataGridViewTextBoxColumn8})
+        resources.ApplyResources(Me.gridmatrices, "gridmatrices")
         Me.gridmatrices.MultiSelect = False
         Me.gridmatrices.Name = "gridmatrices"
         Me.gridmatrices.RowHeadersVisible = False
@@ -606,36 +610,36 @@ Partial Class FormDynamicsManager
         '
         'ToolStrip4
         '
-        resources.ApplyResources(Me.ToolStrip4, "ToolStrip4")
         Me.ToolStrip4.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.btnAddMatrix, Me.btnCopyMatrix, Me.btnRemoveMatrix})
+        resources.ApplyResources(Me.ToolStrip4, "ToolStrip4")
         Me.ToolStrip4.Name = "ToolStrip4"
         '
         'btnAddMatrix
         '
-        resources.ApplyResources(Me.btnAddMatrix, "btnAddMatrix")
         Me.btnAddMatrix.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.btnAddMatrix.Image = Global.DWSIM.My.Resources.Resources.add
+        resources.ApplyResources(Me.btnAddMatrix, "btnAddMatrix")
         Me.btnAddMatrix.Name = "btnAddMatrix"
         '
         'btnCopyMatrix
         '
-        resources.ApplyResources(Me.btnCopyMatrix, "btnCopyMatrix")
         Me.btnCopyMatrix.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.btnCopyMatrix.Image = Global.DWSIM.My.Resources.Resources.copy
+        resources.ApplyResources(Me.btnCopyMatrix, "btnCopyMatrix")
         Me.btnCopyMatrix.Name = "btnCopyMatrix"
         '
         'btnRemoveMatrix
         '
-        resources.ApplyResources(Me.btnRemoveMatrix, "btnRemoveMatrix")
         Me.btnRemoveMatrix.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.btnRemoveMatrix.Image = Global.DWSIM.My.Resources.Resources.cross
+        resources.ApplyResources(Me.btnRemoveMatrix, "btnRemoveMatrix")
         Me.btnRemoveMatrix.Name = "btnRemoveMatrix"
         '
         'TabPage2
         '
-        resources.ApplyResources(Me.TabPage2, "TabPage2")
         Me.TabPage2.Controls.Add(Me.GroupBox5)
         Me.TabPage2.Controls.Add(Me.GroupBox6)
+        resources.ApplyResources(Me.TabPage2, "TabPage2")
         Me.TabPage2.Name = "TabPage2"
         Me.TabPage2.UseVisualStyleBackColor = True
         '
@@ -648,21 +652,22 @@ Partial Class FormDynamicsManager
         '
         'panelSelIntegrator
         '
-        resources.ApplyResources(Me.panelSelIntegrator, "panelSelIntegrator")
         Me.panelSelIntegrator.Controls.Add(Me.TabControl2)
+        resources.ApplyResources(Me.panelSelIntegrator, "panelSelIntegrator")
         Me.panelSelIntegrator.Name = "panelSelIntegrator"
         '
         'TabControl2
         '
-        resources.ApplyResources(Me.TabControl2, "TabControl2")
         Me.TabControl2.Controls.Add(Me.TabPage5)
         Me.TabControl2.Controls.Add(Me.TabPage9)
+        resources.ApplyResources(Me.TabControl2, "TabControl2")
         Me.TabControl2.Name = "TabControl2"
         Me.TabControl2.SelectedIndex = 0
         '
         'TabPage5
         '
-        resources.ApplyResources(Me.TabPage5, "TabPage5")
+        Me.TabPage5.Controls.Add(Me.Label14)
+        Me.TabPage5.Controls.Add(Me.nupRTStep)
         Me.TabPage5.Controls.Add(Me.Label7)
         Me.TabPage5.Controls.Add(Me.dtpIntegratorDuration)
         Me.TabPage5.Controls.Add(Me.Label1)
@@ -675,8 +680,22 @@ Partial Class FormDynamicsManager
         Me.TabPage5.Controls.Add(Me.nupCalcEqFreq)
         Me.TabPage5.Controls.Add(Me.Label6)
         Me.TabPage5.Controls.Add(Me.Label8)
+        resources.ApplyResources(Me.TabPage5, "TabPage5")
         Me.TabPage5.Name = "TabPage5"
         Me.TabPage5.UseVisualStyleBackColor = True
+        '
+        'Label14
+        '
+        resources.ApplyResources(Me.Label14, "Label14")
+        Me.Label14.Name = "Label14"
+        '
+        'nupRTStep
+        '
+        resources.ApplyResources(Me.nupRTStep, "nupRTStep")
+        Me.nupRTStep.Maximum = New Decimal(New Integer() {10000, 0, 0, 0})
+        Me.nupRTStep.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.nupRTStep.Name = "nupRTStep"
+        Me.nupRTStep.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
         'Label7
         '
@@ -685,8 +704,8 @@ Partial Class FormDynamicsManager
         '
         'dtpIntegratorDuration
         '
-        resources.ApplyResources(Me.dtpIntegratorDuration, "dtpIntegratorDuration")
         Me.dtpIntegratorDuration.Format = System.Windows.Forms.DateTimePickerFormat.Time
+        resources.ApplyResources(Me.dtpIntegratorDuration, "dtpIntegratorDuration")
         Me.dtpIntegratorDuration.Name = "dtpIntegratorDuration"
         Me.dtpIntegratorDuration.ShowUpDown = True
         Me.dtpIntegratorDuration.Value = New Date(1753, 1, 1, 0, 0, 0, 0)
@@ -698,8 +717,8 @@ Partial Class FormDynamicsManager
         '
         'dtpIntegrationStep
         '
-        resources.ApplyResources(Me.dtpIntegrationStep, "dtpIntegrationStep")
         Me.dtpIntegrationStep.Format = System.Windows.Forms.DateTimePickerFormat.Time
+        resources.ApplyResources(Me.dtpIntegrationStep, "dtpIntegrationStep")
         Me.dtpIntegrationStep.Name = "dtpIntegrationStep"
         Me.dtpIntegrationStep.ShowUpDown = True
         Me.dtpIntegrationStep.Value = New Date(1753, 1, 1, 0, 0, 0, 0)
@@ -752,15 +771,14 @@ Partial Class FormDynamicsManager
         '
         'TabPage9
         '
-        resources.ApplyResources(Me.TabPage9, "TabPage9")
         Me.TabPage9.Controls.Add(Me.gridMonitoredVariables)
         Me.TabPage9.Controls.Add(Me.ToolStrip7)
+        resources.ApplyResources(Me.TabPage9, "TabPage9")
         Me.TabPage9.Name = "TabPage9"
         Me.TabPage9.UseVisualStyleBackColor = True
         '
         'gridMonitoredVariables
         '
-        resources.ApplyResources(Me.gridMonitoredVariables, "gridMonitoredVariables")
         Me.gridMonitoredVariables.AllowUserToAddRows = False
         Me.gridMonitoredVariables.AllowUserToDeleteRows = False
         Me.gridMonitoredVariables.AllowUserToResizeRows = False
@@ -768,15 +786,16 @@ Partial Class FormDynamicsManager
         Me.gridMonitoredVariables.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells
         Me.gridMonitoredVariables.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText
         Me.gridMonitoredVariables.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
-        DataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle17.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle17.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!)
-        DataGridViewCellStyle17.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle17.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        Me.gridMonitoredVariables.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle17
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!)
+        DataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        Me.gridMonitoredVariables.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle4
         Me.gridMonitoredVariables.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.gridMonitoredVariables.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn13, Me.Column9, Me.DataGridViewComboBoxColumn1, Me.DataGridViewComboBoxColumn5, Me.DataGridViewTextBoxColumn18})
+        resources.ApplyResources(Me.gridMonitoredVariables, "gridMonitoredVariables")
         Me.gridMonitoredVariables.Name = "gridMonitoredVariables"
         Me.gridMonitoredVariables.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.[Single]
         '
@@ -819,23 +838,23 @@ Partial Class FormDynamicsManager
         '
         'ToolStrip7
         '
-        resources.ApplyResources(Me.ToolStrip7, "ToolStrip7")
         Me.ToolStrip7.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip7.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1, Me.ToolStripButton2})
+        resources.ApplyResources(Me.ToolStrip7, "ToolStrip7")
         Me.ToolStrip7.Name = "ToolStrip7"
         '
         'ToolStripButton1
         '
-        resources.ApplyResources(Me.ToolStripButton1, "ToolStripButton1")
         Me.ToolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.ToolStripButton1.Image = Global.DWSIM.My.Resources.Resources.add
+        resources.ApplyResources(Me.ToolStripButton1, "ToolStripButton1")
         Me.ToolStripButton1.Name = "ToolStripButton1"
         '
         'ToolStripButton2
         '
-        resources.ApplyResources(Me.ToolStripButton2, "ToolStripButton2")
         Me.ToolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.ToolStripButton2.Image = Global.DWSIM.My.Resources.Resources.delete1
+        resources.ApplyResources(Me.ToolStripButton2, "ToolStripButton2")
         Me.ToolStripButton2.Name = "ToolStripButton2"
         '
         'GroupBox6
@@ -848,7 +867,6 @@ Partial Class FormDynamicsManager
         '
         'gridintegrators
         '
-        resources.ApplyResources(Me.gridintegrators, "gridintegrators")
         Me.gridintegrators.AllowUserToAddRows = False
         Me.gridintegrators.AllowUserToDeleteRows = False
         Me.gridintegrators.AllowUserToResizeColumns = False
@@ -858,6 +876,7 @@ Partial Class FormDynamicsManager
         Me.gridintegrators.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.gridintegrators.ColumnHeadersVisible = False
         Me.gridintegrators.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn11, Me.DataGridViewTextBoxColumn12})
+        resources.ApplyResources(Me.gridintegrators, "gridintegrators")
         Me.gridintegrators.MultiSelect = False
         Me.gridintegrators.Name = "gridintegrators"
         Me.gridintegrators.RowHeadersVisible = False
@@ -876,36 +895,36 @@ Partial Class FormDynamicsManager
         '
         'ToolStrip6
         '
-        resources.ApplyResources(Me.ToolStrip6, "ToolStrip6")
         Me.ToolStrip6.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.btnAddIntegrator, Me.btnCopyIntegrator, Me.btnRemoveIntegrator})
+        resources.ApplyResources(Me.ToolStrip6, "ToolStrip6")
         Me.ToolStrip6.Name = "ToolStrip6"
         '
         'btnAddIntegrator
         '
-        resources.ApplyResources(Me.btnAddIntegrator, "btnAddIntegrator")
         Me.btnAddIntegrator.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.btnAddIntegrator.Image = Global.DWSIM.My.Resources.Resources.add
+        resources.ApplyResources(Me.btnAddIntegrator, "btnAddIntegrator")
         Me.btnAddIntegrator.Name = "btnAddIntegrator"
         '
         'btnCopyIntegrator
         '
-        resources.ApplyResources(Me.btnCopyIntegrator, "btnCopyIntegrator")
         Me.btnCopyIntegrator.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.btnCopyIntegrator.Image = Global.DWSIM.My.Resources.Resources.copy
+        resources.ApplyResources(Me.btnCopyIntegrator, "btnCopyIntegrator")
         Me.btnCopyIntegrator.Name = "btnCopyIntegrator"
         '
         'btnRemoveIntegrator
         '
-        resources.ApplyResources(Me.btnRemoveIntegrator, "btnRemoveIntegrator")
         Me.btnRemoveIntegrator.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.btnRemoveIntegrator.Image = Global.DWSIM.My.Resources.Resources.cross
+        resources.ApplyResources(Me.btnRemoveIntegrator, "btnRemoveIntegrator")
         Me.btnRemoveIntegrator.Name = "btnRemoveIntegrator"
         '
         'TabPage7
         '
-        resources.ApplyResources(Me.TabPage7, "TabPage7")
         Me.TabPage7.Controls.Add(Me.GroupBox7)
         Me.TabPage7.Controls.Add(Me.GroupBox8)
+        resources.ApplyResources(Me.TabPage7, "TabPage7")
         Me.TabPage7.Name = "TabPage7"
         Me.TabPage7.UseVisualStyleBackColor = True
         '
@@ -918,7 +937,6 @@ Partial Class FormDynamicsManager
         '
         'panelSelSchedule
         '
-        resources.ApplyResources(Me.panelSelSchedule, "panelSelSchedule")
         Me.panelSelSchedule.Controls.Add(Me.chkSchUseCurrentState)
         Me.panelSelSchedule.Controls.Add(Me.cbScheduleInitialState)
         Me.panelSelSchedule.Controls.Add(Me.Label3)
@@ -928,6 +946,7 @@ Partial Class FormDynamicsManager
         Me.panelSelSchedule.Controls.Add(Me.cbSelectedCauseAndEffectMatrix)
         Me.panelSelSchedule.Controls.Add(Me.chkIntegratorUseEventSet)
         Me.panelSelSchedule.Controls.Add(Me.Label9)
+        resources.ApplyResources(Me.panelSelSchedule, "panelSelSchedule")
         Me.panelSelSchedule.Name = "panelSelSchedule"
         '
         'chkSchUseCurrentState
@@ -938,9 +957,9 @@ Partial Class FormDynamicsManager
         '
         'cbScheduleInitialState
         '
-        resources.ApplyResources(Me.cbScheduleInitialState, "cbScheduleInitialState")
         Me.cbScheduleInitialState.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cbScheduleInitialState.FormattingEnabled = True
+        resources.ApplyResources(Me.cbScheduleInitialState, "cbScheduleInitialState")
         Me.cbScheduleInitialState.Name = "cbScheduleInitialState"
         '
         'Label3
@@ -950,16 +969,16 @@ Partial Class FormDynamicsManager
         '
         'cbAssociatedIntegrator
         '
-        resources.ApplyResources(Me.cbAssociatedIntegrator, "cbAssociatedIntegrator")
         Me.cbAssociatedIntegrator.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cbAssociatedIntegrator.FormattingEnabled = True
+        resources.ApplyResources(Me.cbAssociatedIntegrator, "cbAssociatedIntegrator")
         Me.cbAssociatedIntegrator.Name = "cbAssociatedIntegrator"
         '
         'cbSelectedEventSet
         '
-        resources.ApplyResources(Me.cbSelectedEventSet, "cbSelectedEventSet")
         Me.cbSelectedEventSet.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cbSelectedEventSet.FormattingEnabled = True
+        resources.ApplyResources(Me.cbSelectedEventSet, "cbSelectedEventSet")
         Me.cbSelectedEventSet.Name = "cbSelectedEventSet"
         '
         'chkIntegratorUseMatrix
@@ -970,9 +989,9 @@ Partial Class FormDynamicsManager
         '
         'cbSelectedCauseAndEffectMatrix
         '
-        resources.ApplyResources(Me.cbSelectedCauseAndEffectMatrix, "cbSelectedCauseAndEffectMatrix")
         Me.cbSelectedCauseAndEffectMatrix.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cbSelectedCauseAndEffectMatrix.FormattingEnabled = True
+        resources.ApplyResources(Me.cbSelectedCauseAndEffectMatrix, "cbSelectedCauseAndEffectMatrix")
         Me.cbSelectedCauseAndEffectMatrix.Name = "cbSelectedCauseAndEffectMatrix"
         '
         'chkIntegratorUseEventSet
@@ -996,7 +1015,6 @@ Partial Class FormDynamicsManager
         '
         'gridschedules
         '
-        resources.ApplyResources(Me.gridschedules, "gridschedules")
         Me.gridschedules.AllowUserToAddRows = False
         Me.gridschedules.AllowUserToDeleteRows = False
         Me.gridschedules.AllowUserToResizeColumns = False
@@ -1006,6 +1024,7 @@ Partial Class FormDynamicsManager
         Me.gridschedules.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.gridschedules.ColumnHeadersVisible = False
         Me.gridschedules.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn3, Me.DataGridViewTextBoxColumn6})
+        resources.ApplyResources(Me.gridschedules, "gridschedules")
         Me.gridschedules.MultiSelect = False
         Me.gridschedules.Name = "gridschedules"
         Me.gridschedules.RowHeadersVisible = False
@@ -1024,54 +1043,54 @@ Partial Class FormDynamicsManager
         '
         'ToolStrip5
         '
-        resources.ApplyResources(Me.ToolStrip5, "ToolStrip5")
         Me.ToolStrip5.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.btnAddSchedule, Me.btnCopySchedule, Me.btnRemoveSchedule})
+        resources.ApplyResources(Me.ToolStrip5, "ToolStrip5")
         Me.ToolStrip5.Name = "ToolStrip5"
         '
         'btnAddSchedule
         '
-        resources.ApplyResources(Me.btnAddSchedule, "btnAddSchedule")
         Me.btnAddSchedule.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.btnAddSchedule.Image = Global.DWSIM.My.Resources.Resources.add
+        resources.ApplyResources(Me.btnAddSchedule, "btnAddSchedule")
         Me.btnAddSchedule.Name = "btnAddSchedule"
         '
         'btnCopySchedule
         '
-        resources.ApplyResources(Me.btnCopySchedule, "btnCopySchedule")
         Me.btnCopySchedule.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.btnCopySchedule.Image = Global.DWSIM.My.Resources.Resources.copy
+        resources.ApplyResources(Me.btnCopySchedule, "btnCopySchedule")
         Me.btnCopySchedule.Name = "btnCopySchedule"
         '
         'btnRemoveSchedule
         '
-        resources.ApplyResources(Me.btnRemoveSchedule, "btnRemoveSchedule")
         Me.btnRemoveSchedule.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
         Me.btnRemoveSchedule.Image = Global.DWSIM.My.Resources.Resources.cross
+        resources.ApplyResources(Me.btnRemoveSchedule, "btnRemoveSchedule")
         Me.btnRemoveSchedule.Name = "btnRemoveSchedule"
         '
         'TabPage4
         '
-        resources.ApplyResources(Me.TabPage4, "TabPage4")
         Me.TabPage4.Controls.Add(Me.dgvControllers)
+        resources.ApplyResources(Me.TabPage4, "TabPage4")
         Me.TabPage4.Name = "TabPage4"
         Me.TabPage4.UseVisualStyleBackColor = True
         '
         'dgvControllers
         '
-        resources.ApplyResources(Me.dgvControllers, "dgvControllers")
         Me.dgvControllers.AllowUserToAddRows = False
         Me.dgvControllers.AllowUserToDeleteRows = False
         Me.dgvControllers.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
-        DataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle18.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle18.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!)
-        DataGridViewCellStyle18.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle18.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle18.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvControllers.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle18
+        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle5.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!)
+        DataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvControllers.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle5
         Me.dgvControllers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgvControllers.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1, Me.Column2, Me.Column8, Me.Column3, Me.Column4, Me.Column5, Me.Column7, Me.Column6})
+        resources.ApplyResources(Me.dgvControllers, "dgvControllers")
         Me.dgvControllers.Name = "dgvControllers"
         Me.dgvControllers.RowHeadersVisible = False
         '
@@ -1094,70 +1113,70 @@ Partial Class FormDynamicsManager
         '
         'Column3
         '
-        DataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.Column3.DefaultCellStyle = DataGridViewCellStyle19
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.Column3.DefaultCellStyle = DataGridViewCellStyle6
         resources.ApplyResources(Me.Column3, "Column3")
         Me.Column3.Name = "Column3"
         '
         'Column4
         '
-        DataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.Column4.DefaultCellStyle = DataGridViewCellStyle20
+        DataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.Column4.DefaultCellStyle = DataGridViewCellStyle7
         resources.ApplyResources(Me.Column4, "Column4")
         Me.Column4.Name = "Column4"
         '
         'Column5
         '
-        DataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.Column5.DefaultCellStyle = DataGridViewCellStyle21
+        DataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.Column5.DefaultCellStyle = DataGridViewCellStyle8
         resources.ApplyResources(Me.Column5, "Column5")
         Me.Column5.Name = "Column5"
         '
         'Column7
         '
-        DataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.Column7.DefaultCellStyle = DataGridViewCellStyle22
+        DataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.Column7.DefaultCellStyle = DataGridViewCellStyle9
         resources.ApplyResources(Me.Column7, "Column7")
         Me.Column7.Name = "Column7"
         '
         'Column6
         '
-        DataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.Column6.DefaultCellStyle = DataGridViewCellStyle23
+        DataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.Column6.DefaultCellStyle = DataGridViewCellStyle10
         resources.ApplyResources(Me.Column6, "Column6")
         Me.Column6.Name = "Column6"
         '
         'TabPage8
         '
-        resources.ApplyResources(Me.TabPage8, "TabPage8")
         Me.TabPage8.Controls.Add(Me.dgvIndicators)
+        resources.ApplyResources(Me.TabPage8, "TabPage8")
         Me.TabPage8.Name = "TabPage8"
         Me.TabPage8.UseVisualStyleBackColor = True
         '
         'dgvIndicators
         '
-        resources.ApplyResources(Me.dgvIndicators, "dgvIndicators")
         Me.dgvIndicators.AllowUserToAddRows = False
         Me.dgvIndicators.AllowUserToDeleteRows = False
         Me.dgvIndicators.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
-        DataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle24.BackColor = System.Drawing.SystemColors.Control
-        DataGridViewCellStyle24.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!)
-        DataGridViewCellStyle24.ForeColor = System.Drawing.SystemColors.WindowText
-        DataGridViewCellStyle24.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle24.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle24.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
-        Me.dgvIndicators.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle24
+        DataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Control
+        DataGridViewCellStyle11.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!)
+        DataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.WindowText
+        DataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
+        Me.dgvIndicators.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle11
         Me.dgvIndicators.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgvIndicators.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn4, Me.DataGridViewTextBoxColumn9, Me.DataGridViewTextBoxColumn10, Me.DataGridViewTextBoxColumn14, Me.DataGridViewTextBoxColumn15, Me.DataGridViewTextBoxColumn16, Me.DataGridViewTextBoxColumn17})
-        DataGridViewCellStyle26.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle26.BackColor = System.Drawing.SystemColors.Window
-        DataGridViewCellStyle26.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!)
-        DataGridViewCellStyle26.ForeColor = System.Drawing.SystemColors.ControlText
-        DataGridViewCellStyle26.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle26.SelectionForeColor = System.Drawing.SystemColors.HighlightText
-        DataGridViewCellStyle26.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
-        Me.dgvIndicators.DefaultCellStyle = DataGridViewCellStyle26
+        DataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle13.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!)
+        DataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.ControlText
+        DataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.dgvIndicators.DefaultCellStyle = DataGridViewCellStyle13
+        resources.ApplyResources(Me.dgvIndicators, "dgvIndicators")
         Me.dgvIndicators.Name = "dgvIndicators"
         Me.dgvIndicators.RowHeadersVisible = False
         '
@@ -1168,8 +1187,8 @@ Partial Class FormDynamicsManager
         '
         'DataGridViewTextBoxColumn9
         '
-        DataGridViewCellStyle25.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
-        Me.DataGridViewTextBoxColumn9.DefaultCellStyle = DataGridViewCellStyle25
+        DataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        Me.DataGridViewTextBoxColumn9.DefaultCellStyle = DataGridViewCellStyle12
         Me.DataGridViewTextBoxColumn9.FillWeight = 200.0!
         resources.ApplyResources(Me.DataGridViewTextBoxColumn9, "DataGridViewTextBoxColumn9")
         Me.DataGridViewTextBoxColumn9.Name = "DataGridViewTextBoxColumn9"
@@ -1220,12 +1239,19 @@ Partial Class FormDynamicsManager
         Me.chkDynamics.Name = "chkDynamics"
         Me.chkDynamics.UseVisualStyleBackColor = False
         '
+        'Label13
+        '
+        resources.ApplyResources(Me.Label13, "Label13")
+        Me.Label13.ForeColor = System.Drawing.Color.DarkRed
+        Me.Label13.Name = "Label13"
+        '
         'FormDynamicsManager
         '
         resources.ApplyResources(Me, "$this")
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.CloseButton = False
         Me.CloseButtonVisible = False
+        Me.Controls.Add(Me.Label13)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.chkDynamics)
         Me.Controls.Add(Me.lblStatus)
@@ -1266,6 +1292,7 @@ Partial Class FormDynamicsManager
         Me.TabControl2.ResumeLayout(False)
         Me.TabPage5.ResumeLayout(False)
         Me.TabPage5.PerformLayout()
+        CType(Me.nupRTStep, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.nupCalcControlFreq, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.nupCalcBalFreq, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.nupCalcEqFreq, System.ComponentModel.ISupportInitialize).EndInit()
@@ -1430,4 +1457,7 @@ Partial Class FormDynamicsManager
     Friend WithEvents DataGridViewComboBoxColumn1 As DataGridViewComboBoxColumn
     Friend WithEvents DataGridViewComboBoxColumn5 As DataGridViewComboBoxColumn
     Friend WithEvents DataGridViewTextBoxColumn18 As DataGridViewTextBoxColumn
+    Friend WithEvents Label13 As Label
+    Friend WithEvents Label14 As Label
+    Friend WithEvents nupRTStep As NumericUpDown
 End Class

@@ -171,6 +171,8 @@ Namespace UnitOperations
 
         Public Overrides ReadOnly Property SupportsDynamicMode As Boolean = True
 
+        Public Overrides ReadOnly Property HasPropertiesForDynamicMode As Boolean = False
+
         <NonSerialized> <Xml.Serialization.XmlIgnore> Public f As EditingForm_Pump
 
         Public Enum CalculationMode
@@ -510,22 +512,30 @@ Namespace UnitOperations
 
             IObj?.Paragraphs.Add("• Outlet temperature: PH Flash.")
 
-            If Not Me.GraphicObject.InputConnectors(1).IsAttached Then
-                'Call function to calculate flowsheet
-                Throw New Exception(FlowSheet.GetTranslatedString("NohcorrentedeEnergyFlow4"))
-            ElseIf Not Me.GraphicObject.OutputConnectors(0).IsAttached Then
-                'Call function to calculate flowsheet
-                Throw New Exception(FlowSheet.GetTranslatedString("Verifiqueasconexesdo"))
-            ElseIf Not Me.GraphicObject.InputConnectors(0).IsAttached Then
-                'Call function to calculate flowsheet
-                Throw New Exception(FlowSheet.GetTranslatedString("Verifiqueasconexesdo"))
+            If args Is Nothing Then
+                If Not Me.GraphicObject.InputConnectors(1).IsAttached Then
+                    'Call function to calculate flowsheet
+                    Throw New Exception(FlowSheet.GetTranslatedString("NohcorrentedeEnergyFlow4"))
+                ElseIf Not Me.GraphicObject.OutputConnectors(0).IsAttached Then
+                    'Call function to calculate flowsheet
+                    Throw New Exception(FlowSheet.GetTranslatedString("Verifiqueasconexesdo"))
+                ElseIf Not Me.GraphicObject.InputConnectors(0).IsAttached Then
+                    'Call function to calculate flowsheet
+                    Throw New Exception(FlowSheet.GetTranslatedString("Verifiqueasconexesdo"))
+                End If
             End If
 
             Dim msin, msout As MaterialStream, esin As Streams.EnergyStream
 
-            msin = FlowSheet.SimulationObjects(Me.GraphicObject.InputConnectors(0).AttachedConnector.AttachedFrom.Name)
-            msout = FlowSheet.SimulationObjects(Me.GraphicObject.OutputConnectors(0).AttachedConnector.AttachedTo.Name)
-            esin = FlowSheet.SimulationObjects(Me.GraphicObject.InputConnectors(1).AttachedConnector.AttachedFrom.Name)
+            If args Is Nothing Then
+                msin = FlowSheet.SimulationObjects(Me.GraphicObject.InputConnectors(0).AttachedConnector.AttachedFrom.Name)
+                msout = FlowSheet.SimulationObjects(Me.GraphicObject.OutputConnectors(0).AttachedConnector.AttachedTo.Name)
+                esin = FlowSheet.SimulationObjects(Me.GraphicObject.InputConnectors(1).AttachedConnector.AttachedFrom.Name)
+            Else
+                msin = args(0)
+                msout = args(1)
+                esin = args(2)
+            End If
 
             Me.PropertyPackage.CurrentMaterialStream = msin
 
@@ -729,7 +739,7 @@ Namespace UnitOperations
                     'energy stream - update energy flow value (kW)
                     With esin
                         .EnergyFlow = Me.DeltaQ.GetValueOrDefault
-                        .GraphicObject.Calculated = True
+                        If args Is Nothing Then .GraphicObject.Calculated = True
                     End With
 
                 Case CalculationMode.EnergyStream
@@ -853,7 +863,7 @@ Namespace UnitOperations
                     'energy stream - update energy flow value (kW)
                     With esin
                         .EnergyFlow = Me.DeltaQ.GetValueOrDefault
-                        .GraphicObject.Calculated = True
+                        If args Is Nothing Then .GraphicObject.Calculated = True
                     End With
 
                 Case CalculationMode.OutletPressure
@@ -895,7 +905,7 @@ Namespace UnitOperations
                     'energy stream - update energy flow value (kW)
                     With esin
                         .EnergyFlow = Me.DeltaQ.GetValueOrDefault
-                        .GraphicObject.Calculated = True
+                        If args Is Nothing Then .GraphicObject.Calculated = True
                     End With
 
             End Select
@@ -911,8 +921,7 @@ Namespace UnitOperations
             If Not DebugMode Then
 
                 'Atribuir valores a corrente de materia conectada a jusante
-                Dim omstr As MaterialStream = FlowSheet.SimulationObjects(Me.GraphicObject.OutputConnectors(0).AttachedConnector.AttachedTo.Name)
-                With omstr
+                With msout
                     .Phases(0).Properties.temperature = T2
                     .Phases(0).Properties.pressure = P2
                     .Phases(0).Properties.enthalpy = H2
@@ -1210,7 +1219,7 @@ Namespace UnitOperations
 
             Dim list As New List(Of Tuple(Of ReportItemType, String()))
 
-            list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.Label, New String() {"Results Report for Adiabatic Pump '" & Me.GraphicObject.Tag + "'"}))
+            list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.Label, New String() {"Results Report for Adiabatic Pump '" & Me.GraphicObject?.Tag + "'"}))
             list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.SingleColumn, New String() {"Calculated successfully on " & LastUpdated.ToString}))
 
             list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.Label, New String() {"Calculation Parameters"}))

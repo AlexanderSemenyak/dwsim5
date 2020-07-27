@@ -470,7 +470,7 @@ Namespace UnitOperations.Auxiliary.SepOps
         Dim _sideopid As String = ""
         Dim _t As Type = Type.Material
         Dim _bhv As Behavior = Behavior.Feed
-        Dim _ph As Phase = Phase.B
+        Dim _ph As Phase = Phase.L
         Dim _flow As Parameter
 
         Public Property StreamID As String = ""
@@ -2533,10 +2533,10 @@ Namespace UnitOperations
                         Next
                         If firstF = -1 Then firstF = StageIndex(ms.AssociatedStage)
                     Case StreamInformation.Behavior.Sidedraw
-                        If ms.StreamPhase = StreamInformation.Phase.L Then
-                            LSS(StageIndex(ms.AssociatedStage)) = ms.FlowRate.Value
-                        Else
+                        If ms.StreamPhase = StreamInformation.Phase.V Then
                             VSS(StageIndex(ms.AssociatedStage)) = ms.FlowRate.Value
+                        Else
+                            LSS(StageIndex(ms.AssociatedStage)) = ms.FlowRate.Value
                         End If
                     Case StreamInformation.Behavior.InterExchanger
                         Q(StageIndex(ms.AssociatedStage)) = -DirectCast(FlowSheet.SimulationObjects(ms.StreamID), Streams.EnergyStream).EnergyFlow.GetValueOrDefault
@@ -2631,6 +2631,8 @@ Namespace UnitOperations
                 Case ColType.AbsorptionColumn
                     T1 = FT.First
                     T2 = FT.Last
+                    If (T1 = 0.0) Then Throw New Exception("The absorber needs a feed stream connected to the first stage.")
+                    If (T2 = 0.0) Then Throw New Exception("The absorber needs a feed stream connected to the last stage.")
                 Case ColType.ReboiledAbsorber
                     T1 = MathEx.Common.WgtAvg(F, FT)
                     T2 = T1
@@ -3139,7 +3141,7 @@ Namespace UnitOperations
                     Case StreamInformation.Behavior.Sidedraw
                         Dim sidx As Integer = StageIndex(sinf.AssociatedStage)
                         msm = FlowSheet.SimulationObjects(sinf.StreamID)
-                        If sinf.StreamPhase = StreamInformation.Phase.L Then
+                        If sinf.StreamPhase = StreamInformation.Phase.L Or sinf.StreamPhase = StreamInformation.Phase.B Then
                             With msm
                                 .SpecType = StreamSpec.Pressure_and_Enthalpy
                                 .Phases(0).Properties.massflow = LSSf(sidx) * pp.AUX_MMM(xf(sidx)) / 1000

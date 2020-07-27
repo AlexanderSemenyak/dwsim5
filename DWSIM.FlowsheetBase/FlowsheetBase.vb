@@ -24,6 +24,7 @@ Imports System.Text
 Imports DWSIM.SharedClasses.Flowsheet
 Imports System.Dynamic
 Imports DWSIM.Interfaces.Enums
+Imports DWSIM.GlobalSettings
 Imports DWSIM.Thermodynamics.SpecialEOS
 Imports DWSIM.Thermodynamics.SpecialEOS.PRSRKAdv
 
@@ -783,11 +784,11 @@ Imports DWSIM.Thermodynamics.SpecialEOS.PRSRKAdv
 
             Case ObjectType.MaterialStream
 
-                Dim myMStr As New MaterialStreamGraphic(mpx, mpy, 30, 30)
-                myMStr.Tag = "MS-" & SimulationObjects.Count.ToString("00#")
+                Dim myMStr As New MaterialStreamGraphic(mpx, mpy, 20, 20)
+                myMStr.Tag = "MSTR-" & SimulationObjects.Count.ToString("00#")
                 If tag <> "" Then myMStr.Tag = tag
                 gObj = myMStr
-                gObj.Name = "MS-" & Guid.NewGuid.ToString
+                gObj.Name = "MSTR-" & Guid.NewGuid.ToString
                 If id <> "" Then gObj.Name = id
                 GraphicObjects.Add(gObj.Name, myMStr)
                 'OBJETO DWSIM
@@ -798,11 +799,11 @@ Imports DWSIM.Thermodynamics.SpecialEOS.PRSRKAdv
 
             Case ObjectType.EnergyStream
 
-                Dim myMStr As New EnergyStreamGraphic(mpx, mpy, 30, 30)
-                myMStr.Tag = "ES-" & SimulationObjects.Count.ToString("00#")
+                Dim myMStr As New EnergyStreamGraphic(mpx, mpy, 20, 20)
+                myMStr.Tag = "ESTR-" & SimulationObjects.Count.ToString("00#")
                 If tag <> "" Then myMStr.Tag = tag
                 gObj = myMStr
-                gObj.Name = "ES-" & Guid.NewGuid.ToString
+                gObj.Name = "ESTR-" & Guid.NewGuid.ToString
                 If id <> "" Then gObj.Name = id
                 GraphicObjects.Add(gObj.Name, myMStr)
                 'OBJETO DWSIM
@@ -1523,7 +1524,9 @@ Imports DWSIM.Thermodynamics.SpecialEOS.PRSRKAdv
 
         End If
 
-        If LoadSpreadsheetData IsNot Nothing Then LoadSpreadsheetData.Invoke(xdoc)
+        If Not Settings.AutomationMode Then
+            If LoadSpreadsheetData IsNot Nothing Then LoadSpreadsheetData.Invoke(xdoc)
+        End If
 
         If excs.Count > 0 Then
             ShowMessage("Some errors where found while parsing the XML file. The simulation might not work as expected. Please read the subsequent messages for more details.", IFlowsheet.MessageType.GeneralError)
@@ -1541,7 +1544,10 @@ Imports DWSIM.Thermodynamics.SpecialEOS.PRSRKAdv
         Dim xdoc = SaveToXML()
 
         Parallel.ForEach(xdoc.Descendants, Sub(xel1)
-                                               SharedClasses.Utility.UpdateElementForMobileXMLSaving_CrossPlatformUI(xel1)
+                                               Try
+                                                   SharedClasses.Utility.UpdateElementForMobileXMLSaving_CrossPlatformUI(xel1)
+                                               Catch ex As Exception
+                                               End Try
                                            End Sub)
 
         Return xdoc
@@ -1651,16 +1657,20 @@ Imports DWSIM.Thermodynamics.SpecialEOS.PRSRKAdv
 
         Dim flsconfig As New System.Text.StringBuilder()
 
-        With flsconfig
-            .Append(FlowsheetSurface.Zoom.ToString(ci) & ";")
-            .Append("0;")
-            .Append("0")
-        End With
+        If Not GlobalSettings.Settings.AutomationMode Then
 
-        xdoc.Element("DWSIM_Simulation_Data").Add(New XElement("FlowsheetView"))
-        xel = xdoc.Element("DWSIM_Simulation_Data").Element("FlowsheetView")
+            With flsconfig
+                .Append(FlowsheetSurface.Zoom.ToString(ci) & ";")
+                .Append("0;")
+                .Append("0")
+            End With
 
-        xel.Add(flsconfig.ToString)
+            xdoc.Element("DWSIM_Simulation_Data").Add(New XElement("FlowsheetView"))
+            xel = xdoc.Element("DWSIM_Simulation_Data").Element("FlowsheetView")
+
+            xel.Add(flsconfig.ToString)
+
+        End If
 
         xel = xdoc.Element("DWSIM_Simulation_Data")
 
@@ -1692,7 +1702,10 @@ Imports DWSIM.Thermodynamics.SpecialEOS.PRSRKAdv
             xel.Add(New XElement("ChartItem", ch.SaveData().ToArray()))
         Next
 
-        If SaveSpreadsheetData IsNot Nothing Then SaveSpreadsheetData.Invoke(xdoc)
+        If Not GlobalSettings.Settings.AutomationMode Then
+            If SaveSpreadsheetData IsNot Nothing Then SaveSpreadsheetData.Invoke(xdoc)
+        End If
+
 
         Return xdoc
 
@@ -2504,74 +2517,133 @@ Label_00CC:
 
     Private Sub RunScript_PythonNET(scripttext As String)
 
-        If Not GlobalSettings.Settings.PythonInitialized Then
+        If GlobalSettings.Settings.RunningPlatform <> Settings.Platform.Windows Then
 
-            Dim t As Task = Task.Factory.StartNew(Sub()
-                                                      RunCodeOnUIThread(Sub()
-                                                                            If Not GlobalSettings.Settings.IsRunningOnMono() Then
-                                                                                PythonEngine.PythonHome = GlobalSettings.Settings.PythonPath
-                                                                            End If
-                                                                            PythonEngine.Initialize()
-                                                                            GlobalSettings.Settings.PythonInitialized = True
-                                                                        End Sub)
-                                                  End Sub)
-            t.Wait()
+            Dim t1 = Task.Factory.StartNew(Sub()
 
-            Dim t2 As Task = Task.Factory.StartNew(Sub()
+                                               If Not GlobalSettings.Settings.PythonInitialized Then
+
+                                                   PythonEngine.Initialize()
+                                                   GlobalSettings.Settings.PythonInitialized = True
+
+                                                   PythonEngine.BeginAllowThreads()
+
+                                               End If
+
+                                               Using Py.GIL
+
+                                                   Try
+
+                                                       Dim sys As Object = PythonEngine.ImportModule("sys")
+
+                                                       Dim codeToRedirectOutput As String = "import sys" & vbCrLf + "from io import BytesIO as StringIO" & vbCrLf + "sys.stdout = mystdout = StringIO()" & vbCrLf + "sys.stdout.flush()" & vbCrLf + "sys.stderr = mystderr = StringIO()" & vbCrLf + "sys.stderr.flush()"
+                                                       PythonEngine.RunSimpleString(codeToRedirectOutput)
+
+                                                       Dim locals As New PyDict()
+
+                                                       locals.SetItem("Plugins", UtilityPlugins.ToPython)
+                                                       locals.SetItem("Flowsheet", Me.ToPython)
+                                                       Try
+                                                           locals.SetItem("Spreadsheet", (GetSpreadsheetObject.Invoke()).ToPython)
+                                                       Catch ex As Exception
+                                                       End Try
+                                                       Dim Solver As New FlowsheetSolver.FlowsheetSolver
+                                                       locals.SetItem("Solver", Solver.ToPython)
+
+                                                       If Not GlobalSettings.Settings.IsRunningOnMono() Then
+                                                           locals.SetItem("Application", GetApplicationObject.ToPython)
+                                                       End If
+
+                                                       PythonEngine.Exec(scripttext, Nothing, locals.Handle)
+
+                                                       ShowMessage(sys.stdout.getvalue().ToString, IFlowsheet.MessageType.Information)
+
+                                                   Catch ex As Exception
+
+                                                       ShowMessage("Error running script: " & ex.Message.ToString, IFlowsheet.MessageType.GeneralError)
+
+                                                   Finally
+
+                                                   End Try
+
+                                               End Using
+
+                                           End Sub)
+
+            t1.Wait()
+
+        Else
+
+            If Not GlobalSettings.Settings.PythonInitialized Then
+
+                Dim t As Task = Task.Factory.StartNew(Sub()
+                                                          RunCodeOnUIThread(Sub()
+                                                                                If Not GlobalSettings.Settings.IsRunningOnMono() Then
+                                                                                    PythonEngine.PythonHome = GlobalSettings.Settings.PythonPath
+                                                                                End If
+                                                                                PythonEngine.Initialize()
+                                                                                GlobalSettings.Settings.PythonInitialized = True
+                                                                            End Sub)
+                                                      End Sub)
+                t.Wait()
+
+                Dim t2 As Task = Task.Factory.StartNew(Sub()
+                                                           RunCodeOnUIThread(Sub()
+                                                                                 PythonEngine.BeginAllowThreads()
+                                                                             End Sub)
+                                                       End Sub)
+                t2.Wait()
+
+            End If
+
+            Dim t3 As Task = Task.Factory.StartNew(Sub()
                                                        RunCodeOnUIThread(Sub()
-                                                                             PythonEngine.BeginAllowThreads()
-                                                                         End Sub)
-                                                   End Sub)
-            t2.Wait()
+                                                                             Using Py.GIL
 
-        End If
+                                                                                 Try
 
-        Dim t3 As Task = Task.Factory.StartNew(Sub()
-                                                   RunCodeOnUIThread(Sub()
-                                                                         Using Py.GIL
+                                                                                     Dim sys As Object = PythonEngine.ImportModule("sys")
 
-                                                                             Try
-
-                                                                                 Dim sys As Object = PythonEngine.ImportModule("sys")
-
-                                                                                 If Not GlobalSettings.Settings.IsRunningOnMono() Then
+                                                                                     'If Not GlobalSettings.Settings.IsRunningOnMono() Then
                                                                                      Dim codeToRedirectOutput As String = "import sys" & vbCrLf + "from io import BytesIO as StringIO" & vbCrLf + "sys.stdout = mystdout = StringIO()" & vbCrLf + "sys.stdout.flush()" & vbCrLf + "sys.stderr = mystderr = StringIO()" & vbCrLf + "sys.stderr.flush()"
                                                                                      PythonEngine.RunSimpleString(codeToRedirectOutput)
-                                                                                 End If
+                                                                                     'End If
 
-                                                                                 Dim locals As New PyDict()
+                                                                                     Dim locals As New PyDict()
 
-                                                                                 locals.SetItem("Plugins", UtilityPlugins.ToPython)
-                                                                                 locals.SetItem("Flowsheet", Me.ToPython)
-                                                                                 Try
-                                                                                     locals.SetItem("Spreadsheet", (GetSpreadsheetObject.Invoke()).ToPython)
-                                                                                 Catch ex As Exception
-                                                                                 End Try
-                                                                                 Dim Solver As New FlowsheetSolver.FlowsheetSolver
-                                                                                 locals.SetItem("Solver", Solver.ToPython)
+                                                                                     locals.SetItem("Plugins", UtilityPlugins.ToPython)
+                                                                                     locals.SetItem("Flowsheet", Me.ToPython)
+                                                                                     Try
+                                                                                         locals.SetItem("Spreadsheet", (GetSpreadsheetObject.Invoke()).ToPython)
+                                                                                     Catch ex As Exception
+                                                                                     End Try
+                                                                                     Dim Solver As New FlowsheetSolver.FlowsheetSolver
+                                                                                     locals.SetItem("Solver", Solver.ToPython)
 
-                                                                                 If Not GlobalSettings.Settings.IsRunningOnMono() Then
-                                                                                     locals.SetItem("Application", GetApplicationObject.ToPython)
-                                                                                 End If
+                                                                                     If Not GlobalSettings.Settings.IsRunningOnMono() Then
+                                                                                         locals.SetItem("Application", GetApplicationObject.ToPython)
+                                                                                     End If
 
-                                                                                 PythonEngine.Exec(scripttext, Nothing, locals.Handle)
+                                                                                     PythonEngine.Exec(scripttext, Nothing, locals.Handle)
 
-                                                                                 If Not GlobalSettings.Settings.IsRunningOnMono() Then
+                                                                                     'If Not GlobalSettings.Settings.IsRunningOnMono() Then
                                                                                      ShowMessage(sys.stdout.getvalue().ToString, IFlowsheet.MessageType.Information)
-                                                                                 End If
+                                                                                     'End If
 
-                                                                             Catch ex As Exception
+                                                                                 Catch ex As Exception
 
-                                                                                 ShowMessage("Error running script: " & ex.Message.ToString, IFlowsheet.MessageType.GeneralError)
+                                                                                     ShowMessage("Error running script: " & ex.Message.ToString, IFlowsheet.MessageType.GeneralError)
 
-                                                                             Finally
+                                                                                 Finally
 
-                                                                             End Try
+                                                                                 End Try
 
-                                                                         End Using
-                                                                     End Sub)
-                                               End Sub)
-        t3.Wait()
+                                                                             End Using
+                                                                         End Sub)
+                                                   End Sub)
+            t3.Wait()
+
+        End If
 
     End Sub
 

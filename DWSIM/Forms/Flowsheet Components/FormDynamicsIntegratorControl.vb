@@ -2,6 +2,7 @@
 Imports System.Threading.Tasks
 Imports DWSIM.DynamicsManager
 Imports Eto.Threading
+Imports Python.Runtime
 
 Public Class FormDynamicsIntegratorControl
 
@@ -23,8 +24,13 @@ Public Class FormDynamicsIntegratorControl
 
             cbScenario.Items.Clear()
 
-            For Each item In Flowsheet.DynamicsManager.IntegratorList
-                cbScenario.Items.Add(item.Value.Description)
+            For Each item In Flowsheet.DynamicsManager.ScheduleList
+                If item.Value.CurrentIntegrator <> "" Then
+                    Dim integ = Flowsheet.DynamicsManager.IntegratorList(item.Value.CurrentIntegrator).Description
+                    cbScenario.Items.Add(item.Value.Description & " (" & integ & ")")
+                Else
+                    cbScenario.Items.Add(item.Value.Description)
+                End If
             Next
 
             If cbScenario.Items.Count > 0 Then
@@ -62,7 +68,7 @@ Public Class FormDynamicsIntegratorControl
         For Each v As DynamicsManager.MonitoredVariable In integrator.MonitoredVariables
             Dim vnew = DirectCast(v.Clone, DynamicsManager.MonitoredVariable)
             Dim sobj = Flowsheet.SimulationObjects(vnew.ObjectID)
-            vnew.PropertyValue = SystemsOfUnits.Converter.ConvertFromSI(vnew.PropertyUnits, sobj.GetPropertyValue(vnew.PropertyID))
+            vnew.PropertyValue = SystemsOfUnits.Converter.ConvertFromSI(vnew.PropertyUnits, sobj.GetPropertyValue(vnew.PropertyID)).ToString(Globalization.CultureInfo.InvariantCulture)
             vnew.TimeStamp = tstamp
             list.Add(vnew)
         Next
@@ -137,11 +143,19 @@ Public Class FormDynamicsIntegratorControl
 
     Public Sub RestoreState(stateID As String)
 
-        Dim initialstate = Flowsheet.StoredSolutions(stateID)
+        Try
 
-        Flowsheet.LoadProcessData(initialstate)
+            Dim initialstate = Flowsheet.StoredSolutions(stateID)
 
-        Flowsheet.UpdateInterface()
+            Flowsheet.LoadProcessData(initialstate)
+
+            Flowsheet.UpdateInterface()
+
+        Catch ex As Exception
+
+            MessageBox.Show(String.Format("Error Restoring State {0}: {1}", stateID, ex.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+
+        End Try
 
     End Sub
 
@@ -158,6 +172,8 @@ Public Class FormDynamicsIntegratorControl
         Dim schedule = Flowsheet.DynamicsManager.ScheduleList(Flowsheet.DynamicsManager.CurrentSchedule)
 
         Dim integrator = Flowsheet.DynamicsManager.IntegratorList(schedule.CurrentIntegrator)
+
+        integrator.RealTime = realtime
 
         Dim Controllers = Flowsheet.SimulationObjects.Values.Where(Function(x) x.ObjectClass = SimulationObjectClass.Controllers).ToList
 
@@ -199,7 +215,7 @@ Public Class FormDynamicsIntegratorControl
 
         Dim interval = integrator.IntegrationStep.TotalSeconds
 
-        If realtime Then interval = 1.0
+        If realtime Then interval = Convert.ToDouble(integrator.RealTimeStepMs) / 1000.0
 
         Dim final = ProgressBar1.Maximum
 
@@ -217,11 +233,15 @@ Public Class FormDynamicsIntegratorControl
 
         Flowsheet.SupressMessages = True
 
+        Dim exceptions As New List(Of Exception)
+
         Dim maintask = New Task(Sub()
 
                                     Dim j As Integer = 0
 
-                                    For i = 0 To final Step interval
+                                    Dim i As Double = 0
+
+                                    While i <= final
 
                                         Dim sw As New Stopwatch
 
@@ -259,18 +279,20 @@ Public Class FormDynamicsIntegratorControl
                                             integrator.ShouldCalculatePressureFlow = False
                                         End If
 
-                                        FlowsheetSolver.FlowsheetSolver.SolveFlowsheet(Flowsheet, GlobalSettings.Settings.SolverMode)
+                                        exceptions = FlowsheetSolver.FlowsheetSolver.SolveFlowsheet(Flowsheet, GlobalSettings.Settings.SolverMode)
 
                                         While GlobalSettings.Settings.CalculatorBusy
                                             Task.Delay(200).Wait()
                                         End While
 
-                                        If Not realtime Then StoreVariableValues(integrator, i, integrator.CurrentTime)
+                                        If exceptions.Count > 0 Then Exit While
+
+                                        StoreVariableValues(integrator, j, integrator.CurrentTime)
 
                                         Flowsheet.RunCodeOnUIThread(Sub()
                                                                         Flowsheet.FormDynamics.UpdateControllerList()
                                                                         Flowsheet.FormDynamics.UpdateIndicatorList()
-                                                                        Flowsheet.FormSurface.Invalidate()
+                                                                        Flowsheet.FormSurface.FControl.Invalidate()
                                                                         Application.DoEvents()
                                                                     End Sub)
 
@@ -282,7 +304,7 @@ Public Class FormDynamicsIntegratorControl
                                             Next
                                         End If
 
-                                        Dim waittime = 1000 - sw.ElapsedMilliseconds
+                                        Dim waittime = integrator.RealTimeStepMs - sw.ElapsedMilliseconds
 
                                         If waittime > 0 And realtime Then
 
@@ -292,7 +314,7 @@ Public Class FormDynamicsIntegratorControl
 
                                         sw.Stop()
 
-                                        If Abort Then Exit For
+                                        If Abort Then Exit While
 
                                         If Not realtime Then
 
@@ -312,7 +334,11 @@ Public Class FormDynamicsIntegratorControl
 
                                         j += 1
 
-                                    Next
+                                        i += interval
+
+                                    End While
+
+                                    If exceptions.Count > 0 Then Throw exceptions(0)
 
                                 End Sub)
 
@@ -325,6 +351,11 @@ Public Class FormDynamicsIntegratorControl
                                                                   ProgressBar1.Style = ProgressBarStyle.Continuous
                                                                   Flowsheet.SupressMessages = False
                                                                   Flowsheet.UpdateOpenEditForms()
+                                                                  If t.Exception IsNot Nothing Then
+                                                                      Dim euid As String = Guid.NewGuid().ToString()
+                                                                      ExceptionProcessing.ExceptionList.Exceptions.Add(euid, t.Exception)
+                                                                      Flowsheet.ShowMessage(t.Exception.Message, Interfaces.IFlowsheet.MessageType.GeneralError, euid)
+                                                                  End If
                                                               End Sub)
                               End Sub)
 
@@ -348,7 +379,7 @@ Public Class FormDynamicsIntegratorControl
 
         sheet.RowCount = integrator.MonitoredVariableValues.Count + 1
 
-        sheet.Cells(0, 0).Data = "Time (s)"
+        sheet.Cells(0, 0).Data = "Time (ms)"
 
         Dim i, j As Integer
 
@@ -360,10 +391,14 @@ Public Class FormDynamicsIntegratorControl
 
         i = 1
         For Each item In integrator.MonitoredVariableValues
-            sheet.Cells(i, 0).Data = item.Key.ToString
+            If integrator.RealTime Then
+                sheet.Cells(i, 0).Data = item.Key * integrator.RealTimeStepMs
+            Else
+                sheet.Cells(i, 0).Data = item.Key * integrator.IntegrationStep.TotalMilliseconds
+            End If
             j = 1
             For Each var In item.Value
-                sheet.Cells(i, j).Data = var.PropertyValue
+                sheet.Cells(i, j).Data = var.PropertyValue.ToDoubleFromInvariant
                 j += 1
             Next
             i += 1
@@ -372,6 +407,27 @@ Public Class FormDynamicsIntegratorControl
         Flowsheet.FormSpreadsheet.Activate()
 
         Flowsheet.FormSpreadsheet.Spreadsheet.CurrentWorksheet = sheet
+
+    End Sub
+
+    Private Sub FormDynamicsIntegratorControl_MouseEnter(sender As Object, e As EventArgs) Handles Me.MouseEnter
+
+        If cbScenario.Items.Count <> Flowsheet.DynamicsManager.ScheduleList.Count Then
+
+            cbScenario.Items.Clear()
+
+            For Each item In Flowsheet.DynamicsManager.ScheduleList
+                If item.Value.CurrentIntegrator <> "" Then
+                    Dim integ = Flowsheet.DynamicsManager.IntegratorList(item.Value.CurrentIntegrator).Description
+                    cbScenario.Items.Add(item.Value.Description & " (" & integ & ")")
+                Else
+                    cbScenario.Items.Add(item.Value.Description)
+                End If
+            Next
+
+            cbScenario.SelectedIndex = 0
+
+        End If
 
     End Sub
 

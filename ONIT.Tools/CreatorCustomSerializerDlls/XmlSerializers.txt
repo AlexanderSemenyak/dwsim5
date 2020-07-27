@@ -1,0 +1,2 @@
+DWSIM.Thermodynamics.BaseClasses.Compound, DWSIM.Thermodynamics
+DWSIM.Thermodynamics.BaseClasses.ConstantProperties, DWSIM.Thermodynamics

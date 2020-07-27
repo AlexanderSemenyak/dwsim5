@@ -71,9 +71,9 @@ namespace DWSIM.UI.Desktop.Editors.Dynamics
 
             var tr2 = new TableRow();
 
-            btnPlay = new Button { ImagePosition = ButtonImagePosition.Overlay, Text = "", Width = 40, Height = 40, Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-play.png")).WithSize(30, 30) };
-            btnRT = new Button { ImagePosition = ButtonImagePosition.Overlay, Text = "", Width = 40, Height = 40, Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-realtime.png")).WithSize(30, 30) };
-            btnStop = new Button { ImagePosition = ButtonImagePosition.Overlay, Text = "", Width = 40, Height = 40, Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-stop.png")).WithSize(30, 30) };
+            btnPlay = new Button { ImagePosition = ButtonImagePosition.Overlay, Text = "", Width = 40, Height = 40, Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-play.png", this.GetType().Assembly)).WithSize(30, 30) };
+            btnRT = new Button { ImagePosition = ButtonImagePosition.Overlay, Text = "", Width = 40, Height = 40, Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-realtime.png", this.GetType().Assembly)).WithSize(30, 30) };
+            btnStop = new Button { ImagePosition = ButtonImagePosition.Overlay, Text = "", Width = 40, Height = 40, Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-stop.png", this.GetType().Assembly)).WithSize(30, 30) };
 
             pbProgress = new ProgressBar { MinValue = 0, MaxValue = 100 };
 
@@ -93,12 +93,27 @@ namespace DWSIM.UI.Desktop.Editors.Dynamics
 
             this.MouseEnter += (s, e) =>
             {
+                var prevsel = -1;
+                if (cbsc.Items.Count > 0) prevsel = cbsc.SelectedIndex;
                 cbsc.Items.Clear();
                 foreach (var sch in Flowsheet.DynamicsManager.ScheduleList.Values)
                 {
-                    cbsc.Items.Add(sch.Description);
+                    if (sch.CurrentIntegrator != "")
+                    {
+                        var integ = Flowsheet.DynamicsManager.IntegratorList[sch.CurrentIntegrator].Description;
+                        cbsc.Items.Add(sch.Description + " (" + integ + ")");
+                    }
+                    else
+                    {
+                        cbsc.Items.Add(sch.Description);
+                    }
                 }
                 if (cbsc.Items.Count > 0) cbsc.SelectedIndex = 0;
+                try
+                {
+                    if (prevsel != -1) cbsc.SelectedIndex = prevsel;
+                }
+                catch { }
             };
 
             btnStop.Click += (s, e) =>
@@ -122,12 +137,18 @@ namespace DWSIM.UI.Desktop.Editors.Dynamics
 
         public void Populate()
         {
-
             foreach (var sch in Flowsheet.DynamicsManager.ScheduleList.Values)
             {
-                cbsc.Items.Add(sch.Description);
+                if (sch.CurrentIntegrator != "")
+                {
+                    var integ = Flowsheet.DynamicsManager.IntegratorList[sch.CurrentIntegrator].Description;
+                    cbsc.Items.Add(sch.Description + " (" + integ + ")");
+                }
+                else
+                {
+                    cbsc.Items.Add(sch.Description);
+                }
             }
-
         }
 
         public void StoreVariableValues(DynamicsManager.Integrator integrator, int tstep, DateTime tstamp)
@@ -221,9 +242,16 @@ namespace DWSIM.UI.Desktop.Editors.Dynamics
 
         public void RestoreState(string stateID)
         {
-            var initialstate = Flowsheet.StoredSolutions[stateID];
-            Flowsheet.LoadProcessData(initialstate);
-            Flowsheet.UpdateInterface();
+            try
+            {
+                var initialstate = Flowsheet.StoredSolutions[stateID];
+                Flowsheet.LoadProcessData(initialstate);
+                Flowsheet.UpdateInterface();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(String.Format("Error Restoring State {0}: {1}", stateID, ex.Message), "Error", MessageBoxType.Error);
+            }
         }
 
         public Task RunIntegrator(bool realtime, bool waittofinish)
@@ -239,6 +267,8 @@ namespace DWSIM.UI.Desktop.Editors.Dynamics
             var schedule = Flowsheet.DynamicsManager.ScheduleList[Flowsheet.DynamicsManager.CurrentSchedule];
 
             var integrator = Flowsheet.DynamicsManager.IntegratorList[schedule.CurrentIntegrator];
+
+            integrator.RealTime = realtime;
 
             var Controllers = Flowsheet.SimulationObjects.Values.Where(x => x.ObjectClass == SimulationObjectClass.Controllers).ToList();
 
@@ -272,7 +302,7 @@ namespace DWSIM.UI.Desktop.Editors.Dynamics
 
             if (realtime)
             {
-                interval = 1.0;
+                interval = Convert.ToDouble(integrator.RealTimeStepMs) / 1000.0;
             }
 
             var final = pbProgress.MaxValue;
@@ -290,13 +320,17 @@ namespace DWSIM.UI.Desktop.Editors.Dynamics
 
             Flowsheet.SupressMessages = true;
 
+            var exceptions = new List<Exception>();
+
             var maintask = new Task(() =>
             {
                 int j = 0;
 
-                for (var i = 0; i <= final; i += (int)interval)
+                double i = 0;
+
+                while (i <= final)
                 {
-                    int i0 = i;
+                    int i0 = (int)i;
 
                     var sw = new Stopwatch();
 
@@ -339,13 +373,14 @@ namespace DWSIM.UI.Desktop.Editors.Dynamics
                     GlobalSettings.Settings.CalculatorActivated = true;
                     GlobalSettings.Settings.CalculatorBusy = false;
 
-                    FlowsheetSolver.FlowsheetSolver.SolveFlowsheet(Flowsheet, GlobalSettings.Settings.SolverMode);
+                    exceptions = FlowsheetSolver.FlowsheetSolver.SolveFlowsheet(Flowsheet, GlobalSettings.Settings.SolverMode);
 
                     while (GlobalSettings.Settings.CalculatorBusy)
                         Task.Delay(200).Wait();
 
-                    if (!realtime)
-                        StoreVariableValues((DynamicsManager.Integrator)integrator, i, integrator.CurrentTime);
+                    if (exceptions.Count > 0) break;
+
+                    StoreVariableValues((DynamicsManager.Integrator)integrator, j, integrator.CurrentTime);
 
                     Flowsheet.RunCodeOnUIThread(() =>
                     {
@@ -364,7 +399,7 @@ namespace DWSIM.UI.Desktop.Editors.Dynamics
                         }
                     }
 
-                    var waittime = 1000 - sw.ElapsedMilliseconds;
+                    var waittime = integrator.RealTimeStepMs - sw.ElapsedMilliseconds;
 
                     if (waittime > 0 && realtime)
                     {
@@ -387,7 +422,12 @@ namespace DWSIM.UI.Desktop.Editors.Dynamics
 
                     j += 1;
 
+                    i += interval;
+
                 }
+
+                if (exceptions.Count > 0) throw exceptions[0];
+
             });
 
             maintask.ContinueWith(t =>
@@ -400,6 +440,12 @@ namespace DWSIM.UI.Desktop.Editors.Dynamics
                     pbProgress.Value = 0;
                     Flowsheet.SupressMessages = false;
                     Flowsheet.UpdateEditorPanels.Invoke();
+                    if (t.Exception != null)
+                    {
+                        var euid = Guid.NewGuid().ToString();
+                        SharedClasses.ExceptionProcessing.ExceptionList.Exceptions.Add(euid, t.Exception);
+                        Flowsheet.ShowMessage(t.Exception.Message, Interfaces.IFlowsheet.MessageType.GeneralError, euid);                                                                
+                    }
                 });
             });
 
@@ -426,7 +472,7 @@ namespace DWSIM.UI.Desktop.Editors.Dynamics
 
             sheet.RowCount = integrator.MonitoredVariableValues.Count + 1;
 
-            sheet.Cells[0, 0].Data = "Time (s)";
+            sheet.Cells[0, 0].Data = "Time (ms)";
 
             int i, j;
 
@@ -440,11 +486,18 @@ namespace DWSIM.UI.Desktop.Editors.Dynamics
             i = 1;
             foreach (var item in integrator.MonitoredVariableValues)
             {
-                sheet.Cells[i, 0].Data = item.Key.ToString();
+                if (integrator.RealTime)
+                {
+                    sheet.Cells[i, 0].Data = item.Key * integrator.RealTimeStepMs;
+                }
+                else
+                {
+                    sheet.Cells[i, 0].Data = item.Key * integrator.IntegrationStep.TotalMilliseconds;
+                }
                 j = 1;
                 foreach (var var in item.Value)
                 {
-                    sheet.Cells[i, j].Data = var.PropertyValue;
+                    sheet.Cells[i, j].Data = var.PropertyValue.ToDoubleFromInvariant();
                     j += 1;
                 }
                 i += 1;

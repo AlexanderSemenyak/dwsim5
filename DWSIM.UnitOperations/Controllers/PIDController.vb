@@ -66,9 +66,14 @@ Namespace SpecialOps
         Protected m_initialEstimate As Nullable(Of Double) = Nothing
 
         Public Property Offset As Double = 0.0
-        Public Property Kp As Double = 1.0
-        Public Property Kd As Double = 0.0
-        Public Property Ki As Double = 0.0
+
+        Public Property Kp As Double = 10.0
+
+        Public Property Kd As Double = 2.0
+
+        Public Property Ki As Double = 2.0
+
+        Public Property WindupGuard As Double = 20.0
 
         Public Property CurrentError As Double = 0.0
 
@@ -644,6 +649,12 @@ Namespace SpecialOps
 
             ITerm += CurrentError * timestep
 
+            If ITerm < -WindupGuard Then
+                ITerm = -WindupGuard
+            ElseIf ITerm > WindupGuard Then
+                ITerm = WindupGuard
+            End If
+
             DTerm = 0.0
 
             If Math.Abs(LastError) > 0.0 Then DTerm = delta_error / timestep
@@ -652,21 +663,31 @@ Namespace SpecialOps
 
                 Output = PTerm + Ki * ITerm + Kd * DTerm + Offset / BaseSP
 
+                If Not ReverseActing Then
+                    OutputAbs = (1.0 - Output) * BaseSP
+                Else
+                    OutputAbs = (1.0 + Output) * BaseSP
+                End If
+
+                If OutputAbs > OutputMax Then OutputAbs = OutputMax
+
+                If OutputAbs < OutputMin Then OutputAbs = OutputMin
+
+                MVValue = SystemsOfUnits.Converter.ConvertToSI(ManipulatedObjectData.Units, OutputAbs)
+
+            Else
+
+                OutputAbs = SystemsOfUnits.Converter.ConvertFromSI(ManipulatedObjectData.Units, MVValue)
+
+                If Not ReverseActing Then
+                    Output = 1.0 - OutputAbs / BaseSP
+                Else
+                    Output = OutputAbs / BaseSP - 1.0
+                End If
+
             End If
 
             MVHistory.Add(Output)
-
-            If Not ReverseActing Then
-                OutputAbs = (1.0 - Output) * BaseSP
-            Else
-                OutputAbs = (1.0 + Output) * BaseSP
-            End If
-
-            If OutputAbs > OutputMax Then OutputAbs = OutputMax
-
-            If OutputAbs < OutputMin Then OutputAbs = OutputMin
-
-            MVValue = SharedClasses.SystemsOfUnits.Converter.ConvertToSI(ManipulatedObjectData.Units, OutputAbs)
 
             ManipulatedObject.SetPropertyValue(ManipulatedObjectData.PropertyName, MVValue)
 
@@ -681,14 +702,14 @@ Namespace SpecialOps
                 xavals.Add(i)
             Next
 
-            model.TitleFontSize = 13
-            model.SubtitleFontSize = 12
+            model.TitleFontSize = 12
+            model.SubtitleFontSize = 10
 
             model.Axes.Add(New LinearAxis() With {
                 .MajorGridlineStyle = LineStyle.Dash,
                 .MinorGridlineStyle = LineStyle.Dot,
                 .Position = AxisPosition.Bottom,
-                .FontSize = 12,
+                .FontSize = 10,
                 .Title = "Step"
             })
 
@@ -696,7 +717,7 @@ Namespace SpecialOps
                 .MajorGridlineStyle = LineStyle.Dash,
                 .MinorGridlineStyle = LineStyle.Dot,
                 .Position = AxisPosition.Left,
-                .FontSize = 12,
+                .FontSize = 10,
                 .Title = "SP/PV",
                 .Key = "0"
             })
@@ -705,12 +726,12 @@ Namespace SpecialOps
                 .MajorGridlineStyle = LineStyle.Dash,
                 .MinorGridlineStyle = LineStyle.Dot,
                 .Position = AxisPosition.Right,
-                .FontSize = 12,
+                .FontSize = 10,
                 .Title = "MV",
                 .Key = "1"
             })
 
-            model.LegendFontSize = 13
+            model.LegendFontSize = 10
             model.LegendPlacement = LegendPlacement.Outside
             model.LegendOrientation = LegendOrientation.Horizontal
             model.LegendPosition = LegendPosition.BottomCenter

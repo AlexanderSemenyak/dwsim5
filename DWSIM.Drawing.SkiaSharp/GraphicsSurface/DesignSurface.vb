@@ -6,6 +6,10 @@ Imports DWSIM.Interfaces.Enums.GraphicObjects
 Imports DWSIM.Drawing.SkiaSharp.GraphicObjects
 Imports DWSIM.Interfaces.Enums
 Imports DWSIM.DrawingTools.Point
+Imports Microsoft.Msagl.Core.Geometry.Curves
+Imports Microsoft.Msagl.Core.Layout
+Imports Microsoft.Msagl.Layout.Initial
+Imports Microsoft.Msagl.Layout.Incremental
 
 Public Class GraphicsSurface
 
@@ -59,16 +63,18 @@ Public Class GraphicsSurface
 
     Public ControlPanelMode As Boolean = False
 
+    Public NetworkMode As Boolean = False
+
     Public Property DefaultTypeFace As SKTypeface
 
     Public Sub New()
         Select Case GlobalSettings.Settings.RunningPlatform
             Case GlobalSettings.Settings.Platform.Windows
-                Me.DefaultTypeFace = SKTypeface.FromFamilyName("Segoe UI", SKTypefaceStyle.Bold)
+                Me.DefaultTypeFace = SKTypeface.FromFamilyName("Segoe UI", SKFontStyleWeight.Bold, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright)
             Case GlobalSettings.Settings.Platform.Linux
-                Me.DefaultTypeFace = SKTypeface.FromFamilyName("Ubuntu", SKTypefaceStyle.Bold)
+                Me.DefaultTypeFace = SKTypeface.FromFamilyName("Ubuntu", SKFontStyleWeight.Bold, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright)
             Case GlobalSettings.Settings.Platform.Mac
-                Me.DefaultTypeFace = SKTypeface.FromFamilyName("Helvetica Neue", SKTypefaceStyle.Bold)
+                Me.DefaultTypeFace = SKTypeface.FromFamilyName("Helvetica Neue", SKFontStyleWeight.Bold, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright)
         End Select
     End Sub
 
@@ -202,7 +208,9 @@ Public Class GraphicsSurface
 
         Dim objects = DrawingObjects.ToArray
 
-        If objects.Count = 0 AndAlso Not GlobalSettings.Settings.OldUI Then DrawInstructions(DrawingCanvas)
+        If objects.Count = 0 AndAlso Not GlobalSettings.Settings.OldUI Then
+            If Not NetworkMode Then DrawInstructions(DrawingCanvas)
+        End If
 
         If DrawAddedAnimation Then
             Dim tstep = (Date.Now - AnimationStart).TotalMilliseconds
@@ -343,7 +351,17 @@ Public Class GraphicsSurface
         End If
 
         For Each dobj As GraphicObject In Me.DrawingObjects
-            If TypeOf dobj Is Tables.FloatingTableGraphic Then dobj.Draw(DrawingCanvas)
+            If TypeOf dobj Is Tables.FloatingTableGraphic Then
+                'Dim deltaX, deltaY As Integer
+                'If (dobj.X + dobj.Width) * Zoom > Me.Size.Width Then
+                '    deltaX = -10 / Zoom - dobj.Width / Zoom
+                'End If
+                'If (dobj.Y + dobj.Height) * Zoom > Me.Size.Height Then
+                '    deltaY = -10 / Zoom - dobj.Height / Zoom
+                'End If
+                'dobj.SetPosition(dobj.X + deltaX, dobj.Y + deltaY)
+                dobj.Draw(DrawingCanvas)
+            End If
         Next
 
         'draw selection rectangle (click and drag to select interface)
@@ -503,7 +521,7 @@ Public Class GraphicsSurface
 
     Public Sub ZoomAll(viewwidth As Integer, viewheight As Integer)
 
-		If Me.DrawingObjects.Count = 0 Then Exit Sub
+        If Me.DrawingObjects.Count = 0 Then Exit Sub
 
         Size = New SKSize(viewwidth, viewheight)
 
@@ -685,24 +703,28 @@ Public Class GraphicsSurface
                                 gobj.ObjectType = ObjectType.GO_Chart And Not _
                                 gobj.ObjectType = ObjectType.Nenhum Then
 
-                            Dim flowsheet = gobj.Owner.GetFlowsheet()
+                            Dim flowsheet = gobj.Owner?.GetFlowsheet()
 
-                            If gobj.Calculated Or gobj.ObjectType = ObjectType.OT_Adjust Or
+                            If flowsheet IsNot Nothing Then
+
+                                If gobj.Calculated Or gobj.ObjectType = ObjectType.OT_Adjust Or
                                 gobj.ObjectType = ObjectType.OT_Spec Or gobj.ObjectType = ObjectType.OT_Recycle Or
                                 gobj.ObjectType = ObjectType.OT_EnergyRecycle Then
 
-                                If flowsheet.SimulationObjects.ContainsKey(gobj.Name) Then
+                                    If gobj.Owner IsNot Nothing Then
 
-                                    Dim obj = flowsheet.SimulationObjects(gobj.Name)
+                                        Dim obj = gobj.Owner
 
-                                    Dim tabela As New Tables.FloatingTableGraphic(obj, (x + 25) / Zoom, (y + 25) / Zoom)
-                                    tabela.Owner = obj
-                                    tabela.Tag = obj.Name
-                                    tabela.Name = "QTAB-" & Guid.NewGuid.ToString
-                                    tabela.HeaderText = gobj.Tag
-                                    tabela.AdditionalInfo = Zoom
-                                    _FloatingTable = tabela
-                                    DrawingObjects.Add(tabela)
+                                        Dim tabela As New Tables.FloatingTableGraphic(obj, (x + 25) / Zoom, (y + 25) / Zoom)
+                                        tabela.Owner = obj
+                                        tabela.Tag = obj.Name
+                                        tabela.Name = "QTAB-" & Guid.NewGuid.ToString
+                                        tabela.HeaderText = gobj.Tag
+                                        tabela.AdditionalInfo = Zoom
+                                        _FloatingTable = tabela
+                                        DrawingObjects.Add(tabela)
+
+                                    End If
 
                                 End If
 
@@ -910,7 +932,7 @@ Public Class GraphicsSurface
         RaiseEvent StatusUpdate(Me, New StatusUpdateEventArgs(StatusUpdateType.ObjectDeleted, Nothing, "", Nothing, 0))
     End Sub
 
-    Private Function AngleToPoint(ByVal Origin As SKPoint, _
+    Private Function AngleToPoint(ByVal Origin As SKPoint,
             ByVal Target As SKPoint) As Single
         'a cool little utility function, 
         'given two points finds the angle between them....
@@ -1436,7 +1458,137 @@ Public Class GraphicsSurface
 
     Public Sub AutoArrange(Optional ByVal DistanceFactor As Double = 1.0)
 
+        Dim graph As New GeometryGraph
+        Dim rec1 As ICurve
 
+        For Each obj In DrawingObjects
+            If Not obj.IsConnector Then
+                Select Case obj.ObjectType
+                    Case ObjectType.GO_Rectangle,
+                           ObjectType.GO_FloatingTable
+                    Case Else
+                        rec1 = Microsoft.Msagl.Core.Geometry.Curves.CurveFactory.CreateRectangle(obj.Width, obj.Height, New Microsoft.Msagl.Core.Geometry.Point(obj.X + obj.Width / 2, obj.Y + obj.Height / 2))
+                        Dim n1 = New Node(rec1, obj.Name)
+                        graph.Nodes.Add(n1)
+                End Select
+            End If
+        Next
+
+        For Each obj In DrawingObjects
+            If TypeOf obj Is IConnectorGraphicObject Then
+                Dim con = DirectCast(obj, IConnectorGraphicObject)
+                Dim n1 = graph.Nodes.Where(Function(x) x.UserData = con.AttachedFrom.Name).FirstOrDefault
+                Dim n2 = graph.Nodes.Where(Function(x) x.UserData = con.AttachedTo.Name).FirstOrDefault
+                Dim e1 = New Edge(n1, n2)
+                graph.Edges.Add(e1)
+            ElseIf TypeOf obj Is Shapes.AdjustGraphic Then
+                Dim adj = DirectCast(obj, DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.AdjustGraphic)
+                Dim n0 = graph.Nodes.Where(Function(x) x.UserData = adj.Name).FirstOrDefault
+                Dim n1 = graph.Nodes.Where(Function(x) x.UserData = adj.ConnectedToCv?.Name).FirstOrDefault
+                Dim n2 = graph.Nodes.Where(Function(x) x.UserData = adj.ConnectedToMv?.Name).FirstOrDefault
+                If n1 IsNot Nothing Then
+                    Dim e1 = New Edge(n0, n1)
+                    graph.Edges.Add(e1)
+                End If
+                If n2 IsNot Nothing Then
+                    Dim e1 = New Edge(n0, n2)
+                    graph.Edges.Add(e1)
+                End If
+            ElseIf TypeOf obj Is Shapes.PIDControllerGraphic Then
+                Dim pid = DirectCast(obj, DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.PIDControllerGraphic)
+                Dim n0 = graph.Nodes.Where(Function(x) x.UserData = pid.Name).FirstOrDefault
+                Dim n1 = graph.Nodes.Where(Function(x) x.UserData = pid.ConnectedToCv?.Name).FirstOrDefault
+                Dim n2 = graph.Nodes.Where(Function(x) x.UserData = pid.ConnectedToMv?.Name).FirstOrDefault
+                If n1 IsNot Nothing Then
+                    Dim e1 = New Edge(n0, n1)
+                    graph.Edges.Add(e1)
+                End If
+                If n2 IsNot Nothing Then
+                    Dim e1 = New Edge(n0, n2)
+                    graph.Edges.Add(e1)
+                End If
+            ElseIf TypeOf obj Is Shapes.SpecGraphic Then
+                Dim spec = DirectCast(obj, DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes.SpecGraphic)
+                Dim n0 = graph.Nodes.Where(Function(x) x.UserData = spec.Name).FirstOrDefault
+                Dim n1 = graph.Nodes.Where(Function(x) x.UserData = spec.ConnectedToSv?.Name).FirstOrDefault
+                Dim n2 = graph.Nodes.Where(Function(x) x.UserData = spec.ConnectedToTv?.Name).FirstOrDefault
+                If n1 IsNot Nothing Then
+                    Dim e1 = New Edge(n0, n1)
+                    graph.Edges.Add(e1)
+                End If
+                If n2 IsNot Nothing Then
+                    Dim e1 = New Edge(n0, n2)
+                    graph.Edges.Add(e1)
+                End If
+            ElseIf obj.Owner IsNot Nothing Then
+                Select Case obj.ObjectType
+                    Case ObjectType.Input
+                        Dim owneri = DirectCast(obj.Owner, IInput)
+                        Dim SelectedObject = obj.Owner.GetFlowsheet?.SimulationObjects.Values.Where(Function(x) x.Name = owneri.SelectedObjectID).FirstOrDefault
+                        If SelectedObject IsNot Nothing Then
+                            Dim n0 = graph.Nodes.Where(Function(x) x.UserData = obj.Name).FirstOrDefault
+                            Dim n1 = graph.Nodes.Where(Function(x) x.UserData = SelectedObject.Name).FirstOrDefault
+                            Dim e1 = New Edge(n0, n1)
+                            graph.Edges.Add(e1)
+                        End If
+                    Case ObjectType.LevelGauge, ObjectType.AnalogGauge, ObjectType.DigitalGauge
+                        Dim owneri = DirectCast(obj.Owner, IIndicator)
+                        Dim SelectedObject = obj.Owner.GetFlowsheet?.SimulationObjects.Values.Where(Function(x) x.Name = owneri.SelectedObjectID).FirstOrDefault
+                        If SelectedObject IsNot Nothing Then
+                            Dim n0 = graph.Nodes.Where(Function(x) x.UserData = obj.Name).FirstOrDefault
+                            Dim n1 = graph.Nodes.Where(Function(x) x.UserData = SelectedObject.Name).FirstOrDefault
+                            Dim e1 = New Edge(n0, n1)
+                            graph.Edges.Add(e1)
+                        End If
+                End Select
+            End If
+        Next
+
+        Dim settings = New Microsoft.Msagl.Layout.Incremental.FastIncrementalLayoutSettings()
+        settings.AvoidOverlaps = True
+        settings.PackingMethod = PackingMethod.Compact
+        settings.NodeSeparation = 50 * DistanceFactor
+        settings.RouteEdges = True
+        settings.RespectEdgePorts = True
+        Dim eset = New Microsoft.Msagl.Core.Routing.EdgeRoutingSettings()
+        eset.EdgeRoutingMode = Microsoft.Msagl.Core.Routing.EdgeRoutingMode.Rectilinear
+        settings.EdgeRoutingSettings = eset
+
+        Dim layout = New InitialLayout(graph, settings)
+
+        layout.Run()
+
+        graph.UpdateBoundingBox()
+
+        For Each node In graph.Nodes
+            Dim gobj = DrawingObjects.Where(Function(x) x.Name = node.UserData).FirstOrDefault
+            gobj.X = node.Center.X - node.Width / 2
+            gobj.Y = node.Center.Y - node.Height / 2
+        Next
+
+        settings = Nothing
+        layout = Nothing
+        graph = Nothing
+
+        For Each obj In DrawingObjects
+            If TypeOf obj Is ShapeGraphic And Not obj.IsConnector Then
+                DirectCast(obj, ShapeGraphic).PositionConnectors()
+            End If
+        Next
+
+        For Each obj In DrawingObjects
+            If TypeOf obj Is ShapeGraphic And Not obj.IsConnector Then
+                If obj.InputConnectors.Count = 1 And obj.OutputConnectors.Count = 1 Then
+                    If obj.InputConnectors(0).IsAttached Then
+                        If obj.InputConnectors(0).AttachedConnector.AttachedFrom.X > obj.X Then
+                            obj.FlippedH = True
+                        Else
+                            obj.FlippedH = False
+                        End If
+                    End If
+                End If
+            End If
+        Next
 
     End Sub
 

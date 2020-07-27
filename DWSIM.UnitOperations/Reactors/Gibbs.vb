@@ -37,6 +37,11 @@ Namespace Reactors
 
         Inherits Reactor
 
+        Public Overrides ReadOnly Property SupportsDynamicMode As Boolean = True
+
+        Public Overrides ReadOnly Property HasPropertiesForDynamicMode As Boolean = False
+
+
         <NonSerialized> <Xml.Serialization.XmlIgnore> Public f As EditingForm_ReactorConvEqGibbs
 
         Public Enum SolvingMethod
@@ -913,6 +918,12 @@ Namespace Reactors
             ElseIf Not Me.GraphicObject.InputConnectors(0).IsAttached Then
                 Throw New Exception(FlowSheet.GetTranslatedString("Verifiqueasconexesdo"))
             End If
+
+        End Sub
+
+        Public Overrides Sub RunDynamicModel()
+
+            Calculate()
 
         End Sub
 
@@ -2047,6 +2058,8 @@ Namespace Reactors
             ws = tmp.GetSolidPhaseMassFraction
             Ki = tmp.Kvalues.ToArray
 
+            OutletTemperature = T
+
             Dim ms As MaterialStream
             Dim cp As IConnectionPoint
 
@@ -2458,12 +2471,12 @@ Namespace Reactors
 
             list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.TripleColumn,
                     New String() {"Initial Gibbs Free Energy",
-                    InitialGibbsEnergy.ConvertFromSI(su.enthalpy).ToString(nf),
+                    InitialGibbsEnergy.ConvertFromSI(su.heatflow).ToString(nf),
                     su.enthalpy}))
 
             list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.TripleColumn,
                     New String() {"Final Gibbs Free Energy",
-                    FinalGibbsEnergy.ConvertFromSI(su.enthalpy).ToString(nf),
+                    FinalGibbsEnergy.ConvertFromSI(su.heatflow).ToString(nf),
                     su.enthalpy}))
 
             list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.TripleColumn,

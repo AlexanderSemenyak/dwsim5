@@ -36,6 +36,11 @@ Namespace Reactors
 
         Inherits Reactor
 
+        Public Overrides ReadOnly Property SupportsDynamicMode As Boolean = True
+
+        Public Overrides ReadOnly Property HasPropertiesForDynamicMode As Boolean = False
+
+
         <NonSerialized> <Xml.Serialization.XmlIgnore> Public f As EditingForm_ReactorConvEqGibbs
 
         Private _IObj As InspectorItem
@@ -204,10 +209,12 @@ Namespace Reactors
             Next
 
             Dim pen_val As Double = If(NoPenVal, 0.0, ReturnPenaltyValue())
+            Dim kr As Double
 
             For i = 0 To Me.Reactions.Count - 1
                 With FlowSheet.Reactions(Me.Reactions(i))
-                    f(i) = prod(i) - .EvaluateK(T, pp) + pen_val
+                    kr = .EvaluateK(T, pp)
+                    f(i) = prod(i) - kr + pen_val
                     If Double.IsNaN(f(i)) Or Double.IsInfinity(f(i)) Then
                         f(i) = pen_val
                     End If
@@ -404,6 +411,12 @@ Namespace Reactors
             ElseIf Not Me.GraphicObject.InputConnectors(0).IsAttached Then
                 Throw New Exception(FlowSheet.GetTranslatedString("Verifiqueasconexesdo"))
             End If
+
+        End Sub
+
+        Public Overrides Sub RunDynamicModel()
+
+            Calculate()
 
         End Sub
 
@@ -1061,6 +1074,8 @@ Namespace Reactors
                 Next
             End If
 
+            OutletTemperature = T
+
             cp = Me.GraphicObject.OutputConnectors(0)
             If cp.IsAttached Then
                 ms = FlowSheet.SimulationObjects(cp.AttachedConnector.AttachedTo.Name)
@@ -1525,12 +1540,12 @@ Namespace Reactors
 
             list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.TripleColumn,
                     New String() {"Initial Gibbs Free Energy",
-                    InitialGibbsEnergy.ConvertFromSI(su.enthalpy).ToString(nf),
+                    InitialGibbsEnergy.ConvertFromSI(su.heatflow).ToString(nf),
                     su.enthalpy}))
 
             list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.TripleColumn,
                     New String() {"Final Gibbs Free Energy",
-                    FinalGibbsEnergy.ConvertFromSI(su.enthalpy).ToString(nf),
+                    FinalGibbsEnergy.ConvertFromSI(su.heatflow).ToString(nf),
                     su.enthalpy}))
 
             list.Add(New Tuple(Of ReportItemType, String())(ReportItemType.Label, New String() {"Reaction Extents"}))

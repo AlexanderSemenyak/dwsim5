@@ -122,6 +122,8 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
 
             settings(Interfaces.Enums.FlashSetting.CheckIncipientLiquidForStability) = False
 
+            settings(Interfaces.Enums.FlashSetting.PHFlash_MaximumTemperatureChange) = 30.0.ToString(ci)
+
             Return settings
 
         End Function
@@ -1304,6 +1306,9 @@ will converge to this solution.")
                 End If
                 If Not FlashSettings.ContainsKey(Interfaces.Enums.FlashSetting.CheckIncipientLiquidForStability) Then
                     FlashSettings.Add(Interfaces.Enums.FlashSetting.CheckIncipientLiquidForStability, False)
+                End If
+                If Not FlashSettings.ContainsKey(Interfaces.Enums.FlashSetting.PHFlash_MaximumTemperatureChange) Then
+                    FlashSettings.Add(Interfaces.Enums.FlashSetting.PHFlash_MaximumTemperatureChange, 30.0.ToString(Globalization.CultureInfo.InvariantCulture))
                 End If
 
             End If

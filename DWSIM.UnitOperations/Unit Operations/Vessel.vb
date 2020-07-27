@@ -1,5 +1,5 @@
 '    Separator Vessel Calculation Routines 
-'    Copyright 2008-2014 Daniel Wagner O. de Medeiros
+'    Copyright 2008-2020 Daniel Wagner O. de Medeiros
 '
 '    This file is part of DWSIM.
 '
@@ -20,11 +20,7 @@
 Imports DWSIM.Thermodynamics
 Imports DWSIM.Thermodynamics.Streams
 Imports DWSIM.SharedClasses
-Imports System.Windows.Forms
-Imports DWSIM.UnitOperations.UnitOperations.Auxiliary
-Imports DWSIM.Thermodynamics.BaseClasses
 Imports DWSIM.Interfaces.Enums
-Imports System.Linq
 Imports DWSIM.Interfaces.My.Resources
 
 Namespace UnitOperations
@@ -35,6 +31,8 @@ Namespace UnitOperations
         Public Overrides Property ObjectClass As SimulationObjectClass = SimulationObjectClass.Separators
 
         Public Overrides ReadOnly Property SupportsDynamicMode As Boolean = True
+
+        Public Overrides ReadOnly Property HasPropertiesForDynamicMode As Boolean = True
 
         Dim rhol, rhov, ql, qv, qe, rhoe, wl, wv As Double
         Dim C, VGI, VMAX, K As Double
@@ -154,7 +152,8 @@ Namespace UnitOperations
             AddDynamicProperty("Liquid Level", "Current Liquid Level", 0, UnitOfMeasure.distance)
             AddDynamicProperty("Volume", "Vessel Volume", 1, UnitOfMeasure.volume)
             AddDynamicProperty("Height", "Available Height for Liquid", 2, UnitOfMeasure.distance)
-            AddDynamicProperty("Initialize using Inlet Stream", "Initializes the vessel content with information from the inlet stream, if the vessel content is null.", 1, UnitOfMeasure.none)
+            AddDynamicProperty("Minimum Pressure", "Minimum Dynamic Pressure for this Unit Operation.", 101325, UnitOfMeasure.pressure)
+            AddDynamicProperty("Initialize using Inlet Stream", "Initializes the vessel content with information from the inlet stream, if the vessel content is null.", 0, UnitOfMeasure.none)
             AddDynamicProperty("Reset Content", "Empties the vessel's content on the next run.", 0, UnitOfMeasure.none)
 
         End Sub
@@ -167,6 +166,8 @@ Namespace UnitOperations
             Dim integrator = FlowSheet.DynamicsManager.IntegratorList(integratorID)
 
             Dim timestep = integrator.IntegrationStep.TotalSeconds
+
+            If integrator.RealTime Then timestep = Convert.ToDouble(integrator.RealTimeStepMs) / 1000.0
 
             Dim oms1 As MaterialStream = Me.GetOutletMaterialStream(0)
             Dim oms2 As MaterialStream = Me.GetOutletMaterialStream(1)
@@ -187,14 +188,10 @@ Namespace UnitOperations
                 End If
             Next
 
-            Dim s2, s3 As Enums.Dynamics.DynamicsSpecType
-
-            s2 = oms1.DynamicsSpec
-            s3 = oms2.DynamicsSpec
-
             Dim Vol As Double = GetDynamicProperty("Volume")
             Dim Height As Double = GetDynamicProperty("Height")
             Dim Pressure As Double
+            Dim Pmin = GetDynamicProperty("Minimum Pressure")
             Dim Orientation As Integer = GetDynamicProperty("Vessel Orientation")
             Dim InitializeFromInlet As Boolean = GetDynamicProperty("Initialize using Inlet Stream")
 
@@ -205,154 +202,152 @@ Namespace UnitOperations
                 SetDynamicProperty("Reset Content", 0)
             End If
 
-            If s2 = Dynamics.DynamicsSpecType.Pressure And s3 = Dynamics.DynamicsSpecType.Pressure Then
+            If AccumulationStream Is Nothing Then
 
-                If AccumulationStream Is Nothing Then
+                If InitializeFromInlet Then
 
-                    If InitializeFromInlet Then
-
-                        AccumulationStream = imsmix.CloneXML
-
-                    Else
-
-                        AccumulationStream = imsmix.Subtract(oms1, timestep)
-                        AccumulationStream = AccumulationStream.Subtract(oms2, timestep)
-
-                    End If
-
-                    Dim density = AccumulationStream.Phases(0).Properties.density.GetValueOrDefault
-
-                    AccumulationStream.SetMassFlow(density * Vol)
-                    AccumulationStream.SpecType = StreamSpec.Temperature_and_Pressure
-                    AccumulationStream.PropertyPackage = PropertyPackage
-                    AccumulationStream.PropertyPackage.CurrentMaterialStream = AccumulationStream
-                    AccumulationStream.Calculate()
+                    AccumulationStream = imsmix.CloneXML
 
                 Else
 
-                    AccumulationStream.SetFlowsheet(FlowSheet)
-                    AccumulationStream = AccumulationStream.Add(imsmix, timestep)
-                    AccumulationStream = AccumulationStream.Subtract(oms1, timestep)
+                    AccumulationStream = imsmix.Subtract(oms1, timestep)
                     AccumulationStream = AccumulationStream.Subtract(oms2, timestep)
-                    If AccumulationStream.GetMassFlow <= 0.0 Then AccumulationStream.SetMassFlow(0.0)
+
                 End If
+
+                Dim density = AccumulationStream.Phases(0).Properties.density.GetValueOrDefault
+
+                AccumulationStream.SetMassFlow(density * Vol)
+                AccumulationStream.SpecType = StreamSpec.Temperature_and_Pressure
+                AccumulationStream.PropertyPackage = PropertyPackage
+                AccumulationStream.PropertyPackage.CurrentMaterialStream = AccumulationStream
+                AccumulationStream.Calculate()
+
+            Else
 
                 AccumulationStream.SetFlowsheet(FlowSheet)
+                If imsmix.GetMassFlow() > 0 Then AccumulationStream = AccumulationStream.Add(imsmix, timestep)
+                AccumulationStream.PropertyPackage.CurrentMaterialStream = AccumulationStream
+                AccumulationStream.Calculate()
+                If oms1.GetMassFlow() > 0 Then AccumulationStream = AccumulationStream.Subtract(oms1, timestep)
+                If oms2.GetMassFlow() > 0 Then AccumulationStream = AccumulationStream.Subtract(oms2, timestep)
+                If AccumulationStream.GetMassFlow <= 0.0 Then AccumulationStream.SetMassFlow(0.0)
+            End If
 
-                ' Calculate Temperature
+            AccumulationStream.SetFlowsheet(FlowSheet)
 
-                Dim Qval, Ha, Wa As Double
+            ' Calculate Temperature
 
-                Ha = AccumulationStream.GetMassEnthalpy
-                Wa = AccumulationStream.GetMassFlow
+            Dim Qval, Ha, Wa As Double
 
-                Dim es = GetInletEnergyStream(6)
+            Ha = AccumulationStream.GetMassEnthalpy
+            Wa = AccumulationStream.GetMassFlow
 
-                If es IsNot Nothing Then Qval = es.EnergyFlow.GetValueOrDefault
+            Dim es = GetInletEnergyStream(6)
 
-                If Qval <> 0.0 Then
+            If es IsNot Nothing Then Qval = es.EnergyFlow.GetValueOrDefault
 
-                    If Wa > 0 Then
+            If Qval <> 0.0 Then
 
-                        AccumulationStream.SetMassEnthalpy(Ha + Qval * timestep / Wa)
+                If Wa > 0 Then
 
-                        AccumulationStream.SpecType = StreamSpec.Pressure_and_Enthalpy
+                    AccumulationStream.SetMassEnthalpy(Ha + Qval * timestep / Wa)
 
-                        AccumulationStream.PropertyPackage = PropertyPackage
-                        AccumulationStream.PropertyPackage.CurrentMaterialStream = AccumulationStream
+                    AccumulationStream.SpecType = StreamSpec.Pressure_and_Enthalpy
 
-                        If integrator.ShouldCalculateEquilibrium Then
+                    AccumulationStream.PropertyPackage = PropertyPackage
+                    AccumulationStream.PropertyPackage.CurrentMaterialStream = AccumulationStream
 
-                            AccumulationStream.Calculate(True, True)
+                    If integrator.ShouldCalculateEquilibrium Then
 
-                        End If
+                        AccumulationStream.Calculate(True, True)
 
                     End If
 
                 End If
 
-                'calculate pressure
+            End If
 
-                Dim M = AccumulationStream.GetMolarFlow()
+            'calculate pressure
 
-                Dim Temperature = AccumulationStream.GetTemperature
+            Dim M = AccumulationStream.GetMolarFlow()
 
-                Pressure = AccumulationStream.GetPressure
+            Dim Temperature = AccumulationStream.GetTemperature
 
-                'm3/mol
+            Pressure = AccumulationStream.GetPressure
 
-                prevM = currentM
+            'm3/mol
 
-                currentM = Vol / M
+            prevM = currentM
 
-                PropertyPackage.CurrentMaterialStream = AccumulationStream
+            currentM = Vol / M
 
-                Dim LiquidVolume, RelativeLevel As Double
+            PropertyPackage.CurrentMaterialStream = AccumulationStream
 
-                If AccumulationStream.GetPressure > 0 Then
+            Dim LiquidVolume, RelativeLevel As Double
 
-                    If prevM = 0.0 Or integrator.ShouldCalculateEquilibrium Then
+            If AccumulationStream.GetPressure > Pmin Then
 
-                        Dim result As IFlashCalculationResult
+                If prevM = 0.0 Or integrator.ShouldCalculateEquilibrium Then
 
-                        result = PropertyPackage.CalculateEquilibrium2(FlashCalculationType.VolumeTemperature, currentM, Temperature, Pressure)
+                    Dim result As IFlashCalculationResult
 
-                        Pressure = result.CalculatedPressure
+                    result = PropertyPackage.CalculateEquilibrium2(FlashCalculationType.VolumeTemperature, currentM, Temperature, Pressure)
 
-                        LiquidVolume = AccumulationStream.Phases(3).Properties.volumetric_flow.GetValueOrDefault
+                    Pressure = result.CalculatedPressure
 
-                        RelativeLevel = LiquidVolume / Vol
-
-                        SetDynamicProperty("Liquid Level", RelativeLevel * Height)
-
-                    Else
-
-                        Pressure = currentM / prevM * Pressure
-
-                    End If
-
-                Else
-
-                    Pressure = 0.0
-
-                    LiquidVolume = 0.0
+                    LiquidVolume = AccumulationStream.Phases(3).Properties.volumetric_flow.GetValueOrDefault
 
                     RelativeLevel = LiquidVolume / Vol
 
                     SetDynamicProperty("Liquid Level", RelativeLevel * Height)
 
-                End If
+                Else
 
-                AccumulationStream.SetPressure(Pressure)
-                AccumulationStream.SpecType = StreamSpec.Temperature_and_Pressure
-
-                AccumulationStream.PropertyPackage = PropertyPackage
-                AccumulationStream.PropertyPackage.CurrentMaterialStream = AccumulationStream
-
-                If integrator.ShouldCalculateEquilibrium And Pressure > 0.0 Then
-
-                    AccumulationStream.Calculate(True, True)
+                    Pressure = currentM / prevM * Pressure
 
                 End If
 
-                SetDynamicProperty("Operating Pressure", Pressure)
+            Else
 
-                For i = 0 To 5
-                    If Me.GraphicObject.InputConnectors(i).IsAttached Then
-                        GetInletMaterialStream(i).SetPressure(Pressure)
-                    End If
-                Next
-                oms1.SetPressure(Pressure)
+                Pressure = Pmin
 
-                Dim liqdens = AccumulationStream.Phases(3).Properties.density.GetValueOrDefault
+                LiquidVolume = 0.0
 
-                oms2.SetPressure(Pressure + liqdens * 9.8 * RelativeLevel * Height)
+                RelativeLevel = LiquidVolume / Vol
 
-                oms1.AssignFromPhase(PhaseLabel.Vapor, AccumulationStream, False)
-
-                oms2.AssignFromPhase(PhaseLabel.Liquid1, AccumulationStream, False)
+                SetDynamicProperty("Liquid Level", RelativeLevel * Height)
 
             End If
+
+            AccumulationStream.SetPressure(Pressure)
+            AccumulationStream.SpecType = StreamSpec.Temperature_and_Pressure
+
+            AccumulationStream.PropertyPackage = PropertyPackage
+            AccumulationStream.PropertyPackage.CurrentMaterialStream = AccumulationStream
+
+            If integrator.ShouldCalculateEquilibrium And Pressure > 0.0 Then
+
+                AccumulationStream.Calculate(True, True)
+
+            End If
+
+            SetDynamicProperty("Operating Pressure", Pressure)
+
+            For i = 0 To 5
+                If Me.GraphicObject.InputConnectors(i).IsAttached Then
+                    GetInletMaterialStream(i).SetPressure(Pressure)
+                End If
+            Next
+            oms1.SetPressure(Pressure)
+
+            Dim liqdens = AccumulationStream.Phases(3).Properties.density.GetValueOrDefault
+
+            oms2.SetPressure(Pressure + liqdens * 9.8 * RelativeLevel * Height)
+
+            oms1.AssignFromPhase(PhaseLabel.Vapor, AccumulationStream, False)
+
+            oms2.AssignFromPhase(PhaseLabel.Liquid1, AccumulationStream, False)
 
 
         End Sub
@@ -663,7 +658,7 @@ Namespace UnitOperations
                     .SpecType = Interfaces.Enums.StreamSpec.Pressure_and_Enthalpy
                     .Phases(0).Properties.temperature = T
                     .Phases(0).Properties.pressure = P
-                    .Phases(0).Properties.enthalpy = MixedStream.Phases(3).Properties.enthalpy.GetValueOrDefault
+                    .Phases(0).Properties.enthalpy = MixedStream.Phases(4).Properties.enthalpy.GetValueOrDefault
                     If W2 > 0.0# Then .Phases(0).Properties.massflow = W2 Else .Phases(0).Properties.molarflow = 0.0#
                     .Phases(0).Properties.enthalpy = HL2
                     Dim comp As BaseClasses.Compound

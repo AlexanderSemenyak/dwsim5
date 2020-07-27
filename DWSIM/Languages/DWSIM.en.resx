@@ -2239,10 +2239,10 @@
     <value> Сообщения</value>
   </data>
   <data name="Mensagens1" xml:space="preserve">
-    <value> Сообщение</value>
+    <value> Message</value>
   </data>
   <data name="minuto1" xml:space="preserve">
-    <value>1 минута</value>
+    <value>1 minute</value>
   </data>
   <data name="minutos" xml:space="preserve">
     <value>минут</value>
@@ -2410,10 +2410,10 @@
     <value>n-Nonane (nC9)</value>
   </data>
   <data name="No" xml:space="preserve">
-    <value>Нет</value>
+    <value>No</value>
   </data>
   <data name="NoCalculado" xml:space="preserve">
-    <value>Не рассчитано</value>
+    <value>Not Calculated</value>
   </data>
   <data name="Noexisteguanacorrent" xml:space="preserve">
     <value>There is no water in the stream selected.</value>
@@ -2422,10 +2422,10 @@
     <value>Please add and setup a Property Package to continue.</value>
   </data>
   <data name="Noexistemsimulaesase" xml:space="preserve">
-    <value>Нет расчетов к сохранению.</value>
+    <value>No simulations to be saved.</value>
   </data>
   <data name="Noexistemsimulaesati" xml:space="preserve">
-    <value>Нет активных расчетов.</value>
+    <value>No active simulations.</value>
   </data>
   <data name="Noexistesoluonointer" xml:space="preserve">
     <value>There is no solution in the specified range.</value>
@@ -2530,7 +2530,7 @@
     <value>The XML file information is invalid or corrupt.</value>
   </data>
   <data name="Objeto" xml:space="preserve">
-    <value>Объект</value>
+    <value>Object</value>
   </data>
   <data name="Objetonoencontrado" xml:space="preserve">
     <value>Object not found.</value>
@@ -3073,7 +3073,7 @@
     <value>Reboiled Absorber</value>
   </data>
   <data name="Recalcular" xml:space="preserve">
-    <value>&amp; Recalculate</value>
+    <value>&amp; Пересчитать</value>
   </data>
   <data name="Reciclo" xml:space="preserve">
     <value>Recycle</value>
@@ -3190,7 +3190,7 @@
     <value>Сохранение модели ...</value>
   </data>
   <data name="salvocomsucesso" xml:space="preserve">
-    <value> сохранен успешно.</value>
+    <value> saved successfully.</value>
   </data>
   <data name="Sbol" xml:space="preserve">
     <value>Sbol (</value>
@@ -3778,13 +3778,13 @@
     <value>Массовый расход в смеси</value>
   </data>
   <data name="VazoTP" xml:space="preserve">
-    <value>Объемный расход @ T, P</value>
+    <value>Volumetric Flow Rate @ T, P</value>
   </data>
   <data name="VazoTPPhaseLquida" xml:space="preserve">
-    <value>Объемный расход @ T, P (Жидкая фаза)</value>
+    <value>Volumetric Flow Rate @ T, P (Liquid Phase)</value>
   </data>
   <data name="VazoTPPhaseVapor" xml:space="preserve">
-    <value>Объемный расход  @ T, P (Паровая фаза)</value>
+    <value>Volumetric Flow Rate @ T, P (Vapor Phase)</value>
   </data>
   <data name="Vazovolumtrica" xml:space="preserve">
     <value>Объемный расход </value>
@@ -3793,19 +3793,19 @@
     <value>Volumetric flow rate of the stream</value>
   </data>
   <data name="Vazovolumtricadamist" xml:space="preserve">
-    <value>Объемный расход в смеси</value>
+    <value>Volumetric flow rate in the mixture</value>
   </data>
   <data name="VazovolumtricanaPhase" xml:space="preserve">
-    <value>Объемный расход в паровой фазе</value>
+    <value>Volumetric flow rate in the vapor phase</value>
   </data>
   <data name="VazovolumtricanaPhase1" xml:space="preserve">
-    <value>Объемный расход в жидкой фазе</value>
+    <value>Volumetric flow rate in the liquid phase</value>
   </data>
   <data name="VazovolumtricanaMist" xml:space="preserve">
-    <value>Объемный расход в смеси</value>
+    <value>Volumetric flow rate in the mixture</value>
   </data>
   <data name="Vazovolumtricanascon" xml:space="preserve">
-    <value>Объемный расход в текущих условиях</value>
+    <value>Volumetric flow rate at current conditions</value>
   </data>
   <data name="Vbolm3mol" xml:space="preserve">
     <value>Vbol (m3/mol)</value>
@@ -3970,10 +3970,10 @@
     <value>Molar Volume</value>
   </data>
   <data name="VolumevsEntalpia" xml:space="preserve">
-    <value>Объем к Энтальпии</value>
+    <value>Volume vs. Enthalpy</value>
   </data>
   <data name="VolumevsEntropia" xml:space="preserve">
-    <value>Объем к Энтропии</value>
+    <value>Volume vs. Entropy</value>
   </data>
   <data name="VolumevsPresso" xml:space="preserve">
     <value>Volume vs. Pressure</value>
@@ -4228,7 +4228,7 @@
     <value>Pressure tappings</value>
   </data>
   <data name="OPOverallPressureDrop" xml:space="preserve">
-    <value>Общее падение давления</value>
+    <value>Overall pressure drop</value>
   </data>
   <data name="OrificePlate" xml:space="preserve">
     <value>Диафрагма</value>
@@ -4240,7 +4240,7 @@
     <value>Gibbs Free Energy after reaction(s).</value>
   </data>
   <data name="RGInitialG" xml:space="preserve">
-    <value>Начальная свободная энергия Гиббса</value>
+    <value>Initial Gibbs Free Energy</value>
   </data>
   <data name="RGInitialG_description" xml:space="preserve">
     <value>Gibbs Free Energy before reaction(s).</value>
@@ -5388,7 +5388,7 @@ In this model, chemical and physical equilibria of NH3, CO2, and H2S in sour wat
     <value>Multiple reaction phases are not supported.</value>
   </data>
   <data name="BulkModulus" xml:space="preserve">
-    <value>Объемный модуль (Bulk Modulus)</value>
+    <value>Bulk Modulus</value>
   </data>
   <data name="GibbsEnergy" xml:space="preserve">
     <value>Свободная энергия Гиббса</value>
@@ -5606,30 +5606,6 @@ In this model, chemical and physical equilibria of NH3, CO2, and H2S in sour wat
   <data name="PFDTip" xml:space="preserve">
     <value>Если включен режим MultiSelect (множественный выбо объектов, проверьте на панели инструментов, нажмите и держите клавишу SHIFT, когда двигаете курсором мыши с нажатой левой кнопкой мыши над областью отрисовки модели, чтобы изменить видимую область.</value>
   </data>
-  <data name="Correntedeenergia" xml:space="preserve">
-    <value>Energy Stream</value>
-  </data>
-  <data name="nButanonC4" xml:space="preserve">
-    <value>n-Butan (nC4)</value>
-  </data>
-  <data name="Perfil" xml:space="preserve">
-    <value>Perfil</value>
-  </data>
-  <data name="ViscosidadedaPhaseVap" xml:space="preserve">
-    <value>Kinematic viscosity (Liquid Phase)Viscosidade da Fase Vapor: Método Jossi-Stiel-Thodos</value>
-  </data>
-  <data name="VerPerfil" xml:space="preserve">
-    <value>Verifique se você tem o nível de acesso requerido para criá-lo no local especificado.</value>
-  </data>
-  <data name="HXLMTDCorr" xml:space="preserve">
-    <value>Fator de Correção de média Logarítmica da Diferença de Temperaturas (MLDT)</value>
-  </data>
-  <data name="DBManagerNoFile" xml:space="preserve">
-    <value>No Component Creator Study file defined!</value>
-  </data>
-  <data name="UserDefined" xml:space="preserve">
-    <value>User defined</value>
-  </data>
   <data name="DescENPP" xml:space="preserve">
     <value>Extended NRTL model for electrolyte solutions</value>
   </data>
@@ -5722,5 +5698,8 @@ In this model, chemical and physical equilibria of NH3, CO2, and H2S in sour wat
   </data>
   <data name="DynamicsDisabled" xml:space="preserve">
     <value>Dynamic Mode is inactive.</value>
+  </data>
+  <data name="nButanonC4" xml:space="preserve">
+    <value>n-Бутан (nC4)</value>
   </data>
 </root>

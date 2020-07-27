@@ -14932,7 +14932,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized string similar to Tubulação simples.
+        '''  Looks up a localized string similar to Tubulação Simples.
         '''</summary>
         Friend Shared ReadOnly Property Tubulaosimples() As String
             Get

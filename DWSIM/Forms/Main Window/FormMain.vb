@@ -190,6 +190,13 @@ Public Class FormMain
                 My.Settings.Save()
             End If
 
+            Try
+                If Eto.Forms.Application.Instance.Platform.IsWpf Then
+                    System.Windows.Threading.Dispatcher.CurrentDispatcher.InvokeShutdown()
+                End If
+            Catch ex As Exception
+            End Try
+
             'release yeppp! resources
             Try
                 If My.Settings.UseSIMDExtensions Then Yeppp.Library.Release()
@@ -1342,7 +1349,6 @@ Public Class FormMain
         Dim form As FormFlowsheet = New FormFlowsheet() With {.MobileCompatibilityMode = True}
         form.FormSpreadsheet = New FormNewSpreadsheet() With {.Flowsheet = form}
         form.FormSpreadsheet.Initialize()
-        form.PanelMobileCompatMode.Visible = True
 
         Settings.CAPEOPENMode = False
         My.Application.ActiveSimulation = form
@@ -2831,7 +2837,10 @@ Public Class FormMain
         Next
 
         Parallel.ForEach(xdoc.Descendants, Sub(xel1)
-                                               SharedClasses.Utility.UpdateElementForMobileXMLSaving_CrossPlatformUI(xel1)
+                                               Try
+                                                   SharedClasses.Utility.UpdateElementForMobileXMLSaving_CrossPlatformUI(xel1)
+                                               Catch ex As Exception
+                                               End Try
                                            End Sub)
 
         xdoc.Save(path)
@@ -3483,6 +3492,8 @@ Label_00CC:
 
     Public Sub NewToolStripButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NewToolStripButton.Click, NewToolStripMenuItem.Click
 
+        Me.WelcomePanel.Visible = False
+
         Dim newform As New FormFlowsheet()
 
         With newform
@@ -3492,7 +3503,9 @@ Label_00CC:
             .MdiParent = Me
             Application.DoEvents()
         End With
+
         Me.ActivateMdiChild(newform)
+
         m_childcount += 1
 
     End Sub

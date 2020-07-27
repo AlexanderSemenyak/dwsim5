@@ -1,0 +1,1 @@
+Fond.CreateCustomSerializer.exe --typesfile XmlSerializers.txt

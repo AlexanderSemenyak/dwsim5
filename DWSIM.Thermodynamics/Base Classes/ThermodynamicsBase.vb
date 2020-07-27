@@ -402,7 +402,7 @@ Namespace BaseClasses
 
         Public Property Name As String = "" Implements Interfaces.IReaction.Name
 
-        Public Property ReactionBasis As Interfaces.Enums.ReactionBasis Implements Interfaces.IReaction.ReactionBasis
+        Public Property ReactionBasis As Interfaces.Enums.ReactionBasis = ReactionBasis.Fugacity Implements Interfaces.IReaction.ReactionBasis
 
         Public Property ReactionHeat As Double Implements Interfaces.IReaction.ReactionHeat
 
@@ -1409,7 +1409,11 @@ Namespace BaseClasses
 
         Public Function Clone() As Object Implements System.ICloneable.Clone
 
-            Return ObjectCopy(Me)
+            Dim comp = ObjectCopy(Me)
+
+            comp.ExtraProperties = New ExpandoObject()
+
+            Return comp
 
         End Function
 

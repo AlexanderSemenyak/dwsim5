@@ -257,14 +257,16 @@ Namespace UnitOperations
 
             IObj?.Paragraphs.Add(SolutionInspector.Pipe_Calculate_Paragraph_11)
 
-            If Not Me.GraphicObject.EnergyConnector.IsAttached Then
-                Throw New Exception(FlowSheet.GetTranslatedString("NohcorrentedeEnergyFlow3"))
-            ElseIf Not Me.Profile.Status = PipeEditorStatus.OK Then
-                Throw New Exception(FlowSheet.GetTranslatedString("Operfilhidrulicodatu"))
-            ElseIf Not Me.GraphicObject.OutputConnectors(0).IsAttached Then
-                Throw New Exception(FlowSheet.GetTranslatedString("Verifiqueasconexesdo"))
-            ElseIf Not Me.GraphicObject.InputConnectors(0).IsAttached Then
-                Throw New Exception(FlowSheet.GetTranslatedString("Verifiqueasconexesdo"))
+            If args Is Nothing Then
+                If Not Me.GraphicObject.EnergyConnector.IsAttached Then
+                    Throw New Exception(FlowSheet.GetTranslatedString("NohcorrentedeEnergyFlow3"))
+                ElseIf Not Me.Profile.Status = PipeEditorStatus.OK Then
+                    Throw New Exception(FlowSheet.GetTranslatedString("Operfilhidrulicodatu"))
+                ElseIf Not Me.GraphicObject.OutputConnectors(0).IsAttached Then
+                    Throw New Exception(FlowSheet.GetTranslatedString("Verifiqueasconexesdo"))
+                ElseIf Not Me.GraphicObject.InputConnectors(0).IsAttached Then
+                    Throw New Exception(FlowSheet.GetTranslatedString("Verifiqueasconexesdo"))
+                End If
             End If
 
             If Me.Specification = Specmode.OutletPressure Then
@@ -291,7 +293,17 @@ Namespace UnitOperations
                     fpp = New FlowPackages.BeggsBrill
             End Select
 
-            Dim oms As MaterialStream
+            Dim ims, oms As MaterialStream, es As Streams.EnergyStream
+
+            If args Is Nothing Then
+                ims = GetInletMaterialStream(0)
+                oms = GetOutletMaterialStream(0)
+                es = GetEnergyStream
+            Else
+                ims = args(0)
+                oms = args(1)
+                es = args(2)
+            End If
 
             Dim Tin, Pin, Tout, Pout, Tout_ant, Pout_ant, Pout_ant2, Toutj, Text, Win, Qin, Qvin, Qlin, TinP, PinP,
                 rho_l, rho_v, Cp_l, Cp_v, Cp_m, K_l, K_v, eta_l, eta_v, tens, Hin, Hout, HinP,
@@ -338,7 +350,7 @@ Namespace UnitOperations
 
                 IObj2?.Paragraphs.Add(SolutionInspector.This_Is_the_external_loop_To_converge_pressure_When_outlet_temperature_Is_specified_Or_vice_versa)
 
-                oms = Me.GetInletMaterialStream(0).Clone()
+                oms = ims.Clone()
                 oms.SetFlowsheet(Me.FlowSheet)
                 oms.PreferredFlashAlgorithmTag = Me.PreferredFlashAlgorithmTag
                 Me.PropertyPackage.CurrentMaterialStream = oms
@@ -389,7 +401,8 @@ Namespace UnitOperations
 
                         IObj3?.Paragraphs.Add(String.Format(SolutionInspector.Calculating_segment_0_1_2, segmento.Indice, iq, segmento.Quantidade))
 
-                        If segmento.TipoSegmento = "Tubulaosimples" Or segmento.TipoSegmento = "" Or segmento.TipoSegmento = "Straight Tube Section" Or segmento.TipoSegmento = "Straight Tube" Then
+                        If segmento.TipoSegmento = "Tubulaosimples" Or segmento.TipoSegmento = "" Or segmento.TipoSegmento = "Straight Tube Section" Or
+                            segmento.TipoSegmento = "Straight Tube" Or segmento.TipoSegmento = "Tubulação Simples" Then
 
                             IObj3?.Paragraphs.Add(String.Format(SolutionInspector.Segment_type_0, segmento.TipoSegmento))
                             IObj3?.Paragraphs.Add(String.Format(SolutionInspector.Segment_increments_0, segmento.Incrementos))
@@ -605,7 +618,8 @@ Namespace UnitOperations
                                     Tout_ant = Tout
                                     IObj5?.SetCurrent()
                                     Tout = oms.PropertyPackage.FlashBase.CalculateEquilibrium(PropertyPackages.FlashSpec.P, PropertyPackages.FlashSpec.H, Pout, Hout, oms.PropertyPackage, oms.PropertyPackage.RET_VMOL(PropertyPackages.Phase.Mixture), Nothing, Tout).CalculatedTemperature
-                                    Tout = 0.7 * Tout_ant + 0.3 * Tout
+                                    'Tout = 0.7 * Tout_ant + 0.3 * Tout
+                                    Tout = (Tout + Tout_ant) / 2
 
                                     IObj5?.Paragraphs.Add(String.Format(SolutionInspector.Calculated_Outlet_Temperature_0_K, Tout))
 
@@ -948,22 +962,28 @@ Namespace UnitOperations
             Me.DeltaQ = -(HinP - Hout) * Win
 
             'Atribuir valores a corrente de materia conectada a jusante
-            With Me.GetOutletMaterialStream(0)
+            Dim msout As MaterialStream
+            If args Is Nothing Then
+                msout = Me.GetOutletMaterialStream(0)
+            Else
+                msout = args(1)
+            End If
+            With msout
                 .Phases(0).Properties.temperature = Tout
                 .Phases(0).Properties.pressure = Pout
                 .Phases(0).Properties.enthalpy = Hout
                 Dim comp As BaseClasses.Compound
                 For Each comp In .Phases(0).Compounds.Values
-                    comp.MoleFraction = Me.GetInletMaterialStream(0).Phases(0).Compounds(comp.Name).MoleFraction
-                    comp.MassFraction = Me.GetInletMaterialStream(0).Phases(0).Compounds(comp.Name).MassFraction
+                    comp.MoleFraction = ims.Phases(0).Compounds(comp.Name).MoleFraction
+                    comp.MassFraction = ims.Phases(0).Compounds(comp.Name).MassFraction
                 Next
-                .Phases(0).Properties.massflow = Me.GetInletMaterialStream(0).Phases(0).Properties.massflow.GetValueOrDefault
+                .Phases(0).Properties.massflow = ims.Phases(0).Properties.massflow.GetValueOrDefault
             End With
 
             'energy stream - update energy flow value (kW)
-            With Me.GetEnergyStream
+            With es
                 .EnergyFlow = -Me.DeltaQ.Value
-                .GraphicObject.Calculated = True
+                If args Is Nothing Then .GraphicObject.Calculated = True
             End With
 
             segmento = Nothing
@@ -2262,43 +2282,49 @@ Final3:     T = bbb
                 Return True
             End Get
         End Property
+
         Public Overrides Function GetReport(su As IUnitsOfMeasure, ci As Globalization.CultureInfo, numberformat As String) As String
 
             Dim str As New Text.StringBuilder
 
-            Dim istr, ostr As MaterialStream
-            istr = Me.GetInletMaterialStream(0)
-            ostr = Me.GetOutletMaterialStream(0)
+            Dim istr As MaterialStream = Nothing
+            Dim ostr As MaterialStream = Nothing
+            Try
+                istr = Me.GetInletMaterialStream(0)
+                ostr = Me.GetOutletMaterialStream(0)
+            Catch ex As Exception
+            End Try
 
-            istr.PropertyPackage.CurrentMaterialStream = istr
-
-            str.AppendLine("Pipe Segment: " & Me.GraphicObject.Tag)
-            str.AppendLine("Property Package: " & Me.PropertyPackage.ComponentName)
-            str.AppendLine()
-            str.AppendLine("Inlet conditions")
-            str.AppendLine()
-            str.AppendLine("    Temperature: " & SystemsOfUnits.Converter.ConvertFromSI(su.temperature, istr.Phases(0).Properties.temperature.GetValueOrDefault).ToString(numberformat, ci) & " " & su.temperature)
-            str.AppendLine("    Pressure: " & SystemsOfUnits.Converter.ConvertFromSI(su.pressure, istr.Phases(0).Properties.pressure.GetValueOrDefault).ToString(numberformat, ci) & " " & su.pressure)
-            str.AppendLine("    Mass flow: " & SystemsOfUnits.Converter.ConvertFromSI(su.massflow, istr.Phases(0).Properties.massflow.GetValueOrDefault).ToString(numberformat, ci) & " " & su.massflow)
-            str.AppendLine("    Volumetric flow: " & SystemsOfUnits.Converter.ConvertFromSI(su.volumetricFlow, istr.Phases(0).Properties.volumetric_flow.GetValueOrDefault).ToString(numberformat, ci) & " " & su.volumetricFlow)
-            str.AppendLine("    Vapor fraction: " & istr.Phases(2).Properties.molarfraction.GetValueOrDefault.ToString(numberformat, ci))
-            str.AppendLine("    Compounds: " & istr.PropertyPackage.RET_VNAMES.ToArrayString)
-            str.AppendLine("    Molar composition: " & istr.PropertyPackage.RET_VMOL(PropertyPackages.Phase.Mixture).ToArrayString(ci))
-            str.AppendLine()
+            If istr IsNot Nothing And ostr IsNot Nothing Then
+                istr.PropertyPackage.CurrentMaterialStream = istr
+                str.AppendLine("Pipe Segment: " & Me.GraphicObject?.Tag)
+                str.AppendLine("Property Package: " & Me.PropertyPackage.ComponentName)
+                str.AppendLine()
+                str.AppendLine("Inlet conditions")
+                str.AppendLine()
+                str.AppendLine("    Temperature: " & SystemsOfUnits.Converter.ConvertFromSI(su.temperature, istr.Phases(0).Properties.temperature.GetValueOrDefault).ToString(numberformat, ci) & " " & su.temperature)
+                str.AppendLine("    Pressure: " & SystemsOfUnits.Converter.ConvertFromSI(su.pressure, istr.Phases(0).Properties.pressure.GetValueOrDefault).ToString(numberformat, ci) & " " & su.pressure)
+                str.AppendLine("    Mass flow: " & SystemsOfUnits.Converter.ConvertFromSI(su.massflow, istr.Phases(0).Properties.massflow.GetValueOrDefault).ToString(numberformat, ci) & " " & su.massflow)
+                str.AppendLine("    Volumetric flow: " & SystemsOfUnits.Converter.ConvertFromSI(su.volumetricFlow, istr.Phases(0).Properties.volumetric_flow.GetValueOrDefault).ToString(numberformat, ci) & " " & su.volumetricFlow)
+                str.AppendLine("    Vapor fraction: " & istr.Phases(2).Properties.molarfraction.GetValueOrDefault.ToString(numberformat, ci))
+                str.AppendLine("    Compounds: " & istr.PropertyPackage.RET_VNAMES.ToArrayString)
+                str.AppendLine("    Molar composition: " & istr.PropertyPackage.RET_VMOL(PropertyPackages.Phase.Mixture).ToArrayString(ci))
+                str.AppendLine()
+                str.AppendLine("Outlet conditions")
+                str.AppendLine()
+                ostr.PropertyPackage.CurrentMaterialStream = ostr
+                str.AppendLine("    Temperature: " & SystemsOfUnits.Converter.ConvertFromSI(su.temperature, ostr.Phases(0).Properties.temperature.GetValueOrDefault).ToString(numberformat, ci) & " " & su.temperature)
+                str.AppendLine("    Pressure: " & SystemsOfUnits.Converter.ConvertFromSI(su.pressure, ostr.Phases(0).Properties.pressure.GetValueOrDefault).ToString(numberformat, ci) & " " & su.pressure)
+                str.AppendLine("    Mass flow: " & SystemsOfUnits.Converter.ConvertFromSI(su.massflow, ostr.Phases(0).Properties.massflow.GetValueOrDefault).ToString(numberformat, ci) & " " & su.massflow)
+                str.AppendLine("    Volumetric flow: " & SystemsOfUnits.Converter.ConvertFromSI(su.volumetricFlow, ostr.Phases(0).Properties.volumetric_flow.GetValueOrDefault).ToString(numberformat, ci) & " " & su.volumetricFlow)
+                str.AppendLine("    Vapor fraction: " & ostr.Phases(2).Properties.molarfraction.GetValueOrDefault.ToString(numberformat, ci))
+            End If
             str.AppendLine("Results")
             str.AppendLine()
             str.AppendLine("    Pressure Change: " & SystemsOfUnits.Converter.ConvertFromSI(su.deltaP, Me.DeltaP.GetValueOrDefault).ToString(numberformat, ci) & " " & su.deltaP)
             str.AppendLine("    Temperature Change: " & SystemsOfUnits.Converter.ConvertFromSI(su.deltaT, Me.DeltaT.GetValueOrDefault).ToString(numberformat, ci) & " " & su.deltaT)
             str.AppendLine("    Heat balance: " & SystemsOfUnits.Converter.ConvertFromSI(su.heatflow, Me.DeltaQ.GetValueOrDefault).ToString(numberformat, ci) & " " & su.heatflow)
             str.AppendLine()
-            str.AppendLine("Outlet conditions")
-            str.AppendLine()
-            ostr.PropertyPackage.CurrentMaterialStream = ostr
-            str.AppendLine("    Temperature: " & SystemsOfUnits.Converter.ConvertFromSI(su.temperature, ostr.Phases(0).Properties.temperature.GetValueOrDefault).ToString(numberformat, ci) & " " & su.temperature)
-            str.AppendLine("    Pressure: " & SystemsOfUnits.Converter.ConvertFromSI(su.pressure, ostr.Phases(0).Properties.pressure.GetValueOrDefault).ToString(numberformat, ci) & " " & su.pressure)
-            str.AppendLine("    Mass flow: " & SystemsOfUnits.Converter.ConvertFromSI(su.massflow, ostr.Phases(0).Properties.massflow.GetValueOrDefault).ToString(numberformat, ci) & " " & su.massflow)
-            str.AppendLine("    Volumetric flow: " & SystemsOfUnits.Converter.ConvertFromSI(su.volumetricFlow, ostr.Phases(0).Properties.volumetric_flow.GetValueOrDefault).ToString(numberformat, ci) & " " & su.volumetricFlow)
-            str.AppendLine("    Vapor fraction: " & ostr.Phases(2).Properties.molarfraction.GetValueOrDefault.ToString(numberformat, ci))
 
             Dim comp_ant As Double = 0
 
@@ -2327,7 +2353,6 @@ Final3:     T = bbb
                     comp_ant += ps.Comprimento / ps.Incrementos
                 Next
             Next
-
 
             str.AppendLine()
             str.AppendLine("Friction Pressure Drop Profile")
