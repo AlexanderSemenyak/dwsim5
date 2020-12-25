@@ -238,7 +238,11 @@ Public Class FormDataRegression
             Me.chkTS.Checked = .useTSdata
             Me.chkIdealVaporPhase.Checked = .idealvapormodel
             Me.cbDataType.SelectedIndex = .datatype
-            Me.cbRegMethod.SelectedItem = .method
+            Try
+                Me.cbRegMethod.SelectedItem = .method
+            Catch ex As Exception
+                Me.cbRegMethod.SelectedIndex = 0
+            End Try
             Me.cbObjFunc.SelectedItem = .objfunction
             Me.cbTunit.SelectedItem = .tunit
             Me.cbPunit.SelectedItem = .punit
@@ -3968,7 +3972,7 @@ Namespace DWSIM.Optimization.DatRegression
         Public model As String = "Peng-Robinson"
         Public datatype As DataType = datatype.Pxy
         Public tp, x1p, x2p, yp, pp, calct, calcp, calcy, calcx1l1, calcx1l2, checkp, ts, tl, calcts, calctl As New ArrayList
-        Public method As String = "Local Unimodal Sampling"
+        Public method As String = "IPOPT"
         Public objfunction As String = "Least Squares (min T/P)"
         Public includesd As Boolean = False
         Public results As String = ""

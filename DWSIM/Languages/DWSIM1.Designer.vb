@@ -497,6 +497,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Propriedades Adicionais.
+        '''</summary>
+        Friend Shared ReadOnly Property AdditionalProperties() As String
+            Get
+                Return ResourceManager.GetString("AdditionalProperties", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Adicionar Sistema de Unidades da Simulação.
         '''</summary>
         Friend Shared ReadOnly Property AddUnitSystemFromSimulation() As String
@@ -902,6 +911,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Ativo/Inativo.
+        '''</summary>
+        Friend Shared ReadOnly Property AtivoInativo() As String
+            Get
+                Return ResourceManager.GetString("AtivoInativo", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Atraso na aceleração.
         '''</summary>
         Friend Shared ReadOnly Property Atrasonaacelerao() As String
@@ -1294,6 +1312,15 @@ Namespace My.Resources
         Friend Shared ReadOnly Property CaixadeTexto() As String
             Get
                 Return ResourceManager.GetString("CaixadeTexto", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Este modo de cálculo nao é suportado por este objeto..
+        '''</summary>
+        Friend Shared ReadOnly Property CalcModeNotSupported() As String
+            Get
+                Return ResourceManager.GetString("CalcModeNotSupported", resourceCulture)
             End Get
         End Property
         
@@ -4430,6 +4457,15 @@ Namespace My.Resources
         Friend Shared ReadOnly Property DescPCSAFTPP() As String
             Get
                 Return ResourceManager.GetString("DescPCSAFTPP", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Based on the Peng–Robinson EOS as published by Peng and Robinson in 1978..
+        '''</summary>
+        Friend Shared ReadOnly Property DescPengRobinson78PP() As String
+            Get
+                Return ResourceManager.GetString("DescPengRobinson78PP", resourceCulture)
             End Get
         End Property
         
@@ -9127,6 +9163,15 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Coeficiente de Atividade Iônico Médio.
+        '''</summary>
+        Friend Shared ReadOnly Property MIAC() As String
+            Get
+                Return ResourceManager.GetString("MIAC", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to 1 minuto.
         '''</summary>
         Friend Shared ReadOnly Property minuto1() As String
@@ -11431,6 +11476,24 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized string similar to Potência Gerada.
+        '''</summary>
+        Friend Shared ReadOnly Property PowerGenerated() As String
+            Get
+                Return ResourceManager.GetString("PowerGenerated", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Potência Requerida.
+        '''</summary>
+        Friend Shared ReadOnly Property PowerRequired() As String
+            Get
+                Return ResourceManager.GetString("PowerRequired", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to Método de Cálculo Entalpia/Entropia/Cp/Cv (0 = Lee-Kesler, 1 = Ideal, 2 = Excesso).
         '''</summary>
         Friend Shared ReadOnly Property PP_ENTH_CP_CALC_METHOD() As String
@@ -11796,6 +11859,24 @@ Namespace My.Resources
         Friend Shared ReadOnly Property PressureCalculation() As String
             Get
                 Return ResourceManager.GetString("PressureCalculation", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Decremento de Pressão.
+        '''</summary>
+        Friend Shared ReadOnly Property PressureDecrease() As String
+            Get
+                Return ResourceManager.GetString("PressureDecrease", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to Incremento de Pressão.
+        '''</summary>
+        Friend Shared ReadOnly Property PressureIncrease() As String
+            Get
+                Return ResourceManager.GetString("PressureIncrease", resourceCulture)
             End Get
         End Property
         

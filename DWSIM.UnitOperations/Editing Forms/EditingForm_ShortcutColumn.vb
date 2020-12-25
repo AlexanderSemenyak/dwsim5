@@ -52,6 +52,8 @@ Public Class EditingForm_ShortcutColumn
 
             chkActive.Checked = .GraphicObject.Active
 
+            ToolTip1.SetToolTip(chkActive, .FlowSheet.GetTranslatedString("AtivoInativo"))
+
             Me.Text = .GraphicObject.Tag & " (" & .GetDisplayName() & ")"
 
             lblTag.Text = .GraphicObject.Tag
@@ -63,11 +65,7 @@ Public Class EditingForm_ShortcutColumn
                     lblStatus.Text = .FlowSheet.GetTranslatedString("Inativo")
                     lblStatus.ForeColor = System.Drawing.Color.Gray
                 ElseIf .ErrorMessage <> "" Then
-                    If .ErrorMessage.Length > 50 Then
-                        lblStatus.Text = .FlowSheet.GetTranslatedString("Erro") & " (" & .ErrorMessage.Substring(50) & "...)"
-                    Else
-                        lblStatus.Text = .FlowSheet.GetTranslatedString("Erro") & " (" & .ErrorMessage & ")"
-                    End If
+                    lblStatus.Text = .FlowSheet.GetTranslatedString("Erro")
                     lblStatus.ForeColor = System.Drawing.Color.Red
                 Else
                     lblStatus.Text = .FlowSheet.GetTranslatedString("NoCalculado")
@@ -113,12 +111,6 @@ Public Class EditingForm_ShortcutColumn
             cbPropPack.Items.Clear()
             cbPropPack.Items.AddRange(proppacks)
             cbPropPack.SelectedItem = .PropertyPackage?.Tag
-
-            Dim flashalgos As String() = .FlowSheet.FlowsheetOptions.FlashAlgorithms.Select(Function(x) x.Tag).ToArray
-            cbFlashAlg.Items.Clear()
-            cbFlashAlg.Items.Add("Default")
-            cbFlashAlg.Items.AddRange(flashalgos)
-            If .PreferredFlashAlgorithmTag <> "" Then cbFlashAlg.SelectedItem = .PreferredFlashAlgorithmTag Else cbFlashAlg.SelectedIndex = 0
 
             'parameters
 
@@ -178,12 +170,6 @@ Public Class EditingForm_ShortcutColumn
 
     Private Sub btnConfigurePP_Click(sender As Object, e As EventArgs) Handles btnConfigurePP.Click
         SimObject.FlowSheet.PropertyPackages.Values.Where(Function(x) x.Tag = cbPropPack.SelectedItem.ToString).SingleOrDefault.DisplayEditingForm()
-    End Sub
-
-    Private Sub btnConfigureFlashAlg_Click(sender As Object, e As EventArgs) Handles btnConfigureFlashAlg.Click
-
-        Thermodynamics.Calculator.ConfigureFlashInstance(SimObject, cbFlashAlg.SelectedItem.ToString)
-
     End Sub
 
     Private Sub lblTag_TextChanged(sender As Object, e As EventArgs) Handles lblTag.TextChanged
@@ -270,13 +256,6 @@ Public Class EditingForm_ShortcutColumn
         End If
     End Sub
 
-    Private Sub cbFlashAlg_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbFlashAlg.SelectedIndexChanged
-        If Loaded Then
-            SimObject.PreferredFlashAlgorithmTag = cbFlashAlg.SelectedItem.ToString
-            RequestCalc()
-        End If
-    End Sub
-
     Private Sub cbInlet1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbInlet1.SelectedIndexChanged
 
         If Loaded Then
@@ -292,10 +271,15 @@ Public Class EditingForm_ShortcutColumn
 
                 If flowsheet.GetFlowsheetSimulationObject(text).GraphicObject.OutputConnectors(0).IsAttached Then
                     MessageBox.Show(flowsheet.GetTranslatedString("Todasasconexespossve"), flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
-                    Exit Sub
+                Else
+                    Try
+                        If gobj.InputConnectors(index).IsAttached Then flowsheet.DisconnectObjects(gobj.InputConnectors(index).AttachedConnector.AttachedFrom, gobj)
+                        flowsheet.ConnectObjects(flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, gobj, 0, index)
+                    Catch ex As Exception
+                        MessageBox.Show(ex.Message, flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End Try
                 End If
-                If gobj.InputConnectors(index).IsAttached Then flowsheet.DisconnectObjects(gobj.InputConnectors(index).AttachedConnector.AttachedFrom, gobj)
-                flowsheet.ConnectObjects(flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, gobj, 0, index)
+                UpdateInfo()
 
             End If
 
@@ -316,10 +300,15 @@ Public Class EditingForm_ShortcutColumn
 
                 If flowsheet.GetFlowsheetSimulationObject(text).GraphicObject.InputConnectors(0).IsAttached Then
                     MessageBox.Show(flowsheet.GetTranslatedString("Todasasconexespossve"), flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
-                    Exit Sub
+                Else
+                    Try
+                        If gobj.InputConnectors(0).IsAttached Then flowsheet.DisconnectObjects(gobj.InputConnectors(0).AttachedConnector.AttachedFrom, gobj)
+                        flowsheet.ConnectObjects(gobj, flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, 0, 0)
+                    Catch ex As Exception
+                        MessageBox.Show(ex.Message, flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End Try
                 End If
-                If gobj.InputConnectors(0).IsAttached Then flowsheet.DisconnectObjects(gobj.InputConnectors(0).AttachedConnector.AttachedFrom, gobj)
-                flowsheet.ConnectObjects(gobj, flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, 0, 0)
+                UpdateInfo()
 
             End If
 
@@ -415,10 +404,15 @@ Public Class EditingForm_ShortcutColumn
 
                 If flowsheet.GetFlowsheetSimulationObject(text).GraphicObject.OutputConnectors(0).IsAttached Then
                     MessageBox.Show(flowsheet.GetTranslatedString("Todasasconexespossve"), flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
-                    Exit Sub
+                Else
+                    Try
+                        If gobj.InputConnectors(index).IsAttached Then flowsheet.DisconnectObjects(gobj.InputConnectors(index).AttachedConnector.AttachedFrom, gobj)
+                        flowsheet.ConnectObjects(gobj, flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, index, 0)
+                    Catch ex As Exception
+                        MessageBox.Show(ex.Message, flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End Try
                 End If
-                If gobj.InputConnectors(index).IsAttached Then flowsheet.DisconnectObjects(gobj.InputConnectors(index).AttachedConnector.AttachedFrom, gobj)
-                flowsheet.ConnectObjects(gobj, flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, index, 0)
+                UpdateInfo()
 
             End If
 
@@ -441,10 +435,15 @@ Public Class EditingForm_ShortcutColumn
 
                 If flowsheet.GetFlowsheetSimulationObject(text).GraphicObject.InputConnectors(0).IsAttached Then
                     MessageBox.Show(flowsheet.GetTranslatedString("Todasasconexespossve"), flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
-                    Exit Sub
+                Else
+                    Try
+                        If gobj.EnergyConnector.IsAttached Then flowsheet.DisconnectObjects(gobj, gobj.EnergyConnector.AttachedConnector.AttachedTo)
+                        flowsheet.ConnectObjects(gobj, flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, 0, 0)
+                    Catch ex As Exception
+                        MessageBox.Show(ex.Message, flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End Try
                 End If
-                If gobj.EnergyConnector.IsAttached Then flowsheet.DisconnectObjects(gobj, gobj.EnergyConnector.AttachedConnector.AttachedTo)
-                flowsheet.ConnectObjects(gobj, flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, 0, 0)
+                UpdateInfo()
 
             End If
 
@@ -481,10 +480,15 @@ Public Class EditingForm_ShortcutColumn
 
                 If flowsheet.GetFlowsheetSimulationObject(text).GraphicObject.OutputConnectors(0).IsAttached Then
                     MessageBox.Show(flowsheet.GetTranslatedString("Todasasconexespossve"), flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
-                    Exit Sub
+                Else
+                    Try
+                        If gobj.InputConnectors(index).IsAttached Then flowsheet.DisconnectObjects(gobj.InputConnectors(index).AttachedConnector.AttachedFrom, gobj)
+                        flowsheet.ConnectObjects(flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, gobj, 0, index)
+                    Catch ex As Exception
+                        MessageBox.Show(ex.Message, flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End Try
                 End If
-                If gobj.InputConnectors(index).IsAttached Then flowsheet.DisconnectObjects(gobj.InputConnectors(index).AttachedConnector.AttachedFrom, gobj)
-                flowsheet.ConnectObjects(flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, gobj, 0, index)
+                UpdateInfo()
 
             End If
 
@@ -521,11 +525,11 @@ Public Class EditingForm_ShortcutColumn
         If Loaded Then
             Try
                 If sender Is cbCondPressureUnits Then
-                    tbCondPressure.Text = su.Converter.Convert(cbCondPressureUnits.SelectedItem.ToString, units.temperature, Double.Parse(tbCondPressure.Text)).ToString(nf)
+                    tbCondPressure.Text = su.Converter.Convert(cbCondPressureUnits.SelectedItem.ToString, units.pressure, Double.Parse(tbCondPressure.Text)).ToString(nf)
                     cbCondPressureUnits.SelectedItem = units.pressure
                     UpdateProps(tbCondPressure)
                 ElseIf sender Is cbRebPressureUnits Then
-                    tbRebPressure.Text = su.Converter.Convert(cbRebPressureUnits.SelectedItem.ToString, units.deltaT, Double.Parse(tbRebPressure.Text)).ToString(nf)
+                    tbRebPressure.Text = su.Converter.Convert(cbRebPressureUnits.SelectedItem.ToString, units.pressure, Double.Parse(tbRebPressure.Text)).ToString(nf)
                     cbRebPressureUnits.SelectedItem = units.pressure
                     UpdateProps(tbRebPressure)
                 End If

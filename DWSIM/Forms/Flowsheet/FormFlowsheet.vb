@@ -32,6 +32,8 @@ Imports DWSIM.Drawing.SkiaSharp.GraphicObjects.Tables
 Imports DWSIM.SharedClasses.SystemsOfUnits
 Imports DWSIM.Thermodynamics.BaseClasses
 Imports DWSIM.Thermodynamics.PropertyPackages.Auxiliary
+Imports DWSIM.DWSIM.Editors.PropertyPackages
+Imports System.Threading.Tasks
 
 <ComSourceInterfaces(GetType(Interfaces.IFlowsheetNewMessageSentEvent)), ClassInterface(ClassInterfaceType.AutoDual)>
 <System.Serializable()>
@@ -157,11 +159,6 @@ Public Class FormFlowsheet
         End If
 
         Options.ReactionSets.Add("DefaultSet", New ReactionSet("DefaultSet", DWSIM.App.GetLocalString("Rxn_DefaultSetName"), DWSIM.App.GetLocalString("Rxn_DefaultSetDesc")))
-
-        Dim fa As New Thermodynamics.PropertyPackages.Auxiliary.FlashAlgorithms.NestedLoops()
-        fa.Tag = fa.Name & " (1)"
-
-        Options.FlashAlgorithms.Add(fa)
 
     End Sub
 
@@ -423,10 +420,14 @@ Public Class FormFlowsheet
         FormSurface.FlowsheetSurface.DrawFloatingTable = Options.DisplayFloatingPropertyTables
         FormSurface.FlowsheetSurface.DrawPropertyList = Options.DisplayCornerPropertyList
 
-        FormSurface.FlowsheetSurface.ZoomAll(FormSurface.SplitContainer1.Panel1.Width, FormSurface.SplitContainer1.Panel1.Height)
-        FormSurface.FlowsheetSurface.ZoomAll(FormSurface.SplitContainer1.Panel1.Width, FormSurface.SplitContainer1.Panel1.Height)
+        FormSurface.FlowsheetSurface.ZoomAll(FormSurface.SplitContainerHorizontal.Panel1.Width, FormSurface.SplitContainerHorizontal.Panel1.Height)
+        FormSurface.FlowsheetSurface.ZoomAll(FormSurface.SplitContainerHorizontal.Panel1.Width, FormSurface.SplitContainerHorizontal.Panel1.Height)
 
         Me.FormLog.Grid1.Sort(Me.FormLog.Grid1.Columns(1), ListSortDirection.Descending)
+
+        For Each ws In FormSpreadsheet.Spreadsheet.Worksheets
+            ws.Recalculate()
+        Next
 
     End Sub
 
@@ -684,78 +685,78 @@ Public Class FormFlowsheet
 
             If texto.Trim <> "" Then
 
-            Dim frsht As FormFlowsheet
-            If Not Me.MasterFlowsheet Is Nothing And Me.RedirectMessages Then
-                frsht = Me.MasterFlowsheet
-                texto = "[" & Me.MasterUnitOp.GraphicObject.Tag & "] " & texto
-            Else
-                frsht = Me
-            End If
+                Dim frsht As FormFlowsheet
+                If Not Me.MasterFlowsheet Is Nothing And Me.RedirectMessages Then
+                    frsht = Me.MasterFlowsheet
+                    texto = "[" & Me.MasterUnitOp.GraphicObject.Tag & "] " & texto
+                Else
+                    frsht = Me
+                End If
 
-            If listeningaction IsNot Nothing Then
-                listeningaction(texto, tipo)
-            End If
+                If listeningaction IsNot Nothing Then
+                    listeningaction(texto, tipo)
+                End If
 
-            Message = texto
-
-            frsht.UIThread(New System.Action(Sub()
-                                                 RaiseEvent NewMessageSent(texto)
-                                             End Sub))
-
-            If frsht.Visible Then
+                Message = texto
 
                 frsht.UIThread(New System.Action(Sub()
-
-                                                     Dim showtips As Boolean = True
-                                                     If GlobalSettings.Settings.OldUI Then
-                                                         showtips = My.Settings.ShowTips
-                                                     End If
-
-                                                     If Not My.Application.CommandLineMode Then
-
-                                                         Dim frlog = frsht.FormLog
-
-                                                         Dim img As Bitmap
-                                                         Dim strtipo As String
-                                                         Select Case tipo
-                                                             Case SharedClasses.DWSIM.Flowsheet.MessageType.Warning
-                                                                 img = My.Resources._error
-                                                                 strtipo = DWSIM.App.GetLocalString("Aviso")
-                                                             Case SharedClasses.DWSIM.Flowsheet.MessageType.GeneralError
-                                                                 img = My.Resources.exclamation
-                                                                 strtipo = DWSIM.App.GetLocalString("Erro")
-                                                             Case SharedClasses.DWSIM.Flowsheet.MessageType.Tip
-                                                                 If Not showtips Then Exit Sub
-                                                                 img = My.Resources.lightbulb
-                                                                 strtipo = DWSIM.App.GetLocalString("Dica")
-                                                             Case Else
-                                                                 img = My.Resources.information
-                                                                 strtipo = DWSIM.App.GetLocalString("Mensagem")
-                                                         End Select
-
-                                                         If frlog.Grid1.Rows.Count > 1500 Then
-                                                             frlog.Grid1.Rows.Clear()
-                                                         End If
-
-                                                         frlog.Grid1.Rows.Insert(0, New Object() {img, frlog.Grid1.Rows.Count, Date.Now, strtipo, texto})
-
-                                                         If frlog.Grid1.Rows.Count > 0 Then
-                                                             frlog.Grid1.Rows(0).Cells("Info").Tag = exceptionID
-                                                             frlog.Grid1.Rows(0).Cells("Mensagem").Style.ForeColor = cor
-                                                             frlog.Grid1.ClearSelection()
-                                                             Try
-                                                                 frlog.Grid1.FirstDisplayedScrollingRowIndex = 0
-                                                             Catch ex As Exception
-                                                             End Try
-                                                         End If
-
-                                                     End If
-
+                                                     RaiseEvent NewMessageSent(texto)
                                                  End Sub))
 
-            End If
+                If frsht.Visible Then
 
-        End If
+                    frsht.UIThread(New System.Action(Sub()
+
+                                                         Dim showtips As Boolean = True
+                                                         If GlobalSettings.Settings.OldUI Then
+                                                             showtips = My.Settings.ShowTips
+                                                         End If
+
+                                                         If Not My.Application.CommandLineMode Then
+
+                                                             Dim frlog = frsht.FormLog
+
+                                                             Dim img As Bitmap
+                                                             Dim strtipo As String
+                                                             Select Case tipo
+                                                                 Case SharedClasses.DWSIM.Flowsheet.MessageType.Warning
+                                                                     img = My.Resources._error
+                                                                     strtipo = DWSIM.App.GetLocalString("Aviso")
+                                                                 Case SharedClasses.DWSIM.Flowsheet.MessageType.GeneralError
+                                                                     img = My.Resources.exclamation
+                                                                     strtipo = DWSIM.App.GetLocalString("Erro")
+                                                                 Case SharedClasses.DWSIM.Flowsheet.MessageType.Tip
+                                                                     If Not showtips Then Exit Sub
+                                                                     img = My.Resources.lightbulb
+                                                                     strtipo = DWSIM.App.GetLocalString("Dica")
+                                                                 Case Else
+                                                                     img = My.Resources.information
+                                                                     strtipo = DWSIM.App.GetLocalString("Mensagem")
+                                                             End Select
+
+                                                             If frlog.Grid1.Rows.Count > 1500 Then
+                                                                 frlog.Grid1.Rows.Clear()
+                                                             End If
+
+                                                             frlog.Grid1.Rows.Insert(0, New Object() {img, frlog.Grid1.Rows.Count, Date.Now, strtipo, texto})
+
+                                                             If frlog.Grid1.Rows.Count > 0 Then
+                                                                 frlog.Grid1.Rows(0).Cells("Info").Tag = exceptionID
+                                                                 frlog.Grid1.Rows(0).Cells("Mensagem").Style.ForeColor = cor
+                                                                 frlog.Grid1.ClearSelection()
+                                                                 Try
+                                                                     frlog.Grid1.FirstDisplayedScrollingRowIndex = 0
+                                                                 Catch ex As Exception
+                                                                 End Try
+                                                             End If
+
+                                                         End If
+
+                                                     End Sub))
+
+                End If
+
+            End If
 
         End If
 
@@ -790,9 +791,11 @@ Public Class FormFlowsheet
     End Sub
 
     Private Sub ToolStripButton3_Click(sender As Object, e As EventArgs) Handles tsbAbortCalc.Click
-        GlobalSettings.Settings.CalculatorStopRequested = True
-        If GlobalSettings.Settings.TaskCancellationTokenSource IsNot Nothing Then
-            GlobalSettings.Settings.TaskCancellationTokenSource.Cancel()
+        If Settings.CalculatorBusy Then
+            Settings.CalculatorStopRequested = True
+            If Settings.TaskCancellationTokenSource IsNot Nothing Then
+                Settings.TaskCancellationTokenSource.Cancel()
+            End If
         End If
     End Sub
 
@@ -922,7 +925,8 @@ Public Class FormFlowsheet
             GlobalSettings.Settings.TaskCancellationTokenSource = Nothing
             My.Application.ActiveSimulation = Me
             If My.Computer.Keyboard.ShiftKeyDown Then GlobalSettings.Settings.CalculatorBusy = False
-            FlowsheetSolver.FlowsheetSolver.SolveFlowsheet(Me, My.Settings.SolverMode, Nothing, False, False, Nothing, Nothing,
+            Task.Factory.StartNew(Sub()
+                                      FlowsheetSolver.FlowsheetSolver.SolveFlowsheet(Me, My.Settings.SolverMode, Nothing, False, False, Nothing, Nothing,
                                                         Sub()
                                                             If My.Settings.ObjectEditor = 1 Then
                                                                 Me.UIThread(Sub()
@@ -931,6 +935,7 @@ Public Class FormFlowsheet
                                                                             End Sub)
                                                             End If
                                                         End Sub, My.Computer.Keyboard.CtrlKeyDown And My.Computer.Keyboard.AltKeyDown)
+                                  End Sub)
         Else
             ShowMessage(DWSIM.App.GetLocalString("DynEnabled"), IFlowsheet.MessageType.Warning)
         End If
@@ -1140,7 +1145,9 @@ Public Class FormFlowsheet
 
             CalculationQueue.Enqueue(objargs)
 
-            FlowsheetSolver.FlowsheetSolver.SolveFlowsheet(Me, My.Settings.SolverMode, , True)
+            Task.Factory.StartNew(Sub()
+                                      FlowsheetSolver.FlowsheetSolver.SolveFlowsheet(Me, My.Settings.SolverMode, , True)
+                                  End Sub)
 
         End If
 
@@ -1252,8 +1259,6 @@ Public Class FormFlowsheet
         End If
         Me.Options.FlowsheetShowWatchWindow = varpaneltsmi.Checked
     End Sub
-
-
 
     Private Sub SimulationConfig_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tsmiConfigSimulation.Click
         If DWSIM.App.IsRunningOnMono Then
@@ -1437,88 +1442,90 @@ Public Class FormFlowsheet
                             Me.FormSurface.FlowsheetSurface.DeleteSelectedObject(gobj)
                         Else
 
-                            Dim obj As SharedClasses.UnitOperations.BaseClass = Me.Collections.FlowsheetObjectCollection(SelectedObj.Name)
-
                             gobj = SelectedObj
 
-                            If gobj.EnergyConnector.IsAttached = True Then DisconnectObject(gobj, gobj.EnergyConnector.AttachedConnector.AttachedTo, False)
+                                If gobj.EnergyConnector.IsAttached = True Then DisconnectObject(gobj, gobj.EnergyConnector.AttachedConnector.AttachedTo, False)
 
-                            Dim InCon, OutCon As ConnectionPoint
-                            For Each InCon In gobj.InputConnectors
-                                Try
-                                    If InCon.IsAttached = True Then DisconnectObject(InCon.AttachedConnector.AttachedFrom, gobj, False)
-                                Catch ex As Exception
+                                Dim InCon, OutCon As ConnectionPoint
+                                For Each InCon In gobj.InputConnectors
+                                    Try
+                                        If InCon.IsAttached = True Then DisconnectObject(InCon.AttachedConnector.AttachedFrom, gobj, False)
+                                    Catch ex As Exception
 
-                                End Try
-                            Next
-                            gobj = SelectedObj
-                            For Each OutCon In gobj.OutputConnectors
-                                Try
-                                    If OutCon.IsAttached = True Then DisconnectObject(gobj, OutCon.AttachedConnector.AttachedTo, False)
-                                Catch ex As Exception
+                                    End Try
+                                Next
+                                gobj = SelectedObj
+                                For Each OutCon In gobj.OutputConnectors
+                                    Try
+                                        If OutCon.IsAttached = True Then DisconnectObject(gobj, OutCon.AttachedConnector.AttachedTo, False)
+                                    Catch ex As Exception
 
-                                End Try
-                            Next
+                                    End Try
+                                Next
 
-                            gobj = SelectedObj
+                                gobj = SelectedObj
 
-                            If My.Application.PushUndoRedoAction Then AddUndoRedoAction(New UndoRedoAction() With {.AType = UndoRedoActionType.ObjectRemoved,
+                            If gobj.ObjectType = ObjectType.OT_Spec Then
+                                    Dim specobj As Spec = Me.Collections.FlowsheetObjectCollection(namesel)
+                                    If Me.Collections.FlowsheetObjectCollection.ContainsKey(specobj.TargetObjectData.ID) Then
+                                        Me.Collections.FlowsheetObjectCollection(specobj.TargetObjectData.ID).IsSpecAttached = False
+                                        Me.Collections.FlowsheetObjectCollection(specobj.TargetObjectData.ID).AttachedSpecId = ""
+                                    End If
+                                    If Me.Collections.FlowsheetObjectCollection.ContainsKey(specobj.SourceObjectData.ID) Then
+                                        Me.Collections.FlowsheetObjectCollection(specobj.SourceObjectData.ID).IsSpecAttached = False
+                                        Me.Collections.FlowsheetObjectCollection(specobj.SourceObjectData.ID).AttachedSpecId = ""
+                                    End If
+                                ElseIf gobj.ObjectType = ObjectType.OT_Adjust Then
+                                    Dim adjobj As Adjust = Me.Collections.FlowsheetObjectCollection(namesel)
+                                    If Me.Collections.FlowsheetObjectCollection.ContainsKey(adjobj.ManipulatedObjectData.ID) Then
+                                        Me.Collections.FlowsheetObjectCollection(adjobj.ManipulatedObjectData.ID).IsAdjustAttached = False
+                                        Me.Collections.FlowsheetObjectCollection(adjobj.ManipulatedObjectData.ID).AttachedAdjustId = ""
+                                    End If
+                                    If Me.Collections.FlowsheetObjectCollection.ContainsKey(adjobj.ControlledObjectData.ID) Then
+                                        Me.Collections.FlowsheetObjectCollection(adjobj.ControlledObjectData.ID).IsAdjustAttached = False
+                                        Me.Collections.FlowsheetObjectCollection(adjobj.ControlledObjectData.ID).AttachedAdjustId = ""
+                                    End If
+                                    If Me.Collections.FlowsheetObjectCollection.ContainsKey(adjobj.ReferencedObjectData.ID) Then
+                                        Me.Collections.FlowsheetObjectCollection(adjobj.ReferencedObjectData.ID).IsAdjustAttached = False
+                                        Me.Collections.FlowsheetObjectCollection(adjobj.ReferencedObjectData.ID).AttachedAdjustId = ""
+                                    End If
+                                ElseIf gobj.ObjectType = ObjectType.Controller_PID Then
+                                    Dim adjobj As PIDController = Me.Collections.FlowsheetObjectCollection(namesel)
+                                    If Me.Collections.FlowsheetObjectCollection.ContainsKey(adjobj.ManipulatedObjectData.ID) Then
+                                        Me.Collections.FlowsheetObjectCollection(adjobj.ManipulatedObjectData.ID).IsAdjustAttached = False
+                                        Me.Collections.FlowsheetObjectCollection(adjobj.ManipulatedObjectData.ID).AttachedAdjustId = ""
+                                    End If
+                                    If Me.Collections.FlowsheetObjectCollection.ContainsKey(adjobj.ControlledObjectData.ID) Then
+                                        Me.Collections.FlowsheetObjectCollection(adjobj.ControlledObjectData.ID).IsAdjustAttached = False
+                                        Me.Collections.FlowsheetObjectCollection(adjobj.ControlledObjectData.ID).AttachedAdjustId = ""
+                                    End If
+                                    If Me.Collections.FlowsheetObjectCollection.ContainsKey(adjobj.ReferencedObjectData.ID) Then
+                                        Me.Collections.FlowsheetObjectCollection(adjobj.ReferencedObjectData.ID).IsAdjustAttached = False
+                                        Me.Collections.FlowsheetObjectCollection(adjobj.ReferencedObjectData.ID).AttachedAdjustId = ""
+                                    End If
+                                End If
+
+                            If SimulationObjects.ContainsKey(namesel) Then
+
+                                If My.Application.PushUndoRedoAction Then AddUndoRedoAction(New UndoRedoAction() With {.AType = UndoRedoActionType.ObjectRemoved,
                                                                          .NewValue = gobj,
                                                                          .OldValue = Me.Collections.FlowsheetObjectCollection(namesel).SaveData(),
                                                                          .Name = String.Format(DWSIM.App.GetLocalString("UndoRedo_ObjectRemoved"), gobj.Tag)})
 
-                            If gobj.ObjectType = ObjectType.OT_Spec Then
-                                Dim specobj As Spec = Me.Collections.FlowsheetObjectCollection(namesel)
-                                If Me.Collections.FlowsheetObjectCollection.ContainsKey(specobj.TargetObjectData.ID) Then
-                                    Me.Collections.FlowsheetObjectCollection(specobj.TargetObjectData.ID).IsSpecAttached = False
-                                    Me.Collections.FlowsheetObjectCollection(specobj.TargetObjectData.ID).AttachedSpecId = ""
-                                End If
-                                If Me.Collections.FlowsheetObjectCollection.ContainsKey(specobj.SourceObjectData.ID) Then
-                                    Me.Collections.FlowsheetObjectCollection(specobj.SourceObjectData.ID).IsSpecAttached = False
-                                    Me.Collections.FlowsheetObjectCollection(specobj.SourceObjectData.ID).AttachedSpecId = ""
-                                End If
-                            ElseIf gobj.ObjectType = ObjectType.OT_Adjust Then
-                                Dim adjobj As Adjust = Me.Collections.FlowsheetObjectCollection(namesel)
-                                If Me.Collections.FlowsheetObjectCollection.ContainsKey(adjobj.ManipulatedObjectData.ID) Then
-                                    Me.Collections.FlowsheetObjectCollection(adjobj.ManipulatedObjectData.ID).IsAdjustAttached = False
-                                    Me.Collections.FlowsheetObjectCollection(adjobj.ManipulatedObjectData.ID).AttachedAdjustId = ""
-                                End If
-                                If Me.Collections.FlowsheetObjectCollection.ContainsKey(adjobj.ControlledObjectData.ID) Then
-                                    Me.Collections.FlowsheetObjectCollection(adjobj.ControlledObjectData.ID).IsAdjustAttached = False
-                                    Me.Collections.FlowsheetObjectCollection(adjobj.ControlledObjectData.ID).AttachedAdjustId = ""
-                                End If
-                                If Me.Collections.FlowsheetObjectCollection.ContainsKey(adjobj.ReferencedObjectData.ID) Then
-                                    Me.Collections.FlowsheetObjectCollection(adjobj.ReferencedObjectData.ID).IsAdjustAttached = False
-                                    Me.Collections.FlowsheetObjectCollection(adjobj.ReferencedObjectData.ID).AttachedAdjustId = ""
-                                End If
-                            ElseIf gobj.ObjectType = ObjectType.Controller_PID Then
-                                Dim adjobj As PIDController = Me.Collections.FlowsheetObjectCollection(namesel)
-                                If Me.Collections.FlowsheetObjectCollection.ContainsKey(adjobj.ManipulatedObjectData.ID) Then
-                                    Me.Collections.FlowsheetObjectCollection(adjobj.ManipulatedObjectData.ID).IsAdjustAttached = False
-                                    Me.Collections.FlowsheetObjectCollection(adjobj.ManipulatedObjectData.ID).AttachedAdjustId = ""
-                                End If
-                                If Me.Collections.FlowsheetObjectCollection.ContainsKey(adjobj.ControlledObjectData.ID) Then
-                                    Me.Collections.FlowsheetObjectCollection(adjobj.ControlledObjectData.ID).IsAdjustAttached = False
-                                    Me.Collections.FlowsheetObjectCollection(adjobj.ControlledObjectData.ID).AttachedAdjustId = ""
-                                End If
-                                If Me.Collections.FlowsheetObjectCollection.ContainsKey(adjobj.ReferencedObjectData.ID) Then
-                                    Me.Collections.FlowsheetObjectCollection(adjobj.ReferencedObjectData.ID).IsAdjustAttached = False
-                                    Me.Collections.FlowsheetObjectCollection(adjobj.ReferencedObjectData.ID).AttachedAdjustId = ""
-                                End If
+                                Dim obj As SharedClasses.UnitOperations.BaseClass = SimulationObjects(namesel)
+                                obj.CloseEditForm()
+                                obj.Dispose()
+                                SimulationObjects.Remove(namesel)
+
                             End If
 
-                            'dispose object
-                            Me.Collections.FlowsheetObjectCollection(namesel).CloseEditForm()
-                            Me.Collections.FlowsheetObjectCollection(namesel).Dispose()
-
-                            Me.Collections.FlowsheetObjectCollection.Remove(namesel)
                             Me.Collections.GraphicObjectCollection.Remove(namesel)
 
                             Me.FormSurface.FlowsheetSurface.DeleteSelectedObject(gobj)
 
                         End If
 
-                    End If
+                        End If
 
                     For Each obj In Me.SimulationObjects.Values
                         obj.UpdateEditForm()
@@ -2550,12 +2557,12 @@ Public Class FormFlowsheet
     Public Event StatusChanged()
 
     Public Function GetFlowsheetSurfaceWidth() As Integer Implements IFlowsheet.GetFlowsheetSurfaceWidth
-        Return FormSurface.SplitContainer1.Panel1.Width
+        Return FormSurface.SplitContainerHorizontal.Panel1.Width
     End Function
 
 
     Public Function GetFlowsheetSurfaceHeight() As Integer Implements IFlowsheet.GetFlowsheetSurfaceHeight
-        Return FormSurface.SplitContainer1.Panel1.Height
+        Return FormSurface.SplitContainerHorizontal.Panel1.Height
     End Function
 
     Public Function ChangeCalculationOrder(objects As List(Of String)) As List(Of String) Implements IFlowsheet.ChangeCalculationOrder
@@ -2568,15 +2575,6 @@ Public Class FormFlowsheet
         Return frm.NewItemList
 
     End Function
-
-    Public Property AvailableFlashAlgorithms As Dictionary(Of String, IFlashAlgorithm) Implements IFlowsheet.AvailableFlashAlgorithms
-        Get
-            Throw New NotImplementedException()
-        End Get
-        Set(value As Dictionary(Of String, IFlashAlgorithm))
-            Throw New NotImplementedException()
-        End Set
-    End Property
 
     Public Property AvailablePropertyPackages As Dictionary(Of String, IPropertyPackage) Implements IFlowsheet.AvailablePropertyPackages
         Get
@@ -2642,6 +2640,10 @@ Public Class FormFlowsheet
 
     End Function
 
+    Public Function GetSpreadsheetObject() As Object Implements IFlowsheet.GetSpreadsheetObject
+        Return FormSpreadsheet.Spreadsheet
+    End Function
+
     Public Function GetApplicationObject() As Object Implements IFlowsheet.GetApplicationObject
         Return My.Application
     End Function
@@ -2698,7 +2700,7 @@ Public Class FormFlowsheet
     End Sub
 
     Public Sub CheckStatus() Implements Interfaces.IFlowsheet.CheckStatus, IFlowsheetGUI.CheckStatus
-        Application.DoEvents()
+        UpdateInterface()
         FlowsheetSolver.FlowsheetSolver.CheckCalculatorStatus()
     End Sub
 
@@ -2792,11 +2794,11 @@ Public Class FormFlowsheet
         Dim cnt = TryCast(form, DockContent)
         If Not cnt Is Nothing Then
             If cnt.ShowHint = DockState.DockLeft Or cnt.ShowHint = DockState.DockLeftAutoHide Then
-                dckPanel.DockLeftPortion = cnt.Width
+                dckPanel.DockLeftPortion = 400 * Settings.DpiScale
             ElseIf cnt.ShowHint = DockState.DockRight Or cnt.ShowHint = DockState.DockRightAutoHide Then
-                dckPanel.DockRightPortion = cnt.Width
+                dckPanel.DockRightPortion = 400 * Settings.DpiScale
             ElseIf cnt.ShowHint = DockState.Float Then
-                dckPanel.DefaultFloatWindowSize = New Size(cnt.Width, cnt.Height)
+                dckPanel.DefaultFloatWindowSize = New Size(500 * Settings.DpiScale, 500 * Settings.DpiScale)
             End If
             cnt.Show(Me.dckPanel)
             Try
@@ -2856,10 +2858,20 @@ Public Class FormFlowsheet
     Public Sub RequestCalculation(Optional sender As ISimulationObject = Nothing, Optional changecalcorder As Boolean = False) Implements IFlowsheet.RequestCalculation
 
         If Not DynamicMode Then
+            Dim finishaction = Sub()
+                                   UpdateOpenEditForms()
+                               End Sub
             If Not sender Is Nothing Then
-                FlowsheetSolver.FlowsheetSolver.CalculateObject(Me, sender.Name)
+                Task.Factory.StartNew(Sub()
+                                          FlowsheetSolver.FlowsheetSolver.CalculateObject(Me, sender.Name)
+                                          UpdateOpenEditForms()
+                                      End Sub)
             Else
-                FlowsheetSolver.FlowsheetSolver.SolveFlowsheet(Me, Settings.SolverMode)
+                Task.Factory.StartNew(Sub()
+                                          FlowsheetSolver.FlowsheetSolver.SolveFlowsheet(Me, Settings.SolverMode,
+                                                                                         Nothing, False, False,
+                                                                                         Nothing, Nothing, finishaction)
+                                      End Sub)
             End If
             FormSurface.Invalidate()
         End If
@@ -2895,6 +2907,8 @@ Public Class FormFlowsheet
         Me.UIThread(Sub()
                         For Each obj In SimulationObjects.Values
                             obj.UpdateEditForm()
+                            obj.UpdateDynamicsEditForm()
+                            obj.UpdateExtraPropertiesEditForm()
                             EditorTooltips.Update(obj, Me)
                             obj.AttachedUtilities.ForEach(Sub(x) x.Populate())
                         Next
@@ -2926,9 +2940,17 @@ Public Class FormFlowsheet
         Me.Options.PropertyPackages.Add(obj.UniqueID, obj)
     End Sub
 
+    Private Invalidating As Boolean = False
+
     Public Sub UpdateInterface() Implements IFlowsheetGUI.UpdateInterface, IFlowsheet.UpdateInterface
 
-        Me.UIThread(Sub() Me.FormSurface.Refresh())
+        If Not Invalidating Then
+            Me.UIThread(Sub()
+                            Invalidating = True
+                            FormSurface.TableLayoutPanel1.Refresh()
+                            Invalidating = False
+                        End Sub)
+        End If
 
     End Sub
 
@@ -2942,6 +2964,11 @@ Public Class FormFlowsheet
         Return dckPanel
     End Function
 
+    Public Sub UpdateSettingsPanel()
+
+        FrmStSim1.Init(True)
+
+    End Sub
 
     Private Sub AdicionarUtilitárioToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles TSMIAddUtility.Click
 
@@ -3234,6 +3261,43 @@ Public Class FormFlowsheet
         Me.FormDynamics.chkDynamics.Checked = Me.DynamicMode
         Me.tsbDynamics.Checked = Me.DynamicMode
         FormSurface.FControl.Invalidate()
+    End Sub
+
+    Public Function GetObject(name As String) As ISimulationObject Implements IFlowsheet.GetObject
+        Return GetFlowsheetSimulationObject(name)
+    End Function
+
+    Public Function GetCompound(name As String) As ICompoundConstantProperties Implements IFlowsheet.GetCompound
+        Return AvailableCompounds(name)
+    End Function
+
+    Public Function GetPropertyPackage(name As String) As IPropertyPackage Implements IFlowsheet.GetPropertyPackage
+        Return PropertyPackages.Values.Where(Function(x) x.Tag = name).FirstOrDefault
+    End Function
+
+    Public Function GetReaction(name As String) As IReaction Implements IFlowsheet.GetReaction
+        Return Reactions.Values.Where(Function(x) x.Name = name).FirstOrDefault
+    End Function
+
+    Public Function GetReactionSet(name As String) As IReactionSet Implements IFlowsheet.GetReactionSet
+        Return ReactionSets.Values.Where(Function(x) x.Name = name).FirstOrDefault
+    End Function
+
+    Public Sub AutoLayout() Implements IFlowsheet.AutoLayout
+        FormSurface.FlowsheetSurface.AutoArrange()
+        FormSurface.Invalidate()
+    End Sub
+
+    Public Sub RefreshInterface() Implements IFlowsheet.RefreshInterface
+
+        If Not Invalidating Then
+            Me.UIThread(Sub()
+                            Invalidating = True
+                            FormSurface.Refresh()
+                            Invalidating = False
+                        End Sub)
+        End If
+
     End Sub
 
 #End Region

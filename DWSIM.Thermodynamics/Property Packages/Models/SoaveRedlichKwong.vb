@@ -27,6 +27,8 @@ Namespace PropertyPackages.Auxiliary
         Dim m_pr As New PROPS
         Public ReadOnly InteractionParameters As Dictionary(Of String, Dictionary(Of String, PR_IPData))
 
+        Public Property BIPChanged As Boolean = False
+
         'Public ReadOnly Property InteractionParameters() As Dictionary(Of String, Dictionary(Of String, PR_IPData))
         '    Get
         '        Return _ip
@@ -50,6 +52,7 @@ Namespace PropertyPackages.Auxiliary
 
             Dim csdb As New ChemSepHelper.ChemSepIDConverter
             For Each srkip In srkipc
+                srkip.Owner = Me
                 If Me.InteractionParameters.ContainsKey(csdb.GetDWSIMName(srkip.ID1)) Then
                     If Me.InteractionParameters(csdb.GetDWSIMName(srkip.ID1)).ContainsKey(csdb.GetDWSIMName(srkip.ID2)) Then
                     Else
@@ -61,6 +64,7 @@ Namespace PropertyPackages.Auxiliary
                 End If
             Next
             For Each srkip In srkipc
+                srkip.Owner = Me
                 If Me.InteractionParameters.ContainsKey(csdb.GetCSName(srkip.ID1)) Then
                     If Me.InteractionParameters(csdb.GetCSName(srkip.ID1)).ContainsKey(csdb.GetCSName(srkip.ID2)) Then
                     Else
@@ -292,7 +296,7 @@ Namespace PropertyPackages.Auxiliary
             IObj?.Paragraphs.Add(String.Format(SolutionInspector.Calculated_Intermediate_Parameters))
 
             Dim ai(), bi(), ci() As Double
-            Dim n, R As Double
+            Dim n As Integer, R As Double
             Dim Tc(), Pc(), Vc(), w(), Zc(), alpha(), m(), a(,), b(,), Z, Tr() As Double
             Dim i, j, dadT
 
@@ -448,17 +452,27 @@ Namespace PropertyPackages.Auxiliary
 
             Dim tmp1 = MMm / V / 1000
 
-            Dim aux1 = -R / 2 * (0.42748 / T) ^ 0.5
-            i = 0
-            Dim aux2 = 0.0#
-            Do
-                j = 0
+            Dim aux1, aux2, auxtmp(n) As Double
+            aux1 = -R / 2 * (0.42748 / T) ^ 0.5
+
+            If Settings.EnableParallelProcessing Then
+                Parallel.For(0, n + 1, Sub(k)
+                                           For l As Integer = 0 To n
+                                               auxtmp(k) += Vz(k) * Vz(l) * (1 - VKij(k, l)) * (ci(l) * (ai(k) * Tc(l) / Pc(l)) ^ 0.5 + ci(k) * (ai(l) * Tc(k) / Pc(k)) ^ 0.5)
+                                           Next
+                                       End Sub)
+                aux2 = auxtmp.SumY
+            Else
+                i = 0
                 Do
-                    aux2 += Vz(i) * Vz(j) * (1 - VKij(i, j)) * (ci(j) * (ai(i) * Tc(j) / Pc(j)) ^ 0.5 + ci(i) * (ai(j) * Tc(i) / Pc(i)) ^ 0.5)
-                    j = j + 1
-                Loop Until j = n + 1
-                i = i + 1
-            Loop Until i = n + 1
+                    j = 0
+                    Do
+                        aux2 += Vz(i) * Vz(j) * (1 - VKij(i, j)) * (ci(j) * (ai(i) * Tc(j) / Pc(j)) ^ 0.5 + ci(i) * (ai(j) * Tc(i) / Pc(i)) ^ 0.5)
+                        j = j + 1
+                    Loop Until j = n + 1
+                    i = i + 1
+                Loop Until i = n + 1
+            End If
 
             dadT = aux1 * aux2
 

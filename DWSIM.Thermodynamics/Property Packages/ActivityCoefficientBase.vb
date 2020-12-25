@@ -553,7 +553,7 @@ Namespace PropertyPackages
 
             Dim constprop = Me.DW_GetConstantProperties
 
-            Dim Tc As Object = Me.RET_VTC()
+            Dim Tc As Double() = Me.RET_VTC()
             Dim Tr As Double
             If st = State.Liquid Then
 
@@ -617,7 +617,11 @@ Namespace PropertyPackages
                         IObj?.SetCurrent()
                         Dim a2 As Double = AUX_KHenry(Me.RET_VNAMES(i), 1.02 * Tc(i))
                         Dim a1 As Double = ativ(i) * Me.AUX_PVAPi(i, 0.98 * Tc(i))
-                        lnfug(i) = Math.Log(((Tr - 0.98) / (1.02 - 0.98) * (a2 - a1) + a1) / P)
+                        If Not Double.IsNaN(a1) Then
+                            lnfug(i) = Math.Log(((Tr - 0.98) / (1.02 - 0.98) * (a2 - a1) + a1) / P)
+                        Else
+                            lnfug(i) = Log(a2 / P)
+                        End If
                     End If
                 Next
 

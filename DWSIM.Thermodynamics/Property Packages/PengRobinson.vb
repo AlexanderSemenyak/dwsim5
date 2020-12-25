@@ -43,7 +43,6 @@ Namespace PropertyPackages
         Public m_pr As New PropertyPackages.Auxiliary.PengRobinson
         Public prn As New PropertyPackages.ThermoPlugs.PR
         Public ip(,) As Double
-        <Xml.Serialization.XmlIgnore> Public ip_changed As Boolean = True
 
         Public Sub New(ByVal comode As Boolean)
 
@@ -55,8 +54,8 @@ Namespace PropertyPackages
 
             MyBase.New()
 
-            Me.IsConfigurable = True
-            Me._packagetype = PropertyPackages.PackageType.EOS
+            IsConfigurable = True
+            _packagetype = PropertyPackages.PackageType.EOS
 
         End Sub
 
@@ -81,75 +80,6 @@ Namespace PropertyPackages
         End Sub
 
 #Region "    DWSIM Functions"
-
-        Public Overrides Function CalcIsothermalCompressibility(p As Interfaces.IPhase) As Double
-
-            Dim T, P0 As Double
-            T = CurrentMaterialStream.Phases(0).Properties.temperature.GetValueOrDefault
-            P0 = CurrentMaterialStream.Phases(0).Properties.pressure.GetValueOrDefault
-
-            Select Case p.Name
-                Case "Mixture"
-                    Return 0.0#
-                Case "Vapor"
-                    Return ThermoPlug.CalcIsothermalCompressibility(RET_VMOL(Phase.Vapor), P0, T, Me, "PR")
-                Case "OverallLiquid"
-                    Return 0.0#
-                Case "Liquid1"
-                    Return ThermoPlug.CalcIsothermalCompressibility(RET_VMOL(Phase.Liquid1), P0, T, Me, "PR")
-                Case "Liquid2"
-                    Return ThermoPlug.CalcIsothermalCompressibility(RET_VMOL(Phase.Liquid2), P0, T, Me, "PR")
-                Case "Liquid3"
-                    Return ThermoPlug.CalcIsothermalCompressibility(RET_VMOL(Phase.Liquid3), P0, T, Me, "PR")
-                Case "Aqueous"
-                    Return ThermoPlug.CalcIsothermalCompressibility(RET_VMOL(Phase.Aqueous), P0, T, Me, "PR")
-                Case "Solid"
-                    Return 0.0#
-            End Select
-
-        End Function
-
-        Public Overrides Function CalcJouleThomsonCoefficient(p As Interfaces.IPhase) As Double
-
-            Dim T, P0 As Double
-            T = CurrentMaterialStream.Phases(0).Properties.temperature.GetValueOrDefault
-            P0 = CurrentMaterialStream.Phases(0).Properties.pressure.GetValueOrDefault
-
-            Select Case p.Name
-                Case "Mixture"
-                    Return 0.0#
-                Case "Vapor"
-                    If p.Properties.compressibilityFactor Is Nothing Then DW_CalcProp("compressibilityfactor", Phase.Vapor)
-                    If p.Properties.heatCapacityCp Is Nothing Then DW_CalcProp("heatCapacityCp", Phase.Vapor)
-                    Return m_pr.JT_PR(p.Properties.compressibilityFactor.GetValueOrDefault, T, P0, RET_VMOL(Phase.Vapor), RET_VMM, RET_VZC, RET_VTC, RET_VPC,
-                                      p.Properties.heatCapacityCp.GetValueOrDefault, RET_VW)
-                Case "OverallLiquid"
-                    Return 0.0#
-                Case "Liquid1"
-                    If p.Properties.compressibilityFactor Is Nothing Then DW_CalcProp("compressibilityfactor", Phase.Liquid1)
-                    If p.Properties.heatCapacityCp Is Nothing Then DW_CalcProp("heatCapacityCp", Phase.Liquid1)
-                    Return m_pr.JT_PR(p.Properties.compressibilityFactor.GetValueOrDefault, T, P0, RET_VMOL(Phase.Liquid1), RET_VMM, RET_VZC, RET_VTC, RET_VPC,
-                                      p.Properties.heatCapacityCp.GetValueOrDefault, RET_VW)
-                Case "Liquid2"
-                    If p.Properties.compressibilityFactor Is Nothing Then DW_CalcProp("compressibilityfactor", Phase.Liquid2)
-                    If p.Properties.heatCapacityCp Is Nothing Then DW_CalcProp("heatCapacityCp", Phase.Liquid2)
-                    Return m_pr.JT_PR(p.Properties.compressibilityFactor.GetValueOrDefault, T, P0, RET_VMOL(Phase.Liquid2), RET_VMM, RET_VZC, RET_VTC, RET_VPC,
-                                      p.Properties.heatCapacityCp.GetValueOrDefault, RET_VW)
-                Case "Liquid3"
-                    If p.Properties.compressibilityFactor Is Nothing Then DW_CalcProp("compressibilityfactor", Phase.Liquid3)
-                    If p.Properties.heatCapacityCp Is Nothing Then DW_CalcProp("heatCapacityCp", Phase.Liquid3)
-                    Return m_pr.JT_PR(p.Properties.compressibilityFactor.GetValueOrDefault, T, P0, RET_VMOL(Phase.Liquid3), RET_VMM, RET_VZC, RET_VTC, RET_VPC,
-                            p.Properties.heatCapacityCp.GetValueOrDefault, RET_VW)
-                Case "Aqueous"
-                    If p.Properties.compressibilityFactor Is Nothing Then DW_CalcProp("compressibilityfactor", Phase.Aqueous)
-                    If p.Properties.heatCapacityCp Is Nothing Then DW_CalcProp("heatCapacityCp", Phase.Aqueous)
-                    Return m_pr.JT_PR(p.Properties.compressibilityFactor.GetValueOrDefault, T, P0, RET_VMOL(Phase.Aqueous), RET_VMM, RET_VZC, RET_VTC, RET_VPC,
-                  p.Properties.heatCapacityCp.GetValueOrDefault, RET_VW)
-                Case "Solid"
-                    Return 0.0#
-            End Select
-
-        End Function
 
         Public Overrides Function DW_CalcCp_ISOL(ByVal Phase1 As PropertyPackages.Phase, ByVal T As Double, ByVal P As Double) As Double
             Select Case Phase1
@@ -557,8 +487,12 @@ Namespace PropertyPackages
                         Return 0
                     End If
                 End If
-            Else
-                Return 0
+            ElseIf Me.m_pr.InteractionParameters.ContainsKey(id2) Then
+                If Me.m_pr.InteractionParameters(id2).ContainsKey(id1) Then
+                    Return m_pr.InteractionParameters(id2)(id1).kij
+                Else
+                    Return 0
+                End If
             End If
         End Function
 
@@ -589,35 +523,35 @@ Namespace PropertyPackages
 
         Public Overrides Function RET_VKij() As Double(,)
 
-            Dim hash As Integer = m_pr.InteractionParameters.GetHashCode()
+            If m_pr.BIPChanged Or ip Is Nothing Then
 
             Dim vn As IList(Of String) = RET_VNAMES()
             Dim n As Integer = vn.Count - 1
 
-            'If ip_changed Then
-
+            '    Dim val(Me.CurrentMaterialStream.Phases(0).Compounds.Count - 1, Me.CurrentMaterialStream.Phases(0).Compounds.Count - 1) As Double
+            '    Dim i As Integer = 0
+            '    Dim l As Integer = 0
             Dim phases0  = Me.CurrentMaterialStream.Phases(0)
             Dim val(phases0.Compounds.Count - 1, phases0.Compounds.Count - 1) As Double
             Dim i As Integer = 0
             Dim l As Integer = 0
 
-            For i = 0 To n
-                Dim vn_i  = vn(i)
-                For l = 0 To n
-                    val(i, l) = Me.RET_KIJ(vn_i, vn(l))
+                For i = 0 To n
+                    For l = 0 To n
+                        val(i, l) = Me.RET_KIJ(vn(i), vn(l))
+                    Next
                 Next
-            Next
 
-            ip = val
-            ip_changed = False
+                ip = val
+                m_pr.BIPChanged = False
 
-            Return val
+                Return val
 
-            'Else
+            Else
 
-            '    Return ip
+                Return ip
 
-            'End If
+            End If
 
         End Function
 
@@ -951,10 +885,6 @@ Namespace PropertyPackages
 
         Public Overrides Function DW_CalcFugCoeff(ByVal Vx As System.Array, ByVal T As Double, ByVal P As Double, ByVal st As State) As Double()
 
-            Calculator.WriteToConsole(Me.ComponentName & " fugacity coefficient calculation for phase '" & st.ToString & "' requested at T = " & T & " K and P = " & P & " Pa.", 2)
-            Calculator.WriteToConsole("Compounds: " & Me.RET_VNAMES.ToArrayString, 2)
-            Calculator.WriteToConsole("Mole fractions: " & Vx.ToArrayString(), 2)
-
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
             Inspector.Host.CheckAndAdd(IObj, "", "DW_CalcFugCoeff", SolutionInspector.Peng_Robinson_EOS_Fugacity_Coefficient, SolutionInspector.Property_Package_Fugacity_Coefficient_Calculation_Routine)
@@ -976,16 +906,9 @@ Namespace PropertyPackages
                 lnfug = prn.CalcLnFug(T, P, Vx, Me.RET_VKij, Me.RET_VTC, Me.RET_VPC, Me.RET_VW, Nothing, "V")
             End If
 
-            Dim n As Integer = UBound(lnfug)
-            Dim fugcoeff(n) As Double
-
-            fugcoeff = lnfug.ExpY
-
-            Calculator.WriteToConsole("Result: " & fugcoeff.ToArrayString(), 2)
-
             IObj?.Close()
 
-            Return fugcoeff
+            Return lnfug.ExpY
 
         End Function
 
@@ -1104,6 +1027,72 @@ Namespace PropertyPackages
 
         End Function
 
+        Public Overrides Function CalcIsothermalCompressibility(p As Interfaces.IPhase) As Double
+
+            Dim T, P0 As Double
+            T = CurrentMaterialStream.Phases(0).Properties.temperature.GetValueOrDefault
+            P0 = CurrentMaterialStream.Phases(0).Properties.pressure.GetValueOrDefault
+            Dim beta, v, a, b, sos As Double
+            Dim tmp As Double()
+
+            Select Case p.Name
+                Case "Mixture"
+                    Return 0.0#
+                Case "Vapor"
+                    Return ThermoPlug.CalcIsothermalCompressibility(RET_VMOL(Phase.Vapor), P0, T, Me, "PR")
+                Case "OverallLiquid"
+                    Return 0.0#
+                Case "Liquid1"
+                    Return ThermoPlug.CalcIsothermalCompressibility(RET_VMOL(Phase.Liquid1), P0, T, Me, "PR")
+                Case "Liquid2"
+                    Return ThermoPlug.CalcIsothermalCompressibility(RET_VMOL(Phase.Liquid2), P0, T, Me, "PR")
+                Case "Liquid3"
+                    Return ThermoPlug.CalcIsothermalCompressibility(RET_VMOL(Phase.Liquid3), P0, T, Me, "PR")
+                Case "Aqueous"
+                    Return ThermoPlug.CalcIsothermalCompressibility(RET_VMOL(Phase.Aqueous), P0, T, Me, "PR")
+                Case "Solid"
+                    Return 0.0#
+            End Select
+        End Function
+
+        Public Overrides Function CalcJouleThomsonCoefficient(p As Interfaces.IPhase) As Double
+
+            Dim T, P0, cp As Double
+
+            T = CurrentMaterialStream.Phases(0).Properties.temperature.GetValueOrDefault
+            P0 = CurrentMaterialStream.Phases(0).Properties.pressure.GetValueOrDefault
+
+            Select Case p.Name
+                Case "Mixture"
+                    Return 0.0#
+                Case "Vapor"
+
+                    DW_CalcProp("heatCapacityCp", Phase.Vapor)
+                    cp = p.Properties.heatCapacityCp.GetValueOrDefault
+                    'Return m_pr.JT_PR(AUX_Z(RET_VMOL(Phase.Vapor), T, P0, Phase.Vapor), T, P0, RET_VMOL(Phase.Vapor), Me.RET_VMM(), Me.RET_VZC(), Me.RET_VTC(), Me.RET_VPC(), cp, Me.RET_VW())
+                    Return ThermoPlug.CalcJouleThomsonCoefficient(RET_VMOL(Phase.Vapor), P0, T, Me, "PR", cp, AUX_MMM(Phase.Vapor))
+                Case "OverallLiquid"
+                    Return 0.0#
+                Case "Liquid1"
+                    DW_CalcProp("heatCapacityCp", Phase.Liquid1)
+                    cp = p.Properties.heatCapacityCp.GetValueOrDefault
+                    Return ThermoPlug.CalcJouleThomsonCoefficient(RET_VMOL(Phase.Liquid1), P0, T, Me, "PR", cp, AUX_MMM(Phase.Liquid1))
+                Case "Liquid2"
+                    DW_CalcProp("heatCapacityCp", Phase.Liquid2)
+                    cp = p.Properties.heatCapacityCp.GetValueOrDefault
+                    Return ThermoPlug.CalcJouleThomsonCoefficient(RET_VMOL(Phase.Liquid2), P0, T, Me, "PR", cp, AUX_MMM(Phase.Liquid2))
+                Case "Liquid3"
+                    DW_CalcProp("heatCapacityCp", Phase.Liquid3)
+                    cp = p.Properties.heatCapacityCp.GetValueOrDefault
+                    Return ThermoPlug.CalcJouleThomsonCoefficient(RET_VMOL(Phase.Liquid3), P0, T, Me, "PR", cp, AUX_MMM(Phase.Liquid3))
+                Case "Aqueous"
+                    DW_CalcProp("heatCapacityCp", Phase.Aqueous)
+                    cp = p.Properties.heatCapacityCp.GetValueOrDefault
+                    Return ThermoPlug.CalcJouleThomsonCoefficient(RET_VMOL(Phase.Aqueous), P0, T, Me, "PR", cp, AUX_MMM(Phase.Aqueous))
+                Case "Solid"
+                    Return 0.0#
+            End Select
+        End Function
     End Class
 
 End Namespace

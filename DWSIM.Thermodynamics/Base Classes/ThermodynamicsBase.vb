@@ -31,6 +31,7 @@ Imports DWSIM.Interfaces
 Imports System.Dynamic
 Imports DWSIM.SharedClasses
 Imports XMLSerializer
+Imports System.Text.RegularExpressions
 
 Namespace BaseClasses
 
@@ -459,6 +460,10 @@ Namespace BaseClasses
         Public Property E_Forward_Unit As String = "J/mol" Implements IReaction.E_Forward_Unit
 
         Public Property E_Reverse_Unit As String = "J/mol" Implements IReaction.E_Reverse_Unit
+
+        Public Property ReactionKinetics As ReactionKinetics = ReactionKinetics.Expression Implements IReaction.ReactionKinetics
+
+        Public Property ScriptTitle As String = "" Implements IReaction.ScriptTitle
 
         Public Function EvaluateK1(T As Double, PP As Interfaces.IPropertyPackage) As Double Implements Interfaces.IReaction.EvaluateK
             Return EvaluateK(T, PP)
@@ -1286,6 +1291,8 @@ Namespace BaseClasses
 
         Public Property logKvalue As Double? Implements Interfaces.IPhaseProperties.logKvalue
 
+        Public Property mean_ionic_acitivty_coefficient As Double? Implements Interfaces.IPhaseProperties.mean_ionic_acitivty_coefficient
+
         Public Property massflow As Double? Implements Interfaces.IPhaseProperties.massflow
 
         Public Property massfraction As Double? Implements Interfaces.IPhaseProperties.massfraction
@@ -1407,6 +1414,64 @@ Namespace BaseClasses
 
         End Function
 
+        Public Sub UpdateElements()
+
+            Dim el As New Dictionary(Of String, Double)
+
+            Dim _molecule = Formula
+
+            Dim useParenthesis As Boolean = Regex.IsMatch(_molecule, "[A-Z][a-z]?\d*\((([A-Z][a-z]?\d*){1,2})\)\d*")
+            Dim findMatches = Regex.Matches(_molecule, "\(?[A-Z][a-z]?\d*\)?")
+
+            ' Get all elements
+
+            If useParenthesis Then
+                Dim strval = If(Regex.IsMatch(_molecule, "\)\d+"), Regex.Match(_molecule, "\)\d+").Value.Remove(0, 1), "1")
+                Dim endNumber As Double = Double.Parse(strval, NumberStyles.AllowDecimalPoint, System.Globalization.CultureInfo.InvariantCulture)
+                ' Finds the number after the ')'
+                For Each i As Match In findMatches
+                    Dim element As String = Regex.Match(i.Value, "[A-Z][a-z]?").Value
+                    ' Gets the element
+                    Dim amountOfElement As Double = 0
+                    If Regex.IsMatch(i.Value, "[\(\)]") Then
+                        If Not Double.TryParse(Regex.Replace(i.Value, "(\(|\)|[A-Z]|[a-z])", ""), amountOfElement) Then
+                            ' If the element has either '(' or ')' and doesn't specify an amount, then set it equal to the endnumber
+                            amountOfElement = endNumber
+                        Else
+                            ' If the element has either '(' or ')' and specifies an amount, then multiply it by the end number
+                            amountOfElement = amountOfElement * endNumber
+                        End If
+                    Else
+                        amountOfElement = Double.Parse(If(String.IsNullOrWhiteSpace(i.Value.Replace(element, "")), "1", i.Value.Replace(element, "")))
+                    End If
+                    If el.ContainsKey(element) Then
+                        el(element) += amountOfElement
+                    Else
+                        el.Add(element, amountOfElement)
+                    End If
+                Next
+            Else
+                Dim elementRegex = "([A-Z][a-z]*)([0-9]*)"
+                Dim validateRegex = "^(" + elementRegex + ")+$"
+                For Each match In Regex.Matches(_molecule, elementRegex)
+                    Dim name = match.Groups(1).Value
+                    Dim count = If(match.Groups(2).Value <> "", Integer.Parse(match.Groups(2).Value), 1)
+                    If el.ContainsKey(name) Then
+                        el(name) += count
+                    Else
+                        el.Add(name, count)
+                    End If
+                Next
+            End If
+
+            Elements = New SortedList()
+
+            For Each item In el
+                Elements.Add(item.Key, item.Value)
+            Next
+
+        End Sub
+
         Public Function Clone() As Object Implements System.ICloneable.Clone
 
             Dim comp = ObjectCopy(Me)
@@ -1487,7 +1552,9 @@ Namespace BaseClasses
 
             'For Each xel2 As XElement In (From xel As XElement In data Select xel Where xel.Name = "Elements").Elements
             For Each xel2 As XElement In OnitUtilities.GetFilteredXElementsEnumerable(data,"Elements").Elements
-                Me.Elements.Add(xel2.@Name, xel2.@Value)
+                If Not Me.Elements.ContainsKey(xel2.@Name) Then
+                    Me.Elements.Add(xel2.@Name, xel2.@Value)
+                End If
             Next
 
 
@@ -1621,7 +1688,20 @@ Namespace BaseClasses
 
         Public Property EnthalpyOfFusionAtTf As Double = 0.0# Implements Interfaces.ICompoundConstantProperties.EnthalpyOfFusionAtTf
 
-        Public Property Formula As String = "" Implements Interfaces.ICompoundConstantProperties.Formula
+        Private _formula As String = ""
+
+        Public Property Formula As String Implements Interfaces.ICompoundConstantProperties.Formula
+            Get
+                Return _formula
+            End Get
+            Set(value As String)
+                _formula = value
+                Try
+                    UpdateElements()
+                Catch ex As Exception
+                End Try
+            End Set
+        End Property
 
         Public Property HVap_A As Double = 0.0# Implements Interfaces.ICompoundConstantProperties.HVap_A
 

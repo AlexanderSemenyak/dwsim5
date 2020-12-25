@@ -20,7 +20,7 @@ namespace DWSIM.UI.Desktop.Editors
         public Dictionary<String, Interfaces.ISimulationObject> ObjList;
 
         public Button btnOK, btnCancel;
-        public ListBox list1, list2, list3; 
+        public ListBox list1, list2, list3, list4; 
 
         public PropertySelector()
         {
@@ -54,9 +54,10 @@ namespace DWSIM.UI.Desktop.Editors
             var lblDesc = new TextArea { ReadOnly = true };
             var lblAbout = new TextArea { ReadOnly = true };
 
-            list1 = new ListBox { Height = 300, Width = 250 };
-            list2 = new ListBox { Height = 300, Width = 250 };
+            list1 = new ListBox { Height = 300, Width = 200 };
+            list2 = new ListBox { Height = 300, Width = 150 };
             list3 = new ListBox { Height = 300, Width = 250 };
+            list4 = new ListBox { Height = 300, Width = 100 };
 
             btnOK = new Button { Text = "OK", Enabled = false };
 
@@ -67,8 +68,8 @@ namespace DWSIM.UI.Desktop.Editors
                 Close();
             };
 
-            topcontainer.Rows.Add(new TableRow(new Label { Text = "Object Type / Instance / Property" }));
-            topcontainer.Rows.Add(new TableRow(list1, list2, list3));
+            topcontainer.Rows.Add(new TableRow(new Label { Text = "Type / Object / Property / Units" }));
+            topcontainer.Rows.Add(new TableRow(list1, list2, list3, list4));
             topcontainer.Padding = new Padding(5, 5, 5, 5);
             topcontainer.Spacing = new Size(10, 10);
 
@@ -93,10 +94,33 @@ namespace DWSIM.UI.Desktop.Editors
                 }
 
                 list3.SelectedIndexChanged += (sender2, e2) => {
+
+                    if (list3.SelectedIndex < 0) return;
+
+                    if (!initialized) return;
+
                     btnOK.Enabled = list3.SelectedKey != null;
+
+                    list4.Items.Clear();
+
+                    var obj = Flowsheet.SimulationObjects[list2.SelectedKey];
+                    var prop = list3.SelectedKey;
+                    var unit = obj.GetPropertyUnit(prop);
+                    var su = Flowsheet.FlowsheetOptions.SelectedUnitSystem;
+                    var units = su.GetUnitSet(su.GetUnitType(unit));
+
+                    foreach (var item in units)
+                    {
+                        list4.Items.Add(item);
+                    }
+
                 };
 
                 list2.SelectedIndexChanged += (sender2, e2) => {
+
+                    if (list2.SelectedIndex < 0) return;
+
+                    if (!initialized) return;
 
                     list3.Items.Clear();
 
@@ -122,6 +146,8 @@ namespace DWSIM.UI.Desktop.Editors
                 list1.SelectedIndexChanged += (sender2, e2) =>
                 {
 
+                    if (list1.SelectedIndex < 0) return;
+
                     if (!initialized) return;
 
                     var obj = ObjList[list1.SelectedValue.ToString()];
@@ -134,6 +160,7 @@ namespace DWSIM.UI.Desktop.Editors
                 };
 
                 list1.SelectedIndex = 0;
+
             };
 
             initialized = true;

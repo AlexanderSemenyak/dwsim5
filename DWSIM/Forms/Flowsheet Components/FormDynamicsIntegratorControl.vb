@@ -223,6 +223,28 @@ Public Class FormDynamicsIntegratorControl
             controller.Reset()
         Next
 
+        If schedule.ResetContentsOfAllObjects Then
+            For Each obj In Flowsheet.SimulationObjects.Values
+                If obj.HasPropertiesForDynamicMode Then
+                    If TypeOf obj Is BaseClass Then
+                        Dim bobj = DirectCast(obj, BaseClass)
+                        If bobj.GetDynamicProperty("Reset Content") IsNot Nothing Then
+                            bobj.SetDynamicProperty("Reset Content", 1)
+                        End If
+                        If bobj.GetDynamicProperty("Reset Contents") IsNot Nothing Then
+                            bobj.SetDynamicProperty("Reset Contents", 1)
+                        End If
+                        If bobj.GetDynamicProperty("Initialize using Inlet Stream") IsNot Nothing Then
+                            bobj.SetDynamicProperty("Initialize using Inlet Stream", 1)
+                        End If
+                        If bobj.GetDynamicProperty("Initialize using Inlet Streams") IsNot Nothing Then
+                            bobj.SetDynamicProperty("Initialize using Inlet Streams", 1)
+                        End If
+                    End If
+                End If
+            Next
+        End If
+
         integrator.CurrentTime = New Date
 
         integrator.MonitoredVariableValues.Clear()
@@ -300,7 +322,16 @@ Public Class FormDynamicsIntegratorControl
 
                                         If integrator.ShouldCalculateControl Then
                                             For Each controller As PIDController In Controllers
-                                                If controller.Active Then controller.Calculate()
+                                                If controller.Active Then
+                                                    Flowsheet.ProcessScripts(Scripts.EventType.ObjectCalculationStarted, Scripts.ObjectType.FlowsheetObject, controller.Name)
+                                                    Try
+                                                        controller.Solve()
+                                                        Flowsheet.ProcessScripts(Scripts.EventType.ObjectCalculationFinished, Scripts.ObjectType.FlowsheetObject, controller.Name)
+                                                    Catch ex As Exception
+                                                        Flowsheet.ProcessScripts(Scripts.EventType.ObjectCalculationError, Scripts.ObjectType.FlowsheetObject, controller.Name)
+                                                        Throw ex
+                                                    End Try
+                                                End If
                                             Next
                                         End If
 
@@ -351,10 +382,31 @@ Public Class FormDynamicsIntegratorControl
                                                                   ProgressBar1.Style = ProgressBarStyle.Continuous
                                                                   Flowsheet.SupressMessages = False
                                                                   Flowsheet.UpdateOpenEditForms()
+                                                                  Dim baseexception As Exception
                                                                   If t.Exception IsNot Nothing Then
-                                                                      Dim euid As String = Guid.NewGuid().ToString()
-                                                                      ExceptionProcessing.ExceptionList.Exceptions.Add(euid, t.Exception)
-                                                                      Flowsheet.ShowMessage(t.Exception.Message, Interfaces.IFlowsheet.MessageType.GeneralError, euid)
+                                                                      For Each ex In t.Exception.Flatten().InnerExceptions
+                                                                          Dim euid As String = Guid.NewGuid().ToString()
+                                                                          SharedClasses.ExceptionProcessing.ExceptionList.Exceptions.Add(euid, ex)
+                                                                          If TypeOf ex Is AggregateException Then
+                                                                              baseexception = ex.InnerException
+                                                                              For Each iex In DirectCast(ex, AggregateException).Flatten().InnerExceptions
+                                                                                  While iex.InnerException IsNot Nothing
+                                                                                      baseexception = iex.InnerException
+                                                                                  End While
+                                                                                  Flowsheet.ShowMessage(baseexception.Message.ToString, Interfaces.IFlowsheet.MessageType.GeneralError, euid)
+                                                                              Next
+                                                                          Else
+                                                                              baseexception = ex
+                                                                              If baseexception.InnerException IsNot Nothing Then
+                                                                                  While baseexception.InnerException.InnerException IsNot Nothing
+                                                                                      baseexception = baseexception.InnerException
+                                                                                      If baseexception Is Nothing Then Exit While
+                                                                                      If baseexception.InnerException Is Nothing Then Exit While
+                                                                                  End While
+                                                                              End If
+                                                                              Flowsheet.ShowMessage(baseexception.Message.ToString, Interfaces.IFlowsheet.MessageType.GeneralError, euid)
+                                                                          End If
+                                                                      Next
                                                                   End If
                                                               End Sub)
                               End Sub)

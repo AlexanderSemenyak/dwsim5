@@ -4,6 +4,7 @@ Imports DWSIM.Interfaces
 Imports Converter = DWSIM.SharedClasses.SystemsOfUnits.Converter
 Imports WeifenLuo.WinFormsUI.Docking
 Imports su = DWSIM.SharedClasses.SystemsOfUnits
+Imports Eto.Drawing
 
 Public Class MaterialStreamEditor
 
@@ -61,18 +62,20 @@ Public Class MaterialStreamEditor
         If Host.Items.Where(Function(x) x.Name.Contains(MatStream.GraphicObject.Tag)).Count > 0 Then
             If InspReportBar Is Nothing Then
                 InspReportBar = New SharedClasses.InspectorReportBar
-                InspReportBar.Dock = DockStyle.Bottom
+                InspReportBar.Dock = DockStyle.Fill
                 AddHandler InspReportBar.Button1.Click, Sub()
                                                             Dim iwindow As New Inspector.Window2
                                                             iwindow.SelectedObject = MatStream
                                                             iwindow.Show(DockPanel)
                                                         End Sub
-                Me.Controls.Add(InspReportBar)
+                Me.SplitContainer1.Panel2.Controls.Add(InspReportBar)
+                Me.SplitContainer1.Panel2Collapsed = False
                 InspReportBar.BringToFront()
             End If
         Else
             If InspReportBar IsNot Nothing Then
-                Me.Controls.Remove(InspReportBar)
+                Me.SplitContainer1.Panel2.Controls.Remove(InspReportBar)
+                Me.SplitContainer1.Panel2Collapsed = True
                 InspReportBar = Nothing
             End If
         End If
@@ -179,6 +182,23 @@ Public Class MaterialStreamEditor
 
             tbFracSpec.Text = .Phases(2).Properties.molarfraction.GetValueOrDefault.ToString(nf)
 
+            'flow definition
+
+            Select Case .DefinedFlow
+                Case Interfaces.Enums.FlowSpec.Mass
+                    tbMassFlow.BackColor = System.Drawing.Color.LightBlue
+                    tbMoleFlow.BackColor = tbTemp.BackColor
+                    tbVolFlow.BackColor = tbTemp.BackColor
+                Case Interfaces.Enums.FlowSpec.Mole
+                    tbMassFlow.BackColor = tbTemp.BackColor
+                    tbMoleFlow.BackColor = System.Drawing.Color.LightBlue
+                    tbVolFlow.BackColor = tbTemp.BackColor
+                Case Interfaces.Enums.FlowSpec.Volumetric
+                    tbMassFlow.BackColor = tbTemp.BackColor
+                    tbMoleFlow.BackColor = tbTemp.BackColor
+                    tbVolFlow.BackColor = System.Drawing.Color.LightBlue
+            End Select
+
             'reference solvent
 
             Dim complist As List(Of String) = .FlowSheet.SelectedCompounds.Values.Select(Function(x) x.Name).ToList
@@ -216,15 +236,6 @@ Public Class MaterialStreamEditor
                 cbPropPack.Items.Clear()
                 cbPropPack.Items.AddRange(proppacks)
                 cbPropPack.SelectedItem = .PropertyPackage.Tag
-            Catch ex As Exception
-            End Try
-
-            Try
-                Dim flashalgos As String() = .FlowSheet.FlowsheetOptions.FlashAlgorithms.Select(Function(x) x.Tag).ToArray
-                cbFlashAlg.Items.Clear()
-                cbFlashAlg.Items.Add("Default")
-                cbFlashAlg.Items.AddRange(flashalgos)
-                If .PreferredFlashAlgorithmTag <> "" Then cbFlashAlg.SelectedItem = .PreferredFlashAlgorithmTag Else cbFlashAlg.SelectedIndex = 0
             Catch ex As Exception
             End Try
 
@@ -586,12 +597,12 @@ Public Class MaterialStreamEditor
             refval = p.Properties.bubbleTemperature
             If refval.HasValue Then
                 val = Converter.ConvertFromSI(units.temperature, refval)
-                .Add(New Object() {MatStream.FlowSheet.GetTranslatedString("BubbleTemp"), val, units.pressure})
+                .Add(New Object() {MatStream.FlowSheet.GetTranslatedString("BubbleTemp"), val, units.temperature})
             End If
             refval = p.Properties.dewTemperature
             If refval.HasValue Then
                 val = Converter.ConvertFromSI(units.temperature, refval)
-                .Add(New Object() {MatStream.FlowSheet.GetTranslatedString("DewTemp"), val, units.pressure})
+                .Add(New Object() {MatStream.FlowSheet.GetTranslatedString("DewTemp"), val, units.temperature})
             End If
 
             If p.Name.Contains("Overall") Then
@@ -626,6 +637,9 @@ Public Class MaterialStreamEditor
 
                     refval = MatStream.Phases(3).Properties.osmoticCoefficient.GetValueOrDefault
                     .Add(New Object() {MatStream.FlowSheet.GetTranslatedString("OsmoticCoefficient"), refval, ""})
+
+                    refval = MatStream.Phases(3).Properties.mean_ionic_acitivty_coefficient.GetValueOrDefault
+                    .Add(New Object() {MatStream.FlowSheet.GetTranslatedString("MIAC"), refval, ""})
 
                     refval = MatStream.Phases(3).Properties.freezingPoint.GetValueOrDefault
                     val = Converter.ConvertFromSI(units.temperature, refval)
@@ -1076,6 +1090,15 @@ Public Class MaterialStreamEditor
 
         If e.KeyCode = Keys.Enter And Loaded And DirectCast(sender, TextBox).ForeColor = Drawing.Color.Blue Then
 
+            If sender Is tbFracSpec Then
+                If tbFracSpec.Text.ToDoubleFromCurrent > 1.0 Or tbFracSpec.Text.ToDoubleFromCurrent < 0.0 Then
+                    MessageBox.Show(MatStream.FlowSheet.GetTranslatedString("Ovalorinformadonovli"),
+                                    MatStream.FlowSheet.GetTranslatedString("Erro"),
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    Exit Sub
+                End If
+            End If
+
             UpdateProps(sender)
 
             DirectCast(sender, TextBox).SelectAll()
@@ -1091,12 +1114,15 @@ Public Class MaterialStreamEditor
         If sender Is tbMassFlow Then
             MatStream.Phases(0).Properties.molarflow = Nothing
             MatStream.Phases(0).Properties.volumetric_flow = Nothing
+            MatStream.DefinedFlow = Interfaces.Enums.FlowSpec.Mass
         ElseIf sender Is tbMoleFlow Then
             MatStream.Phases(0).Properties.massflow = Nothing
             MatStream.Phases(0).Properties.volumetric_flow = Nothing
+            MatStream.DefinedFlow = Interfaces.Enums.FlowSpec.Mole
         ElseIf sender Is tbVolFlow Then
             MatStream.Phases(0).Properties.massflow = Nothing
             MatStream.Phases(0).Properties.molarflow = Nothing
+            MatStream.DefinedFlow = Interfaces.Enums.FlowSpec.Volumetric
         End If
 
         With MatStream.Phases(0).Properties
@@ -1168,13 +1194,6 @@ Public Class MaterialStreamEditor
     Private Sub cbPropPack_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbPropPack.SelectedIndexChanged
         If Loaded Then
             MatStream.PropertyPackage = MatStream.FlowSheet.PropertyPackages.Values.Where(Function(x) x.Tag = cbPropPack.SelectedItem.ToString).SingleOrDefault
-            RequestCalc()
-        End If
-    End Sub
-
-    Private Sub cbFlashAlg_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbFlashAlg.SelectedIndexChanged
-        If Loaded Then
-            MatStream.PreferredFlashAlgorithmTag = cbFlashAlg.SelectedItem
             RequestCalc()
         End If
     End Sub
@@ -1439,12 +1458,6 @@ Public Class MaterialStreamEditor
 
     Private Sub btnConfigurePP_Click(sender As Object, e As EventArgs) Handles btnConfigurePP.Click
         MatStream.FlowSheet.PropertyPackages.Values.Where(Function(x) x.Tag = cbPropPack.SelectedItem.ToString).FirstOrDefault.DisplayEditingForm()
-    End Sub
-
-    Private Sub btnConfigureFlashAlg_Click(sender As Object, e As EventArgs) Handles btnConfigureFlashAlg.Click
-
-        Thermodynamics.Calculator.ConfigureFlashInstance(MatStream, cbFlashAlg.SelectedItem.ToString)
-
     End Sub
 
     Private Sub rtbAnnotations_RtfChanged(sender As Object, e As EventArgs) Handles rtbAnnotations.RtfChanged

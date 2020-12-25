@@ -6,9 +6,9 @@
         Dim interf As New DWSIM.Automation.Automation2
 
         Dim sim As Interfaces.IFlowsheet
-
+        Dim errorText as String
         'load Cavett's Problem simulation file
-        sim = interf.LoadFlowsheet("samples" & IO.Path.DirectorySeparatorChar & "Cavett's Problem.dwxml")
+        sim = interf.LoadFlowsheet("samples" & IO.Path.DirectorySeparatorChar & "Cavett's Problem.dwxml", errorText )
 
         'set a listener to catch solver messages
         'sim.SetMessageListener(Sub(msg As String)

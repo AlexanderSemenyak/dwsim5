@@ -537,14 +537,13 @@ Namespace UnitOperations
                 esin = args(2)
             End If
 
+            Dim Tout0 As Double = msout.GetTemperature()
+
             Me.PropertyPackage.CurrentMaterialStream = msin
 
             Me.PropertyPackage.CurrentMaterialStream.Validate()
 
-            Dim Ti, Pi, Hi, Wi, rho_li, qli, qvi, ei, ein, T2, P2, H2 As Double
-
-            qvi = msin.Phases(2).Properties.volumetric_flow.GetValueOrDefault
-            If qvi > 0 And Not Me.IgnorePhase Then Throw New Exception(FlowSheet.GetTranslatedString("ExisteumaPhasevaporna"))
+            Dim Ti, Pi, Hi, Wi, rho_li, qli, ei, ein, T2, P2, H2 As Double
 
             Ti = msin.Phases(0).Properties.temperature.GetValueOrDefault
             Pi = msin.Phases(0).Properties.pressure.GetValueOrDefault
@@ -762,7 +761,7 @@ Namespace UnitOperations
                     If DebugMode Then AppendDebugLine(String.Format("Doing a PH flash to calculate outlet temperature... P = {0} Pa, H = {1} kJ/[kg.K]", P2, H2))
 
                     IObj?.SetCurrent()
-                    tmp = Me.PropertyPackage.CalculateEquilibrium2(FlashCalculationType.PressureEnthalpy, P2, H2, Ti)
+                    tmp = Me.PropertyPackage.CalculateEquilibrium2(FlashCalculationType.PressureEnthalpy, P2, H2, Tout0)
                     T2 = tmp.CalculatedTemperature.GetValueOrDefault
                     CheckSpec(T2, True, "outlet temperature")
 
@@ -803,7 +802,7 @@ Namespace UnitOperations
                     If DebugMode Then AppendDebugLine(String.Format("Doing a PH flash to calculate outlet temperature... P = {0} Pa, H = {1} kJ/[kg.K]", P2, H2))
 
                     IObj?.SetCurrent()
-                    tmp = Me.PropertyPackage.CalculateEquilibrium2(FlashCalculationType.PressureEnthalpy, P2, H2, Ti)
+                    tmp = Me.PropertyPackage.CalculateEquilibrium2(FlashCalculationType.PressureEnthalpy, P2, H2, Tout0)
                     T2 = tmp.CalculatedTemperature.GetValueOrDefault
                     CheckSpec(T2, True, "outlet temperature")
 
@@ -824,10 +823,6 @@ Namespace UnitOperations
 
                 Case CalculationMode.Delta_P
 
-                    qvi = msin.Phases(2).Properties.volumetric_flow.GetValueOrDefault.ToString
-
-                    If qvi > 0 And Not Me.IgnorePhase Then Throw New Exception(FlowSheet.GetTranslatedString("ExisteumaPhasevaporna"))
-
                     Me.PropertyPackage.CurrentMaterialStream = msin
                     P2 = Pi + Me.DeltaP.GetValueOrDefault
                     CheckSpec(P2, True, "outlet pressure")
@@ -840,7 +835,7 @@ Namespace UnitOperations
                     If DebugMode Then AppendDebugLine(String.Format("Doing a PH flash to calculate outlet temperature... P = {0} Pa, H = {1} kJ/[kg.K]", P2, H2))
 
                     IObj?.SetCurrent()
-                    Dim tmp = Me.PropertyPackage.CalculateEquilibrium2(FlashCalculationType.PressureEnthalpy, P2, H2, 0.0#)
+                    Dim tmp = Me.PropertyPackage.CalculateEquilibrium2(FlashCalculationType.PressureEnthalpy, P2, H2, Tout0)
                     T2 = tmp.CalculatedTemperature.GetValueOrDefault
                     CheckSpec(T2, True, "outlet temperature")
 
@@ -883,7 +878,7 @@ Namespace UnitOperations
                     If DebugMode Then AppendDebugLine(String.Format("Doing a PH flash to calculate outlet temperature... P = {0} Pa, H = {1} kJ/[kg.K]", P2, H2))
 
                     IObj?.SetCurrent()
-                    Dim tmp = Me.PropertyPackage.CalculateEquilibrium2(FlashCalculationType.PressureEnthalpy, P2, H2, Ti)
+                    Dim tmp = Me.PropertyPackage.CalculateEquilibrium2(FlashCalculationType.PressureEnthalpy, P2, H2, Tout0)
                     T2 = tmp.CalculatedTemperature
                     CheckSpec(T2, True, "outlet temperature")
 
@@ -1011,7 +1006,8 @@ Namespace UnitOperations
                         value = SystemsOfUnits.Converter.ConvertFromSI(su.heatflow, Me.DeltaQ.GetValueOrDefault)
                     Case 4
                         value = SystemsOfUnits.Converter.ConvertFromSI(su.distance, Me.NPSH.GetValueOrDefault)
-
+                    Case 5
+                        value = Pout.ConvertFromSI(su.pressure)
                 End Select
 
                 Return value
@@ -1025,24 +1021,9 @@ Namespace UnitOperations
             Dim proplist As New ArrayList
             Dim basecol = MyBase.GetProperties(proptype)
             If basecol.Length > 0 Then proplist.AddRange(basecol)
-            Select Case proptype
-                Case PropertyType.RO
-                    For i = 2 To 2
-                        proplist.Add("PROP_PU_" + CStr(i))
-                    Next
-                Case PropertyType.RW
-                    For i = 0 To 4
-                        proplist.Add("PROP_PU_" + CStr(i))
-                    Next
-                Case PropertyType.WR
-                    For i = 0 To 4
-                        proplist.Add("PROP_PU_" + CStr(i))
-                    Next
-                Case PropertyType.ALL
-                    For i = 0 To 4
-                        proplist.Add("PROP_PU_" + CStr(i))
-                    Next
-            End Select
+            For i = 0 To 5
+                proplist.Add("PROP_PU_" + CStr(i))
+            Next
             Return proplist.ToArray(GetType(System.String))
             proplist = Nothing
         End Function
@@ -1064,6 +1045,8 @@ Namespace UnitOperations
                     Me.Eficiencia = propval
                 Case 3
                     Me.DeltaQ = SystemsOfUnits.Converter.ConvertToSI(su.heatflow, propval)
+                Case 5
+                    Me.Pout = SystemsOfUnits.Converter.ConvertToSI(su.pressure, propval)
             End Select
             Return 1
         End Function
@@ -1095,7 +1078,8 @@ Namespace UnitOperations
                         value = su.heatflow
                     Case 4
                         value = su.distance
-
+                    Case 5
+                        value = su.pressure
                 End Select
 
                 Return value

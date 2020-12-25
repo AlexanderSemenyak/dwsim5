@@ -166,7 +166,7 @@
     <value>Водород</value>
   </data>
   <data name="_iButano" xml:space="preserve">
-    <value>i-Бутан</value>
+    <value>Isobutane</value>
   </data>
   <data name="_iPentano" xml:space="preserve">
     <value>Isopentane</value>
@@ -178,7 +178,7 @@
     <value>Метан</value>
   </data>
   <data name="_Metanol" xml:space="preserve">
-    <value>Метанол (CH3OH)</value>
+    <value>Метанол</value>
   </data>
   <data name="_MetilEtilCetona" xml:space="preserve">
     <value>Methyl-Ethyl-Ketone</value>
@@ -388,10 +388,10 @@
     <value>Warning</value>
   </data>
   <data name="Avisos" xml:space="preserve">
-    <value> Warnings</value>
+    <value>Предупреждения</value>
   </data>
   <data name="Avisos1" xml:space="preserve">
-    <value> Warning</value>
+    <value>Предупреждение</value>
   </data>
   <data name="BancodeDados" xml:space="preserve">
     <value>Database</value>
@@ -1516,10 +1516,10 @@
     <value>Error loading ChemSep XML database.</value>
   </data>
   <data name="Erros" xml:space="preserve">
-    <value> Errors</value>
+    <value>Ошибки</value>
   </data>
   <data name="Erros1" xml:space="preserve">
-    <value> Error</value>
+    <value>Ошибка</value>
   </data>
   <data name="ErroT" xml:space="preserve">
     <value>T Error</value>
@@ -2239,7 +2239,7 @@
     <value> Сообщения</value>
   </data>
   <data name="Mensagens1" xml:space="preserve">
-    <value> Message</value>
+    <value> Сообщение</value>
   </data>
   <data name="minuto1" xml:space="preserve">
     <value>1 minute</value>
@@ -2410,10 +2410,10 @@
     <value>n-Nonane (nC9)</value>
   </data>
   <data name="No" xml:space="preserve">
-    <value>No</value>
+    <value>Нет</value>
   </data>
   <data name="NoCalculado" xml:space="preserve">
-    <value>Not Calculated</value>
+    <value>Не рассчитано</value>
   </data>
   <data name="Noexisteguanacorrent" xml:space="preserve">
     <value>There is no water in the stream selected.</value>
@@ -2422,10 +2422,10 @@
     <value>Please add and setup a Property Package to continue.</value>
   </data>
   <data name="Noexistemsimulaesase" xml:space="preserve">
-    <value>No simulations to be saved.</value>
+    <value>Нет расчетов к сохранению.</value>
   </data>
   <data name="Noexistemsimulaesati" xml:space="preserve">
-    <value>No active simulations.</value>
+    <value>Нет активных расчетов.</value>
   </data>
   <data name="Noexistesoluonointer" xml:space="preserve">
     <value>There is no solution in the specified range.</value>
@@ -2530,7 +2530,7 @@
     <value>The XML file information is invalid or corrupt.</value>
   </data>
   <data name="Objeto" xml:space="preserve">
-    <value>Object</value>
+    <value>Объект</value>
   </data>
   <data name="Objetonoencontrado" xml:space="preserve">
     <value>Object not found.</value>
@@ -3073,7 +3073,7 @@
     <value>Reboiled Absorber</value>
   </data>
   <data name="Recalcular" xml:space="preserve">
-    <value>&amp; Пересчитать</value>
+    <value>&amp; Recalculate</value>
   </data>
   <data name="Reciclo" xml:space="preserve">
     <value>Recycle</value>
@@ -3190,7 +3190,7 @@
     <value>Сохранение модели ...</value>
   </data>
   <data name="salvocomsucesso" xml:space="preserve">
-    <value> saved successfully.</value>
+    <value> сохранен успешно.</value>
   </data>
   <data name="Sbol" xml:space="preserve">
     <value>Sbol (</value>
@@ -3778,13 +3778,13 @@
     <value>Массовый расход в смеси</value>
   </data>
   <data name="VazoTP" xml:space="preserve">
-    <value>Volumetric Flow Rate @ T, P</value>
+    <value>Объемный расход @ T, P</value>
   </data>
   <data name="VazoTPPhaseLquida" xml:space="preserve">
-    <value>Volumetric Flow Rate @ T, P (Liquid Phase)</value>
+    <value>Объемный расход @ T, P (Жидкая фаза)</value>
   </data>
   <data name="VazoTPPhaseVapor" xml:space="preserve">
-    <value>Volumetric Flow Rate @ T, P (Vapor Phase)</value>
+    <value>Объемный расход  @ T, P (Паровая фаза)</value>
   </data>
   <data name="Vazovolumtrica" xml:space="preserve">
     <value>Объемный расход </value>
@@ -3793,19 +3793,19 @@
     <value>Volumetric flow rate of the stream</value>
   </data>
   <data name="Vazovolumtricadamist" xml:space="preserve">
-    <value>Volumetric flow rate in the mixture</value>
+    <value>Объемный расход в смеси</value>
   </data>
   <data name="VazovolumtricanaPhase" xml:space="preserve">
-    <value>Volumetric flow rate in the vapor phase</value>
+    <value>Объемный расход в паровой фазе</value>
   </data>
   <data name="VazovolumtricanaPhase1" xml:space="preserve">
-    <value>Volumetric flow rate in the liquid phase</value>
+    <value>Объемный расход в жидкой фазе</value>
   </data>
   <data name="VazovolumtricanaMist" xml:space="preserve">
-    <value>Volumetric flow rate in the mixture</value>
+    <value>Объемный расход в смеси</value>
   </data>
   <data name="Vazovolumtricanascon" xml:space="preserve">
-    <value>Volumetric flow rate at current conditions</value>
+    <value>Объемный расход в текущих условиях</value>
   </data>
   <data name="Vbolm3mol" xml:space="preserve">
     <value>Vbol (m3/mol)</value>
@@ -3970,10 +3970,10 @@
     <value>Molar Volume</value>
   </data>
   <data name="VolumevsEntalpia" xml:space="preserve">
-    <value>Volume vs. Enthalpy</value>
+    <value>Объем к Энтальпии</value>
   </data>
   <data name="VolumevsEntropia" xml:space="preserve">
-    <value>Volume vs. Entropy</value>
+    <value>Объем к Энтропии</value>
   </data>
   <data name="VolumevsPresso" xml:space="preserve">
     <value>Volume vs. Pressure</value>
@@ -4228,7 +4228,7 @@
     <value>Pressure tappings</value>
   </data>
   <data name="OPOverallPressureDrop" xml:space="preserve">
-    <value>Overall pressure drop</value>
+    <value>Общее падение давления</value>
   </data>
   <data name="OrificePlate" xml:space="preserve">
     <value>Диафрагма</value>
@@ -4240,7 +4240,7 @@
     <value>Gibbs Free Energy after reaction(s).</value>
   </data>
   <data name="RGInitialG" xml:space="preserve">
-    <value>Initial Gibbs Free Energy</value>
+    <value>Начальная свободная энергия Гиббса</value>
   </data>
   <data name="RGInitialG_description" xml:space="preserve">
     <value>Gibbs Free Energy before reaction(s).</value>
@@ -5388,7 +5388,7 @@ In this model, chemical and physical equilibria of NH3, CO2, and H2S in sour wat
     <value>Multiple reaction phases are not supported.</value>
   </data>
   <data name="BulkModulus" xml:space="preserve">
-    <value>Bulk Modulus</value>
+    <value>Объемный модуль (Bulk Modulus)</value>
   </data>
   <data name="GibbsEnergy" xml:space="preserve">
     <value>Свободная энергия Гиббса</value>
@@ -5699,7 +5699,34 @@ In this model, chemical and physical equilibria of NH3, CO2, and H2S in sour wat
   <data name="DynamicsDisabled" xml:space="preserve">
     <value>Dynamic Mode is inactive.</value>
   </data>
+  <data name="AtivoInativo" xml:space="preserve">
+    <value>Активно/неактивно</value>
+  </data>
+  <data name="MIAC" xml:space="preserve">
+    <value>Mean Ionic Activity Coefficient</value>
+  </data>
+  <data name="CalcModeNotSupported" xml:space="preserve">
+    <value>the selected calculation mode is not supported by this object.</value>
+  </data>
+  <data name="PowerGenerated" xml:space="preserve">
+    <value>Power Generated</value>
+  </data>
+  <data name="PowerRequired" xml:space="preserve">
+    <value>Power Required</value>
+  </data>
+  <data name="PressureDecrease" xml:space="preserve">
+    <value>Pressure Decrease</value>
+  </data>
+  <data name="PressureIncrease" xml:space="preserve">
+    <value>Pressure Increase</value>
+  </data>
+  <data name="DescPengRobinson78PP" xml:space="preserve">
+    <value>Based on the Peng–Robinson EOS as published by Peng and Robinson in 1978.</value>
+  </data>
+  <data name="AdditionalProperties" xml:space="preserve">
+    <value>Additional Properties</value>
+  </data>
   <data name="nButanonC4" xml:space="preserve">
-    <value>n-Бутан (nC4)</value>
+    <value>n-Butan (nC4)</value>
   </data>
 </root>

@@ -188,6 +188,15 @@ Public Class FormNewSpreadsheet
 
     Public Sub SetCustomFunctions()
 
+        Formula.FormulaExtension.CustomFunctions("GETNAME") = Function(cell, args) As Object
+                                                                  Try
+                                                                      Dim obj = Flowsheet.SimulationObjects(args(0).ToString)
+                                                                      Return obj.GraphicObject.Tag
+                                                                  Catch ex As Exception
+                                                                      Return "ERROR: " & ex.Message
+                                                                  End Try
+                                                              End Function
+
         Formula.FormulaExtension.CustomFunctions("GETPROPVAL") = Function(cell, args) As Object
                                                                      If args.Length = 2 Then
                                                                          Try
@@ -665,6 +674,10 @@ Public Class FormNewSpreadsheet
         Spreadsheet.CurrentWorksheet = Spreadsheet.Worksheets(0)
 
         Spreadsheet.RemoveWorksheet(sheet)
+
+        For Each sheet In Spreadsheet.Worksheets
+            If sheet.ScaleFactor < Settings.DpiScale Then sheet.ScaleFactor = Settings.DpiScale
+        Next
 
     End Sub
 

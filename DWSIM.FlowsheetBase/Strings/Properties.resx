@@ -381,6 +381,9 @@
   <data name="PROP_HX_28" xml:space="preserve">
     <value>Потеря температуры</value>
   </data>
+  <data name="PROP_HX_29" xml:space="preserve">
+    <value>User-Defined LMTD Correction Factor</value>
+  </data>
   <data name="PROP_HX_3" xml:space="preserve">
     <value>Температура на выходе охлажденного флюида</value>
   </data>
@@ -455,7 +458,7 @@
     <comment>0</comment>
   </data>
   <data name="PROP_MS_11" xml:space="preserve">
-    <value>Mixture Thermal Conductivity</value>
+    <value>Thermal Conductivity (Mixture)</value>
     <comment>0</comment>
   </data>
   <data name="PROP_MS_110" xml:space="preserve">
@@ -573,7 +576,7 @@
     <value>Твердая фаза Динамическая вязкость</value>
   </data>
   <data name="PROP_MS_14" xml:space="preserve">
-    <value>Vapor Phase Specific Enthalpy</value>
+    <value>Specific Enthalpy (Vapor)</value>
     <comment>0</comment>
   </data>
   <data name="PROP_MS_140" xml:space="preserve">
@@ -604,17 +607,17 @@
     <value>Твердая фаза. Объемная доля</value>
   </data>
   <data name="PROP_MS_149" xml:space="preserve">
-    <value>Mole Fraction (Solid Phase)</value>
+    <value>Mole Fraction (Solid)</value>
   </data>
   <data name="PROP_MS_15" xml:space="preserve">
-    <value>Vapor Phase Specific Entropy</value>
+    <value>Specific Entropy (Vapor)</value>
     <comment>0</comment>
   </data>
   <data name="PROP_MS_150" xml:space="preserve">
     <value>Массовая доля (Solid Phase)</value>
   </data>
   <data name="PROP_MS_151" xml:space="preserve">
-    <value>Mole Flow (Solid Phase)</value>
+    <value>Mole Flow (Solid)</value>
   </data>
   <data name="PROP_MS_152" xml:space="preserve">
     <value>Массовый поток (Solid Phase)</value>
@@ -641,7 +644,7 @@
     <value>Внутренняя энергия (Vapor)</value>
   </data>
   <data name="PROP_MS_16" xml:space="preserve">
-    <value>Vapor Phase Molar Enthalpy</value>
+    <value>Molar Enthalpy (Vapor)</value>
     <comment>0</comment>
   </data>
   <data name="PROP_MS_160" xml:space="preserve">
@@ -675,7 +678,7 @@
     <value>Объемный модуль (Liquid 1)</value>
   </data>
   <data name="PROP_MS_17" xml:space="preserve">
-    <value>Vapor Phase Molar Entropy</value>
+    <value>Molar Entropy (Vapor)</value>
     <comment>0</comment>
   </data>
   <data name="PROP_MS_170" xml:space="preserve">
@@ -709,7 +712,7 @@
     <value>Внутренняя энергия (Liquid 2)</value>
   </data>
   <data name="PROP_MS_18" xml:space="preserve">
-    <value>Vapor Phase Thermal Conductivity</value>
+    <value>Thermal Conductivity (Vapor)</value>
     <comment>0</comment>
   </data>
   <data name="PROP_MS_180" xml:space="preserve">
@@ -815,8 +818,8 @@
     <value>Vapor Phase Тепловая емкость (Cp)</value>
     <comment>0</comment>
   </data>
-  <data name="PROP_MS_2101" xml:space="preserve">
-    <value>Molar Высвобожденная энергия (Гельмгольц)(Смесь)</value>
+  <data name="PROP_MS_210" xml:space="preserve">
+    <value>Molar Helmholtz Free Energy (Mixture)</value>
   </data>
   <data name="PROP_MS_211" xml:space="preserve">
     <value>Molar Внутренняя энергия (Vapor)</value>
@@ -896,7 +899,7 @@
     <value>Molality (газовая фаза)</value>
   </data>
   <data name="PROP_MS_234" xml:space="preserve">
-    <value>Molality (Overall Liquid)</value>
+    <value>Molality (Общая жидкость)</value>
   </data>
   <data name="PROP_MS_235" xml:space="preserve">
     <value>Molality (Жидкая фаза 1)</value>
@@ -908,7 +911,7 @@
     <value>Molality (Водная фаза)</value>
   </data>
   <data name="PROP_MS_238" xml:space="preserve">
-    <value>Molality (Solid Phase)</value>
+    <value>Molality (Твердая фаза)</value>
   </data>
   <data name="PROP_MS_239" xml:space="preserve">
     <value>Molarity (Смесь)</value>
@@ -935,6 +938,18 @@
   </data>
   <data name="PROP_MS_245" xml:space="preserve">
     <value>Molarity (Solid Phase)</value>
+  </data>
+  <data name="PROP_MS_246" xml:space="preserve">
+    <value>Osmotic Coefficient (Liquid 1)</value>
+  </data>
+  <data name="PROP_MS_247" xml:space="preserve">
+    <value>Mean Ionic Activity Coefficient (Liquid 1)</value>
+  </data>
+  <data name="PROP_MS_248" xml:space="preserve">
+    <value>Freezing Point (Liquid 1)</value>
+  </data>
+  <data name="PROP_MS_249" xml:space="preserve">
+    <value>Freezing Point Depression (Liquid 1)</value>
   </data>
   <data name="PROP_MS_25" xml:space="preserve">
     <value>Паровая фаза - Объемный поток</value>
@@ -1057,7 +1072,7 @@
     <comment>0</comment>
   </data>
   <data name="PROP_MS_52" xml:space="preserve">
-    <value>Liquid Phase (1) Molar Enthalpy</value>
+    <value>Molar Enthalpy (Liquid 1)</value>
     <comment>0</comment>
   </data>
   <data name="PROP_MS_53" xml:space="preserve">
@@ -1282,14 +1297,14 @@
   </data>
   <data name="PROP_OP_4" xml:space="preserve">
     <value>Падение давления на выходе</value>
-    <comment>0</comment>
+    <comment>1</comment>
   </data>
   <data name="PROP_OP_5" xml:space="preserve">
-    <value>Orifice Pressure Drop</value>
+    <value>Overall Pressure Drop</value>
     <comment>0</comment>
   </data>
   <data name="PROP_OP_6" xml:space="preserve">
-    <value>Дельта-Т</value>
+    <value>Падение давления на дифрагме</value>
     <comment>0</comment>
   </data>
   <data name="PROP_OP_7" xml:space="preserve">
@@ -1375,6 +1390,9 @@
   </data>
   <data name="PROP_PU_4" xml:space="preserve">
     <value>Available NPSH</value>
+  </data>
+  <data name="PROP_PU_5" xml:space="preserve">
+    <value>Outlet Pressure</value>
   </data>
   <data name="PROP_RA_0" xml:space="preserve">
     <value>Top Stage Pressure</value>
@@ -1544,7 +1562,6 @@
   </data>
   <data name="PROP_TK_2" xml:space="preserve">
     <value>Время жизни</value>
-    <comment>1</comment>
   </data>
   <data name="PROP_TU_0" xml:space="preserve">
     <value>Падение давления</value>
@@ -1587,5 +1604,8 @@
   </data>
   <data name="PROP_VA_5" xml:space="preserve">
     <value>Открытие</value>
+  </data>
+  <data name="PROP_MS_2101" xml:space="preserve">
+    <value>Molar Высвобожденная энергия (Гельмгольц)(Смесь)</value>
   </data>
 </root>

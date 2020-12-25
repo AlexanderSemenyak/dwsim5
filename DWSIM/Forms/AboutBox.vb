@@ -146,16 +146,16 @@ Public Class AboutBox
 
         With Me.DataGridView2.Rows
             .Clear()
-            .Add(New Object() {"cef.redist.x64", "3.3497.1841", "https://raw.github.com/cefsharp/cef-binary/master/LICENSE.txt"})
-            .Add(New Object() {"cef.redist.x86", "3.3497.1841", "https://raw.github.com/cefsharp/cef-binary/master/LICENSE.txt"})
-            .Add(New Object() {"CefSharp.Common", "69.0.0", "https://raw.github.com/cefsharp/CefSharp/master/LICENSE"})
-            .Add(New Object() {"CefSharp.WinForms", "69.0.0", "https://raw.github.com/cefsharp/CefSharp/master/LICENSE"})
-            .Add(New Object() {"DynamicLanguageRuntime", "1.2.2", "https://github.com/IronLanguages/dlr/blob/master/LICENSE"})
-            .Add(New Object() {"IronPython", "2.7.9", "https://github.com/IronLanguages/ironpython2/blob/master/LICENSE"})
-            .Add(New Object() {"IronPython.StdLib", "2.7.9", "http://docs.python.org/license.html"})
+            .Add(New Object() {"cef.redist.x64", "75.1.14", "https://raw.github.com/cefsharp/cef-binary/master/LICENSE.txt"})
+            .Add(New Object() {"cef.redist.x86", "75.1.14", "https://raw.github.com/cefsharp/cef-binary/master/LICENSE.txt"})
+            .Add(New Object() {"CefSharp.Common", "75.1.14", "https://raw.github.com/cefsharp/CefSharp/master/LICENSE"})
+            .Add(New Object() {"CefSharp.WinForms", "75.1.14", "https://raw.github.com/cefsharp/CefSharp/master/LICENSE"})
+            .Add(New Object() {"DynamicLanguageRuntime", "1.2.3", "https://github.com/IronLanguages/dlr/blob/master/LICENSE"})
+            .Add(New Object() {"IronPython", "2.7.10", "https://github.com/IronLanguages/ironpython2/blob/master/LICENSE"})
+            .Add(New Object() {"IronPython.StdLib", "2.7.10", "http://docs.python.org/license.html"})
             .Add(New Object() {"jacobslusser.ScintillaNET", "3.6.3", ""})
             .Add(New Object() {"MathNet.Numerics", "4.7.0", "https://numerics.mathdotnet.com/License.html"})
-            .Add(New Object() {"Newtonsoft.Json", "8.0.3", "https://raw.github.com/JamesNK/Newtonsoft.Json/master/LICENSE.md"})
+            .Add(New Object() {"Newtonsoft.Json", "12.0.3", "https://raw.github.com/JamesNK/Newtonsoft.Json/master/LICENSE.md"})
             .Add(New Object() {"OpenTK", "3.0.", "https://github.com/opentk/opentk/blob/master/License.txt"})
             .Add(New Object() {"OpenTK.GLControl", "3.0.1", "http://github.com/opentk/opentk/blob/master/License.txt"})
             .Add(New Object() {"OxyPlot.Core", "2.0.0-unstable0956", "https://raw.githubusercontent.com/oxyplot/oxyplot/master/LICENSE"})
@@ -165,8 +165,8 @@ Public Class AboutBox
             .Add(New Object() {"SharpDX.DXGI", "4.0.1", "http://sharpdx.org/License.txt"})
             .Add(New Object() {"SharpDX.Mathematics", "4.0.1", "http://sharpdx.org/License.txt"})
             .Add(New Object() {"SharpZipLib", "1.1.0", "https://github.com/icsharpcode/SharpZipLib/blob/master/LICENSE.txt"})
-            .Add(New Object() {"SkiaSharp", "1.6.", "https://github.com/mono/SkiaSharp/blob/master/LICENSE.md"})
-            .Add(New Object() {"SkiaSharp.Extended", "1.6.", "https://github.com/mono/SkiaSharp.Extended/blob/master/LICENSE"})
+            .Add(New Object() {"SkiaSharp", "1.68.2.1", "https://github.com/mono/SkiaSharp/blob/master/LICENSE.md"})
+            .Add(New Object() {"SkiaSharp.Extended", "1.68.2.1", "https://github.com/mono/SkiaSharp.Extended/blob/master/LICENSE"})
             .Add(New Object() {"System.ComponentModel", "4.3.0", "http://go.microsoft.com/fwlink/?LinkId=329770"})
             .Add(New Object() {"System.Runtime.Serialization.Primitives", "4.3.0", "http://go.microsoft.com/fwlink/?LinkId=329770"})
         End With
@@ -336,43 +336,43 @@ Public Class AboutBox
             Value = ""
             Select Case TypeName
                 Case "System.CLSCompliantAttribute"
-                    Value = CType(attrib, CLSCompliantAttribute).IsCompliant.ToString
+                    Value = CType(attrib, CLSCompliantAttribute).IsCompliant
                 Case "System.Diagnostics.DebuggableAttribute"
-                    Value = CType(attrib, Diagnostics.DebuggableAttribute).IsJITTrackingEnabled.ToString
+                    Value = CType(attrib, Diagnostics.DebuggableAttribute).IsJITTrackingEnabled
                 Case "System.Reflection.AssemblyCompanyAttribute"
-                    Value = CType(attrib, AssemblyCompanyAttribute).Company.ToString
+                    Value = CType(attrib, AssemblyCompanyAttribute).Company
                 Case "System.Reflection.AssemblyConfigurationAttribute"
-                    Value = CType(attrib, AssemblyConfigurationAttribute).Configuration.ToString
+                    Value = CType(attrib, AssemblyConfigurationAttribute).Configuration
                 Case "System.Reflection.AssemblyCopyrightAttribute"
-                    Value = CType(attrib, AssemblyCopyrightAttribute).Copyright.ToString
+                    Value = CType(attrib, AssemblyCopyrightAttribute).Copyright
                 Case "System.Reflection.AssemblyDefaultAliasAttribute"
-                    Value = CType(attrib, AssemblyDefaultAliasAttribute).DefaultAlias.ToString
+                    Value = CType(attrib, AssemblyDefaultAliasAttribute).DefaultAlias
                 Case "System.Reflection.AssemblyDelaySignAttribute"
-                    Value = CType(attrib, AssemblyDelaySignAttribute).DelaySign.ToString
+                    Value = CType(attrib, AssemblyDelaySignAttribute).DelaySign
                 Case "System.Reflection.AssemblyDescriptionAttribute"
-                    Value = CType(attrib, AssemblyDescriptionAttribute).Description.ToString
+                    Value = CType(attrib, AssemblyDescriptionAttribute).Description
                 Case "System.Reflection.AssemblyInformationalVersionAttribute"
-                    Value = CType(attrib, AssemblyInformationalVersionAttribute).InformationalVersion.ToString
+                    Value = CType(attrib, AssemblyInformationalVersionAttribute).InformationalVersion
                 Case "System.Reflection.AssemblyKeyFileAttribute"
-                    Value = CType(attrib, AssemblyKeyFileAttribute).KeyFile.ToString
+                    Value = CType(attrib, AssemblyKeyFileAttribute).KeyFile
                 Case "System.Reflection.AssemblyProductAttribute"
-                    Value = CType(attrib, AssemblyProductAttribute).Product.ToString
+                    Value = CType(attrib, AssemblyProductAttribute).Product
                 Case "System.Reflection.AssemblyTrademarkAttribute"
-                    Value = CType(attrib, AssemblyTrademarkAttribute).Trademark.ToString
+                    Value = CType(attrib, AssemblyTrademarkAttribute).Trademark
                 Case "System.Reflection.AssemblyTitleAttribute"
-                    Value = CType(attrib, AssemblyTitleAttribute).Title.ToString
+                    Value = CType(attrib, AssemblyTitleAttribute).Title
                 Case "System.Resources.NeutralResourcesLanguageAttribute"
-                    Value = CType(attrib, Resources.NeutralResourcesLanguageAttribute).CultureName.ToString
+                    Value = CType(attrib, Resources.NeutralResourcesLanguageAttribute).CultureName
                 Case "System.Resources.SatelliteContractVersionAttribute"
-                    Value = CType(attrib, Resources.SatelliteContractVersionAttribute).Version.ToString
+                    Value = CType(attrib, Resources.SatelliteContractVersionAttribute).Version
                 Case "System.Runtime.InteropServices.ComCompatibleVersionAttribute"
                     Dim x As Runtime.InteropServices.ComCompatibleVersionAttribute
                     x = CType(attrib, Runtime.InteropServices.ComCompatibleVersionAttribute)
                     Value = x.MajorVersion & "." & x.MinorVersion & "." & x.RevisionNumber & "." & x.BuildNumber
                 Case "System.Runtime.InteropServices.ComVisibleAttribute"
-                    Value = CType(attrib, Runtime.InteropServices.ComVisibleAttribute).Value.ToString
+                    Value = CType(attrib, Runtime.InteropServices.ComVisibleAttribute).Value
                 Case "System.Runtime.InteropServices.GuidAttribute"
-                    Value = CType(attrib, Runtime.InteropServices.GuidAttribute).Value.ToString
+                    Value = CType(attrib, Runtime.InteropServices.GuidAttribute).Value
                 Case "System.Runtime.InteropServices.TypeLibVersionAttribute"
                     Dim x As Runtime.InteropServices.TypeLibVersionAttribute
                     x = CType(attrib, Runtime.InteropServices.TypeLibVersionAttribute)

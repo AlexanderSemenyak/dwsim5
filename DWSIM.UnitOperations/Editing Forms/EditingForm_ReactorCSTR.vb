@@ -56,6 +56,8 @@ Public Class EditingForm_ReactorCSTR
 
             chkActive.Checked = .GraphicObject.Active
 
+            ToolTip1.SetToolTip(chkActive, .FlowSheet.GetTranslatedString("AtivoInativo"))
+
             Me.Text = .GraphicObject.Tag & " (" & .GetDisplayName() & ")"
 
             lblTag.Text = .GraphicObject.Tag
@@ -67,11 +69,7 @@ Public Class EditingForm_ReactorCSTR
                     lblStatus.Text = .FlowSheet.GetTranslatedString("Inativo")
                     lblStatus.ForeColor = System.Drawing.Color.Gray
                 ElseIf .ErrorMessage <> "" Then
-                    If .ErrorMessage.Length > 50 Then
-                        lblStatus.Text = .FlowSheet.GetTranslatedString("Erro") & " (" & .ErrorMessage.Substring(50) & "...)"
-                    Else
-                        lblStatus.Text = .FlowSheet.GetTranslatedString("Erro") & " (" & .ErrorMessage & ")"
-                    End If
+                    lblStatus.Text = .FlowSheet.GetTranslatedString("Erro")
                     lblStatus.ForeColor = System.Drawing.Color.Red
                 Else
                     lblStatus.Text = .FlowSheet.GetTranslatedString("NoCalculado")
@@ -145,7 +143,7 @@ Public Class EditingForm_ReactorCSTR
             tbHeadspace.Text = su.Converter.ConvertFromSI(units.volume, .Headspace).ToString(nf)
             tbPDrop.Text = su.Converter.ConvertFromSI(units.deltaP, .DeltaP.GetValueOrDefault).ToString(nf)
             tbCatLoad.Text = su.Converter.ConvertFromSI(units.mass, .CatalystAmount).ToString(nf)
-        
+
             Dim rsets As String() = .FlowSheet.ReactionSets.Values.Select(Function(m) m.Name).ToArray
             cbReacSet.Items.Clear()
             cbReacSet.Items.AddRange(rsets)
@@ -161,22 +159,22 @@ Public Class EditingForm_ReactorCSTR
             gridResults.Rows.Clear()
             gridReactions.Rows.Clear()
 
-            gridResults.Rows.Add(New Object() {.FlowSheet.GetTranslatedString("DeltaT"), su.Converter.ConvertFromSI(units.deltaT, .DeltaT.GetValueOrDefault).ToString(nf), units.deltaT})
-            gridResults.Rows.Add(New Object() {.FlowSheet.GetTranslatedString("RConvPGridItem3"), su.Converter.ConvertFromSI(units.heatflow, .DeltaQ.GetValueOrDefault).ToString(nf), units.heatflow})
-            gridResults.Rows.Add(New Object() {.FlowSheet.GetTranslatedString("TKResTime"), su.Converter.ConvertFromSI(units.time, .ResidenceTimeL).ToString(nf), units.time})
-      
+            gridResults.Rows.Add(New Object() { .FlowSheet.GetTranslatedString("DeltaT"), su.Converter.ConvertFromSI(units.deltaT, .DeltaT.GetValueOrDefault).ToString(nf), units.deltaT})
+            gridResults.Rows.Add(New Object() { .FlowSheet.GetTranslatedString("RConvPGridItem3"), su.Converter.ConvertFromSI(units.heatflow, .DeltaQ.GetValueOrDefault).ToString(nf), units.heatflow})
+            gridResults.Rows.Add(New Object() { .FlowSheet.GetTranslatedString("TKResTime"), su.Converter.ConvertFromSI(units.time, .ResidenceTimeL).ToString(nf), units.time})
+
             'reaction props
 
             For Each dbl As KeyValuePair(Of String, Double) In .RxiT
-                gridReactions.Rows.Add(New Object() {.FlowSheet.Reactions(dbl.Key).Name, .FlowSheet.GetTranslatedString("ReactionExtent"), su.Converter.ConvertFromSI(units.molarflow, dbl.Value).ToString(nf), units.molarflow})
+                gridReactions.Rows.Add(New Object() { .FlowSheet.Reactions(dbl.Key).Name, .FlowSheet.GetTranslatedString("ReactionExtent"), su.Converter.ConvertFromSI(units.molarflow, dbl.Value).ToString(nf), units.molarflow})
             Next
 
             For Each dbl As KeyValuePair(Of String, Double) In .RxiT
-                gridReactions.Rows.Add(New Object() {.FlowSheet.Reactions(dbl.Key).Name, .FlowSheet.GetTranslatedString("ReactionRate"), su.Converter.ConvertFromSI(units.reac_rate, (dbl.Value / .Volume)).ToString(nf), units.reac_rate})
+                gridReactions.Rows.Add(New Object() { .FlowSheet.Reactions(dbl.Key).Name, .FlowSheet.GetTranslatedString("ReactionRate"), su.Converter.ConvertFromSI(units.reac_rate, (dbl.Value / .Volume)).ToString(nf), units.reac_rate})
             Next
 
             For Each dbl As KeyValuePair(Of String, Double) In .DHRi
-                gridReactions.Rows.Add(New Object() {.FlowSheet.Reactions(dbl.Key).Name, .FlowSheet.GetTranslatedString("ReactionHeat"), su.Converter.ConvertFromSI(units.heatflow, dbl.Value).ToString(nf), units.heatflow})
+                gridReactions.Rows.Add(New Object() { .FlowSheet.Reactions(dbl.Key).Name, .FlowSheet.GetTranslatedString("ReactionHeat"), su.Converter.ConvertFromSI(units.heatflow, dbl.Value).ToString(nf), units.heatflow})
             Next
 
             'conversions
@@ -195,12 +193,6 @@ Public Class EditingForm_ReactorCSTR
             cbPropPack.Items.AddRange(proppacks)
             cbPropPack.SelectedItem = .PropertyPackage?.Tag
 
-            Dim flashalgos As String() = .FlowSheet.FlowsheetOptions.FlashAlgorithms.Select(Function(x) x.Tag).ToArray
-            cbFlashAlg.Items.Clear()
-            cbFlashAlg.Items.Add("Default")
-            cbFlashAlg.Items.AddRange(flashalgos)
-            If .PreferredFlashAlgorithmTag <> "" Then cbFlashAlg.SelectedItem = .PreferredFlashAlgorithmTag Else cbFlashAlg.SelectedIndex = 0
-
             'annotation
 
             Try
@@ -217,12 +209,6 @@ Public Class EditingForm_ReactorCSTR
 
     Private Sub btnConfigurePP_Click(sender As Object, e As EventArgs) Handles btnConfigurePP.Click
         SimObject.FlowSheet.PropertyPackages.Values.Where(Function(x) x.Tag = cbPropPack.SelectedItem.ToString).SingleOrDefault.DisplayEditingForm()
-    End Sub
-
-    Private Sub btnConfigureFlashAlg_Click(sender As Object, e As EventArgs) Handles btnConfigureFlashAlg.Click
-
-        Thermodynamics.Calculator.ConfigureFlashInstance(SimObject, cbFlashAlg.SelectedItem.ToString)
-
     End Sub
 
     Private Sub lblTag_TextChanged(sender As Object, e As EventArgs) Handles lblTag.TextChanged
@@ -270,13 +256,6 @@ Public Class EditingForm_ReactorCSTR
         End If
     End Sub
 
-    Private Sub cbFlashAlg_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbFlashAlg.SelectedIndexChanged
-        If Loaded Then
-            SimObject.PreferredFlashAlgorithmTag = cbFlashAlg.SelectedItem.ToString
-            RequestCalc()
-        End If
-    End Sub
-
     Private Sub cbInlet1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbInlet1.SelectedIndexChanged
 
         If Loaded Then
@@ -292,10 +271,15 @@ Public Class EditingForm_ReactorCSTR
 
                 If flowsheet.GetFlowsheetSimulationObject(text).GraphicObject.OutputConnectors(0).IsAttached Then
                     MessageBox.Show(flowsheet.GetTranslatedString("Todasasconexespossve"), flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
-                    Exit Sub
+                Else
+                    Try
+                        If gobj.InputConnectors(index).IsAttached Then flowsheet.DisconnectObjects(gobj.InputConnectors(index).AttachedConnector.AttachedFrom, gobj)
+                        flowsheet.ConnectObjects(flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, gobj, 0, index)
+                    Catch ex As Exception
+                        MessageBox.Show(ex.Message, flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End Try
                 End If
-                If gobj.InputConnectors(index).IsAttached Then flowsheet.DisconnectObjects(gobj.InputConnectors(index).AttachedConnector.AttachedFrom, gobj)
-                flowsheet.ConnectObjects(flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, gobj, 0, index)
+                UpdateInfo()
 
             End If
 
@@ -318,10 +302,14 @@ Public Class EditingForm_ReactorCSTR
 
                 If flowsheet.GetFlowsheetSimulationObject(text).GraphicObject.InputConnectors(0).IsAttached Then
                     MessageBox.Show(flowsheet.GetTranslatedString("Todasasconexespossve"), flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
-                    Exit Sub
+                Else Try
+                        If gobj.OutputConnectors(0).IsAttached Then flowsheet.DisconnectObjects(gobj, gobj.OutputConnectors(0).AttachedConnector.AttachedTo)
+                        flowsheet.ConnectObjects(gobj, flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, 0, 0)
+                    Catch ex As Exception
+                        MessageBox.Show(ex.Message, flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End Try
                 End If
-                If gobj.OutputConnectors(0).IsAttached Then flowsheet.DisconnectObjects(gobj, gobj.OutputConnectors(0).AttachedConnector.AttachedTo)
-                flowsheet.ConnectObjects(gobj, flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, 0, 0)
+                UpdateInfo()
 
             End If
 
@@ -343,11 +331,15 @@ Public Class EditingForm_ReactorCSTR
 
                 If flowsheet.GetFlowsheetSimulationObject(text).GraphicObject.InputConnectors(0).IsAttached Then
                     MessageBox.Show(flowsheet.GetTranslatedString("Todasasconexespossve"), flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
-                    Exit Sub
+                Else
+                    Try
+                        If gobj.OutputConnectors(1).IsAttached Then flowsheet.DisconnectObjects(gobj, gobj.OutputConnectors(1).AttachedConnector.AttachedTo)
+                        flowsheet.ConnectObjects(gobj, flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, 1, 0)
+                    Catch ex As Exception
+                        MessageBox.Show(ex.Message, flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End Try
                 End If
-                If gobj.OutputConnectors(1).IsAttached Then flowsheet.DisconnectObjects(gobj, gobj.OutputConnectors(1).AttachedConnector.AttachedTo)
-                flowsheet.ConnectObjects(gobj, flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, 1, 0)
-
+                UpdateInfo()
             End If
 
         End If
@@ -368,12 +360,15 @@ Public Class EditingForm_ReactorCSTR
 
                 If flowsheet.GetFlowsheetSimulationObject(text).GraphicObject.InputConnectors(0).IsAttached Then
                     MessageBox.Show(flowsheet.GetTranslatedString("Todasasconexespossve"), flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
-                    Exit Sub
+                Else
+                    Try
+                        If gobj.InputConnectors(1).IsAttached Then flowsheet.DisconnectObjects(gobj, gobj.InputConnectors(1).AttachedConnector.AttachedTo)
+                        flowsheet.ConnectObjects(flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, gobj, 0, 1)
+                    Catch ex As Exception
+                        MessageBox.Show(ex.Message, flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End Try
                 End If
-
-                If gobj.InputConnectors(1).IsAttached Then flowsheet.DisconnectObjects(gobj, gobj.InputConnectors(1).AttachedConnector.AttachedTo)
-                flowsheet.ConnectObjects(flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, gobj, 0, 1)
-
+                UpdateInfo()
             End If
 
         End If

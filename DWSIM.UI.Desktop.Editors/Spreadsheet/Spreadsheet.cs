@@ -55,7 +55,7 @@ namespace DWSIM.UI.Desktop.Editors
             scontrol = new ReoGridFullControl();
             Sheet = scontrol.GridControl;
             SetCustomFunctions();
-            flowsheet.GetSpreadsheetObject = () => { return Sheet; };
+            flowsheet.GetSpreadsheetObjectFunc = () => { return Sheet; };
             Sheet.CurrentWorksheet.Name = "MAIN";
 
             scontrol.ImportDataMenuItem.Click += (sender, e) =>
@@ -68,13 +68,14 @@ namespace DWSIM.UI.Desktop.Editors
 
                     selector.btnOK.Click += (sender2, e2) =>
                     {
-
+                        var units = "";
+                        if (selector.list4.SelectedValue != null) units = selector.list4.SelectedValue.ToString();
                         Sheet.CurrentWorksheet.Cells[Sheet.CurrentWorksheet.SelectionRange.StartPos].Formula =
-                        String.Format("GETPROPVAL({3}{1}{3}{0}{3}{2}{3})",
+                        String.Format("GETPROPVAL({3}{1}{3}{0}{3}{2}{3}{0}{3}{4}{3})",
                                                   ';',
                                                   selector.list2.SelectedKey,
                                                   selector.list3.SelectedKey,
-                                                  '"');
+                                                  '"', units);
 
                         selector.Close();
 
@@ -98,15 +99,16 @@ namespace DWSIM.UI.Desktop.Editors
 
                     selector.btnOK.Click += (sender2, e2) =>
                     {
-
+                        var units = "";
+                        if (selector.list4.SelectedValue != null) units = selector.list4.SelectedValue.ToString();
                         var scell = Sheet.CurrentWorksheet.Cells[Sheet.CurrentWorksheet.SelectionRange.StartPos];
                         var currdata = scell.Formula == null ? scell.Data : scell.Formula;
-                        scell.Formula = String.Format("SETPROPVAL({3}{1}{3}{0}{3}{2}{3}{0}{3}{4}{3})",
+                        scell.Formula = String.Format("SETPROPVAL({3}{1}{3}{0}{3}{2}{3}{0}{3}{4}{3}{0}{3}{5}{3})",
                                                    ';',
                                                    selector.list2.SelectedKey,
                                                    selector.list3.SelectedKey,
                                                    '"',
-                                                   currdata);
+                                                   currdata, units);
 
                         selector.Close();
 
@@ -533,7 +535,20 @@ namespace DWSIM.UI.Desktop.Editors
 
         void SetCustomFunctions()
         {
-            CrossPlatform.UI.Controls.ReoGrid.Formula.FormulaExtension.CustomFunctions["GETPROPVAL"] = (cell, args) =>
+
+            FormulaExtension.CustomFunctions["GETNAME"] = (cell, args) =>
+            { 
+                    try
+                    {
+                        return flowsheet.SimulationObjects[args[0].ToString()].GraphicObject.Tag;
+                    }
+                    catch (Exception ex)
+                    {
+                        return "ERROR: " + ex.Message;
+                    }
+            };
+
+            FormulaExtension.CustomFunctions["GETPROPVAL"] = (cell, args) =>
             {
                 if (args.Length == 2)
                 {
@@ -563,7 +578,7 @@ namespace DWSIM.UI.Desktop.Editors
                     return "INVALID ARGS";
             };
 
-            CrossPlatform.UI.Controls.ReoGrid.Formula.FormulaExtension.CustomFunctions["SETPROPVAL"] = (cell, args) =>
+            FormulaExtension.CustomFunctions["SETPROPVAL"] = (cell, args) =>
             {
                 if (args.Length == 3)
                 {
@@ -630,7 +645,7 @@ namespace DWSIM.UI.Desktop.Editors
                     return "INVALID ARGS";
             };
 
-            CrossPlatform.UI.Controls.ReoGrid.Formula.FormulaExtension.CustomFunctions["GETPROPUNITS"] = (cell, args) =>
+            FormulaExtension.CustomFunctions["GETPROPUNITS"] = (cell, args) =>
             {
                 if (args.Length == 2)
                 {
@@ -647,7 +662,7 @@ namespace DWSIM.UI.Desktop.Editors
                     return "INVALID ARGS";
             };
 
-            CrossPlatform.UI.Controls.ReoGrid.Formula.FormulaExtension.CustomFunctions["GETOBJID"] = (cell, args) =>
+            FormulaExtension.CustomFunctions["GETOBJID"] = (cell, args) =>
             {
                 if (args.Length == 1)
                 {
@@ -664,7 +679,7 @@ namespace DWSIM.UI.Desktop.Editors
                     return "INVALID ARGS";
             };
 
-            CrossPlatform.UI.Controls.ReoGrid.Formula.FormulaExtension.CustomFunctions["GETOBJNAME"] = (cell, args) =>
+            FormulaExtension.CustomFunctions["GETOBJNAME"] = (cell, args) =>
             {
                 if (args.Length == 1)
                 {

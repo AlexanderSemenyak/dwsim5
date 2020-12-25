@@ -45,9 +45,13 @@ Imports DWSIM.Interfaces.Enums
 
     Sub DisplayDynamicsEditForm()
 
+    Sub DisplayExtraPropertiesEditForm()
+
     Sub UpdateEditForm()
 
     Sub UpdateDynamicsEditForm()
+
+    Sub UpdateExtraPropertiesEditForm()
 
     Property PreferredFlashAlgorithmTag As String
 
@@ -82,6 +86,7 @@ Imports DWSIM.Interfaces.Enums
     ''' <returns>A list of property identifiers.</returns>
     ''' <remarks>More details at http://dwsim.inforside.com.br/wiki/index.php?title=Object_Property_Codes </remarks>
     Function GetProperties(ByVal proptype As Enums.PropertyType) As String()
+    Sub AddExtraProperty(pname As String, pvalue As Object)
 
     ''' <summary>
     ''' Gets the value of a property.
@@ -91,7 +96,8 @@ Imports DWSIM.Interfaces.Enums
     ''' <returns>Property value.</returns>
     ''' <remarks>More details at http://dwsim.inforside.com.br/wiki/index.php?title=Object_Property_Codes </remarks>
     Function GetPropertyValue(ByVal prop As String, Optional ByVal su As IUnitsOfMeasure = Nothing) As Object
-
+    Sub RemoveExtraProperty(pname As String)
+    Sub ClearExtraProperties()
     Sub AddDynamicProperty(pname As String, pdesc As String, pvalue As Double, punittype As UnitOfMeasure)
 
     ''' <summary>
@@ -102,7 +108,9 @@ Imports DWSIM.Interfaces.Enums
     ''' <returns>Property units.</returns>
     ''' <remarks>More details at http://dwsim.inforside.com.br/wiki/index.php?title=Object_Property_Codes </remarks>
     Function GetPropertyUnit(ByVal prop As String, Optional ByVal su As IUnitsOfMeasure = Nothing) As String
+    Sub SetExtraPropertyValue(pname As String, pvalue As Object)
     Sub RemoveDynamicProperty(pname As String)
+    Function GetExtraPropertyValue(pname As String) As Object
 
     ''' <summary>
     ''' Sets the value of a property.

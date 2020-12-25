@@ -226,6 +226,8 @@ Namespace PropertyPackages
 
         Public Property IgnoreSalinityLimit As Boolean = False
 
+        Public Property CalculateAdditionalMaterialStreamProperties As Boolean = True
+
         ''' <summary>
         ''' ' For mobile compatibility only.
         ''' </summary>
@@ -482,35 +484,10 @@ Namespace PropertyPackages
         ''' <value></value>
         ''' <returns>A FlashAlgorithm object to be used in flash calculations.</returns>
         ''' <remarks></remarks>
-        Public Overridable ReadOnly Property FlashBase() As Auxiliary.FlashAlgorithms.FlashAlgorithm
+        <XmlIgnore> Public Overridable ReadOnly Property FlashBase() As Auxiliary.FlashAlgorithms.FlashAlgorithm
 
             Get
-
-                If Me.CurrentMaterialStream IsNot Nothing AndAlso
-                    Me.CurrentMaterialStream.Flowsheet IsNot Nothing AndAlso
-                    DirectCast(Me.CurrentMaterialStream, ISimulationObject).PreferredFlashAlgorithmTag <> "" Then
-
-                    Dim fa = Flowsheet.FlowsheetOptions.FlashAlgorithms.Where(Function(x) x.Tag = DirectCast(Me.CurrentMaterialStream, ISimulationObject).PreferredFlashAlgorithmTag).FirstOrDefault
-                    If Not fa Is Nothing Then Return fa.Clone Else Return Flowsheet.FlowsheetOptions.FlashAlgorithms(0).Clone
-
-                Else
-
-                    If Not FlashAlgorithm Is Nothing Then
-                        Return FlashAlgorithm.Clone()
-                    Else
-                        If Not Flowsheet Is Nothing Then
-                            If Flowsheet.FlowsheetOptions.FlashAlgorithms.Count > 0 Then
-                                Return Flowsheet.FlowsheetOptions.FlashAlgorithms(0).Clone
-                            Else
-                                Return New NestedLoops()
-                            End If
-                        Else
-                            Return New NestedLoops()
-                        End If
-                    End If
-
-                End If
-
+                Return New UniversalFlash() With {.FlashSettings = FlashSettings}
             End Get
 
         End Property
@@ -628,6 +605,17 @@ Namespace PropertyPackages
 
         End Sub
 
+        Public Sub CalcAdditionalEnergyTerms()
+
+            For Each p As IPhase In Me.CurrentMaterialStream.Phases.Values
+                CalcInternalEnergy(p)
+                CalcGibbsFreeEnergy(p)
+                CalcHelmholtzEnergy(p)
+                CalcDiffusionCoefficients(p)
+            Next
+
+        End Sub
+
         Public Sub CalcAdditionalPhaseProperties() Implements IPropertyPackage.CalcAdditionalPhaseProperties
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
@@ -639,7 +627,7 @@ Namespace PropertyPackages
             IObj?.Paragraphs.Add("Isothermal compressibility of a given phase is calculated 
                                 following the thermodynamic definition:")
 
-            IObj?.Paragraphs.Add("<m>\beta=-\frac{1}{V}\frac{\partial V}{\partial P}<m>")
+            IObj?.Paragraphs.Add("<m>\beta_T =-\frac{1}{V}\frac{\partial V}{\partial P}<m>")
 
             IObj?.Paragraphs.Add("The above expression is calculated rigorously by the PR and SRK 
                                 equations of state. For the other models, a numerical derivative 
@@ -650,14 +638,14 @@ Namespace PropertyPackages
             IObj?.Paragraphs.Add("The Bulk Modulus of a phase is defined as the inverse of the 
                                 isothermal compressibility:")
 
-            IObj?.Paragraphs.Add("<m>K=\frac{1}{\beta}<m>")
+            IObj?.Paragraphs.Add("<m>K=\frac{1}{\beta_T}<m>")
 
             IObj?.Paragraphs.Add("<h3>Speed of Sound</h3><p>")
 
-            IObj?.Paragraphs.Add("The speed of sound in a given phase is calculated by the 
+            IObj?.Paragraphs.Add("The speed of sound (isentropic) in a given phase is calculated by the 
                                 following equations:")
 
-            IObj?.Paragraphs.Add("<m>c=\sqrt{\frac{K}{\rho}},</m>")
+            IObj?.Paragraphs.Add("<m>c=\sqrt{\frac{C_p}{C_v}\frac{K}{\rho}},</m>")
 
             IObj?.Paragraphs.Add("where:")
 
@@ -666,6 +654,15 @@ Namespace PropertyPackages
             IObj?.Paragraphs.Add("<mi>K</mi> Bulk Modulus (Pa)")
 
             IObj?.Paragraphs.Add("<mi>\rho</mi> Phase Density (kg/m³)")
+
+            IObj?.Paragraphs.Add("<mi>C_p</mi> Constant pressure Heat capacity (kJ/kg K)")
+
+            IObj?.Paragraphs.Add("<mi>C_v</mi> Constant volume Heat capacity (kJ/kg K)")
+
+            IObj?.Paragraphs.Add("The ratio of heat capacities in above equation is equal to the ratio of 
+                                  the isothermal to the isentropic compressibility in order to shift the basis
+                                   from isothermal to isentropic.")
+
 
             IObj?.Paragraphs.Add("<h3>Joule-Thomson Coefficient</h3>")
 
@@ -685,7 +682,7 @@ Namespace PropertyPackages
 
             IObj?.Paragraphs.Add("<m>\mu=(\frac{\partial T}{\partial P})_{H},</m>")
 
-            IObj?.Paragraphs.Add("The JT coefficient is calculated rigorously by the PR and SRK 
+            IObj?.Paragraphs.Add("The JT coefficient is calculated analytically by the PR and SRK 
                                 equations of state, while the Goldzberg correlation is used for 
                                 all other models,")
 
@@ -737,7 +734,15 @@ Namespace PropertyPackages
 
             Dim p = Me.CurrentMaterialStream.Phases(phaseID)
 
-            If p.Name <> "Mixture" And p.Name <> "OverallLiquid" And p.Properties.molarfraction.HasValue Then
+            Dim check As Boolean = False
+
+            If p.Properties.molarfraction.HasValue Then
+                check = True
+            Else
+                If Settings.CAPEOPENMode Then check = True
+            End If
+
+            If p.Name <> "Mixture" And p.Name <> "OverallLiquid" And check Then
 
                 With p.Properties
                     .isothermal_compressibility = CalcIsothermalCompressibility(p)
@@ -760,7 +765,15 @@ Namespace PropertyPackages
 
             Dim Z, P0, P1, T, Z1 As Double
 
-            If Not p.Properties.molarfraction.HasValue Then Return 0.0
+            Dim check As Boolean = False
+
+            If p.Properties.molarfraction.HasValue Then
+                check = True
+            Else
+                If Settings.CAPEOPENMode Then check = True
+            End If
+
+            If Not check Then Return 0.0
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
@@ -793,7 +806,7 @@ Namespace PropertyPackages
                     Return 0.0#
             End Select
 
-            Dim K As Double = 1 / P0 - 1 / Z * (Z1 - Z) / 0.0001
+            Dim K As Double = 1 / P0 - 1 / Z * (Z1 - Z) / (P1 - P0)
 
             If Double.IsNaN(K) Or Double.IsInfinity(K) Then K = 0.0#
 
@@ -802,6 +815,32 @@ Namespace PropertyPackages
             Return K
 
         End Function
+
+        Public Overridable Function CalcIsothermalCompressibility(Vz As Double(), T As Double, P As Double, state As PhaseName) As Double
+
+            Dim Z, P0, P1, Z1 As Double
+
+            Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
+
+            P0 = P
+            Z = AUX_Z(Vz, T, P, state)
+
+            IObj?.SetCurrent
+
+            P1 = P0 + 100
+
+            Z1 = AUX_Z(Vz, T, P1, state)
+
+            Dim K As Double = 1 / P0 - 1 / Z * (Z1 - Z) / (P1 - P0)
+
+            If Double.IsNaN(K) Or Double.IsInfinity(K) Then K = 0.0#
+
+            IObj?.Close()
+
+            Return K
+
+        End Function
+
 
         Public Overridable Function CalcSpeedOfSound(p As IPhase) As Double
 
@@ -816,13 +855,22 @@ Namespace PropertyPackages
 
             IObj?.Close()
 
-            Return (K / rho) ^ 0.5
+            Return (p.Properties.heatCapacityCp.GetValueOrDefault / p.Properties.heatCapacityCv.GetValueOrDefault * K / rho) ^ 0.5
+
 
         End Function
 
         Public Overridable Function CalcJouleThomsonCoefficient(p As IPhase) As Double
 
-            If Not p.Properties.molarfraction.HasValue Then Return 0.0
+            Dim check As Boolean = False
+
+            If p.Properties.molarfraction.HasValue Then
+                check = True
+            Else
+                If Settings.CAPEOPENMode Then check = True
+            End If
+
+            If Not check Then Return 0.0
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
@@ -1224,6 +1272,7 @@ Namespace PropertyPackages
                 Dim Pc, Tc, w As Double
 
                 Dim cprops = DW_GetConstantProperties()
+
                 For i = 0 To n
                     Pc = cprops(i).Critical_Pressure
                     Tc = cprops(i).Critical_Temperature
@@ -1231,7 +1280,7 @@ Namespace PropertyPackages
                     If type = "LV" Then
                         K(i) = Pc / P * Math.Exp(5.373 * (1 + w) * (1 - Tc / T))
                     Else
-                        K(i) = 1.0#
+                        K(i) = 1.0
                     End If
                 Next
 
@@ -1291,6 +1340,52 @@ Namespace PropertyPackages
                     i += 1
                 Next
             End If
+
+            Return K
+
+        End Function
+
+        ''' <summary>
+        ''' Calculates Ideal K-values using Critical Properties.
+        ''' </summary>
+        ''' <param name="T"></param>
+        ''' <param name="P"></param>
+        ''' <returns></returns>
+        Public Function DW_CalcKvalue_Ideal_Wilson(ByVal T As Double, ByVal P As Double) As Double()
+
+            Dim n As Integer = CurrentMaterialStream.Phases(0).Compounds.Count - 1
+            Dim i As Integer
+            Dim K(n) As Double
+
+            Dim cprops = DW_GetConstantProperties()
+
+            Dim Pc, Tc, w As Double
+            For i = 0 To n
+                Pc = cprops(i).Critical_Pressure
+                Tc = cprops(i).Critical_Temperature
+                w = cprops(i).Acentric_Factor
+                K(i) = Pc / P * Math.Exp(5.373 * (1 + w) * (1 - Tc / T))
+            Next
+
+            Return K
+
+        End Function
+
+        ''' <summary>
+        ''' Calculates Ideal K-values using Vapor Pressures.
+        ''' </summary>
+        ''' <param name="T"></param>
+        ''' <param name="P"></param>
+        ''' <returns></returns>
+        Public Function DW_CalcKvalue_Ideal_VP(ByVal T As Double, ByVal P As Double) As Double()
+
+            Dim n As Integer = CurrentMaterialStream.Phases(0).Compounds.Count - 1
+            Dim i As Integer
+            Dim K(n) As Double
+
+            For i = 0 To n
+                K(i) = AUX_PVAPi(i, T) / P
+            Next
 
             Return K
 
@@ -2621,10 +2716,6 @@ Namespace PropertyPackages
                                     xv = (H - hl) / (hv - hl)
                                 End If
                                 IObj?.SetCurrent()
-                                'If Tsat > Me.AUX_TCM(Phase.Mixture) Then
-                                '    xv = 1.0#
-                                '    LoopVarState = State.Vapor
-                                'End If
                                 xl = 1 - xv - xs
 
                                 If xv <> 0.0# And xv <> 1.0# And xs = 0.0# Then
@@ -2644,13 +2735,7 @@ Namespace PropertyPackages
                                 End If
 
                                 IObj?.SetCurrent()
-                                If T <= Me.AUX_TFM(Phase.Mixture) Then
-
-                                    'solid only.
-
-                                    xv = 0.0#
-                                    xl = 0.0#
-                                    xs = 1.0#
+                                If xs > 0.0 Then
 
                                     Dim constprops As New List(Of Interfaces.ICompoundConstantProperties)
                                     For Each su As Interfaces.ICompound In Me.CurrentMaterialStream.Phases(0).Compounds.Values
@@ -2658,7 +2743,7 @@ Namespace PropertyPackages
                                     Next
 
                                     IObj?.SetCurrent()
-                                    S = Me.DW_CalcSolidEnthalpy(T, vz, constprops) / (T - 298.15)
+                                    S = Me.DW_CalcEntropy(vz, T, P, State.Solid)
 
                                     Me.CurrentMaterialStream.Phases(3).Properties.molarfraction = xl
                                     Me.CurrentMaterialStream.Phases(2).Properties.molarfraction = xv
@@ -2680,35 +2765,33 @@ Namespace PropertyPackages
                                         i += 1
                                     Next
 
-                                Else
-
-                                    Me.CurrentMaterialStream.Phases(3).Properties.molarfraction = xl
-                                    Me.CurrentMaterialStream.Phases(2).Properties.molarfraction = xv
-                                    Me.CurrentMaterialStream.Phases(3).Properties.massfraction = xl
-                                    Me.CurrentMaterialStream.Phases(2).Properties.massfraction = xv
-
-                                    i = 0
-                                    For Each subst In Me.CurrentMaterialStream.Phases(3).Compounds.Values
-                                        subst.MoleFraction = vz(i)
-                                        subst.FugacityCoeff = 1
-                                        subst.ActivityCoeff = 1
-                                        subst.PartialVolume = 0
-                                        subst.PartialPressure = P
-                                        subst.MassFraction = vz(i)
-                                        i += 1
-                                    Next
-                                    i = 0
-                                    For Each subst In Me.CurrentMaterialStream.Phases(2).Compounds.Values
-                                        subst.MoleFraction = vz(i)
-                                        subst.FugacityCoeff = 1
-                                        subst.ActivityCoeff = 1
-                                        subst.PartialVolume = 0
-                                        subst.PartialPressure = P
-                                        subst.MassFraction = vz(i)
-                                        i += 1
-                                    Next
-
                                 End If
+
+                                Me.CurrentMaterialStream.Phases(3).Properties.molarfraction = xl
+                                Me.CurrentMaterialStream.Phases(2).Properties.molarfraction = xv
+                                Me.CurrentMaterialStream.Phases(3).Properties.massfraction = xl
+                                Me.CurrentMaterialStream.Phases(2).Properties.massfraction = xv
+
+                                i = 0
+                                For Each subst In Me.CurrentMaterialStream.Phases(3).Compounds.Values
+                                    subst.MoleFraction = vz(i)
+                                    subst.FugacityCoeff = 1
+                                    subst.ActivityCoeff = 1
+                                    subst.PartialVolume = 0
+                                    subst.PartialPressure = P
+                                    subst.MassFraction = vz(i)
+                                    i += 1
+                                Next
+                                i = 0
+                                For Each subst In Me.CurrentMaterialStream.Phases(2).Compounds.Values
+                                    subst.MoleFraction = vz(i)
+                                    subst.FugacityCoeff = 1
+                                    subst.ActivityCoeff = 1
+                                    subst.PartialVolume = 0
+                                    subst.PartialPressure = P
+                                    subst.MassFraction = vz(i)
+                                    i += 1
+                                Next
 
                             Else
 
@@ -4614,7 +4697,7 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
                                 End Try
                             Else
                                 Try
-                                    tmp1 = MyFlash.Flash_PV(New Double() {i * dx, 1 - i * dx}, P, 0.0#, Test1, Me, True, prevkib)
+                                    tmp1 = MyFlash.Flash_PV(New Double() {i * dx, 1 - i * dx}, P, 0.0#, Test1, Me)
                                     calcT = tmp1(4)
                                     Test1 = calcT
                                     prevkib = tmp1(6)
@@ -4707,7 +4790,7 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
 
                     Dim validdata = data.ReturnValidSets()
 
-                    Dim interpolator As New MathNet.Numerics.Interpolation.NevillePolynomialInterpolation(validdata.Item1, validdata.Item2)
+                    Dim interpolator As New MathNet.Numerics.Interpolation.BulirschStoerRationalInterpolation(validdata.Item1, validdata.Item2)
 
                     i = 0
                     For Each d As Double In py1.Clone
@@ -4721,7 +4804,7 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
 
                     validdata = data.ReturnValidSets()
 
-                    interpolator = New MathNet.Numerics.Interpolation.NevillePolynomialInterpolation(validdata.Item1, validdata.Item2)
+                    interpolator = New MathNet.Numerics.Interpolation.BulirschStoerRationalInterpolation(validdata.Item1, validdata.Item2)
 
                     i = 0
                     For Each d As Double In py2.Clone
@@ -5283,6 +5366,8 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
                     Me.CurrentMaterialStream.Phases(phaseID).Properties.massflow = Nothing
                     Me.CurrentMaterialStream.Phases(phaseID).Properties.massfraction = Nothing
                     Me.CurrentMaterialStream.Phases(phaseID).Properties.molarfraction = Nothing
+                    Me.CurrentMaterialStream.Phases(phaseID).Properties.bulk_modulus = Nothing
+                    Me.CurrentMaterialStream.Phases(phaseID).Properties.isothermal_compressibility = Nothing
 
                 Else
 
@@ -5312,6 +5397,8 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
                     Me.CurrentMaterialStream.Phases(phaseID).Properties.dewPressure = Nothing
                     Me.CurrentMaterialStream.Phases(phaseID).Properties.viscosity = Nothing
                     Me.CurrentMaterialStream.Phases(phaseID).Properties.kinematic_viscosity = Nothing
+                    Me.CurrentMaterialStream.Phases(phaseID).Properties.bulk_modulus = Nothing
+                    Me.CurrentMaterialStream.Phases(phaseID).Properties.isothermal_compressibility = Nothing
 
                     If Not CalculatedOnly Then
                         Me.CurrentMaterialStream.Phases(phaseID).Properties.molarflow = Nothing
@@ -5484,6 +5571,15 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
 
         Public Function AUX_KHenry(ByVal CompName As String, ByVal T As Double) As Double
 
+            Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
+
+            Inspector.Host.CheckAndAdd(IObj, "", "AUX_KHenry", "Henry's Constant Calculation", "Liquid Phase Fugacity Calculation Routine")
+
+            IObj?.SetCurrent()
+
+            IObj?.Paragraphs.Add(String.Format("Compound: {0}", CompName))
+            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
+
             Dim KHx As Double
             Dim MW As Double = 18 'mol weight of water [g/mol]
             Dim DW As Double = 996 'density of water at 298.15 K [Kg/m3]
@@ -5493,11 +5589,21 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
 
             CAS = Me.CurrentMaterialStream.Phases(0).Compounds(CompName).ConstantProperties.CAS_Number
 
+            IObj?.Paragraphs.Add(String.Format("CAS Number: {0}", CAS))
+
             If m_Henry.ContainsKey(CAS) Then
                 KHCP = m_Henry(CAS).KHcp
                 C = m_Henry(CAS).C
             End If
+
+            IObj?.Paragraphs.Add(String.Format("KHCP: {0}", KHCP))
+            IObj?.Paragraphs.Add(String.Format("C: {0}", C))
+
             KHx = 1 / (KHCP * MW / DW / 1000 * Exp(C * (1 / T - 1 / 298.15)))
+
+            IObj?.Paragraphs.Add(String.Format("Henry's Constant: {0} Pa", KHx))
+
+            IObj?.Close()
 
             Return KHx '[Pa]
 
@@ -5600,6 +5706,8 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
 
         Public Overridable Function AUX_CPi(ByVal sub1 As String, ByVal T As Double) As Double
 
+            Dim db As String = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.OriginalDB
+
             If Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.IsPF = 1 Then
 
                 With Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties
@@ -5608,8 +5716,7 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
 
             Else
 
-                If Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.OriginalDB = "DWSIM" Or
-                Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.OriginalDB = "" Then
+                If db = "DWSIM" Or db = "" Then
                     Dim A, B, C, D, E, result As Double
                     A = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
                     B = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
@@ -5619,7 +5726,7 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
                     'Cp = A + B*T + C*T^2 + D*T^3 + E*T^4 where Cp in kJ/kg-mol , T in K 
                     result = A + B * T + C * T ^ 2 + D * T ^ 3 + E * T ^ 4
                     Return result / Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Molar_Weight 'kJ/kg.K
-                ElseIf Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.OriginalDB = "CheResources" Then
+                ElseIf db = "CheResources" Then
                     Dim A, B, C, D, E, result As Double
                     A = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
                     B = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_B
@@ -5629,9 +5736,7 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
                     'CAL/MOL.K [CP=A+(B*T)+(C*T^2)+(D*T^3)], T in K
                     result = A + B * T + C * T ^ 2 + D * T ^ 3
                     Return result / Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Molar_Weight * 4.1868 'kJ/kg.K
-                ElseIf Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.OriginalDB = "ChemSep" Or
-                Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.OriginalDB = "ChEDL Thermo" Or
-                Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.OriginalDB = "User" Then
+                ElseIf db = "ChemSep" Or db = "ChEDL Thermo" Or db = "User" Then
                     Dim A, B, C, D, E, result As Double
                     Dim eqno As String = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.IdealgasCpEquation
                     Dim mw As Double = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Molar_Weight
@@ -5645,8 +5750,21 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
                     Else
                         result = Me.ParseEquation(eqno, A, B, C, D, E, T) / mw
                     End If
-                    If result = 0.0 Then Return 3.5 * 8.314 / mw Else Return result
-                ElseIf Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.OriginalDB = "ChEDL Thermo" Then
+                    If result = 0.0 Then
+                        'try estimating from LK method
+                        With Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties
+                            Dim sg60 = AUX_LIQDENSi(Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties, T) / 1000.0
+                            result = Auxiliary.PROPS.Cpig_lk(.Normal_Boiling_Point ^ 0.33 / sg60, .Acentric_Factor, T)
+                        End With
+                        If Double.IsNaN(result) Or Double.IsInfinity(result) Then
+                            Return 3.5 * 8.314 / mw
+                        Else
+                            Return result
+                        End If
+                    Else
+                        Return result
+                    End If
+                ElseIf db = "ChEDL Thermo" Then
                     Dim A, B, C, D, E, result As Double
                     Dim eqno As String = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.IdealgasCpEquation
                     A = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
@@ -5656,7 +5774,7 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
                     E = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
                     result = Me.CalcCSTDepProp(eqno, A, B, C, D, E, T, 0) 'kJ/kg.K
                     Return result
-                ElseIf Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.OriginalDB = "CoolProp" Then
+                ElseIf db = "CoolProp" Then
                     Dim A, B, C, D, E, result As Double
                     Dim eqno As String = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.IdealgasCpEquation
                     Dim mw As Double = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Molar_Weight
@@ -5667,7 +5785,7 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
                     E = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
                     result = Me.CalcCSTDepProp(eqno, A, B, C, D, E, T, 0) 'kJ/kg.K
                     Return result
-                ElseIf Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.OriginalDB = "Biodiesel" Then
+                ElseIf db = "Biodiesel" Then
                     Dim A, B, C, D, E, result As Double
                     Dim eqno As String = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.IdealgasCpEquation
                     A = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
@@ -5677,7 +5795,7 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
                     E = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_E
                     result = Me.CalcCSTDepProp(eqno, A, B, C, D, E, T, 0) 'kJ/kg.K
                     Return result
-                ElseIf Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.OriginalDB = "KDB" Then
+                ElseIf db = "KDB" Then
                     Dim A, B, C, D, E As Double
                     Dim eqno As String = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.IdealgasCpEquation
                     A = Me.CurrentMaterialStream.Phases(0).Compounds(sub1).ConstantProperties.Ideal_Gas_Heat_Capacity_Const_A
@@ -7001,9 +7119,19 @@ Final3:
 
             If Settings.EnableParallelProcessing Then
 
-                Dim nsteps As Integer = Math.Abs(T2 - T1) / 20
+                Dim nsteps As Integer = Math.Abs(T2 - T1) / 10
 
-                If nsteps < 20 Then nsteps = 20
+                If nsteps < 10 Then
+                    If Math.Abs(T2 - T1) < 1 Then
+                        nsteps = 2
+                    ElseIf Math.Abs(T2 - T1) < 3 Then
+                        nsteps = 4
+                    ElseIf Math.Abs(T2 - T1) < 5 Then
+                        nsteps = 6
+                    Else
+                        nsteps = 10
+                    End If
+                End If
 
                 Dim deltaT As Double = (T2 - T1) / nsteps
 
@@ -7012,9 +7140,13 @@ Final3:
                 Ti = T1 + deltaT / 2
 
                 Dim integrals(nsteps - 1) As Double
-                Parallel.For(0, nsteps, Sub(ii)
-                                            integrals(ii) = AUX_CPi(subst, Ti + ii * deltaT)
-                                        End Sub)
+                'Parallel.For(0, nsteps, Sub(ii)
+                '                            integrals(ii) = AUX_CPi(subst, Ti + ii * deltaT)
+                '                        End Sub)
+
+                For i = 0 To nsteps - 1
+                    integrals(i) = AUX_CPi(subst, Ti + i * deltaT)
+                Next
 
                 Dim outval = integrals.SumY * deltaT
 
@@ -7389,34 +7521,39 @@ Final3:
 
         End Function
 
-        Public Function DW_CalcSolidFugCoeff(phil() As Double, T As Double, P As Double) As Double()
+        Public Function DW_CalcSolidFugCoeff(T As Double, P As Double) As Double()
 
             Dim Tf = RET_VTF()
             Dim Hf = RET_VHF()
 
+            Dim names = RET_VNAMES()
+
+            If ForcedSolids Is Nothing Then ForcedSolids = New List(Of String)
+
             Dim i, n As Integer
 
-            n = phil.Length - 1
+            n = Tf.Length - 1
 
-            Dim phis(n) As Double
+            Dim phis(n), cterm(n), Pvaps(n), Pvapl(n) As Double
 
-            If SolidPhaseFugacityCalculationMethod = SolidPhaseFugacityCalcMode.Ideal Then
-                For i = 0 To n
-                    phis(i) = 1.0
-                Next
-            Else
-                If SolidPhaseFugacity_UseIdealLiquidPhaseFugacity Then
-                    For i = 0 To n
-                        phis(i) = Math.Exp(Hf(i) * 1000 / (8.314 * Tf(i)) * (Tf(i) / T - 1)) - 1
-                        If Double.IsNaN(phis(i)) Or Double.IsInfinity(phis(i)) Then phis(i) = Double.MaxValue
-                    Next
+            For i = 0 To n
+                cterm(i) = Math.Exp(Hf(i) * 1000 / (8.314 * Tf(i)) * (Tf(i) / T - 1))
+                Pvapl(i) = AUX_PVAPi(i, T)
+                Pvaps(i) = Math.Exp(Math.Log(Pvapl(i)) - Hf(i) * 1000 / 8.314 * (1 / T - 1 / Tf(i)))
+            Next
+
+            For i = 0 To n
+                If ForcedSolids.Contains(names(i)) Then
+                    phis(i) = 0.000000000000001
                 Else
-                    For i = 0 To n
-                        phis(i) = phil(i) * Math.Exp(Hf(i) * 1000 / (8.314 * Tf(i)) * (Tf(i) / T - 1)) - 1
-                        If Double.IsNaN(phis(i)) Or Double.IsInfinity(phis(i)) Then phis(i) = Double.MaxValue
-                    Next
+                    If T > Tf(i) Then
+                        phis(i) = 10000000000.0 * Pvaps(i) / P
+                    Else
+                        phis(i) = Pvaps(i) / P
+                    End If
                 End If
-            End If
+                If Double.IsNaN(phis(i)) Or Double.IsInfinity(phis(i)) Then phis(i) = Double.MaxValue
+            Next
 
             Return phis
 
@@ -7512,6 +7649,12 @@ Final3:
         Public Function RET_VHF() As Double()
 
             Return CurrentMaterialStream.Phases(0).Compounds.Values.Select(Function(x) x.ConstantProperties.EnthalpyOfFusionAtTf).ToArray
+
+        End Function
+
+        Public Function RET_VDHF() As Double()
+
+            Return CurrentMaterialStream.Phases(0).Compounds.Values.Select(Function(x) x.ConstantProperties.IG_Enthalpy_of_Formation_25C).ToArray
 
         End Function
 
@@ -8025,7 +8168,7 @@ Final3:
 
         End Function
 
-        Public Function AUX_IS_SINGLECOMP(ByVal Vx As Object) As Boolean
+        Public Function AUX_IS_SINGLECOMP(ByVal Vx As Double()) As Boolean
 
             Dim i, c, n As Integer, bo As Boolean
 
@@ -8034,7 +8177,7 @@ Final3:
             bo = False
             c = 0
             For i = 0 To n
-                If Vx(i) <> 0.0# Then c += 1
+                If Vx(i) > 0.0# Then c += 1
                 If Me.DW_GetConstantProperties(i).IsBlackOil Then bo = True
             Next
 
@@ -8149,14 +8292,14 @@ Final3:
 
         End Function
 
-        Public Function AUX_CheckTrivial(ByVal KI As Double()) As Boolean
+        Public Function AUX_CheckTrivial(ByVal Ki As Double(), Optional ByVal tolerance As Double = 0.01) As Boolean
 
             Dim isTrivial As Boolean = True
             Dim n, i As Integer
-            n = KI.Length - 1
+            n = Ki.Length - 1
 
             For i = 0 To n
-                If Abs(KI(i) - 1) > 0.01 Then isTrivial = False
+                If Abs(Ki(i) - 1) > tolerance Then isTrivial = False
             Next
 
             Return isTrivial
@@ -9412,6 +9555,21 @@ Final3:
                     Me.CurrentMaterialStream.Phases(0).Properties.pressure = P
                     Me.CurrentMaterialStream.SetPhaseComposition(Vx, phs)
 
+                    Select Case [property].ToLower
+                        Case "isothermalcompressibility",
+                             "bulkmodulus",
+                             "joulethomsoncoefficient",
+                             "speedofsound",
+                             "internalenergy",
+                             "helmholtzenergy",
+                             "gibbsenergy"
+                            Me.DW_CalcProp("enthalpy", phs)
+                            Me.DW_CalcProp("entropy", phs)
+                            Me.DW_CalcProp("compressibilityfactor", phs)
+                            Me.DW_CalcProp("density", phs)
+                            CalcAdditionalPhaseProperties(f)
+                    End Select
+
                     If phs = Phase.Solid Then
                         Me.DW_CalcSolidPhaseProps()
                     Else
@@ -9419,6 +9577,7 @@ Final3:
                     End If
 
                     basis = "Mole"
+
                     Select Case [property].ToLower
                         Case "compressibilityfactor"
                             res.Add(Me.CurrentMaterialStream.Phases(f).Properties.compressibilityFactor.GetValueOrDefault)
@@ -10631,8 +10790,8 @@ Final3:
                 Dim HP As New HenryParam
                 HP.Component = HenryLines(i).Split(";")(1)
                 HP.CAS = HenryLines(i).Split(";")(2)
-                HP.KHcp = Val(HenryLines(i).Split(";")(3))
-                HP.C = Val(HenryLines(i).Split(";")(4))
+                HP.KHcp = HenryLines(i).Split(";")(3).ToDoubleFromInvariant()
+                HP.C = HenryLines(i).Split(";")(4).ToDoubleFromInvariant()
                 If Not m_Henry.ContainsKey(HP.CAS) Then m_Henry.Add(HP.CAS, HP)
             Next
 
@@ -11056,129 +11215,89 @@ Final3:
             Catch ex As Exception
             End Try
 
-            Try
-                Me.ParametersXMLString = (From el As XElement In data Select el Where el.Name = "Parameters").FirstOrDefault?.ToString()
-            Catch ex As Exception
-            End Try
+            'Try
+            Dim e1 = (From el As XElement In data Select el Where el.Name = "Parameters").FirstOrDefault
+            If e1 IsNot Nothing Then Me.ParametersXMLString = e1.ToString()
+            'Catch ex As Exception
+            'End Try
 
-            Try
-                OverrideKvalFugCoeff = (From el As XElement In data Select el Where el.Name = "OverrideKvalFugCoeff").FirstOrDefault?.Value
-            Catch ex As Exception
-            End Try
+            'Try
+            e1 = (From el As XElement In data Select el Where el.Name = "OverrideKvalFugCoeff").FirstOrDefault
+            If e1 IsNot Nothing Then OverrideKvalFugCoeff = e1.Value
+            'Catch ex As Exception
+            'End Try
 
-            Try
-                OverrideEnthalpyCalculation = (From el As XElement In data Select el Where el.Name = "OverrideEnthalpyCalculation").FirstOrDefault.Value
-            Catch ex As Exception
-            End Try
+            e1 = (From el As XElement In data Select el Where el.Name = "OverrideEnthalpyCalculation").FirstOrDefault
+            If e1 IsNot Nothing Then OverrideEnthalpyCalculation = e1.Value
 
-            Try
-                OverrideEntropyCalculation = (From el As XElement In data Select el Where el.Name = "OverrideEntropyCalculation").FirstOrDefault.Value
-            Catch ex As Exception
-            End Try
+            e1 = (From el As XElement In data Select el Where el.Name = "OverrideEntropyCalculation").FirstOrDefault
+            If e1 IsNot Nothing Then OverrideEntropyCalculation = e1.Value
 
-            Try
-                LiquidDensityCalculationMode_Subcritical = [Enum].Parse(LiquidDensityCalculationMode_Subcritical.GetType, (From el As XElement In data Select el Where el.Name = "LiquidDensityCalculationMode_Supercritical").FirstOrDefault.Value)
-            Catch ex As Exception
-            End Try
+            e1 = (From el As XElement In data Select el Where el.Name = "LiquidDensity_CorrectExpDataForPressure").FirstOrDefault
+            If e1 IsNot Nothing Then LiquidDensity_CorrectExpDataForPressure = e1.Value
 
-            Try
-                LiquidDensityCalculationMode_Supercritical = [Enum].Parse(LiquidDensityCalculationMode_Supercritical.GetType, (From el As XElement In data Select el Where el.Name = "LiquidDensityCalculationMode_Supercritical").FirstOrDefault.Value)
-            Catch ex As Exception
-            End Try
+            e1 = (From el As XElement In data Select el Where el.Name = "LiquidDensity_UsePenelouxVolumeTranslation").FirstOrDefault
+            If e1 IsNot Nothing Then LiquidDensity_UsePenelouxVolumeTranslation = e1.Value
 
-            Try
-                LiquidDensity_CorrectExpDataForPressure = (From el As XElement In data Select el Where el.Name = "LiquidDensity_CorrectExpDataForPressure").FirstOrDefault.Value
-            Catch ex As Exception
-            End Try
+            e1 = (From el As XElement In data Select el Where el.Name = "LiquidDensity_UsePenelouxVolumeTranslation").FirstOrDefault
+            If e1 IsNot Nothing Then LiquidViscosity_CorrectExpDataForPressure = e1.Value
 
-            Try
-                LiquidDensity_UsePenelouxVolumeTranslation = (From el As XElement In data Select el Where el.Name = "LiquidDensity_UsePenelouxVolumeTranslation").FirstOrDefault.Value
-            Catch ex As Exception
-            End Try
+            e1 = (From el As XElement In data Select el Where el.Name = "LiquidFugacity_UsePoyntingCorrectionFactor").FirstOrDefault
+            If e1 IsNot Nothing Then LiquidFugacity_UsePoyntingCorrectionFactor = e1.Value
 
-            Try
-                LiquidViscosityCalculationMode_Subcritical = [Enum].Parse(LiquidViscosityCalculationMode_Subcritical.GetType, (From el As XElement In data Select el Where el.Name = "LiquidViscosityCalculationMode_Subcritical").FirstOrDefault.Value)
-            Catch ex As Exception
-            End Try
+            e1 = (From el As XElement In data Select el Where el.Name = "SolidPhaseFugacity_UseIdealLiquidPhaseFugacity").FirstOrDefault
+            If e1 IsNot Nothing Then SolidPhaseFugacity_UseIdealLiquidPhaseFugacity = e1.Value
 
-            Try
-                LiquidViscosityCalculationMode_Supercritical = [Enum].Parse(LiquidViscosityCalculationMode_Supercritical.GetType, (From el As XElement In data Select el Where el.Name = "LiquidViscosityCalculationMode_Supercritical").FirstOrDefault.Value)
-            Catch ex As Exception
-            End Try
+            e1 = (From el As XElement In data Select el Where el.Name = "SolidPhaseEnthalpy_UsesCp").FirstOrDefault
+            If e1 IsNot Nothing Then SolidPhaseEnthalpy_UsesCp = e1.Value
 
-            Try
-                LiquidViscosity_CorrectExpDataForPressure = (From el As XElement In data Select el Where el.Name = "LiquidViscosity_CorrectExpDataForPressure").FirstOrDefault.Value
-            Catch ex As Exception
-            End Try
+            e1 = (From el As XElement In data Select el Where el.Name = "ActivityCoefficientModels_IgnoreMissingInteractionParameters").FirstOrDefault
+            If e1 IsNot Nothing Then ActivityCoefficientModels_IgnoreMissingInteractionParameters = e1.Value
 
-            Try
-                LiquidViscosity_MixingRule = [Enum].Parse(LiquidViscosity_MixingRule.GetType, (From el As XElement In data Select el Where el.Name = "LiquidViscosity_MixingRule").FirstOrDefault.Value)
-            Catch ex As Exception
-            End Try
+            e1 = (From el As XElement In data Select el Where el.Name = "IgnoreVaporFractionLimit").FirstOrDefault
+            If e1 IsNot Nothing Then IgnoreVaporFractionLimit = e1.Value
 
-            Try
-                VaporPhaseFugacityCalculationMode = [Enum].Parse(VaporPhaseFugacityCalculationMode.GetType, (From el As XElement In data Select el Where el.Name = "VaporPhaseFugacityCalculationMode").FirstOrDefault.Value)
-            Catch ex As Exception
-            End Try
+            e1 = (From el As XElement In data Select el Where el.Name = "IgnoreSalinityLimit").FirstOrDefault
+            If e1 IsNot Nothing Then IgnoreSalinityLimit = e1.Value
 
-            Try
-                SolidPhaseFugacityCalculationMethod = [Enum].Parse(SolidPhaseFugacityCalculationMethod.GetType, (From el As XElement In data Select el Where el.Name = "SolidPhaseFugacityCalculationMethod").FirstOrDefault.Value)
-            Catch ex As Exception
-            End Try
+            e1 = (From el As XElement In data Select el Where el.Name = "CalculateAdditionalMaterialStreamProperties").FirstOrDefault
+            If e1 IsNot Nothing Then CalculateAdditionalMaterialStreamProperties = e1.Value
 
-            Try
-                SolidPhaseFugacity_UseIdealLiquidPhaseFugacity = (From el As XElement In data Select el Where el.Name = "SolidPhaseFugacity_UseIdealLiquidPhaseFugacity").FirstOrDefault.Value
-            Catch ex As Exception
-            End Try
-
-            Try
-                SolidPhaseEnthalpy_UsesCp = (From el As XElement In data Select el Where el.Name = "SolidPhaseEnthalpy_UsesCp").FirstOrDefault.Value
-            Catch ex As Exception
-            End Try
-
-            Try
-                EnthalpyEntropyCpCvCalculationMode = [Enum].Parse(EnthalpyEntropyCpCvCalculationMode.GetType, (From el As XElement In data Select el Where el.Name = "EnthalpyEntropyCpCvCalculationMode").FirstOrDefault.Value)
-            Catch ex As Exception
-            End Try
-
-            Try
-                LiquidFugacity_UsePoyntingCorrectionFactor = (From el As XElement In data Select el Where el.Name = "LiquidFugacity_UsePoyntingCorrectionFactor").FirstOrDefault.Value
-            Catch ex As Exception
-            End Try
-
-            Try
-                ActivityCoefficientModels_IgnoreMissingInteractionParameters = (From el As XElement In data Select el Where el.Name = "ActivityCoefficientModels_IgnoreMissingInteractionParameters").FirstOrDefault.Value
-            Catch ex As Exception
-            End Try
-
-            Try
-                IgnoreVaporFractionLimit = (From el As XElement In data Select el Where el.Name = "IgnoreVaporFractionLimit").FirstOrDefault.Value
-            Catch ex As Exception
-            End Try
-
-            Try
-                IgnoreSalinityLimit = (From el As XElement In data Select el Where el.Name = "IgnoreSalinityLimit").FirstOrDefault.Value
-            Catch ex As Exception
-            End Try
+            If (From el As XElement In data Select el Where el.Name = "LiquidDensityCalculationMode_Supercritical").FirstOrDefault IsNot Nothing Then
+                Try
+                    LiquidDensityCalculationMode_Subcritical = [Enum].Parse(LiquidDensityCalculationMode_Subcritical.GetType, (From el As XElement In data Select el Where el.Name = "LiquidDensityCalculationMode_Supercritical").FirstOrDefault.Value)
+                    LiquidDensityCalculationMode_Supercritical = [Enum].Parse(LiquidDensityCalculationMode_Supercritical.GetType, (From el As XElement In data Select el Where el.Name = "LiquidDensityCalculationMode_Supercritical").FirstOrDefault.Value)
+                    LiquidViscosityCalculationMode_Subcritical = [Enum].Parse(LiquidViscosityCalculationMode_Subcritical.GetType, (From el As XElement In data Select el Where el.Name = "LiquidViscosityCalculationMode_Subcritical").FirstOrDefault.Value)
+                    LiquidViscosityCalculationMode_Supercritical = [Enum].Parse(LiquidViscosityCalculationMode_Supercritical.GetType, (From el As XElement In data Select el Where el.Name = "LiquidViscosityCalculationMode_Supercritical").FirstOrDefault.Value)
+                    LiquidViscosity_MixingRule = [Enum].Parse(LiquidViscosity_MixingRule.GetType, (From el As XElement In data Select el Where el.Name = "LiquidViscosity_MixingRule").FirstOrDefault.Value)
+                    VaporPhaseFugacityCalculationMode = [Enum].Parse(VaporPhaseFugacityCalculationMode.GetType, (From el As XElement In data Select el Where el.Name = "VaporPhaseFugacityCalculationMode").FirstOrDefault.Value)
+                    SolidPhaseFugacityCalculationMethod = [Enum].Parse(SolidPhaseFugacityCalculationMethod.GetType, (From el As XElement In data Select el Where el.Name = "SolidPhaseFugacityCalculationMethod").FirstOrDefault.Value)
+                    EnthalpyEntropyCpCvCalculationMode = [Enum].Parse(EnthalpyEntropyCpCvCalculationMode.GetType, (From el As XElement In data Select el Where el.Name = "EnthalpyEntropyCpCvCalculationMode").FirstOrDefault.Value)
+                Catch ex As Exception
+                End Try
+            End If
 
             Dim jsonoptions As New JsonSerializerSettings With {.StringEscapeHandling = StringEscapeHandling.EscapeHtml, .Formatting = Formatting.Indented}
 
             Try
-                ForcedSolids = JsonConvert.DeserializeObject(Of List(Of String))((From el As XElement In data Select el Where el.Name = "ForcedSolids").FirstOrDefault.Value)
+                Dim fselement = (From el As XElement In data Select el Where el.Name = "ForcedSolids").FirstOrDefault
+                If fselement IsNot Nothing AndAlso fselement.Value <> "" Then
+                    ForcedSolids = JsonConvert.DeserializeObject(Of List(Of String))(fselement.Value)
+                Else
+                    ForcedSolids = New List(Of String)
+                End If
             Catch ex As Exception
             End Try
 
             Try
-                PropertyOverrides = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))((From el As XElement In data Select el Where el.Name = "PropertyOverrides").FirstOrDefault.Value)
+                Dim porrelement = (From el As XElement In data Select el Where el.Name = "PropertyOverrides").FirstOrDefault
+                If porrelement IsNot Nothing AndAlso porrelement.Value <> "" Then
+                    PropertyOverrides = JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(porrelement.Value)
+                Else
+                    PropertyOverrides = New Dictionary(Of String, String)
+                End If
             Catch ex As Exception
             End Try
-
-            'Try
-            '    For Each xel As XElement In (From xel2 As XElement In data Select xel2 Where xel2.Name = "Parameters").FirstOrDefault.Elements.ToList
-            '        If m_par.ContainsKey(xel.@ID) Then m_par(xel.@ID) = Double.Parse(xel.@Value, ci) Else m_par.Add(xel.@ID, Double.Parse(xel.@Value, ci))
-            '    Next
-            'Catch ex As Exception
-            'End Try
 
             Select Case Me.ComponentName
 
@@ -11188,7 +11307,7 @@ Final3:
                         Dim pp As PengRobinsonPropertyPackage = Me
                         'pp.m_pr.InteractionParameters.Clear()
                         For Each xel As XElement In (From xel2 As XElement In data Select xel2 Where xel2.Name = "InteractionParameters").FirstOrDefault.Elements.ToList
-                            Dim ip As New Auxiliary.PR_IPData() With {.kij = Double.Parse(xel.@Value, ci)}
+                            Dim ip As New Auxiliary.PR_IPData() With {.Owner = Me.GetModel(), .kij = Double.Parse(xel.@Value, ci)}
                             Dim dic As New Dictionary(Of String, Auxiliary.PR_IPData)
                             dic.Add(xel.@Compound2, ip)
                             If Not pp.m_pr.InteractionParameters.ContainsKey(xel.@Compound1) Then
@@ -11249,7 +11368,7 @@ Final3:
                         Dim pp As SRKPropertyPackage = Me
                         'pp.m_pr.InteractionParameters.Clear()
                         For Each xel As XElement In (From xel2 As XElement In data Select xel2 Where xel2.Name = "InteractionParameters").FirstOrDefault.Elements.ToList
-                            Dim ip As New Auxiliary.PR_IPData() With {.kij = Double.Parse(xel.@Value, ci)}
+                            Dim ip As New Auxiliary.PR_IPData() With {.Owner = Me.GetModel(), .kij = Double.Parse(xel.@Value, ci)}
                             Dim dic As New Dictionary(Of String, Auxiliary.PR_IPData)
                             dic.Add(xel.@Compound2, ip)
                             If Not pp.m_pr.InteractionParameters.ContainsKey(xel.@Compound1) Then
@@ -11462,6 +11581,46 @@ Final3:
 
             End Select
 
+            Dim elf = (From xel As XElement In data Select xel Where xel.Name = "FlashSettings").SingleOrDefault
+
+            If Not elf Is Nothing Then
+
+                FlashSettings.Clear()
+
+                For Each xel3 In elf.Elements
+                    Try
+                        Dim esname = [Enum].Parse(Interfaces.Enums.Helpers.GetEnumType("DWSIM.Interfaces.Enums.FlashSetting"), xel3.@Name)
+                        FlashSettings.Add(esname, xel3.@Value)
+                    Catch ex As Exception
+                    End Try
+                Next
+
+                If Not FlashSettings.ContainsKey(Interfaces.Enums.FlashSetting.PVFlash_FixedDampingFactor) Then
+                    FlashSettings.Add(Interfaces.Enums.FlashSetting.PVFlash_FixedDampingFactor, 1.0.ToString(Globalization.CultureInfo.InvariantCulture))
+                End If
+                If Not FlashSettings.ContainsKey(Interfaces.Enums.FlashSetting.PVFlash_MaximumTemperatureChange) Then
+                    FlashSettings.Add(Interfaces.Enums.FlashSetting.PVFlash_MaximumTemperatureChange, 10.0.ToString(Globalization.CultureInfo.InvariantCulture))
+                End If
+                If Not FlashSettings.ContainsKey(Interfaces.Enums.FlashSetting.PVFlash_TemperatureDerivativeEpsilon) Then
+                    FlashSettings.Add(Interfaces.Enums.FlashSetting.PVFlash_TemperatureDerivativeEpsilon, 0.1.ToString(Globalization.CultureInfo.InvariantCulture))
+                End If
+                If Not FlashSettings.ContainsKey(Interfaces.Enums.FlashSetting.ST_Number_of_Random_Tries) Then
+                    FlashSettings.Add(Interfaces.Enums.FlashSetting.ST_Number_of_Random_Tries, 20)
+                End If
+                If Not FlashSettings.ContainsKey(Interfaces.Enums.FlashSetting.CheckIncipientLiquidForStability) Then
+                    FlashSettings.Add(Interfaces.Enums.FlashSetting.CheckIncipientLiquidForStability, False)
+                End If
+                If Not FlashSettings.ContainsKey(Interfaces.Enums.FlashSetting.PHFlash_MaximumTemperatureChange) Then
+                    FlashSettings.Add(Interfaces.Enums.FlashSetting.PHFlash_MaximumTemperatureChange, 30.0.ToString(Globalization.CultureInfo.InvariantCulture))
+                End If
+                If Not FlashSettings.ContainsKey(Interfaces.Enums.FlashSetting.PTFlash_DampingFactor) Then
+                    FlashSettings.Add(Interfaces.Enums.FlashSetting.PTFlash_DampingFactor, 1.0.ToString(Globalization.CultureInfo.InvariantCulture))
+                End If
+                If Not FlashSettings.ContainsKey(Interfaces.Enums.FlashSetting.ForceEquilibriumCalculationType) Then
+                    FlashSettings.Add(Interfaces.Enums.FlashSetting.ForceEquilibriumCalculationType, "Default")
+                End If
+            End If
+
         End Function
 
         Public Overridable Function SaveData() As System.Collections.Generic.List(Of System.Xml.Linq.XElement) Implements Interfaces.ICustomXMLSerialization.SaveData
@@ -11506,6 +11665,7 @@ Final3:
                 .Add(New XElement("ActivityCoefficientModels_IgnoreMissingInteractionParameters", ActivityCoefficientModels_IgnoreMissingInteractionParameters))
                 .Add(New XElement("IgnoreVaporFractionLimit", IgnoreVaporFractionLimit))
                 .Add(New XElement("IgnoreSalinityLimit", IgnoreSalinityLimit))
+                .Add(New XElement("CalculateAdditionalMaterialStreamProperties", CalculateAdditionalMaterialStreamProperties))
 
                 Dim jsonoptions As New JsonSerializerSettings With {.StringEscapeHandling = StringEscapeHandling.EscapeHtml, .Formatting = Formatting.Indented}
 
@@ -11766,6 +11926,12 @@ Final3:
 
             End With
 
+            elements.Add(New XElement("FlashSettings"))
+
+            For Each item In FlashSettings
+                elements(elements.Count - 1).Add(New XElement("Setting", New XAttribute("Name", item.Key), New XAttribute("Value", item.Value)))
+            Next
+
             Return elements
 
         End Function
@@ -11811,10 +11977,20 @@ Final3:
             Return Clone()
         End Function
 
-        Public Property FlashAlgorithm As Interfaces.IFlashAlgorithm Implements IPropertyPackage.FlashAlgorithm
+        <XmlIgnore> Public Property FlashAlgorithm As Interfaces.IFlashAlgorithm Implements IPropertyPackage.FlashAlgorithm
 
         Public Overridable Sub DisplayEditingForm() Implements IPropertyPackage.DisplayEditingForm
 
+        End Sub
+
+        Public Sub DisplayFlashConfigForm()
+            Dim fset As New FlashAlgorithmConfig
+            fset.Settings = FlashSettings
+            If Settings.IsRunningOnMono() Then
+                fset.ShowDialog()
+            Else
+                fset.Show()
+            End If
         End Sub
 
         Public Sub DisplayAdvancedEditingForm() Implements IPropertyPackage.DisplayAdvancedEditingForm
@@ -11936,6 +12112,16 @@ Final3:
             Array.Copy(arr.ToArray(), arr2, arr.Count)
             Return arr2
         End Function
+
+        ''' <summary>
+        ''' Sets the Phase Equilibria Calculation mode for this instance. Default behavior is SVLLE. 
+        ''' </summary>
+        ''' <param name="mode">Recognized values: 'Default', 'VLE', 'VLLE', 'SVLE' and 'SVLLE'.</param>
+        Public Sub SetPhaseEquilibriaCalculationMode(mode As String)
+
+            FlashSettings(FlashSetting.ForceEquilibriumCalculationType) = mode
+
+        End Sub
 
 #End Region
 

@@ -344,4 +344,83 @@ namespace DWSIM.Automation
             return Converter.ConvertToSI(units, d);
         }
     }
+
+    partial class Automation2
+    {
+        /// <summary>
+        /// Add userdefined UOMs for automation
+        /// </summary>
+        /// <param name="serializedUnits"></param>
+        public Units AddUnits(byte[] serializedUnits)
+        {
+            using (var ms = new MemoryStream(serializedUnits))
+            {
+                var su = new Units();
+                var mySerializer = new BinaryFormatter(null, new System.Runtime.Serialization.StreamingContext());
+                mySerializer.Binder = UnitsVersionBinder.Instance;
+
+                try
+                {
+                    //Debugger.Break();
+                    su = (Units) mySerializer.Deserialize(ms);
+                    if (su != null)
+                    {
+                        Units.PredefinedUserUnits[su.Name] = su;
+                        return su;
+                    }
+                }
+                catch (Exception e)
+                {
+                    //Debugger.Break();
+
+                    throw;
+                }
+            }
+
+            return null;
+        }
+
+        public double ConvertFromSI(double d, string units)
+        {
+            return Converter.ConvertFromSI(units, d);
+        }
+
+        public double ConvertToSI(double d, string units)
+        {
+            return Converter.ConvertToSI(units, d);
+        }
+
+        /// <summary>
+        /// Выполнить подстройку
+        /// </summary>
+        /// <param name="formC"></param>
+        /// <param name="myADJ">Регулятор</param>
+        /// <param name="minValue">Минимальная граница манипулируемого объекта</param>
+        /// <param name="maxValue">Максимальная граница манипулируемого объекта</param>
+        /// <param name="tolerance">Допустимая погрешность</param>
+        /// <returns></returns>
+        public bool Adjust(IFlowsheet formC, Adjust myADJ, double? minValue, double? maxValue, double? tolerance, out string errorText)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CloseWithoutSave(IFlowsheet flowsheet)
+        {
+            GlobalSettings.Settings.AutomationMode = true;
+            if (flowsheet == null) throw new ArgumentNullException(nameof(flowsheet));
+
+           
+            if (flowsheet is UI.Forms.Flowsheet ffs)
+            {
+                //flowsheet.Reset(); - Not Implemented in this version of IFlowsheet
+                ffs.m_overrideCloseQuestion = true; //supress closing dialog
+                ffs.Close();
+            }
+            else
+            {
+                //flowsheet.Reset(); 
+                throw new NotSupportedException("[Automation.CloseWithoutSave]flowsheet type = "+ flowsheet.GetType());
+            }
+        }
+    }
 }

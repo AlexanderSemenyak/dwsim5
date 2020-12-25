@@ -42,19 +42,21 @@ Public Class PropertyPackageSettingsEditingControl
 
         chkLiqFugPoynt.Checked = PropPack.LiquidFugacity_UsePoyntingCorrectionFactor
 
-        chkSolidIdealLiqFug.Checked = PropPack.SolidPhaseFugacity_UseIdealLiquidPhaseFugacity
-
         chkUseSolidCp.Checked = PropPack.SolidPhaseEnthalpy_UsesCp
 
         chkVapFugIdeal.Checked = Not PropPack.VaporPhaseFugacityCalculationMode
-
-        chkSolidFugIdeal.Checked = PropPack.SolidPhaseFugacityCalculationMethod
 
         chkIgnoreIPs.Checked = PropPack.ActivityCoefficientModels_IgnoreMissingInteractionParameters
 
         chkIgnoreSalLim.Checked = PropPack.IgnoreSalinityLimit
 
         chkIgnoreVapFracLim.Checked = PropPack.IgnoreVaporFractionLimit
+
+        chkDoPhaseId.Checked = PropPack.FlashSettings(Interfaces.Enums.FlashSetting.UsePhaseIdentificationAlgorithm)
+
+        chkCalcBubbleDew.Checked = PropPack.FlashSettings(Interfaces.Enums.FlashSetting.CalculateBubbleAndDewPoints)
+
+        chkCalcAdditionalProps.Checked = PropPack.CalculateAdditionalMaterialStreamProperties
 
         AddHandler cbLiqDens.SelectedIndexChanged, Sub()
                                                        PropPack.LiquidDensityCalculationMode_Subcritical = cbLiqDens.SelectedIndex
@@ -102,21 +104,25 @@ Public Class PropertyPackageSettingsEditingControl
                                                        PropPack.LiquidViscosity_CorrectExpDataForPressure = chkLiqViscPCorr.Checked
                                                    End Sub
 
-        AddHandler chkSolidIdealLiqFug.CheckedChanged, Sub()
-                                                           PropPack.SolidPhaseFugacity_UseIdealLiquidPhaseFugacity = chkSolidIdealLiqFug.Checked
-                                                       End Sub
-
         AddHandler chkVapFugIdeal.CheckedChanged, Sub()
                                                       PropPack.VaporPhaseFugacityCalculationMode = Not chkVapFugIdeal.Checked
                                                   End Sub
 
-        AddHandler chkSolidFugIdeal.CheckedChanged, Sub()
-                                                        PropPack.SolidPhaseFugacityCalculationMethod = chkSolidFugIdeal.Checked
-                                                    End Sub
-
         AddHandler chkUseSolidCp.CheckedChanged, Sub()
                                                      PropPack.SolidPhaseEnthalpy_UsesCp = chkUseSolidCp.Checked
                                                  End Sub
+
+        AddHandler chkCalcAdditionalProps.CheckedChanged, Sub()
+                                                              PropPack.CalculateAdditionalMaterialStreamProperties = chkCalcAdditionalProps.Checked
+                                                          End Sub
+
+        AddHandler chkDoPhaseId.CheckedChanged, Sub()
+                                                    PropPack.FlashSettings(Interfaces.Enums.FlashSetting.UsePhaseIdentificationAlgorithm) = chkDoPhaseId.Checked
+                                                End Sub
+
+        AddHandler chkCalcBubbleDew.CheckedChanged, Sub()
+                                                        PropPack.FlashSettings(Interfaces.Enums.FlashSetting.CalculateBubbleAndDewPoints) = chkCalcBubbleDew.Checked
+                                                    End Sub
     End Sub
 
 End Class

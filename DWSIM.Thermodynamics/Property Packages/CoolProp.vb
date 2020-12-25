@@ -1523,7 +1523,7 @@ Namespace PropertyPackages
             Dim fugcoeff(n) As Double
 
             If st = State.Liquid Then
-                Dim Tc As Object = Me.RET_VTC()
+                Dim Tc As Double() = Me.RET_VTC()
                 For i = 0 To n
                     If T / Tc(i) >= 1 Then
                         IObj?.SetCurrent()
@@ -1625,7 +1625,11 @@ Namespace PropertyPackages
                 Me.CurrentMaterialStream.Phases(phaseID).Properties.molarflow = result
                 result = result * Me.AUX_MMM(Phase) / 1000
                 Me.CurrentMaterialStream.Phases(phaseID).Properties.massflow = result
-                result = phasemolarfrac * overallmolarflow * Me.AUX_MMM(Phase) / 1000 / Me.CurrentMaterialStream.Phases(0).Properties.massflow.GetValueOrDefault
+                If Me.CurrentMaterialStream.Phases(0).Properties.massflow.GetValueOrDefault > 0 Then
+                    result = phasemolarfrac * overallmolarflow * Me.AUX_MMM(Phase) / 1000 / Me.CurrentMaterialStream.Phases(0).Properties.massflow.GetValueOrDefault
+                Else
+                    result = 0
+                End If
                 Me.CurrentMaterialStream.Phases(phaseID).Properties.massfraction = result
                 IObj?.SetCurrent
                 Me.DW_CalcCompVolFlow(phaseID)

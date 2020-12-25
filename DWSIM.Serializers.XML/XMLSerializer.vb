@@ -248,8 +248,8 @@ Public Class XMLSerializer
                                             val = New SkiaSharp.SKColor(val2.R, val2.G, val2.B, val2.A)
                                         Catch ex As Exception
                                         End Try
-                                        typeAccessor(obj,propname) = val ' propertyInfo.SetValue(obj, val, Nothing)
                                     End If
+                                    typeAccessor(obj,propname) = val ' propertyInfo.SetValue(obj, val, Nothing)
                                 End If
                             ElseIf TypeOf propertyValue Is ArrayList Then
                                 'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault
@@ -462,8 +462,8 @@ Public Class XMLSerializer
                                         val = New SkiaSharp.SKColor(val2.R, val2.G, val2.B, val2.A)
                                     Catch ex As Exception
                                     End Try
-                                    typeAccessor(obj,propname) = val ' fieldInfo.SetValue(obj, val)
                                 End If
+                                typeAccessor(obj,propname) = val ' fieldInfo.SetValue(obj, val)
                             End If
                         ElseIf TypeOf fieldValue Is ArrayList Then
                             'Dim xel As XElement = (From xmlprop In xmlprops Select xmlprop Where xmlprop.Name = propname).FirstOrDefault

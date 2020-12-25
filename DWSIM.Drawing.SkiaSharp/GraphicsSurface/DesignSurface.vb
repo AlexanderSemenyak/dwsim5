@@ -65,6 +65,8 @@ Public Class GraphicsSurface
 
     Public NetworkMode As Boolean = False
 
+    Private PrevPositions As New Dictionary(Of String, Tuple(Of Point, Boolean))
+
     Public Property DefaultTypeFace As SKTypeface
 
     Public Sub New()
@@ -319,7 +321,16 @@ Public Class GraphicsSurface
 
                     Else
 
-                        dobj.Draw(DrawingCanvas)
+                        Try
+                            dobj.Draw(DrawingCanvas)
+                        Catch ex As Exception
+                            Using p As New SKPaint
+                                p.Color = SKColors.Black
+                                p.StrokeWidth = 1
+                                p.IsStroke = True
+                                DrawingCanvas.DrawText(String.Format("Error drawing {0}: {1}", dobj.Tag, ex.Message), dobj.X, dobj.Y, p)
+                            End Using
+                        End Try
 
                     End If
 
@@ -506,7 +517,7 @@ Public Class GraphicsSurface
 
     End Sub
 
-    Public Sub OffsetAll(deltax As Integer, deltay As Integer)
+    Public Sub OffsetAll(deltax As Single, deltay As Single)
 
         If deltax > 10000000000.0 Or deltay > 10000000000.0 Then Exit Sub
 
@@ -642,8 +653,8 @@ Public Class GraphicsSurface
 
                             For Each gr As IGraphicObject In Me.SelectedObjects.Values
                                 Dim p As SKPoint = New SKPoint(gr.X, gr.Y)
-                                p.X += (x - dragStart.X) / Me.Zoom
-                                p.Y += (y - dragStart.Y) / Me.Zoom
+                                p.X += (x - dragStart.X) / Zoom
+                                p.Y += (y - dragStart.Y) / Zoom
                                 gr.X = p.X
                                 gr.Y = p.Y
                             Next
@@ -965,6 +976,26 @@ Public Class GraphicsSurface
             Dim OutConSlot As IConnectionPoint = Nothing
             If Not gObjFrom Is Nothing Then
                 If Not gObjTo Is Nothing Then
+                    If gObjFrom.ObjectType = ObjectType.MaterialStream AndAlso gObjFrom.InputConnectors(0).IsAttached Then
+                        If gObjTo.Name = gObjFrom.InputConnectors(0).AttachedConnector.AttachedFrom.Name Then
+                            Throw New Exception("This connection is not allowed.")
+                        End If
+                    End If
+                    If gObjFrom.ObjectType = ObjectType.EnergyStream AndAlso gObjFrom.InputConnectors(0).IsAttached Then
+                        If gObjTo.Name = gObjFrom.InputConnectors(0).AttachedConnector.AttachedFrom.Name Then
+                            Throw New Exception("This connection is not allowed.")
+                        End If
+                    End If
+                    If gObjTo.ObjectType = ObjectType.MaterialStream AndAlso gObjTo.OutputConnectors(0).IsAttached Then
+                        If gObjFrom.Name = gObjTo.OutputConnectors(0).AttachedConnector.AttachedTo.Name Then
+                            Throw New Exception("This connection is not allowed.")
+                        End If
+                    End If
+                    If gObjTo.ObjectType = ObjectType.EnergyStream AndAlso gObjTo.OutputConnectors(0).IsAttached Then
+                        If gObjFrom.Name = gObjTo.OutputConnectors(0).AttachedConnector.AttachedTo.Name Then
+                            Throw New Exception("This connection is not allowed.")
+                        End If
+                    End If
                     If gObjFrom.ObjectType = ObjectType.MaterialStream And gObjTo.ObjectType = ObjectType.MaterialStream Then
                         Throw New Exception("This connection is not allowed.")
                     ElseIf gObjFrom.ObjectType = ObjectType.EnergyStream And gObjTo.ObjectType = ObjectType.EnergyStream Then
@@ -1046,15 +1077,15 @@ Public Class GraphicsSurface
                     Else
                         Select Case gObjFrom.ObjectType
                             Case ObjectType.Cooler, ObjectType.Pipe, ObjectType.Expander, ObjectType.ShortcutColumn, ObjectType.DistillationColumn, ObjectType.AbsorptionColumn,
-                                ObjectType.ReboiledAbsorber, ObjectType.RefluxedAbsorber, ObjectType.OT_EnergyRecycle, ObjectType.ComponentSeparator, ObjectType.SolidSeparator,
-                                ObjectType.Filter, ObjectType.CustomUO, ObjectType.CapeOpenUO, ObjectType.FlowsheetUO, ObjectType.External
+                            ObjectType.ReboiledAbsorber, ObjectType.RefluxedAbsorber, ObjectType.OT_EnergyRecycle, ObjectType.ComponentSeparator, ObjectType.SolidSeparator,
+                            ObjectType.Filter, ObjectType.CustomUO, ObjectType.CapeOpenUO, ObjectType.FlowsheetUO, ObjectType.External
                                 GoTo 100
                             Case Else
                                 Throw New Exception("This connection is not allowed.")
                         End Select
 100:                    If gObjFrom.ObjectType <> ObjectType.CapeOpenUO And gObjFrom.ObjectType <> ObjectType.CustomUO And gObjFrom.ObjectType <> ObjectType.DistillationColumn _
-                            And gObjFrom.ObjectType <> ObjectType.AbsorptionColumn And gObjFrom.ObjectType <> ObjectType.OT_EnergyRecycle And gObjFrom.ObjectType <> ObjectType.External _
-                                                        And gObjFrom.ObjectType <> ObjectType.RefluxedAbsorber And gObjFrom.ObjectType <> ObjectType.ReboiledAbsorber Then
+                        And gObjFrom.ObjectType <> ObjectType.AbsorptionColumn And gObjFrom.ObjectType <> ObjectType.OT_EnergyRecycle And gObjFrom.ObjectType <> ObjectType.External _
+                                                    And gObjFrom.ObjectType <> ObjectType.RefluxedAbsorber And gObjFrom.ObjectType <> ObjectType.ReboiledAbsorber Then
                             If Not gObjFrom.EnergyConnector.IsAttached Then
                                 StartPos.X = gObjFrom.EnergyConnector.Position.X
                                 StartPos.Y = gObjFrom.EnergyConnector.Position.Y
@@ -1461,6 +1492,8 @@ Public Class GraphicsSurface
         Dim graph As New GeometryGraph
         Dim rec1 As ICurve
 
+        PrevPositions = New Dictionary(Of String, Tuple(Of Point, Boolean))
+
         For Each obj In DrawingObjects
             If Not obj.IsConnector Then
                 Select Case obj.ObjectType
@@ -1470,6 +1503,7 @@ Public Class GraphicsSurface
                         rec1 = Microsoft.Msagl.Core.Geometry.Curves.CurveFactory.CreateRectangle(obj.Width, obj.Height, New Microsoft.Msagl.Core.Geometry.Point(obj.X + obj.Width / 2, obj.Y + obj.Height / 2))
                         Dim n1 = New Node(rec1, obj.Name)
                         graph.Nodes.Add(n1)
+                        PrevPositions.Add(obj.Name, New Tuple(Of Point, Boolean)(New Point(obj.X, obj.Y), obj.FlippedH))
                 End Select
             End If
         Next
@@ -1544,14 +1578,14 @@ Public Class GraphicsSurface
             End If
         Next
 
-        Dim settings = New Microsoft.Msagl.Layout.Incremental.FastIncrementalLayoutSettings()
+        Dim settings = New FastIncrementalLayoutSettings()
         settings.AvoidOverlaps = True
         settings.PackingMethod = PackingMethod.Compact
-        settings.NodeSeparation = 50 * DistanceFactor
+        settings.NodeSeparation = 100 * DistanceFactor
         settings.RouteEdges = True
         settings.RespectEdgePorts = True
         Dim eset = New Microsoft.Msagl.Core.Routing.EdgeRoutingSettings()
-        eset.EdgeRoutingMode = Microsoft.Msagl.Core.Routing.EdgeRoutingMode.Rectilinear
+        eset.EdgeRoutingMode = Microsoft.Msagl.Core.Routing.EdgeRoutingMode.SplineBundling
         settings.EdgeRoutingSettings = eset
 
         Dim layout = New InitialLayout(graph, settings)
@@ -1585,11 +1619,43 @@ Public Class GraphicsSurface
                         Else
                             obj.FlippedH = False
                         End If
+                    ElseIf obj.ObjectType = ObjectType.EnergyStream Then
+                        If obj.OutputConnectors(0).IsAttached Then
+                            Dim dest = obj.OutputConnectors(0).AttachedConnector.AttachedTo
+                            If dest.FlippedH Then
+                                obj.X += dest.Width * 1.3
+                            Else
+                                obj.X -= dest.Width * 1.3
+                            End If
+                            If dest.X < obj.X Then
+                                obj.FlippedH = True
+                            Else
+                                obj.FlippedH = False
+                            End If
+                        End If
                     End If
                 End If
             End If
         Next
 
     End Sub
+
+    Public Sub RestoreLayout()
+
+        If PrevPositions.Count > 0 Then
+
+            For Each item In PrevPositions
+                Dim obj = DrawingObjects.Where(Function(x) x.Name = item.Key).FirstOrDefault()
+                If obj IsNot Nothing Then
+                    obj.X = item.Value.Item1.X
+                    obj.Y = item.Value.Item1.Y
+                    obj.FlippedH = item.Value.Item2
+                End If
+            Next
+
+        End If
+
+    End Sub
+
 
 End Class

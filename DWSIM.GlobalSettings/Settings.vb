@@ -60,7 +60,16 @@ Public Class Settings
     End Property
     Public Shared Property CAPEOPENMode As Boolean = False
     Public Shared Property ExcelMode As Boolean = False
-    Public Shared Property MaxDegreeOfParallelism As Integer = -1
+
+    Public Shared Property MaxDegreeOfParallelism As Integer
+        Get
+            Return -1
+        End Get
+        Set(value As Integer)
+            'do nothing
+        End Set
+    End Property
+
     Public Shared Property UseSIMDExtensions As Boolean = False
     Public Shared Property EnableParallelProcessing As Boolean = True
     Public Shared Property EnableGPUProcessing As Boolean = False
@@ -69,7 +78,7 @@ Public Class Settings
     Public Shared Property DebugLevel As Integer = 0
     Public Shared Property MaxThreadMultiplier As Integer = 8
     Public Shared Property TaskScheduler As Integer = 0
-    Public Shared Property SolverTimeoutSeconds As Integer = 300
+    Public Shared Property SolverTimeoutSeconds As Integer = 15 * 60
     Public Shared Property SolverMode As Integer = 0
     Public Shared Property ServiceBusConnectionString As String = ""
     Public Shared Property CalculatorStopRequested As Boolean

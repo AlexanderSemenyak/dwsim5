@@ -196,13 +196,6 @@ Namespace Enums
         Truncated_Newton = 1
         Simplex = 2
         IPOPT = 3
-        ParticleSwarm = 4
-        LocalUnimodalSampling = 5
-        GradientDescent = 6
-        DifferentialEvolution = 7
-        ParticleSwarmOptimization = 8
-        ManyOptimizingLiaisons = 9
-        Mesh = 10
     End Enum
 
     Public Enum AccelMethod
@@ -234,6 +227,8 @@ Namespace Enums
         CoolProp_Incompressibles = 18
         CoolProp_IncompressibleMixtures = 19
         UserDefined = 20
+        Gibbs_Minimization_Multiphase = 21
+        Universal = 22
     End Enum
 
     Public Enum FlashSetting
@@ -275,6 +270,10 @@ Namespace Enums
         CheckIncipientLiquidForStability = 22
 
         PHFlash_MaximumTemperatureChange = 23
+
+        PTFlash_DampingFactor = 24
+
+        ForceEquilibriumCalculationType = 25
 
     End Enum
 
@@ -326,6 +325,12 @@ Namespace Enums
         Volume_and_Entropy = 8
     End Enum
 
+    Public Enum FlowSpec
+        Mass = 0
+        Mole = 1
+        Volumetric = 2
+    End Enum
+
     Public Enum CompositionBasis
         Molar_Fractions
         Mass_Fractions
@@ -374,6 +379,11 @@ Namespace Enums
     Public Enum ReactionKineticType
         Arrhenius = 0
         UserDefined = 1
+    End Enum
+
+    Public Enum ReactionKinetics
+        Expression = 0
+        PythonScript = 1
     End Enum
 
     Public Enum KOpt

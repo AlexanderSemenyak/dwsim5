@@ -17,7 +17,6 @@
 '    along with DWSIM.  If not, see <http://www.gnu.org/licenses/>.
 
 Imports System.Math
-Imports DWSIM.Interfaces.My.Resources
 
 Namespace PropertyPackages.Auxiliary.FlashAlgorithms
 
@@ -72,20 +71,22 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-            Inspector.Host.CheckAndAdd(IObj, "", "Flash_PT", Name & " (PT Flash)", SolutionInspector.Pressure_Temperature_Flash_Algorithm_Routine, True)
+            Inspector.Host.CheckAndAdd(IObj, "", "Flash_PT", Name & " (PT Flash)", "Pressure-Temperature Flash Algorithm Routine", True)
 
-            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
+            IObj?.Paragraphs.Add(String.Format("<h2>Input Parameters</h2>"))
 
-            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Temperature_0_K, T))
-            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
-            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Compounds_0, PP.RET_VNAMES.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Mole_Fractions_0, Vz.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format("Temperature: {0} K", T))
+            IObj?.Paragraphs.Add(String.Format("Pressure: {0} Pa", P))
+            IObj?.Paragraphs.Add(String.Format("Compounds: {0}", PP.RET_VNAMES.ToMathArrayString))
+            IObj?.Paragraphs.Add(String.Format("Mole Fractions: {0}", Vz.ToMathArrayString))
 
             Dim V, L1, L2, S, Vy(), Vx1(), Vx2(), Vs() As Double
 
             Dim result As Object
 
             Dim names = PP.RET_VNAMES
+
+            Dim n = Vz.Length - 1
 
             If PP.ForcedSolids.Count > 0 Then
 
@@ -115,16 +116,30 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
 
             Else
 
+                Dim Vz2 = Vz.Clone
+                Vs = PP.RET_NullVector
+
+                Dim VTfus As Double() = PP.RET_VTF
+
+                For i = 0 To n
+                    If Vz(i) > 0.0 And T < VTfus(i) Then
+                        Vs(i) = Vz(i)
+                        Vz2(i) = 0.0
+                    End If
+                Next
+
+                S = Vs.Sum
+
                 IObj?.SetCurrent
 
-                result = nl1.Flash_PT(Vz, P, T, PP)
+                result = nl1.Flash_PT(Vz2, P, T, PP)
 
-                L1 = result(0)
-                V = result(1)
+                L1 = result(0) * (1 - S)
+                V = result(1) * (1 - S)
                 Vx1 = result(2)
                 Vy = result(3)
-                Vx2 = PP.RET_NullVector
-                Vs = PP.RET_NullVector
+                L2 = result(5) * (1 - S)
+                Vx2 = result(6)
 
             End If
 
@@ -132,11 +147,9 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
 
             If L1 = 0 And S = 0.0 And (FlashSettings(Interfaces.Enums.FlashSetting.CheckIncipientLiquidForStability)) Then
 
-                Dim stresult As Object = StabTest(T, P, result(2), PP.RET_VTC, PP)
+                Dim stresult As Object = StabTest(T, P, Vx1, PP.RET_VTC, PP)
 
                 If stresult(0) = False Then
-
-                    Dim n = Vz.Length - 1
 
                     Dim nlflash As New NestedLoops()
 
@@ -192,7 +205,6 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
 
                     ' liquid phase NOT stable. proceed to three-phase flash.
 
-                    Dim n As Integer = Vz.Length - 1
                     Dim k As Integer = 0
 
                     Dim vx2est(n), fcl(n), fcv(n) As Double
@@ -346,495 +358,21 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
 
         Public Overrides Function Flash_PH(ByVal Vz As Double(), ByVal P As Double, ByVal H As Double, ByVal Tref As Double, ByVal PP As PropertyPackages.PropertyPackage, Optional ByVal ReuseKI As Boolean = False, Optional ByVal PrevKi As Double() = Nothing) As Object
 
-            nl1 = New NestedLoops
-            nl2 = New NestedLoops3PV3
-            nl3 = New NestedLoopsSLE With {.SolidSolution = False}
-
-            Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
-
-            Inspector.Host.CheckAndAdd(IObj, "", "Flash_PH", Name & " (PH Flash)", "Pressure-Enthalpy Flash Algorithm Routine")
-
-            IObj?.Paragraphs.Add("The PH Flash uses two nested loops (hence the name) to calculate temperature and phase distribution. 
-                                    The external one converges the temperature, while the internal one finds the phase distribution for the current temperature estimate in the external loop.
-                                    The algorithm converges when the calculated overall enthalpy for the tentative phase distribution and temperature matches the specified one.")
-
-            IObj?.SetCurrent()
-
-            Dim d1, d2 As Date, dt As TimeSpan
-            Dim j, n, ecount As Integer
-
-            d1 = Date.Now
-
-            n = Vz.Length - 1
-
-            Dim maxitINT As Integer = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Maximum_Number_Of_Internal_Iterations)
-            Dim maxitEXT As Integer = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Maximum_Number_Of_External_Iterations)
-            Dim tolINT As Double = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Internal_Loop_Tolerance).ToDoubleFromInvariant
-            Dim tolEXT As Double = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_External_Loop_Tolerance).ToDoubleFromInvariant
-
-            Dim Tmin, Tmax, epsilon(2) As Double
-
-            Tmax = 10000.0#
-            Tmin = 20.0#
-
-            epsilon(0) = 0.1
-            epsilon(1) = 1
-            epsilon(2) = 10
-
-            Dim fx, fx2, dfdx, x1, dx, T As Double
-
-            Dim cnt As Integer
-
-            If Tref = 0 Then Tref = 298.15
-
-            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
-
-            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
-            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Enthalpy_0_kJ_kg, H))
-            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Compounds_0, PP.RET_VNAMES.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Mole_Fractions_0, Vz.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Initial_estimates_for_T_0_K, Tref))
-
-            Dim pvmode As Boolean = False
-
-            Dim pvflashresult As Object = Nothing
-
-            Dim Vresult As Double = 0.0
-
-            If PP.ForcedSolids.Count > 0 Then
-
-                Dim Hb, Hd As Double
-
-                If Settings.EnableParallelProcessing Then
-
-                    Dim task1 = Task.Factory.StartNew(Sub()
-                                                          Hb = H_Error("PV", 0, H, P, Vz, PP)(0)
-                                                      End Sub,
-                                                      Settings.TaskCancellationTokenSource.Token,
-                                                      TaskCreationOptions.None,
-                                                     Settings.AppTaskScheduler)
-                    Dim task2 = Task.Factory.StartNew(Sub()
-                                                          Hd = H_Error("PV", 1, H, P, Vz, PP)(0)
-                                                      End Sub,
-                                                  Settings.TaskCancellationTokenSource.Token,
-                                                  TaskCreationOptions.None,
-                                                 Settings.AppTaskScheduler)
-                    Task.WaitAll(task1, task2)
-
-                Else
-                    IObj?.SetCurrent()
-                    Hb = H_Error("PV", 0, H, P, Vz, PP)(0)
-                    IObj?.SetCurrent()
-                    Hd = H_Error("PV", 1, H, P, Vz, PP)(0)
-                End If
-
-                Dim brent As New DWSIM.MathOps.MathEx.BrentOpt.Brent
-
-                If Hb > 0 And Hd < 0 Then
-
-                    pvmode = True
-
-                    'partial vaporization
-
-                    Dim H1, H2, V1, V2 As Double
-                    ecount = 0
-                    Dim Vx = 0.5
-                    Dim res As Object()
-                    H1 = Hb
-                    Do
-
-                        ecount += 1
-                        V1 = Vx
-                        If V1 < 1 Then
-                            V2 = V1 + 0.01
-                        Else
-                            V2 = V1 - 0.01
-                        End If
-                        IObj?.SetCurrent()
-                        H2 = H_Error("PV", V2, H, P, Vz, PP)(0)
-                        Vx = V1 + (V2 - V1) * (0 - H1) / (H2 - H1)
-                        If Vx < 0 Then Vx = 0.0#
-                        If Vx > 1 Then Vx = 1.0#
-                        IObj?.SetCurrent()
-                        res = H_Error("PV", Vx, H, P, Vz, PP)
-                        H1 = res(0)
-                        pvflashresult = res(1)
-                    Loop Until Abs(H1) < tolINT Or ecount > maxitEXT
-
-                Else
-
-                    brent.DefineFuncDelegate(Function(x, oa)
-                                                 Return H_Error("PT", x, H, P, Vz, PP)(0)
-                                             End Function)
-
-                    T = brent.BrentOpt(Tref * 0.3, Tref * 2, 10, tolEXT, maxitEXT, Nothing)
-
-                End If
-
-            Else
-
-                For j = 0 To 1
-
-                    cnt = 0
-                    x1 = Tref
-
-                    Do
-
-                        IObj?.SetCurrent()
-
-                        Dim IObj2 As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
-
-                        Inspector.Host.CheckAndAdd(IObj2, "", "Flash_PH", "PH Flash Newton Iteration", "Pressure-Enthalpy Flash Algorithm Convergence Iteration Step")
-
-                        IObj2?.Paragraphs.Add(String.Format("This is the Newton convergence loop iteration #{0}. DWSIM will use the current value of T to calculate the phase distribution by calling the Flash_PT routine.", cnt))
-
-                        IObj2?.SetCurrent()
-                        fx = H_Error("PT", x1, H, P, Vz, PP)(0)
-                        IObj2?.SetCurrent()
-                        fx2 = H_Error("PT", x1 + epsilon(j), H, P, Vz, PP)(0)
-
-                        IObj2?.Paragraphs.Add(String.Format("Current Enthalpy error: {0}", fx))
-
-                        If Abs(fx) < tolEXT Then Exit Do
-
-                        dfdx = (fx2 - fx) / epsilon(j)
-                        dx = fx / dfdx
-
-                        x1 = x1 - dx
-
-                        IObj2?.Paragraphs.Add(String.Format("Updated Temperature estimate: {0} K", T))
-
-                        cnt += 1
-
-                        IObj2?.Close()
-
-                    Loop Until cnt > maxitEXT Or Double.IsNaN(x1)
-
-                    IObj?.Paragraphs.Add(String.Format("The PH Flash algorithm converged in {0} iterations. Final Temperature value: {1} K", cnt, T))
-
-                    T = x1
-
-                    If Not Double.IsNaN(T) And Not Double.IsInfinity(T) And Not cnt > maxitEXT Then
-                        If T > Tmin And T < Tmax Then Exit For
-                    End If
-
-                Next
-
-            End If
-
-            If Double.IsNaN(T) Or cnt > maxitEXT Then Throw New Exception("PH Flash [NL3PV3]: Invalid result: Temperature did not converge.")
-
-            IObj?.SetCurrent()
-
-            Dim V, L1, L2, Vy(), Vx1(), Vx2(), Vs(), Ki(), S As Double
-
-            If Not pvmode Then
-
-                Dim tmp As Object = Flash_PT(Vz, P, T, PP)
-
-                V = tmp(1)
-                L1 = tmp(0)
-                L2 = tmp(5)
-                S = tmp(7)
-                Vy = tmp(3)
-                Vx1 = tmp(2)
-                Vx2 = tmp(6)
-                Vs = tmp(8)
-                ecount = tmp(4)
-
-                Ki = Vy.DivideY(Vx1)
-
-            Else
-
-                V = pvflashresult(1)
-                L1 = pvflashresult(0)
-                L2 = pvflashresult(7)
-                S = pvflashresult(9)
-                Vy = pvflashresult(3)
-                Vx1 = pvflashresult(2)
-                Vx2 = pvflashresult(8)
-                Vs = pvflashresult(10)
-                ecount = pvflashresult(5)
-
-                T = pvflashresult(4)
-
-                Ki = Vy.DivideY(Vx1)
-
-            End If
-
-            d2 = Date.Now
-
-            dt = d2 - d1
-
-            WriteDebugInfo("PH Flash [NL-SVLLE]: Converged in " & ecount & " iterations. Time taken: " & dt.TotalMilliseconds & " ms")
-
-            IObj?.Paragraphs.Add(String.Format(SolutionInspector.The_algorithm_converged_in_0_iterations_Time_taken_1_ms, ecount, dt.TotalMilliseconds))
-
-            IObj?.Close()
-
-            Return New Object() {L1, V, Vx1, Vy, T, ecount, Ki, L2, Vx2, S, Vs}
+            Dim nl = New NestedLoops
+            nl.FlashSettings = FlashSettings
+            nl.PTFlashFunction = AddressOf Flash_PT
+
+            Return nl.Flash_PH(Vz, P, H, Tref, PP, ReuseKI, PrevKi)
 
         End Function
 
         Public Overrides Function Flash_PS(ByVal Vz As Double(), ByVal P As Double, ByVal S As Double, ByVal Tref As Double, ByVal PP As PropertyPackages.PropertyPackage, Optional ByVal ReuseKI As Boolean = False, Optional ByVal PrevKi As Double() = Nothing) As Object
 
-            nl1 = New NestedLoops
-            nl2 = New NestedLoops3PV3
-            nl3 = New NestedLoopsSLE With {.SolidSolution = False}
-
-            Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
-
-            Inspector.Host.CheckAndAdd(IObj, "", "Flash_PS", Name & " (PS Flash)", "Pressure-Entropy Flash Algorithm Routine")
-
-            IObj?.Paragraphs.Add("The PS Flash in fast mode uses two nested loops (hence the name) to calculate temperature and phase distribution. 
-                                    The external one converges the temperature, while the internal one finds the phase distribution for the current temperature estimate in the external loop.
-                                    The algorithm converges when the calculated overall entropy for the tentative phase distribution and temperature matches the specified one.")
-
-            IObj?.SetCurrent()
-
-            Dim d1, d2 As Date, dt As TimeSpan
-            Dim j, n, ecount As Integer
-
-            d1 = Date.Now
-
-            n = Vz.Length - 1
-
-            Dim maxitINT As Integer = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Maximum_Number_Of_Internal_Iterations)
-            Dim maxitEXT As Integer = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Maximum_Number_Of_External_Iterations)
-            Dim tolINT As Double = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_Internal_Loop_Tolerance).ToDoubleFromInvariant
-            Dim tolEXT As Double = Me.FlashSettings(Interfaces.Enums.FlashSetting.PHFlash_External_Loop_Tolerance).ToDoubleFromInvariant
-
-            Dim Tmin, Tmax, epsilon(1) As Double
-
-            Tmax = 10000.0#
-            Tmin = 20.0#
-
-            epsilon(0) = 0.1
-            epsilon(1) = 1
-
-            Dim fx, fx2, dfdx, x1, dx, T As Double
-
-            Dim cnt As Integer
-
-            If Tref = 0 Then Tref = 298.15
-
-            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Input_Parameters))
-
-            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_0_Pa, P))
-            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Entropy_0_kJ_kg, S))
-            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Compounds_0, PP.RET_VNAMES.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Mole_Fractions_0, Vz.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format(SolutionInspector.Initial_estimates_for_T_0_K, Tref))
-
-            For j = 0 To 4
-
-                cnt = 0
-                x1 = Tref
-
-                Do
-
-                    IObj?.SetCurrent()
-
-                    Dim IObj2 As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
-
-                    Inspector.Host.CheckAndAdd(IObj2, "", "Flash_PS", SolutionInspector.PS_Flash_Newton_Iteration, "Pressure-Entropy Flash Algorithm Convergence Iteration Step")
-
-                    IObj2?.Paragraphs.Add(String.Format(SolutionInspector.Pressure_Entalphy_Flash_Algorithm_Convergence_Iteration_Step_Detail_0, cnt))
-
-                    IObj2?.SetCurrent()
-                    fx = S_Error(x1, S, P, Vz, PP)
-                    IObj2?.SetCurrent()
-                    fx2 = S_Error(x1 + epsilon(j), S, P, Vz, PP)
-
-                    IObj2?.Paragraphs.Add(String.Format("Current Entropy error: {0}", fx))
-
-                    If Abs(fx) < tolEXT Then Exit Do
-
-                    dfdx = (fx2 - fx) / epsilon(j)
-                    dx = fx / dfdx
-
-                    'If Abs(dx) > 10.0 Then dx = Sign(dx) * 10.0
-
-                    x1 = x1 - dx
-
-                    IObj2?.Paragraphs.Add(String.Format(SolutionInspector.Updated_Temperature_estimate_0_K, x1))
-
-                    IObj2?.Close()
-
-                    cnt += 1
-
-                Loop Until cnt > maxitEXT Or Double.IsNaN(x1)
-
-                IObj?.Paragraphs.Add(String.Format("The PS Flash algorithm converged in {0} iterations. Final Temperature value: {1} K", cnt, x1))
-
-                T = x1
-
-                If Not Double.IsNaN(T) And Not Double.IsInfinity(T) And Not cnt > maxitEXT Then
-                    If T > Tmin And T < Tmax Then Exit For
-                End If
-
-            Next
-
-            If Double.IsNaN(T) Or cnt > maxitEXT Then Throw New Exception("PS Flash [NL-3PV3]: Invalid result: Temperature did not converge.")
-
-            IObj?.SetCurrent()
-
-            Dim V, L1, L2, Vy(), Vx1(), Vx2(), Vs(), Ki(), Ss As Double
-            Dim tmp As Object = Flash_PT(Vz, P, T, PP)
-            'Return New Object() {L1, V, Vx1, Vy, 0, L2, Vx2, S, Vs}
-
-            V = tmp(1)
-            L1 = tmp(0)
-            L2 = tmp(5)
-            Ss = tmp(7)
-            Vy = tmp(3)
-            Vx1 = tmp(2)
-            Vx2 = tmp(6)
-            Vs = tmp(8)
-            ecount = tmp(4)
-
-            Ki = Vy.DivideY(Vx1)
-
-            d2 = Date.Now
-
-            dt = d2 - d1
-
-            WriteDebugInfo("PS Flash [NL-SVLLE]: Converged in " & ecount & " iterations. Time taken: " & dt.TotalMilliseconds & " ms")
-
-            IObj?.Paragraphs.Add(String.Format(SolutionInspector.The_algorithm_converged_in_0_iterations_Time_taken_1_ms, ecount, dt.TotalMilliseconds))
-
-            IObj?.Close()
-
-            Return New Object() {L1, V, Vx1, Vy, T, ecount, Ki, L2, Vx2, Ss, Vs}
-
-        End Function
-
-        Function H_Error(ByVal Type As String, ByVal X As Double, ByVal H As Double, ByVal P As Double, ByVal Vz As Double(), PP As PropertyPackage) As Object()
-
-            Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
-
-            Inspector.Host.CheckAndAdd(IObj, "", "Flash_PH", "PH Flash Objective Function (Error)", "Pressure-Enthalpy Flash Algorithm Objective Function (Error) Calculation")
-
-            IObj?.Paragraphs.Add("This routine calculates the current error between calculated and specified enthalpies.")
-
-            IObj?.SetCurrent()
-
-            Dim n = Vz.Length - 1
-
-            Dim L1, L2, V, Vx1(), Vx2(), Vy(), Sx, Vs(), T As Double
-
-            Dim tmp As Object = Nothing
-
-            If Type = "PT" Then
-                tmp = Me.Flash_PT(Vz, P, X, PP)
-                L1 = tmp(0)
-                V = tmp(1)
-                Vx1 = tmp(2)
-                Vy = tmp(3)
-                L2 = tmp(5)
-                Vx2 = tmp(6)
-                Sx = tmp(7)
-                Vs = tmp(8)
-                T = X
-            Else
-                tmp = Me.Flash_PV(Vz, P, X, 0.0#, PP)
-                L1 = tmp(0)
-                V = tmp(1)
-                Vx1 = tmp(2)
-                Vy = tmp(3)
-                T = tmp(4)
-                L2 = tmp(7)
-                Vx2 = tmp(8)
-                Sx = tmp(9)
-                Vs = tmp(10)
-            End If
-
-            Dim _Hv, _Hl1, _Hl2, _Hs As Double
-
-            _Hv = 0.0#
-            _Hl1 = 0.0#
-            _Hl2 = 0.0#
-            _Hs = 0.0
-
-            If V > 0 Then _Hv = PP.DW_CalcEnthalpy(Vy, T, P, State.Vapor)
-            If L1 > 0 Then _Hl1 = PP.DW_CalcEnthalpy(Vx1, T, P, State.Liquid)
-            If L2 > 0 Then _Hl2 = PP.DW_CalcEnthalpy(Vx2, T, P, State.Liquid)
-            If Sx > 0 Then _Hs = PP.DW_CalcEnthalpy(Vs, T, P, State.Solid)
-
-            Dim mmg, mml, mml2, mms As Double
-            mmg = PP.AUX_MMM(Vy)
-            mml = PP.AUX_MMM(Vx1)
-            mml2 = PP.AUX_MMM(Vx2)
-            mms = PP.AUX_MMM(Vs)
-
-            Dim e1 = H - (mmg * V / (mmg * V + mml * L1 + mml2 * L2 + mms * Sx)) * _Hv - (mml * L1 / (mmg * V + mml * L1 + mml2 * L2 + mms * Sx)) * _Hl1 - (mml2 * L2 / (mmg * V + mml * L1 + mml2 * L2 + mms * Sx)) * _Hl2 - (mms * Sx / (mmg * V + mml * L1 + mml2 * L2 + mms * Sx)) * _Hs
-
-            IObj?.Paragraphs.Add(String.Format("Specified Enthalpy: {0} kJ/[kg]", H))
-
-            IObj?.Paragraphs.Add(String.Format("Current Error: {0} kJ/[kg.K]", e1))
-
-            IObj?.Close()
-
-            WriteDebugInfo("PH Flash [NL-3PV3]: Current T = " & T & ", Current H Error = " & e1)
-
-            Return New Object() {e1, tmp}
-
-        End Function
-
-        Function S_Error(ByVal T As Double, ByVal S As Double, ByVal P As Double, ByVal Vz As Double(), PP As PropertyPackage) As Double
-
-            Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
-
-            Inspector.Host.CheckAndAdd(IObj, "", "Flash_PS", "PS Flash Objective Function (Error)", "Pressure-Entropy Flash Algorithm Objective Function (Error) Calculation")
-
-            IObj?.Paragraphs.Add("This routine calculates the current error between calculated and specified entropies.")
-
-            IObj?.SetCurrent()
-
-            Dim tmp = Me.Flash_PT(Vz, P, T, PP)
-
-            Dim n = Vz.Length - 1
-
-            Dim L1, L2, V, Vx1(), Vx2(), Vy(), Sx, Vs() As Double
-
-            L1 = tmp(0)
-            V = tmp(1)
-            Vx1 = tmp(2)
-            Vy = tmp(3)
-            L2 = tmp(5)
-            Vx2 = tmp(6)
-            Sx = tmp(7)
-            Vs = tmp(8)
-
-            Dim _Sv, _Sl1, _Sl2, _Ss As Double
-
-            _Sv = 0.0#
-            _Sl1 = 0.0#
-            _Sl2 = 0.0#
-            _Ss = 0.0
-
-            If V > 0 Then _Sv = PP.DW_CalcEntropy(Vy, T, P, State.Vapor)
-            If L1 > 0 Then _Sl1 = PP.DW_CalcEntropy(Vx1, T, P, State.Liquid)
-            If L2 > 0 Then _Sl2 = PP.DW_CalcEntropy(Vx2, T, P, State.Liquid)
-            If Sx > 0 Then _Ss = PP.DW_CalcEntropy(Vs, T, P, State.Solid)
-
-            Dim mmg, mml, mml2, mms As Double
-            mmg = PP.AUX_MMM(Vy)
-            mml = PP.AUX_MMM(Vx1)
-            mml2 = PP.AUX_MMM(Vx2)
-            mms = PP.AUX_MMM(Vs)
-
-            Dim e1 = S - (mmg * V / (mmg * V + mml * L1 + mml2 * L2 + mms * Sx)) * _Sv - (mml * L1 / (mmg * V + mml * L1 + mml2 * L2 + mms * Sx)) * _Sl1 - (mml2 * L2 / (mmg * V + mml * L1 + mml2 * L2 + mms * Sx)) * _Sl2 - (mms * Sx / (mmg * V + mml * L1 + mml2 * L2 + mms * Sx)) * _Ss
-
-            IObj?.Paragraphs.Add(String.Format("Specified Entropy: {0} kJ/[kg.K]", S))
-
-            IObj?.Paragraphs.Add(String.Format("Current Error: {0} kJ/[kg.K]", e1))
-
-            IObj?.Close()
-
-            WriteDebugInfo("PS Flash [NL-3PV3]: Current T = " & T & ", Current S Error = " & e1)
-
-            Return e1
+            Dim nl = New NestedLoops
+            nl.FlashSettings = FlashSettings
+            nl.PTFlashFunction = AddressOf Flash_PT
+
+            Return nl.Flash_PS(Vz, P, S, Tref, PP, ReuseKI, PrevKi)
 
         End Function
 

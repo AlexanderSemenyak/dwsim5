@@ -137,6 +137,12 @@
     <Compile Include="Editor\FormCustomCalcOrder.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Editor\FormExtraProperties.designer.vb">
+      <DependentUpon>FormExtraProperties.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Editor\FormExtraProperties.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Editor\InspectorReportBar.Designer.vb">
       <DependentUpon>InspectorReportBar.vb</DependentUpon>
     </Compile>
@@ -185,6 +191,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Patrons\Patrons.vb" />
     <Compile Include="SimulationCharts\Charts.vb" />
     <Compile Include="UnitsOfMeasure\SystemsOfUnits.vb" />
     <Compile Include="UpdateCheck\UpdateCheck.vb" />
@@ -198,6 +205,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Editor\FormCustomCalcOrder.resx">
       <DependentUpon>FormCustomCalcOrder.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\FormExtraProperties.en.resx">
+      <DependentUpon>FormExtraProperties.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Editor\FormExtraProperties.resx">
+      <DependentUpon>FormExtraProperties.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Editor\InspectorReportBar.en.resx">
       <DependentUpon>InspectorReportBar.vb</DependentUpon>
@@ -260,6 +273,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\icons8-spy_male.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Patrons\activepatrons.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

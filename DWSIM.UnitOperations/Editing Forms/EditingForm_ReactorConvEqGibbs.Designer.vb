@@ -45,18 +45,13 @@ Partial Class EditingForm_ReactorConvEqGibbs
         Me.GroupBox4 = New System.Windows.Forms.GroupBox()
         Me.rtbAnnotations = New Extended.Windows.Forms.RichTextBoxExtended()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
-        Me.btnConfigureFlashAlg = New System.Windows.Forms.Button()
         Me.btnConfigurePP = New System.Windows.Forms.Button()
-        Me.cbFlashAlg = New System.Windows.Forms.ComboBox()
-        Me.Label10 = New System.Windows.Forms.Label()
         Me.cbPropPack = New System.Windows.Forms.ComboBox()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
         Me.TabControlParameters = New System.Windows.Forms.TabControl()
         Me.TabPageParams = New System.Windows.Forms.TabPage()
-        Me.cbGibbsMinMode = New System.Windows.Forms.ComboBox()
         Me.Label4 = New System.Windows.Forms.Label()
-        Me.Label6 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.cbPDrop = New System.Windows.Forms.ComboBox()
         Me.cbCalcMode = New System.Windows.Forms.ComboBox()
@@ -69,10 +64,8 @@ Partial Class EditingForm_ReactorConvEqGibbs
         Me.TabPageCompounds = New System.Windows.Forms.TabPage()
         Me.ListViewCompounds = New System.Windows.Forms.ListView()
         Me.TabPageElements = New System.Windows.Forms.TabPage()
-        Me.TabPageInitialEstimates = New System.Windows.Forms.TabPage()
         Me.TabPageGibbsParams = New System.Windows.Forms.TabPage()
-        Me.Label27 = New System.Windows.Forms.Label()
-        Me.tbNumDeriv = New System.Windows.Forms.TextBox()
+        Me.chkGibbsUsePreviousSolution = New System.Windows.Forms.CheckBox()
         Me.tbExtLoopTol = New System.Windows.Forms.TextBox()
         Me.Label20 = New System.Windows.Forms.Label()
         Me.tbIntLoopTol = New System.Windows.Forms.TextBox()
@@ -81,16 +74,8 @@ Partial Class EditingForm_ReactorConvEqGibbs
         Me.Label17 = New System.Windows.Forms.Label()
         Me.tbIntLoopMaxIts = New System.Windows.Forms.TextBox()
         Me.Label16 = New System.Windows.Forms.Label()
-        Me.chkEnableDamping = New System.Windows.Forms.CheckBox()
-        Me.txtDampingUpperLimit = New System.Windows.Forms.TextBox()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.Label15 = New System.Windows.Forms.Label()
-        Me.txtDampingLowerLimit = New System.Windows.Forms.TextBox()
         Me.TabPageEqParams = New System.Windows.Forms.TabPage()
-        Me.chkAlternateInit = New System.Windows.Forms.CheckBox()
-        Me.Label28 = New System.Windows.Forms.Label()
-        Me.tbNumDeriv2 = New System.Windows.Forms.TextBox()
-        Me.Label26 = New System.Windows.Forms.Label()
+        Me.chkUseIPOPT = New System.Windows.Forms.CheckBox()
         Me.tbExtLoopTolEq = New System.Windows.Forms.TextBox()
         Me.Label21 = New System.Windows.Forms.Label()
         Me.tbIntLoopTolEq = New System.Windows.Forms.TextBox()
@@ -100,8 +85,6 @@ Partial Class EditingForm_ReactorConvEqGibbs
         Me.tbExtLoopMaxItsEq = New System.Windows.Forms.TextBox()
         Me.Label24 = New System.Windows.Forms.Label()
         Me.chkInitializeExtents = New System.Windows.Forms.CheckBox()
-        Me.Label25 = New System.Windows.Forms.Label()
-        Me.tbExtentsInitializer = New System.Windows.Forms.TextBox()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.btnCreateAndConnectEnergy = New System.Windows.Forms.Button()
         Me.btnCreateAndConnectOutlet2 = New System.Windows.Forms.Button()
@@ -246,8 +229,9 @@ Partial Class EditingForm_ReactorConvEqGibbs
         '
         resources.ApplyResources(Me.rtbAnnotations, "rtbAnnotations")
         Me.rtbAnnotations.Name = "rtbAnnotations"
-        Me.rtbAnnotations.Rtf = "{\rtf1\ansi\ansicpg1252\deff0\deflang1046{\fonttbl{\f0\fnil\fcharset0 Microsoft S" &
-    "ans Serif;}}" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "\viewkind4\uc1\pard\f0\fs17\par" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "}" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        Me.rtbAnnotations.Rtf = "{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1046{\fonttbl{\f0\fnil Microsoft " &
+    "Sans Serif;}}" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "{\*\generator Riched20 10.0.18362}\viewkind4\uc1 " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "\pard\f0\fs17\" &
+    "par" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "}" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         Me.rtbAnnotations.ShowRedo = False
         Me.rtbAnnotations.ShowUndo = False
         Me.ToolTipValues.SetToolTip(Me.rtbAnnotations, resources.GetString("rtbAnnotations.ToolTip"))
@@ -257,10 +241,7 @@ Partial Class EditingForm_ReactorConvEqGibbs
         'GroupBox3
         '
         resources.ApplyResources(Me.GroupBox3, "GroupBox3")
-        Me.GroupBox3.Controls.Add(Me.btnConfigureFlashAlg)
         Me.GroupBox3.Controls.Add(Me.btnConfigurePP)
-        Me.GroupBox3.Controls.Add(Me.cbFlashAlg)
-        Me.GroupBox3.Controls.Add(Me.Label10)
         Me.GroupBox3.Controls.Add(Me.cbPropPack)
         Me.GroupBox3.Controls.Add(Me.Label9)
         Me.GroupBox3.Name = "GroupBox3"
@@ -268,16 +249,6 @@ Partial Class EditingForm_ReactorConvEqGibbs
         Me.ToolTipChangeTag.SetToolTip(Me.GroupBox3, resources.GetString("GroupBox3.ToolTip"))
         Me.ToolTipValues.SetToolTip(Me.GroupBox3, resources.GetString("GroupBox3.ToolTip1"))
         Me.ToolTip1.SetToolTip(Me.GroupBox3, resources.GetString("GroupBox3.ToolTip2"))
-        '
-        'btnConfigureFlashAlg
-        '
-        resources.ApplyResources(Me.btnConfigureFlashAlg, "btnConfigureFlashAlg")
-        Me.btnConfigureFlashAlg.BackgroundImage = Global.DWSIM.UnitOperations.My.Resources.Resources.cog
-        Me.btnConfigureFlashAlg.Name = "btnConfigureFlashAlg"
-        Me.ToolTip1.SetToolTip(Me.btnConfigureFlashAlg, resources.GetString("btnConfigureFlashAlg.ToolTip"))
-        Me.ToolTipChangeTag.SetToolTip(Me.btnConfigureFlashAlg, resources.GetString("btnConfigureFlashAlg.ToolTip1"))
-        Me.ToolTipValues.SetToolTip(Me.btnConfigureFlashAlg, resources.GetString("btnConfigureFlashAlg.ToolTip2"))
-        Me.btnConfigureFlashAlg.UseVisualStyleBackColor = True
         '
         'btnConfigurePP
         '
@@ -288,24 +259,6 @@ Partial Class EditingForm_ReactorConvEqGibbs
         Me.ToolTipChangeTag.SetToolTip(Me.btnConfigurePP, resources.GetString("btnConfigurePP.ToolTip1"))
         Me.ToolTipValues.SetToolTip(Me.btnConfigurePP, resources.GetString("btnConfigurePP.ToolTip2"))
         Me.btnConfigurePP.UseVisualStyleBackColor = True
-        '
-        'cbFlashAlg
-        '
-        resources.ApplyResources(Me.cbFlashAlg, "cbFlashAlg")
-        Me.cbFlashAlg.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cbFlashAlg.FormattingEnabled = True
-        Me.cbFlashAlg.Name = "cbFlashAlg"
-        Me.ToolTip1.SetToolTip(Me.cbFlashAlg, resources.GetString("cbFlashAlg.ToolTip"))
-        Me.ToolTipValues.SetToolTip(Me.cbFlashAlg, resources.GetString("cbFlashAlg.ToolTip1"))
-        Me.ToolTipChangeTag.SetToolTip(Me.cbFlashAlg, resources.GetString("cbFlashAlg.ToolTip2"))
-        '
-        'Label10
-        '
-        resources.ApplyResources(Me.Label10, "Label10")
-        Me.Label10.Name = "Label10"
-        Me.ToolTip1.SetToolTip(Me.Label10, resources.GetString("Label10.ToolTip"))
-        Me.ToolTipChangeTag.SetToolTip(Me.Label10, resources.GetString("Label10.ToolTip1"))
-        Me.ToolTipValues.SetToolTip(Me.Label10, resources.GetString("Label10.ToolTip2"))
         '
         'cbPropPack
         '
@@ -341,7 +294,6 @@ Partial Class EditingForm_ReactorConvEqGibbs
         Me.TabControlParameters.Controls.Add(Me.TabPageParams)
         Me.TabControlParameters.Controls.Add(Me.TabPageCompounds)
         Me.TabControlParameters.Controls.Add(Me.TabPageElements)
-        Me.TabControlParameters.Controls.Add(Me.TabPageInitialEstimates)
         Me.TabControlParameters.Controls.Add(Me.TabPageGibbsParams)
         Me.TabControlParameters.Controls.Add(Me.TabPageEqParams)
         Me.TabControlParameters.Name = "TabControlParameters"
@@ -353,10 +305,8 @@ Partial Class EditingForm_ReactorConvEqGibbs
         'TabPageParams
         '
         resources.ApplyResources(Me.TabPageParams, "TabPageParams")
-        Me.TabPageParams.Controls.Add(Me.cbGibbsMinMode)
         Me.TabPageParams.Controls.Add(Me.Label4)
         Me.TabPageParams.Controls.Add(Me.GroupBox3)
-        Me.TabPageParams.Controls.Add(Me.Label6)
         Me.TabPageParams.Controls.Add(Me.Label2)
         Me.TabPageParams.Controls.Add(Me.cbPDrop)
         Me.TabPageParams.Controls.Add(Me.cbCalcMode)
@@ -367,21 +317,10 @@ Partial Class EditingForm_ReactorConvEqGibbs
         Me.TabPageParams.Controls.Add(Me.cbReacSet)
         Me.TabPageParams.Controls.Add(Me.cbTemp)
         Me.TabPageParams.Name = "TabPageParams"
-        Me.ToolTipValues.SetToolTip(Me.TabPageParams, resources.GetString("TabPageParams.ToolTip"))
-        Me.ToolTip1.SetToolTip(Me.TabPageParams, resources.GetString("TabPageParams.ToolTip1"))
+        Me.ToolTip1.SetToolTip(Me.TabPageParams, resources.GetString("TabPageParams.ToolTip"))
+        Me.ToolTipValues.SetToolTip(Me.TabPageParams, resources.GetString("TabPageParams.ToolTip1"))
         Me.ToolTipChangeTag.SetToolTip(Me.TabPageParams, resources.GetString("TabPageParams.ToolTip2"))
         Me.TabPageParams.UseVisualStyleBackColor = True
-        '
-        'cbGibbsMinMode
-        '
-        resources.ApplyResources(Me.cbGibbsMinMode, "cbGibbsMinMode")
-        Me.cbGibbsMinMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cbGibbsMinMode.FormattingEnabled = True
-        Me.cbGibbsMinMode.Items.AddRange(New Object() {resources.GetString("cbGibbsMinMode.Items"), resources.GetString("cbGibbsMinMode.Items1")})
-        Me.cbGibbsMinMode.Name = "cbGibbsMinMode"
-        Me.ToolTip1.SetToolTip(Me.cbGibbsMinMode, resources.GetString("cbGibbsMinMode.ToolTip"))
-        Me.ToolTipValues.SetToolTip(Me.cbGibbsMinMode, resources.GetString("cbGibbsMinMode.ToolTip1"))
-        Me.ToolTipChangeTag.SetToolTip(Me.cbGibbsMinMode, resources.GetString("cbGibbsMinMode.ToolTip2"))
         '
         'Label4
         '
@@ -390,14 +329,6 @@ Partial Class EditingForm_ReactorConvEqGibbs
         Me.ToolTip1.SetToolTip(Me.Label4, resources.GetString("Label4.ToolTip"))
         Me.ToolTipChangeTag.SetToolTip(Me.Label4, resources.GetString("Label4.ToolTip1"))
         Me.ToolTipValues.SetToolTip(Me.Label4, resources.GetString("Label4.ToolTip2"))
-        '
-        'Label6
-        '
-        resources.ApplyResources(Me.Label6, "Label6")
-        Me.Label6.Name = "Label6"
-        Me.ToolTip1.SetToolTip(Me.Label6, resources.GetString("Label6.ToolTip"))
-        Me.ToolTipChangeTag.SetToolTip(Me.Label6, resources.GetString("Label6.ToolTip1"))
-        Me.ToolTipValues.SetToolTip(Me.Label6, resources.GetString("Label6.ToolTip2"))
         '
         'Label2
         '
@@ -488,8 +419,8 @@ Partial Class EditingForm_ReactorConvEqGibbs
         resources.ApplyResources(Me.TabPageCompounds, "TabPageCompounds")
         Me.TabPageCompounds.Controls.Add(Me.ListViewCompounds)
         Me.TabPageCompounds.Name = "TabPageCompounds"
-        Me.ToolTipValues.SetToolTip(Me.TabPageCompounds, resources.GetString("TabPageCompounds.ToolTip"))
-        Me.ToolTip1.SetToolTip(Me.TabPageCompounds, resources.GetString("TabPageCompounds.ToolTip1"))
+        Me.ToolTip1.SetToolTip(Me.TabPageCompounds, resources.GetString("TabPageCompounds.ToolTip"))
+        Me.ToolTipValues.SetToolTip(Me.TabPageCompounds, resources.GetString("TabPageCompounds.ToolTip1"))
         Me.ToolTipChangeTag.SetToolTip(Me.TabPageCompounds, resources.GetString("TabPageCompounds.ToolTip2"))
         Me.TabPageCompounds.UseVisualStyleBackColor = True
         '
@@ -497,9 +428,10 @@ Partial Class EditingForm_ReactorConvEqGibbs
         '
         resources.ApplyResources(Me.ListViewCompounds, "ListViewCompounds")
         Me.ListViewCompounds.CheckBoxes = True
+        Me.ListViewCompounds.HideSelection = False
         Me.ListViewCompounds.Name = "ListViewCompounds"
-        Me.ToolTipValues.SetToolTip(Me.ListViewCompounds, resources.GetString("ListViewCompounds.ToolTip"))
-        Me.ToolTip1.SetToolTip(Me.ListViewCompounds, resources.GetString("ListViewCompounds.ToolTip1"))
+        Me.ToolTip1.SetToolTip(Me.ListViewCompounds, resources.GetString("ListViewCompounds.ToolTip"))
+        Me.ToolTipValues.SetToolTip(Me.ListViewCompounds, resources.GetString("ListViewCompounds.ToolTip1"))
         Me.ToolTipChangeTag.SetToolTip(Me.ListViewCompounds, resources.GetString("ListViewCompounds.ToolTip2"))
         Me.ListViewCompounds.UseCompatibleStateImageBehavior = False
         Me.ListViewCompounds.View = System.Windows.Forms.View.List
@@ -508,25 +440,15 @@ Partial Class EditingForm_ReactorConvEqGibbs
         '
         resources.ApplyResources(Me.TabPageElements, "TabPageElements")
         Me.TabPageElements.Name = "TabPageElements"
-        Me.ToolTipValues.SetToolTip(Me.TabPageElements, resources.GetString("TabPageElements.ToolTip"))
-        Me.ToolTip1.SetToolTip(Me.TabPageElements, resources.GetString("TabPageElements.ToolTip1"))
+        Me.ToolTip1.SetToolTip(Me.TabPageElements, resources.GetString("TabPageElements.ToolTip"))
+        Me.ToolTipValues.SetToolTip(Me.TabPageElements, resources.GetString("TabPageElements.ToolTip1"))
         Me.ToolTipChangeTag.SetToolTip(Me.TabPageElements, resources.GetString("TabPageElements.ToolTip2"))
         Me.TabPageElements.UseVisualStyleBackColor = True
-        '
-        'TabPageInitialEstimates
-        '
-        resources.ApplyResources(Me.TabPageInitialEstimates, "TabPageInitialEstimates")
-        Me.TabPageInitialEstimates.Name = "TabPageInitialEstimates"
-        Me.ToolTipValues.SetToolTip(Me.TabPageInitialEstimates, resources.GetString("TabPageInitialEstimates.ToolTip"))
-        Me.ToolTip1.SetToolTip(Me.TabPageInitialEstimates, resources.GetString("TabPageInitialEstimates.ToolTip1"))
-        Me.ToolTipChangeTag.SetToolTip(Me.TabPageInitialEstimates, resources.GetString("TabPageInitialEstimates.ToolTip2"))
-        Me.TabPageInitialEstimates.UseVisualStyleBackColor = True
         '
         'TabPageGibbsParams
         '
         resources.ApplyResources(Me.TabPageGibbsParams, "TabPageGibbsParams")
-        Me.TabPageGibbsParams.Controls.Add(Me.Label27)
-        Me.TabPageGibbsParams.Controls.Add(Me.tbNumDeriv)
+        Me.TabPageGibbsParams.Controls.Add(Me.chkGibbsUsePreviousSolution)
         Me.TabPageGibbsParams.Controls.Add(Me.tbExtLoopTol)
         Me.TabPageGibbsParams.Controls.Add(Me.Label20)
         Me.TabPageGibbsParams.Controls.Add(Me.tbIntLoopTol)
@@ -535,32 +457,20 @@ Partial Class EditingForm_ReactorConvEqGibbs
         Me.TabPageGibbsParams.Controls.Add(Me.Label17)
         Me.TabPageGibbsParams.Controls.Add(Me.tbIntLoopMaxIts)
         Me.TabPageGibbsParams.Controls.Add(Me.Label16)
-        Me.TabPageGibbsParams.Controls.Add(Me.chkEnableDamping)
-        Me.TabPageGibbsParams.Controls.Add(Me.txtDampingUpperLimit)
-        Me.TabPageGibbsParams.Controls.Add(Me.Label8)
-        Me.TabPageGibbsParams.Controls.Add(Me.Label15)
-        Me.TabPageGibbsParams.Controls.Add(Me.txtDampingLowerLimit)
         Me.TabPageGibbsParams.Name = "TabPageGibbsParams"
-        Me.ToolTipValues.SetToolTip(Me.TabPageGibbsParams, resources.GetString("TabPageGibbsParams.ToolTip"))
-        Me.ToolTip1.SetToolTip(Me.TabPageGibbsParams, resources.GetString("TabPageGibbsParams.ToolTip1"))
+        Me.ToolTip1.SetToolTip(Me.TabPageGibbsParams, resources.GetString("TabPageGibbsParams.ToolTip"))
+        Me.ToolTipValues.SetToolTip(Me.TabPageGibbsParams, resources.GetString("TabPageGibbsParams.ToolTip1"))
         Me.ToolTipChangeTag.SetToolTip(Me.TabPageGibbsParams, resources.GetString("TabPageGibbsParams.ToolTip2"))
         Me.TabPageGibbsParams.UseVisualStyleBackColor = True
         '
-        'Label27
+        'chkGibbsUsePreviousSolution
         '
-        resources.ApplyResources(Me.Label27, "Label27")
-        Me.Label27.Name = "Label27"
-        Me.ToolTip1.SetToolTip(Me.Label27, resources.GetString("Label27.ToolTip"))
-        Me.ToolTipChangeTag.SetToolTip(Me.Label27, resources.GetString("Label27.ToolTip1"))
-        Me.ToolTipValues.SetToolTip(Me.Label27, resources.GetString("Label27.ToolTip2"))
-        '
-        'tbNumDeriv
-        '
-        resources.ApplyResources(Me.tbNumDeriv, "tbNumDeriv")
-        Me.tbNumDeriv.Name = "tbNumDeriv"
-        Me.ToolTipValues.SetToolTip(Me.tbNumDeriv, resources.GetString("tbNumDeriv.ToolTip"))
-        Me.ToolTip1.SetToolTip(Me.tbNumDeriv, resources.GetString("tbNumDeriv.ToolTip1"))
-        Me.ToolTipChangeTag.SetToolTip(Me.tbNumDeriv, resources.GetString("tbNumDeriv.ToolTip2"))
+        resources.ApplyResources(Me.chkGibbsUsePreviousSolution, "chkGibbsUsePreviousSolution")
+        Me.chkGibbsUsePreviousSolution.Name = "chkGibbsUsePreviousSolution"
+        Me.ToolTip1.SetToolTip(Me.chkGibbsUsePreviousSolution, resources.GetString("chkGibbsUsePreviousSolution.ToolTip"))
+        Me.ToolTipChangeTag.SetToolTip(Me.chkGibbsUsePreviousSolution, resources.GetString("chkGibbsUsePreviousSolution.ToolTip1"))
+        Me.ToolTipValues.SetToolTip(Me.chkGibbsUsePreviousSolution, resources.GetString("chkGibbsUsePreviousSolution.ToolTip2"))
+        Me.chkGibbsUsePreviousSolution.UseVisualStyleBackColor = True
         '
         'tbExtLoopTol
         '
@@ -626,54 +536,10 @@ Partial Class EditingForm_ReactorConvEqGibbs
         Me.ToolTipChangeTag.SetToolTip(Me.Label16, resources.GetString("Label16.ToolTip1"))
         Me.ToolTipValues.SetToolTip(Me.Label16, resources.GetString("Label16.ToolTip2"))
         '
-        'chkEnableDamping
-        '
-        resources.ApplyResources(Me.chkEnableDamping, "chkEnableDamping")
-        Me.chkEnableDamping.Name = "chkEnableDamping"
-        Me.ToolTip1.SetToolTip(Me.chkEnableDamping, resources.GetString("chkEnableDamping.ToolTip"))
-        Me.ToolTipChangeTag.SetToolTip(Me.chkEnableDamping, resources.GetString("chkEnableDamping.ToolTip1"))
-        Me.ToolTipValues.SetToolTip(Me.chkEnableDamping, resources.GetString("chkEnableDamping.ToolTip2"))
-        Me.chkEnableDamping.UseVisualStyleBackColor = True
-        '
-        'txtDampingUpperLimit
-        '
-        resources.ApplyResources(Me.txtDampingUpperLimit, "txtDampingUpperLimit")
-        Me.txtDampingUpperLimit.Name = "txtDampingUpperLimit"
-        Me.ToolTipValues.SetToolTip(Me.txtDampingUpperLimit, resources.GetString("txtDampingUpperLimit.ToolTip"))
-        Me.ToolTip1.SetToolTip(Me.txtDampingUpperLimit, resources.GetString("txtDampingUpperLimit.ToolTip1"))
-        Me.ToolTipChangeTag.SetToolTip(Me.txtDampingUpperLimit, resources.GetString("txtDampingUpperLimit.ToolTip2"))
-        '
-        'Label8
-        '
-        resources.ApplyResources(Me.Label8, "Label8")
-        Me.Label8.Name = "Label8"
-        Me.ToolTip1.SetToolTip(Me.Label8, resources.GetString("Label8.ToolTip"))
-        Me.ToolTipChangeTag.SetToolTip(Me.Label8, resources.GetString("Label8.ToolTip1"))
-        Me.ToolTipValues.SetToolTip(Me.Label8, resources.GetString("Label8.ToolTip2"))
-        '
-        'Label15
-        '
-        resources.ApplyResources(Me.Label15, "Label15")
-        Me.Label15.Name = "Label15"
-        Me.ToolTip1.SetToolTip(Me.Label15, resources.GetString("Label15.ToolTip"))
-        Me.ToolTipChangeTag.SetToolTip(Me.Label15, resources.GetString("Label15.ToolTip1"))
-        Me.ToolTipValues.SetToolTip(Me.Label15, resources.GetString("Label15.ToolTip2"))
-        '
-        'txtDampingLowerLimit
-        '
-        resources.ApplyResources(Me.txtDampingLowerLimit, "txtDampingLowerLimit")
-        Me.txtDampingLowerLimit.Name = "txtDampingLowerLimit"
-        Me.ToolTipValues.SetToolTip(Me.txtDampingLowerLimit, resources.GetString("txtDampingLowerLimit.ToolTip"))
-        Me.ToolTip1.SetToolTip(Me.txtDampingLowerLimit, resources.GetString("txtDampingLowerLimit.ToolTip1"))
-        Me.ToolTipChangeTag.SetToolTip(Me.txtDampingLowerLimit, resources.GetString("txtDampingLowerLimit.ToolTip2"))
-        '
         'TabPageEqParams
         '
         resources.ApplyResources(Me.TabPageEqParams, "TabPageEqParams")
-        Me.TabPageEqParams.Controls.Add(Me.chkAlternateInit)
-        Me.TabPageEqParams.Controls.Add(Me.Label28)
-        Me.TabPageEqParams.Controls.Add(Me.tbNumDeriv2)
-        Me.TabPageEqParams.Controls.Add(Me.Label26)
+        Me.TabPageEqParams.Controls.Add(Me.chkUseIPOPT)
         Me.TabPageEqParams.Controls.Add(Me.tbExtLoopTolEq)
         Me.TabPageEqParams.Controls.Add(Me.Label21)
         Me.TabPageEqParams.Controls.Add(Me.tbIntLoopTolEq)
@@ -683,46 +549,20 @@ Partial Class EditingForm_ReactorConvEqGibbs
         Me.TabPageEqParams.Controls.Add(Me.tbExtLoopMaxItsEq)
         Me.TabPageEqParams.Controls.Add(Me.Label24)
         Me.TabPageEqParams.Controls.Add(Me.chkInitializeExtents)
-        Me.TabPageEqParams.Controls.Add(Me.Label25)
-        Me.TabPageEqParams.Controls.Add(Me.tbExtentsInitializer)
         Me.TabPageEqParams.Name = "TabPageEqParams"
-        Me.ToolTipValues.SetToolTip(Me.TabPageEqParams, resources.GetString("TabPageEqParams.ToolTip"))
-        Me.ToolTip1.SetToolTip(Me.TabPageEqParams, resources.GetString("TabPageEqParams.ToolTip1"))
+        Me.ToolTip1.SetToolTip(Me.TabPageEqParams, resources.GetString("TabPageEqParams.ToolTip"))
+        Me.ToolTipValues.SetToolTip(Me.TabPageEqParams, resources.GetString("TabPageEqParams.ToolTip1"))
         Me.ToolTipChangeTag.SetToolTip(Me.TabPageEqParams, resources.GetString("TabPageEqParams.ToolTip2"))
         Me.TabPageEqParams.UseVisualStyleBackColor = True
         '
-        'chkAlternateInit
+        'chkUseIPOPT
         '
-        resources.ApplyResources(Me.chkAlternateInit, "chkAlternateInit")
-        Me.chkAlternateInit.Name = "chkAlternateInit"
-        Me.ToolTip1.SetToolTip(Me.chkAlternateInit, resources.GetString("chkAlternateInit.ToolTip"))
-        Me.ToolTipChangeTag.SetToolTip(Me.chkAlternateInit, resources.GetString("chkAlternateInit.ToolTip1"))
-        Me.ToolTipValues.SetToolTip(Me.chkAlternateInit, resources.GetString("chkAlternateInit.ToolTip2"))
-        Me.chkAlternateInit.UseVisualStyleBackColor = True
-        '
-        'Label28
-        '
-        resources.ApplyResources(Me.Label28, "Label28")
-        Me.Label28.Name = "Label28"
-        Me.ToolTip1.SetToolTip(Me.Label28, resources.GetString("Label28.ToolTip"))
-        Me.ToolTipChangeTag.SetToolTip(Me.Label28, resources.GetString("Label28.ToolTip1"))
-        Me.ToolTipValues.SetToolTip(Me.Label28, resources.GetString("Label28.ToolTip2"))
-        '
-        'tbNumDeriv2
-        '
-        resources.ApplyResources(Me.tbNumDeriv2, "tbNumDeriv2")
-        Me.tbNumDeriv2.Name = "tbNumDeriv2"
-        Me.ToolTipValues.SetToolTip(Me.tbNumDeriv2, resources.GetString("tbNumDeriv2.ToolTip"))
-        Me.ToolTip1.SetToolTip(Me.tbNumDeriv2, resources.GetString("tbNumDeriv2.ToolTip1"))
-        Me.ToolTipChangeTag.SetToolTip(Me.tbNumDeriv2, resources.GetString("tbNumDeriv2.ToolTip2"))
-        '
-        'Label26
-        '
-        resources.ApplyResources(Me.Label26, "Label26")
-        Me.Label26.Name = "Label26"
-        Me.ToolTip1.SetToolTip(Me.Label26, resources.GetString("Label26.ToolTip"))
-        Me.ToolTipChangeTag.SetToolTip(Me.Label26, resources.GetString("Label26.ToolTip1"))
-        Me.ToolTipValues.SetToolTip(Me.Label26, resources.GetString("Label26.ToolTip2"))
+        resources.ApplyResources(Me.chkUseIPOPT, "chkUseIPOPT")
+        Me.chkUseIPOPT.Name = "chkUseIPOPT"
+        Me.ToolTip1.SetToolTip(Me.chkUseIPOPT, resources.GetString("chkUseIPOPT.ToolTip"))
+        Me.ToolTipChangeTag.SetToolTip(Me.chkUseIPOPT, resources.GetString("chkUseIPOPT.ToolTip1"))
+        Me.ToolTipValues.SetToolTip(Me.chkUseIPOPT, resources.GetString("chkUseIPOPT.ToolTip2"))
+        Me.chkUseIPOPT.UseVisualStyleBackColor = True
         '
         'tbExtLoopTolEq
         '
@@ -796,22 +636,6 @@ Partial Class EditingForm_ReactorConvEqGibbs
         Me.ToolTipChangeTag.SetToolTip(Me.chkInitializeExtents, resources.GetString("chkInitializeExtents.ToolTip1"))
         Me.ToolTipValues.SetToolTip(Me.chkInitializeExtents, resources.GetString("chkInitializeExtents.ToolTip2"))
         Me.chkInitializeExtents.UseVisualStyleBackColor = True
-        '
-        'Label25
-        '
-        resources.ApplyResources(Me.Label25, "Label25")
-        Me.Label25.Name = "Label25"
-        Me.ToolTip1.SetToolTip(Me.Label25, resources.GetString("Label25.ToolTip"))
-        Me.ToolTipChangeTag.SetToolTip(Me.Label25, resources.GetString("Label25.ToolTip1"))
-        Me.ToolTipValues.SetToolTip(Me.Label25, resources.GetString("Label25.ToolTip2"))
-        '
-        'tbExtentsInitializer
-        '
-        resources.ApplyResources(Me.tbExtentsInitializer, "tbExtentsInitializer")
-        Me.tbExtentsInitializer.Name = "tbExtentsInitializer"
-        Me.ToolTipValues.SetToolTip(Me.tbExtentsInitializer, resources.GetString("tbExtentsInitializer.ToolTip"))
-        Me.ToolTip1.SetToolTip(Me.tbExtentsInitializer, resources.GetString("tbExtentsInitializer.ToolTip1"))
-        Me.ToolTipChangeTag.SetToolTip(Me.tbExtentsInitializer, resources.GetString("tbExtentsInitializer.ToolTip2"))
         '
         'GroupBox1
         '
@@ -1017,8 +841,8 @@ Partial Class EditingForm_ReactorConvEqGibbs
         resources.ApplyResources(Me.TabPage1, "TabPage1")
         Me.TabPage1.Controls.Add(Me.gridResults)
         Me.TabPage1.Name = "TabPage1"
-        Me.ToolTipValues.SetToolTip(Me.TabPage1, resources.GetString("TabPage1.ToolTip"))
-        Me.ToolTip1.SetToolTip(Me.TabPage1, resources.GetString("TabPage1.ToolTip1"))
+        Me.ToolTip1.SetToolTip(Me.TabPage1, resources.GetString("TabPage1.ToolTip"))
+        Me.ToolTipValues.SetToolTip(Me.TabPage1, resources.GetString("TabPage1.ToolTip1"))
         Me.ToolTipChangeTag.SetToolTip(Me.TabPage1, resources.GetString("TabPage1.ToolTip2"))
         Me.TabPage1.UseVisualStyleBackColor = True
         '
@@ -1068,8 +892,8 @@ Partial Class EditingForm_ReactorConvEqGibbs
         resources.ApplyResources(Me.TabPage2, "TabPage2")
         Me.TabPage2.Controls.Add(Me.gridReactions)
         Me.TabPage2.Name = "TabPage2"
-        Me.ToolTipValues.SetToolTip(Me.TabPage2, resources.GetString("TabPage2.ToolTip"))
-        Me.ToolTip1.SetToolTip(Me.TabPage2, resources.GetString("TabPage2.ToolTip1"))
+        Me.ToolTip1.SetToolTip(Me.TabPage2, resources.GetString("TabPage2.ToolTip"))
+        Me.ToolTipValues.SetToolTip(Me.TabPage2, resources.GetString("TabPage2.ToolTip1"))
         Me.ToolTipChangeTag.SetToolTip(Me.TabPage2, resources.GetString("TabPage2.ToolTip2"))
         Me.TabPage2.UseVisualStyleBackColor = True
         '
@@ -1128,8 +952,8 @@ Partial Class EditingForm_ReactorConvEqGibbs
         resources.ApplyResources(Me.TabPage3, "TabPage3")
         Me.TabPage3.Controls.Add(Me.gridConversions)
         Me.TabPage3.Name = "TabPage3"
-        Me.ToolTipValues.SetToolTip(Me.TabPage3, resources.GetString("TabPage3.ToolTip"))
-        Me.ToolTip1.SetToolTip(Me.TabPage3, resources.GetString("TabPage3.ToolTip1"))
+        Me.ToolTip1.SetToolTip(Me.TabPage3, resources.GetString("TabPage3.ToolTip"))
+        Me.ToolTipValues.SetToolTip(Me.TabPage3, resources.GetString("TabPage3.ToolTip1"))
         Me.ToolTipChangeTag.SetToolTip(Me.TabPage3, resources.GetString("TabPage3.ToolTip2"))
         Me.TabPage3.UseVisualStyleBackColor = True
         '
@@ -1173,7 +997,7 @@ Partial Class EditingForm_ReactorConvEqGibbs
         'EditingForm_ReactorConvEqGibbs
         '
         resources.ApplyResources(Me, "$this")
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi
         Me.Controls.Add(Me.GroupBox4)
         Me.Controls.Add(Me.GroupBox6)
         Me.Controls.Add(Me.GroupBox1)
@@ -1220,12 +1044,9 @@ Partial Class EditingForm_ReactorConvEqGibbs
     Public WithEvents GroupBox4 As System.Windows.Forms.GroupBox
     Public WithEvents rtbAnnotations As Extended.Windows.Forms.RichTextBoxExtended
     Public WithEvents GroupBox3 As System.Windows.Forms.GroupBox
-    Public WithEvents cbFlashAlg As System.Windows.Forms.ComboBox
-    Public WithEvents Label10 As System.Windows.Forms.Label
     Public WithEvents cbPropPack As System.Windows.Forms.ComboBox
     Public WithEvents Label9 As System.Windows.Forms.Label
     Public WithEvents GroupBox2 As System.Windows.Forms.GroupBox
-    Public WithEvents btnConfigureFlashAlg As System.Windows.Forms.Button
     Public WithEvents btnConfigurePP As System.Windows.Forms.Button
     Public WithEvents GroupBox1 As System.Windows.Forms.GroupBox
     Public WithEvents btnDisconnectEnergy As System.Windows.Forms.Button
@@ -1260,8 +1081,6 @@ Partial Class EditingForm_ReactorConvEqGibbs
     Public WithEvents cbPDrop As System.Windows.Forms.ComboBox
     Public WithEvents tbPDrop As System.Windows.Forms.TextBox
     Public WithEvents Label5 As System.Windows.Forms.Label
-    Public WithEvents cbGibbsMinMode As System.Windows.Forms.ComboBox
-    Public WithEvents Label6 As System.Windows.Forms.Label
     Public WithEvents btnCreateAndConnectEnergy As System.Windows.Forms.Button
     Public WithEvents btnCreateAndConnectOutlet2 As System.Windows.Forms.Button
     Public WithEvents btnCreateAndConnectOutlet1 As System.Windows.Forms.Button
@@ -1270,7 +1089,6 @@ Partial Class EditingForm_ReactorConvEqGibbs
     Public WithEvents TabPageParams As System.Windows.Forms.TabPage
     Public WithEvents TabPageCompounds As System.Windows.Forms.TabPage
     Public WithEvents TabPageElements As System.Windows.Forms.TabPage
-    Public WithEvents TabPageInitialEstimates As System.Windows.Forms.TabPage
     Public WithEvents ListViewCompounds As System.Windows.Forms.ListView
     Public WithEvents DataGridViewTextBoxColumn1 As System.Windows.Forms.DataGridViewTextBoxColumn
     Public WithEvents DataGridViewTextBoxColumn2 As System.Windows.Forms.DataGridViewTextBoxColumn
@@ -1282,11 +1100,6 @@ Partial Class EditingForm_ReactorConvEqGibbs
     Public WithEvents DataGridViewTextBoxColumn6 As System.Windows.Forms.DataGridViewTextBoxColumn
     Public WithEvents DataGridViewTextBoxColumn7 As System.Windows.Forms.DataGridViewTextBoxColumn
     Public WithEvents TabPageGibbsParams As System.Windows.Forms.TabPage
-    Public WithEvents chkEnableDamping As System.Windows.Forms.CheckBox
-    Public WithEvents txtDampingUpperLimit As System.Windows.Forms.TextBox
-    Public WithEvents Label8 As System.Windows.Forms.Label
-    Public WithEvents Label15 As System.Windows.Forms.Label
-    Public WithEvents txtDampingLowerLimit As System.Windows.Forms.TextBox
     Public WithEvents tbExtLoopTol As System.Windows.Forms.TextBox
     Public WithEvents Label20 As System.Windows.Forms.Label
     Public WithEvents tbIntLoopTol As System.Windows.Forms.TextBox
@@ -1305,13 +1118,7 @@ Partial Class EditingForm_ReactorConvEqGibbs
     Public WithEvents tbIntLoopTolEq As TextBox
     Public WithEvents Label24 As Label
     Public WithEvents chkInitializeExtents As CheckBox
-    Public WithEvents Label25 As Label
-    Public WithEvents tbExtentsInitializer As TextBox
-    Public WithEvents Label27 As Label
-    Public WithEvents tbNumDeriv As TextBox
-    Public WithEvents Label28 As Label
-    Public WithEvents tbNumDeriv2 As TextBox
-    Public WithEvents chkAlternateInit As CheckBox
-    Public WithEvents Label26 As Label
     Friend WithEvents ToolTipChangeTag As ToolTip
+    Public WithEvents chkGibbsUsePreviousSolution As CheckBox
+    Public WithEvents chkUseIPOPT As CheckBox
 End Class

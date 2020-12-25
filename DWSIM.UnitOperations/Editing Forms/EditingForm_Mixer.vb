@@ -44,6 +44,8 @@ Public Class EditingForm_Mixer
 
             chkActive.Checked = MixerObject.GraphicObject.Active
 
+            ToolTip1.SetToolTip(chkActive, .FlowSheet.GetTranslatedString("AtivoInativo"))
+
             Me.Text = .GraphicObject.Tag & " (" & .GetDisplayName() & ")"
 
             lblTag.Text = .GraphicObject.Tag
@@ -55,11 +57,7 @@ Public Class EditingForm_Mixer
                     lblStatus.Text = .FlowSheet.GetTranslatedString("Inativo")
                     lblStatus.ForeColor = System.Drawing.Color.Gray
                 ElseIf .ErrorMessage <> "" Then
-                    If .ErrorMessage.Length > 50 Then
-                        lblStatus.Text = .FlowSheet.GetTranslatedString("Erro") & " (" & .ErrorMessage.Substring(50) & "...)"
-                    Else
-                        lblStatus.Text = .FlowSheet.GetTranslatedString("Erro") & " (" & .ErrorMessage & ")"
-                    End If
+                    lblStatus.Text = .FlowSheet.GetTranslatedString("Erro")
                     lblStatus.ForeColor = System.Drawing.Color.Red
                 Else
                     lblStatus.Text = .FlowSheet.GetTranslatedString("NoCalculado")
@@ -115,12 +113,6 @@ Public Class EditingForm_Mixer
             cbPropPack.Items.AddRange(proppacks)
             cbPropPack.SelectedItem = .PropertyPackage?.Tag
 
-            Dim flashalgos As String() = .FlowSheet.FlowsheetOptions.FlashAlgorithms.Select(Function(x) x.Tag).ToArray
-            cbFlashAlg.Items.Clear()
-            cbFlashAlg.Items.Add("Default")
-            cbFlashAlg.Items.AddRange(flashalgos)
-            If .PreferredFlashAlgorithmTag <> "" Then cbFlashAlg.SelectedItem = .PreferredFlashAlgorithmTag Else cbFlashAlg.SelectedIndex = 0
-
             'annotation
 
             Try
@@ -156,11 +148,15 @@ Public Class EditingForm_Mixer
 
             If flowsheet.GetFlowsheetSimulationObject(text).GraphicObject.OutputConnectors(0).IsAttached Then
                 MessageBox.Show(flowsheet.GetTranslatedString("Todasasconexespossve"), flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
-                Exit Sub
+            Else
+                Try
+                    If gobj.InputConnectors(index).IsAttached Then flowsheet.DisconnectObjects(gobj.InputConnectors(index).AttachedConnector.AttachedFrom, gobj)
+                    flowsheet.ConnectObjects(flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, gobj, 0, index)
+                Catch ex As Exception
+                    MessageBox.Show(ex.Message, flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End Try
             End If
-            If gobj.InputConnectors(index).IsAttached Then flowsheet.DisconnectObjects(gobj.InputConnectors(index).AttachedConnector.AttachedFrom, gobj)
-            flowsheet.ConnectObjects(flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, gobj, 0, index)
-
+            UpdateInfo()
         End If
 
     End Sub
@@ -178,11 +174,15 @@ Public Class EditingForm_Mixer
 
             If flowsheet.GetFlowsheetSimulationObject(text).GraphicObject.InputConnectors(0).IsAttached Then
                 MessageBox.Show(flowsheet.GetTranslatedString("Todasasconexespossve"), flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
-                Exit Sub
+            Else
+                Try
+                    If gobj.OutputConnectors(0).IsAttached Then flowsheet.DisconnectObjects(gobj, gobj.OutputConnectors(0).AttachedConnector.AttachedTo)
+                    flowsheet.ConnectObjects(gobj, flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, 0, 0)
+                Catch ex As Exception
+                    MessageBox.Show(ex.Message, flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End Try
             End If
-            If gobj.OutputConnectors(0).IsAttached Then flowsheet.DisconnectObjects(gobj, gobj.OutputConnectors(0).AttachedConnector.AttachedTo)
-            flowsheet.ConnectObjects(gobj, flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, 0, 0)
-
+            UpdateInfo()
         End If
 
     End Sub
@@ -242,13 +242,6 @@ Public Class EditingForm_Mixer
         End If
     End Sub
 
-    Private Sub cbFlashAlg_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbFlashAlg.SelectedIndexChanged
-        If Loaded Then
-            MixerObject.PreferredFlashAlgorithmTag = cbFlashAlg.SelectedItem.ToString
-            RequestCalc()
-        End If
-    End Sub
-
     Private Sub rtbAnnotations_RtfChanged(sender As Object, e As EventArgs) Handles rtbAnnotations.RtfChanged
         If Loaded Then MixerObject.Annotation = rtbAnnotations.Rtf
     End Sub
@@ -284,12 +277,6 @@ Public Class EditingForm_Mixer
 
     Private Sub btnConfigurePP_Click(sender As Object, e As EventArgs) Handles btnConfigurePP.Click
         MixerObject.FlowSheet.PropertyPackages.Values.Where(Function(x) x.Tag = cbPropPack.SelectedItem.ToString).SingleOrDefault.DisplayEditingForm()
-    End Sub
-
-    Private Sub btnConfigureFlashAlg_Click(sender As Object, e As EventArgs) Handles btnConfigureFlashAlg.Click
-
-        Thermodynamics.Calculator.ConfigureFlashInstance(MixerObject, cbFlashAlg.SelectedItem.ToString)
-
     End Sub
 
     Private Sub btnCreateAndConnectInlet1_Click(sender As Object, e As EventArgs) Handles btnCreateAndConnectInlet1.Click, btnCreateAndConnectInlet2.Click, btnCreateAndConnectInlet3.Click, btnCreateAndConnectInlet4.Click, btnCreateAndConnectInlet5.Click, btnCreateAndConnectInlet6.Click, btnCreateAndConnectOutlet1.Click

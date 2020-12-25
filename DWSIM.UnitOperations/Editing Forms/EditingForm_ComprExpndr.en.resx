@@ -127,12 +127,6 @@
   <data name="chkActive.Location" type="System.Drawing.Point, System.Drawing">
     <value>331, 43</value>
   </data>
-  <data name="chkActive.ToolTip" xml:space="preserve">
-    <value>Active/Inactive</value>
-  </data>
-  <data name="chkActive.ToolTip1" xml:space="preserve">
-    <value />
-  </data>
   <data name="lblConnectedTo.Location" type="System.Drawing.Point, System.Drawing">
     <value>158, 72</value>
   </data>
@@ -154,29 +148,17 @@
   <data name="GroupBox5.Text" xml:space="preserve">
     <value>General Info</value>
   </data>
+  <data name="rtbAnnotations.Size" type="System.Drawing.Size, System.Drawing">
+    <value>352, 127</value>
+  </data>
+  <data name="GroupBox4.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 723</value>
+  </data>
   <data name="GroupBox4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>358, 119</value>
+    <value>358, 146</value>
   </data>
   <data name="GroupBox4.Text" xml:space="preserve">
     <value>Notes</value>
-  </data>
-  <data name="rtbAnnotations.Size" type="System.Drawing.Size, System.Drawing">
-    <value>352, 100</value>
-  </data>
-  <data name="GroupBox3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>358, 88</value>
-  </data>
-  <data name="GroupBox3.Text" xml:space="preserve">
-    <value>Property Package Settings</value>
-  </data>
-  <data name="btnConfigureFlashAlg.Location" type="System.Drawing.Point, System.Drawing">
-    <value>331, 53</value>
-  </data>
-  <data name="btnConfigureFlashAlg.ToolTip" xml:space="preserve">
-    <value>Configure</value>
-  </data>
-  <data name="btnConfigureFlashAlg.ToolTip1" xml:space="preserve">
-    <value />
   </data>
   <data name="btnConfigurePP.Location" type="System.Drawing.Point, System.Drawing">
     <value>331, 26</value>
@@ -186,15 +168,6 @@
   </data>
   <data name="btnConfigurePP.ToolTip1" xml:space="preserve">
     <value />
-  </data>
-  <data name="cbFlashAlg.Location" type="System.Drawing.Point, System.Drawing">
-    <value>161, 53</value>
-  </data>
-  <data name="cbFlashAlg.Size" type="System.Drawing.Size, System.Drawing">
-    <value>164, 21</value>
-  </data>
-  <data name="Label10.Text" xml:space="preserve">
-    <value>Flash Algorithm</value>
   </data>
   <data name="cbPropPack.Location" type="System.Drawing.Point, System.Drawing">
     <value>161, 26</value>
@@ -208,11 +181,11 @@
   <data name="Label9.Text" xml:space="preserve">
     <value>Property Package</value>
   </data>
-  <data name="GroupBox2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>358, 429</value>
+  <data name="GroupBox3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>358, 61</value>
   </data>
-  <data name="GroupBox2.Text" xml:space="preserve">
-    <value>Calculation Parameters</value>
+  <data name="GroupBox3.Text" xml:space="preserve">
+    <value>Property Package Settings</value>
   </data>
   <data name="Label25.Location" type="System.Drawing.Point, System.Drawing">
     <value>265, 107</value>
@@ -381,13 +354,16 @@
   <data name="tbPower.Location" type="System.Drawing.Point, System.Drawing">
     <value>153, 233</value>
   </data>
-  <data name="Label6.Location" type="System.Drawing.Point, System.Drawing">
-    <value>9, 236</value>
+  <data name="lblPower.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
-  <data name="Label6.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="lblPower.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lblPower.Size" type="System.Drawing.Size, System.Drawing">
     <value>138, 13</value>
   </data>
-  <data name="Label6.Text" xml:space="preserve">
+  <data name="lblPower.Text" xml:space="preserve">
     <value>Power Required/Generated</value>
   </data>
   <data name="cbPress.Location" type="System.Drawing.Point, System.Drawing">
@@ -426,23 +402,26 @@
   <data name="tbPressureDrop.Location" type="System.Drawing.Point, System.Drawing">
     <value>153, 129</value>
   </data>
-  <data name="Label3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>9, 133</value>
+  <data name="lblDP.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
-  <data name="Label3.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="lblDP.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lblDP.Size" type="System.Drawing.Size, System.Drawing">
     <value>120, 13</value>
   </data>
-  <data name="Label3.Text" xml:space="preserve">
+  <data name="lblDP.Text" xml:space="preserve">
     <value>Pressure Increase/Drop</value>
   </data>
   <data name="cbCalcMode.Items" xml:space="preserve">
     <value>Outlet Pressure</value>
   </data>
   <data name="cbCalcMode.Items1" xml:space="preserve">
-    <value>Pressure Increase/Decrease</value>
+    <value>Pressure Increase</value>
   </data>
   <data name="cbCalcMode.Items2" xml:space="preserve">
-    <value>Power Required/Generated</value>
+    <value>Power Required</value>
   </data>
   <data name="cbCalcMode.Items3" xml:space="preserve">
     <value>Energy Stream</value>
@@ -465,11 +444,11 @@
   <data name="Label8.Text" xml:space="preserve">
     <value>Calculation Type</value>
   </data>
-  <data name="GroupBox1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>358, 113</value>
+  <data name="GroupBox2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>358, 429</value>
   </data>
-  <data name="GroupBox1.Text" xml:space="preserve">
-    <value>Connections</value>
+  <data name="GroupBox2.Text" xml:space="preserve">
+    <value>Calculation Parameters</value>
   </data>
   <data name="btnCreateAndConnectEnergy.Location" type="System.Drawing.Point, System.Drawing">
     <value>304, 77</value>
@@ -560,6 +539,12 @@
   </data>
   <data name="Label19.Text" xml:space="preserve">
     <value>Inlet Stream</value>
+  </data>
+  <data name="GroupBox1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>358, 113</value>
+  </data>
+  <data name="GroupBox1.Text" xml:space="preserve">
+    <value>Connections</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
     <value>367, 881</value>

@@ -52,6 +52,8 @@ Public Class EditingForm_OrificePlate
 
             chkActive.Checked = .GraphicObject.Active
 
+            ToolTip1.SetToolTip(chkActive, .FlowSheet.GetTranslatedString("AtivoInativo"))
+
             Me.Text = .GraphicObject.Tag & " (" & .GetDisplayName() & ")"
 
             lblTag.Text = .GraphicObject.Tag
@@ -63,11 +65,7 @@ Public Class EditingForm_OrificePlate
                     lblStatus.Text = .FlowSheet.GetTranslatedString("Inativo")
                     lblStatus.ForeColor = System.Drawing.Color.Gray
                 ElseIf .ErrorMessage <> "" Then
-                    If .ErrorMessage.Length > 50 Then
-                        lblStatus.Text = .FlowSheet.GetTranslatedString("Erro") & " (" & .ErrorMessage.Substring(50) & "...)"
-                    Else
-                        lblStatus.Text = .FlowSheet.GetTranslatedString("Erro") & " (" & .ErrorMessage & ")"
-                    End If
+                    lblStatus.Text = .FlowSheet.GetTranslatedString("Erro")
                     lblStatus.ForeColor = System.Drawing.Color.Red
                 Else
                     lblStatus.Text = .FlowSheet.GetTranslatedString("NoCalculado")
@@ -99,12 +97,6 @@ Public Class EditingForm_OrificePlate
             cbPropPack.Items.Clear()
             cbPropPack.Items.AddRange(proppacks)
             cbPropPack.SelectedItem = .PropertyPackage?.Tag
-
-            Dim flashalgos As String() = .FlowSheet.FlowsheetOptions.FlashAlgorithms.Select(Function(x) x.Tag).ToArray
-            cbFlashAlg.Items.Clear()
-            cbFlashAlg.Items.Add("Default")
-            cbFlashAlg.Items.AddRange(flashalgos)
-            If .PreferredFlashAlgorithmTag <> "" Then cbFlashAlg.SelectedItem = .PreferredFlashAlgorithmTag Else cbFlashAlg.SelectedIndex = 0
 
             'annotation
 
@@ -151,7 +143,7 @@ Public Class EditingForm_OrificePlate
             tbIntPipeDiameter.Text = su.Converter.ConvertFromSI(units.diameter, uobj.InternalPipeDiameter).ToString(nf)
             tbBeta.Text = .Beta.ToString(nf)
             tbCorrF.Text = .CorrectionFactor.ToString(nf)
-        
+
             tbOverallPDrop.Text = su.Converter.ConvertFromSI(units.deltaP, uobj.OverallPressureDrop).ToString(nf)
             tbOrificePDrop.Text = su.Converter.ConvertFromSI(units.deltaP, uobj.OrificePressureDrop).ToString(nf)
             tbDeltaT.Text = su.Converter.ConvertFromSI(units.deltaT, uobj.DeltaT.GetValueOrDefault).ToString(nf)
@@ -164,12 +156,6 @@ Public Class EditingForm_OrificePlate
 
     Private Sub btnConfigurePP_Click(sender As Object, e As EventArgs) Handles btnConfigurePP.Click
         SimObject.FlowSheet.PropertyPackages.Values.Where(Function(x) x.Tag = cbPropPack.SelectedItem.ToString).SingleOrDefault.DisplayEditingForm()
-    End Sub
-
-    Private Sub btnConfigureFlashAlg_Click(sender As Object, e As EventArgs) Handles btnConfigureFlashAlg.Click
-
-        Thermodynamics.Calculator.ConfigureFlashInstance(SimObject, cbFlashAlg.SelectedItem.ToString)
-
     End Sub
 
     Private Sub lblTag_TextChanged(sender As Object, e As EventArgs) Handles lblTag.TextChanged
@@ -274,13 +260,6 @@ Public Class EditingForm_OrificePlate
         End If
     End Sub
 
-    Private Sub cbFlashAlg_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbFlashAlg.SelectedIndexChanged
-        If Loaded Then
-            SimObject.PreferredFlashAlgorithmTag = cbFlashAlg.SelectedItem.ToString
-            RequestCalc()
-        End If
-    End Sub
-
     Private Sub cbInlet1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbInlet1.SelectedIndexChanged
 
         If Loaded Then
@@ -296,11 +275,15 @@ Public Class EditingForm_OrificePlate
 
                 If flowsheet.GetFlowsheetSimulationObject(text).GraphicObject.OutputConnectors(0).IsAttached Then
                     MessageBox.Show(flowsheet.GetTranslatedString("Todasasconexespossve"), flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
-                    Exit Sub
+                Else
+                    Try
+                        If gobj.InputConnectors(index).IsAttached Then flowsheet.DisconnectObjects(gobj.InputConnectors(index).AttachedConnector.AttachedFrom, gobj)
+                        flowsheet.ConnectObjects(flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, gobj, 0, index)
+                    Catch ex As Exception
+                        MessageBox.Show(ex.Message, flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End Try
                 End If
-                If gobj.InputConnectors(index).IsAttached Then flowsheet.DisconnectObjects(gobj.InputConnectors(index).AttachedConnector.AttachedFrom, gobj)
-                flowsheet.ConnectObjects(flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, gobj, 0, index)
-
+                UpdateInfo()
             End If
 
         End If
@@ -322,11 +305,15 @@ Public Class EditingForm_OrificePlate
 
                 If flowsheet.GetFlowsheetSimulationObject(text).GraphicObject.InputConnectors(0).IsAttached Then
                     MessageBox.Show(flowsheet.GetTranslatedString("Todasasconexespossve"), flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
-                    Exit Sub
+                Else
+                    Try
+                        If gobj.OutputConnectors(0).IsAttached Then flowsheet.DisconnectObjects(gobj, gobj.OutputConnectors(0).AttachedConnector.AttachedTo)
+                        flowsheet.ConnectObjects(gobj, flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, 0, 0)
+                    Catch ex As Exception
+                        MessageBox.Show(ex.Message, flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End Try
                 End If
-                If gobj.OutputConnectors(0).IsAttached Then flowsheet.DisconnectObjects(gobj, gobj.OutputConnectors(0).AttachedConnector.AttachedTo)
-                flowsheet.ConnectObjects(gobj, flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, 0, 0)
-
+                UpdateInfo()
             End If
 
         End If

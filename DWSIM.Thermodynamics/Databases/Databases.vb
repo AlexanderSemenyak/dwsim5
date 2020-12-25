@@ -24,10 +24,12 @@ Imports CProp = CoolProp
 Imports System.Linq
 Imports DWSIM.Thermodynamics
 Imports System.Reflection
+Imports DWSIM.Interfaces
+Imports DWSIM.Thermodynamics.BaseClasses
 
 Namespace Databases
 
-    <DelimitedRecord(";")> <IgnoreFirst()> <System.Serializable()> _
+    <DelimitedRecord(";")> <IgnoreFirst()> <System.Serializable()>
     Public Class ChemSepNameIDPair
 
         Implements ICloneable
@@ -134,6 +136,19 @@ Namespace Databases
             mytxt = Nothing
 
         End Sub
+
+        Public Function ReadChemSepXMLFile(path As String) As List(Of ConstantProperties)
+
+            Dim xmld = New XmlDocument
+            xmld.Load(path)
+
+            Dim cpa As New List(Of ConstantProperties)
+            cpa = GetComps(xmld)
+            cpa.AddRange(GetComps(xmldoc2))
+
+            Return cpa
+
+        End Function
 
         Public Function Transfer(Optional ByVal CompName As String = "") As Thermodynamics.BaseClasses.ConstantProperties()
 
@@ -827,6 +842,20 @@ Namespace Databases
     End Class
 
     <System.Serializable()> Public Class UserDB
+
+        Public Shared Function LoadAdditionalCompounds() As List(Of ICompoundConstantProperties)
+
+            Dim comps As New List(Of ICompoundConstantProperties)
+            Dim cfiles = Directory.GetFiles(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "addcomps"))
+            For Each cpath In cfiles
+                Dim comp = Newtonsoft.Json.JsonConvert.DeserializeObject(Of BaseClasses.ConstantProperties)(File.ReadAllText(cpath))
+                comp.CurrentDB = "User"
+                comp.OriginalDB = "User"
+                comps.Add(comp)
+            Next
+            Return comps
+
+        End Function
 
         Public Shared Sub CreateNew(ByVal path As String, ByVal TopNode As String)
 

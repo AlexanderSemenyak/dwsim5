@@ -212,11 +212,11 @@ Public Class EditingForm_Column_Connections_New
         Dim stage As String = ""
 
         For Each si In rc.MaterialStreams.Values
-            If Integer.TryParse(si.AssociatedStage, New Integer) Then
-                stage = stageNames(CInt(si.AssociatedStage) + 1)
+            If stageNames.Contains(si.AssociatedStage) Then
+                stage = si.AssociatedStage
             Else
-                If stageNames.Contains(si.AssociatedStage) Then
-                    stage = si.AssociatedStage
+                If Integer.TryParse(si.AssociatedStage, New Integer) Then
+                    stage = stageNames(CInt(si.AssociatedStage) + 1)
                 Else
                     stage = stageNames(stageIDs.IndexOf(si.AssociatedStage))
                 End If
@@ -241,11 +241,11 @@ Public Class EditingForm_Column_Connections_New
 
         Next
         For Each si In rc.EnergyStreams.Values
-            If Integer.TryParse(si.AssociatedStage, New Integer) Then
-                stage = stageNames(CInt(si.AssociatedStage) + 1)
+            If stageNames.Contains(si.AssociatedStage) Then
+                stage = si.AssociatedStage
             Else
-                If stageNames.Contains(si.AssociatedStage) Then
-                    stage = si.AssociatedStage
+                If Integer.TryParse(si.AssociatedStage, New Integer) Then
+                    stage = stageNames(CInt(si.AssociatedStage) + 1)
                 Else
                     stage = stageNames(stageIDs.IndexOf(si.AssociatedStage))
                 End If

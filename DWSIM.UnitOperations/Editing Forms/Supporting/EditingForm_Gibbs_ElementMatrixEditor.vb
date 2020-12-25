@@ -61,8 +61,32 @@ Public Class EditingForm_Gibbs_ElementMatrixEditor
 
     End Sub
 
-    Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
+    Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
+
+
+    End Sub
+
+    Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
+
+
+
+    End Sub
+
+
+    Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
+        grid.Rows.Add()
+    End Sub
+
+    Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
+        If Not grid.SelectedRows.Count = 0 Then
+            grid.Rows.RemoveAt(grid.SelectedRows(0).Index)
+        ElseIf grid.SelectedCells.Count > 0 Then
+            grid.Rows.RemoveAt(grid.SelectedCells(0).RowIndex)
+        End If
+    End Sub
+
+    Public Sub CreateMatrix()
         gr.CreateElementMatrix()
 
         Dim i, j, e_, c As Integer
@@ -71,7 +95,7 @@ Public Class EditingForm_Gibbs_ElementMatrixEditor
             .AllowUserToAddRows = False
             .Rows.Clear()
             .Columns.Clear()
-            .Columns.Add("el", "Elements")
+            .Columns.Add("el", "Element")
             For Each s As String In gr.ComponentIDs
                 .Columns.Add(s, s)
             Next
@@ -87,11 +111,13 @@ Public Class EditingForm_Gibbs_ElementMatrixEditor
                 Next
             Next
         End With
-
     End Sub
 
-    Private Sub Button4_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button4.Click
+    Private Sub ToolStripButton4_Click(sender As Object, e As EventArgs) Handles ToolStripButton4.Click
+        CreateMatrix()
+    End Sub
 
+    Public Sub SaveMatrix()
         ReDim elmat(Me.grid.Rows.Count - 1, Me.grid.Columns.Count - 2)
         ReDim gr.TotalElements(Me.grid.Rows.Count - 1)
         Dim sum_e As Double
@@ -107,16 +133,10 @@ Public Class EditingForm_Gibbs_ElementMatrixEditor
         Next
         gr.Elements = elements.ToArray(GetType(String))
         gr.ElementMatrix = elmat
-
     End Sub
 
-    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
-        grid.Rows.Add()
+    Private Sub ToolStripButton3_Click(sender As Object, e As EventArgs) Handles ToolStripButton3.Click
+        SaveMatrix()
     End Sub
 
-    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
-        If Not grid.SelectedRows.Count = 0 Then
-            Me.grid.Rows.RemoveAt(Me.grid.SelectedRows(0).Index)
-        End If
-    End Sub
 End Class

@@ -48,11 +48,25 @@ Public Class EditingForm_ComprExpndr
             End If
         End If
 
+        If TypeOf SimObject Is UnitOperations.Compressor Then
+            cbCalcMode.Items(1) = SimObject.FlowSheet.GetTranslatedString("PressureIncrease")
+            cbCalcMode.Items(2) = SimObject.FlowSheet.GetTranslatedString("PowerRequired")
+            lblDP.Text = SimObject.FlowSheet.GetTranslatedString("PressureIncrease")
+            lblPower.Text = SimObject.FlowSheet.GetTranslatedString("PowerRequired")
+        Else
+            cbCalcMode.Items(1) = SimObject.FlowSheet.GetTranslatedString("PressureDecrease")
+            cbCalcMode.Items(2) = SimObject.FlowSheet.GetTranslatedString("PowerGenerated")
+            lblDP.Text = SimObject.FlowSheet.GetTranslatedString("PressureDecrease")
+            lblPower.Text = SimObject.FlowSheet.GetTranslatedString("PowerGenerated")
+        End If
+
         With SimObject
 
             'first block
 
             chkActive.Checked = .GraphicObject.Active
+
+            ToolTip1.SetToolTip(chkActive, .FlowSheet.GetTranslatedString("AtivoInativo"))
 
             Me.Text = .GraphicObject.Tag & " (" & .GetDisplayName() & ")"
 
@@ -65,11 +79,7 @@ Public Class EditingForm_ComprExpndr
                     lblStatus.Text = .FlowSheet.GetTranslatedString("Inativo")
                     lblStatus.ForeColor = System.Drawing.Color.Gray
                 ElseIf .ErrorMessage <> "" Then
-                    If .ErrorMessage.Length > 50 Then
-                        lblStatus.Text = .FlowSheet.GetTranslatedString("Erro") & " (" & .ErrorMessage.Substring(50) & "...)"
-                    Else
-                        lblStatus.Text = .FlowSheet.GetTranslatedString("Erro") & " (" & .ErrorMessage & ")"
-                    End If
+                    lblStatus.Text = .FlowSheet.GetTranslatedString("Erro")
                     lblStatus.ForeColor = System.Drawing.Color.Red
                 Else
                     lblStatus.Text = .FlowSheet.GetTranslatedString("NoCalculado")
@@ -112,12 +122,6 @@ Public Class EditingForm_ComprExpndr
             cbPropPack.Items.Clear()
             cbPropPack.Items.AddRange(proppacks)
             cbPropPack.SelectedItem = .PropertyPackage?.Tag
-
-            Dim flashalgos As String() = .FlowSheet.FlowsheetOptions.FlashAlgorithms.Select(Function(x) x.Tag).ToArray
-            cbFlashAlg.Items.Clear()
-            cbFlashAlg.Items.Add("Default")
-            cbFlashAlg.Items.AddRange(flashalgos)
-            If .PreferredFlashAlgorithmTag <> "" Then cbFlashAlg.SelectedItem = .PreferredFlashAlgorithmTag Else cbFlashAlg.SelectedIndex = 0
 
             'annotation
 
@@ -247,12 +251,6 @@ Public Class EditingForm_ComprExpndr
         SimObject.FlowSheet.PropertyPackages.Values.Where(Function(x) x.Tag = cbPropPack.SelectedItem.ToString).SingleOrDefault.DisplayEditingForm()
     End Sub
 
-    Private Sub btnConfigureFlashAlg_Click(sender As Object, e As EventArgs) Handles btnConfigureFlashAlg.Click
-
-        Thermodynamics.Calculator.ConfigureFlashInstance(SimObject, cbFlashAlg.SelectedItem.ToString)
-
-    End Sub
-
     Private Sub lblTag_TextChanged(sender As Object, e As EventArgs) Handles lblTag.TextChanged
         If Loaded Then ToolTipChangeTag.Show("Press ENTER to commit changes.", lblTag, New System.Drawing.Point(0, lblTag.Height + 3), 3000)
 
@@ -340,6 +338,13 @@ Public Class EditingForm_ComprExpndr
                 tbPower.Enabled = False
                 tbAdiabaticHead.Enabled = False
                 tbPolytropicHead.Enabled = False
+                If TypeOf SimObject Is UnitOperations.Compressor Then
+                    DirectCast(SimObject, UnitOperations.Compressor).CalcMode = UnitOperations.Compressor.CalculationMode.EnergyStream
+                Else
+                    SimObject.FlowSheet.ShowMessage(SimObject.GraphicObject.Tag + ": " + SimObject.FlowSheet.GetTranslatedString("CalcModeNotSupported"), IFlowsheet.MessageType.GeneralError)
+                    DirectCast(SimObject, UnitOperations.Expander).CalcMode = UnitOperations.Expander.CalculationMode.OutletPressure
+                    UpdateInfo()
+                End If
             Case 4
                 tbRotSpeed.Enabled = False
                 btnCurves.Enabled = False
@@ -539,13 +544,6 @@ Public Class EditingForm_ComprExpndr
         End If
     End Sub
 
-    Private Sub cbFlashAlg_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbFlashAlg.SelectedIndexChanged
-        If Loaded Then
-            SimObject.PreferredFlashAlgorithmTag = cbFlashAlg.SelectedItem.ToString
-            RequestCalc()
-        End If
-    End Sub
-
     Private Sub cbInlet1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbInlet1.SelectedIndexChanged
 
         If Loaded Then
@@ -561,11 +559,15 @@ Public Class EditingForm_ComprExpndr
 
                 If flowsheet.GetFlowsheetSimulationObject(text).GraphicObject.OutputConnectors(0).IsAttached Then
                     MessageBox.Show(flowsheet.GetTranslatedString("Todasasconexespossve"), flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
-                    Exit Sub
+                Else
+                    Try
+                        If gobj.InputConnectors(index).IsAttached Then flowsheet.DisconnectObjects(gobj.InputConnectors(index).AttachedConnector.AttachedFrom, gobj)
+                        flowsheet.ConnectObjects(flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, gobj, 0, index)
+                    Catch ex As Exception
+                        MessageBox.Show(ex.Message, flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End Try
                 End If
-                If gobj.InputConnectors(index).IsAttached Then flowsheet.DisconnectObjects(gobj.InputConnectors(index).AttachedConnector.AttachedFrom, gobj)
-                flowsheet.ConnectObjects(flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, gobj, 0, index)
-
+                UpdateInfo()
             End If
 
         End If
@@ -587,11 +589,15 @@ Public Class EditingForm_ComprExpndr
 
                 If flowsheet.GetFlowsheetSimulationObject(text).GraphicObject.InputConnectors(0).IsAttached Then
                     MessageBox.Show(flowsheet.GetTranslatedString("Todasasconexespossve"), flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
-                    Exit Sub
+                Else
+                    Try
+                        If gobj.OutputConnectors(0).IsAttached Then flowsheet.DisconnectObjects(gobj, gobj.OutputConnectors(0).AttachedConnector.AttachedTo)
+                        flowsheet.ConnectObjects(gobj, flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, 0, 0)
+                    Catch ex As Exception
+                        MessageBox.Show(ex.Message, flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End Try
                 End If
-                If gobj.OutputConnectors(0).IsAttached Then flowsheet.DisconnectObjects(gobj, gobj.OutputConnectors(0).AttachedConnector.AttachedTo)
-                flowsheet.ConnectObjects(gobj, flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, 0, 0)
-
+                UpdateInfo()
             End If
 
         End If
@@ -615,11 +621,15 @@ Public Class EditingForm_ComprExpndr
 
                     If flowsheet.GetFlowsheetSimulationObject(text).GraphicObject.OutputConnectors(0).IsAttached Then
                         MessageBox.Show(flowsheet.GetTranslatedString("Todasasconexespossve"), flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
-                        Exit Sub
+                    Else
+                        Try
+                            If gobj.InputConnectors(index).IsAttached Then flowsheet.DisconnectObjects(gobj.InputConnectors(index).AttachedConnector.AttachedFrom, gobj)
+                            flowsheet.ConnectObjects(flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, gobj, 0, index)
+                        Catch ex As Exception
+                            MessageBox.Show(ex.Message, flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        End Try
                     End If
-                    If gobj.InputConnectors(index).IsAttached Then flowsheet.DisconnectObjects(gobj.InputConnectors(index).AttachedConnector.AttachedFrom, gobj)
-                    flowsheet.ConnectObjects(flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, gobj, 0, index)
-
+                    UpdateInfo()
                 End If
 
             Else

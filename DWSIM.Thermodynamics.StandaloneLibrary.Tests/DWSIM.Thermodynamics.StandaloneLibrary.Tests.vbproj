@@ -22,7 +22,7 @@
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\DistPackages\DTL\</OutputPath>
     <DocumentationFile>DWSIM.Thermodynamics.StandaloneLibrary.Tests.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
@@ -50,6 +50,11 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DWSIM.Thermodynamics.StandaloneLibrary, Version=6.3.7617.40244, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DistPackages\DTL\DWSIM.Thermodynamics.StandaloneLibrary.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -108,12 +113,6 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DWSIM.Thermodynamics.StandaloneLibrary\DWSIM.Thermodynamics.StandaloneLibrary.vbproj">
-      <Project>{ce1b1451-22a9-4cf3-a0ff-821b9e629696}</Project>
-      <Name>DWSIM.Thermodynamics.StandaloneLibrary</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

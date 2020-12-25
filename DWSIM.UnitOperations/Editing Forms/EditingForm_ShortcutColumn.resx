@@ -153,6 +153,9 @@
   <metadata name="ToolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>145, 17</value>
   </metadata>
+  <metadata name="ToolTipChangeTag.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>244, 17</value>
+  </metadata>
   <data name="chkActive.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
   </data>
@@ -175,6 +178,9 @@
     <value>Ativar/Desativar</value>
   </data>
   <data name="chkActive.ToolTip1" xml:space="preserve">
+    <value>Ativar/Desativar</value>
+  </data>
+  <data name="chkActive.ToolTip2" xml:space="preserve">
     <value>Ativar/Desativar</value>
   </data>
   <data name="&gt;&gt;chkActive.Name" xml:space="preserve">
@@ -372,18 +378,6 @@
   <data name="GroupBox3.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Left, Right</value>
   </data>
-  <data name="&gt;&gt;btnConfigureFlashAlg.Name" xml:space="preserve">
-    <value>btnConfigureFlashAlg</value>
-  </data>
-  <data name="&gt;&gt;btnConfigureFlashAlg.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;btnConfigureFlashAlg.Parent" xml:space="preserve">
-    <value>GroupBox3</value>
-  </data>
-  <data name="&gt;&gt;btnConfigureFlashAlg.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
   <data name="&gt;&gt;btnConfigurePP.Name" xml:space="preserve">
     <value>btnConfigurePP</value>
   </data>
@@ -394,31 +388,7 @@
     <value>GroupBox3</value>
   </data>
   <data name="&gt;&gt;btnConfigurePP.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;cbFlashAlg.Name" xml:space="preserve">
-    <value>cbFlashAlg</value>
-  </data>
-  <data name="&gt;&gt;cbFlashAlg.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cbFlashAlg.Parent" xml:space="preserve">
-    <value>GroupBox3</value>
-  </data>
-  <data name="&gt;&gt;cbFlashAlg.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;Label10.Name" xml:space="preserve">
-    <value>Label10</value>
-  </data>
-  <data name="&gt;&gt;Label10.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Label10.Parent" xml:space="preserve">
-    <value>GroupBox3</value>
-  </data>
-  <data name="&gt;&gt;Label10.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>0</value>
   </data>
   <data name="&gt;&gt;cbPropPack.Name" xml:space="preserve">
     <value>cbPropPack</value>
@@ -430,7 +400,7 @@
     <value>GroupBox3</value>
   </data>
   <data name="&gt;&gt;cbPropPack.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>1</value>
   </data>
   <data name="&gt;&gt;Label9.Name" xml:space="preserve">
     <value>Label9</value>
@@ -442,13 +412,13 @@
     <value>GroupBox3</value>
   </data>
   <data name="&gt;&gt;Label9.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>2</value>
   </data>
   <data name="GroupBox3.Location" type="System.Drawing.Point, System.Drawing">
     <value>6, 460</value>
   </data>
   <data name="GroupBox3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>431, 75</value>
+    <value>431, 56</value>
   </data>
   <data name="GroupBox3.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -467,42 +437,6 @@
   </data>
   <data name="&gt;&gt;GroupBox3.ZOrder" xml:space="preserve">
     <value>3</value>
-  </data>
-  <data name="btnConfigureFlashAlg.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Right</value>
-  </data>
-  <data name="btnConfigureFlashAlg.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
-    <value>Stretch</value>
-  </data>
-  <data name="btnConfigureFlashAlg.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="btnConfigureFlashAlg.Location" type="System.Drawing.Point, System.Drawing">
-    <value>404, 47</value>
-  </data>
-  <data name="btnConfigureFlashAlg.Size" type="System.Drawing.Size, System.Drawing">
-    <value>21, 21</value>
-  </data>
-  <data name="btnConfigureFlashAlg.TabIndex" type="System.Int32, mscorlib">
-    <value>21</value>
-  </data>
-  <data name="btnConfigureFlashAlg.ToolTip" xml:space="preserve">
-    <value>Configurar</value>
-  </data>
-  <data name="btnConfigureFlashAlg.ToolTip1" xml:space="preserve">
-    <value>Configurar</value>
-  </data>
-  <data name="&gt;&gt;btnConfigureFlashAlg.Name" xml:space="preserve">
-    <value>btnConfigureFlashAlg</value>
-  </data>
-  <data name="&gt;&gt;btnConfigureFlashAlg.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;btnConfigureFlashAlg.Parent" xml:space="preserve">
-    <value>GroupBox3</value>
-  </data>
-  <data name="&gt;&gt;btnConfigureFlashAlg.ZOrder" xml:space="preserve">
-    <value>0</value>
   </data>
   <data name="btnConfigurePP.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -528,6 +462,9 @@
   <data name="btnConfigurePP.ToolTip1" xml:space="preserve">
     <value>Configurar</value>
   </data>
+  <data name="btnConfigurePP.ToolTip2" xml:space="preserve">
+    <value>Configurar</value>
+  </data>
   <data name="&gt;&gt;btnConfigurePP.Name" xml:space="preserve">
     <value>btnConfigurePP</value>
   </data>
@@ -538,61 +475,7 @@
     <value>GroupBox3</value>
   </data>
   <data name="&gt;&gt;btnConfigurePP.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="cbFlashAlg.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Left, Right</value>
-  </data>
-  <data name="cbFlashAlg.Location" type="System.Drawing.Point, System.Drawing">
-    <value>147, 47</value>
-  </data>
-  <data name="cbFlashAlg.Size" type="System.Drawing.Size, System.Drawing">
-    <value>251, 21</value>
-  </data>
-  <data name="cbFlashAlg.TabIndex" type="System.Int32, mscorlib">
-    <value>17</value>
-  </data>
-  <data name="&gt;&gt;cbFlashAlg.Name" xml:space="preserve">
-    <value>cbFlashAlg</value>
-  </data>
-  <data name="&gt;&gt;cbFlashAlg.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;cbFlashAlg.Parent" xml:space="preserve">
-    <value>GroupBox3</value>
-  </data>
-  <data name="&gt;&gt;cbFlashAlg.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="Label10.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="Label10.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="Label10.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 50</value>
-  </data>
-  <data name="Label10.Size" type="System.Drawing.Size, System.Drawing">
-    <value>78, 13</value>
-  </data>
-  <data name="Label10.TabIndex" type="System.Int32, mscorlib">
-    <value>16</value>
-  </data>
-  <data name="Label10.Text" xml:space="preserve">
-    <value>Algoritmo Flash</value>
-  </data>
-  <data name="&gt;&gt;Label10.Name" xml:space="preserve">
-    <value>Label10</value>
-  </data>
-  <data name="&gt;&gt;Label10.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Label10.Parent" xml:space="preserve">
-    <value>GroupBox3</value>
-  </data>
-  <data name="&gt;&gt;Label10.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>0</value>
   </data>
   <data name="cbPropPack.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Left, Right</value>
@@ -616,7 +499,7 @@
     <value>GroupBox3</value>
   </data>
   <data name="&gt;&gt;cbPropPack.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>1</value>
   </data>
   <data name="Label9.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -646,7 +529,7 @@
     <value>GroupBox3</value>
   </data>
   <data name="&gt;&gt;Label9.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>2</value>
   </data>
   <data name="GroupBox2.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Left, Right</value>
@@ -963,9 +846,6 @@
   <data name="cbRebPressureUnits.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
   </data>
-  <data name="cbRebPressureUnits.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
   <data name="cbRebPressureUnits.Items" xml:space="preserve">
     <value>Mínima das Entradas</value>
   </data>
@@ -1025,9 +905,6 @@
   </data>
   <data name="cbCondPressureUnits.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
-  </data>
-  <data name="cbCondPressureUnits.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
   </data>
   <data name="cbCondPressureUnits.Items" xml:space="preserve">
     <value>Mínima das Entradas</value>
@@ -1776,6 +1653,9 @@
   <data name="btnCreateAndConnectEnergy2.ToolTip1" xml:space="preserve">
     <value>Criar e Conectar</value>
   </data>
+  <data name="btnCreateAndConnectEnergy2.ToolTip2" xml:space="preserve">
+    <value>Criar e Conectar</value>
+  </data>
   <data name="&gt;&gt;btnCreateAndConnectEnergy2.Name" xml:space="preserve">
     <value>btnCreateAndConnectEnergy2</value>
   </data>
@@ -1807,6 +1687,9 @@
     <value>Desconectar</value>
   </data>
   <data name="btnDisconnectEnergy2.ToolTip1" xml:space="preserve">
+    <value>Desconectar</value>
+  </data>
+  <data name="btnDisconnectEnergy2.ToolTip2" xml:space="preserve">
     <value>Desconectar</value>
   </data>
   <data name="&gt;&gt;btnDisconnectEnergy2.Name" xml:space="preserve">
@@ -1899,6 +1782,9 @@
   <data name="btnCreateAndConnectEnergy1.ToolTip1" xml:space="preserve">
     <value>Criar e Conectar</value>
   </data>
+  <data name="btnCreateAndConnectEnergy1.ToolTip2" xml:space="preserve">
+    <value>Criar e Conectar</value>
+  </data>
   <data name="&gt;&gt;btnCreateAndConnectEnergy1.Name" xml:space="preserve">
     <value>btnCreateAndConnectEnergy1</value>
   </data>
@@ -1935,6 +1821,9 @@
   <data name="btnCreateAndConnectOutlet2.ToolTip1" xml:space="preserve">
     <value>Criar e Conectar</value>
   </data>
+  <data name="btnCreateAndConnectOutlet2.ToolTip2" xml:space="preserve">
+    <value>Criar e Conectar</value>
+  </data>
   <data name="&gt;&gt;btnCreateAndConnectOutlet2.Name" xml:space="preserve">
     <value>btnCreateAndConnectOutlet2</value>
   </data>
@@ -1968,6 +1857,9 @@
   <data name="btnDisconnectEnergy1.ToolTip1" xml:space="preserve">
     <value>Desconectar</value>
   </data>
+  <data name="btnDisconnectEnergy1.ToolTip2" xml:space="preserve">
+    <value>Desconectar</value>
+  </data>
   <data name="&gt;&gt;btnDisconnectEnergy1.Name" xml:space="preserve">
     <value>btnDisconnectEnergy1</value>
   </data>
@@ -1999,6 +1891,9 @@
     <value>Desconectar</value>
   </data>
   <data name="btnDisconnectOutlet2.ToolTip1" xml:space="preserve">
+    <value>Desconectar</value>
+  </data>
+  <data name="btnDisconnectOutlet2.ToolTip2" xml:space="preserve">
     <value>Desconectar</value>
   </data>
   <data name="&gt;&gt;btnDisconnectOutlet2.Name" xml:space="preserve">
@@ -2145,6 +2040,9 @@
   <data name="btnCreateAndConnectOutlet1.ToolTip1" xml:space="preserve">
     <value>Criar e Conectar</value>
   </data>
+  <data name="btnCreateAndConnectOutlet1.ToolTip2" xml:space="preserve">
+    <value>Criar e Conectar</value>
+  </data>
   <data name="&gt;&gt;btnCreateAndConnectOutlet1.Name" xml:space="preserve">
     <value>btnCreateAndConnectOutlet1</value>
   </data>
@@ -2181,6 +2079,9 @@
   <data name="btnCreateAndConnectInlet1.ToolTip1" xml:space="preserve">
     <value>Criar e Conectar</value>
   </data>
+  <data name="btnCreateAndConnectInlet1.ToolTip2" xml:space="preserve">
+    <value>Criar e Conectar</value>
+  </data>
   <data name="&gt;&gt;btnCreateAndConnectInlet1.Name" xml:space="preserve">
     <value>btnCreateAndConnectInlet1</value>
   </data>
@@ -2214,6 +2115,9 @@
   <data name="btnDisconnectOutlet1.ToolTip1" xml:space="preserve">
     <value>Desconectar</value>
   </data>
+  <data name="btnDisconnectOutlet1.ToolTip2" xml:space="preserve">
+    <value>Desconectar</value>
+  </data>
   <data name="&gt;&gt;btnDisconnectOutlet1.Name" xml:space="preserve">
     <value>btnDisconnectOutlet1</value>
   </data>
@@ -2245,6 +2149,9 @@
     <value>Desconectar</value>
   </data>
   <data name="btnDisconnectInlet1.ToolTip1" xml:space="preserve">
+    <value>Desconectar</value>
+  </data>
+  <data name="btnDisconnectInlet1.ToolTip2" xml:space="preserve">
     <value>Desconectar</value>
   </data>
   <data name="&gt;&gt;btnDisconnectInlet1.Name" xml:space="preserve">
@@ -2386,10 +2293,10 @@
     <value>0</value>
   </data>
   <data name="GroupBox6.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 541</value>
+    <value>6, 520</value>
   </data>
   <data name="GroupBox6.Size" type="System.Drawing.Size, System.Drawing">
-    <value>431, 263</value>
+    <value>431, 282</value>
   </data>
   <data name="GroupBox6.TabIndex" type="System.Int32, mscorlib">
     <value>11</value>
@@ -2428,7 +2335,7 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="gridResults.Size" type="System.Drawing.Size, System.Drawing">
-    <value>425, 244</value>
+    <value>425, 263</value>
   </data>
   <data name="gridResults.TabIndex" type="System.Int32, mscorlib">
     <value>19</value>
@@ -2466,11 +2373,11 @@
   <metadata name="ToolTipChangeTag.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>244, 17</value>
   </metadata>
-  <metadata name="$this.Language" type="System.Globalization.CultureInfo, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>en</value>
-  </metadata>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
+  </metadata>
+  <metadata name="$this.Language" type="System.Globalization.CultureInfo, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>en</value>
   </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>25</value>
@@ -2530,6 +2437,6 @@
     <value>EditingForm_ShortcutColumn</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>DWSIM.SharedClasses.ObjectEditorForm, DWSIM.SharedClasses, Version=5.7.7108.16983, Culture=neutral, PublicKeyToken=null</value>
+    <value>DWSIM.SharedClasses.ObjectEditorForm, DWSIM.SharedClasses, Version=6.3.7603.33002, Culture=neutral, PublicKeyToken=null</value>
   </data>
 </root>

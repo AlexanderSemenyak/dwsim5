@@ -79,6 +79,8 @@ namespace DWSIM.UI.Forms
 
         private DropDown ddstates;
 
+        public bool m_overrideCloseQuestion;
+
         void InitializeComponent()
         {
 
@@ -560,6 +562,8 @@ namespace DWSIM.UI.Forms
 
             var btnShowHideObjectEditorPanel = new ButtonMenuItem { Text = "Show/Hide Object Editor Panel" };
 
+            var btnCloseAllEditors = new ButtonMenuItem { Text = "Close All Opened Object Editors" };
+
             //process plugin list
 
             var pluginbuttons = new List<ButtonMenuItem>();
@@ -610,7 +614,7 @@ namespace DWSIM.UI.Forms
                         Menu.Items.Insert(7, new ButtonMenuItem { Text = "Tools", Items = { btnSensAnalysis, btnOptimization, btnInspector } });
                         Menu.Items.Insert(8, new ButtonMenuItem { Text = "Utilities", Items = { btnUtilities_TrueCriticalPoint, btnUtilities_PhaseEnvelope, btnUtilities_BinaryEnvelope } });
                         Menu.Items.Insert(9, pluginsmenu);
-                        Menu.Items.Insert(10, new ButtonMenuItem { Text = "View", Items = { btnShowHideObjectPalette, btnShowHideObjectEditorPanel } });
+                        Menu.Items.Insert(10, new ButtonMenuItem { Text = "View", Items = { btnShowHideObjectPalette, btnShowHideObjectEditorPanel, btnCloseAllEditors } });
                     }
                     else
                     {
@@ -621,7 +625,7 @@ namespace DWSIM.UI.Forms
                         Menu.Items.Add(new ButtonMenuItem { Text = "Tools", Items = { btnSensAnalysis, btnOptimization, btnInspector } });
                         Menu.Items.Add(new ButtonMenuItem { Text = "Utilities", Items = { btnUtilities_TrueCriticalPoint, btnUtilities_PhaseEnvelope, btnUtilities_BinaryEnvelope } });
                         Menu.Items.Add(pluginsmenu);
-                        Menu.Items.Add(new ButtonMenuItem { Text = "View", Items = { btnShowHideObjectPalette, btnShowHideObjectEditorPanel } });
+                        Menu.Items.Add(new ButtonMenuItem { Text = "View", Items = { btnShowHideObjectPalette, btnShowHideObjectEditorPanel, btnCloseAllEditors } });
                     }
                     break;
                 case GlobalSettings.Settings.Platform.Linux:
@@ -633,7 +637,7 @@ namespace DWSIM.UI.Forms
                     Menu.Items.Add(new ButtonMenuItem { Text = "Tools", Items = { btnSensAnalysis, btnOptimization, btnInspector } });
                     Menu.Items.Add(new ButtonMenuItem { Text = "Utilities", Items = { btnUtilities_TrueCriticalPoint, btnUtilities_PhaseEnvelope, btnUtilities_BinaryEnvelope } });
                     Menu.Items.Add(pluginsmenu);
-                    Menu.Items.Add(new ButtonMenuItem { Text = "View", Items = { btnShowHideObjectPalette, btnShowHideObjectEditorPanel } });
+                    Menu.Items.Add(new ButtonMenuItem { Text = "View", Items = { btnShowHideObjectPalette, btnShowHideObjectEditorPanel, btnCloseAllEditors } });
                     break;
             }
 
@@ -678,6 +682,7 @@ namespace DWSIM.UI.Forms
                         Application.Instance.Invoke(() =>
                         {
                             string rgfdata = xdoc.Element("DWSIM_Simulation_Data").Element("Spreadsheet").Element("RGFData").Value;
+                            rgfdata = rgfdata.Replace("Calibri", "Arial").Replace("10.25", "10");
                             Dictionary<string, string> sdict = new Dictionary<string, string>();
                             sdict = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, string>>(rgfdata);
                             Spreadsheet.Sheet.RemoveWorksheet(0);
@@ -779,6 +784,10 @@ namespace DWSIM.UI.Forms
             btnShowHideObjectEditorPanel.Click += (sender, e) =>
             {
                 Split1.Panel1.Visible = !Split1.Panel1.Visible;
+            };
+
+            btnCloseAllEditors.Click += (sender, e) => {
+                EditorHolder.Pages.Clear();
             };
 
             // obj containers
@@ -911,6 +920,7 @@ namespace DWSIM.UI.Forms
                         FlowsheetObject.AddObject(e.Data.GetString("ObjectName"), (int)(e.Location.X * GlobalSettings.Settings.DpiScale / FlowsheetControl.FlowsheetSurface.Zoom), (int)(e.Location.Y * GlobalSettings.Settings.DpiScale / FlowsheetControl.FlowsheetSurface.Zoom));
                     }
                     UpdateEditorConnectionsPanel();
+                    FlowsheetObject.UpdateInterface();
                 }
             };
 
@@ -1090,9 +1100,9 @@ namespace DWSIM.UI.Forms
                     try
                     {
                         Point center = new Point((FlowsheetControl.Width / 2), (FlowsheetControl.Height / 2));
-                        FlowsheetControl.FlowsheetSurface.OffsetAll(((int)((float)center.X / FlowsheetControl.FlowsheetSurface.Zoom)
-                                        - obj.GraphicObject.X), ((int)((float)center.Y / FlowsheetControl.FlowsheetSurface.Zoom)
-                                        - obj.GraphicObject.Y));
+                        FlowsheetControl.FlowsheetSurface.OffsetAll((center.X / FlowsheetControl.FlowsheetSurface.Zoom)
+                                        - obj.GraphicObject.X, (center.Y / FlowsheetControl.FlowsheetSurface.Zoom)
+                                        - obj.GraphicObject.Y);
                         FlowsheetControl.Invalidate();
                         FlowsheetControl.Invalidate();
                     }
@@ -1515,9 +1525,13 @@ namespace DWSIM.UI.Forms
 
         void Flowsheet_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (MessageBox.Show(this, "ConfirmFlowsheetExit".Localize(), "FlowsheetExit".Localize(), MessageBoxButtons.YesNo, MessageBoxType.Question, MessageBoxDefaultButton.No) == DialogResult.No)
+            if (!this.m_overrideCloseQuestion)
             {
-                e.Cancel = true;
+                if (MessageBox.Show(this, "ConfirmFlowsheetExit".Localize(), "FlowsheetExit".Localize(),
+                    MessageBoxButtons.YesNo, MessageBoxType.Question, MessageBoxDefaultButton.No) == DialogResult.No)
+                {
+                    e.Cancel = true;
+                }
             }
         }
 
@@ -1574,7 +1588,14 @@ namespace DWSIM.UI.Forms
 
                 File.Delete(xmlfile);
             }
-            else if (ext == ".xml")
+            else if (System.IO.Path.GetExtension(path).ToLower() == ".dwxml" || System.IO.Path.GetExtension(path).ToLower() == ".armxml")
+            {
+                using (var fstream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                {
+                    FlowsheetObject.SaveToXML().Save(fstream);
+                }
+            }
+            else if (System.IO.Path.GetExtension(path).ToLower() == ".xml")
             {
                 using (var fstream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                 {
@@ -1855,14 +1876,14 @@ namespace DWSIM.UI.Forms
                 {
                     isobj = (Interfaces.ISimulationObject)obj.CloneXML();
                     FlowsheetObject.AddObjectToSurface(obj.GraphicObject.ObjectType,
-                        obj.GraphicObject.X + 50,
-                        obj.GraphicObject.Y + 50,
+                        (int)obj.GraphicObject.X + 50,
+                        (int)obj.GraphicObject.Y + 50,
                         obj.GraphicObject.Tag + "_CLONE", "",
                         (Interfaces.IExternalUnitOperation)isobj);
                 }
                 else
                 {
-                    isobj = FlowsheetObject.AddObject(obj.GraphicObject.ObjectType, obj.GraphicObject.X + 50, obj.GraphicObject.Y + 50, obj.GraphicObject.Tag + "_CLONE");
+                    isobj = FlowsheetObject.AddObject(obj.GraphicObject.ObjectType, (int)obj.GraphicObject.X + 50, (int)obj.GraphicObject.Y + 50, obj.GraphicObject.Tag + "_CLONE");
                 }
                 var id = isobj.Name;
                 ((Interfaces.ICustomXMLSerialization)isobj).LoadData(((Interfaces.ICustomXMLSerialization)obj).SaveData());
@@ -1949,7 +1970,7 @@ namespace DWSIM.UI.Forms
                     {
 
                         var stream = FlowsheetControl.FlowsheetSurface.SelectedObject;
-                        var isobj = FlowsheetObject.AddObject(obj.GraphicObject.ObjectType, obj.GraphicObject.X + 20, obj.GraphicObject.Y, obj.GraphicObject.Tag + "_CLONE");
+                        var isobj = FlowsheetObject.AddObject(obj.GraphicObject.ObjectType, (int)obj.GraphicObject.X + 20, (int)obj.GraphicObject.Y, obj.GraphicObject.Tag + "_CLONE");
                         var id = isobj.Name;
                         ((Interfaces.ICustomXMLSerialization)isobj).LoadData(((Interfaces.ICustomXMLSerialization)obj).SaveData());
                         isobj.Name = id;
@@ -2050,14 +2071,21 @@ namespace DWSIM.UI.Forms
             item6.Click += (sender, e) => CopyAsImage(3);
 
             var item7 = new ButtonMenuItem { Text = "Perform Auto-Layout", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-parallel_workflow.png")) };
+            var item8 = new ButtonMenuItem { Text = "Restore Layout", Image = new Bitmap(Eto.Drawing.Bitmap.FromResource(imgprefix + "icons8-parallel_workflow.png")) };
 
             item7.Click += (sender, e) =>
             {
-                FlowsheetControl.FlowsheetSurface.AutoArrange();                
+                FlowsheetControl.FlowsheetSurface.AutoArrange();
+                ActZoomFit.Invoke();
+            };
+            
+            item8.Click += (sender, e) =>
+            {
+                FlowsheetControl.FlowsheetSurface.RestoreLayout();
                 ActZoomFit.Invoke();
             };
 
-            deselctxmenu.Items.AddRange(new MenuItem[] { item0, new SeparatorMenuItem(), item1, item2, new SeparatorMenuItem(), item4, item5, item6, new SeparatorMenuItem(), item7 });
+            deselctxmenu.Items.AddRange(new MenuItem[] { item0, new SeparatorMenuItem(), item1, item2, new SeparatorMenuItem(), item4, item5, item6, new SeparatorMenuItem(), item7, item8 });
 
             return;
 
@@ -2327,6 +2355,7 @@ namespace DWSIM.UI.Forms
             foreach (DocumentPage item in EditorHolder.Pages)
             {
                 ((ObjectEditorContainer)item.Content).Update();
+                ((ObjectEditorContainer)item.Content).UpdateConnections();
             }
         }
 

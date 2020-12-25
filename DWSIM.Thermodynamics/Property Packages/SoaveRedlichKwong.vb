@@ -37,7 +37,8 @@ Namespace PropertyPackages
         Public MAT_KIJ(38, 38)
 
         Public m_pr As New PropertyPackages.Auxiliary.SRK
-        '<System.NonSerialized()> Private m_xn As DLLXnumbers.Xnumbers
+
+        Public ip(,) As Double
 
         Public Sub New(ByVal comode As Boolean)
             MyBase.New(comode)
@@ -82,33 +83,6 @@ Namespace PropertyPackages
         End Sub
 
 #Region "    DWSIM Functions"
-
-        Public Overrides Function CalcIsothermalCompressibility(p As Interfaces.IPhase) As Double
-
-            Dim T, P0 As Double
-            T = CurrentMaterialStream.Phases(0).Properties.temperature.GetValueOrDefault
-            P0 = CurrentMaterialStream.Phases(0).Properties.pressure.GetValueOrDefault
-
-            Select Case p.Name
-                Case "Mixture"
-                    Return 0.0#
-                Case "Vapor"
-                    Return ThermoPlug.CalcIsothermalCompressibility(RET_VMOL(Phase.Vapor), P0, T, Me, "SRK")
-                Case "OverallLiquid"
-                    Return 0.0#
-                Case "Liquid1"
-                    Return ThermoPlug.CalcIsothermalCompressibility(RET_VMOL(Phase.Liquid1), P0, T, Me, "SRK")
-                Case "Liquid2"
-                    Return ThermoPlug.CalcIsothermalCompressibility(RET_VMOL(Phase.Liquid2), P0, T, Me, "SRK")
-                Case "Liquid3"
-                    Return ThermoPlug.CalcIsothermalCompressibility(RET_VMOL(Phase.Liquid3), P0, T, Me, "SRK")
-                Case "Aqueous"
-                    Return ThermoPlug.CalcIsothermalCompressibility(RET_VMOL(Phase.Aqueous), P0, T, Me, "SRK")
-                Case "Solid"
-                    Return 0.0#
-            End Select
-
-        End Function
 
         Public Overrides Function CalcJouleThomsonCoefficient(p As Interfaces.IPhase) As Double
 
@@ -269,28 +243,43 @@ Namespace PropertyPackages
                         Return 0
                     End If
                 End If
-            Else
-                Return 0
+            ElseIf Me.m_pr.InteractionParameters.ContainsKey(id2) Then
+                If Me.m_pr.InteractionParameters(id2).ContainsKey(id1) Then
+                    Return m_pr.InteractionParameters(id2)(id1).kij
+                Else
+                    Return 0
+                End If
             End If
         End Function
 
         Public Overrides Function RET_VKij() As Double(,)
 
-            Dim val(Me.CurrentMaterialStream.Phases(0).Compounds.Count - 1, Me.CurrentMaterialStream.Phases(0).Compounds.Count - 1) As Double
-            Dim i As Integer = 0
-            Dim l As Integer = 0
+            If m_pr.BIPChanged Or ip Is Nothing Then
 
             Dim vn As IList(of String) = RET_VNAMES()
             Dim n As Integer = vn.Count - 1
 
-            For i = 0 To n
-                Dim vn_i  = vn(i)
-                For l = 0 To n
-                    val(i, l) = Me.RET_KIJ(vn_i, vn(l))
-                Next
-            Next
+                Dim phase0 = Me.CurrentMaterialStream.Phases(0).Compounds
+                Dim val(phase0.Count - 1, phase0.Count - 1) As Double
+                Dim i As Integer = 0
+                Dim l As Integer = 0
 
-            Return val
+                For i = 0 To n
+                    For l = 0 To n
+                        val(i, l) = Me.RET_KIJ(vn(i), vn(l))
+                    Next
+                Next
+
+                ip = val
+                m_pr.BIPChanged = False
+
+                Return val
+
+            Else
+
+                Return ip
+
+            End If
 
         End Function
 
@@ -521,7 +510,11 @@ Namespace PropertyPackages
                 Me.CurrentMaterialStream.Phases(phaseID).Properties.molarflow = result
                 result = result * Me.AUX_MMM(Phase) / 1000
                 Me.CurrentMaterialStream.Phases(phaseID).Properties.massflow = result
-                result = phasemolarfrac * overallmolarflow * Me.AUX_MMM(Phase) / 1000 / Me.CurrentMaterialStream.Phases(0).Properties.massflow.GetValueOrDefault
+                If Me.CurrentMaterialStream.Phases(0).Properties.massflow.GetValueOrDefault > 0 Then
+                    result = phasemolarfrac * overallmolarflow * Me.AUX_MMM(Phase) / 1000 / Me.CurrentMaterialStream.Phases(0).Properties.massflow.GetValueOrDefault
+                Else
+                    result = 0
+                End If
                 Me.CurrentMaterialStream.Phases(phaseID).Properties.massfraction = result
                 Me.DW_CalcCompVolFlow(phaseID)
                 Me.DW_CalcCompFugCoeff(Phase)
@@ -970,10 +963,6 @@ Namespace PropertyPackages
 
         Public Overrides Function DW_CalcFugCoeff(ByVal Vx As System.Array, ByVal T As Double, ByVal P As Double, ByVal st As State) As Double()
 
-            Calculator.WriteToConsole(Me.ComponentName & " fugacity coefficient calculation for phase '" & st.ToString & "' requested at T = " & T & " K and P = " & P & " Pa.", 2)
-            Calculator.WriteToConsole("Compounds: " & Me.RET_VNAMES.ToArrayString, 2)
-            Calculator.WriteToConsole("Mole fractions: " & Vx.ToArrayString(), 2)
-
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
             Inspector.Host.CheckAndAdd(IObj, "", "DW_CalcFugCoeff", "SRK EOS Fugacity Coefficient", SolutionInspector.Property_Package_Fugacity_Coefficient_Calculation_Routine)
@@ -990,16 +979,9 @@ Namespace PropertyPackages
                 lnfug = srkn.CalcLnFug(T, P, Vx, Me.RET_VKij, Me.RET_VTC, Me.RET_VPC, Me.RET_VW, Nothing, "V")
             End If
 
-            Dim n As Integer = UBound(lnfug)
-            Dim fugcoeff(n) As Double
-
-            fugcoeff = lnfug.ExpY
-
-            Calculator.WriteToConsole("Result: " & fugcoeff.ToArrayString(), 2)
-
             IObj?.Close()
 
-            Return fugcoeff
+            Return lnfug.ExpY
 
         End Function
 

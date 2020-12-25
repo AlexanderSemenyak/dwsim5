@@ -16,7 +16,6 @@ Public Class EditingForm_ReactorConvEqGibbs
     Dim nf As String
 
     Dim eeditor As EditingForm_Gibbs_ElementMatrixEditor
-    Dim ieditor As EditingForm_Gibbs_InitialEstimatesEditor
 
     Private Sub EditingForm_HeaterCooler_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
@@ -58,6 +57,8 @@ Public Class EditingForm_ReactorConvEqGibbs
 
             chkActive.Checked = .GraphicObject.Active
 
+            ToolTip1.SetToolTip(chkActive, .FlowSheet.GetTranslatedString("AtivoInativo"))
+
             Me.Text = .GraphicObject.Tag & " (" & .GetDisplayName() & ")"
 
             lblTag.Text = .GraphicObject.Tag
@@ -69,11 +70,7 @@ Public Class EditingForm_ReactorConvEqGibbs
                     lblStatus.Text = .FlowSheet.GetTranslatedString("Inativo")
                     lblStatus.ForeColor = System.Drawing.Color.Gray
                 ElseIf .ErrorMessage <> "" Then
-                    If .ErrorMessage.Length > 50 Then
-                        lblStatus.Text = .FlowSheet.GetTranslatedString("Erro") & " (" & .ErrorMessage.Substring(50) & "...)"
-                    Else
-                        lblStatus.Text = .FlowSheet.GetTranslatedString("Erro") & " (" & .ErrorMessage & ")"
-                    End If
+                    lblStatus.Text = .FlowSheet.GetTranslatedString("Erro")
                     lblStatus.ForeColor = System.Drawing.Color.Red
                 Else
                     lblStatus.Text = .FlowSheet.GetTranslatedString("NoCalculado")
@@ -134,20 +131,21 @@ Public Class EditingForm_ReactorConvEqGibbs
 
             If TypeOf SimObject Is Reactors.Reactor_Gibbs Then
 
-                cbGibbsMinMode.Enabled = True
-                cbGibbsMinMode.SelectedIndex = DirectCast(SimObject, Reactors.Reactor_Gibbs).SolvMethod
+                cbReacSet.Enabled = False
 
-                chkEnableDamping.Checked = DirectCast(SimObject, Reactors.Reactor_Gibbs).EnableDamping
+                'chkEnableDamping.Checked = DirectCast(SimObject, Reactors.Reactor_Gibbs).EnableDamping
 
-                txtDampingLowerLimit.Text = DirectCast(SimObject, Reactors.Reactor_Gibbs).DampingLowerLimit.ToString("G")
-                txtDampingUpperLimit.Text = DirectCast(SimObject, Reactors.Reactor_Gibbs).DampingUpperLimit.ToString("G")
+                'txtDampingLowerLimit.Text = DirectCast(SimObject, Reactors.Reactor_Gibbs).DampingLowerLimit.ToString("G")
+                'txtDampingUpperLimit.Text = DirectCast(SimObject, Reactors.Reactor_Gibbs).DampingUpperLimit.ToString("G")
+
+                chkGibbsUsePreviousSolution.Checked = DirectCast(SimObject, Reactors.Reactor_Gibbs).InitializeFromPreviousSolution
 
                 tbExtLoopMaxIts.Text = DirectCast(SimObject, Reactors.Reactor_Gibbs).MaximumExternalIterations
                 tbIntLoopMaxIts.Text = DirectCast(SimObject, Reactors.Reactor_Gibbs).MaximumInternalIterations
                 tbExtLoopTol.Text = DirectCast(SimObject, Reactors.Reactor_Gibbs).ExternalTolerance
                 tbIntLoopTol.Text = DirectCast(SimObject, Reactors.Reactor_Gibbs).InternalTolerance
 
-                tbNumDeriv.Text = DirectCast(SimObject, Reactors.Reactor_Gibbs).DerivativePerturbation
+                'tbNumDeriv.Text = DirectCast(SimObject, Reactors.Reactor_Gibbs).DerivativePerturbation
 
                 'key compounds
 
@@ -174,38 +172,26 @@ Public Class EditingForm_ReactorConvEqGibbs
                 eeditor.Dock = DockStyle.Fill
                 TabPageElements.Controls.Add(eeditor)
 
-                TabPageInitialEstimates.Controls.Clear()
-                ieditor = New EditingForm_Gibbs_InitialEstimatesEditor With {.gr = Me.SimObject}
-                ieditor.Dock = DockStyle.Fill
-                TabPageInitialEstimates.Controls.Add(ieditor)
-
                 TabControlParameters.TabPages.Remove(TabPageEqParams)
 
             ElseIf TypeOf SimObject Is Reactors.Reactor_Equilibrium Then
 
                 TabControlParameters.TabPages.Remove(TabPageCompounds)
                 TabControlParameters.TabPages.Remove(TabPageElements)
-                TabControlParameters.TabPages.Remove(TabPageInitialEstimates)
                 TabControlParameters.TabPages.Remove(TabPageGibbsParams)
 
                 chkInitializeExtents.Checked = DirectCast(SimObject, Reactors.Reactor_Equilibrium).UsePreviousReactionExtents
-
-                chkAlternateInit.Checked = DirectCast(SimObject, Reactors.Reactor_Equilibrium).AlternateBoundsInitializer
-
-                tbExtentsInitializer.Text = DirectCast(SimObject, Reactors.Reactor_Equilibrium).ReactionExtentsInitializer
+                chkUseIPOPT.Checked = DirectCast(SimObject, Reactors.Reactor_Equilibrium).UseIPOPTSolver
 
                 tbExtLoopMaxItsEq.Text = DirectCast(SimObject, Reactors.Reactor_Equilibrium).ExternalLoopMaximumIterations
                 tbIntLoopMaxItsEq.Text = DirectCast(SimObject, Reactors.Reactor_Equilibrium).InternalLoopMaximumIterations
                 tbExtLoopTolEq.Text = DirectCast(SimObject, Reactors.Reactor_Equilibrium).ExternalLoopTolerance
                 tbIntLoopTolEq.Text = DirectCast(SimObject, Reactors.Reactor_Equilibrium).InternalLoopTolerance
 
-                tbNumDeriv2.Text = DirectCast(SimObject, Reactors.Reactor_Equilibrium).DerivativePerturbation
-
             Else
 
                 TabControlParameters.TabPages.Remove(TabPageCompounds)
                 TabControlParameters.TabPages.Remove(TabPageElements)
-                TabControlParameters.TabPages.Remove(TabPageInitialEstimates)
                 TabControlParameters.TabPages.Remove(TabPageGibbsParams)
                 TabControlParameters.TabPages.Remove(TabPageEqParams)
 
@@ -226,23 +212,23 @@ Public Class EditingForm_ReactorConvEqGibbs
             gridResults.Rows.Clear()
             gridReactions.Rows.Clear()
 
-            gridResults.Rows.Add(New Object() {.FlowSheet.GetTranslatedString("DeltaT"), su.Converter.ConvertFromSI(units.deltaT, .DeltaT.GetValueOrDefault).ToString(nf), units.deltaT})
-            gridResults.Rows.Add(New Object() {.FlowSheet.GetTranslatedString("RConvPGridItem3"), su.Converter.ConvertFromSI(units.heatflow, .DeltaQ.GetValueOrDefault).ToString(nf), units.heatflow})
+            gridResults.Rows.Add(New Object() { .FlowSheet.GetTranslatedString("DeltaT"), su.Converter.ConvertFromSI(units.deltaT, .DeltaT.GetValueOrDefault).ToString(nf), units.deltaT})
+            gridResults.Rows.Add(New Object() { .FlowSheet.GetTranslatedString("RConvPGridItem3"), su.Converter.ConvertFromSI(units.heatflow, .DeltaQ.GetValueOrDefault).ToString(nf), units.heatflow})
 
             If TypeOf SimObject Is Reactors.Reactor_Gibbs Then
 
                 Dim robj = DirectCast(SimObject, Reactors.Reactor_Gibbs)
 
-                gridResults.Rows.Add(New Object() {.FlowSheet.GetTranslatedString("RGInitialG"), su.Converter.ConvertFromSI(units.heatflow, robj.InitialGibbsEnergy).ToString(nf), units.heatflow})
-                gridResults.Rows.Add(New Object() {.FlowSheet.GetTranslatedString("RGFinalG"), su.Converter.ConvertFromSI(units.heatflow, robj.FinalGibbsEnergy).ToString(nf), units.heatflow})
-                gridResults.Rows.Add(New Object() {.FlowSheet.GetTranslatedString("RGElementBalance"), robj.ElementBalance.ToString("E"), ""})
+                gridResults.Rows.Add(New Object() { .FlowSheet.GetTranslatedString("RGInitialG"), su.Converter.ConvertFromSI(units.heatflow, robj.InitialGibbsEnergy).ToString(nf), units.heatflow})
+                gridResults.Rows.Add(New Object() { .FlowSheet.GetTranslatedString("RGFinalG"), su.Converter.ConvertFromSI(units.heatflow, robj.FinalGibbsEnergy).ToString(nf), units.heatflow})
+                gridResults.Rows.Add(New Object() { .FlowSheet.GetTranslatedString("RGElementBalance"), robj.ElementBalance.ToString("E"), ""})
 
             ElseIf TypeOf SimObject Is Reactors.Reactor_Equilibrium Then
 
                 Dim robj = DirectCast(SimObject, Reactors.Reactor_Equilibrium)
 
-                gridResults.Rows.Add(New Object() {.FlowSheet.GetTranslatedString("RGInitialG"), su.Converter.ConvertFromSI(units.heatflow, robj.InitialGibbsEnergy).ToString(nf), units.heatflow})
-                gridResults.Rows.Add(New Object() {.FlowSheet.GetTranslatedString("RGFinalG"), su.Converter.ConvertFromSI(units.heatflow, robj.FinalGibbsEnergy).ToString(nf), units.heatflow})
+                gridResults.Rows.Add(New Object() { .FlowSheet.GetTranslatedString("RGInitialG"), su.Converter.ConvertFromSI(units.heatflow, robj.InitialGibbsEnergy).ToString(nf), units.heatflow})
+                gridResults.Rows.Add(New Object() { .FlowSheet.GetTranslatedString("RGFinalG"), su.Converter.ConvertFromSI(units.heatflow, robj.FinalGibbsEnergy).ToString(nf), units.heatflow})
 
 
             End If
@@ -256,7 +242,7 @@ Public Class EditingForm_ReactorConvEqGibbs
                 If Not robj.Conversions Is Nothing Then
 
                     For Each dbl As KeyValuePair(Of String, Double) In robj.Conversions
-                        gridReactions.Rows.Add(New Object() {.FlowSheet.Reactions(dbl.Key).Name, .FlowSheet.GetTranslatedString("ReactionConversion"), (dbl.Value * 100).ToString(nf), "%"})
+                        gridReactions.Rows.Add(New Object() { .FlowSheet.Reactions(dbl.Key).Name, .FlowSheet.GetTranslatedString("ReactionConversion"), (dbl.Value * 100).ToString(nf), "%"})
                     Next
 
                 End If
@@ -303,12 +289,6 @@ Public Class EditingForm_ReactorConvEqGibbs
             cbPropPack.Items.AddRange(proppacks)
             cbPropPack.SelectedItem = .PropertyPackage?.Tag
 
-            Dim flashalgos As String() = .FlowSheet.FlowsheetOptions.FlashAlgorithms.Select(Function(x) x.Tag).ToArray
-            cbFlashAlg.Items.Clear()
-            cbFlashAlg.Items.Add("Default")
-            cbFlashAlg.Items.AddRange(flashalgos)
-            If .PreferredFlashAlgorithmTag <> "" Then cbFlashAlg.SelectedItem = .PreferredFlashAlgorithmTag Else cbFlashAlg.SelectedIndex = 0
-
             'annotation
 
             Try
@@ -326,7 +306,7 @@ Public Class EditingForm_ReactorConvEqGibbs
     Private Sub ListViewCompounds_ItemChecked(ByVal sender As Object, ByVal e As System.Windows.Forms.ItemCheckedEventArgs) Handles ListViewCompounds.ItemChecked
         If Loaded Then
             Dim robj = DirectCast(SimObject, Reactors.Reactor_Gibbs)
-            For Each lvi as ListViewItem In Me.ListViewCompounds.Items
+            For Each lvi As ListViewItem In Me.ListViewCompounds.Items
                 If Not lvi Is Nothing Then
                     If lvi.Checked Then
                         If Not robj.ComponentIDs.Contains(lvi.Tag) Then
@@ -339,18 +319,13 @@ Public Class EditingForm_ReactorConvEqGibbs
                     End If
                 End If
             Next
-            ieditor.GibbsInitialEstimatesEditorForm_Load(sender, e)
+            eeditor.CreateMatrix()
+            eeditor.SaveMatrix()
         End If
     End Sub
 
     Private Sub btnConfigurePP_Click(sender As Object, e As EventArgs) Handles btnConfigurePP.Click
         SimObject.FlowSheet.PropertyPackages.Values.Where(Function(x) x.Tag = cbPropPack.SelectedItem.ToString).SingleOrDefault.DisplayEditingForm()
-    End Sub
-
-    Private Sub btnConfigureFlashAlg_Click(sender As Object, e As EventArgs) Handles btnConfigureFlashAlg.Click
-
-        Thermodynamics.Calculator.ConfigureFlashInstance(SimObject, cbFlashAlg.SelectedItem.ToString)
-
     End Sub
 
     Private Sub lblTag_TextChanged(sender As Object, e As EventArgs) Handles lblTag.TextChanged
@@ -393,13 +368,6 @@ Public Class EditingForm_ReactorConvEqGibbs
         End If
     End Sub
 
-    Private Sub cbFlashAlg_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbFlashAlg.SelectedIndexChanged
-        If Loaded Then
-            SimObject.PreferredFlashAlgorithmTag = cbFlashAlg.SelectedItem.ToString
-            RequestCalc()
-        End If
-    End Sub
-
     Private Sub cbInlet1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbInlet1.SelectedIndexChanged
 
         If Loaded Then
@@ -415,11 +383,15 @@ Public Class EditingForm_ReactorConvEqGibbs
 
                 If flowsheet.GetFlowsheetSimulationObject(text).GraphicObject.OutputConnectors(0).IsAttached Then
                     MessageBox.Show(flowsheet.GetTranslatedString("Todasasconexespossve"), flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
-                    Exit Sub
+                Else
+                    Try
+                        If gobj.InputConnectors(index).IsAttached Then flowsheet.DisconnectObjects(gobj.InputConnectors(index).AttachedConnector.AttachedFrom, gobj)
+                        flowsheet.ConnectObjects(flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, gobj, 0, index)
+                    Catch ex As Exception
+                        MessageBox.Show(ex.Message, flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End Try
                 End If
-                If gobj.InputConnectors(index).IsAttached Then flowsheet.DisconnectObjects(gobj.InputConnectors(index).AttachedConnector.AttachedFrom, gobj)
-                flowsheet.ConnectObjects(flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, gobj, 0, index)
-
+                UpdateInfo()
             End If
 
         End If
@@ -441,11 +413,15 @@ Public Class EditingForm_ReactorConvEqGibbs
 
                 If flowsheet.GetFlowsheetSimulationObject(text).GraphicObject.InputConnectors(0).IsAttached Then
                     MessageBox.Show(flowsheet.GetTranslatedString("Todasasconexespossve"), flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
-                    Exit Sub
+                Else
+                    Try
+                        If gobj.OutputConnectors(0).IsAttached Then flowsheet.DisconnectObjects(gobj, gobj.OutputConnectors(0).AttachedConnector.AttachedTo)
+                        flowsheet.ConnectObjects(gobj, flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, 0, 0)
+                    Catch ex As Exception
+                        MessageBox.Show(ex.Message, flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End Try
                 End If
-                If gobj.OutputConnectors(0).IsAttached Then flowsheet.DisconnectObjects(gobj, gobj.OutputConnectors(0).AttachedConnector.AttachedTo)
-                flowsheet.ConnectObjects(gobj, flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, 0, 0)
-
+                UpdateInfo()
             End If
 
         End If
@@ -467,11 +443,15 @@ Public Class EditingForm_ReactorConvEqGibbs
 
                 If flowsheet.GetFlowsheetSimulationObject(text).GraphicObject.InputConnectors(0).IsAttached Then
                     MessageBox.Show(flowsheet.GetTranslatedString("Todasasconexespossve"), flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
-                    Exit Sub
+                Else
+                    Try
+                        If gobj.OutputConnectors(index).IsAttached Then flowsheet.DisconnectObjects(gobj, gobj.OutputConnectors(index).AttachedConnector.AttachedTo)
+                        flowsheet.ConnectObjects(gobj, flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, index, 0)
+                    Catch ex As Exception
+                        MessageBox.Show(ex.Message, flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End Try
                 End If
-                If gobj.OutputConnectors(index).IsAttached Then flowsheet.DisconnectObjects(gobj, gobj.OutputConnectors(index).AttachedConnector.AttachedTo)
-                flowsheet.ConnectObjects(gobj, flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, index, 0)
-
+                UpdateInfo()
             End If
 
         End If
@@ -493,12 +473,15 @@ Public Class EditingForm_ReactorConvEqGibbs
 
                 If flowsheet.GetFlowsheetSimulationObject(text).GraphicObject.InputConnectors(0).IsAttached Then
                     MessageBox.Show(flowsheet.GetTranslatedString("Todasasconexespossve"), flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
-                    Exit Sub
+                Else
+                    Try
+                        If gobj.InputConnectors(1).IsAttached Then flowsheet.DisconnectObjects(gobj, gobj.InputConnectors(1).AttachedConnector.AttachedTo)
+                        flowsheet.ConnectObjects(flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, gobj, 0, 1)
+                    Catch ex As Exception
+                        MessageBox.Show(ex.Message, flowsheet.GetTranslatedString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
+                    End Try
                 End If
-
-                If gobj.InputConnectors(1).IsAttached Then flowsheet.DisconnectObjects(gobj, gobj.InputConnectors(1).AttachedConnector.AttachedTo)
-                flowsheet.ConnectObjects(flowsheet.GetFlowsheetSimulationObject(text).GraphicObject, gobj, 0, 1)
-
+                UpdateInfo()
             End If
 
         End If
@@ -514,10 +497,9 @@ Public Class EditingForm_ReactorConvEqGibbs
     End Sub
 
 
-    Private Sub tb_TextChanged(sender As Object, e As EventArgs) Handles tbOutletTemperature.TextChanged, tbPDrop.TextChanged,
-        txtDampingLowerLimit.TextChanged, txtDampingUpperLimit.TextChanged, tbExtLoopMaxIts.TextChanged, tbIntLoopMaxIts.TextChanged,
+    Private Sub tb_TextChanged(sender As Object, e As EventArgs) Handles tbOutletTemperature.TextChanged, tbPDrop.TextChanged, tbExtLoopMaxIts.TextChanged, tbIntLoopMaxIts.TextChanged,
         tbExtLoopTol.TextChanged, tbIntLoopTol.TextChanged, tbExtLoopMaxItsEq.TextChanged, tbIntLoopMaxItsEq.TextChanged,
-        tbExtLoopTolEq.TextChanged, tbIntLoopTolEq.TextChanged, tbExtentsInitializer.TextChanged, tbNumDeriv.TextChanged, tbNumDeriv2.TextChanged
+        tbExtLoopTolEq.TextChanged, tbIntLoopTolEq.TextChanged
 
         Dim tbox = DirectCast(sender, TextBox)
 
@@ -529,10 +511,9 @@ Public Class EditingForm_ReactorConvEqGibbs
 
     End Sub
 
-    Private Sub TextBoxKeyDown(sender As Object, e As KeyEventArgs) Handles tbOutletTemperature.KeyDown, tbPDrop.KeyDown,
-        txtDampingLowerLimit.KeyDown, txtDampingUpperLimit.KeyDown, tbExtLoopMaxIts.KeyDown, tbIntLoopMaxIts.KeyDown,
+    Private Sub TextBoxKeyDown(sender As Object, e As KeyEventArgs) Handles tbOutletTemperature.KeyDown, tbPDrop.KeyDown, tbExtLoopMaxIts.KeyDown, tbIntLoopMaxIts.KeyDown,
         tbExtLoopTol.KeyDown, tbIntLoopTol.KeyDown, tbExtLoopMaxItsEq.KeyDown, tbIntLoopMaxItsEq.KeyDown,
-        tbExtLoopTolEq.KeyDown, tbIntLoopTolEq.KeyDown, tbExtentsInitializer.KeyDown, tbNumDeriv.KeyDown, tbNumDeriv2.KeyDown
+        tbExtLoopTolEq.KeyDown, tbIntLoopTolEq.KeyDown
 
 
         If e.KeyCode = Keys.Enter And Loaded And DirectCast(sender, TextBox).ForeColor = System.Drawing.Color.Blue Then
@@ -549,8 +530,6 @@ Public Class EditingForm_ReactorConvEqGibbs
 
         If sender Is tbOutletTemperature Then SimObject.OutletTemperature = su.Converter.ConvertToSI(cbTemp.SelectedItem.ToString, tbOutletTemperature.Text.ParseExpressionToDouble)
         If sender Is tbPDrop Then SimObject.DeltaP = su.Converter.ConvertToSI(cbPDrop.SelectedItem.ToString, tbPDrop.Text.ParseExpressionToDouble)
-        If sender Is txtDampingLowerLimit Then DirectCast(SimObject, Reactors.Reactor_Gibbs).DampingLowerLimit = txtDampingLowerLimit.Text.ParseExpressionToDouble
-        If sender Is txtDampingUpperLimit Then DirectCast(SimObject, Reactors.Reactor_Gibbs).DampingUpperLimit = txtDampingUpperLimit.Text.ParseExpressionToDouble
         If sender Is tbExtLoopMaxIts Then DirectCast(SimObject, Reactors.Reactor_Gibbs).MaximumExternalIterations = tbExtLoopMaxIts.Text.ParseExpressionToDouble
         If sender Is tbIntLoopMaxIts Then DirectCast(SimObject, Reactors.Reactor_Gibbs).MaximumInternalIterations = tbIntLoopMaxIts.Text.ParseExpressionToDouble
         If sender Is tbExtLoopTol Then DirectCast(SimObject, Reactors.Reactor_Gibbs).ExternalTolerance = tbExtLoopTol.Text.ParseExpressionToDouble
@@ -559,9 +538,6 @@ Public Class EditingForm_ReactorConvEqGibbs
         If sender Is tbIntLoopMaxItsEq Then DirectCast(SimObject, Reactors.Reactor_Equilibrium).InternalLoopMaximumIterations = tbIntLoopMaxItsEq.Text.ParseExpressionToDouble
         If sender Is tbExtLoopTolEq Then DirectCast(SimObject, Reactors.Reactor_Equilibrium).ExternalLoopTolerance = tbExtLoopTolEq.Text.ParseExpressionToDouble
         If sender Is tbIntLoopTolEq Then DirectCast(SimObject, Reactors.Reactor_Equilibrium).InternalLoopTolerance = tbIntLoopTolEq.Text.ParseExpressionToDouble
-        If sender Is tbExtentsInitializer Then DirectCast(SimObject, Reactors.Reactor_Equilibrium).ReactionExtentsInitializer = tbExtentsInitializer.Text.ParseExpressionToDouble
-        If sender Is tbNumDeriv Then DirectCast(SimObject, Reactors.Reactor_Gibbs).DerivativePerturbation = tbNumDeriv.Text.ParseExpressionToDouble
-        If sender Is tbNumDeriv2 Then DirectCast(SimObject, Reactors.Reactor_Equilibrium).DerivativePerturbation = tbNumDeriv2.Text.ParseExpressionToDouble
 
         RequestCalc()
 
@@ -592,18 +568,6 @@ Public Class EditingForm_ReactorConvEqGibbs
         End Select
         If Loaded Then RequestCalc()
 
-    End Sub
-
-    Private Sub cbGibbsMinMode_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbGibbsMinMode.SelectedIndexChanged
-        If Loaded Then
-            Select Case cbGibbsMinMode.SelectedIndex
-                Case 1
-                    DirectCast(SimObject, Reactors.Reactor_Gibbs).SolvMethod = Reactors.Reactor_Gibbs.SolvingMethod.DirectMinimization
-                Case 0
-                    DirectCast(SimObject, Reactors.Reactor_Gibbs).SolvMethod = Reactors.Reactor_Gibbs.SolvingMethod.ReactionExtents
-            End Select
-            RequestCalc()
-        End If
     End Sub
 
     Private Sub btnCreateAndConnectInlet1_Click(sender As Object, e As EventArgs) Handles btnCreateAndConnectInlet1.Click, btnCreateAndConnectOutlet1.Click, btnCreateAndConnectOutlet2.Click, btnCreateAndConnectEnergy.Click
@@ -646,24 +610,9 @@ Public Class EditingForm_ReactorConvEqGibbs
 
     End Sub
 
-    Private Sub chkEnableDamping_CheckedChanged(sender As Object, e As EventArgs) Handles chkEnableDamping.CheckedChanged
-        If TypeOf SimObject Is Reactors.Reactor_Gibbs Then
-            DirectCast(SimObject, Reactors.Reactor_Gibbs).EnableDamping = chkEnableDamping.Checked
-        End If
-    End Sub
-
     Private Sub chkInitializeExtents_CheckedChanged(sender As Object, e As EventArgs) Handles chkInitializeExtents.CheckedChanged
-        If TypeOf SimObject Is Reactors.Reactor_Equilibrium Then
+        If TypeOf SimObject Is Reactors.Reactor_Equilibrium And Loaded Then
             DirectCast(SimObject, Reactors.Reactor_Equilibrium).UsePreviousReactionExtents = chkInitializeExtents.Checked
-            tbExtentsInitializer.Enabled = Not chkInitializeExtents.Checked
-            RequestCalc()
-        End If
-    End Sub
-
-    Private Sub chkAlternateInit_CheckedChanged(sender As Object, e As EventArgs) Handles chkAlternateInit.CheckedChanged
-        If TypeOf SimObject Is Reactors.Reactor_Equilibrium Then
-            DirectCast(SimObject, Reactors.Reactor_Equilibrium).AlternateBoundsInitializer = chkAlternateInit.Checked
-            RequestCalc()
         End If
     End Sub
 
@@ -680,4 +629,15 @@ Public Class EditingForm_ReactorConvEqGibbs
 
     End Sub
 
+    Private Sub chkGibbsUsePreviousSolution_CheckedChanged(sender As Object, e As EventArgs) Handles chkGibbsUsePreviousSolution.CheckedChanged
+        If TypeOf SimObject Is Reactors.Reactor_Gibbs And Loaded Then
+            DirectCast(SimObject, Reactors.Reactor_Gibbs).InitializeFromPreviousSolution = chkGibbsUsePreviousSolution.Checked
+        End If
+    End Sub
+
+    Private Sub chkUseIPOPT_CheckedChanged(sender As Object, e As EventArgs) Handles chkUseIPOPT.CheckedChanged
+        If TypeOf SimObject Is Reactors.Reactor_Equilibrium And Loaded Then
+            DirectCast(SimObject, Reactors.Reactor_Equilibrium).UseIPOPTSolver = chkUseIPOPT.Checked
+        End If
+    End Sub
 End Class

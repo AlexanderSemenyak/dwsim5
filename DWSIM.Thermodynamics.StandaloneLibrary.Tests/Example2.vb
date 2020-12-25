@@ -1,4 +1,7 @@
-﻿Imports DWSIM.Thermodynamics.PropertyPackages
+﻿Imports System.IO
+Imports System.Reflection
+Imports System.Runtime.InteropServices
+Imports DWSIM.Thermodynamics.PropertyPackages
 Imports DWSIM.Thermodynamics.PropertyPackages.Auxiliary.FlashAlgorithms
 
 Module Example2
@@ -11,9 +14,13 @@ Module Example2
 
     Sub RunTest()
 
+        Dim dtlpath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+
         Dim dtlc As New DWSIM.Thermodynamics.CalculatorInterface.Calculator
 
         dtlc.Initialize()
+
+        Console.WriteLine(dtlc.AvailableCompounds.Count)
 
         dtlc.SetDebugLevel(0)
 
@@ -22,21 +29,12 @@ Module Example2
         'Peng-Robinson Property Package
         Dim prpp As PropertyPackage = dtlc.GetPropPackInstance(proppacks(1))
 
-        'Nested Loops VLLE Flash Algorithm
-        Dim nlvlle As New NestedLoops3PV3
-
-        prpp.FlashAlgorithm = nlvlle
-
-        'Configures the property package to handle liquid phase instability.
-        nlvlle.StabSearchCompIDs = New String() {"Water"}
-        nlvlle.StabSearchSeverity = 0
-
         Dim P As Double = 25 'bar
         Dim T As Double = 94 'C
 
-        Dim compounds As String() = New String() {"Water", "Ethane", "Propane", "Isobutane", "N-butane", "1-butene", "N-pentane"}
+        Dim compounds As String() = New String() {"Water", "Methane", "Propane", "Isobutane", "N-butane", "N-decane"}
 
-        Dim molefractions As Double() = New Double() {0.2, 0.2, 0.2, 0.1, 0.1, 0.1, 0.1}
+        Dim molefractions As Double() = New Double() {0.2, 0.2, 0.1, 0.1, 0.1, 0.3}
 
         'do a three-phase flash calculation using the new generic function
 

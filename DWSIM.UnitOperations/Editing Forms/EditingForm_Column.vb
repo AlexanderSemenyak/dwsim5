@@ -60,11 +60,9 @@ Public Class EditingForm_Column
 
             chkActive.Checked = .GraphicObject.Active
 
+            ToolTip1.SetToolTip(chkActive, .FlowSheet.GetTranslatedString("AtivoInativo"))
+
             Me.Text = .GraphicObject.Tag & " (" & .GetDisplayName() & ")"
-
-            tbMaxTChange.Text = su.Converter.ConvertFromSI(units.deltaT, SimObject.MaximumTemperatureStep).ToString(nf)
-
-            lblTemperatureUnit.Text = units.deltaT
 
             lblTag.Text = .GraphicObject.Tag
             If .Calculated Then
@@ -75,11 +73,7 @@ Public Class EditingForm_Column
                     lblStatus.Text = .FlowSheet.GetTranslatedString("Inativo")
                     lblStatus.ForeColor = System.Drawing.Color.Gray
                 ElseIf .ErrorMessage <> "" Then
-                    If .ErrorMessage.Length > 50 Then
-                        lblStatus.Text = .FlowSheet.GetTranslatedString("Erro") & " (" & .ErrorMessage.Substring(50) & "...)"
-                    Else
-                        lblStatus.Text = .FlowSheet.GetTranslatedString("Erro") & " (" & .ErrorMessage & ")"
-                    End If
+                    lblStatus.Text = .FlowSheet.GetTranslatedString("Erro")
                     lblStatus.ForeColor = System.Drawing.Color.Red
                 Else
                     lblStatus.Text = .FlowSheet.GetTranslatedString("NoCalculado")
@@ -104,46 +98,6 @@ Public Class EditingForm_Column
 
             'parameters
 
-            cbSolvingMethod.Items.Clear()
-
-            Dim dcsolvers As String() = {"Wang-Henke (Bubble Point)", "Naphtali-Sandholm (Newton)", "Russell (Inside-Out)"}
-            Dim acsolvers As String() = {"Burningham-Otto (Sum Rates)", "Naphtali-Sandholm (Newton)", "Russell (Inside-Out)"}
-            Dim rrsolvers As String() = {"Naphtali-Sandholm (Newton)", "Russell (Inside-Out)"}
-
-            Select Case .GraphicObject.ObjectType
-                Case ObjectType.AbsorptionColumn
-                    cbSolvingMethod.Items.AddRange(acsolvers)
-                    If .SolvingMethod = 0 Then .SolvingMethod = 3
-                    If .SolvingMethod = 3 Then
-                        cbSolvingMethod.SelectedIndex = 0
-                    Else
-                        cbSolvingMethod.SelectedIndex = .SolvingMethod
-                    End If
-                Case ObjectType.DistillationColumn
-                    cbSolvingMethod.Items.AddRange(dcsolvers)
-                    If .SolvingMethod = 3 Then .SolvingMethod = 0
-                    cbSolvingMethod.SelectedIndex = .SolvingMethod
-                Case ObjectType.ReboiledAbsorber, ObjectType.RefluxedAbsorber
-                    cbSolvingMethod.Items.AddRange(rrsolvers)
-                    If .SolvingMethod = 0 Or .SolvingMethod = 3 Then .SolvingMethod = 1
-                    cbSolvingMethod.SelectedIndex = .SolvingMethod - 1
-            End Select
-
-            If .SolvingMethod = 0 Then
-                TabControl2.TabPages.Remove(TabSolverIO)
-                TabControl2.TabPages.Remove(TabSolverNS)
-            ElseIf .SolvingMethod = 1 Then
-                TabControl2.TabPages.Remove(TabSolverBP)
-                TabControl2.TabPages.Remove(TabSolverIO)
-            ElseIf .SolvingMethod = 2 Then
-                TabControl2.TabPages.Remove(TabSolverBP)
-                TabControl2.TabPages.Remove(TabSolverNS)
-            Else
-                TabControl2.TabPages.Remove(TabSolverIO)
-                TabControl2.TabPages.Remove(TabSolverBP)
-                TabControl2.TabPages.Remove(TabSolverNS)
-            End If
-
             cbCondPressureUnits.Items.Clear()
             cbCondPressureUnits.Items.AddRange(units.GetUnitSet(Interfaces.Enums.UnitOfMeasure.pressure).ToArray)
             cbCondPressureUnits.SelectedItem = units.pressure
@@ -163,17 +117,6 @@ Public Class EditingForm_Column
             tbMaxIt.Text = .MaxIterations
             tbConvTol.Text = .ExternalLoopTolerance.ToString("R")
 
-            Select Case SimObject.SolverScheme
-                Case SolvingScheme.Ideal_K_Init
-                    cbSolverScheme.SelectedIndex = 1
-                Case SolvingScheme.Ideal_Enthalpy_Init
-                    cbSolverScheme.SelectedIndex = 2
-                Case SolvingScheme.Ideal_K_and_Enthalpy_Init
-                    cbSolverScheme.SelectedIndex = 3
-                Case SolvingScheme.Direct
-                    cbSolverScheme.SelectedIndex = 0
-            End Select
-
             cbCondType.SelectedIndex = .CondenserType
             tbCondPressure.Text = su.Converter.ConvertFromSI(units.pressure, .CondenserPressure).ToString(nf)
             tbCondPDrop.Text = su.Converter.ConvertFromSI(units.deltaP, .CondenserDeltaP).ToString(nf)
@@ -181,7 +124,7 @@ Public Class EditingForm_Column
             Dim cunits As String() = {}
             Select Case .Specs("C").SType
                 Case ColumnSpec.SpecType.Component_Fraction
-                    cunits = New String() {"M", "We"}
+                    cunits = New String() {"Molar", "Mass"}
                     cbCondComp.Enabled = True
                 Case ColumnSpec.SpecType.Component_Mass_Flow_Rate
                     cunits = New String() {"g/s", "lbm/h", "kg/s", "kg/h", "kg/d", "kg/min", "lb/min", "lb/s"}
@@ -222,7 +165,7 @@ Public Class EditingForm_Column
             Dim runits As String() = {}
             Select Case .Specs("R").SType
                 Case ColumnSpec.SpecType.Component_Fraction
-                    runits = New String() {"M", "We"}
+                    runits = New String() {"Molar", "Mass"}
                     cbRebComp.Enabled = True
                 Case ColumnSpec.SpecType.Component_Mass_Flow_Rate
                     runits = New String() {"g/s", "lbm/h", "kg/s", "kg/h", "kg/d", "kg/min", "lb/min", "lb/s"}
@@ -268,23 +211,6 @@ Public Class EditingForm_Column
             chkUseIE_VF.Checked = .UseVaporFlowEstimates
             chkUseIE_C.Checked = .UseCompositionEstimates
 
-            tbBPStopAtIter.Text = .StopAtIterationNumber
-
-            tb_NS_LowerBound.Text = .NS_LowerBound.ToString(nf)
-            tb_NS_UpperBound.Text = .NS_UpperBound.ToString(nf)
-            cbMinMethodNS.SelectedIndex = .NS_Solver
-            cbNSPreconditioning.Checked = .NS_SimplexPreconditioning
-
-            tb_NS_NumDeriv.Text = .SC_NumericalDerivativeStep.ToString("R")
-
-            tb_IO_LowerBound.Text = .IO_LowerBound.ToString(nf)
-            tb_IO_UpperBound.Text = .IO_UpperBound.ToString(nf)
-            cbMinMethodIO.SelectedIndex = .IO_Solver
-            chkIOAdjustSb.Checked = .AdjustSb
-            chkIOAverageKb.Checked = .KbjWeightedAverage
-
-            tb_IO_NumDeriv.Text = .IO_NumericalDerivativeStep.ToString("R")
-
             'tabs
 
             TabStages.Controls.Clear()
@@ -328,12 +254,6 @@ Public Class EditingForm_Column
             cbPropPack.Items.AddRange(proppacks)
             cbPropPack.SelectedItem = .PropertyPackage?.Tag
 
-            Dim flashalgos As String() = .FlowSheet.FlowsheetOptions.FlashAlgorithms.Select(Function(x) x.Tag).ToArray
-            cbFlashAlg.Items.Clear()
-            cbFlashAlg.Items.Add("Default")
-            cbFlashAlg.Items.AddRange(flashalgos)
-            If .PreferredFlashAlgorithmTag <> "" Then cbFlashAlg.SelectedItem = .PreferredFlashAlgorithmTag Else cbFlashAlg.SelectedIndex = 0
-
         End With
 
         Loaded = True
@@ -342,12 +262,6 @@ Public Class EditingForm_Column
 
     Private Sub btnConfigurePP_Click(sender As Object, e As EventArgs) Handles btnConfigurePP.Click
         SimObject.FlowSheet.PropertyPackages.Values.Where(Function(x) x.Tag = cbPropPack.SelectedItem.ToString).SingleOrDefault.DisplayEditingForm()
-    End Sub
-
-    Private Sub btnConfigureFlashAlg_Click(sender As Object, e As EventArgs) Handles btnConfigureFlashAlg.Click
-
-        Thermodynamics.Calculator.ConfigureFlashInstance(SimObject, cbFlashAlg.SelectedItem.ToString)
-
     End Sub
 
     Private Sub lblTag_TextChanged(sender As Object, e As EventArgs) Handles lblTag.TextChanged
@@ -364,13 +278,6 @@ Public Class EditingForm_Column
     Private Sub cbPropPack_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbPropPack.SelectedIndexChanged
         If Loaded Then
             SimObject.PropertyPackage = SimObject.FlowSheet.PropertyPackages.Values.Where(Function(x) x.Tag = cbPropPack.SelectedItem.ToString).SingleOrDefault
-            RequestCalc()
-        End If
-    End Sub
-
-    Private Sub cbFlashAlg_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbFlashAlg.SelectedIndexChanged
-        If Loaded Then
-            SimObject.PreferredFlashAlgorithmTag = cbFlashAlg.SelectedItem.ToString
             RequestCalc()
         End If
     End Sub
@@ -496,45 +403,6 @@ Public Class EditingForm_Column
 
     End Sub
 
-    Private Sub cbSolvingMethod_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbSolvingMethod.SelectedIndexChanged
-
-        If Loaded Then
-
-            Select Case SimObject.GraphicObject.ObjectType
-                Case ObjectType.AbsorptionColumn
-                    If cbSolvingMethod.SelectedIndex = 0 Then
-                        SimObject.SolvingMethod = 3
-                    Else
-                        SimObject.SolvingMethod = cbSolvingMethod.SelectedIndex
-                    End If
-                Case ObjectType.DistillationColumn
-                    SimObject.SolvingMethod = cbSolvingMethod.SelectedIndex
-                Case ObjectType.ReboiledAbsorber, ObjectType.RefluxedAbsorber
-                    SimObject.SolvingMethod = cbSolvingMethod.SelectedIndex + 1
-            End Select
-
-            If SimObject.SolvingMethod = 0 Then
-                If Not TabControl2.TabPages.Contains(TabSolverBP) Then TabControl2.TabPages.Add(TabSolverBP)
-                If TabControl2.TabPages.Contains(TabSolverIO) Then TabControl2.TabPages.Remove(TabSolverIO)
-                If TabControl2.TabPages.Contains(TabSolverNS) Then TabControl2.TabPages.Remove(TabSolverNS)
-            ElseIf SimObject.SolvingMethod = 1 Then
-                If Not TabControl2.TabPages.Contains(TabSolverNS) Then TabControl2.TabPages.Add(TabSolverNS)
-                If TabControl2.TabPages.Contains(TabSolverBP) Then TabControl2.TabPages.Remove(TabSolverBP)
-                If TabControl2.TabPages.Contains(TabSolverIO) Then TabControl2.TabPages.Remove(TabSolverIO)
-            ElseIf SimObject.SolvingMethod = 2 Then
-                If Not TabControl2.TabPages.Contains(TabSolverIO) Then TabControl2.TabPages.Add(TabSolverIO)
-                If TabControl2.TabPages.Contains(TabSolverBP) Then TabControl2.TabPages.Remove(TabSolverBP)
-                If TabControl2.TabPages.Contains(TabSolverNS) Then TabControl2.TabPages.Remove(TabSolverNS)
-            Else
-                If TabControl2.TabPages.Contains(TabSolverIO) Then TabControl2.TabPages.Remove(TabSolverIO)
-                If TabControl2.TabPages.Contains(TabSolverBP) Then TabControl2.TabPages.Remove(TabSolverBP)
-                If TabControl2.TabPages.Contains(TabSolverNS) Then TabControl2.TabPages.Remove(TabSolverNS)
-            End If
-
-        End If
-
-    End Sub
-
     Private Sub cbCondType_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbCondType.SelectedIndexChanged
 
         SimObject.CondenserType = cbCondType.SelectedIndex
@@ -555,8 +423,8 @@ Public Class EditingForm_Column
             Dim cunits As String() = {}
             Select Case SimObject.Specs("C").SType
                 Case ColumnSpec.SpecType.Component_Fraction
-                    cunits = New String() {"M", "We"}
-                    cbCondComp.Enabled = True
+                cunits = New String() {"Molar", "Mass"}
+                cbCondComp.Enabled = True
                 Case ColumnSpec.SpecType.Component_Mass_Flow_Rate
                     cunits = New String() {"g/s", "lbm/h", "kg/s", "kg/h", "kg/d", "kg/min", "lb/min", "lb/s"}
                     cbCondComp.Enabled = True
@@ -683,8 +551,8 @@ Public Class EditingForm_Column
             Dim cunits As String() = {}
             Select Case SimObject.Specs("R").SType
                 Case ColumnSpec.SpecType.Component_Fraction
-                    cunits = New String() {"M", "We"}
-                    cbRebComp.Enabled = True
+                cunits = New String() {"Molar", "Mass"}
+                cbRebComp.Enabled = True
                 Case ColumnSpec.SpecType.Component_Mass_Flow_Rate
                     cunits = New String() {"g/s", "lbm/h", "kg/s", "kg/h", "kg/d", "kg/min", "lb/min", "lb/s"}
                     cbRebComp.Enabled = True
@@ -756,20 +624,6 @@ Public Class EditingForm_Column
         SimObject.UseCompositionEstimates = chkUseIE_C.Checked
     End Sub
 
-    Private Sub tbBPStopAtIter_TextChanged(sender As Object, e As KeyEventArgs) Handles tbBPStopAtIter.KeyDown
-        If Loaded And e.KeyCode = Keys.Enter Then
-            SimObject.StopAtIterationNumber = tbBPStopAtIter.Text
-        End If
-    End Sub
-
-    Private Sub chkIOAdjustSb_CheckedChanged(sender As Object, e As EventArgs) Handles chkIOAdjustSb.CheckedChanged
-        SimObject.AdjustSb = chkIOAdjustSb.Checked
-    End Sub
-
-    Private Sub chkIOAverageKb_CheckedChanged(sender As Object, e As EventArgs) Handles chkIOAverageKb.CheckedChanged
-        SimObject.KbjWeightedAverage = chkIOAverageKb.Checked
-    End Sub
-
     Private Sub cbCondComp_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbCondComp.SelectedIndexChanged
         If Loaded Then
             Me.SimObject.Specs("C").ComponentID = cbCondComp.SelectedItem.ToString
@@ -782,45 +636,8 @@ Public Class EditingForm_Column
         End If
     End Sub
 
-    Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbMinMethodIO.SelectedIndexChanged
-        If Loaded Then SimObject.IO_Solver = cbMinMethodIO.SelectedIndex
-    End Sub
-
-    Private Sub cbMinMethodNS_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbMinMethodNS.SelectedIndexChanged
-        If Loaded Then SimObject.NS_Solver = cbMinMethodNS.SelectedIndex
-    End Sub
-
-    Private Sub tb_NS_LowerBound_KeyDown(sender As Object, e As KeyEventArgs) Handles tb_NS_LowerBound.KeyDown
-        If Loaded And e.KeyCode = Keys.Enter Then
-            SimObject.NS_LowerBound = tb_NS_LowerBound.Text.ParseExpressionToDouble
-        End If
-    End Sub
-
-    Private Sub tb_NS_UpperBound_KeyDown(sender As Object, e As KeyEventArgs) Handles tb_NS_UpperBound.KeyDown
-        If Loaded And e.KeyCode = Keys.Enter Then
-            SimObject.NS_UpperBound = tb_NS_UpperBound.Text.ParseExpressionToDouble
-        End If
-    End Sub
-
-    Private Sub tb_IO_LowerBound_KeyDown(sender As Object, e As KeyEventArgs) Handles tb_IO_LowerBound.KeyDown
-        If Loaded And e.KeyCode = Keys.Enter Then
-            SimObject.IO_LowerBound = tb_IO_LowerBound.Text.ParseExpressionToDouble
-        End If
-    End Sub
-
-    Private Sub tb_IO_UpperBound_KeyDown(sender As Object, e As KeyEventArgs) Handles tb_IO_UpperBound.KeyDown
-        If Loaded And e.KeyCode = Keys.Enter Then
-            SimObject.IO_UpperBound = tb_IO_UpperBound.Text.ParseExpressionToDouble
-        End If
-    End Sub
-
-    Private Sub cbNSPreconditioning_CheckedChanged(sender As Object, e As EventArgs) Handles cbNSPreconditioning.CheckedChanged
-        SimObject.NS_SimplexPreconditioning = cbNSPreconditioning.Checked
-    End Sub
-
-    Private Sub tbNStages_TextChanged(sender As Object, e As EventArgs) Handles tbNStages.TextChanged, tb_IO_LowerBound.TextChanged, tb_IO_UpperBound.TextChanged, tb_NS_LowerBound.TextChanged, tb_NS_UpperBound.TextChanged,
-                                                                                tbBPStopAtIter.TextChanged, tbCondPDrop.TextChanged, tbCondPressure.TextChanged, tbCondSpec.TextChanged, tbCondVapFlow.TextChanged,
-                                                                                tbConvTol.TextChanged, tbMaxIt.TextChanged, tbNStages.TextChanged, tbRebPressure.TextChanged, tbRebSpecValue.TextChanged, tb_IO_NumDeriv.TextChanged, tb_NS_NumDeriv.TextChanged, tbMaxTChange.TextChanged
+    Private Sub tbNStages_TextChanged(sender As Object, e As EventArgs) Handles tbNStages.TextChanged, tbCondPDrop.TextChanged, tbCondPressure.TextChanged, tbCondSpec.TextChanged, tbCondVapFlow.TextChanged,
+                                                                                tbConvTol.TextChanged, tbMaxIt.TextChanged, tbNStages.TextChanged, tbRebPressure.TextChanged, tbRebSpecValue.TextChanged
         Dim tbox = DirectCast(sender, TextBox)
 
         If Loaded Then
@@ -829,37 +646,6 @@ Public Class EditingForm_Column
             ToolTip1.Show(SimObject.FlowSheet.GetTranslatedString("CommitChanges"), tbox, 0, tbox.Height + 4, 2000)
         End If
 
-    End Sub
-
-    Private Sub cbSolverScheme_SelectedIndexChanged_1(sender As Object, e As EventArgs) Handles cbSolverScheme.SelectedIndexChanged
-        Select Case cbSolverScheme.SelectedIndex
-            Case 0
-                SimObject.SolverScheme = SolvingScheme.Direct
-            Case 1
-                SimObject.SolverScheme = SolvingScheme.Ideal_K_Init
-            Case 2
-                SimObject.SolverScheme = SolvingScheme.Ideal_Enthalpy_Init
-            Case 3
-                SimObject.SolverScheme = SolvingScheme.Ideal_K_and_Enthalpy_Init
-        End Select
-    End Sub
-
-    Private Sub tb_IO_NumDeriv_KeyDown(sender As Object, e As KeyEventArgs) Handles tb_IO_NumDeriv.KeyDown
-        If Loaded And e.KeyCode = Keys.Enter Then
-            SimObject.IO_NumericalDerivativeStep = tb_IO_NumDeriv.Text.ParseExpressionToDouble
-        End If
-    End Sub
-
-    Private Sub tb_NS_NumDeriv_KeyDown(sender As Object, e As KeyEventArgs) Handles tb_NS_NumDeriv.KeyDown
-        If Loaded And e.KeyCode = Keys.Enter Then
-            SimObject.SC_NumericalDerivativeStep = tb_NS_NumDeriv.Text.ParseExpressionToDouble
-        End If
-    End Sub
-
-    Private Sub tbMaxTChange_KeyDown(sender As Object, e As KeyEventArgs) Handles tbMaxTChange.KeyDown
-        If Loaded And e.KeyCode = Keys.Enter Then
-            SimObject.MaximumTemperatureStep = su.Converter.ConvertToSI(units.deltaT, tbMaxTChange.Text.ParseExpressionToDouble)
-        End If
     End Sub
 
     Private Sub lblTag_KeyPress(sender As Object, e As KeyEventArgs) Handles lblTag.KeyUp

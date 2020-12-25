@@ -121,67 +121,73 @@
     <value>Logical block for controlling a variable in the flowsheet</value>
   </data>
   <data name="ADJ_Name" xml:space="preserve">
-    <value>Controller Block</value>
+    <value>Блок контроллера</value>
+  </data>
+  <data name="AG_Desc" xml:space="preserve">
+    <value>Analog Gauge</value>
+  </data>
+  <data name="AG_Name" xml:space="preserve">
+    <value>Analog Gauge</value>
   </data>
   <data name="CABS_Desc" xml:space="preserve">
     <value>Model for rigorous simulation of absorption columns</value>
   </data>
   <data name="CABS_Name" xml:space="preserve">
-    <value>Absorption Column</value>
+    <value>Абсорбционная колонна</value>
   </data>
   <data name="CDEST_Desc" xml:space="preserve">
     <value>Rigorous model for simulation of distillation columns</value>
   </data>
   <data name="CDEST_Name" xml:space="preserve">
-    <value>Distillation Column</value>
+    <value>Дистилляционная колонна</value>
   </data>
   <data name="COMP_Desc" xml:space="preserve">
-    <value>Model for an adiabatic (isentropic) compressor</value>
+    <value>Model for a compressor</value>
   </data>
   <data name="COMP_Name" xml:space="preserve">
-    <value>Adiabatic Compressor</value>
+    <value>Compressor</value>
   </data>
   <data name="CONV_Desc" xml:space="preserve">
     <value>Supports reactions defined by amounts of reactant converted as a function of temperature</value>
   </data>
   <data name="CONV_Name" xml:space="preserve">
-    <value>Conversion Reactor</value>
+    <value>Реактор конверсии</value>
   </data>
   <data name="COOL_Desc" xml:space="preserve">
     <value>Simple cooler model</value>
   </data>
   <data name="COOL_Name" xml:space="preserve">
-    <value>Cooler</value>
+    <value>Охладитель</value>
   </data>
   <data name="COUO_Desc" xml:space="preserve">
     <value>Model for utilization of a CAPE-OPEN Unit Operation in the flowsheet</value>
   </data>
   <data name="COUO_Name" xml:space="preserve">
-    <value>CAPE-OPEN Unit Operation</value>
+    <value>Блок CAPE-OPEN</value>
   </data>
   <data name="CRABS_Desc" xml:space="preserve">
     <value>Rigorous reboiled absorber model</value>
   </data>
   <data name="CRABS_Name" xml:space="preserve">
-    <value>Reboiled Absorber</value>
+    <value>Перегретый абсорбер</value>
   </data>
   <data name="CRFABS_Desc" xml:space="preserve">
     <value>Rigorous Refluxed Absorber model</value>
   </data>
   <data name="CRFABS_Name" xml:space="preserve">
-    <value>Refluxed Absorber</value>
+    <value>Плавкий абсорбер</value>
   </data>
   <data name="CSC_Desc" xml:space="preserve">
     <value>Model for quick sizing of distillation columns</value>
   </data>
   <data name="CSC_Name" xml:space="preserve">
-    <value>Shortcut Column</value>
+    <value>Легкая колонна</value>
   </data>
   <data name="CSEP_Desc" xml:space="preserve">
     <value>Model for a hypothetical compound separation process</value>
   </data>
   <data name="CSEP_Name" xml:space="preserve">
-    <value>Compound Separator</value>
+    <value>Сепаратор фракций</value>
   </data>
   <data name="CSTR_Desc" xml:space="preserve">
     <value>CSTR model, supports Kinetic and HetCat reactions</value>
@@ -189,163 +195,193 @@
   <data name="CSTR_Name" xml:space="preserve">
     <value>Continuous Stirred Tank Reactor (CSTR)</value>
   </data>
+  <data name="DG_Desc" xml:space="preserve">
+    <value>Digital Gauge Display</value>
+  </data>
+  <data name="DG_Name" xml:space="preserve">
+    <value>Digital Gauge</value>
+  </data>
   <data name="EQUIL_Desc" xml:space="preserve">
     <value>Supports equilibrium constant-defined reactions</value>
   </data>
   <data name="EQUIL_Name" xml:space="preserve">
-    <value>Equilibrium Reactor</value>
+    <value>Реактор на равновесии</value>
   </data>
   <data name="ERECY_Desc" xml:space="preserve">
     <value>Logical block for Energy Streams</value>
   </data>
   <data name="ERECY_Name" xml:space="preserve">
-    <value>Energy Recycle Block</value>
+    <value>Блок повторного использования энергии</value>
   </data>
   <data name="ESTR_Desc" xml:space="preserve">
     <value>Energy flow from/to Unit Operations</value>
   </data>
   <data name="ESTR_Name" xml:space="preserve">
-    <value>Energy Stream</value>
+    <value>Энергетический поток</value>
   </data>
   <data name="EXLUO_Desc" xml:space="preserve">
     <value>Use a spreadsheet file as a flowsheet block</value>
   </data>
   <data name="EXLUO_Name" xml:space="preserve">
-    <value>Spreadsheet</value>
+    <value>Excel-файл</value>
   </data>
   <data name="EXP_Desc" xml:space="preserve">
-    <value>Model for an adiabatic (isentropic) expander</value>
+    <value>Model for an expander</value>
   </data>
   <data name="EXP_Name" xml:space="preserve">
-    <value>Adiabatic Expander</value>
+    <value>Расширитель (турбина)</value>
   </data>
   <data name="FILTER_Desc" xml:space="preserve">
-    <value>Solids Filter model</value>
+    <value>Модель фильтра жидкости</value>
   </data>
   <data name="FILTER_Name" xml:space="preserve">
-    <value>Filter</value>
+    <value>Фильтр</value>
   </data>
   <data name="FLOWS_Desc" xml:space="preserve">
     <value>Model for using an existing simulation as a flowsheet block</value>
   </data>
   <data name="FLOWS_Name" xml:space="preserve">
-    <value>Flowsheet</value>
+    <value>Модель в качестве объекта</value>
   </data>
   <data name="GIBBS_Desc" xml:space="preserve">
     <value>Calculates chemical/atomic equilibrium for a Material Stream</value>
   </data>
   <data name="GIBBS_Name" xml:space="preserve">
-    <value>Gibbs Reactor</value>
+    <value>Реактор Гиббса</value>
   </data>
   <data name="HEAT_Desc" xml:space="preserve">
     <value>Simple heater model</value>
   </data>
   <data name="HEAT_Name" xml:space="preserve">
-    <value>Heater</value>
+    <value>Нагреватель</value>
   </data>
   <data name="HEXCH_Desc" xml:space="preserve">
     <value>Rigorous Heat Exchanger model</value>
   </data>
   <data name="HEXCH_Name" xml:space="preserve">
-    <value>Heat Exchanger</value>
+    <value>Теплообменник</value>
+  </data>
+  <data name="IN_Desc" xml:space="preserve">
+    <value>Displays and updates a variable directly from the flowsheet</value>
+  </data>
+  <data name="IN_Name" xml:space="preserve">
+    <value>Input Box</value>
   </data>
   <data name="IPUO_Desc" xml:space="preserve">
     <value>Python Script Unit Operation</value>
   </data>
   <data name="IPUO_Name" xml:space="preserve">
-    <value>Python Script</value>
+    <value>Скрипт Pyton</value>
+  </data>
+  <data name="LG_Desc" xml:space="preserve">
+    <value>Level Gauge</value>
+  </data>
+  <data name="LG_Name" xml:space="preserve">
+    <value>Level Gauge</value>
   </data>
   <data name="MIX_Desc" xml:space="preserve">
     <value>Mixes multiple Material Streams into a single one</value>
   </data>
   <data name="MIX_Name" xml:space="preserve">
-    <value>Stream Mixer</value>
+    <value>Смеситель потоков</value>
   </data>
   <data name="MRECY_Desc" xml:space="preserve">
     <value>Block for connecting tear Material Streams</value>
   </data>
   <data name="MRECY_Name" xml:space="preserve">
-    <value>Recycle Block</value>
+    <value>Блок утилизации</value>
   </data>
   <data name="ORIF_Desc" xml:space="preserve">
     <value>Sizes or evaluates an orifice plate</value>
   </data>
   <data name="ORIF_Name" xml:space="preserve">
-    <value>Orifice Plate</value>
+    <value>Диафрагма</value>
   </data>
   <data name="PFR_Desc" xml:space="preserve">
     <value>Plug-Flow Reactor model, supports Kinetic and HetCat reactions</value>
   </data>
   <data name="PFR_Name" xml:space="preserve">
-    <value>Plug-Flow Reactor (PFR)</value>
+    <value>Реактор с поршневым потоком (PFR)</value>
+  </data>
+  <data name="PID_Desc" xml:space="preserve">
+    <value>PID Controller</value>
+  </data>
+  <data name="PID_Name" xml:space="preserve">
+    <value>PID Controller</value>
   </data>
   <data name="PIPE_Desc" xml:space="preserve">
     <value>Defines a piping segment for pressure drop calculations</value>
   </data>
   <data name="PIPE_Name" xml:space="preserve">
-    <value>Piping Segment</value>
+    <value>Сегмент трубы</value>
   </data>
   <data name="PUMP_Desc" xml:space="preserve">
     <value>Centrifugal Pump model</value>
   </data>
   <data name="PUMP_Err1" xml:space="preserve">
-    <value>No Pump type defined!</value>
+    <value>No type defined!</value>
   </data>
   <data name="PUMP_Err2" xml:space="preserve">
-    <value>Pump database already existing!</value>
+    <value>Database already exists.</value>
   </data>
   <data name="PUMP_Err3" xml:space="preserve">
     <value>Database not found!</value>
   </data>
   <data name="PUMP_Modified" xml:space="preserve">
-    <value>Modified</value>
+    <value>Изменено</value>
   </data>
   <data name="PUMP_Msg1" xml:space="preserve">
-    <value> created.</value>
+    <value> создано.</value>
   </data>
   <data name="PUMP_Msg2" xml:space="preserve">
-    <value>Overwrite ?</value>
+    <value>Перезаписать ?</value>
   </data>
   <data name="PUMP_Name" xml:space="preserve">
-    <value>Centrifugal Pump</value>
+    <value>Центробежный насос</value>
   </data>
   <data name="PUMP_Saved" xml:space="preserve">
-    <value>Saved</value>
+    <value>Сохранено</value>
   </data>
   <data name="SPEC_Desc" xml:space="preserve">
     <value>Defines a dependent variable/object from other variables/objects</value>
   </data>
   <data name="SPEC_Name" xml:space="preserve">
-    <value>Specification Block</value>
+    <value>Блок спецификации</value>
   </data>
   <data name="SPLIT_Desc" xml:space="preserve">
     <value>Splits a single Material Stream into multiple ones</value>
   </data>
   <data name="SPLIT_Name" xml:space="preserve">
-    <value>Stream Splitter</value>
+    <value>Делитель потока</value>
   </data>
   <data name="SSEP_Desc" xml:space="preserve">
     <value>Separates a solid phase from the others in a Material Stream</value>
   </data>
   <data name="SSEP_Name" xml:space="preserve">
-    <value>Solids Separator</value>
+    <value>Сеператор жидкости</value>
+  </data>
+  <data name="SW_Desc" xml:space="preserve">
+    <value>Changes a variable to one of two possible values</value>
+  </data>
+  <data name="SW_Name" xml:space="preserve">
+    <value>Switch</value>
   </data>
   <data name="TANK_Desc" xml:space="preserve">
     <value>Simple Tank model</value>
   </data>
   <data name="TANK_Name" xml:space="preserve">
-    <value>Tank</value>
+    <value>Емкость</value>
   </data>
   <data name="VALVE_Desc" xml:space="preserve">
     <value>Isenthalpic Valve model</value>
   </data>
   <data name="VALVE_Name" xml:space="preserve">
-    <value>Valve</value>
+    <value>Клапан (задвижка)</value>
   </data>
   <data name="VESSEL_Desc" xml:space="preserve">
     <value>Fluid phase separator (vapor/liquid)</value>
   </data>
   <data name="VESSEL_Name" xml:space="preserve">
-    <value>Gas-Liquid Separator</value>
+    <value>Сепаратор газ-жидкость</value>
   </data>
 </root>

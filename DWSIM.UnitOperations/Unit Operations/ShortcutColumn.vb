@@ -29,6 +29,7 @@ Imports DWSIM.Interfaces.Enums
 Imports System.Math
 Imports DWSIM.Interfaces.My.Resources
 Imports DWSIM.MathOps.MathEx
+Imports IronPython.Zlib
 
 Namespace UnitOperations
 
@@ -233,8 +234,7 @@ restart:    B = F - D
 
             'calculate minimum reflux by Underwood's method
 
-            Dim brentsolver As New BrentOpt.Brent
-            brentsolver.DefineFuncDelegate(AddressOf rminfunc)
+            Dim brentsolver As New BrentOpt.BrentMinimize
 
             Dim mode2 As Boolean = False
             Dim count As Integer = 0
@@ -255,7 +255,10 @@ restart:    B = F - D
 
                 Dim teta, L_Dmin, sum As Double
 
-                teta = brentsolver.BrentOpt(alpha(hki) * 1.01, alpha(lki), 10, 0.0000001, 100, New Object() {alpha, z, q, n})
+                teta = brentsolver.brentoptimize2(alpha(hki) * 1.01, alpha(lki), 0.0000001,
+                                                Function(x)
+                                                    Return rminfunc(x, alpha, z, q, n)
+                                                End Function)
 
                 sum = 0
                 i = 0
@@ -275,46 +278,78 @@ restart:    B = F - D
                 i = 0
                 Do
                     If i = 0 Then
-                        teta(i) = brentsolver.BrentOpt(alpha(lki), alpha(indexes(i)), 10, 1.0E-20, 100, New Object() {alpha, z, q, n})
+                        If alpha(lki) < alpha(indexes(i)) Then
+                            teta(i) = brentsolver.brentoptimize2(alpha(lki) * 1.01, alpha(indexes(i)) * 0.99, 0.0000001,
+                                                Function(x)
+                                                    Return rminfunc(x, alpha, z, q, n)
+                                                End Function)
+                        Else
+                            teta(i) = brentsolver.brentoptimize2(alpha(indexes(i)) * 1.01, alpha(lki) * 0.99, 0.0000001,
+                                                Function(x)
+                                                    Return rminfunc(x, alpha, z, q, n)
+                                                End Function)
+                        End If
                     ElseIf i = count Then
-                        teta(i) = brentsolver.BrentOpt(alpha(indexes(i - 1)), alpha(hki), 10, 1.0E-20, 100, New Object() {alpha, z, q, n})
+                        If alpha(indexes(i - 1)) < alpha(hki) Then
+                            teta(i) = brentsolver.brentoptimize2(alpha(indexes(i - 1)) * 1.01, alpha(hki) * 0.99, 0.0000001,
+                                                Function(x)
+                                                    Return rminfunc(x, alpha, z, q, n)
+                                                End Function)
+                        Else
+                            teta(i) = brentsolver.brentoptimize2(alpha(hki) * 1.01, alpha(indexes(i - 1)) * 0.99, 0.0000001,
+                                                Function(x)
+                                                    Return rminfunc(x, alpha, z, q, n)
+                                                End Function)
+                        End If
                     Else
-                        teta(i) = brentsolver.BrentOpt(alpha(indexes(i - 1)), alpha(indexes(i)), 10, 1.0E-20, 100, New Object() {alpha, z, q, n})
+                        If alpha(indexes(i - 1)) < alpha(indexes(i)) Then
+                            teta(i) = brentsolver.brentoptimize2(alpha(indexes(i - 1)) * 1.01, alpha(indexes(i)) * 0.99, 0.0000001,
+                                                Function(x)
+                                                    Return rminfunc(x, alpha, z, q, n)
+                                                End Function)
+                        Else
+                            teta(i) = brentsolver.brentoptimize2(alpha(indexes(i - 1)) * 1.01, alpha(indexes(i)) * 0.99, 0.0000001,
+                                                Function(x)
+                                                    Return rminfunc(x, alpha, z, q, n)
+                                                End Function)
+                        End If
                     End If
                     i = i + 1
-                Loop Until i = count + 1
+                Loop Until i > count
 
-                Dim MA As New Mapack.Matrix(count, count)
-                Dim MB As New Mapack.Matrix(count, 1)
-                Dim MX As New Mapack.Matrix(count, count)
+                Dim MA As New Mapack.Matrix(count + 1, count + 1)
+                Dim MB As New Mapack.Matrix(count + 1, 1)
+                Dim MX As New Mapack.Matrix(1, count + 1)
 
-                Dim j As Integer = 0
+                Dim j, j2 As Integer
                 i = 0
                 Do
-                    MB(i, 0) = 0
-                    j = 0
-                    Do
-                        If j = 0 Then
-                            MA(i, j) = 1 'L/D min
-                        Else
-                            MA(i, j) = -alpha(indexes(j)) / (alpha(indexes(j)) - teta(i))
-                        End If
-                        j = j + 1
-                    Loop Until j = count
-                    j = 0
-                    Do
-                        If j <> indexes(j) Then
+                    MB(i, 0) = -1.0
+                    MA(i, 0) = 1.0 'L/D min
+                    j2 = 0
+                    For j = 0 To alpha.Count - 1
+                        If Not indexes.Contains(j) Then
                             MB(i, 0) += alpha(j) * xd(j) / (alpha(j) - teta(i))
+                        Else
+                            MA(i, j2 + 1) = -alpha(j) / (alpha(j) - teta(i))
+                            j2 += 1
                         End If
-                        j = j + 1
-                    Loop Until j >= count
-                    MB(i, 0) -= 1
+                    Next
                     i = i + 1
-                Loop Until i >= count
+                Loop Until i > count
 
                 MX = MA.Solve(MB)
 
                 m_Rmin = MX(0, 0)
+
+                'Dim sum As Double = 0.0
+                'For j = 0 To teta.Count - 1
+                '    For i = 0 To n
+                '        If z(i) > 0.0 Then sum += alpha(i) * xd(i) / (alpha(i) - teta(j))
+                '    Next
+                'Next
+
+                'm_Rmin = sum / teta.Count - 1
 
             End If
 
@@ -381,6 +416,7 @@ restart:    B = F - D
             End With
             IObj?.SetCurrent()
             distillate.Calculate(True, True)
+            distillate.AtEquilibrium = True
 
             HD = distillate.Phases(0).Properties.enthalpy.GetValueOrDefault * distillate.Phases(0).Properties.molecularWeight.GetValueOrDefault
 
@@ -391,13 +427,14 @@ restart:    B = F - D
             Next
 
             IObj?.SetCurrent()
-            result = pp.CalculateEquilibrium2(FlashCalculationType.PressureVaporFraction, m_boilerpressure, 0.001, 0)
+            result = pp.CalculateEquilibrium2(FlashCalculationType.PressureVaporFraction, m_boilerpressure, 0.0, 0)
             TB = result.CalculatedTemperature
             With bottoms.Phases(0)
                 .Properties.temperature = TB
             End With
             IObj?.SetCurrent()
             bottoms.Calculate(True, True)
+            bottoms.AtEquilibrium = True
 
             HB = bottoms.Phases(0).Properties.enthalpy.GetValueOrDefault * bottoms.Phases(0).Properties.molecularWeight.GetValueOrDefault
 
@@ -444,23 +481,18 @@ restart:    B = F - D
 
         End Sub
 
-        Function rminfunc(ByVal x As Double, ByVal otherargs As Object) As Double
+        Function rminfunc(ByVal x As Double, alpha As Object, z As Object, q As Double, n As Integer) As Double
 
-            If Double.IsNaN(x) Then Return Nothing
-
-            Dim alpha As Object = otherargs(0)
-            Dim z As Object = otherargs(1)
-            Dim q As Double = otherargs(2)
-            Dim n As Integer = otherargs(3)
-
-            Dim value As Double
+            Dim value As Double = 0.0
             Dim j As Integer = 0
             Do
-                If z(j) <> 0 Then value += (alpha(j) * z(j)) / (alpha(j) - x)
+                If z(j) <> 0.0 Then
+                    value += alpha(j) * z(j) / (alpha(j) - x)
+                End If
                 j = j + 1
             Loop Until j = n + 1
 
-            Return value - 1 + q
+            Return (value - 1 + q) ^ 2
 
         End Function
 

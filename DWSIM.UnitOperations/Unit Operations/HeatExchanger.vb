@@ -103,7 +103,7 @@ Namespace UnitOperations
         Public Property TemperatureProfileCold As Double() = {}
         Public Property TemperatureProfileHot As Double() = {}
         Public Property IgnoreLMTDError As Boolean = True
-
+        Public Property CorrectionFactorLMTD As Double = 1.0
         Public Property HeatLoss As Double = 0.0
 
         Public Property STProperties() As STHXProperties
@@ -676,6 +676,8 @@ Namespace UnitOperations
                             End If
                     End Select
 
+                    LMTD *= CorrectionFactorLMTD
+
                     If Double.IsNaN(LMTD) Or Double.IsInfinity(LMTD) Then LMTD = 0.0
 
                     Q = U / 1000 * A * LMTD * timestep
@@ -1039,6 +1041,8 @@ Namespace UnitOperations
                             End If
                     End Select
 
+                    LMTD *= CorrectionFactorLMTD
+
                     If Double.IsNaN(LMTD) Or Double.IsInfinity(LMTD) Then LMTD = 0.0
 
                     Q = U / 1000 * A * LMTD / 1000 * timestep
@@ -1385,6 +1389,8 @@ Namespace UnitOperations
                             LMTD = ((Th1 - Tc2) - (Th2 - Tc1)) / Math.Log((Th1 - Tc2) / (Th2 - Tc1))
                     End Select
 
+                    LMTD *= CorrectionFactorLMTD
+
                     If Not IgnoreLMTDError Then If Double.IsNaN(LMTD) Or Double.IsInfinity(LMTD) Then Throw New Exception(FlowSheet.GetTranslatedString("HXCalcError"))
 
                     U = OverallCoefficient.GetValueOrDefault
@@ -1513,6 +1519,8 @@ Namespace UnitOperations
                             LMTD = ((Th1 - Tc2) - (Th2 - Tc1)) / Math.Log((Th1 - Tc2) / (Th2 - Tc1))
                     End Select
 
+                    LMTD *= CorrectionFactorLMTD
+
                     If Not IgnoreLMTDError Then If Double.IsNaN(LMTD) Or Double.IsInfinity(LMTD) Then Throw New Exception(FlowSheet.GetTranslatedString("HXCalcError"))
 
                     U = Me.OverallCoefficient
@@ -1529,8 +1537,10 @@ Namespace UnitOperations
                     Dim count As Integer
                     A = Area
                     U = OverallCoefficient
-                    Qi = MaxHeatExchange
+                    Qi = MaxHeatExchange * 0.7
                     Q_old = 10000000000.0
+                    Tc2 = Tc1 + (Tc1 + Th1) / 2 * 0.7
+                    Th2 = Th1 - (Tc1 + Th1) / 2 * 0.7
 
                     If DebugMode Then AppendDebugLine(String.Format("Start with Max Heat Exchange Q = {0} KW", Qi))
 
@@ -1599,6 +1609,7 @@ Namespace UnitOperations
                                     LMTD = ((Th1 - Tc2) - (Th2 - Tc1)) / Math.Log((Th1 - Tc2) / (Th2 - Tc1))
                                 End If
                         End Select
+                        LMTD *= CorrectionFactorLMTD
                         Q_old = Qi
                         If LMTD > 0 Then
                             Qi = U * A * LMTD / 1000
@@ -1663,6 +1674,8 @@ Namespace UnitOperations
                             LMTD = ((Th1 - Tc2) - (Th2 - Tc1)) / Math.Log((Th1 - Tc2) / (Th2 - Tc1))
                     End Select
 
+                    LMTD *= CorrectionFactorLMTD
+
                     If Not IgnoreLMTDError Then If Double.IsNaN(LMTD) Or Double.IsInfinity(LMTD) Then Throw New Exception(FlowSheet.GetTranslatedString("HXCalcError"))
 
                     U = Q / (A * LMTD) * 1000
@@ -1724,6 +1737,8 @@ Namespace UnitOperations
                             LMTD = ((Th1 - Tc2) - (Th2 - Tc1)) / Math.Log((Th1 - Tc2) / (Th2 - Tc1))
                     End Select
 
+                    LMTD *= CorrectionFactorLMTD
+
                     If Not IgnoreLMTDError Then If Double.IsNaN(LMTD) Or Double.IsInfinity(LMTD) Then Throw New Exception(FlowSheet.GetTranslatedString("HXCalcError"))
 
                     U = Q / (A * LMTD) * 1000
@@ -1770,6 +1785,8 @@ Namespace UnitOperations
                         Case FlowDirection.CounterCurrent
                             LMTD = ((Th1 - Tc2) - (Th2 - Tc1)) / Math.Log((Th1 - Tc2) / (Th2 - Tc1))
                     End Select
+
+                    LMTD *= CorrectionFactorLMTD
 
                     If Not IgnoreLMTDError Then If Double.IsNaN(LMTD) Or Double.IsInfinity(LMTD) Then Throw New Exception(FlowSheet.GetTranslatedString("HXCalcError"))
 
@@ -1838,6 +1855,8 @@ Namespace UnitOperations
                             Case FlowDirection.CounterCurrent
                                 LMTD = ((Th1 - Tc2) - (Th2 - Tc1)) / Math.Log((Th1 - Tc2) / (Th2 - Tc1))
                         End Select
+
+                        LMTD *= CorrectionFactorLMTD
 
                         IObj?.Paragraphs.Add("<mi>\Delta T_{ml}</mi> = " & LMTD & " K")
 
@@ -2381,6 +2400,8 @@ Namespace UnitOperations
                 StOutCold.Phases(0).Properties.pressure = Pc2
                 StOutHot.Phases(0).Properties.enthalpy = Hh2
                 StOutCold.Phases(0).Properties.enthalpy = Hc2
+                StOutHot.SetFlashSpec("PH")
+                StOutCold.SetFlashSpec("PH")
 
                 If Th2 < Tc1 Or Tc2 > Th1 Then
                     FlowSheet.ShowMessage(Me.GraphicObject.Tag & ": Temperature Cross", IFlowsheet.MessageType.Warning)
@@ -2495,6 +2516,8 @@ Namespace UnitOperations
                         value = SystemsOfUnits.Converter.ConvertFromSI(su.deltaT, MITA)
                     Case 28
                         value = SystemsOfUnits.Converter.ConvertFromSI(su.heatflow, HeatLoss)
+                    Case 29
+                        value = CorrectionFactorLMTD
                 End Select
 
                 Return value
@@ -2518,7 +2541,7 @@ Namespace UnitOperations
                         proplist.Add("PROP_HX_" + CStr(i))
                     Next
                 Case PropertyType.RW
-                    For i = 0 To 28
+                    For i = 0 To 29
                         proplist.Add("PROP_HX_" + CStr(i))
                     Next
                 Case PropertyType.WR
@@ -2527,8 +2550,9 @@ Namespace UnitOperations
                     Next
                     proplist.Add("PROP_HX_27")
                     proplist.Add("PROP_HX_28")
+                    proplist.Add("PROP_HX_29")
                 Case PropertyType.ALL
-                    For i = 0 To 28
+                    For i = 0 To 29
                         proplist.Add("PROP_HX_" + CStr(i))
                     Next
             End Select
@@ -2589,6 +2613,8 @@ Namespace UnitOperations
                     Me.MITA = SystemsOfUnits.Converter.ConvertToSI(su.deltaT, propval)
                 Case 28
                     Me.HeatLoss = SystemsOfUnits.Converter.ConvertToSI(su.heatflow, propval)
+                Case 29
+                    CorrectionFactorLMTD = propval
             End Select
             Return 1
         End Function
@@ -3102,7 +3128,7 @@ Namespace UnitOperations.Auxiliary.HeatExchanger
         'tube layout: 0 = triangular, 1 = triangular rotated, 2 = square, 2 = square rotated
         Public Tube_Layout As Integer = 0
         'tube pitch in mm
-        Public Tube_Pitch As Double = 60.0
+        Public Tube_Pitch As Double = 70.0
         'fluid in tubes: 0 = cold, 1 = hot
         Public Tube_Fluid As Integer = 0
         'tube material roughness in mm

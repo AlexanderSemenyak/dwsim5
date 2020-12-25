@@ -53,8 +53,6 @@
 
     Property VisibleProperties As Dictionary(Of String, List(Of String))
 
-    Property FlashAlgorithms As List(Of IFlashAlgorithm)
-
     Property SimultaneousAdjustSolverEnabled As Boolean
 
     Property SpreadsheetUseRegionalSeparator As Boolean
@@ -86,6 +84,11 @@
     Property DefaultFloatingTableCompoundAmountBasis As Enums.CompositionBasis
 
     Property DisplayFloatingTableCompoundAmounts As Boolean
+
     Property FlowsheetMultiSelectMode As Boolean
+
     Property CompoundOrderingMode As CompoundOrdering
+
+    Property SkipEquilibriumCalculationOnDefinedStreams As Boolean
+
 End Interface

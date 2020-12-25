@@ -78,7 +78,6 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
 
         End Function
 
-
         Public Function Flash_PT_Internal(ByVal include_vapor As Boolean, ByVal Vz As Double(), ByVal P As Double, ByVal T As Double, ByVal PP As PropertyPackages.PropertyPackage, Optional ByVal ReuseKI As Boolean = False, Optional ByVal PrevKi As Double() = Nothing) As Object
 
             Dim d1, d2 As Date, dt As TimeSpan
@@ -201,6 +200,11 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
 
                 L_ant = L
                 If hassolids Then L = 1 - S - V Else L = 1 - V
+                If L < 0.0000000001 Then
+                    L = 0.0
+                    S = S / (S + V)
+                    V = 1 - S
+                End If
 
                 For i = 0 To n
                     Vns(i) = Vnf(i) - Vxl(i) * L - Vnv(i)
@@ -316,7 +320,6 @@ alt:            T = bo.BrentOpt(Tinf, Tsup, 100, tolEXT, maxitEXT, {P, Vz, PP})
                 Vs = tmp(8)
             ElseIf H <= Hs Then
                 'solids only.
-                tmp = Flash_PT(Vz, P, T, PP)
                 L = 0.0#
                 V = 0.0#
                 S = 1.0#
@@ -333,7 +336,8 @@ alt:            T = bo.BrentOpt(Tinf, Tsup, 100, tolEXT, maxitEXT, {P, Vz, PP})
                 S = xs
                 Vx = Vz
                 Vy = PP.RET_NullVector()
-                Vs = Vz
+                Vs = PP.RET_NullVector()
+                Vs(wid) = 1.0
             ElseIf H > Hl And H <= Hv Then
                 'partial vaporization.
                 xv = (H - Hl) / (Hv - Hl)

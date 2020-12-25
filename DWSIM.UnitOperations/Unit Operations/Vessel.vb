@@ -565,12 +565,14 @@ Namespace UnitOperations
             Else
                 SR = 1
             End If
+            Dim Vids As New List(Of String)
             i = 0
             For Each comp In MixedStream.Phases(0).Compounds.Values
                 VnL1(i) = MixedStream.Phases(3).Compounds(comp.Name).MolarFlow.GetValueOrDefault + SR * MixedStream.Phases(7).Compounds(comp.Name).MolarFlow.GetValueOrDefault
                 VmL1(i) = MixedStream.Phases(3).Compounds(comp.Name).MassFlow.GetValueOrDefault + SR * MixedStream.Phases(7).Compounds(comp.Name).MassFlow.GetValueOrDefault
                 VnL2(i) = MixedStream.Phases(4).Compounds(comp.Name).MolarFlow.GetValueOrDefault + (1 - SR) * MixedStream.Phases(7).Compounds(comp.Name).MolarFlow.GetValueOrDefault
                 VmL2(i) = MixedStream.Phases(4).Compounds(comp.Name).MassFlow.GetValueOrDefault + (1 - SR) * MixedStream.Phases(7).Compounds(comp.Name).MassFlow.GetValueOrDefault
+                Vids.Add(comp.Name)
                 i += 1
             Next
             Dim sum1, sum2, sum3, sum4 As Double
@@ -615,6 +617,7 @@ Namespace UnitOperations
             If cp.IsAttached Then
                 ms = FlowSheet.SimulationObjects(cp.AttachedConnector.AttachedTo.Name)
                 With ms
+                    .Clear()
                     .ClearAllProps()
                     .SpecType = Interfaces.Enums.StreamSpec.Pressure_and_Enthalpy
                     .Phases(0).Properties.temperature = T
@@ -626,6 +629,9 @@ Namespace UnitOperations
                         comp.MoleFraction = MixedStream.Phases(2).Compounds(comp.Name).MoleFraction.GetValueOrDefault
                         comp.MassFraction = MixedStream.Phases(2).Compounds(comp.Name).MassFraction.GetValueOrDefault
                     Next
+                    .CopyCompositions(PhaseLabel.Mixture, PhaseLabel.Vapor)
+                    .Phases(2).Properties.molarfraction = 1.0
+                    .AtEquilibrium = True
                 End With
             End If
 
@@ -633,6 +639,7 @@ Namespace UnitOperations
             If cp.IsAttached Then
                 ms = FlowSheet.SimulationObjects(cp.AttachedConnector.AttachedTo.Name)
                 With ms
+                    .Clear()
                     .ClearAllProps()
                     .SpecType = Interfaces.Enums.StreamSpec.Pressure_and_Enthalpy
                     .Phases(0).Properties.temperature = T
@@ -643,10 +650,15 @@ Namespace UnitOperations
                     Dim comp As BaseClasses.Compound
                     i = 0
                     For Each comp In .Phases(0).Compounds.Values
-                        comp.MoleFraction = VnL1(i)
-                        comp.MassFraction = VmL1(i)
+                        comp.MoleFraction = VnL1(Vids.IndexOf(comp.Name))
+                        comp.MassFraction = VmL1(Vids.IndexOf(comp.Name))
                         i += 1
                     Next
+                    If WS = 0.0 Then
+                        .CopyCompositions(PhaseLabel.Mixture, PhaseLabel.Liquid1)
+                        .Phases(3).Properties.molarfraction = 1.0
+                        .AtEquilibrium = True
+                    End If
                 End With
             End If
 
@@ -654,6 +666,7 @@ Namespace UnitOperations
             If cp.IsAttached Then
                 ms = FlowSheet.SimulationObjects(cp.AttachedConnector.AttachedTo.Name)
                 With ms
+                    .Clear()
                     .ClearAllProps()
                     .SpecType = Interfaces.Enums.StreamSpec.Pressure_and_Enthalpy
                     .Phases(0).Properties.temperature = T
@@ -664,10 +677,15 @@ Namespace UnitOperations
                     Dim comp As BaseClasses.Compound
                     i = 0
                     For Each comp In .Phases(0).Compounds.Values
-                        comp.MoleFraction = VnL2(i)
-                        comp.MassFraction = VmL2(i)
+                        comp.MoleFraction = VnL2(Vids.IndexOf(comp.Name))
+                        comp.MassFraction = VmL2(Vids.IndexOf(comp.Name))
                         i += 1
                     Next
+                    If WS = 0.0 Then
+                        .CopyCompositions(PhaseLabel.Mixture, PhaseLabel.Liquid1)
+                        .Phases(3).Properties.molarfraction = 1.0
+                        .AtEquilibrium = True
+                    End If
                 End With
             Else
                 If MixedStream.Phases(4).Properties.massflow.GetValueOrDefault > 0.0# Then Throw New Exception(FlowSheet.GetTranslatedString("SeparatorVessel_SecondLiquidPhaseFound"))
@@ -1013,11 +1031,13 @@ Namespace UnitOperations
                 Loop Until Math.Abs(dv - dl) < 0.0001 Or x >= 0.5
                 vl1 = (ql) * tr / (1 / 60)
                 vl2 = (1 - y) * Math.PI * dl ^ 3 / 4 * l_d
+                Dim cnt As Integer = 0
                 If vl2 < vl1 Then
                     Do
                         vl2 = (1 - y) * Math.PI * dl ^ 3 / 4 * l_d
                         dl = dl * 1.001
-                    Loop Until Math.Abs(vl2 - vl1) < 0.001
+                        cnt += 1
+                    Loop Until Math.Abs(vl2 - vl1) < 0.001 Or cnt > 100
                 End If
 
                 Dim diam As Double

@@ -65,6 +65,8 @@ Imports Jolt
             Me.Text = ScriptUO.GraphicObject.Tag & " - " & Me.Text
         End If
 
+        Dim apppath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+
         If Not CAPEOPEN Then
 
             Dim calculatorassembly = My.Application.Info.LoadedAssemblies.Where(Function(x) x.FullName.Contains("DWSIM.Thermodynamics,")).FirstOrDefault
@@ -82,7 +84,7 @@ Imports Jolt
 
         Else
 
-            reader.Add(New Jolt.XmlDocCommentReader(My.Application.Info.DirectoryPath & Path.DirectorySeparatorChar & "CapeOpen.xml"))
+            reader.Add(New Jolt.XmlDocCommentReader(Path.Combine(apppath, "CapeOpen.xml")))
 
         End If
 
@@ -108,7 +110,7 @@ Imports Jolt
 
         tscb2.Items.AddRange(New Object() {6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16})
 
-        btnHighlightSpaces.Checked = ScriptUO.HighlightSpaces
+        If Not CAPEOPEN Then btnHighlightSpaces.Checked = ScriptUO.HighlightSpaces
 
         If CAPEOPEN Then
             tscb1.SelectedItem = FontName

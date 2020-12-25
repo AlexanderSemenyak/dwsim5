@@ -24,9 +24,9 @@ Partial Class FormOptions
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormOptions))
-        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.FaTabStrip1 = New System.Windows.Forms.TabControl()
         Me.FaTabStripItem1 = New System.Windows.Forms.TabPage()
         Me.GroupBox18 = New System.Windows.Forms.GroupBox()
@@ -75,13 +75,11 @@ Partial Class FormOptions
         Me.ComboBoxCompoundCopyMode = New System.Windows.Forms.ComboBox()
         Me.Label5 = New System.Windows.Forms.Label()
         Me.GroupBox12 = New System.Windows.Forms.GroupBox()
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.chkEditorDoubleClick = New System.Windows.Forms.CheckBox()
         Me.chkEnableMultipleEditors = New System.Windows.Forms.CheckBox()
         Me.chkCloseFormsOnDeselect = New System.Windows.Forms.CheckBox()
         Me.Label14 = New System.Windows.Forms.Label()
         Me.cbDefaultLocation = New System.Windows.Forms.ComboBox()
-        Me.cbEditorStyle = New System.Windows.Forms.ComboBox()
-        Me.Label3 = New System.Windows.Forms.Label()
         Me.GroupBox11 = New System.Windows.Forms.GroupBox()
         Me.CheckBoxUndoRedoRecalc = New System.Windows.Forms.CheckBox()
         Me.FaTabStripItem3 = New System.Windows.Forms.TabPage()
@@ -119,12 +117,6 @@ Partial Class FormOptions
         Me.btnSelectPythonPath = New System.Windows.Forms.Button()
         Me.tbPythonPath = New System.Windows.Forms.TextBox()
         Me.Label18 = New System.Windows.Forms.Label()
-        Me.GroupBox16 = New System.Windows.Forms.GroupBox()
-        Me.tbOctaveTimeout = New System.Windows.Forms.TextBox()
-        Me.Label20 = New System.Windows.Forms.Label()
-        Me.btnSelectOctavePath = New System.Windows.Forms.Button()
-        Me.tbOctavePath = New System.Windows.Forms.TextBox()
-        Me.Label19 = New System.Windows.Forms.Label()
         Me.GroupBox15 = New System.Windows.Forms.GroupBox()
         Me.chkIgnoreCompConstData = New System.Windows.Forms.CheckBox()
         Me.GroupBox14 = New System.Windows.Forms.GroupBox()
@@ -153,7 +145,6 @@ Partial Class FormOptions
         Me.GroupBox13.SuspendLayout()
         Me.GroupBox5.SuspendLayout()
         Me.GroupBox12.SuspendLayout()
-        Me.GroupBox1.SuspendLayout()
         Me.GroupBox11.SuspendLayout()
         Me.FaTabStripItem3.SuspendLayout()
         Me.GroupBox4.SuspendLayout()
@@ -165,7 +156,6 @@ Partial Class FormOptions
         CType(Me.TrackBar1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.FaTabStripItem7.SuspendLayout()
         Me.GroupBox17.SuspendLayout()
-        Me.GroupBox16.SuspendLayout()
         Me.GroupBox15.SuspendLayout()
         Me.GroupBox14.SuspendLayout()
         Me.GroupBox9.SuspendLayout()
@@ -185,11 +175,11 @@ Partial Class FormOptions
         '
         'FaTabStripItem1
         '
-        resources.ApplyResources(Me.FaTabStripItem1, "FaTabStripItem1")
         Me.FaTabStripItem1.BackColor = System.Drawing.SystemColors.Window
         Me.FaTabStripItem1.Controls.Add(Me.GroupBox18)
         Me.FaTabStripItem1.Controls.Add(Me.GroupBox2)
         Me.FaTabStripItem1.Controls.Add(Me.GroupBox7)
+        resources.ApplyResources(Me.FaTabStripItem1, "FaTabStripItem1")
         Me.FaTabStripItem1.Name = "FaTabStripItem1"
         '
         'GroupBox18
@@ -305,9 +295,9 @@ Partial Class FormOptions
         '
         'GroupBoxAzureConfig
         '
-        resources.ApplyResources(Me.GroupBoxAzureConfig, "GroupBoxAzureConfig")
         Me.GroupBoxAzureConfig.Controls.Add(Me.tbServiceBusNamespace)
         Me.GroupBoxAzureConfig.Controls.Add(Me.Label8)
+        resources.ApplyResources(Me.GroupBoxAzureConfig, "GroupBoxAzureConfig")
         Me.GroupBoxAzureConfig.Name = "GroupBoxAzureConfig"
         Me.GroupBoxAzureConfig.TabStop = False
         '
@@ -323,11 +313,11 @@ Partial Class FormOptions
         '
         'GroupBoxNetworkComputerConfig
         '
-        resources.ApplyResources(Me.GroupBoxNetworkComputerConfig, "GroupBoxNetworkComputerConfig")
         Me.GroupBoxNetworkComputerConfig.Controls.Add(Me.tbServerPort)
         Me.GroupBoxNetworkComputerConfig.Controls.Add(Me.tbServerIP)
         Me.GroupBoxNetworkComputerConfig.Controls.Add(Me.Label15)
         Me.GroupBoxNetworkComputerConfig.Controls.Add(Me.Label16)
+        resources.ApplyResources(Me.GroupBoxNetworkComputerConfig, "GroupBoxNetworkComputerConfig")
         Me.GroupBoxNetworkComputerConfig.Name = "GroupBoxNetworkComputerConfig"
         Me.GroupBoxNetworkComputerConfig.TabStop = False
         '
@@ -402,9 +392,9 @@ Partial Class FormOptions
         '
         'cbParallelism
         '
-        resources.ApplyResources(Me.cbParallelism, "cbParallelism")
         Me.cbParallelism.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cbParallelism.FormattingEnabled = True
+        resources.ApplyResources(Me.cbParallelism, "cbParallelism")
         Me.cbParallelism.Name = "cbParallelism"
         '
         'Label6
@@ -419,11 +409,11 @@ Partial Class FormOptions
         '
         'TabPage1
         '
-        resources.ApplyResources(Me.TabPage1, "TabPage1")
         Me.TabPage1.Controls.Add(Me.GroupBox13)
         Me.TabPage1.Controls.Add(Me.GroupBox5)
         Me.TabPage1.Controls.Add(Me.GroupBox12)
         Me.TabPage1.Controls.Add(Me.GroupBox11)
+        resources.ApplyResources(Me.TabPage1, "TabPage1")
         Me.TabPage1.Name = "TabPage1"
         Me.TabPage1.UseVisualStyleBackColor = True
         '
@@ -493,21 +483,18 @@ Partial Class FormOptions
         'GroupBox12
         '
         resources.ApplyResources(Me.GroupBox12, "GroupBox12")
-        Me.GroupBox12.Controls.Add(Me.GroupBox1)
-        Me.GroupBox12.Controls.Add(Me.cbEditorStyle)
-        Me.GroupBox12.Controls.Add(Me.Label3)
+        Me.GroupBox12.Controls.Add(Me.chkEditorDoubleClick)
+        Me.GroupBox12.Controls.Add(Me.chkEnableMultipleEditors)
+        Me.GroupBox12.Controls.Add(Me.chkCloseFormsOnDeselect)
+        Me.GroupBox12.Controls.Add(Me.Label14)
+        Me.GroupBox12.Controls.Add(Me.cbDefaultLocation)
         Me.GroupBox12.Name = "GroupBox12"
         Me.GroupBox12.TabStop = False
         '
-        'GroupBox1
+        'chkEditorDoubleClick
         '
-        resources.ApplyResources(Me.GroupBox1, "GroupBox1")
-        Me.GroupBox1.Controls.Add(Me.chkEnableMultipleEditors)
-        Me.GroupBox1.Controls.Add(Me.chkCloseFormsOnDeselect)
-        Me.GroupBox1.Controls.Add(Me.Label14)
-        Me.GroupBox1.Controls.Add(Me.cbDefaultLocation)
-        Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.TabStop = False
+        resources.ApplyResources(Me.chkEditorDoubleClick, "chkEditorDoubleClick")
+        Me.chkEditorDoubleClick.Name = "chkEditorDoubleClick"
         '
         'chkEnableMultipleEditors
         '
@@ -532,19 +519,6 @@ Partial Class FormOptions
         Me.cbDefaultLocation.Items.AddRange(New Object() {resources.GetString("cbDefaultLocation.Items"), resources.GetString("cbDefaultLocation.Items1")})
         Me.cbDefaultLocation.Name = "cbDefaultLocation"
         '
-        'cbEditorStyle
-        '
-        resources.ApplyResources(Me.cbEditorStyle, "cbEditorStyle")
-        Me.cbEditorStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cbEditorStyle.FormattingEnabled = True
-        Me.cbEditorStyle.Items.AddRange(New Object() {resources.GetString("cbEditorStyle.Items"), resources.GetString("cbEditorStyle.Items1")})
-        Me.cbEditorStyle.Name = "cbEditorStyle"
-        '
-        'Label3
-        '
-        resources.ApplyResources(Me.Label3, "Label3")
-        Me.Label3.Name = "Label3"
-        '
         'GroupBox11
         '
         resources.ApplyResources(Me.GroupBox11, "GroupBox11")
@@ -559,10 +533,10 @@ Partial Class FormOptions
         '
         'FaTabStripItem3
         '
-        resources.ApplyResources(Me.FaTabStripItem3, "FaTabStripItem3")
         Me.FaTabStripItem3.BackColor = System.Drawing.SystemColors.Window
         Me.FaTabStripItem3.Controls.Add(Me.GroupBox4)
         Me.FaTabStripItem3.Controls.Add(Me.GroupBox10)
+        resources.ApplyResources(Me.FaTabStripItem3, "FaTabStripItem3")
         Me.FaTabStripItem3.Name = "FaTabStripItem3"
         '
         'GroupBox4
@@ -582,11 +556,11 @@ Partial Class FormOptions
         '
         'dgvdb
         '
-        resources.ApplyResources(Me.dgvdb, "dgvdb")
         Me.dgvdb.AllowUserToAddRows = False
         Me.dgvdb.AllowUserToDeleteRows = False
         Me.dgvdb.AllowUserToResizeColumns = False
         Me.dgvdb.AllowUserToResizeRows = False
+        resources.ApplyResources(Me.dgvdb, "dgvdb")
         Me.dgvdb.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
         Me.dgvdb.BackgroundColor = System.Drawing.SystemColors.Control
         Me.dgvdb.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
@@ -633,10 +607,10 @@ Partial Class FormOptions
         'Column13
         '
         Me.Column13.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
-        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        DataGridViewCellStyle1.NullValue = CType(resources.GetObject("DataGridViewCellStyle1.NullValue"), Object)
-        Me.Column13.DefaultCellStyle = DataGridViewCellStyle1
+        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        DataGridViewCellStyle4.NullValue = CType(resources.GetObject("DataGridViewCellStyle4.NullValue"), Object)
+        Me.Column13.DefaultCellStyle = DataGridViewCellStyle4
         Me.Column13.FillWeight = 10.0!
         resources.ApplyResources(Me.Column13, "Column13")
         Me.Column13.Name = "Column13"
@@ -646,10 +620,10 @@ Partial Class FormOptions
         'BtnEdit
         '
         Me.BtnEdit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
-        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        DataGridViewCellStyle2.NullValue = CType(resources.GetObject("DataGridViewCellStyle2.NullValue"), Object)
-        Me.BtnEdit.DefaultCellStyle = DataGridViewCellStyle2
+        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        DataGridViewCellStyle5.NullValue = CType(resources.GetObject("DataGridViewCellStyle5.NullValue"), Object)
+        Me.BtnEdit.DefaultCellStyle = DataGridViewCellStyle5
         Me.BtnEdit.FillWeight = 10.0!
         resources.ApplyResources(Me.BtnEdit, "BtnEdit")
         Me.BtnEdit.Name = "BtnEdit"
@@ -678,11 +652,11 @@ Partial Class FormOptions
         '
         'dgvIPDB
         '
-        resources.ApplyResources(Me.dgvIPDB, "dgvIPDB")
         Me.dgvIPDB.AllowUserToAddRows = False
         Me.dgvIPDB.AllowUserToDeleteRows = False
         Me.dgvIPDB.AllowUserToResizeColumns = False
         Me.dgvIPDB.AllowUserToResizeRows = False
+        resources.ApplyResources(Me.dgvIPDB, "dgvIPDB")
         Me.dgvIPDB.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
         Me.dgvIPDB.BackgroundColor = System.Drawing.SystemColors.Control
         Me.dgvIPDB.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
@@ -729,10 +703,10 @@ Partial Class FormOptions
         'DataGridViewImageColumn1
         '
         Me.DataGridViewImageColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
-        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        DataGridViewCellStyle3.NullValue = CType(resources.GetObject("DataGridViewCellStyle3.NullValue"), Object)
-        Me.DataGridViewImageColumn1.DefaultCellStyle = DataGridViewCellStyle3
+        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        DataGridViewCellStyle6.NullValue = CType(resources.GetObject("DataGridViewCellStyle6.NullValue"), Object)
+        Me.DataGridViewImageColumn1.DefaultCellStyle = DataGridViewCellStyle6
         Me.DataGridViewImageColumn1.FillWeight = 10.0!
         resources.ApplyResources(Me.DataGridViewImageColumn1, "DataGridViewImageColumn1")
         Me.DataGridViewImageColumn1.Name = "DataGridViewImageColumn1"
@@ -741,9 +715,9 @@ Partial Class FormOptions
         '
         'FaTabStripItem2
         '
-        resources.ApplyResources(Me.FaTabStripItem2, "FaTabStripItem2")
         Me.FaTabStripItem2.BackColor = System.Drawing.SystemColors.Window
         Me.FaTabStripItem2.Controls.Add(Me.GroupBox3)
+        resources.ApplyResources(Me.FaTabStripItem2, "FaTabStripItem2")
         Me.FaTabStripItem2.Name = "FaTabStripItem2"
         '
         'GroupBox3
@@ -814,14 +788,13 @@ Partial Class FormOptions
         '
         'FaTabStripItem7
         '
-        resources.ApplyResources(Me.FaTabStripItem7, "FaTabStripItem7")
         Me.FaTabStripItem7.BackColor = System.Drawing.SystemColors.Window
         Me.FaTabStripItem7.Controls.Add(Me.GroupBox17)
-        Me.FaTabStripItem7.Controls.Add(Me.GroupBox16)
         Me.FaTabStripItem7.Controls.Add(Me.GroupBox15)
         Me.FaTabStripItem7.Controls.Add(Me.GroupBox14)
         Me.FaTabStripItem7.Controls.Add(Me.GroupBox9)
         Me.FaTabStripItem7.Controls.Add(Me.GroupBox6)
+        resources.ApplyResources(Me.FaTabStripItem7, "FaTabStripItem7")
         Me.FaTabStripItem7.Name = "FaTabStripItem7"
         '
         'GroupBox17
@@ -855,55 +828,16 @@ Partial Class FormOptions
         '
         resources.ApplyResources(Me.tbPythonPath, "tbPythonPath")
         Me.tbPythonPath.Name = "tbPythonPath"
-        Me.tbPythonPath.ReadOnly = True
         '
         'Label18
         '
         resources.ApplyResources(Me.Label18, "Label18")
         Me.Label18.Name = "Label18"
         '
-        'GroupBox16
-        '
-        resources.ApplyResources(Me.GroupBox16, "GroupBox16")
-        Me.GroupBox16.Controls.Add(Me.tbOctaveTimeout)
-        Me.GroupBox16.Controls.Add(Me.Label20)
-        Me.GroupBox16.Controls.Add(Me.btnSelectOctavePath)
-        Me.GroupBox16.Controls.Add(Me.tbOctavePath)
-        Me.GroupBox16.Controls.Add(Me.Label19)
-        Me.GroupBox16.Name = "GroupBox16"
-        Me.GroupBox16.TabStop = False
-        '
-        'tbOctaveTimeout
-        '
-        resources.ApplyResources(Me.tbOctaveTimeout, "tbOctaveTimeout")
-        Me.tbOctaveTimeout.Name = "tbOctaveTimeout"
-        '
-        'Label20
-        '
-        resources.ApplyResources(Me.Label20, "Label20")
-        Me.Label20.Name = "Label20"
-        '
-        'btnSelectOctavePath
-        '
-        resources.ApplyResources(Me.btnSelectOctavePath, "btnSelectOctavePath")
-        Me.btnSelectOctavePath.Name = "btnSelectOctavePath"
-        Me.btnSelectOctavePath.UseVisualStyleBackColor = True
-        '
-        'tbOctavePath
-        '
-        resources.ApplyResources(Me.tbOctavePath, "tbOctavePath")
-        Me.tbOctavePath.Name = "tbOctavePath"
-        Me.tbOctavePath.ReadOnly = True
-        '
-        'Label19
-        '
-        resources.ApplyResources(Me.Label19, "Label19")
-        Me.Label19.Name = "Label19"
-        '
         'GroupBox15
         '
-        resources.ApplyResources(Me.GroupBox15, "GroupBox15")
         Me.GroupBox15.Controls.Add(Me.chkIgnoreCompConstData)
+        resources.ApplyResources(Me.GroupBox15, "GroupBox15")
         Me.GroupBox15.Name = "GroupBox15"
         Me.GroupBox15.TabStop = False
         '
@@ -935,10 +869,10 @@ Partial Class FormOptions
         '
         'ComboBoxUILanguage
         '
-        resources.ApplyResources(Me.ComboBoxUILanguage, "ComboBoxUILanguage")
         Me.ComboBoxUILanguage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.ComboBoxUILanguage.FormattingEnabled = True
         Me.ComboBoxUILanguage.Items.AddRange(New Object() {resources.GetString("ComboBoxUILanguage.Items"), resources.GetString("ComboBoxUILanguage.Items1")})
+        resources.ApplyResources(Me.ComboBoxUILanguage, "ComboBoxUILanguage")
         Me.ComboBoxUILanguage.Name = "ComboBoxUILanguage"
         '
         'Label22
@@ -961,10 +895,10 @@ Partial Class FormOptions
         '
         'cbDebugLevel
         '
-        resources.ApplyResources(Me.cbDebugLevel, "cbDebugLevel")
         Me.cbDebugLevel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cbDebugLevel.FormattingEnabled = True
         Me.cbDebugLevel.Items.AddRange(New Object() {resources.GetString("cbDebugLevel.Items"), resources.GetString("cbDebugLevel.Items1"), resources.GetString("cbDebugLevel.Items2"), resources.GetString("cbDebugLevel.Items3")})
+        resources.ApplyResources(Me.cbDebugLevel, "cbDebugLevel")
         Me.cbDebugLevel.Name = "cbDebugLevel"
         '
         'Label13
@@ -1033,8 +967,6 @@ Partial Class FormOptions
         Me.GroupBox5.PerformLayout()
         Me.GroupBox12.ResumeLayout(False)
         Me.GroupBox12.PerformLayout()
-        Me.GroupBox1.ResumeLayout(False)
-        Me.GroupBox1.PerformLayout()
         Me.GroupBox11.ResumeLayout(False)
         Me.GroupBox11.PerformLayout()
         Me.FaTabStripItem3.ResumeLayout(False)
@@ -1050,8 +982,6 @@ Partial Class FormOptions
         Me.FaTabStripItem7.ResumeLayout(False)
         Me.GroupBox17.ResumeLayout(False)
         Me.GroupBox17.PerformLayout()
-        Me.GroupBox16.ResumeLayout(False)
-        Me.GroupBox16.PerformLayout()
         Me.GroupBox15.ResumeLayout(False)
         Me.GroupBox14.ResumeLayout(False)
         Me.GroupBox9.ResumeLayout(False)
@@ -1150,12 +1080,6 @@ Partial Class FormOptions
     Public WithEvents chkHideSolidPhaseCO As System.Windows.Forms.CheckBox
     Public WithEvents GroupBox15 As System.Windows.Forms.GroupBox
     Public WithEvents chkIgnoreCompConstData As System.Windows.Forms.CheckBox
-    Public WithEvents GroupBox16 As System.Windows.Forms.GroupBox
-    Public WithEvents btnSelectOctavePath As System.Windows.Forms.Button
-    Public WithEvents tbOctavePath As System.Windows.Forms.TextBox
-    Public WithEvents Label19 As System.Windows.Forms.Label
-    Friend WithEvents tbOctaveTimeout As System.Windows.Forms.TextBox
-    Friend WithEvents Label20 As System.Windows.Forms.Label
     Public WithEvents GroupBox17 As System.Windows.Forms.GroupBox
     Friend WithEvents tbPythonTimeout As System.Windows.Forms.TextBox
     Friend WithEvents Label17 As System.Windows.Forms.Label
@@ -1165,13 +1089,11 @@ Partial Class FormOptions
     Friend WithEvents GroupBox18 As GroupBox
     Public WithEvents chkEnableInspector As CheckBox
     Friend WithEvents Label21 As Label
-    Friend WithEvents GroupBox1 As GroupBox
-    Friend WithEvents cbEditorStyle As ComboBox
-    Public WithEvents Label3 As Label
     Public WithEvents GroupBox13 As GroupBox
     Public WithEvents chkAA As CheckBox
     Friend WithEvents cbRenderer As ComboBox
     Public WithEvents Label23 As Label
     Friend WithEvents ComboBoxUILanguage As ComboBox
     Friend WithEvents Label22 As Label
+    Public WithEvents chkEditorDoubleClick As CheckBox
 End Class

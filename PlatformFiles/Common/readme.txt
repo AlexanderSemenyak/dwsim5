@@ -1,6 +1,6 @@
 ﻿==================================================
 DWSIM - Open Source Process Simulator
-Version 6.0 Update 7
+Version 6.3 Update 6
 Copyright (c) 2017-2020 Daniel Medeiros
 Copyright (c) 2008-2016 Daniel Medeiros, Gregor Reichert, Gustavo Leon
 ==================================================
@@ -27,14 +27,14 @@ SYSTEM REQUIREMENTS
 
 OS:             
 
-Windows: 32/64-bit Vista/7/8/10
-Linux: 64-bit x86 Ubuntu 12.04 or newer / 32-bit armhf Raspbian/Ubuntu MATE
+Windows: 32/64-bit 7/8/10
+Linux: 32/64-bit Wine-supported (https://www.winehq.org)
 macOS: 10.7 (OS X Lion) or newer
 
 Software:
 
-Microsoft .NET Framework 4.6.1 or newer (Windows) 
-Mono Framework 6.8.0 or newer (Linux)
+Microsoft .NET Framework 4.6.2 or newer (Windows) 
+Wine 3.0.3 or newer (Linux)
 
 CPU:			
 
@@ -54,13 +54,167 @@ Display:
 
 Disk space:		
 
-500 MB for program files
+750-2000 MB for program files
 
 ==================================================
 VERSION HISTORY / CHANGELOG
 ==================================================
 
-The full changelog, including code changes and their authors can be viewed at https://github.com/DanWBR/dwsim5/commits/windows
+The full changelog including souce code changes can be viewed at https://github.com/DanWBR/dwsim6/commits/windows
+
+Version 6.3 Update 6
+
+- [FIX] Bug fixes
+
+Version 6.3 Update 5
+
+- [CHG] Optimized script execution in advanced kinetic reactors
+- [FIX] Fixed convergence issues with Liquid-Liquid Extractor
+- [FIX] Fixed convergence issues with Gibbs Reactor
+- [FIX] Fixed issues with equilibrium calculations
+- [FIX] Layout and other fixes
+
+Version 6.3 Update 4
+
+- [NEW] Advanced Python Script Kinetics
+- [CHG] PR/SRK calculation speed improvements
+- [CHG] Rigorous Column solver improvements
+- [FIX] Thermo subsystem fixes
+- [FIX] Bug fixes
+
+Version 6.3 Update 3
+
+- [CHG] Enhanced Automation functionality
+- [FIX] Fixed issues with phase equilibria calculation in some specific cases
+- [FIX] Other fixes and enhancements
+
+Version 6.3 Update 2
+
+- [CHG] Rigorous Column solver reliability and speed enhancements
+- [FIX] Bug fixes
+
+Version 6.3 Update 1
+
+- [NEW] Rigorous Column BP Solver now supports all Condenser/Reboiler specifications
+- [FIX] Bug fixes and enhancements
+
+Version 6.3
+
+- [NEW] New Thermodynamics subsystem with Univeral Flash Algorithm used by default
+- [FIX] Bug fixes and enhancements
+
+Version 6.2 Update 4
+
+- [NEW] Added an option to disable skipping of equilibrium calculation on some 
+		Material Streams (feature introduced in Update 2)
+- [CHG] Usage of IPOPT solver in Equilibrium Reactor is optional
+- [FIX] Minor bug fixes
+
+Version 6.2 Update 3
+
+- [NEW] Added an editor for custom properties (Classic UI)
+- [CHG] Updated Equilibrium Reactor Solver
+- [FIX] General bug fixes and enhancements
+
+Version 6.2 Update 2
+
+- [CHG] Enhanced reliability of the Flash Algorithms
+- [CHG] Optimized calculation speeds by removing unnecessary Material Stream calculations
+- [FIX] General bug fixes and enhancements
+
+Version 6.2 Update 1
+
+- [NEW] Multiphase (SVLLE) Gibbs Minimization Flash Algorithm
+- [NEW] Added more units for mass, standard condition volumetric and power/heat flow
+- [NEW] Added a new plugin for Heat of Combustion calculation
+- [FIX] Bug fixes
+
+Version 6.2
+
+- [NEW] New compounds: Sulfuric Acid, Solid Carbon, Mercury, Casein, Lactose, 
+        Methyl Oleate, Myristic Acid, Triolein
+- [NEW] GERG-2008 Property Package
+- [NEW] PC-SAFT (with Association Support) Property Package
+- [NEW] Peng-Robinson (1978) Property Package
+- [NEW] Temperature-dependent Interaction Parameter PR78/SRK Property Packages
+- [FIX] Fixed Dynamic Mode error messages
+- [FIX] Fixed an issue with Gibbs Reactor's element matrix editor
+- [FIX] Fixed flowsheet object appearance editor (Classic UI)
+- [FIX] Minor bug fixes
+
+Version 6.1 Update 10
+
+- [CHG] Changed minimum required .NET Framework version to v4.6.2 on Windows
+- [FIX] Fixed Unit Operations energy balance check
+- [FIX] Fixed PFR energy balance
+- [FIX] Fixed a regression in Nested Loops VLLE Flash
+- [NEW] Added an option to open editors with a double-click (Classic UI)
+
+Version 6.1 Update 8/9
+
+- [FIX] Fixed a regression with Nested Loops VLE Flash Algorithm
+
+Version 6.1 Update 7
+
+- [CHG] Enhanced reliability of Gibbs Reactor solver
+- [FIX] Fixed PR/SRK Interaction Parameters missing on first run
+- [FIX] Fixed CSTR convergence in some cases
+- [FIX] Fixed an issue with the Element Matrix editor on Gibbs Reactor
+- [FIX] Fixed reaction editors windows being modal (Classic UI)
+- [FIX] Other minor bug fixes
+
+Version 6.1 Update 6
+
+- [NEW] Added an option to initialize Gibbs Reactor solver from a previous valid solution
+- [FIX] Mono/Linux bug fixes
+- [FIX] Fixed Sensitivity Analysis window on Cross-Platform UI
+
+Version 6.1 Update 5
+
+- [NEW] Added Mean Ionic Activity Coefficient property
+- [CHG] Updated valve P2 calculation in kv gas mode
+- [CHG] Added valve equations for supercritical expansion
+- [FIX] Fixed issues 4, 20, 21, 22, 23, 24, 25, 27, 29, 30 and 31 (https://github.com/DanWBR/dwsim6/issues?q=is%3Aissue+is%3Aclosed)
+- [FIX] Rewritten Gibbs reactor solver
+- [FIX] Bug fix CAPE-OPEN UO connection update
+- [FIX] Fixed null property error when displaying on Property Table
+- [FIX] Fixed handling of partial liquefaction
+- [FIX] Other minor bug fixes
+
+Version 6.1 Update 4
+
+- [CHG] Updated Python.NET library on Windows to match Python 3.7 runtime
+- [FIX] Fixed a bug with master property table
+- [FIX] Fixed Excel Add-In
+- [FIX] Fixed issues 15, 16, 17 and 19 (https://github.com/DanWBR/dwsim6/issues)
+
+Version 6.1 Update 3
+
+- [NEW] Added an option to force reset of all objects before running a Schedule (Dynamics)
+- [NEW] Added an option to close all editors (Cross-Platform UI)
+- [CHG] Updated Gibbs/Equilibrium Reactor solvers
+- [FIX] Fixed PID Controller not associating with Linked scripts
+- [FIX] Other bug fixes
+
+Version 6.1 Update 2
+
+- [NEW] Added Helper Functions to Flowsheet (Scripting)
+- [CHG] Updated Spreadsheet property importing/exporting to include units
+- [FIX] Bug fixes
+
+Version 6.1 Update 1
+
+- [CHG] Enhanced spreadsheet performance (Cross-Platform UI)
+- [FIX] Fixed a bug with the calculation of henry's constant
+- [FIX] Fixes for High-DPI displays (Classic UI)
+- [FIX] Fixed an issue on saving simulations with Master Property Tables
+- [FIX] Other bug fixes
+
+Version 6.1
+
+- [NEW] Added support for the new Neural Network Unit Operation
+- [NEW] Flowsheet Auto-Layout function
+- [FIX] Bug fixes and enhancements
 
 Version 6.0 Update 7
 

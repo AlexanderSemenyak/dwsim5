@@ -36,10 +36,7 @@ Partial Class EditingForm_ShortcutColumn
         Me.Label12 = New System.Windows.Forms.Label()
         Me.Label11 = New System.Windows.Forms.Label()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
-        Me.btnConfigureFlashAlg = New System.Windows.Forms.Button()
         Me.btnConfigurePP = New System.Windows.Forms.Button()
-        Me.cbFlashAlg = New System.Windows.Forms.ComboBox()
-        Me.Label10 = New System.Windows.Forms.Label()
         Me.cbPropPack = New System.Windows.Forms.ComboBox()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
@@ -122,7 +119,8 @@ Partial Class EditingForm_ShortcutColumn
         Me.chkActive.Image = Global.DWSIM.UnitOperations.My.Resources.Resources.bullet_tick
         Me.chkActive.Name = "chkActive"
         Me.ToolTip1.SetToolTip(Me.chkActive, resources.GetString("chkActive.ToolTip"))
-        Me.ToolTipValues.SetToolTip(Me.chkActive, resources.GetString("chkActive.ToolTip1"))
+        Me.ToolTipChangeTag.SetToolTip(Me.chkActive, resources.GetString("chkActive.ToolTip1"))
+        Me.ToolTipValues.SetToolTip(Me.chkActive, resources.GetString("chkActive.ToolTip2"))
         Me.chkActive.UseVisualStyleBackColor = True
         '
         'lblConnectedTo
@@ -153,23 +151,11 @@ Partial Class EditingForm_ShortcutColumn
         'GroupBox3
         '
         resources.ApplyResources(Me.GroupBox3, "GroupBox3")
-        Me.GroupBox3.Controls.Add(Me.btnConfigureFlashAlg)
         Me.GroupBox3.Controls.Add(Me.btnConfigurePP)
-        Me.GroupBox3.Controls.Add(Me.cbFlashAlg)
-        Me.GroupBox3.Controls.Add(Me.Label10)
         Me.GroupBox3.Controls.Add(Me.cbPropPack)
         Me.GroupBox3.Controls.Add(Me.Label9)
         Me.GroupBox3.Name = "GroupBox3"
         Me.GroupBox3.TabStop = False
-        '
-        'btnConfigureFlashAlg
-        '
-        resources.ApplyResources(Me.btnConfigureFlashAlg, "btnConfigureFlashAlg")
-        Me.btnConfigureFlashAlg.BackgroundImage = Global.DWSIM.UnitOperations.My.Resources.Resources.cog
-        Me.btnConfigureFlashAlg.Name = "btnConfigureFlashAlg"
-        Me.ToolTip1.SetToolTip(Me.btnConfigureFlashAlg, resources.GetString("btnConfigureFlashAlg.ToolTip"))
-        Me.ToolTipValues.SetToolTip(Me.btnConfigureFlashAlg, resources.GetString("btnConfigureFlashAlg.ToolTip1"))
-        Me.btnConfigureFlashAlg.UseVisualStyleBackColor = True
         '
         'btnConfigurePP
         '
@@ -177,20 +163,9 @@ Partial Class EditingForm_ShortcutColumn
         Me.btnConfigurePP.BackgroundImage = Global.DWSIM.UnitOperations.My.Resources.Resources.cog
         Me.btnConfigurePP.Name = "btnConfigurePP"
         Me.ToolTip1.SetToolTip(Me.btnConfigurePP, resources.GetString("btnConfigurePP.ToolTip"))
-        Me.ToolTipValues.SetToolTip(Me.btnConfigurePP, resources.GetString("btnConfigurePP.ToolTip1"))
+        Me.ToolTipChangeTag.SetToolTip(Me.btnConfigurePP, resources.GetString("btnConfigurePP.ToolTip1"))
+        Me.ToolTipValues.SetToolTip(Me.btnConfigurePP, resources.GetString("btnConfigurePP.ToolTip2"))
         Me.btnConfigurePP.UseVisualStyleBackColor = True
-        '
-        'cbFlashAlg
-        '
-        resources.ApplyResources(Me.cbFlashAlg, "cbFlashAlg")
-        Me.cbFlashAlg.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cbFlashAlg.FormattingEnabled = True
-        Me.cbFlashAlg.Name = "cbFlashAlg"
-        '
-        'Label10
-        '
-        resources.ApplyResources(Me.Label10, "Label10")
-        Me.Label10.Name = "Label10"
         '
         'cbPropPack
         '
@@ -372,7 +347,8 @@ Partial Class EditingForm_ShortcutColumn
         Me.btnCreateAndConnectEnergy2.BackgroundImage = Global.DWSIM.UnitOperations.My.Resources.Resources.bullet_lightning
         Me.btnCreateAndConnectEnergy2.Name = "btnCreateAndConnectEnergy2"
         Me.ToolTip1.SetToolTip(Me.btnCreateAndConnectEnergy2, resources.GetString("btnCreateAndConnectEnergy2.ToolTip"))
-        Me.ToolTipValues.SetToolTip(Me.btnCreateAndConnectEnergy2, resources.GetString("btnCreateAndConnectEnergy2.ToolTip1"))
+        Me.ToolTipChangeTag.SetToolTip(Me.btnCreateAndConnectEnergy2, resources.GetString("btnCreateAndConnectEnergy2.ToolTip1"))
+        Me.ToolTipValues.SetToolTip(Me.btnCreateAndConnectEnergy2, resources.GetString("btnCreateAndConnectEnergy2.ToolTip2"))
         Me.btnCreateAndConnectEnergy2.UseVisualStyleBackColor = True
         '
         'btnDisconnectEnergy2
@@ -381,7 +357,8 @@ Partial Class EditingForm_ShortcutColumn
         Me.btnDisconnectEnergy2.Image = Global.DWSIM.UnitOperations.My.Resources.Resources.disconnect
         Me.btnDisconnectEnergy2.Name = "btnDisconnectEnergy2"
         Me.ToolTip1.SetToolTip(Me.btnDisconnectEnergy2, resources.GetString("btnDisconnectEnergy2.ToolTip"))
-        Me.ToolTipValues.SetToolTip(Me.btnDisconnectEnergy2, resources.GetString("btnDisconnectEnergy2.ToolTip1"))
+        Me.ToolTipChangeTag.SetToolTip(Me.btnDisconnectEnergy2, resources.GetString("btnDisconnectEnergy2.ToolTip1"))
+        Me.ToolTipValues.SetToolTip(Me.btnDisconnectEnergy2, resources.GetString("btnDisconnectEnergy2.ToolTip2"))
         Me.btnDisconnectEnergy2.UseVisualStyleBackColor = True
         '
         'Label20
@@ -402,7 +379,8 @@ Partial Class EditingForm_ShortcutColumn
         Me.btnCreateAndConnectEnergy1.BackgroundImage = Global.DWSIM.UnitOperations.My.Resources.Resources.bullet_lightning
         Me.btnCreateAndConnectEnergy1.Name = "btnCreateAndConnectEnergy1"
         Me.ToolTip1.SetToolTip(Me.btnCreateAndConnectEnergy1, resources.GetString("btnCreateAndConnectEnergy1.ToolTip"))
-        Me.ToolTipValues.SetToolTip(Me.btnCreateAndConnectEnergy1, resources.GetString("btnCreateAndConnectEnergy1.ToolTip1"))
+        Me.ToolTipChangeTag.SetToolTip(Me.btnCreateAndConnectEnergy1, resources.GetString("btnCreateAndConnectEnergy1.ToolTip1"))
+        Me.ToolTipValues.SetToolTip(Me.btnCreateAndConnectEnergy1, resources.GetString("btnCreateAndConnectEnergy1.ToolTip2"))
         Me.btnCreateAndConnectEnergy1.UseVisualStyleBackColor = True
         '
         'btnCreateAndConnectOutlet2
@@ -411,7 +389,8 @@ Partial Class EditingForm_ShortcutColumn
         Me.btnCreateAndConnectOutlet2.BackgroundImage = Global.DWSIM.UnitOperations.My.Resources.Resources.bullet_lightning
         Me.btnCreateAndConnectOutlet2.Name = "btnCreateAndConnectOutlet2"
         Me.ToolTip1.SetToolTip(Me.btnCreateAndConnectOutlet2, resources.GetString("btnCreateAndConnectOutlet2.ToolTip"))
-        Me.ToolTipValues.SetToolTip(Me.btnCreateAndConnectOutlet2, resources.GetString("btnCreateAndConnectOutlet2.ToolTip1"))
+        Me.ToolTipChangeTag.SetToolTip(Me.btnCreateAndConnectOutlet2, resources.GetString("btnCreateAndConnectOutlet2.ToolTip1"))
+        Me.ToolTipValues.SetToolTip(Me.btnCreateAndConnectOutlet2, resources.GetString("btnCreateAndConnectOutlet2.ToolTip2"))
         Me.btnCreateAndConnectOutlet2.UseVisualStyleBackColor = True
         '
         'btnDisconnectEnergy1
@@ -420,7 +399,8 @@ Partial Class EditingForm_ShortcutColumn
         Me.btnDisconnectEnergy1.Image = Global.DWSIM.UnitOperations.My.Resources.Resources.disconnect
         Me.btnDisconnectEnergy1.Name = "btnDisconnectEnergy1"
         Me.ToolTip1.SetToolTip(Me.btnDisconnectEnergy1, resources.GetString("btnDisconnectEnergy1.ToolTip"))
-        Me.ToolTipValues.SetToolTip(Me.btnDisconnectEnergy1, resources.GetString("btnDisconnectEnergy1.ToolTip1"))
+        Me.ToolTipChangeTag.SetToolTip(Me.btnDisconnectEnergy1, resources.GetString("btnDisconnectEnergy1.ToolTip1"))
+        Me.ToolTipValues.SetToolTip(Me.btnDisconnectEnergy1, resources.GetString("btnDisconnectEnergy1.ToolTip2"))
         Me.btnDisconnectEnergy1.UseVisualStyleBackColor = True
         '
         'btnDisconnectOutlet2
@@ -429,7 +409,8 @@ Partial Class EditingForm_ShortcutColumn
         Me.btnDisconnectOutlet2.Image = Global.DWSIM.UnitOperations.My.Resources.Resources.disconnect
         Me.btnDisconnectOutlet2.Name = "btnDisconnectOutlet2"
         Me.ToolTip1.SetToolTip(Me.btnDisconnectOutlet2, resources.GetString("btnDisconnectOutlet2.ToolTip"))
-        Me.ToolTipValues.SetToolTip(Me.btnDisconnectOutlet2, resources.GetString("btnDisconnectOutlet2.ToolTip1"))
+        Me.ToolTipChangeTag.SetToolTip(Me.btnDisconnectOutlet2, resources.GetString("btnDisconnectOutlet2.ToolTip1"))
+        Me.ToolTipValues.SetToolTip(Me.btnDisconnectOutlet2, resources.GetString("btnDisconnectOutlet2.ToolTip2"))
         Me.btnDisconnectOutlet2.UseVisualStyleBackColor = True
         '
         'Label1
@@ -462,7 +443,8 @@ Partial Class EditingForm_ShortcutColumn
         Me.btnCreateAndConnectOutlet1.BackgroundImage = Global.DWSIM.UnitOperations.My.Resources.Resources.bullet_lightning
         Me.btnCreateAndConnectOutlet1.Name = "btnCreateAndConnectOutlet1"
         Me.ToolTip1.SetToolTip(Me.btnCreateAndConnectOutlet1, resources.GetString("btnCreateAndConnectOutlet1.ToolTip"))
-        Me.ToolTipValues.SetToolTip(Me.btnCreateAndConnectOutlet1, resources.GetString("btnCreateAndConnectOutlet1.ToolTip1"))
+        Me.ToolTipChangeTag.SetToolTip(Me.btnCreateAndConnectOutlet1, resources.GetString("btnCreateAndConnectOutlet1.ToolTip1"))
+        Me.ToolTipValues.SetToolTip(Me.btnCreateAndConnectOutlet1, resources.GetString("btnCreateAndConnectOutlet1.ToolTip2"))
         Me.btnCreateAndConnectOutlet1.UseVisualStyleBackColor = True
         '
         'btnCreateAndConnectInlet1
@@ -471,7 +453,8 @@ Partial Class EditingForm_ShortcutColumn
         Me.btnCreateAndConnectInlet1.BackgroundImage = Global.DWSIM.UnitOperations.My.Resources.Resources.bullet_lightning
         Me.btnCreateAndConnectInlet1.Name = "btnCreateAndConnectInlet1"
         Me.ToolTip1.SetToolTip(Me.btnCreateAndConnectInlet1, resources.GetString("btnCreateAndConnectInlet1.ToolTip"))
-        Me.ToolTipValues.SetToolTip(Me.btnCreateAndConnectInlet1, resources.GetString("btnCreateAndConnectInlet1.ToolTip1"))
+        Me.ToolTipChangeTag.SetToolTip(Me.btnCreateAndConnectInlet1, resources.GetString("btnCreateAndConnectInlet1.ToolTip1"))
+        Me.ToolTipValues.SetToolTip(Me.btnCreateAndConnectInlet1, resources.GetString("btnCreateAndConnectInlet1.ToolTip2"))
         Me.btnCreateAndConnectInlet1.UseVisualStyleBackColor = True
         '
         'btnDisconnectOutlet1
@@ -480,7 +463,8 @@ Partial Class EditingForm_ShortcutColumn
         Me.btnDisconnectOutlet1.Image = Global.DWSIM.UnitOperations.My.Resources.Resources.disconnect
         Me.btnDisconnectOutlet1.Name = "btnDisconnectOutlet1"
         Me.ToolTip1.SetToolTip(Me.btnDisconnectOutlet1, resources.GetString("btnDisconnectOutlet1.ToolTip"))
-        Me.ToolTipValues.SetToolTip(Me.btnDisconnectOutlet1, resources.GetString("btnDisconnectOutlet1.ToolTip1"))
+        Me.ToolTipChangeTag.SetToolTip(Me.btnDisconnectOutlet1, resources.GetString("btnDisconnectOutlet1.ToolTip1"))
+        Me.ToolTipValues.SetToolTip(Me.btnDisconnectOutlet1, resources.GetString("btnDisconnectOutlet1.ToolTip2"))
         Me.btnDisconnectOutlet1.UseVisualStyleBackColor = True
         '
         'btnDisconnectInlet1
@@ -489,7 +473,8 @@ Partial Class EditingForm_ShortcutColumn
         Me.btnDisconnectInlet1.Image = Global.DWSIM.UnitOperations.My.Resources.Resources.disconnect
         Me.btnDisconnectInlet1.Name = "btnDisconnectInlet1"
         Me.ToolTip1.SetToolTip(Me.btnDisconnectInlet1, resources.GetString("btnDisconnectInlet1.ToolTip"))
-        Me.ToolTipValues.SetToolTip(Me.btnDisconnectInlet1, resources.GetString("btnDisconnectInlet1.ToolTip1"))
+        Me.ToolTipChangeTag.SetToolTip(Me.btnDisconnectInlet1, resources.GetString("btnDisconnectInlet1.ToolTip1"))
+        Me.ToolTipValues.SetToolTip(Me.btnDisconnectInlet1, resources.GetString("btnDisconnectInlet1.ToolTip2"))
         Me.btnDisconnectInlet1.UseVisualStyleBackColor = True
         '
         'Label7
@@ -597,8 +582,6 @@ Partial Class EditingForm_ShortcutColumn
     Public WithEvents Label12 As System.Windows.Forms.Label
     Public WithEvents Label11 As System.Windows.Forms.Label
     Public WithEvents GroupBox3 As System.Windows.Forms.GroupBox
-    Public WithEvents cbFlashAlg As System.Windows.Forms.ComboBox
-    Public WithEvents Label10 As System.Windows.Forms.Label
     Public WithEvents cbPropPack As System.Windows.Forms.ComboBox
     Public WithEvents Label9 As System.Windows.Forms.Label
     Public WithEvents GroupBox2 As System.Windows.Forms.GroupBox
@@ -606,7 +589,6 @@ Partial Class EditingForm_ShortcutColumn
     Public WithEvents Label8 As System.Windows.Forms.Label
     Public WithEvents tbLKmolfrac As System.Windows.Forms.TextBox
     Public WithEvents Label3 As System.Windows.Forms.Label
-    Public WithEvents btnConfigureFlashAlg As System.Windows.Forms.Button
     Public WithEvents btnConfigurePP As System.Windows.Forms.Button
     Public WithEvents tbHKmolfrac As System.Windows.Forms.TextBox
     Public WithEvents Label2 As System.Windows.Forms.Label

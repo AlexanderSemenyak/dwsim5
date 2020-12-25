@@ -16,12 +16,13 @@
 '    You should have received a copy of the GNU General Public License
 '    along with DWSIM.  If not, see <http://www.gnu.org/licenses/>.
 
-
 Imports DWSIM.Thermodynamics
 Imports DWSIM.Thermodynamics.Streams
 Imports DWSIM.SharedClasses
 Imports DWSIM.Interfaces.Enums
 Imports DWSIM.Interfaces.My.Resources
+Imports DotNumerics.Optimization.TN
+Imports NetOffice.ExcelApi
 
 Namespace UnitOperations
 
@@ -204,10 +205,19 @@ Namespace UnitOperations
                         ElseIf CalcMode = CalculationMode.Kv_Gas Then
                             ims.PropertyPackage.CurrentMaterialStream = ims
                             rhog20 = ims.PropertyPackage.AUX_VAPDENS(273.15, 101325)
-                            Wi = 519 * Kvc / (Ti / (rhog20 * (P1 - P2) / 100000.0 * P1 / 100000.0)) ^ 0.5 / 3600
+                            If P2 > P1 / 2 Then
+                                Wi = 519 * Kvc / (Ti / (rhog20 * (P1 - P2) / 100000.0 * P1 / 100000.0)) ^ 0.5 / 3600
+                            Else
+                                Wi = 259.5 * Kvc * P1 / 100000.0 / (Ti / rhog20) ^ 0.5 / 3600
+                            End If
                         ElseIf CalcMode = CalculationMode.Kv_Steam Then
-                            v2 = 1 / ims.PropertyPackage.AUX_VAPDENS(Ti, P2)
-                            Wi = Kvc * 31.62 * (v2 / ((P1 - P2) / 100000.0)) ^ 0.5 / 3600
+                            If P2 > P1 / 2 Then
+                                v2 = 1 / ims.PropertyPackage.AUX_VAPDENS(Ti, P2)
+                                Wi = Kvc * 31.62 / (v2 / ((P1 - P2) / 100000.0)) ^ 0.5 / 3600
+                            Else
+                                v2 = 1 / ims.PropertyPackage.AUX_VAPDENS(Ti, P1 / 2)
+                                Wi = Kvc * 31.62 / (2 * v2 / (P1 / 100000.0)) ^ 0.5 / 3600
+                            End If
                         End If
 
                         If Double.IsNaN(Wi) Then Wi = 0.0
@@ -255,15 +265,14 @@ Namespace UnitOperations
                         ElseIf CalcMode = CalculationMode.Kv_Gas Then
                             ims.PropertyPackage.CurrentMaterialStream = ims
                             rhog20 = ims.PropertyPackage.AUX_VAPDENS(273.15, 101325)
-                            P2 = P1 * 0.7 / 100000.0
-                            icount = 0
-                            Do
-                                P2ant = P2
-                                P2 = P1 / 100000.0 - Ti / rhog20 / P2ant * (519 * Kvc / (Wi * 3600)) ^ -2
-                                icount += 1
-                                If icount > 1000 Then Throw New Exception("P2 did not converge in 1000 iterations.")
-                            Loop Until Math.Abs(P2 - P2ant) < 0.0001
-                            P2 = P2 * 100000.0
+                            Dim roots = MathOps.Quadratic.quadForm(-rhog20, rhog20 * P1 / 100000, -Ti * (519 * Kvc / (Wi * 3600)) ^ -2)
+                            If roots.Item1 > 0 And roots.Item1 > P1 / 100000 / 2 Then
+                                P2 = roots.Item1 * 100000.0
+                            ElseIf roots.Item2 > 0 And roots.Item2 > P1 / 100000 / 2 Then
+                                P2 = roots.Item2 * 100000.0
+                            Else
+                                Throw New Exception("Unable to calculate the outlet pressure.")
+                            End If
                         ElseIf CalcMode = CalculationMode.Kv_Steam Then
                             P2 = P1 * 0.7 / 100000.0
                             icount = 0
@@ -272,7 +281,7 @@ Namespace UnitOperations
                                 P2ant = P2
                                 P2 = P1 / 100000.0 - v2 * (31.62 * Kvc / (Wi * 3600)) ^ -2
                                 icount += 1
-                                If icount > 1000 Then Throw New Exception("P2 did not converge in 1000 iterations.")
+                                If icount > 10000 Then Throw New Exception("P2 did not converge in 10000 iterations.")
                             Loop Until Math.Abs(P2 - P2ant) < 0.0001
                             P2 = P2 * 100000.0
                         End If
@@ -339,10 +348,19 @@ Namespace UnitOperations
             ElseIf CalcMode = CalculationMode.Kv_Gas Then
                 ims.PropertyPackage.CurrentMaterialStream = ims
                 rhog20 = ims.PropertyPackage.AUX_VAPDENS(273.15, 101325)
-                Kv = Wi * 3600 / 519 * (Ti / (rhog20 * (P1 - P2) / 100000.0 * P2 / 100000.0)) ^ 0.5
+                If P2 > P1 / 2 Then
+                    Kv = Wi * 3600 / 519 * (Ti / (rhog20 * (P1 - P2) / 100000.0 * P2 / 100000.0)) ^ 0.5
+                Else
+                    Kv = Wi * 3600 / 259.5 / P1 * (Ti / rhog20) ^ 0.5
+                End If
             ElseIf CalcMode = CalculationMode.Kv_Steam Then
-                v2 = 1 / ims.PropertyPackage.AUX_VAPDENS(Ti, P2)
-                Kv = Wi * 3600 / 31.62 * (v2 / ((P1 - P2) / 100000.0)) ^ 0.5
+                If P2 > P1 / 2 Then
+                    v2 = 1 / ims.PropertyPackage.AUX_VAPDENS(Ti, P2)
+                    Kv = Wi * 3600 / 31.62 * (v2 / ((P1 - P2) / 100000.0)) ^ 0.5
+                Else
+                    v2 = 1 / ims.PropertyPackage.AUX_VAPDENS(Ti, P1 / 2)
+                    Kv = Wi * 3600 / 31.62 * (2 * v2 / (P1 / 100000.0)) ^ 0.5
+                End If
             End If
 
         End Sub
@@ -372,15 +390,17 @@ Namespace UnitOperations
                 End If
             End If
 
-            Dim Ti, Pi, Hi, Wi, ei, ein, T2, P2, H2, H2c, rho, volf, rhog20, P2ant, v2, Kvc As Double
+            Dim Ti, Pi, Hi, Wi, ei, ein, T2, P2, H2, H2c, rho, volf, rhog20, P2ant, v2, Kvc, T2est As Double
             Dim icount As Integer
 
-            Dim ims As MaterialStream
+            Dim ims, oms As MaterialStream
 
             If args IsNot Nothing Then
                 ims = args(0)
+                oms = args(1)
             Else
                 ims = Me.GetInletMaterialStream(0)
+                oms = Me.GetOutletMaterialStream(0)
             End If
 
             Me.PropertyPackage.CurrentMaterialStream = ims
@@ -393,6 +413,12 @@ Namespace UnitOperations
             ein = ei
             rho = ims.Phases(0).Properties.density.GetValueOrDefault
             volf = ims.Phases(0).Properties.volumetric_flow.GetValueOrDefault
+
+            If oms.GetTemperature() < ims.GetTemperature() Then
+                T2est = oms.GetTemperature()
+            Else
+                T2est = ims.GetTemperature()
+            End If
 
             H2 = Hi '- Me.DeltaP.GetValueOrDefault / (rho_li * 1000)
 
@@ -443,15 +469,14 @@ Namespace UnitOperations
             ElseIf CalcMode = CalculationMode.Kv_Gas Then
                 ims.PropertyPackage.CurrentMaterialStream = ims
                 rhog20 = ims.PropertyPackage.AUX_VAPDENS(273.15, 101325)
-                P2 = Pi * 0.7 / 100000.0
-                icount = 0
-                Do
-                    P2ant = P2
-                    P2 = Pi / 100000.0 - Ti / rhog20 / P2ant * (519 * Kvc / (Wi * 3600)) ^ -2
-                    icount += 1
-                    If icount > 1000 Then Throw New Exception("P2 did not converge in 1000 iterations.")
-                Loop Until Math.Abs(P2 - P2ant) < 0.0001
-                P2 = P2 * 100000.0
+                Dim roots = MathOps.Quadratic.quadForm(-rhog20, rhog20 * Pi / 100000, -Ti * (519 * Kvc / (Wi * 3600)) ^ -2)
+                If roots.Item1 > 0 And roots.Item1 > Pi / 100000 / 2 Then
+                    P2 = roots.Item1 * 100000.0
+                ElseIf roots.Item2 > 0 And roots.Item2 > Pi / 100000 / 2 Then
+                    P2 = roots.Item2 * 100000.0
+                Else
+                    Throw New Exception("Unable to calculate the outlet pressure.")
+                End If
                 IObj?.Paragraphs.Add(String.Format("Calculated Outlet Pressure P2 = {0} Pa", P2))
             ElseIf CalcMode = CalculationMode.Kv_Steam Then
                 P2 = Pi * 0.7 / 100000.0
@@ -461,7 +486,7 @@ Namespace UnitOperations
                     P2ant = P2
                     P2 = Pi / 100000.0 - v2 * (31.62 * Kvc / (Wi * 3600)) ^ -2
                     icount += 1
-                    If icount > 1000 Then Throw New Exception("P2 did not converge in 1000 iterations.")
+                    If icount > 10000 Then Throw New Exception("P2 did not converge in 10000 iterations.")
                 Loop Until Math.Abs(P2 - P2ant) < 0.0001
                 P2 = P2 * 100000.0
                 IObj?.Paragraphs.Add(String.Format("Calculated Outlet Pressure P2 = {0} Pa", P2))
@@ -486,7 +511,7 @@ Namespace UnitOperations
             IObj?.Paragraphs.Add(String.Format("Inlet Stream Enthalpy = {0} kJ/kg", Hi))
 
             IObj?.SetCurrent()
-            Dim tmp = Me.PropertyPackage.CalculateEquilibrium2(FlashCalculationType.PressureEnthalpy, P2, H2, Ti)
+            Dim tmp = Me.PropertyPackage.CalculateEquilibrium2(FlashCalculationType.PressureEnthalpy, P2, H2, T2est)
             T2 = tmp.CalculatedTemperature
             CheckSpec(T2, True, "outlet temperature")
             H2c = tmp.CalculatedEnthalpy
@@ -509,14 +534,6 @@ Namespace UnitOperations
             Me.DeltaQ = 0
 
             OutletTemperature = T2
-
-            Dim oms As IMaterialStream
-
-            If args IsNot Nothing Then
-                oms = args(1)
-            Else
-                oms = Me.GetOutletMaterialStream(0)
-            End If
 
             If Not DebugMode Then
 

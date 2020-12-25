@@ -42,6 +42,7 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
     Public Shared Event FlowsheetCalculationFinished As CustomEvent
     Public Shared Event MaterialStreamCalculationStarted As CustomEvent
     Public Shared Event MaterialStreamCalculationFinished As CustomEvent
+    Public Shared Event CalculationError As CustomEvent
     Public Shared Event CalculatingObject As CustomEvent2
 
     ''' <summary>
@@ -413,6 +414,7 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
                         If fbag.DynamicMode Then myobj.UpdateDynamicsEditForm()
                     End If
                 Catch ex As AggregateException
+                    RaiseEvent CalculationError(myinfo, New EventArgs(), ex)
                     myobj.ErrorMessage = ""
                     For Each iex In ex.InnerExceptions
                         If TypeOf iex Is AggregateException Then
@@ -445,6 +447,7 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
                     Next
                     If GlobalSettings.Settings.SolverBreakOnException Then Exit While
                 Catch ex As Exception
+                    RaiseEvent CalculationError(myinfo, New EventArgs(), ex)
                     myobj.ErrorMessage = ex.Message.ToString & vbCrLf
                     CheckExceptionForAdditionalInfo(ex)
                     loopex.Add(New Exception(myinfo.Tag & ": " & ex.Message))
@@ -461,7 +464,7 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
 
         End While
 
-        fgui.ShowMessage(fgui.GetTranslatedString("Runtime") & ": " & (Date.Now - d0).ToString, IFlowsheet.MessageType.Information)
+        fgui.ShowMessage(fgui.GetTranslatedString("Runtime") & " (s): " & (Date.Now - d0).TotalSeconds.ToString("G4"), IFlowsheet.MessageType.Information)
 
         Return loopex
 
@@ -518,6 +521,7 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
                     If fbag.DynamicMode Then myobj.UpdateDynamicsEditForm()
                 End If
             Catch ex As AggregateException
+                RaiseEvent CalculationError(myinfo, New EventArgs(), ex)
                 fgui.ProcessScripts(Scripts.EventType.ObjectCalculationError, Scripts.ObjectType.FlowsheetObject, myobj.Name)
                 myobj.ErrorMessage = ""
                 For Each iex In ex.InnerExceptions
@@ -551,6 +555,7 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
                 Next
                 If GlobalSettings.Settings.SolverBreakOnException Then Exit While
             Catch ex As Exception
+                RaiseEvent CalculationError(myinfo, New EventArgs(), ex)
                 fgui.ProcessScripts(Scripts.EventType.ObjectCalculationError, Scripts.ObjectType.FlowsheetObject, myobj.Name)
                 myobj.ErrorMessage = ex.Message.ToString
                 CheckExceptionForAdditionalInfo(ex)
@@ -625,6 +630,7 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
                                                              If fbag.DynamicMode Then myobj.UpdateDynamicsEditForm()
                                                          End If
                                                      Catch ex As AggregateException
+                                                         RaiseEvent CalculationError(myinfo, New EventArgs(), ex)
                                                          fgui.ProcessScripts(Scripts.EventType.ObjectCalculationError, Scripts.ObjectType.FlowsheetObject, myobj.Name)
                                                          myobj.ErrorMessage = ""
                                                          For Each iex In ex.InnerExceptions
@@ -658,6 +664,7 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
                                                          Next
                                                          If GlobalSettings.Settings.SolverBreakOnException Then state.Break()
                                                      Catch ex As Exception
+                                                         RaiseEvent CalculationError(myinfo, New EventArgs(), ex)
                                                          fgui.ProcessScripts(Scripts.EventType.ObjectCalculationError, Scripts.ObjectType.FlowsheetObject, myobj.Name)
                                                          myobj.ErrorMessage = ex.Message.ToString
                                                          CheckExceptionForAdditionalInfo(ex)
@@ -869,22 +876,24 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
                     lists.Add(listidx, New List(Of String))
                     maxidx = listidx
                     For Each o As String In lists(listidx - 1)
-                        obj = fbag.SimulationObjects(o)
-                        If Not onqueue Is Nothing Then
-                            If onqueue.Name = obj.Name Then Exit Do
-                        End If
-                        For Each c As IConnectionPoint In obj.GraphicObject.InputConnectors
-                            If c.IsAttached Then
-                                If c.AttachedConnector.AttachedFrom.ObjectType <> ObjectType.OT_Recycle And
-                                    c.AttachedConnector.AttachedFrom.ObjectType <> ObjectType.OT_EnergyRecycle Then
-                                    lists(listidx).Add(c.AttachedConnector.AttachedFrom.Name)
-                                    totalobjs += 1
-                                    If totalobjs > 10000 Then
-                                        Throw New Exception("Infinite loop detected while obtaining flowsheet object calculation order. Please insert recycle blocks where needed.")
+                        If fbag.SimulationObjects.ContainsKey(o) Then
+                            obj = fbag.SimulationObjects(o)
+                            If Not onqueue Is Nothing Then
+                                If onqueue.Name = obj.Name Then Exit Do
+                            End If
+                            For Each c As IConnectionPoint In obj.GraphicObject.InputConnectors
+                                If c.IsAttached Then
+                                    If c.AttachedConnector.AttachedFrom.ObjectType <> ObjectType.OT_Recycle And
+                                        c.AttachedConnector.AttachedFrom.ObjectType <> ObjectType.OT_EnergyRecycle Then
+                                        lists(listidx).Add(c.AttachedConnector.AttachedFrom.Name)
+                                        totalobjs += 1
+                                        If totalobjs > 10000 Then
+                                            Throw New Exception("Infinite loop detected while obtaining flowsheet object calculation order. Please insert recycle blocks where needed.")
+                                        End If
                                     End If
                                 End If
-                            End If
-                        Next
+                            Next
+                        End If
                     Next
                 Else
                     Exit Do
@@ -1035,7 +1044,9 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
 
             If ChangeCalcOrder Then
                 If mode = 0 Or mode = 1 Then
-                    objstack = fgui.ChangeCalculationOrder(objstack)
+                    fgui.RunCodeOnUIThread(Sub()
+                                               objstack = fgui.ChangeCalculationOrder(objstack)
+                                           End Sub)
                 End If
             End If
 
@@ -1080,15 +1091,20 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
             Dim totalr As Integer = 0
 
             For Each r In objstack
-                Dim robj = fbag.SimulationObjects(r)
-                If robj.GraphicObject.ObjectType = ObjectType.OT_Recycle Then
-                    recycles.Add(robj.Name)
-                    Dim rec As IRecycle = fbag.SimulationObjects(robj.Name)
-                    If rec.AccelerationMethod = AccelMethod.GlobalBroyden Then
-                        If rec.Values.Count = 0 Then fbag.SimulationObjects(robj.Name).Solve()
-                        totalv += rec.Values.Count
+                If fbag.SimulationObjects.ContainsKey(r) Then
+                    Dim robj = fbag.SimulationObjects(r)
+                    If robj.GraphicObject.ObjectType = ObjectType.MaterialStream Then
+                        Dim ms As IMaterialStream = fbag.SimulationObjects(robj.Name)
+                        ms.AtEquilibrium = False
+                    ElseIf robj.GraphicObject.ObjectType = ObjectType.OT_Recycle Then
+                        recycles.Add(robj.Name)
+                        Dim rec As IRecycle = fbag.SimulationObjects(robj.Name)
+                        If rec.AccelerationMethod = AccelMethod.GlobalBroyden Then
+                            If rec.Values.Count = 0 Then fbag.SimulationObjects(robj.Name).Solve()
+                            totalv += rec.Values.Count
+                        End If
+                        totalr += 1
                     End If
-                    totalr += 1
                 End If
             Next
 
@@ -1137,16 +1153,18 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
                                                      'add the objects to the calculation queue.
 
                                                      For Each o As String In objstack
-                                                         obj = fbag.SimulationObjects(o)
-                                                         objargs = New CalculationArgs
-                                                         With objargs
-                                                             .Sender = "FlowsheetSolver"
-                                                             .Calculated = True
-                                                             .Name = obj.Name
-                                                             .ObjectType = obj.GraphicObject.ObjectType
-                                                             .Tag = obj.GraphicObject.Tag
-                                                             fqueue.CalculationQueue.Enqueue(objargs)
-                                                         End With
+                                                         If fbag.SimulationObjects.ContainsKey(o) Then
+                                                             obj = fbag.SimulationObjects(o)
+                                                             objargs = New CalculationArgs
+                                                             With objargs
+                                                                 .Sender = "FlowsheetSolver"
+                                                                 .Calculated = True
+                                                                 .Name = obj.Name
+                                                                 .ObjectType = obj.GraphicObject.ObjectType
+                                                                 .Tag = obj.GraphicObject.Tag
+                                                                 fqueue.CalculationQueue.Enqueue(objargs)
+                                                             End With
+                                                         End If
                                                      Next
 
                                                      'set the flowsheet instance for all objects, this is required for the async threads
@@ -1267,7 +1285,7 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
                                                                  Dim rec = DirectCast(fbag.SimulationObjects(r), IRecycle)
                                                                  If rec.AccelerationMethod = AccelMethod.GlobalBroyden Then
                                                                      For Each kvp In rec.Errors
-                                                                         rec.Values(kvp.Key) = recvars(i) + recdvars(i)
+                                                                         rec.Values(kvp.Key) = recvars(i) + 0.7 * recdvars(i)
                                                                          i += 1
                                                                      Next
                                                                  End If
@@ -1409,7 +1427,7 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
             If age Is Nothing Then
 
                 fgui.ShowMessage(fgui.GetTranslatedString("FSfinishedsolvingok"), IFlowsheet.MessageType.Information)
-                fgui.ShowMessage(fgui.GetTranslatedString("Runtime") & ": " & (Date.Now - d1).ToString("g"), IFlowsheet.MessageType.Information)
+                fgui.ShowMessage(fgui.GetTranslatedString("Runtime") & " (s): " & (Date.Now - d1).TotalSeconds.ToString("G4"), IFlowsheet.MessageType.Information)
 
                 IObj?.Paragraphs.Add(String.Format("Solver finished calculation of all objects in {0} seconds.", (Date.Now - d1).TotalSeconds))
 
@@ -1434,6 +1452,7 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
                                 baseexception = iex.InnerException
                             End While
                             fgui.ShowMessage(baseexception.Message.ToString, IFlowsheet.MessageType.GeneralError, euid)
+                            'Console.WriteLine(baseexception.ToString)
                             IObj?.Paragraphs.Add(baseexception.Message)
                         Next
                     Else
@@ -1446,6 +1465,7 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
                             End While
                         End If
                         fgui.ShowMessage(baseexception.Message.ToString, IFlowsheet.MessageType.GeneralError, euid)
+                        'Console.WriteLine(baseexception.ToString)
                         IObj?.Paragraphs.Add(baseexception.Message)
                     End If
                 Next
@@ -1462,11 +1482,11 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
 
             fgui.UpdateInformation()
 
+            fgui.RefreshInterface()
+
             fgui.ProcessScripts(Scripts.EventType.SolverFinished, Scripts.ObjectType.Solver, "")
 
             GlobalSettings.Settings.CalculatorBusy = False
-
-            RaiseEvent FlowsheetCalculationFinished(fobj, New System.EventArgs(), Nothing)
 
             IObj?.Close()
 
@@ -1474,9 +1494,11 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
 
             If age Is Nothing Then
                 FinishSuccess?.Invoke()
+                RaiseEvent FlowsheetCalculationFinished(fobj, New System.EventArgs(), Nothing)
                 Return New List(Of Exception)
             Else
                 FinishWithErrors?.Invoke()
+                RaiseEvent FlowsheetCalculationFinished(fobj, New System.EventArgs(), age.InnerExceptions.ToList())
                 Return age.InnerExceptions.ToList()
             End If
 
@@ -1718,7 +1740,7 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
                         If success Then
                             For i = 0 To x.Length - 1
                                 dx(i) = -dx(i)
-                                x(i) += dx(i)
+                                x(i) += 0.7 * dx(i)
                             Next
                         End If
 
@@ -1815,7 +1837,7 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
                     If success Then
                         For i = 0 To x.Length - 1
                             dx(i) = -dx(i)
-                            x(i) += dx(i)
+                            x(i) += 0.7 * dx(i)
                         Next
                     End If
 

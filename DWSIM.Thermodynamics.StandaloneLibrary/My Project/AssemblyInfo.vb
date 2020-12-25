@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("")>
 <Assembly: AssemblyCompany("")>
 <Assembly: AssemblyProduct("DWSIM.Thermodynamics.StandaloneLibrary")>
-<Assembly: AssemblyCopyright("Copyright ©  2018-2019 Daniel Medeiros")>
+<Assembly: AssemblyCopyright("Copyright ©  2018-2020 Daniel Medeiros")>
 <Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(True)>
@@ -31,4 +31,4 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")>
 
-<Assembly: AssemblyVersion("6.0.*")>
+<Assembly: AssemblyVersion("6.3.*")>

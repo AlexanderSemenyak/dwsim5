@@ -56,8 +56,6 @@
 
     Property AvailablePropertyPackages As Dictionary(Of String, IPropertyPackage)
 
-    Property AvailableFlashAlgorithms As Dictionary(Of String, IFlashAlgorithm)
-
     Property AvailableSystemsOfUnits As List(Of IUnitsOfMeasure)
 
     Property Reactions As Dictionary(Of String, IReaction)
@@ -89,6 +87,18 @@
     Function GetFlowsheetSimulationObject(tag As String) As ISimulationObject
 
     Function GetSelectedFlowsheetSimulationObject(tag As String) As ISimulationObject
+
+    Function GetObject(name As String) As ISimulationObject
+
+    Function GetCompound(name As String) As ICompoundConstantProperties
+
+    Function GetPropertyPackage(name As String) As IPropertyPackage
+
+    Function GetReaction(name As String) As IReaction
+
+    Function GetReactionSet(name As String) As IReactionSet
+
+    Sub AutoLayout()
 
     Sub DisplayForm(form As Object)
 
@@ -156,6 +166,8 @@
 
     Sub UpdateInformation()
 
+    Sub RefreshInterface()
+
     Function GetFlowsheetSurfaceWidth() As Integer
 
     Function GetFlowsheetSurfaceHeight() As Integer
@@ -165,6 +177,8 @@
     Function GetProcessData() As List(Of XElement)
 
     Sub LoadProcessData(data As List(Of XElement))
+
+    Function GetSpreadsheetObject() As Object
 
 End Interface
 

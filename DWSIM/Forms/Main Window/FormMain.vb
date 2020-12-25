@@ -42,8 +42,9 @@ Imports CefSharp.WinForms
 Imports DWSIM.Interfaces
 Imports DWSIM.Thermodynamics.SpecialEOS
 Imports DWSIM.Thermodynamics.SpecialEOS.PCSAFT
-Imports DWSIM.Thermodynamics.SpecialEOS.PRSRKAdv
+Imports DWSIM.Thermodynamics.AdvancedEOS
 Imports XMLSerializer
+Imports DWSIM.Thermodynamics.Databases
 
 Public Class FormMain
 
@@ -81,6 +82,8 @@ Public Class FormMain
     Public SampleList As New List(Of String)
     Public FOSSEEList As New List(Of FOSSEEFlowsheet)
 
+    Public ObjectList As New Dictionary(Of String, Interfaces.ISimulationObject)
+
     ''' <summary>
     ''' ONIT Alexander  - send errorMessages to <see cref="m_LastError"/>
     ''' </summary>
@@ -92,21 +95,6 @@ Public Class FormMain
     End Sub
 
 #Region "    Form Events"
-
-    'Public Sub InitializeChromium()
-    '    If Not DWSIM.App.IsRunningOnMono Then
-    '        Try
-    '            Dim settings As CefSettings = New CefSettings
-    '            settings.IgnoreCertificateErrors = True
-    '            settings.PersistUserPreferences = True
-    '            settings.PersistSessionCookies = True
-    '            settings.CachePath = Path.Combine(My.Computer.FileSystem.SpecialDirectories.CurrentUserApplicationData, "BrowserDataCache")
-    '            CefSharp.CefSharpSettings.SubprocessExitIfParentProcessClosed = True
-    '            CefSharp.Cef.Initialize(settings)
-    '        Catch ex As Exception
-    '        End Try
-    '    End If
-    'End Sub
 
     Private Sub FormMain_DragDrop(ByVal sender As Object, ByVal e As System.Windows.Forms.DragEventArgs) Handles Me.DragDrop
         If e.Data.GetDataPresent(DataFormats.FileDrop) Then
@@ -243,6 +231,17 @@ Public Class FormMain
             aTypeList.AddRange(calculatorassembly.GetTypes().Where(Function(x) If(x.GetInterface("DWSIM.Interfaces.ISimulationObject") IsNot Nothing, True, False)))
             aTypeList.AddRange(unitopassembly.GetTypes().Where(Function(x) If(x.GetInterface("DWSIM.Interfaces.ISimulationObject") IsNot Nothing, True, False)))
 
+            For Each item In aTypeList.OrderBy(Function(x) x.Name)
+                If Not item.IsAbstract Then
+                    Dim obj = DirectCast(Activator.CreateInstance(item), Interfaces.ISimulationObject)
+                    ObjectList.Add(obj.GetDisplayName(), obj)
+                End If
+            Next
+
+            For Each item In ExternalUnitOperations.Values.OrderBy(Function(x) x.Name)
+                ObjectList.Add(item.Name, item)
+            Next
+
             My.Application.MainThreadId = Threading.Thread.CurrentThread.ManagedThreadId
 
             If My.Settings.BackupFolder = "" Then My.Settings.BackupFolder = My.Computer.FileSystem.SpecialDirectories.Temp & Path.DirectorySeparatorChar & "DWSIM"
@@ -371,7 +370,7 @@ Public Class FormMain
 
         For Each currentAssembly As Assembly In alist
             Try
-                availableTypes.AddRange(currentAssembly.GetTypes())
+                availableTypes.AddRange(currentAssembly.GetExportedTypes())
             Catch ex As ReflectionTypeLoadException
                 Dim errstr As New StringBuilder()
                 For Each lex As Exception In ex.LoaderExceptions
@@ -447,47 +446,42 @@ Public Class FormMain
             My.Settings.MostRecentFiles.RemoveAt(0)
         End If
         If  (GlobalSettings.Settings.AutomationMode =false)Then
-            Dim j As Integer = 0
-            For Each k As String In Me.dropdownlist
-                Dim tsmi As ToolStripItem = Me.FileToolStripMenuItem.DropDownItems(Convert.ToInt32(k - j))
-                If tsmi.DisplayStyle = ToolStripItemDisplayStyle.Text Or TypeOf tsmi Is ToolStripSeparator Then
-                    Me.FileToolStripMenuItem.DropDownItems.Remove(tsmi)
-                    j = j + 1
-                End If
-            Next
+           Dim j As Integer = 0
+           For Each k As String In Me.dropdownlist
+               Dim tsmi As ToolStripItem = Me.FileToolStripMenuItem.DropDownItems(Convert.ToInt32(k - j))
+               If tsmi.DisplayStyle = ToolStripItemDisplayStyle.Text Or TypeOf tsmi Is ToolStripSeparator Then
+                   Me.FileToolStripMenuItem.DropDownItems.Remove(tsmi)
+                   j = j + 1
+               End If
+           Next
         end if 
+
 
         Me.dropdownlist.Clear()
 
         Dim toremove As New ArrayList
 
         If  (GlobalSettings.Settings.AutomationMode =false)Then
+          Dim tsindex = FileToolStripMenuItem.DropDownItems.IndexOf(tsFileSeparator)
 
-            If (Not My.Settings.MostRecentFiles Is Nothing ) andalso (GlobalSettings.Settings.AutomationMode =false)Then
-                For Each str As String In My.Settings.MostRecentFiles
-                    If File.Exists(str) Then
-                        Dim tsmi As New ToolStripMenuItem
-                        With tsmi
-                            .Text = str
-                            .Tag = str
-                            .DisplayStyle = ToolStripItemDisplayStyle.Text
-                        End With
-                        Me.FileToolStripMenuItem.DropDownItems.Insert(Me.FileToolStripMenuItem.DropDownItems.Count - 1, tsmi)
-                        Me.dropdownlist.Add(Me.FileToolStripMenuItem.DropDownItems.Count - 2)
-                        AddHandler tsmi.Click, AddressOf Me.OpenRecent_click
-                    Else
-                        toremove.Add(str)
-                    End If
-                Next
-                For Each s As String In toremove
-                    My.Settings.MostRecentFiles.Remove(s)
-                Next
-                If My.Settings.MostRecentFiles.Count > 0 Then
-                    Me.FileToolStripMenuItem.DropDownItems.Insert(Me.FileToolStripMenuItem.DropDownItems.Count - 1, New ToolStripSeparator())
+          If Not My.Settings.MostRecentFiles Is Nothing Then
+            For Each str As String In My.Settings.MostRecentFiles
+                If File.Exists(str) Then
+                    Dim tsmi As New ToolStripMenuItem
+                    With tsmi
+                        .Text = str
+                        .Tag = str
+                        .DisplayStyle = ToolStripItemDisplayStyle.Text
+                    End With
+                    Me.FileToolStripMenuItem.DropDownItems.Insert(tsindex, tsmi)
                     Me.dropdownlist.Add(Me.FileToolStripMenuItem.DropDownItems.Count - 2)
                 End If
-            Else
-                My.Settings.MostRecentFiles = New System.Collections.Specialized.StringCollection
+            Next
+            For Each s As String In toremove
+                My.Settings.MostRecentFiles.Remove(s)
+            Next
+            If My.Settings.MostRecentFiles.Count > 0 Then
+                Me.dropdownlist.Add(Me.FileToolStripMenuItem.DropDownItems.Count - 2)
             End If
 
             Dim latestfolders As New List(Of String)
@@ -498,17 +492,20 @@ Public Class FormMain
                 End If
             Next
 
+        If latestfolders.Count > 0 Then
+            tsFolderSeparator.Visible = True
+            Dim tfindex = FileToolStripMenuItem.DropDownItems.IndexOf(tsFolderSeparator)
             For Each s In latestfolders
                 Dim tsmi As New ToolStripMenuItem With {.Text = s, .Tag = s, .DisplayStyle = ToolStripItemDisplayStyle.Text}
-                Me.FileToolStripMenuItem.DropDownItems.Insert(Me.FileToolStripMenuItem.DropDownItems.Count - 1, tsmi)
+                Me.FileToolStripMenuItem.DropDownItems.Insert(tfindex, tsmi)
                 Me.dropdownlist.Add(Me.FileToolStripMenuItem.DropDownItems.Count - 2)
                 AddHandler tsmi.Click, AddressOf Me.OpenRecentFolder_click
             Next
-
-            If latestfolders.Count > 0 Then
-                Me.FileToolStripMenuItem.DropDownItems.Insert(Me.FileToolStripMenuItem.DropDownItems.Count - 1, New ToolStripSeparator())
-            End If
-       End If
+        Else
+            tsFolderSeparator.Visible = False
+        End If
+      end if
+     End If 'end if not automation 
 
     End Sub
 
@@ -538,11 +535,6 @@ Public Class FormMain
         CPIMPP.ComponentName = "CoolProp (Incompressible Mixtures)"
         CPIMPP.ComponentDescription = "CoolProp (Incompressible Mixtures)"
         PropertyPackages.Add(CPIMPP.ComponentName.ToString, CPIMPP)
-
-        Dim SWPP As New SourWaterPropertyPackage()
-        SWPP.ComponentName = DWSIM.App.GetLocalString("SourWaterPP")
-        SWPP.ComponentDescription = DWSIM.App.GetLocalString("DescSourWaterPP")
-        PropertyPackages.Add(SWPP.ComponentName.ToString, SWPP)
 
         Dim STPP As SteamTablesPropertyPackage = New SteamTablesPropertyPackage()
         STPP.ComponentName = DWSIM.App.GetLocalString("TabelasdeVaporSteamT")
@@ -640,41 +632,40 @@ Public Class FormMain
 
         PropertyPackages.Add(LKPPP.ComponentName.ToString, LKPPP)
 
-        Dim EUQPP As ExUNIQUACPropertyPackage = New ExUNIQUACPropertyPackage()
-        EUQPP.ComponentName = "Extended UNIQUAC (Aqueous Electrolytes)"
-        EUQPP.ComponentDescription = DWSIM.App.GetLocalString("DescEUPP")
-
-        PropertyPackages.Add(EUQPP.ComponentName.ToString, EUQPP)
-
-        Dim ENQPP As New ElectrolyteNRTLPropertyPackage()
-        ENQPP.ComponentName = "Electrolyte NRTL (Aqueous Electrolytes)"
-        ENQPP.ComponentDescription = DWSIM.App.GetLocalString("DescENPP")
-
-        PropertyPackages.Add(ENQPP.ComponentName.ToString, ENQPP)
-
         Dim BOPP As BlackOilPropertyPackage = New BlackOilPropertyPackage()
         BOPP.ComponentName = "Black Oil"
         BOPP.ComponentDescription = DWSIM.App.GetLocalString("DescBOPP")
 
         PropertyPackages.Add(BOPP.ComponentName.ToString, BOPP)
 
-        Dim SRKPPAdv = New SoaveRedlichKwongAdvancedPropertyPackage()
-        PropertyPackages.Add(SRKPPAdv.ComponentName.ToString, SRKPPAdv)
+        Dim GERGPP As GERG2008PropertyPackage = New GERG2008PropertyPackage()
 
-        Dim PRPPAdv = New PengRobinsonAdvancedPropertyPackage()
-        PropertyPackages.Add(PRPPAdv.ComponentName.ToString, PRPPAdv)
+        PropertyPackages.Add(GERGPP.ComponentName.ToString, GERGPP)
 
-        GERG2008PropertyPackageInitializer.Initialize()
-        Dim GERG2008 = New GERG2008PropertyPackage()
-        PropertyPackages.Add(GERG2008.ComponentName.ToString, GERG2008)
+        Dim PCSAFTPP As PCSAFT2PropertyPackage = New PCSAFT2PropertyPackage()
 
-        Dim PCSAFT2 = New PCSAFT2PropertyPackage()
-        PropertyPackages.Add(PCSAFT2.ComponentName.ToString, PCSAFT2)
+        PropertyPackages.Add(PCSAFTPP.ComponentName.ToString, PCSAFTPP)
+
+        Dim PR78PP As PengRobinsonPropertyPackage = New PengRobinsonPropertyPackage()
+        PR78PP.ComponentName = "Peng-Robinson 1978 (PR78)"
+        PR78PP.ComponentDescription = DWSIM.App.GetLocalString("DescPengRobinson78PP")
+
+        PropertyPackages.Add(PR78PP.ComponentName.ToString, PR78PP)
+
+        Dim PR78Adv As PengRobinson1978AdvancedPropertyPackage = New PengRobinson1978AdvancedPropertyPackage()
+
+        PropertyPackages.Add(PR78Adv.ComponentName.ToString, PR78Adv)
+
+        Dim SRKAdv As SoaveRedlichKwongAdvancedPropertyPackage = New SoaveRedlichKwongAdvancedPropertyPackage()
+
+        PropertyPackages.Add(SRKAdv.ComponentName.ToString, SRKAdv)
 
         Dim otherpps = SharedClasses.Utility.LoadAdditionalPropertyPackages()
 
         For Each pp In otherpps
-            PropertyPackages.Add(DirectCast(pp, CapeOpen.ICapeIdentification).ComponentName, pp)
+            If Not PropertyPackages.ContainsKey(DirectCast(pp, CapeOpen.ICapeIdentification).ComponentName) Then
+                PropertyPackages.Add(DirectCast(pp, CapeOpen.ICapeIdentification).ComponentName, pp)
+            End If
         Next
 
         'Check if DWSIM is running in Portable/Mono mode, if not then load the CAPE-OPEN Wrapper Property Package.
@@ -687,32 +678,6 @@ Public Class FormMain
             PropertyPackages.Add(COPP.ComponentName.ToString, COPP)
 
         End If
-
-    End Sub
-
-    Sub AddFlashAlgorithms()
-
-        Dim calculatorassembly = My.Application.Info.LoadedAssemblies.Where(Function(x) x.FullName.Contains("DWSIM.Thermodynamics,")).FirstOrDefault
-        Dim availableTypes As New List(Of Type)()
-
-        availableTypes.AddRange(calculatorassembly.GetTypes().Where(Function(x) If(x.GetInterface("DWSIM.Interfaces.IFlashAlgorithm") IsNot Nothing, True, False)))
-
-        For Each item In availableTypes.OrderBy(Function(x) x.Name)
-            If Not item.IsAbstract Then
-                Dim obj = DirectCast(Activator.CreateInstance(item), Interfaces.IFlashAlgorithm)
-                If Not obj.InternalUseOnly Then FlashAlgorithms.Add(obj.Name, obj)
-                If obj.Name.Contains("Gibbs") Then
-                    Dim obj2 = obj.Clone
-                    DirectCast(obj2, Auxiliary.FlashAlgorithms.GibbsMinimization3P).ForceTwoPhaseOnly = True
-                    FlashAlgorithms.Add(obj2.Name, obj2)
-                End If
-                If TypeOf obj Is Auxiliary.FlashAlgorithms.NestedLoopsSLE Then
-                    Dim obj2 = obj.Clone
-                    DirectCast(obj2, Auxiliary.FlashAlgorithms.NestedLoopsSLE).SolidSolution = True
-                    FlashAlgorithms.Add(obj2.Name, obj2)
-                End If
-            End If
-        Next
 
     End Sub
 
@@ -843,7 +808,6 @@ Public Class FormMain
 
     End Sub
 
-
     Sub UpdateFlowsheetLinks()
 
         For Each item In SampleList
@@ -866,6 +830,7 @@ Public Class FormMain
     Sub UpdateFOSSEEList()
 
         For Each item In FOSSEEList
+
             Dim tsmi As New ToolStripMenuItem
             With tsmi
                 .Text = item.DisplayName
@@ -929,22 +894,25 @@ Public Class FormMain
     Private Function GetComponents()
 
         'try to find chemsep xml database
-        Me.LoadCSDB()
+        LoadCSDB()
 
         'load DWSIM XML database
-        Me.LoadDWSIMDB()
+        LoadDWSIMDB()
 
         'load CoolProp database
-        Me.LoadCPDB()
+        LoadCPDB()
 
         'load ChEDL database
-        Me.LoadCheDLDB()
+        LoadCheDLDB()
 
         'load Electrolyte XML database
-        Me.LoadEDB()
+        LoadEDB()
 
         'load Biodiesel XML database
-        Me.LoadBDDB()
+        LoadBDDB()
+
+        'additional compounds
+        LoadAdditionalCompounds()
 
         If GlobalSettings.Settings.OldUI Then
 
@@ -1015,6 +983,13 @@ Public Class FormMain
         dwdb.Load()
         cpa = dwdb.Transfer()
         For Each cp As BaseClasses.ConstantProperties In cpa
+            If Not Me.AvailableComponents.ContainsKey(cp.Name) Then Me.AvailableComponents.Add(cp.Name, cp)
+        Next
+    End Sub
+
+    Public Sub LoadAdditionalCompounds()
+        Dim comps = UserDB.LoadAdditionalCompounds()
+        For Each cp As BaseClasses.ConstantProperties In comps
             If Not Me.AvailableComponents.ContainsKey(cp.Name) Then Me.AvailableComponents.Add(cp.Name, cp)
         Next
     End Sub
@@ -1632,14 +1607,18 @@ Public Class FormMain
         Dim savedfromclui As Boolean = True
 
         Try
-            savedfromclui = Boolean.Parse(simulationDataRootElement.Element("GeneralInfo").Element("SavedFromClassicUI").Value)
+            If simulationDataRootElement.Element("GeneralInfo").Element("SavedFromClassicUI") IsNot Nothing Then
+                savedfromclui = Boolean.Parse(simulationDataRootElement.Element("GeneralInfo").Element("SavedFromClassicUI").Value)
+            End If
         Catch ex As Exception
         End Try
 
         If Not ProgressFeedBack Is Nothing Then ProgressFeedBack.Invoke(5)
 
         Dim form As FormFlowsheet = New FormFlowsheet()
+
         Settings.CAPEOPENMode = False
+
         My.Application.ActiveSimulation = form
 
         Application.DoEvents()
@@ -1648,24 +1627,8 @@ Public Class FormMain
 
         Try
             form.Options.LoadData(data)
-        Catch ex As Exception
-            excs.Add(New Exception("Error Loading Flowsheet Settings", ex))
-        End Try
-
-        Try
-            form.Options.FlashAlgorithms.Clear()
-
-            'Dim el As XElement = (From xel As XElement In data Select xel Where xel.Name = "FlashAlgorithms").SingleOrDefault
-            Dim el As XElement = OnitUtilities.GetFilteredXElementsEnumerable (data, "FlashAlgorithms").SingleOrDefault
-
-            If Not el Is Nothing Then
-                For Each xel As XElement In el.Elements
-                    Dim obj As PropertyPackages.Auxiliary.FlashAlgorithms.FlashAlgorithm = CType(New PropertyPackages.RaoultPropertyPackage().ReturnInstance(xel.Element("Type").Value), Thermodynamics.PropertyPackages.Auxiliary.FlashAlgorithms.FlashAlgorithm)
-                    obj.LoadData(xel.Elements.ToArray())'.ToList)
-                    form.Options.FlashAlgorithms.Add(obj)
-                Next
-            Else
-                form.Options.FlashAlgorithms.Add(New Thermodynamics.PropertyPackages.Auxiliary.FlashAlgorithms.NestedLoops() With {.Tag = .Name})
+            If sver < New Version("6.3.0.0") Then
+                form.Options.SkipEquilibriumCalculationOnDefinedStreams = False
             End If
         Catch ex As Exception
             excs.Add(New Exception("Error Loading Flowsheet Settings", ex))
@@ -2001,6 +1964,7 @@ Public Class FormMain
                 Dim rgfdataelement = simulationDataRootElement.Element("Spreadsheet").Element("RGFData")
                 If Not (rgfdataelement) Is Nothing Then
                     Dim rgfdata As String = simulationDataRootElement.Element("Spreadsheet").Element("RGFData").Value
+                    rgfdata = rgfdata.Replace("Calibri", "Arial").Replace("10.25", "10")
                     Dim sdict As New Dictionary(Of String, String)
                     sdict = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(rgfdata)
                     form.FormSpreadsheet.Spreadsheet.RemoveWorksheet(0)
@@ -2073,20 +2037,22 @@ Public Class FormMain
             form.FormProps.DockPanel = Nothing
             form.FormCharts.DockPanel = Nothing
 
-            If Not My.Computer.Keyboard.ShiftKeyDown Then
-                If savedfromclui Then
-                    Dim myfile As String = My.Computer.FileSystem.GetTempFileName()
-                    Try
-                        Dim pnl As String = simulationDataRootElement.Element("PanelLayout").Value
-                        File.WriteAllText(myfile, pnl)
-                        form.dckPanel.LoadFromXml(myfile, New DeserializeDockContent(AddressOf Me.ReturnForm))
-                    Catch ex As Exception
-                    Finally
-                        File.Delete(myfile)
-                    End Try
-                Else
-                    Dim myfile As String = IO.Path.Combine(My.Application.Info.DirectoryPath, "layout.xml")
-                    form.dckPanel.LoadFromXml(myfile, New DeserializeDockContent(AddressOf ReturnForm))
+            If Not DWSIM.App.IsRunningOnMono Then
+                If Not My.Computer.Keyboard.ShiftKeyDown Then
+                    If savedfromclui Then
+                        Dim myfile As String = My.Computer.FileSystem.GetTempFileName()
+                        Try
+                            Dim pnl As String = xdoc.Element("DWSIM_Simulation_Data").Element("PanelLayout").Value
+                            File.WriteAllText(myfile, pnl)
+                            form.dckPanel.LoadFromXml(myfile, New DeserializeDockContent(AddressOf Me.ReturnForm))
+                        Catch ex As Exception
+                        Finally
+                            File.Delete(myfile)
+                        End Try
+                    Else
+                        Dim myfile As String = IO.Path.Combine(My.Application.Info.DirectoryPath, "layout.xml")
+                        form.dckPanel.LoadFromXml(myfile, New DeserializeDockContent(AddressOf ReturnForm))
+                    End If
                 End If
             End If
 
@@ -2207,24 +2173,8 @@ Public Class FormMain
 
         Try
             form.Options.LoadData(data)
-        Catch ex As Exception
-            excs.Add(New Exception("Error Loading Flowsheet Settings", ex))
-        End Try
-
-        Try
-            form.Options.FlashAlgorithms.Clear()
-
-            'Dim el As XElement = From xel As XElement In data Select xel Where xel.Name = "FlashAlgorithms").SingleOrDefault
-            Dim el As XElement = OnitUtilities.GetFilteredXElementsEnumerable(data, "FlashAlgorithms").SingleOrDefault
-
-            If Not el Is Nothing Then
-                For Each xel As XElement In el.Elements
-                    Dim obj As PropertyPackages.Auxiliary.FlashAlgorithms.FlashAlgorithm = CType(New PropertyPackages.RaoultPropertyPackage().ReturnInstance(xel.Element("Type").Value), Thermodynamics.PropertyPackages.Auxiliary.FlashAlgorithms.FlashAlgorithm)
-                    obj.LoadData(xel.Elements.ToArray())'.ToList)
-                    form.Options.FlashAlgorithms.Add(obj)
-                Next
-            Else
-                form.Options.FlashAlgorithms.Add(New Thermodynamics.PropertyPackages.Auxiliary.FlashAlgorithms.NestedLoops() With {.Tag = .Name})
+            If sver < New Version("6.3.0.0") Then
+                form.Options.SkipEquilibriumCalculationOnDefinedStreams = False
             End If
         Catch ex As Exception
             excs.Add(New Exception("Error Loading Flowsheet Settings", ex))
@@ -2559,6 +2509,7 @@ Public Class FormMain
                 Dim rgfdataelement = simulatiOnDataRootElement.Element("Spreadsheet").Element("RGFData")
                 If (Not (rgfdataelement) Is Nothing) Then
                     Dim rgfdata As String = simulatiOnDataRootElement.Element("Spreadsheet").Element("RGFData").Value
+                    rgfdata = rgfdata.Replace("Calibri", "Arial").Replace("10.25", "10")
                     Dim sdict As New Dictionary(Of String, String)
                     sdict = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(rgfdata)
                     form.FormSpreadsheet.Spreadsheet.RemoveWorksheet(0)
@@ -2867,12 +2818,10 @@ Public Class FormMain
 
         If simulationfilename = "" Then simulationfilename = path
 
-        UIThread(Sub()
-                     If (From f As DockContent In form.dckPanel.Documents Select f Where f.Name = "FormScript").Count > 0 Then
-                         Dim f As FormScript = (From fs As DockContent In form.dckPanel.Documents Select fs Where fs.Name = "FormScript").First
-                         f.UpdateScripts()
-                     End If
-                 End Sub)
+        If (From f As DockContent In form.dckPanel.Documents Select f Where f.Name = "FormScript").Count > 0 Then
+            Dim f As FormScript = (From fs As DockContent In form.dckPanel.Documents Select fs Where fs.Name = "FormScript").First
+            f.UpdateScripts()
+        End If
 
         Dim xdoc As New XDocument()
         Dim xel As XElement
@@ -3053,20 +3002,18 @@ Public Class FormMain
         xdoc.Save(path)
     If Settings.AutomationMode = false then 
         If IO.Path.GetExtension(simulationfilename).ToLower.Contains("dwxml") Or IO.Path.GetExtension(simulationfilename).ToLower.Contains("dwxmz")Or IO.Path.GetExtension(simulationfilename).ToLower.Contains("armgz") Then
-            Me.UIThread(New Action(Sub()
-                                       If Visible Then
-                                           Dim mypath As String = simulationfilename
-                                           If mypath = "" Then mypath = [path]
-                                           'process recent files list
-                                           If Not My.Settings.MostRecentFiles.Contains(mypath) Then
-                                               My.Settings.MostRecentFiles.Add(mypath)
-                                               If Not My.Application.CommandLineArgs.Count > 1 Then Me.UpdateMRUList()
-                                           End If
-                                           form.Options.FilePath = Me.filename
-                                           form.UpdateFormText()
-                                           form.WriteToLog(DWSIM.App.GetLocalString("Arquivo") & Me.filename & DWSIM.App.GetLocalString("salvocomsucesso"), Color.Blue, MessageType.Information)
-                                       End If
-                                   End Sub))
+            If Visible Then
+                Dim mypath As String = simulationfilename
+                If mypath = "" Then mypath = [path]
+                'process recent files list
+                If Not My.Settings.MostRecentFiles.Contains(mypath) Then
+                    My.Settings.MostRecentFiles.Add(mypath)
+                    If Not My.Application.CommandLineArgs.Count > 1 Then Me.UpdateMRUList()
+                End If
+                form.Options.FilePath = Me.filename
+                form.UpdateFormText()
+                form.WriteToLog(DWSIM.App.GetLocalString("Arquivo") & Me.filename & DWSIM.App.GetLocalString("salvocomsucesso"), Color.Blue, MessageType.Information)
+            End If
         End If
      end if
         If Not IO.Path.GetExtension(path).ToLower.Contains("dwbcs") Then
@@ -3155,7 +3102,7 @@ Label_00CC:
                 fs = LoadXML(fsStream, lastFileName, ProgressFeedBack, path, forcommandline)
             End Using
             fs.FilePath = path
-            fs.Options.FilePath = path
+            fs.FlowsheetOptions.FilePath = path
             'File.Delete(fullname)
             Return fs
         Catch ex As Exception
@@ -3228,6 +3175,7 @@ Label_00CC:
     Sub LoadFile(fpath As String)
 
         Me.WelcomePanel.Visible = False
+        PainelDeBoasvindasToolStripMenuItem.Checked = False
 
         Dim floading As New FormLoadingSimulation
 
@@ -3493,6 +3441,7 @@ Label_00CC:
     Public Sub NewToolStripButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles NewToolStripButton.Click, NewToolStripMenuItem.Click
 
         Me.WelcomePanel.Visible = False
+        PainelDeBoasvindasToolStripMenuItem.Checked = False
 
         Dim newform As New FormFlowsheet()
 
@@ -3562,6 +3511,7 @@ Label_00CC:
             If File.Exists(myLink.Tag.ToString) Then
 
                 Me.WelcomePanel.Visible = False
+                PainelDeBoasvindasToolStripMenuItem.Checked = False
 
                 Dim floading As New FormLoadingSimulation
 
@@ -3754,24 +3704,8 @@ Label_00CC:
                     Application.DoEvents()
                     Me.filename = form2.Options.FilePath
                     SaveBackup(Me.filename)
-                    If Path.GetExtension(Me.filename).ToLower = ".dwsim" Then
-                        Try
-                            'SaveF(form2.Options.FilePath, form2)
-                        Catch ex As Exception
-                            MessageBox.Show(DWSIM.App.GetLocalString("Erro"), ex.Message, MessageBoxButtons.OK, MessageBoxIcon.Error)
-                        Finally
-                            'Me.ToolStripStatusLabel1.Text = ""
-                        End Try
-                    ElseIf Path.GetExtension(Me.filename).ToLower = ".dwxml" Then
-                        If saveasync Then
-                            Task.Factory.StartNew(Sub() SaveXML(form2.Options.FilePath, form2)).ContinueWith(Sub(t)
-                                                                                                                 'Me.ToolStripStatusLabel1.Text = ""
-                                                                                                                 If Not t.Exception Is Nothing Then form2.WriteToLog(DWSIM.App.GetLocalString("Erroaosalvararquivo") & t.Exception.ToString, Color.Red, MessageType.GeneralError)
-                                                                                                             End Sub, TaskContinuationOptions.ExecuteSynchronously)
-                        Else
-                            SaveXML(form2.Options.FilePath, form2)
-                            'Me.ToolStripStatusLabel1.Text = ""
-                        End If
+                    If Path.GetExtension(Me.filename).ToLower = ".dwxml" Then
+                        SaveXML(form2.Options.FilePath, form2)
                     ElseIf Path.GetExtension(Me.filename).ToLower = ".xml" Then
                         If saveasync Then
                             Task.Factory.StartNew(Sub() SaveMobileXML(form2.Options.FilePath, form2)).ContinueWith(Sub(t)
@@ -3780,18 +3714,9 @@ Label_00CC:
                                                                                                                    End Sub, TaskContinuationOptions.ExecuteSynchronously)
                         Else
                             SaveMobileXML(form2.Options.FilePath, form2)
-                            'Me.ToolStripStatusLabel1.Text = ""
                         End If
                     ElseIf Path.GetExtension(Me.filename).ToLower = ".dwxmz" or Path.GetExtension(Me.filename).ToLower = ".armgz" Then
-                        If saveasync Then
-                            Task.Factory.StartNew(Sub() SaveXMLZIP(form2.Options.FilePath, form2)).ContinueWith(Sub(t)
-                                                                                                                    'Me.ToolStripStatusLabel1.Text = ""
-                                                                                                                    If Not t.Exception Is Nothing Then form2.WriteToLog(DWSIM.App.GetLocalString("Erroaosalvararquivo") & t.Exception.ToString, Color.Red, MessageType.GeneralError)
-                                                                                                                End Sub, TaskContinuationOptions.ExecuteSynchronously)
-                        Else
-                            SaveXMLZIP(form2.Options.FilePath, form2)
-                            'Me.ToolStripStatusLabel1.Text = ""
-                        End If
+                        SaveXMLZIP(form2.Options.FilePath, form2)
                     End If
                 Else
                     Dim myStream As System.IO.FileStream
@@ -3803,32 +3728,10 @@ Label_00CC:
                         If Not (myStream Is Nothing) Then
                             'Me.ToolStripStatusLabel1.Text = DWSIM.App.GetLocalString("Salvandosimulao") + " (" + Me.filename + ")"
                             Application.DoEvents()
-                            If Path.GetExtension(Me.filename).ToLower = ".dwsim" Then
-                                Try
-                                    'SaveF(myStream.Name, form2)
-                                Catch ex As Exception
-                                    MessageBox.Show(ex.Message, DWSIM.App.GetLocalString("Erro"), MessageBoxButtons.OK, MessageBoxIcon.Error)
-                                Finally
-                                    'Me.ToolStripStatusLabel1.Text = ""
-                                End Try
-                            ElseIf Path.GetExtension(Me.filename).ToLower = ".dwxml" Then
-                                If saveasync Then
-                                    Task.Factory.StartNew(Sub() SaveXML(myStream.Name, form2)).ContinueWith(Sub(t)
-                                                                                                                form2.WriteToLog(DWSIM.App.GetLocalString("Erroaosalvararquivo") & t.Exception.ToString, Color.Red, MessageType.GeneralError)
-                                                                                                            End Sub, TaskContinuationOptions.OnlyOnFaulted)
-                                Else
-                                    SaveXML(myStream.Name, form2)
-                                    'Me.ToolStripStatusLabel1.Text = ""
-                                End If
+                            If Path.GetExtension(Me.filename).ToLower = ".dwxml" Then
+                                SaveXML(myStream.Name, form2)
                             ElseIf Path.GetExtension(Me.filename).ToLower = ".dwxmz" or Path.GetExtension(Me.filename).ToLower = ".armgz"  Then
-                                If saveasync Then
-                                    Task.Factory.StartNew(Sub() SaveXMLZIP(myStream.Name, form2)).ContinueWith(Sub(t)
-                                                                                                                   form2.WriteToLog(DWSIM.App.GetLocalString("Erroaosalvararquivo") & t.Exception.ToString, Color.Red, MessageType.GeneralError)
-                                                                                                               End Sub, TaskContinuationOptions.OnlyOnFaulted)
-                                Else
-                                    SaveXMLZIP(myStream.Name, form2)
-                                    'Me.ToolStripStatusLabel1.Text = ""
-                                End If
+                                SaveXMLZIP(myStream.Name, form2)
                             End If
                         End If
                     End If
@@ -3935,11 +3838,11 @@ Label_00CC:
     End Sub
 
     Private Sub RastreamentoDeBugsToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RastreamentoDeBugsToolStripMenuItem.Click
-        System.Diagnostics.Process.Start("https://sourceforge.net/p/dwsim/tickets/")
+        System.Diagnostics.Process.Start("https://github.com/DanWBR/dwsim6/issues")
     End Sub
 
     Private Sub DonateToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
-        System.Diagnostics.Process.Start("https://gumroad.com/products/PTljX")
+        System.Diagnostics.Process.Start("https://www.paypal.com/cgi-bin/webscr?item_name=Donation+to+DWSIM+-+Open+Source+Process+Simulator&cmd=_donations&business=danielwag%40gmail.com&lc=US")
     End Sub
 
     Private Sub MostrarBarraDeFerramentasToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MostrarBarraDeFerramentasToolStripMenuItem.Click
@@ -4115,6 +4018,30 @@ Label_00CC:
             ' There was an error during the operation.
             Console.WriteLine("Error saving backup file: " & e.Error.Message)
         End If
+    End Sub
+
+    Private Sub ReaktoroToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ReaktoroToolStripMenuItem.Click
+        Process.Start("http://dwsim.inforside.com.br/wiki/index.php?title=Aqueous_Electrolytes_Property_Package")
+    End Sub
+
+    Private Sub NNUOToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles NNUOToolStripMenuItem.Click
+        Process.Start("http://dwsim.inforside.com.br/wiki/index.php?title=Neural_Network_Unit_Operation")
+    End Sub
+
+    Private Sub PNUOToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles PNUOToolStripMenuItem.Click
+        Process.Start("http://dwsim.inforside.com.br/wiki/index.php?title=Pipe_Network_Unit_Operation")
+    End Sub
+
+    Private Sub CapitalCostToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles CapitalCostToolStripMenuItem.Click
+        Process.Start("http://dwsim.inforside.com.br/wiki/index.php?title=Capital_Cost_Estimator")
+    End Sub
+
+    Private Sub OPCPluginToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OPCPluginToolStripMenuItem.Click
+        Process.Start("http://dwsim.inforside.com.br/wiki/index.php?title=OPC_Client_Plugin")
+    End Sub
+
+    Private Sub DTLToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DTLToolStripMenuItem.Click
+        Process.Start("http://dwsim.inforside.com.br/wiki/index.php?title=DTL")
     End Sub
 
     Private Sub tsbInspector_CheckedChanged(sender As Object, e As EventArgs) Handles tsbInspector.CheckedChanged

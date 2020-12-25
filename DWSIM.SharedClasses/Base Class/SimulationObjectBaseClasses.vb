@@ -46,7 +46,9 @@ Namespace UnitOperations
 
         Public Overridable Property Visible As Boolean = True
 
-        <System.NonSerialized()> <Xml.Serialization.XmlIgnore> Public LaunchExternalPropertyEditor() As Action(Of ISimulationObject)
+        <NonSerialized()> <Xml.Serialization.XmlIgnore> Public LaunchExternalPropertyEditor() As Action(Of ISimulationObject)
+
+        <NonSerialized()> <Xml.Serialization.XmlIgnore> Public ExtraPropertiesEditor As Form
 
         Public Property OverrideCalculationRoutine As Boolean = False
 
@@ -82,6 +84,75 @@ Namespace UnitOperations
 
 #Region "    ISimulationObject"
 
+        Public Sub AddExtraProperty(pname As String, pvalue As Object) Implements ISimulationObject.AddExtraProperty
+
+            Dim col1 = DirectCast(ExtraProperties, IDictionary(Of String, Object))
+
+            If Not col1.ContainsKey(pname) Then
+                col1.Add(pname, pvalue)
+            Else
+                Throw New Exception("Property already exists.")
+            End If
+
+        End Sub
+
+        Public Sub RemoveExtraProperty(pname As String) Implements ISimulationObject.RemoveExtraProperty
+
+            Dim col1 = DirectCast(ExtraProperties, IDictionary(Of String, Object))
+
+            If col1.ContainsKey(pname) Then
+                col1.Remove(pname)
+            Else
+                Throw New Exception("Property doesn't exist.")
+            End If
+
+        End Sub
+
+        Public Sub SetExtraPropertyValue(pname As String, pvalue As Object) Implements ISimulationObject.SetExtraPropertyValue
+
+            Dim col1 = DirectCast(ExtraProperties, IDictionary(Of String, Object))
+
+            If col1.ContainsKey(pname) Then
+                col1(pname) = pvalue
+            Else
+                Throw New Exception("Property doesn't exist.")
+            End If
+
+        End Sub
+
+        Public Function GetExtraPropertyValue(pname As String) As Object Implements ISimulationObject.GetExtraPropertyValue
+
+            Dim col1 = DirectCast(ExtraProperties, IDictionary(Of String, Object))
+
+            If col1.ContainsKey(pname) Then
+                Return col1(pname)
+            Else
+                Throw New Exception("Property doesn't exist.")
+            End If
+
+        End Function
+
+        Public Sub ClearExtraProperties() Implements ISimulationObject.ClearExtraProperties
+
+            Dim col1 = DirectCast(ExtraProperties, IDictionary(Of String, Object))
+            Dim col2 = DirectCast(ExtraPropertiesDescriptions, IDictionary(Of String, Object))
+            Dim col3 = DirectCast(ExtraPropertiesUnitTypes, IDictionary(Of String, Object))
+
+            Dim toremove As New List(Of String)
+            For Each p In col1
+                If Not col2.ContainsKey(p.Key) And Not col3.ContainsKey(p.Key) Then
+                    toremove.Add(p.Key)
+                Else
+                    'Throw New Exception("Property already exists.")
+                End If
+            Next
+
+            For Each item In toremove
+                col1.Remove(item)
+            Next
+
+        End Sub
+
         Public Sub AddDynamicProperty(pname As String, pdesc As String, pvalue As Double,
                                punittype As Enums.UnitOfMeasure) Implements ISimulationObject.AddDynamicProperty
 
@@ -113,7 +184,7 @@ Namespace UnitOperations
 
             Dim col1 = DirectCast(ExtraProperties, IDictionary(Of String, Object))
 
-            Return col1(id)
+            If col1.ContainsKey(id) Then Return col1(id) Else Return Nothing
 
         End Function
 
@@ -121,7 +192,7 @@ Namespace UnitOperations
 
             Dim col1 = DirectCast(ExtraPropertiesUnitTypes, IDictionary(Of String, Object))
 
-            Return col1(id)
+            If col1.ContainsKey(id) Then Return col1(id) Else Return Nothing
 
         End Function
 
@@ -183,7 +254,7 @@ Namespace UnitOperations
 
         <Xml.Serialization.XmlIgnore> Public Property DebugText As String = "" Implements Interfaces.ISimulationObject.DebugText
 
-        <Xml.Serialization.XmlIgnore> Public Property LastUpdated As New Date Implements Interfaces.ISimulationObject.LastUpdated
+        Public Property LastUpdated As New Date Implements Interfaces.ISimulationObject.LastUpdated
 
         ''' <summary>
         ''' Calculates the object.
@@ -218,7 +289,7 @@ Namespace UnitOperations
                 Dim ebe As Double = 0.0#
                 Dim mbt As Double = 0.0#
                 Dim ebt As Double = 0.0#
-                Dim mi, hi As Double
+                Dim mi, hi, hf As Double
 
                 Dim imsc As List(Of ISimulationObject) = GraphicObject.InputConnectors.Where(Function(x) x.IsAttached And Not (x.IsEnergyConnector Or x.Type = ConType.ConEn)).Select(Function(x) FlowSheet.SimulationObjects(x.AttachedConnector.AttachedFrom.Name)).ToList
                 Dim omsc As List(Of ISimulationObject) = GraphicObject.OutputConnectors.Where(Function(x) x.IsAttached And Not (x.IsEnergyConnector Or x.Type = ConType.ConEn)).Select(Function(x) FlowSheet.SimulationObjects(x.AttachedConnector.AttachedTo.Name)).ToList
@@ -231,6 +302,10 @@ Namespace UnitOperations
                         hi = Convert.ToDouble(ims.GetPropertyValue("PROP_MS_7"))
                         eb -= mi * hi 'kg/s * kJ/kg = kJ/s = kW
                         ebt += Math.Abs(mi * hi)
+                        'heats of formation
+                        hf = DirectCast(ims, IMaterialStream).GetOverallHeatOfFormation()
+                        eb -= hf
+                        ebt += Math.Abs(hf)
                     End If
                 Next
 
@@ -242,6 +317,10 @@ Namespace UnitOperations
                         hi = Convert.ToDouble(oms.GetPropertyValue("PROP_MS_7"))
                         eb += mi * hi 'kg/s * kJ/kg = kJ/s = kW
                         ebt += Math.Abs(mi * hi)
+                        'heats of formation
+                        hf = DirectCast(oms, IMaterialStream).GetOverallHeatOfFormation()
+                        eb += hf
+                        ebt += Math.Abs(hf)
                     End If
                 Next
 
@@ -289,17 +368,12 @@ Namespace UnitOperations
                     End If
                 End If
 
-                If GraphicObject.ObjectType <> ObjectType.RCT_Conversion And GraphicObject.ObjectType <> ObjectType.RCT_CSTR And
-                GraphicObject.ObjectType <> ObjectType.RCT_Equilibrium And GraphicObject.ObjectType <> ObjectType.RCT_Gibbs And
-                GraphicObject.ObjectType <> ObjectType.RCT_PFR Then
-                    If ebe > FlowSheet.FlowsheetOptions.EnergyBalanceRelativeTolerance Then
-                        If FlowSheet.FlowsheetOptions.EnergyBalanceCheck = WarningType.RaiseError Then
-                            Throw New Exception(GraphicObject.Tag + ": " + FlowSheet.GetTranslatedString("EnergyBalanceMessage") + " (" + ebe.ToString() + " > " + FlowSheet.FlowsheetOptions.EnergyBalanceRelativeTolerance.ToString + ")")
-                        ElseIf FlowSheet.FlowsheetOptions.EnergyBalanceCheck = WarningType.ShowWarning Then
-                            FlowSheet.ShowMessage(GraphicObject.Tag + ": " + FlowSheet.GetTranslatedString("EnergyBalanceMessage") + " (" + ebe.ToString() + " > " + FlowSheet.FlowsheetOptions.EnergyBalanceRelativeTolerance.ToString + ")", IFlowsheet.MessageType.Warning)
-                        End If
+                If ebe > FlowSheet.FlowsheetOptions.EnergyBalanceRelativeTolerance Then
+                    If FlowSheet.FlowsheetOptions.EnergyBalanceCheck = WarningType.RaiseError Then
+                        Throw New Exception(GraphicObject.Tag + ": " + FlowSheet.GetTranslatedString("EnergyBalanceMessage") + " (" + ebe.ToString() + " > " + FlowSheet.FlowsheetOptions.EnergyBalanceRelativeTolerance.ToString + ")")
+                    ElseIf FlowSheet.FlowsheetOptions.EnergyBalanceCheck = WarningType.ShowWarning Then
+                        FlowSheet.ShowMessage(GraphicObject.Tag + ": " + FlowSheet.GetTranslatedString("EnergyBalanceMessage") + " (" + ebe.ToString() + " > " + FlowSheet.FlowsheetOptions.EnergyBalanceRelativeTolerance.ToString + ")", IFlowsheet.MessageType.Warning)
                     End If
-
                 End If
 
             End If
@@ -997,6 +1071,44 @@ Namespace UnitOperations
         End Function
 
         Public Overridable Sub CreateDynamicProperties() Implements ISimulationObject.CreateDynamicProperties
+
+        End Sub
+
+        Public Sub DisplayExtraPropertiesEditForm() Implements ISimulationObject.DisplayExtraPropertiesEditForm
+
+            Dim col1 = DirectCast(ExtraProperties, IDictionary(Of String, Object))
+            Dim col2 = DirectCast(ExtraPropertiesDescriptions, IDictionary(Of String, Object))
+            Dim count As Integer = 0
+            For Each prop In col1
+                If Not col2.ContainsKey(prop.Key) Then
+                    count += 1
+                End If
+            Next
+
+            If count > 0 Then
+                If ExtraPropertiesEditor Is Nothing Then
+                    ExtraPropertiesEditor = New FormExtraProperties With {.SimObject = Me}
+                    Me.FlowSheet.DisplayForm(ExtraPropertiesEditor)
+                Else
+                    If ExtraPropertiesEditor.IsDisposed Then
+                        ExtraPropertiesEditor = New FormExtraProperties With {.SimObject = Me}
+                        ExtraPropertiesEditor.Tag = "ObjectEditor"
+                        Me.FlowSheet.DisplayForm(ExtraPropertiesEditor)
+                    Else
+                        DirectCast(ExtraPropertiesEditor, FormExtraProperties).Activate()
+                    End If
+                End If
+            End If
+
+        End Sub
+
+        Public Sub UpdateExtraPropertiesEditForm() Implements ISimulationObject.UpdateExtraPropertiesEditForm
+
+            If ExtraPropertiesEditor IsNot Nothing Then
+                If Not ExtraPropertiesEditor.IsDisposed Then
+                    ExtraPropertiesEditor.UIThread(Sub() DirectCast(ExtraPropertiesEditor, FormExtraProperties).UpdateValues())
+                End If
+            End If
 
         End Sub
 

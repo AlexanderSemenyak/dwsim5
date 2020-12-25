@@ -66,21 +66,24 @@ Namespace GraphicObjects.Tables
 
         Public Overrides Function SaveData() As System.Collections.Generic.List(Of System.Xml.Linq.XElement)
 
-
             Dim elements As System.Collections.Generic.List(Of System.Xml.Linq.XElement) = MyBase.SaveData()
 
             With elements
 
                 .Add(New XElement("Objects"))
 
+                Dim name As String
+
                 For Each kvp As KeyValuePair(Of String, Boolean) In m_objectlist
-                    elements(elements.Count - 1).Add(New XElement(XmlConvert.EncodeName(kvp.Key), kvp.Value))
+                    name = XmlConvert.EncodeLocalName(kvp.Key)
+                    elements(elements.Count - 1).Add(New XElement(Name, kvp.Value))
                 Next
 
                 .Add(New XElement("Properties"))
 
                 For Each kvp As KeyValuePair(Of String, Boolean) In m_propertylist
-                    elements(elements.Count - 1).Add(New XElement(XmlConvert.EncodeName(kvp.Key), kvp.Value))
+                    name = XmlConvert.EncodeLocalName(kvp.Key)
+                    elements(elements.Count - 1).Add(New XElement(Name, kvp.Value))
                 Next
 
                 .Add(New XElement("SortableItems"))
@@ -261,8 +264,10 @@ Namespace GraphicObjects.Tables
                                     mypropid = p
                                     Dim value As Object = myobj.GetPropertyValue(mypropid, su)
                                     If Double.TryParse(value, New Double) Then
-                                        m_items(kvp.Key).Add(New NodeItem(Flowsheet.GetTranslatedString(kvp2.Key), Format(Double.Parse(value), nf), myobj.GetPropertyUnit(mypropid, su), 0, 0, ""))
+                                        Dim val = Convert.ToDouble(value)
+                                        m_items(kvp.Key).Add(New NodeItem(Flowsheet.GetTranslatedString(kvp2.Key), val.ToString(nf), myobj.GetPropertyUnit(mypropid, su), 0, 0, ""))
                                     Else
+                                        If value Is Nothing Then value = ""
                                         m_items(kvp.Key).Add(New NodeItem(Flowsheet.GetTranslatedString(kvp2.Key), value, myobj.GetPropertyUnit(mypropid, su), 0, 0, ""))
                                     End If
                                     Exit For

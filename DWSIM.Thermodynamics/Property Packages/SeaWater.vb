@@ -518,6 +518,8 @@ Namespace PropertyPackages
 
             If DirectCast(Vx, Double()).Sum > 0.0# Then
                 Select Case st
+                    Case State.Solid
+                        Return Me.SIA.sea_enthalpy_si(CalcSalinity(Vx), T, P) / 1000 - Me.RET_HFUSM(AUX_CONVERT_MOL_TO_MASS(Vx), T)
                     Case State.Liquid
                         Return Me.SIA.sea_enthalpy_si(CalcSalinity(Vx), T, P) / 1000
                     Case State.Vapor
@@ -566,6 +568,8 @@ Namespace PropertyPackages
         Public Overrides Function DW_CalcEntropy(ByVal Vx As System.Array, ByVal T As Double, ByVal P As Double, ByVal st As State) As Double
             If DirectCast(Vx, Double()).Sum > 0.0# Then
                 Select Case st
+                    Case State.Solid
+                        Return Me.SIA.sea_entropy_si(CalcSalinity(Vx), T, P) / 1000 - Me.RET_HFUSM(AUX_CONVERT_MOL_TO_MASS(Vx), T) / T
                     Case State.Liquid
                         Return Me.SIA.sea_entropy_si(CalcSalinity, T, P) / 1000
                     Case State.Vapor
@@ -599,7 +603,7 @@ Namespace PropertyPackages
 
             If st = State.Liquid Then
 
-                Dim Tc As Object = Me.RET_VTC()
+                Dim Tc As Double() = Me.RET_VTC()
 
                 For i = 0 To n
 
@@ -667,7 +671,7 @@ Namespace PropertyPackages
 
         Public Function VaporPressure(Vx As Double(), T As Double) As Double
 
-            If Vx.Sum > 0.0# Then
+            If Vx.Sum > 0.0000000002 Then
                 Return Me.SIA.sea_vaporpressure(CalcSalinity(Vx), T)
             Else
                 Return Me.m_iapws97.pSatW(T) * 100000

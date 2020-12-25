@@ -611,7 +611,6 @@
     <Compile Include="Reactors\PFR.vb" />
     <Compile Include="Resource Manager\ResMan.vb" />
     <Compile Include="Support Classes\PipeThermalProfile.vb" />
-    <Compile Include="Support Classes\RigorousColumnSolver.vb" />
     <Compile Include="Support Classes\ComboBoxColumnTemplates.vb" />
     <Compile Include="Type Resolver\Resolver.vb" />
     <Compile Include="CAPE-OPEN\CustomUO_CO.vb" />
@@ -755,9 +754,6 @@
       <DependentUpon>EditingForm_PIDController.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Editing Forms\EditingForm_Pipe.de.resx">
-      <DependentUpon>EditingForm_Pipe.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Editing Forms\EditingForm_Pipe.ru.resx">
       <DependentUpon>EditingForm_Pipe.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Editing Forms\EditingForm_Pump.de.resx">
@@ -1697,6 +1693,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\switch_on.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\lightning.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

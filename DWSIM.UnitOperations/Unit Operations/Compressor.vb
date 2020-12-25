@@ -271,7 +271,7 @@ Namespace UnitOperations
                 End If
             End If
 
-            Dim Ti, Pi, Hi, Si, Wi, rho_vi, qvi, qli, ei, ein, T2, T2s, P2, P2i, Qloop, Qi, H2, H2s, cpig, cp, cv, mw, fx, fx0, fx00, P2i0, P2i00 As Double
+            Dim Ti, Pi, Hi, Si, Wi, rho_vi, qvi, ei, ein, T2, T2s, P2, P2i, Qloop, Qi, H2, H2s, cpig, cp, cv, mw, fx, fx0, fx00, P2i0, P2i00 As Double
 
             Dim msin, msout As MaterialStream, esin As Streams.EnergyStream
 
@@ -285,7 +285,8 @@ Namespace UnitOperations
                 esin = args(2)
             End If
 
-            qli = msin.Phases(1).Properties.volumetric_flow.ToString
+            Dim Pout0 As Double = msout.GetPressure()
+            Dim Tout0 As Double = msout.GetTemperature()
 
             If DebugMode Then AppendDebugLine("Calculation mode: " & CalcMode.ToString)
 
@@ -296,19 +297,19 @@ Namespace UnitOperations
                 Case CalculationMode.EnergyStream, CalculationMode.Head, CalculationMode.PowerRequired
 
 Curves:             Me.PropertyPackage.CurrentMaterialStream = msin
-                    Ti = msin.Phases(0).Properties.temperature
-                    Pi = msin.Phases(0).Properties.pressure
-                    rho_vi = msin.Phases(2).Properties.density
+                    Ti = msin.Phases(0).Properties.temperature.GetValueOrDefault
+                    Pi = msin.Phases(0).Properties.pressure.GetValueOrDefault
+                    rho_vi = msin.Phases(2).Properties.density.GetValueOrDefault
                     IObj?.SetCurrent()
                     cpig = Me.PropertyPackage.AUX_CPm(PhaseName.Vapor, Ti)
-                    cp = msin.Phases(0).Properties.heatCapacityCp
-                    cv = msin.Phases(0).Properties.heatCapacityCv
-                    mw = msin.Phases(0).Properties.molecularWeight
-                    qvi = msin.Phases(2).Properties.volumetric_flow
-                    Hi = msin.Phases(0).Properties.enthalpy
-                    Si = msin.Phases(0).Properties.entropy
-                    Wi = msin.Phases(0).Properties.massflow
-                    Qi = msin.Phases(0).Properties.molarflow
+                    cp = msin.Phases(0).Properties.heatCapacityCp.GetValueOrDefault
+                    cv = msin.Phases(0).Properties.heatCapacityCv.GetValueOrDefault
+                    mw = msin.Phases(0).Properties.molecularWeight.GetValueOrDefault
+                    qvi = msin.Phases(2).Properties.volumetric_flow.GetValueOrDefault
+                    Hi = msin.Phases(0).Properties.enthalpy.GetValueOrDefault
+                    Si = msin.Phases(0).Properties.entropy.GetValueOrDefault
+                    Wi = msin.Phases(0).Properties.massflow.GetValueOrDefault
+                    Qi = msin.Phases(0).Properties.molarflow.GetValueOrDefault
                     ei = Hi * Wi
                     ein = ei
 
@@ -337,7 +338,7 @@ Curves:             Me.PropertyPackage.CurrentMaterialStream = msin
                             End If
                     End Select
 
-                    CheckSpec(Me.DeltaQ, True, "power")
+                    'CheckSpec(Me.DeltaQ, True, "power")
 
                     With esin
                         .EnergyFlow = Me.DeltaQ
@@ -361,7 +362,9 @@ Curves:             Me.PropertyPackage.CurrentMaterialStream = msin
                     Do
 
                         IObj?.SetCurrent()
-                        tmp = Me.PropertyPackage.CalculateEquilibrium2(FlashCalculationType.PressureEntropy, P2i, Si, 0)
+                        tmp = Me.PropertyPackage.CalculateEquilibrium2(FlashCalculationType.PressureEntropy, P2i, Si, Tout0)
+
+                        Tout0 = tmp.CalculatedTemperature
 
                         If ProcessPath = ProcessPathType.Adiabatic Then
                             Qloop = Wi * (tmp.CalculatedEnthalpy - Hi) / (Me.AdiabaticEfficiency / 100)
@@ -404,7 +407,7 @@ Curves:             Me.PropertyPackage.CurrentMaterialStream = msin
                     If DebugMode Then AppendDebugLine(String.Format("Doing a PS flash to calculate ideal outlet enthalpy... P = {0} Pa, S = {1} kJ/[kg.K]", P2, Si))
 
                     IObj?.SetCurrent()
-                    tmp = Me.PropertyPackage.CalculateEquilibrium2(FlashCalculationType.PressureEntropy, P2, Si, 0)
+                    tmp = Me.PropertyPackage.CalculateEquilibrium2(FlashCalculationType.PressureEntropy, P2, Si, Tout0)
                     T2s = tmp.CalculatedTemperature
                     H2s = tmp.CalculatedEnthalpy
 
@@ -429,7 +432,7 @@ Curves:             Me.PropertyPackage.CurrentMaterialStream = msin
                     If DebugMode Then AppendDebugLine(String.Format("Doing a PH flash to calculate outlet temperature... P = {0} Pa, H = {1} kJ/[kg.K]", P2, H2))
 
                     IObj?.SetCurrent()
-                    tmp = Me.PropertyPackage.CalculateEquilibrium2(FlashCalculationType.PressureEnthalpy, P2, H2, Ti)
+                    tmp = Me.PropertyPackage.CalculateEquilibrium2(FlashCalculationType.PressureEnthalpy, P2, H2, T2s)
 
                     T2 = tmp.CalculatedTemperature
 
@@ -544,15 +547,15 @@ Curves:             Me.PropertyPackage.CurrentMaterialStream = msin
                 Case CalculationMode.Delta_P, CalculationMode.OutletPressure
 
                     Me.PropertyPackage.CurrentMaterialStream = msin
-                    Ti = msin.Phases(0).Properties.temperature
-                    Pi = msin.Phases(0).Properties.pressure
-                    rho_vi = msin.Phases(2).Properties.density
-                    qvi = msin.Phases(2).Properties.volumetric_flow
-                    Hi = msin.Phases(0).Properties.enthalpy
-                    Si = msin.Phases(0).Properties.entropy
-                    Wi = msin.Phases(0).Properties.massflow
-                    Qi = msin.Phases(0).Properties.molarflow
-                    mw = msin.Phases(0).Properties.molecularWeight
+                    Ti = msin.Phases(0).Properties.temperature.GetValueOrDefault
+                    Pi = msin.Phases(0).Properties.pressure.GetValueOrDefault
+                    rho_vi = msin.Phases(2).Properties.density.GetValueOrDefault
+                    qvi = msin.Phases(2).Properties.volumetric_flow.GetValueOrDefault
+                    Hi = msin.Phases(0).Properties.enthalpy.GetValueOrDefault
+                    Si = msin.Phases(0).Properties.entropy.GetValueOrDefault
+                    Wi = msin.Phases(0).Properties.massflow.GetValueOrDefault
+                    Qi = msin.Phases(0).Properties.molarflow.GetValueOrDefault
+                    mw = msin.Phases(0).Properties.molecularWeight.GetValueOrDefault
                     ei = Hi * Wi
                     ein = ei
 
@@ -583,7 +586,7 @@ Curves:             Me.PropertyPackage.CurrentMaterialStream = msin
                     If DebugMode Then AppendDebugLine(String.Format("Doing a PS flash to calculate ideal outlet enthalpy... P = {0} Pa, S = {1} kJ/[kg.K]", P2, Si))
 
                     IObj?.SetCurrent()
-                    Dim tmp = Me.PropertyPackage.CalculateEquilibrium2(FlashCalculationType.PressureEntropy, P2, Si, 0)
+                    Dim tmp = Me.PropertyPackage.CalculateEquilibrium2(FlashCalculationType.PressureEntropy, P2, Si, Tout0)
                     T2 = tmp.CalculatedTemperature
                     T2s = T2
                     H2 = tmp.CalculatedEnthalpy
@@ -612,7 +615,7 @@ Curves:             Me.PropertyPackage.CurrentMaterialStream = msin
 
                     If DebugMode Then AppendDebugLine(String.Format("Calculated real compressor power = {0} kW", DeltaQ))
 
-                    CheckSpec(DeltaQ, True, "power")
+                    'CheckSpec(DeltaQ, True, "power")
 
                     If DebugMode Then AppendDebugLine(String.Format("Doing a PH flash to calculate outlet temperature... P = {0} Pa, H = {1} kJ/[kg.K]", P2, Hi + Me.DeltaQ / Wi))
 
@@ -688,7 +691,7 @@ Curves:             Me.PropertyPackage.CurrentMaterialStream = msin
 
                     ' 1 W = 1 kg*m2/s3 
 
-                    AdiabaticHead = Wic * 1000 / Wi / 9.8 'm
+                    AdiabaticHead = Wic * 1000 / Wi / 9.8 ' m
 
                     PolytropicHead = Wpc * 1000 / Wi / 9.8 ' m
 
@@ -713,8 +716,8 @@ Curves:             Me.PropertyPackage.CurrentMaterialStream = msin
                             .Phases(0).Properties.enthalpy = H2
                             Dim comp As BaseClasses.Compound
                             For Each comp In .Phases(0).Compounds.Values
-                                comp.MoleFraction = msin.Phases(0).Compounds(comp.Name).MoleFraction
-                                comp.MassFraction = msin.Phases(0).Compounds(comp.Name).MassFraction
+                                comp.MoleFraction = msin.Phases(0).Compounds(comp.Name).MoleFraction.GetValueOrDefault
+                                comp.MassFraction = msin.Phases(0).Compounds(comp.Name).MassFraction.GetValueOrDefault
                             Next
                             .Phases(0).Properties.massflow = msin.Phases(0).Properties.massflow
                         End With
@@ -749,10 +752,10 @@ Curves:             Me.PropertyPackage.CurrentMaterialStream = msin
 
                         If chead.xunit.Contains("@ P,T") Then
                             'actual flow
-                            qint = msin.Phases(0).Properties.volumetric_flow
+                            qint = msin.Phases(0).Properties.volumetric_flow.GetValueOrDefault
                         Else
                             ' molar flow
-                            qint = msin.Phases(0).Properties.molarflow
+                            qint = msin.Phases(0).Properties.molarflow.GetValueOrDefault
                         End If
 
                         Dim i As Integer

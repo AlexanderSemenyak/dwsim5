@@ -133,6 +133,7 @@ Public Class FormWelcome
     Private Sub lvlatest_ItemActivate(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lvlatest.ItemActivate, lvsamples.ItemActivate
 
         Me.Parent.Visible = False
+        FormMain.PainelDeBoasvindasToolStripMenuItem.Checked = False
 
         Dim lview = DirectCast(sender, ListView)
 
@@ -338,6 +339,7 @@ Public Class FormWelcome
                                                                              Dim xdoc = SharedClasses.FOSSEEFlowsheets.LoadFlowsheet(tk.Result)
                                                                              Me.UIThread(Sub()
                                                                                              Me.Parent.Visible = False
+                                                                                             FormMain.PainelDeBoasvindasToolStripMenuItem.Checked = False
                                                                                              floading.Label1.Text = DWSIM.App.GetLocalString("LoadingFile") & vbCrLf & "(" & item.Title & ")"
                                                                                              floading.Show()
                                                                                              Application.DoEvents()
@@ -453,4 +455,11 @@ Public Class FormWelcome
     Private Sub LinkLabel7_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel7.LinkClicked
         Process.Start("https://www.patreon.com/join/dwsim?")
     End Sub
+
+    Private Sub FormWelcome_VisibleChanged(sender As Object, e As EventArgs) Handles Me.VisibleChanged
+
+        FormMain.PainelDeBoasvindasToolStripMenuItem.Checked = Visible
+
+    End Sub
+
 End Class

@@ -124,10 +124,10 @@
     <value>Блок контроллера</value>
   </data>
   <data name="AG_Desc" xml:space="preserve">
-    <value>Analog Gauge</value>
+    <value>Аналоговая шкала</value>
   </data>
   <data name="AG_Name" xml:space="preserve">
-    <value>Analog Gauge</value>
+    <value>Аналоговая шкала</value>
   </data>
   <data name="CABS_Desc" xml:space="preserve">
     <value>Model for rigorous simulation of absorption columns</value>
@@ -145,7 +145,7 @@
     <value>Model for a compressor</value>
   </data>
   <data name="COMP_Name" xml:space="preserve">
-    <value>Compressor</value>
+    <value>Компрессор</value>
   </data>
   <data name="CONV_Desc" xml:space="preserve">
     <value>Supports reactions defined by amounts of reactant converted as a function of temperature</value>
@@ -199,7 +199,7 @@
     <value>Digital Gauge Display</value>
   </data>
   <data name="DG_Name" xml:space="preserve">
-    <value>Digital Gauge</value>
+    <value>Цифровой индикатор</value>
   </data>
   <data name="EQUIL_Desc" xml:space="preserve">
     <value>Supports equilibrium constant-defined reactions</value>
@@ -265,7 +265,7 @@
     <value>Displays and updates a variable directly from the flowsheet</value>
   </data>
   <data name="IN_Name" xml:space="preserve">
-    <value>Input Box</value>
+    <value>Поле ввода</value>
   </data>
   <data name="IPUO_Desc" xml:space="preserve">
     <value>Python Script Unit Operation</value>
@@ -274,10 +274,10 @@
     <value>Скрипт Pyton</value>
   </data>
   <data name="LG_Desc" xml:space="preserve">
-    <value>Level Gauge</value>
+    <value>Шкала уровня</value>
   </data>
   <data name="LG_Name" xml:space="preserve">
-    <value>Level Gauge</value>
+    <value>Шкала уровня</value>
   </data>
   <data name="MIX_Desc" xml:space="preserve">
     <value>Mixes multiple Material Streams into a single one</value>
@@ -304,10 +304,10 @@
     <value>Реактор с поршневым потоком (PFR)</value>
   </data>
   <data name="PID_Desc" xml:space="preserve">
-    <value>PID Controller</value>
+    <value>PID-контроллер</value>
   </data>
   <data name="PID_Name" xml:space="preserve">
-    <value>PID Controller</value>
+    <value>PID-контроллер</value>
   </data>
   <data name="PIPE_Desc" xml:space="preserve">
     <value>Defines a piping segment for pressure drop calculations</value>
@@ -316,7 +316,7 @@
     <value>Сегмент трубы</value>
   </data>
   <data name="PUMP_Desc" xml:space="preserve">
-    <value>Centrifugal Pump model</value>
+    <value>Pump model</value>
   </data>
   <data name="PUMP_Err1" xml:space="preserve">
     <value>No type defined!</value>
@@ -364,7 +364,7 @@
     <value>Changes a variable to one of two possible values</value>
   </data>
   <data name="SW_Name" xml:space="preserve">
-    <value>Switch</value>
+    <value>Переключатель</value>
   </data>
   <data name="TANK_Desc" xml:space="preserve">
     <value>Simple Tank model</value>

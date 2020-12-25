@@ -1,4 +1,5 @@
-﻿Imports DWSIM.Thermodynamics.BaseClasses
+﻿Imports System.Reflection
+Imports DWSIM.Thermodynamics.BaseClasses
 Imports DWSIM.Thermodynamics.PropertyPackages
 
 Module Example1
@@ -6,17 +7,17 @@ Module Example1
     Sub Main()
 
         Console.WriteLine("DTL Property and Equilibrium calculation example with Water and Ethanol")
-        Console.WriteLine(vbCrLf)
 
         Dim dtlc As New DWSIM.Thermodynamics.CalculatorInterface.Calculator
 
+        Console.WriteLine(String.Format("DTL version: {0}", Assembly.GetAssembly(dtlc.GetType()).GetName.Version))
+        Console.WriteLine(vbCrLf)
+
         dtlc.Initialize()
 
-        Dim proppacks As String() = dtlc.GetPropPackList()
+        Dim prpp As New NRTLPropertyPackage(True)
 
-        Dim nrtl As String = proppacks(8)
-
-        Dim prpp As PropertyPackage = dtlc.GetPropPackInstance(nrtl)
+        dtlc.TransferCompounds(prpp)
 
         Dim compprops As String()
 
@@ -128,7 +129,7 @@ Module Example1
                 values = dtlc.CalcProp(prpp, prop, "Mole", "Vapor", New String() {"Water", "Ethanol"}, T, P, New Double() {Double.Parse(result2(2, 0).ToString), Double.Parse(result2(3, 0).ToString)})
                 line = ""
                 For i = 0 To values.Length - 1
-                    line += Double.Parse(values(i).ToString).ToString("N6") & vbTab
+                    line += Double.Parse(values(i).ToString).ToString("G6") & vbTab
                 Next
                 Console.WriteLine(prop.PadRight(30) & vbTab & line)
             Catch ex As CapeOpen.CapeThrmPropertyNotAvailableException
@@ -152,7 +153,7 @@ Module Example1
                 values = dtlc.CalcProp(prpp, prop, "Mole", "Liquid", New String() {"Water", "Ethanol"}, T, P, New Double() {Double.Parse(result2(2, 1).ToString), Double.Parse(result2(3, 1).ToString)})
                 line = ""
                 For i = 0 To values.Length - 1
-                    line += Double.Parse(values(i).ToString).ToString("N6") & vbTab
+                    line += Double.Parse(values(i).ToString).ToString("G6") & vbTab
                 Next
                 Console.WriteLine(prop.PadRight(30) & vbTab & line)
             Catch ex As CapeOpen.CapeThrmPropertyNotAvailableException

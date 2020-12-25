@@ -34,6 +34,8 @@ Namespace CalculatorInterface
 
         Private _availablecomps As Dictionary(Of String, BaseClasses.ConstantProperties)
 
+        Private _rpp As RaoultPropertyPackage
+
         Sub New()
 
         End Sub
@@ -47,13 +49,23 @@ Namespace CalculatorInterface
             'load databases
             _availablecomps = New Dictionary(Of String, BaseClasses.ConstantProperties)
 
-            ''ChemSep
-            Me.LoadCSDB()
+            LoadCSDB()
+            LoadDWSIMDB()
+            LoadBDDB()
+            LoadEDB()
+            LoadCheDLDB()
 
-            ''load DWSIM XML database
-            'Me.LoadDWSIMDB()
+            _rpp = New RaoultPropertyPackage(True)
+            TransferCompounds(_rpp)
 
             GlobalSettings.Settings.InspectorEnabled = False
+
+            'preload IPOPT libraries
+            If GlobalSettings.Settings.RunningPlatform = Settings.Platform.Windows Then
+
+                IPOPTLoader.Load()
+
+            End If
 
         End Sub
 
@@ -72,11 +84,17 @@ Namespace CalculatorInterface
 
         End Sub
 
-        Private Sub TransferComps(ByRef pp As PropertyPackage)
+        Public Sub TransferCompounds(ByVal pp As PropertyPackage)
 
             pp._availablecomps = _availablecomps
 
         End Sub
+
+        Public ReadOnly Property AvailableCompounds As Dictionary(Of String, BaseClasses.ConstantProperties)
+            Get
+                Return _availablecomps
+            End Get
+        End Property
 
         ''' <summary>
         ''' Enables CPU parallel processing for some tasks.
@@ -154,6 +172,59 @@ Namespace CalculatorInterface
             Next
         End Sub
 
+        Public Sub LoadCheDLDB()
+
+            Dim chedl As New Databases.ChEDL_Thermo
+            Dim cpa() As BaseClasses.ConstantProperties
+            chedl.Load()
+            cpa = chedl.Transfer().ToArray()
+            Dim addedcomps = _availablecomps.Keys.Select(Function(x) x.ToLower).ToList()
+            For Each cp As BaseClasses.ConstantProperties In cpa
+                If Not addedcomps.Contains(cp.Name.ToLower) AndAlso Not _availablecomps.ContainsKey(cp.Name) Then
+                    If _availablecomps.Values.Where(Function(x) x.CAS_Number = cp.CAS_Number).Count = 0 Then
+                        _availablecomps.Add(cp.Name, cp)
+                    End If
+                End If
+            Next
+
+        End Sub
+
+        Private Sub LoadBDDB()
+            Dim bddb As New Databases.Biodiesel
+            Dim cpa() As BaseClasses.ConstantProperties
+            bddb.Load()
+            cpa = bddb.Transfer()
+            For Each cp As BaseClasses.ConstantProperties In cpa
+                If Not _availablecomps.ContainsKey(cp.Name) Then _availablecomps.Add(cp.Name, cp)
+            Next
+        End Sub
+
+        Private Sub LoadEDB()
+            Dim edb As New Databases.Electrolyte
+            Dim cpa() As BaseClasses.ConstantProperties
+            edb.Load()
+            cpa = edb.Transfer()
+            For Each cp As BaseClasses.ConstantProperties In cpa
+                If Not _availablecomps.ContainsKey(cp.Name) Then _availablecomps.Add(cp.Name, cp)
+            Next
+        End Sub
+
+        Private Sub LoadCPDB()
+            Dim cpdb As New Databases.CoolProp
+            Dim cpa() As BaseClasses.ConstantProperties
+            cpdb.Load()
+            Try
+                cpa = cpdb.Transfer()
+                For Each cp As BaseClasses.ConstantProperties In cpa
+                    If _availablecomps.Values.Where(Function(x) x.CAS_Number = cp.CAS_Number).Count = 0 Then
+                        _availablecomps.Add(cp.Name, cp)
+                        _availablecomps(cp.Name).IsCOOLPROPSupported = True
+                    End If
+                Next
+            Catch ex As Exception
+            End Try
+        End Sub
+
         Friend Sub SetIP(ByVal proppack As String, ByRef pp As PropertyPackage, ByVal compounds As Object, ByVal ip1 As Object, ByVal ip2 As Object, ByVal ip3 As Object, ByVal ip4 As Object)
 
             Dim i, j As Integer
@@ -161,6 +232,25 @@ Namespace CalculatorInterface
             Select Case proppack
                 Case "Peng-Robinson (PR)"
                     With CType(pp, PengRobinsonPropertyPackage).m_pr.InteractionParameters
+                        If Not ip1 Is Nothing Then
+                            .Clear()
+                            i = 0
+                            For Each c1 As String In compounds
+                                .Add(c1, New Dictionary(Of String, Auxiliary.PR_IPData))
+                                j = 0
+                                For Each c2 As String In compounds
+                                    .Item(c1).Add(c2, New Auxiliary.PR_IPData())
+                                    With .Item(c1).Item(c2)
+                                        .kij = ip1(i, j)
+                                    End With
+                                    j += 1
+                                Next
+                                i += 1
+                            Next
+                        End If
+                    End With
+                Case "Peng-Robinson 1978 (PR78)"
+                    With CType(pp, PengRobinson1978PropertyPackage).m_pr.InteractionParameters
                         If Not ip1 Is Nothing Then
                             .Clear()
                             i = 0
@@ -430,9 +520,7 @@ Namespace CalculatorInterface
             ByVal compound As String,
             ByVal prop As String) As String
 
-            Dim pp As New RaoultPropertyPackage(True)
-            TransferComps(pp)
-
+            Dim pp = _rpp
             pp._selectedcomps.Clear()
 
             Dim ms As New Streams.MaterialStream("", "")
@@ -454,9 +542,6 @@ Namespace CalculatorInterface
 
             Return results(0)
 
-            pp.Dispose()
-            pp = Nothing
-
             ms.Dispose()
             ms = Nothing
 
@@ -475,8 +560,8 @@ Namespace CalculatorInterface
             ByVal prop As String,
             ByVal temperature As Double) As String
 
-            Dim pp As New RaoultPropertyPackage(True)
-            TransferComps(pp)
+            Dim pp = _rpp
+            pp._selectedcomps.Clear()
 
             Dim ms As New Streams.MaterialStream("", "")
 
@@ -497,9 +582,6 @@ Namespace CalculatorInterface
 
             Return results(0)
 
-            pp.Dispose()
-            pp = Nothing
-
             ms.Dispose()
             ms = Nothing
 
@@ -518,8 +600,8 @@ Namespace CalculatorInterface
             ByVal prop As String,
             ByVal pressure As Double) As String
 
-            Dim pp As New RaoultPropertyPackage(True)
-            TransferComps(pp)
+            Dim pp = _rpp
+            pp._selectedcomps.Clear()
 
             Dim ms As New Streams.MaterialStream("", "")
 
@@ -540,9 +622,6 @@ Namespace CalculatorInterface
 
             Return results(0)
 
-            pp.Dispose()
-            pp = Nothing
-
             ms.Dispose()
             ms = Nothing
 
@@ -555,14 +634,12 @@ Namespace CalculatorInterface
         ''' <remarks></remarks>
         <Runtime.InteropServices.DispId(13)> Public Function GetCompoundConstPropList() As String()
 
-            Dim pp As New RaoultPropertyPackage(True)
+            Dim pp = _rpp
+            pp._selectedcomps.Clear()
 
             Dim props As New ArrayList
 
             props.AddRange(pp.GetConstPropList())
-
-            pp.Dispose()
-            pp = Nothing
 
             Dim values As Object() = props.ToArray
 
@@ -584,14 +661,12 @@ Namespace CalculatorInterface
         ''' <remarks></remarks>
         <Runtime.InteropServices.DispId(14)> Public Function GetCompoundTDepPropList() As String()
 
-            Dim pp As New RaoultPropertyPackage(True)
+            Dim pp = _rpp
+            pp._selectedcomps.Clear()
 
             Dim props As New ArrayList
 
             props.AddRange(pp.GetTDependentPropList())
-
-            pp.Dispose()
-            pp = Nothing
 
             Dim values As Object() = props.ToArray
 
@@ -613,14 +688,12 @@ Namespace CalculatorInterface
         ''' <remarks></remarks>
         <Runtime.InteropServices.DispId(15)> Public Function GetCompoundPDepPropList() As String()
 
-            Dim pp As New RaoultPropertyPackage(True)
+            Dim pp = _rpp
+            pp._selectedcomps.Clear()
 
             Dim props As New ArrayList
 
             props.AddRange(pp.GetPDependentPropList())
-
-            pp.Dispose()
-            pp = Nothing
 
             Dim values As Object() = props.ToArray
 
@@ -670,7 +743,7 @@ Namespace CalculatorInterface
 
             Dim pp As PropertyPackage = ppm.GetPropertyPackage(proppack)
 
-            TransferComps(pp)
+            TransferCompounds(pp)
 
             SetIP(proppack, pp, compounds, ip1, ip2, ip3, ip4)
 
@@ -699,6 +772,7 @@ Namespace CalculatorInterface
             ms.SetPhaseComposition(molefractions, dwp)
             ms.Phases(0).Properties.temperature = temperature
             ms.Phases(0).Properties.pressure = pressure
+            ms.Phases(0).Properties.molarfraction = 1.0
 
             ms._pp = pp
             pp.SetMaterial(ms)
@@ -769,12 +843,12 @@ Namespace CalculatorInterface
             Optional ByVal ip3 As Object = Nothing,
             Optional ByVal ip4 As Object = Nothing) As Object()
 
-            Dim ppm As New CAPEOPENMAnager()
+            Dim ppm As New CAPEOPENManager()
 
             Dim pp As PropertyPackage
 
             pp = proppack
-            TransferComps(pp)
+            TransferCompounds(pp)
 
             SetIP(pp.ComponentName, pp, compounds, ip1, ip2, ip3, ip4)
 
@@ -875,11 +949,11 @@ Namespace CalculatorInterface
             Optional ByVal ip3 As Object = Nothing,
             Optional ByVal ip4 As Object = Nothing) As Object()
 
-            Dim ppm As New CAPEOPENMAnager()
+            Dim ppm As New CAPEOPENManager()
 
             Dim pp As PropertyPackage = ppm.GetPropertyPackage(proppack)
 
-            TransferComps(pp)
+            TransferCompounds(pp)
 
             SetIP(proppack, pp, compounds, ip1, ip2, ip3, ip4)
 
@@ -982,11 +1056,11 @@ Namespace CalculatorInterface
             Optional ByVal ip3 As Object = Nothing,
             Optional ByVal ip4 As Object = Nothing) As Object()
 
-            Dim ppm As New CAPEOPENMAnager()
+            Dim ppm As New CAPEOPENManager()
 
             Dim pp As PropertyPackage
             pp = proppack
-            TransferComps(pp)
+            TransferCompounds(pp)
 
             SetIP(pp.ComponentName, pp, compounds, ip1, ip2, ip3, ip4)
 
@@ -1061,7 +1135,7 @@ Namespace CalculatorInterface
         ''' <remarks></remarks>
         <Runtime.InteropServices.DispId(20)> Public Function GetPropPackList() As String()
 
-            Dim ppm As New CAPEOPENMAnager()
+            Dim ppm As New CAPEOPENManager()
 
             Dim values As Object() = ppm.GetPropertyPackageList()
 
@@ -1086,11 +1160,11 @@ Namespace CalculatorInterface
         ''' <remarks></remarks>
         <Runtime.InteropServices.DispId(21)> Public Function GetPropPackInstance(ByVal proppackname As String) As PropertyPackage
 
-            Dim ppm As New CAPEOPENMAnager()
+            Dim ppm As New CAPEOPENManager()
 
             Dim pp As PropertyPackage = ppm.GetPropertyPackage(proppackname)
 
-            TransferComps(pp)
+            TransferCompounds(pp)
 
             ppm.Dispose()
             ppm = Nothing
@@ -1106,7 +1180,8 @@ Namespace CalculatorInterface
         ''' <remarks></remarks>
         <Runtime.InteropServices.DispId(22)> Public Function GetPropList() As String()
 
-            Dim pp As New RaoultPropertyPackage(True)
+            Dim pp = _rpp
+            pp._selectedcomps.Clear()
 
             Dim values As Object() = pp.GetSinglePhasePropList()
 
@@ -1119,9 +1194,6 @@ Namespace CalculatorInterface
 
             Return results2
 
-            pp.Dispose()
-            pp = Nothing
-
         End Function
 
         ''' <summary>
@@ -1131,7 +1203,8 @@ Namespace CalculatorInterface
         ''' <remarks></remarks>
         <Runtime.InteropServices.DispId(23)> Public Function GetTwoPhasePropList() As String()
 
-            Dim pp As New RaoultPropertyPackage(True)
+            Dim pp = _rpp
+            pp._selectedcomps.Clear()
 
             Dim values As Object() = pp.GetTwoPhasePropList()
 
@@ -1144,9 +1217,6 @@ Namespace CalculatorInterface
 
             Return results2
 
-            pp.Dispose()
-            pp = Nothing
-
         End Function
 
         ''' <summary>
@@ -1156,7 +1226,8 @@ Namespace CalculatorInterface
         ''' <remarks></remarks>
         <Runtime.InteropServices.DispId(24)> Public Function GetPhaseList() As String()
 
-            Dim pp As New RaoultPropertyPackage(True)
+            Dim pp = _rpp
+            pp._selectedcomps.Clear()
 
             Dim values As Object() = pp.GetPhaseList()
 
@@ -1168,9 +1239,6 @@ Namespace CalculatorInterface
             Next
 
             Return results2
-
-            pp.Dispose()
-            pp = Nothing
 
         End Function
 
@@ -1212,7 +1280,7 @@ Namespace CalculatorInterface
         ''' Calculates a PT Flash using the selected Property Package.
         ''' </summary>
         ''' <param name="proppack">The name of the Property Package to use.</param>
-        ''' <param name="flashalg">Flash Algorithm (2 = Global Def., 0 = NL VLE, 1 = IO VLE, 3 = IO VLLE, 4 = Gibbs VLE, 5 = Gibbs VLLE, 6 = NL VLLE, 7 = NL SLE, 8 = NL Immisc., 9 = Simple LLE)</param>
+        ''' <param name="flashalg">[DEPRECATED] Flash Algorithm (2 = Global Def., 0 = NL VLE, 1 = IO VLE, 3 = IO VLLE, 4 = Gibbs VLE, 5 = Gibbs VLLE, 6 = NL VLLE, 7 = NL SLE, 8 = NL Immisc., 9 = Simple LLE, 10 = Nested Loops SVLLE, 11 = Gibbs Minimization SVLLE)</param>
         ''' <param name="P">Pressure in Pa.</param>
         ''' <param name="T">Temperature in K.</param>
         ''' <param name="compounds">Compound names.</param>
@@ -1235,12 +1303,12 @@ Namespace CalculatorInterface
             Optional ByVal ip3 As Object = Nothing,
             Optional ByVal ip4 As Object = Nothing) As Object(,)
 
-            Dim ppm As New CAPEOPENMAnager()
+            Dim ppm As New CAPEOPENManager()
 
             Dim pp As PropertyPackage
 
             pp = ppm.GetPropertyPackage(proppack)
-            TransferComps(pp)
+            TransferCompounds(pp)
 
             SetIP(proppack, pp, compounds, ip1, ip2, ip3, ip4)
 
@@ -1267,38 +1335,6 @@ Namespace CalculatorInterface
 
             ms._pp = pp
             pp.SetMaterial(ms)
-
-            'Flash Algorithm (0 or 2 = Nested Loops VLE, 1 = Inside-Out VLE, 3 = Inside-Out VLLE, 4 = Gibbs VLE, 
-            '5 = Gibbs VLLE, 6 = Nested-Loops VLLE, 7 = Nested-Loops SLE, 8 = Nested-Loops Immisc., 9 = Simple LLE
-            Select Case flashalg
-                Case 0, 2
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoops
-                Case 1
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.BostonBrittInsideOut
-                Case 3
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.BostonFournierInsideOut3P
-                Case 4
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.GibbsMinimization3P With {.ForceTwoPhaseOnly = True}
-                Case 5
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.GibbsMinimization3P With {.ForceTwoPhaseOnly = False}
-                Case 6
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoops3PV3
-                Case 7
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoopsSLE
-                Case 8
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoopsImmiscible
-                Case 9
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.SimpleLLE
-            End Select
-
-            pp._tpseverity = 2
-            Dim comps(compounds.Length - 1) As String
-            Dim k As Integer
-            For Each c As String In compounds
-                comps(k) = c
-                k += 1
-            Next
-            pp._tpcompids = comps
 
             pp.CalcEquilibrium(ms, "TP", "UNDEFINED")
 
@@ -1341,7 +1377,7 @@ Namespace CalculatorInterface
         ''' Calculates a PH Flash using the selected Property Package.
         ''' </summary>
         ''' <param name="proppack">The name of the Property Package to use.</param>
-        ''' <param name="flashalg">Flash Algorithm (2 = Global Def., 0 = NL VLE, 1 = IO VLE, 3 = IO VLLE, 4 = Gibbs VLE, 5 = Gibbs VLLE, 6 = NL VLLE, 7 = NL SLE, 8 = NL Immisc., 9 = Simple LLE)</param>
+        ''' <param name="flashalg">[DEPRECATED] Flash Algorithm (2 = Global Def., 0 = NL VLE, 1 = IO VLE, 3 = IO VLLE, 4 = Gibbs VLE, 5 = Gibbs VLLE, 6 = NL VLLE, 7 = NL SLE, 8 = NL Immisc., 9 = Simple LLE, 10 = Nested Loops SVLLE, 11 = Gibbs Minimization SVLLE)</param>
         ''' <param name="P">Pressure in Pa.</param>
         ''' <param name="H">Mixture Mass Enthalpy in kJ/kg.</param>
         ''' <param name="compounds">Compound names.</param>
@@ -1366,12 +1402,12 @@ Namespace CalculatorInterface
             Optional ByVal ip4 As Object = Nothing,
             Optional ByVal InitialTemperatureEstimate As Double = 0.0#) As Object(,)
 
-            Dim ppm As New CAPEOPENMAnager()
+            Dim ppm As New CAPEOPENManager()
 
             Dim pp As PropertyPackage
 
             pp = ppm.GetPropertyPackage(proppack)
-            TransferComps(pp)
+            TransferCompounds(pp)
 
             SetIP(proppack, pp, compounds, ip1, ip2, ip3, ip4)
 
@@ -1398,38 +1434,6 @@ Namespace CalculatorInterface
 
             ms._pp = pp
             pp.SetMaterial(ms)
-
-            'Flash Algorithm (0 or 2 = Nested Loops VLE, 1 = Inside-Out VLE, 3 = Inside-Out VLLE, 4 = Gibbs VLE, 
-            '5 = Gibbs VLLE, 6 = Nested-Loops VLLE, 7 = Nested-Loops SLE, 8 = Nested-Loops Immisc., 9 = Simple LLE
-            Select Case flashalg
-                Case 0, 2
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoops
-                Case 1
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.BostonBrittInsideOut
-                Case 3
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.BostonFournierInsideOut3P
-                Case 4
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.GibbsMinimization3P With {.ForceTwoPhaseOnly = True}
-                Case 5
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.GibbsMinimization3P With {.ForceTwoPhaseOnly = False}
-                Case 6
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoops3PV3
-                Case 7
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoopsSLE
-                Case 8
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoopsImmiscible
-                Case 9
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.SimpleLLE
-            End Select
-
-            pp._tpseverity = 2
-            Dim comps(compounds.Length - 1) As String
-            Dim k As Integer
-            For Each c As String In compounds
-                comps(k) = c
-                k += 1
-            Next
-            pp._tpcompids = comps
 
             ms.Phases(0).Properties.temperature = InitialTemperatureEstimate
 
@@ -1476,7 +1480,7 @@ Namespace CalculatorInterface
         ''' Calculates a PH Flash using the selected Property Package.
         ''' </summary>
         ''' <param name="proppack">The name of the Property Package to use.</param>
-        ''' <param name="flashalg">Flash Algorithm (2 = Global Def., 0 = NL VLE, 1 = IO VLE, 3 = IO VLLE, 4 = Gibbs VLE, 5 = Gibbs VLLE, 6 = NL VLLE, 7 = NL SLE, 8 = NL Immisc., 9 = Simple LLE)</param>
+        ''' <param name="flashalg">[DEPRECATED] Flash Algorithm (2 = Global Def., 0 = NL VLE, 1 = IO VLE, 3 = IO VLLE, 4 = Gibbs VLE, 5 = Gibbs VLLE, 6 = NL VLLE, 7 = NL SLE, 8 = NL Immisc., 9 = Simple LLE, 10 = Nested Loops SVLLE, 11 = Gibbs Minimization SVLLE)</param>
         ''' <param name="P">Pressure in Pa.</param>
         ''' <param name="S">Mixture Mass Entropy in kJ/[kg.K].</param>
         ''' <param name="compounds">Compound names.</param>
@@ -1501,12 +1505,12 @@ Namespace CalculatorInterface
             Optional ByVal ip4 As Object = Nothing,
             Optional ByVal InitialTemperatureEstimate As Double = 0.0#) As Object(,)
 
-            Dim ppm As New CAPEOPENMAnager()
+            Dim ppm As New CAPEOPENManager()
 
             Dim pp As PropertyPackage
 
             pp = ppm.GetPropertyPackage(proppack)
-            TransferComps(pp)
+            TransferCompounds(pp)
 
             SetIP(proppack, pp, compounds, ip1, ip2, ip3, ip4)
 
@@ -1533,38 +1537,6 @@ Namespace CalculatorInterface
 
             ms._pp = pp
             pp.SetMaterial(ms)
-
-            'Flash Algorithm (0 or 2 = Nested Loops VLE, 1 = Inside-Out VLE, 3 = Inside-Out VLLE, 4 = Gibbs VLE, 
-            '5 = Gibbs VLLE, 6 = Nested-Loops VLLE, 7 = Nested-Loops SLE, 8 = Nested-Loops Immisc., 9 = Simple LLE
-            Select Case flashalg
-                Case 0, 2
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoops
-                Case 1
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.BostonBrittInsideOut
-                Case 3
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.BostonFournierInsideOut3P
-                Case 4
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.GibbsMinimization3P With {.ForceTwoPhaseOnly = True}
-                Case 5
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.GibbsMinimization3P With {.ForceTwoPhaseOnly = False}
-                Case 6
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoops3PV3
-                Case 7
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoopsSLE
-                Case 8
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoopsImmiscible
-                Case 9
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.SimpleLLE
-            End Select
-
-            pp._tpseverity = 2
-            Dim comps(compounds.Length - 1) As String
-            Dim k As Integer
-            For Each c As String In compounds
-                comps(k) = c
-                k += 1
-            Next
-            pp._tpcompids = comps
 
             ms.Phases(0).Properties.temperature = InitialTemperatureEstimate
 
@@ -1611,7 +1583,7 @@ Namespace CalculatorInterface
         ''' Calculates a PVF Flash using the selected Property Package.
         ''' </summary>
         ''' <param name="proppack">The name of the Property Package to use.</param>
-        ''' <param name="flashalg">Flash Algorithm (2 = Global Def., 0 = NL VLE, 1 = IO VLE, 3 = IO VLLE, 4 = Gibbs VLE, 5 = Gibbs VLLE, 6 = NL VLLE, 7 = NL SLE, 8 = NL Immisc., 9 = Simple LLE)</param>
+        ''' <param name="flashalg">[DEPRECATED] Flash Algorithm (2 = Global Def., 0 = NL VLE, 1 = IO VLE, 3 = IO VLLE, 4 = Gibbs VLE, 5 = Gibbs VLLE, 6 = NL VLLE, 7 = NL SLE, 8 = NL Immisc., 9 = Simple LLE, 10 = Nested Loops SVLLE, 11 = Gibbs Minimization SVLLE)</param>
         ''' <param name="P">Pressure in Pa.</param>
         ''' <param name="VF">Mixture Mole Vapor Fraction.</param>
         ''' <param name="compounds">Compound names.</param>
@@ -1636,12 +1608,12 @@ Namespace CalculatorInterface
             Optional ByVal ip4 As Object = Nothing,
             Optional ByVal InitialTemperatureEstimate As Double = 0.0#) As Object(,)
 
-            Dim ppm As New CAPEOPENMAnager()
+            Dim ppm As New CAPEOPENManager()
 
             Dim pp As PropertyPackage
 
             pp = ppm.GetPropertyPackage(proppack)
-            TransferComps(pp)
+            TransferCompounds(pp)
 
             SetIP(proppack, pp, compounds, ip1, ip2, ip3, ip4)
 
@@ -1668,38 +1640,6 @@ Namespace CalculatorInterface
 
             ms._pp = pp
             pp.SetMaterial(ms)
-
-            'Flash Algorithm (0 or 2 = Nested Loops VLE, 1 = Inside-Out VLE, 3 = Inside-Out VLLE, 4 = Gibbs VLE, 
-            '5 = Gibbs VLLE, 6 = Nested-Loops VLLE, 7 = Nested-Loops SLE, 8 = Nested-Loops Immisc., 9 = Simple LLE
-            Select Case flashalg
-                Case 0, 2
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoops
-                Case 1
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.BostonBrittInsideOut
-                Case 3
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.BostonFournierInsideOut3P
-                Case 4
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.GibbsMinimization3P With {.ForceTwoPhaseOnly = True}
-                Case 5
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.GibbsMinimization3P With {.ForceTwoPhaseOnly = False}
-                Case 6
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoops3PV3
-                Case 7
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoopsSLE
-                Case 8
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoopsImmiscible
-                Case 9
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.SimpleLLE
-            End Select
-
-            pp._tpseverity = 2
-            Dim comps(compounds.Length - 1) As String
-            Dim k As Integer
-            For Each c As String In compounds
-                comps(k) = c
-                k += 1
-            Next
-            pp._tpcompids = comps
 
             ms.Phases(0).Properties.temperature = InitialTemperatureEstimate
 
@@ -1746,7 +1686,7 @@ Namespace CalculatorInterface
         ''' Calculates a TVF Flash using the selected Property Package.
         ''' </summary>
         ''' <param name="proppack">The name of the Property Package to use.</param>
-        ''' <param name="flashalg">Flash Algorithm (2 = Global Def., 0 = NL VLE, 1 = IO VLE, 3 = IO VLLE, 4 = Gibbs VLE, 5 = Gibbs VLLE, 6 = NL VLLE, 7 = NL SLE, 8 = NL Immisc., 9 = Simple LLE)</param>
+        ''' <param name="flashalg">[DEPRECATED] Flash Algorithm (2 = Global Def., 0 = NL VLE, 1 = IO VLE, 3 = IO VLLE, 4 = Gibbs VLE, 5 = Gibbs VLLE, 6 = NL VLLE, 7 = NL SLE, 8 = NL Immisc., 9 = Simple LLE, 10 = Nested Loops SVLLE, 11 = Gibbs Minimization SVLLE)</param>
         ''' <param name="T">Temperature in K.</param>
         ''' <param name="VF">Mixture Mole Vapor Fraction.</param>
         ''' <param name="compounds">Compound names.</param>
@@ -1771,12 +1711,12 @@ Namespace CalculatorInterface
             Optional ByVal ip4 As Object = Nothing,
             Optional ByVal InitialPressureEstimate As Double = 0.0#) As Object(,)
 
-            Dim ppm As New CAPEOPENMAnager()
+            Dim ppm As New CAPEOPENManager()
 
             Dim pp As PropertyPackage
 
             pp = ppm.GetPropertyPackage(proppack)
-            TransferComps(pp)
+            TransferCompounds(pp)
 
             SetIP(proppack, pp, compounds, ip1, ip2, ip3, ip4)
 
@@ -1803,38 +1743,6 @@ Namespace CalculatorInterface
 
             ms._pp = pp
             pp.SetMaterial(ms)
-
-            'Flash Algorithm (0 or 2 = Nested Loops VLE, 1 = Inside-Out VLE, 3 = Inside-Out VLLE, 4 = Gibbs VLE, 
-            '5 = Gibbs VLLE, 6 = Nested-Loops VLLE, 7 = Nested-Loops SLE, 8 = Nested-Loops Immisc., 9 = Simple LLE
-            Select Case flashalg
-                Case 0, 2
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoops
-                Case 1
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.BostonBrittInsideOut
-                Case 3
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.BostonFournierInsideOut3P
-                Case 4
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.GibbsMinimization3P With {.ForceTwoPhaseOnly = True}
-                Case 5
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.GibbsMinimization3P With {.ForceTwoPhaseOnly = False}
-                Case 6
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoops3PV3
-                Case 7
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoopsSLE
-                Case 8
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoopsImmiscible
-                Case 9
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.SimpleLLE
-            End Select
-
-            pp._tpseverity = 2
-            Dim comps(compounds.Length - 1) As String
-            Dim k As Integer
-            For Each c As String In compounds
-                comps(k) = c
-                k += 1
-            Next
-            pp._tpcompids = comps
 
             ms.Phases(0).Properties.pressure = InitialPressureEstimate
 
@@ -1877,11 +1785,12 @@ Namespace CalculatorInterface
             Return fractions
 
         End Function
+
         ''' <summary>
         ''' Calculates a PT Flash using the referenced Property Package.
         ''' </summary>
         ''' <param name="proppack">A reference to the Property Package object to use.</param>
-        ''' <param name="flashalg">Flash Algorithm (2 = Global Def., 0 = NL VLE, 1 = IO VLE, 3 = IO VLLE, 4 = Gibbs VLE, 5 = Gibbs VLLE, 6 = NL VLLE, 7 = NL SLE, 8 = NL Immisc., 9 = Simple LLE)</param>
+        ''' <param name="flashalg">[DEPRECATED] Flash Algorithm (2 = Global Def., 0 = NL VLE, 1 = IO VLE, 3 = IO VLLE, 4 = Gibbs VLE, 5 = Gibbs VLLE, 6 = NL VLLE, 7 = NL SLE, 8 = NL Immisc., 9 = Simple LLE, 10 = Nested Loops SVLLE, 11 = Gibbs Minimization SVLLE)</param>
         ''' <param name="T">Temperature in K.</param>
         ''' <param name="P">Pressure in Pa.</param>
         ''' <param name="compounds">Compound names.</param>
@@ -1904,12 +1813,12 @@ Namespace CalculatorInterface
             Optional ByVal ip3 As Object = Nothing,
             Optional ByVal ip4 As Object = Nothing) As Object(,)
 
-            Dim ppm As New CAPEOPENMAnager()
+            Dim ppm As New CAPEOPENManager()
 
             Dim pp As PropertyPackage
 
             pp = proppack
-            TransferComps(pp)
+            TransferCompounds(pp)
 
             SetIP(pp.ComponentName, pp, compounds, ip1, ip2, ip3, ip4)
 
@@ -1936,29 +1845,6 @@ Namespace CalculatorInterface
 
             ms._pp = pp
             pp.SetMaterial(ms)
-
-            'Flash Algorithm (0 or 2 = Nested Loops VLE, 1 = Inside-Out VLE, 3 = Inside-Out VLLE, 4 = Gibbs VLE, 
-            '5 = Gibbs VLLE, 6 = Nested-Loops VLLE, 7 = Nested-Loops SLE, 8 = Nested-Loops Immisc., 9 = Simple LLE
-            Select Case flashalg
-                Case 0, 2
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoops
-                Case 1
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.BostonBrittInsideOut
-                Case 3
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.BostonFournierInsideOut3P
-                Case 4
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.GibbsMinimization3P With {.ForceTwoPhaseOnly = True}
-                Case 5
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.GibbsMinimization3P With {.ForceTwoPhaseOnly = False}
-                Case 6
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoops3PV3
-                Case 7
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoopsSLE
-                Case 8
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoopsImmiscible
-                Case 9
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.SimpleLLE
-            End Select
 
             pp.CalcEquilibrium(ms, "TP", "UNDEFINED")
 
@@ -1996,7 +1882,7 @@ Namespace CalculatorInterface
         ''' Calculates a PH Flash using the referenced Property Package.
         ''' </summary>
         ''' <param name="proppack">A reference to the Property Package object to use.</param>
-        ''' <param name="flashalg">Flash Algorithm (2 = Global Def., 0 = NL VLE, 1 = IO VLE, 3 = IO VLLE, 4 = Gibbs VLE, 5 = Gibbs VLLE, 6 = NL VLLE, 7 = NL SLE, 8 = NL Immisc., 9 = Simple LLE)</param>
+        ''' <param name="flashalg">[DEPRECATED] Flash Algorithm (2 = Global Def., 0 = NL VLE, 1 = IO VLE, 3 = IO VLLE, 4 = Gibbs VLE, 5 = Gibbs VLLE, 6 = NL VLLE, 7 = NL SLE, 8 = NL Immisc., 9 = Simple LLE, 10 = Nested Loops SVLLE, 11 = Gibbs Minimization SVLLE)</param>
         ''' <param name="P">Pressure in Pa.</param>
         ''' <param name="H">Mixture Mass Enthalpy in kJ/kg.</param>
         ''' <param name="compounds">Compound names.</param>
@@ -2021,12 +1907,12 @@ Namespace CalculatorInterface
             Optional ByVal ip4 As Object = Nothing,
             Optional ByVal InitialTemperatureEstimate As Double = 0.0#) As Object(,)
 
-            Dim ppm As New CAPEOPENMAnager()
+            Dim ppm As New CAPEOPENManager()
 
             Dim pp As PropertyPackage
 
             pp = proppack
-            TransferComps(pp)
+            TransferCompounds(pp)
 
             SetIP(pp.ComponentName, pp, compounds, ip1, ip2, ip3, ip4)
 
@@ -2053,29 +1939,6 @@ Namespace CalculatorInterface
 
             ms._pp = pp
             pp.SetMaterial(ms)
-
-            'Flash Algorithm (0 or 2 = Nested Loops VLE, 1 = Inside-Out VLE, 3 = Inside-Out VLLE, 4 = Gibbs VLE, 
-            '5 = Gibbs VLLE, 6 = Nested-Loops VLLE, 7 = Nested-Loops SLE, 8 = Nested-Loops Immisc., 9 = Simple LLE
-            Select Case flashalg
-                Case 0, 2
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoops
-                Case 1
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.BostonBrittInsideOut
-                Case 3
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.BostonFournierInsideOut3P
-                Case 4
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.GibbsMinimization3P With {.ForceTwoPhaseOnly = True}
-                Case 5
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.GibbsMinimization3P With {.ForceTwoPhaseOnly = False}
-                Case 6
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoops3PV3
-                Case 7
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoopsSLE
-                Case 8
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoopsImmiscible
-                Case 9
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.SimpleLLE
-            End Select
 
             ms.Phases(0).Properties.temperature = InitialTemperatureEstimate
 
@@ -2117,7 +1980,7 @@ Namespace CalculatorInterface
         ''' Calculates a PS Flash using the referenced Property Package.
         ''' </summary>
         ''' <param name="proppack">A reference to the Property Package object to use.</param>
-        ''' <param name="flashalg">Flash Algorithm (2 = Global Def., 0 = NL VLE, 1 = IO VLE, 3 = IO VLLE, 4 = Gibbs VLE, 5 = Gibbs VLLE, 6 = NL VLLE, 7 = NL SLE, 8 = NL Immisc., 9 = Simple LLE)</param>
+        ''' <param name="flashalg">[DEPRECATED] Flash Algorithm (2 = Global Def., 0 = NL VLE, 1 = IO VLE, 3 = IO VLLE, 4 = Gibbs VLE, 5 = Gibbs VLLE, 6 = NL VLLE, 7 = NL SLE, 8 = NL Immisc., 9 = Simple LLE, 10 = Nested Loops SVLLE, 11 = Gibbs Minimization SVLLE)</param>
         ''' <param name="P">Pressure in Pa.</param>
         ''' <param name="S">Mixture Mass Entropyin kJ/[kg.K].</param>
         ''' <param name="compounds">Compound names.</param>
@@ -2142,12 +2005,12 @@ Namespace CalculatorInterface
             Optional ByVal ip4 As Object = Nothing,
             Optional ByVal InitialTemperatureEstimate As Double = 0.0#) As Object(,)
 
-            Dim ppm As New CAPEOPENMAnager()
+            Dim ppm As New CAPEOPENManager()
 
             Dim pp As PropertyPackage
 
             pp = proppack
-            TransferComps(pp)
+            TransferCompounds(pp)
 
             SetIP(pp.ComponentName, pp, compounds, ip1, ip2, ip3, ip4)
 
@@ -2174,29 +2037,6 @@ Namespace CalculatorInterface
 
             ms._pp = pp
             pp.SetMaterial(ms)
-
-            'Flash Algorithm (0 or 2 = Nested Loops VLE, 1 = Inside-Out VLE, 3 = Inside-Out VLLE, 4 = Gibbs VLE, 
-            '5 = Gibbs VLLE, 6 = Nested-Loops VLLE, 7 = Nested-Loops SLE, 8 = Nested-Loops Immisc., 9 = Simple LLE
-            Select Case flashalg
-                Case 0, 2
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoops
-                Case 1
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.BostonBrittInsideOut
-                Case 3
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.BostonFournierInsideOut3P
-                Case 4
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.GibbsMinimization3P With {.ForceTwoPhaseOnly = True}
-                Case 5
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.GibbsMinimization3P With {.ForceTwoPhaseOnly = False}
-                Case 6
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoops3PV3
-                Case 7
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoopsSLE
-                Case 8
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoopsImmiscible
-                Case 9
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.SimpleLLE
-            End Select
 
             ms.Phases(0).Properties.temperature = InitialTemperatureEstimate
 
@@ -2238,7 +2078,7 @@ Namespace CalculatorInterface
         ''' Calculates a PVF Flash using the referenced Property Package.
         ''' </summary>
         ''' <param name="proppack">A reference to the Property Package object to use.</param>
-        ''' <param name="flashalg">Flash Algorithm (2 = Global Def., 0 = NL VLE, 1 = IO VLE, 3 = IO VLLE, 4 = Gibbs VLE, 5 = Gibbs VLLE, 6 = NL VLLE, 7 = NL SLE, 8 = NL Immisc., 9 = Simple LLE)</param>
+        ''' <param name="flashalg">[DEPRECATED] Flash Algorithm (2 = Global Def., 0 = NL VLE, 1 = IO VLE, 3 = IO VLLE, 4 = Gibbs VLE, 5 = Gibbs VLLE, 6 = NL VLLE, 7 = NL SLE, 8 = NL Immisc., 9 = Simple LLE, 10 = Nested Loops SVLLE, 11 = Gibbs Minimization SVLLE)</param>
         ''' <param name="P">Pressure in Pa.</param>
         ''' <param name="VF">Mixture Mole Vapor Fraction.</param>
         ''' <param name="compounds">Compound names.</param>
@@ -2263,12 +2103,12 @@ Namespace CalculatorInterface
             Optional ByVal ip4 As Object = Nothing,
             Optional ByVal InitialTemperatureEstimate As Double = 0.0#) As Object(,)
 
-            Dim ppm As New CAPEOPENMAnager()
+            Dim ppm As New CAPEOPENManager()
 
             Dim pp As PropertyPackage
 
             pp = proppack
-            TransferComps(pp)
+            TransferCompounds(pp)
 
             SetIP(pp.ComponentName, pp, compounds, ip1, ip2, ip3, ip4)
 
@@ -2295,29 +2135,6 @@ Namespace CalculatorInterface
 
             ms._pp = pp
             pp.SetMaterial(ms)
-
-            'Flash Algorithm (0 or 2 = Nested Loops VLE, 1 = Inside-Out VLE, 3 = Inside-Out VLLE, 4 = Gibbs VLE, 
-            '5 = Gibbs VLLE, 6 = Nested-Loops VLLE, 7 = Nested-Loops SLE, 8 = Nested-Loops Immisc., 9 = Simple LLE
-            Select Case flashalg
-                Case 0, 2
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoops
-                Case 1
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.BostonBrittInsideOut
-                Case 3
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.BostonFournierInsideOut3P
-                Case 4
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.GibbsMinimization3P With {.ForceTwoPhaseOnly = True}
-                Case 5
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.GibbsMinimization3P With {.ForceTwoPhaseOnly = False}
-                Case 6
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoops3PV3
-                Case 7
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoopsSLE
-                Case 8
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoopsImmiscible
-                Case 9
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.SimpleLLE
-            End Select
 
             ms.Phases(0).Properties.temperature = InitialTemperatureEstimate
 
@@ -2359,7 +2176,7 @@ Namespace CalculatorInterface
         ''' Calculates a TVF Flash using the referenced Property Package.
         ''' </summary>
         ''' <param name="proppack">A reference to the Property Package object to use.</param>
-        ''' <param name="flashalg">Flash Algorithm (2 = Global Def., 0 = NL VLE, 1 = IO VLE, 3 = IO VLLE, 4 = Gibbs VLE, 5 = Gibbs VLLE, 6 = NL VLLE, 7 = NL SLE, 8 = NL Immisc., 9 = Simple LLE)</param>
+        ''' <param name="flashalg">[DEPRECATED] Flash Algorithm (2 = Global Def., 0 = NL VLE, 1 = IO VLE, 3 = IO VLLE, 4 = Gibbs VLE, 5 = Gibbs VLLE, 6 = NL VLLE, 7 = NL SLE, 8 = NL Immisc., 9 = Simple LLE, 10 = Nested Loops SVLLE, 11 = Gibbs Minimization SVLLE)</param>
         ''' <param name="T">Temperature in K.</param>
         ''' <param name="VF">Mixture Mole Vapor Fraction.</param>
         ''' <param name="compounds">Compound names.</param>
@@ -2384,12 +2201,12 @@ Namespace CalculatorInterface
             Optional ByVal ip4 As Object = Nothing,
             Optional ByVal InitialPressureEstimate As Double = 0.0#) As Object(,)
 
-            Dim ppm As New CAPEOPENMAnager()
+            Dim ppm As New CAPEOPENManager()
 
             Dim pp As PropertyPackage
 
             pp = proppack
-            TransferComps(pp)
+            TransferCompounds(pp)
 
             SetIP(pp.ComponentName, pp, compounds, ip1, ip2, ip3, ip4)
 
@@ -2416,29 +2233,6 @@ Namespace CalculatorInterface
 
             ms._pp = pp
             pp.SetMaterial(ms)
-
-            'Flash Algorithm (0 or 2 = Nested Loops VLE, 1 = Inside-Out VLE, 3 = Inside-Out VLLE, 4 = Gibbs VLE, 
-            '5 = Gibbs VLLE, 6 = Nested-Loops VLLE, 7 = Nested-Loops SLE, 8 = Nested-Loops Immisc., 9 = Simple LLE
-            Select Case flashalg
-                Case 0, 2
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoops
-                Case 1
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.BostonBrittInsideOut
-                Case 3
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.BostonFournierInsideOut3P
-                Case 4
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.GibbsMinimization3P With {.ForceTwoPhaseOnly = True}
-                Case 5
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.GibbsMinimization3P With {.ForceTwoPhaseOnly = False}
-                Case 6
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoops3PV3
-                Case 7
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoopsSLE
-                Case 8
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoopsImmiscible
-                Case 9
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.SimpleLLE
-            End Select
 
             ms.Phases(0).Properties.pressure = InitialPressureEstimate
 
@@ -2486,6 +2280,7 @@ Namespace CalculatorInterface
             Dim modellist As New ArrayList
 
             modellist.Add("Peng-Robinson")
+            modellist.Add("Peng-Robinson (1978)")
             modellist.Add("Peng-Robinson-Stryjek-Vera 2 (Van Laar)")
             modellist.Add("Peng-Robinson-Stryjek-Vera 2 (Margules)")
             modellist.Add("Soave-Redlich-Kwong")
@@ -2513,6 +2308,25 @@ Namespace CalculatorInterface
             Select Case Model
                 Case "Peng-Robinson"
                     Dim pp As New PengRobinsonPropertyPackage(True)
+                    If pp.m_pr.InteractionParameters.ContainsKey(Compound1) Then
+                        If pp.m_pr.InteractionParameters(Compound1).ContainsKey(Compound2) Then
+                            pars = New Dictionary(Of String, Object) From {{"kij", pp.m_pr.InteractionParameters(Compound1)(Compound2).kij}}
+                        Else
+                            If pp.m_pr.InteractionParameters.ContainsKey(Compound2) Then
+                                If pp.m_pr.InteractionParameters(Compound2).ContainsKey(Compound1) Then
+                                    pars = New Dictionary(Of String, Object) From {{"kij", pp.m_pr.InteractionParameters(Compound2)(Compound1).kij}}
+                                End If
+                            End If
+                        End If
+                    ElseIf pp.m_pr.InteractionParameters.ContainsKey(Compound2) Then
+                        If pp.m_pr.InteractionParameters(Compound2).ContainsKey(Compound1) Then
+                            pars = New Dictionary(Of String, Object) From {{"kij", pp.m_pr.InteractionParameters(Compound2)(Compound1).kij}}
+                        End If
+                    End If
+                    pp.Dispose()
+                    pp = Nothing
+                Case "Peng-Robinson 1978"
+                    Dim pp As New PengRobinson1978PropertyPackage(True)
                     If pp.m_pr.InteractionParameters.ContainsKey(Compound1) Then
                         If pp.m_pr.InteractionParameters(Compound1).ContainsKey(Compound2) Then
                             pars = New Dictionary(Of String, Object) From {{"kij", pp.m_pr.InteractionParameters(Compound1)(Compound2).kij}}
@@ -2681,7 +2495,7 @@ Namespace CalculatorInterface
         ''' Calculates Phase Equilibria for a given mixture at specified conditions.
         ''' </summary>
         ''' <param name="flashtype">The type of the flash algorithm to calculate</param>
-        ''' <param name="flashalg">The flash algorithm to use (set to -1 to use the current instance)</param>
+        ''' <param name="flashalg">[DEPRECATED] The flash algorithm to use (set to -1 to use the current instance)</param>
         ''' <param name="val1">Value of the first flash state specification (P in Pa, T in K, H in kJ/kg, S in kJ/[kg.K], VAP/SF in mole fraction from 0 to 1)</param>
         ''' <param name="val2">Value of the second flash state specification (P in Pa, T in K, H in kJ/kg, S in kJ/[kg.K], VAP/SF in mole fraction from 0 to 1)</param>
         ''' <param name="pp">Property Package instance</param>
@@ -2709,7 +2523,7 @@ Namespace CalculatorInterface
                                                                                            Optional ByVal ip3 As Object = Nothing,
                                                                                            Optional ByVal ip4 As Object = Nothing) As FlashCalculationResult
 
-            TransferComps(pp)
+            TransferCompounds(pp)
 
             SetIP(pp.ComponentName, pp, compounds, ip1, ip2, ip3, ip4)
 
@@ -2731,29 +2545,6 @@ Namespace CalculatorInterface
 
             ms._pp = pp
             pp.SetMaterial(ms)
-
-            'Flash Algorithm (0 or 2 = Nested Loops VLE, 1 = Inside-Out VLE, 3 = Inside-Out VLLE, 4 = Gibbs VLE, 
-            '5 = Gibbs VLLE, 6 = Nested-Loops VLLE, 7 = Nested-Loops SLE, 8 = Nested-Loops Immisc., 9 = Simple LLE
-            Select Case flashalg
-                Case 0, 2
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoops
-                Case 1
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.BostonBrittInsideOut
-                Case 3
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.BostonFournierInsideOut3P
-                Case 4
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.GibbsMinimization3P With {.ForceTwoPhaseOnly = True}
-                Case 5
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.GibbsMinimization3P With {.ForceTwoPhaseOnly = False}
-                Case 6
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoops3PV3
-                Case 7
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoopsSLE
-                Case 8
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.NestedLoopsImmiscible
-                Case 9
-                    pp.FlashAlgorithm = New Auxiliary.FlashAlgorithms.SimpleLLE
-            End Select
 
             Dim results As New FlashCalculationResult
 
@@ -2799,7 +2590,7 @@ Namespace CalculatorInterface
             Dim pp As PropertyPackage
 
             pp = proppack
-            TransferComps(pp)
+            TransferCompounds(pp)
 
             Dim ms As New Streams.MaterialStream("", "")
 
@@ -2847,6 +2638,15 @@ Namespace CalculatorInterface
 
         End Function
 
+        ''' <summary>
+        ''' Links/Associates a Material Stream with a Property Package and vice-versa.
+        ''' </summary>
+        ''' <param name="stream">Material Stream instance</param>
+        ''' <param name="pp">Property Package instance</param>
+        Public Sub Link(stream As MaterialStream, pp As PropertyPackage)
+            stream.PropertyPackage = pp
+            pp.CurrentMaterialStream = stream
+        End Sub
 
     End Class
 

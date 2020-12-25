@@ -68,6 +68,12 @@ Namespace Streams
 
         Public Overrides ReadOnly Property HasPropertiesForDynamicMode As Boolean = False
 
+        ''' <summary>
+        ''' Use this property to disable automatic PH-Flash for single-compound streams connected to unit operations. Default is 'False'.
+        ''' </summary>
+        ''' <returns></returns>
+        Public Property OverrideSingleCompoundFlashBehavior As Boolean = False
+
 #Region "    XML serialization"
 
         Public Overrides Function LoadData(data As ICollection(Of XElement)) As Boolean
@@ -363,7 +369,16 @@ Namespace Streams
         End Sub
 
         Public Overrides Sub Calculate(Optional ByVal args As Object = Nothing)
-            Calculate(True, True)
+            If FlowSheet IsNot Nothing Then
+                If AtEquilibrium And Not FlowSheet.DynamicMode And
+                    FlowSheet.FlowsheetOptions.SkipEquilibriumCalculationOnDefinedStreams Then
+                    Calculate(False, True)
+                Else
+                    Calculate(True, True)
+                End If
+            Else
+                Calculate(True, True)
+            End If
         End Sub
 
         ''' <summary>
@@ -438,12 +453,6 @@ Namespace Streams
 
                 .CurrentMaterialStream = Me
 
-                If (PropertyPackage.ForcedSolids.Count > 0 And Not PropertyPackage.FlashBase.AlgoType = Enums.FlashMethod.Nested_Loops_SVLLE) Then
-
-                    FlowSheet?.ShowMessage("When working with forced solids, prefer the Nested Loops SVLLE Flash Algorithm for a correct calculation of the energy balance of the flowsheet.", IFlowsheet.MessageType.Information)
-
-                End If
-
                 If W.HasValue Then
                     If DebugMode Then AppendDebugLine(String.Format("Checking flow definition. Mass flow specified, will calculate molar and volumetric flow."))
                     IObj?.Paragraphs.Add("Checking flow definition... Mass Flow specified, will calculate Molar and Volumetric Flows.")
@@ -479,7 +488,8 @@ Namespace Streams
                     If .AUX_IS_SINGLECOMP(PropertyPackages.Phase.Mixture) Then
 
                         If Not Me.GraphicObject Is Nothing AndAlso Me.GraphicObject.InputConnectors(0).IsAttached AndAlso
-                            Me.GraphicObject.InputConnectors(0).AttachedConnector.AttachedFrom.ObjectType <> ObjectType.OT_Recycle Then
+                            Me.GraphicObject.InputConnectors(0).AttachedConnector.AttachedFrom.ObjectType <> ObjectType.OT_Recycle AndAlso
+                            Not OverrideSingleCompoundFlashBehavior Then
                             If DebugMode Then AppendDebugLine(String.Format("Stream is single-compound and attached to the outlet of an unit operation. PH flash equilibrium calculation forced."))
                             IObj?.Paragraphs.Add("<b>WARNING: Stream is single-compound and attached to the outlet of an unit operation. PH flash equilibrium calculation forced.</b>")
                             IObj?.Paragraphs.Add(String.Format("<b>Current State Variables: P = {0} Pa, H = {1} kJ/kg</b>", P, H))
@@ -679,7 +689,9 @@ Namespace Streams
                     IObj?.SetCurrent()
 
                     'calculate additional properties
-                    .CalcAdditionalPhaseProperties()
+                    If .CalculateAdditionalMaterialStreamProperties Then .CalcAdditionalPhaseProperties()
+
+                    .CalcAdditionalEnergyTerms()
 
                     IObj?.SetCurrent()
 
@@ -688,7 +700,10 @@ Namespace Streams
 
                     IObj?.SetCurrent()
 
-                    If Me.Phases(2).Properties.molarfraction.GetValueOrDefault >= 0 And Me.Phases(2).Properties.molarfraction.GetValueOrDefault <= 1 Then
+                    Dim liqsum As Double = Me.Phases(1).Compounds.Values.Select(Function(x) x.MoleFraction.GetValueOrDefault).Sum
+
+                    If Me.Phases(2).Properties.molarfraction.GetValueOrDefault >= 0 And
+                        Me.Phases(2).Properties.molarfraction.GetValueOrDefault <= 1 And liqsum > 0 Then
                         .DW_CalcPhaseProps(PropertyPackages.Phase.Liquid)
                         .DW_CalcLiqMixtureProps()
                     Else
@@ -893,6 +908,7 @@ Namespace Streams
             Me.PropertyPackage.DW_ZerarComposicoes(PropertyPackages.Phase.Liquid3)
             Me.PropertyPackage.DW_ZerarComposicoes(PropertyPackages.Phase.Aqueous)
             Me.PropertyPackage.DW_ZerarComposicoes(PropertyPackages.Phase.Solid)
+            AtEquilibrium = False
         End Sub
 
 
@@ -1919,6 +1935,14 @@ Namespace Streams
                             Else
                                 value = Double.MinValue
                             End If
+                        Case 246
+                            value = Phases(3).Properties.osmoticCoefficient.GetValueOrDefault
+                        Case 247
+                            value = Phases(3).Properties.mean_ionic_acitivty_coefficient.GetValueOrDefault
+                        Case 248
+                            value = Phases(3).Properties.freezingPoint.GetValueOrDefault
+                        Case 249
+                            value = Phases(3).Properties.freezingPointDepression.GetValueOrDefault
                     End Select
 
                     Return value
@@ -1997,7 +2021,10 @@ Namespace Streams
                         proplist.Add("PROP_MS_" + CStr(i))
                     Next
                     proplist.Add("PROP_MS_153")
-                    proplist.Add("PROP_MS_154")
+                    proplist.Add("PROP_MS_246")
+                    proplist.Add("PROP_MS_247")
+                    proplist.Add("PROP_MS_248")
+                    proplist.Add("PROP_MS_249")
                     For i = 155 To 231
                         proplist.Add("PROP_MS_" + CStr(i))
                     Next
@@ -2016,6 +2043,7 @@ Namespace Streams
                         proplist.Add("PROP_MS_244" + "/" + subst.Name)
                         proplist.Add("PROP_MS_245" + "/" + subst.Name)
                     Next
+                    proplist.Add("PROP_MS_154")
                 Case PropertyType.WR
                     For i = 0 To 4
                         proplist.Add("PROP_MS_" + CStr(i))
@@ -2069,7 +2097,10 @@ Namespace Streams
                         proplist.Add("PROP_MS_" + CStr(i))
                     Next
                     proplist.Add("PROP_MS_153")
-                    proplist.Add("PROP_MS_154")
+                    proplist.Add("PROP_MS_246")
+                    proplist.Add("PROP_MS_247")
+                    proplist.Add("PROP_MS_248")
+                    proplist.Add("PROP_MS_249")
                     For i = 155 To 231
                         proplist.Add("PROP_MS_" + CStr(i))
                     Next
@@ -2088,6 +2119,7 @@ Namespace Streams
                         proplist.Add("PROP_MS_244" + "/" + subst.Name)
                         proplist.Add("PROP_MS_245" + "/" + subst.Name)
                     Next
+                    proplist.Add("PROP_MS_154")
             End Select
 
             proplist.AddRange(MyBase.GetProperties(proptype))
@@ -2810,6 +2842,16 @@ Namespace Streams
                         Case 239, 240, 241, 242, 243, 244, 245
                             'Molality
                             value = su.molar_conc
+                        Case 246
+                            'osmotic coefficient
+                            value = ""
+                        Case 247
+                            'miac
+                            value = ""
+                        Case 248
+                            value = su.temperature
+                        Case 249
+                            value = su.deltaT
                         Case Else
                             value = ""
                     End Select
@@ -4112,6 +4154,7 @@ Namespace Streams
             Me.PropertyPackage.DW_ZerarComposicoes(PropertyPackages.Phase.Solid)
             Me.PropertyPackage.DW_ZerarComposicoes(PropertyPackages.Phase.Mixture)
             Me.PropertyPackage.CurrentMaterialStream = Nothing
+            AtEquilibrium = False
         End Sub
 
         ''' <summary>
@@ -4482,13 +4525,23 @@ Namespace Streams
                         res.Add(Math.Log(Me.Phases(f).Compounds(c).FugacityCoeff.GetValueOrDefault))
                     Next
                 Case "volume"
-                    If Not GlobalSettings.Settings.CAPEOPENMode Then
-                        res.Add(Me.Phases(f).Properties.molecularWeight / Me.Phases(f).Properties.density)
-                    Else
-                        res.Add(Me.Phases(f).Properties.molecularWeight / Me.Phases(f).Properties.density / 1000)
-                    End If
+                    Select Case basis
+                        Case "Molar", "molar", "mole", "Mole"
+                            If Not GlobalSettings.Settings.CAPEOPENMode Then
+                                res.Add(Me.Phases(f).Properties.molecularWeight / Me.Phases(f).Properties.density)
+                            Else
+                                res.Add(Me.Phases(f).Properties.molecularWeight / Me.Phases(f).Properties.density / 1000)
+                            End If
+                        Case "Mass", "mass"
+                            res.Add(1 / Me.Phases(f).Properties.density)
+                    End Select
                 Case "density"
-                    res.Add(Me.Phases(f).Properties.density.GetValueOrDefault)
+                    Select Case basis
+                        Case "Molar", "molar", "mole", "Mole"
+                            res.Add(Me.Phases(f).Properties.density.GetValueOrDefault / Me.PropertyPackage.AUX_MMM(phs) * 1000)
+                        Case "Mass", "mass"
+                            res.Add(Me.Phases(f).Properties.density.GetValueOrDefault)
+                    End Select
                 Case "enthalpy", "enthalpynf"
                     Select Case basis
                         Case "Molar", "molar", "mole", "Mole"
@@ -5139,7 +5192,7 @@ Namespace Streams
                             Me.Phases(f).Properties.internal_energy = values(0) / 1000
                             Me.Phases(f).Properties.molar_internal_energy = values(0) * Me.PropertyPackage.AUX_MMM(phs)
                     End Select
-                Case "gibbslenergy"
+                Case "gibbsenergy"
                     Select Case basis
                         Case "Molar", "molar", "mole", "Mole"
                             Me.Phases(f).Properties.molar_gibbs_free_energy = values(0)
@@ -6192,6 +6245,8 @@ Namespace Streams
 
         Public Property FloatingTableAmountBasis As CompositionBasis = CompositionBasis.DefaultBasis Implements IMaterialStream.FloatingTableAmountBasis
 
+        Public Property DefinedFlow As FlowSpec = FlowSpec.Mass Implements IMaterialStream.DefinedFlow
+
         Public Overrides Function GetReport(su As IUnitsOfMeasure, ci As Globalization.CultureInfo, numberformat As String) As String
 
             PropertyPackage.CurrentMaterialStream = Me
@@ -6546,7 +6601,7 @@ Namespace Streams
 
         End Function
 
-        Public Overrides Function GetStructuredReport() As List(Of Tuple(Of ReportItemType, String()))
+        Public Overrides Function GetStructuredReport() As List(Of System.Tuple(Of ReportItemType, String()))
 
             Dim list As New List(Of Tuple(Of ReportItemType, String()))
 
@@ -7473,6 +7528,7 @@ Namespace Streams
         ''' <param name="value">Temperature in K</param>
         Public Sub SetTemperature(value As Double)
             Phases(0).Properties.temperature = value
+            AtEquilibrium = False
         End Sub
 
         ''' <summary>
@@ -7481,6 +7537,7 @@ Namespace Streams
         ''' <param name="value">Pressure in Pa</param>
         Public Sub SetPressure(value As Double)
             Phases(0).Properties.pressure = value
+            AtEquilibrium = False
         End Sub
 
         ''' <summary>
@@ -7489,6 +7546,7 @@ Namespace Streams
         ''' <param name="value">Enthalpy in kJ/kg</param>
         Public Sub SetMassEnthalpy(value As Double)
             Phases(0).Properties.enthalpy = value
+            AtEquilibrium = False
         End Sub
 
         ''' <summary>
@@ -7497,6 +7555,7 @@ Namespace Streams
         ''' <param name="value">Entropy in kJ/[kg.K]</param>
         Public Sub SetMassEntropy(value As Double)
             Phases(0).Properties.entropy = value
+            AtEquilibrium = False
         End Sub
 
         ''' <summary>
@@ -7507,6 +7566,8 @@ Namespace Streams
             Phases(0).Properties.massflow = value
             Phases(0).Properties.molarflow = value / Phases(0).Properties.molecularWeight * 1000
             Phases(0).Properties.volumetric_flow = value / Phases(0).Properties.density.GetValueOrDefault
+            DefinedFlow = FlowSpec.Mass
+            AtEquilibrium = False
         End Sub
 
         Public Function GetMassEnthalpy() As Double
@@ -7541,6 +7602,8 @@ Namespace Streams
             Phases(0).Properties.massflow = value * Phases(0).Properties.molecularWeight / 1000
             Phases(0).Properties.molarflow = value
             Phases(0).Properties.volumetric_flow = value * Phases(0).Properties.molecularWeight / 1000 / Phases(0).Properties.density.GetValueOrDefault
+            DefinedFlow = FlowSpec.Mole
+            AtEquilibrium = False
         End Sub
 
         ''' <summary>
@@ -7551,6 +7614,8 @@ Namespace Streams
             Phases(0).Properties.massflow = Nothing
             Phases(0).Properties.molarflow = Nothing
             Phases(0).Properties.volumetric_flow = value
+            DefinedFlow = FlowSpec.Volumetric
+            AtEquilibrium = False
         End Sub
 
         ''' <summary>
@@ -7578,6 +7643,7 @@ Namespace Streams
                 Case "vs"
                     SpecType = StreamSpec.Volume_and_Entropy
             End Select
+            AtEquilibrium = False
         End Sub
 
         Public Sub Mix(withstream As MaterialStream)
@@ -7911,6 +7977,18 @@ Namespace Streams
 
         End Sub
 
+        ''' <summary>
+        ''' Returns the overall heat of formation term for energy balance check, in kJ/s
+        ''' </summary>
+        ''' <returns></returns>
+        Public Function GetOverallHeatOfFormation() As Double Implements IMaterialStream.GetOverallHeatOfFormation
+
+            PropertyPackage.CurrentMaterialStream = Me
+
+            Return GetMassFlow() * PropertyPackage.RET_VMAS(PropertyPackages.Phase.Mixture).MultiplyY(PropertyPackage.RET_VDHF).SumY()
+
+        End Function
+
         Public Overrides Function ToString() As String
 
             If GraphicObject IsNot Nothing Then
@@ -7920,6 +7998,51 @@ Namespace Streams
             End If
 
         End Function
+
+        Public Sub CopyCompositions(fromphase As PhaseLabel, tophase As PhaseLabel)
+
+            Dim fromp, top As Integer
+
+            Select Case fromphase
+                Case PhaseLabel.Mixture
+                    fromp = 0
+                Case PhaseLabel.LiquidMixture
+                    fromp = 1
+                Case PhaseLabel.Liquid1
+                    fromp = 3
+                Case PhaseLabel.Liquid2
+                    fromp = 4
+                Case PhaseLabel.Liquid3
+                    fromp = 5
+                Case PhaseLabel.Vapor
+                    fromp = 2
+                Case PhaseLabel.Solid
+                    fromp = 7
+            End Select
+
+            Select Case tophase
+                Case PhaseLabel.Mixture
+                    top = 0
+                Case PhaseLabel.LiquidMixture
+                    top = 1
+                Case PhaseLabel.Liquid1
+                    top = 3
+                Case PhaseLabel.Liquid2
+                    top = 4
+                Case PhaseLabel.Liquid3
+                    top = 5
+                Case PhaseLabel.Vapor
+                    top = 2
+                Case PhaseLabel.Solid
+                    top = 7
+            End Select
+
+            For Each c In Phases(fromp).Compounds.Values
+                Phases(top).Compounds(c.Name).MassFraction = c.MassFraction.GetValueOrDefault
+                Phases(top).Compounds(c.Name).MoleFraction = c.MoleFraction.GetValueOrDefault
+            Next
+
+        End Sub
 
     End Class
 

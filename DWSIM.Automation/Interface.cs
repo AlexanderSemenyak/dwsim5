@@ -12,6 +12,8 @@ using DWSIM.UI.Desktop.Shared;
 using System.Xml.Linq;
 using DWSIM.UnitOperations.UnitOperations.Auxiliary;
 using System.IO;
+using DWSIM.SharedClasses.SystemsOfUnits;
+using DWSIM.UnitOperations.SpecialOps;
 
 namespace DWSIM.Automation
 {
@@ -61,6 +63,12 @@ namespace DWSIM.Automation
 
         double ConvertFromSI(double d, string units);
         double ConvertToSI(double d, string units);
+
+        List<Exception> CalculateFlowsheet2(IFlowsheet flowsheet);
+
+        IFlowsheet CreateFlowsheet();
+
+
     }
 
     [Guid("37437090-e541-4f2c-9856-d1e27df32ecb"), ClassInterface(ClassInterfaceType.None)]
@@ -127,6 +135,14 @@ namespace DWSIM.Automation
             }
         }
 
+        public List<Exception> CalculateFlowsheet2(IFlowsheet flowsheet)
+        {
+            SetupCalculationMode();
+
+            return FlowsheetSolver.FlowsheetSolver.SolveFlowsheet(flowsheet, GlobalSettings.Settings.SolverMode);
+        }
+
+
         public List<Exception> CalculateFlowsheet(IFlowsheet flowsheet, ISimulationObject sender)
         {
             SetupCalculationMode();
@@ -141,21 +157,13 @@ namespace DWSIM.Automation
 
         private static void SetupCalculationMode()
         {
+            GlobalSettings.Settings.CalculatorActivated = true;
             GlobalSettings.Settings.AutomationMode = true;
             GlobalSettings.Settings.SolverBreakOnException = true;
             GlobalSettings.Settings.SolverMode = 0;
             GlobalSettings.Settings.SolverTimeoutSeconds = 360;
             GlobalSettings.Settings.EnableGPUProcessing = false;
             GlobalSettings.Settings.EnableParallelProcessing = true;
-            Console.WriteLine("Solving Flowsheet, please wait...");
-            if ((sender != null))
-            {
-                FlowsheetSolver.FlowsheetSolver.CalculateObject(flowsheet, sender.Name);
-            }
-            else
-            {
-                FlowsheetSolver.FlowsheetSolver.SolveFlowsheet(flowsheet, GlobalSettings.Settings.SolverMode);
-            }
         }
 
         private double GetRefVarValue(IFlowsheet formC, Adjust myADJ, IUnitsOfMeasure su)
@@ -190,9 +198,15 @@ namespace DWSIM.Automation
         {
             SaveFlowsheet(flowsheet, filepath, true);
         }
+
+        public IFlowsheet CreateFlowsheet()
+        {
+            return new FormFlowsheet();
+        }
     }
+
     [Guid("22694b87-1ba6-4341-81dd-8d33f48643d7"), ClassInterface(ClassInterfaceType.None)]
-    public class Automation2 : AutomationInterface
+    public partial class Automation2 : AutomationInterface
     {
 
         Eto.Forms.Application app;
@@ -201,58 +215,122 @@ namespace DWSIM.Automation
         public Automation2()
         {
             GlobalSettings.Settings.AutomationMode = true;
-            Console.WriteLine("Initializing DWSIM in Automation Mode, please wait...");
+            //Console.WriteLine("Initializing DWSIM in Automation Mode, please wait...");
             app = UI.Desktop.Program.MainApp(null);
             app.Attach(this);
         }
 
-        public Interfaces.IFlowsheet LoadFlowsheet(string filepath)
+        public Interfaces.IFlowsheet LoadFlowsheet(string filepath, out string errorText)
         {
             GlobalSettings.Settings.AutomationMode = true;
-            Console.WriteLine("Initializing the Flowsheet, please wait...");
+            //Console.WriteLine("Initializing the Flowsheet, please wait...");
             fm = new UI.Forms.Flowsheet();
-            Console.WriteLine("Loading Flowsheet data, please wait...");
-            LoadSimulation(filepath);
-            return fm.FlowsheetObject;
+            //Console.WriteLine("Loading Flowsheet data, please wait...");
+
+            return LoadSimulation(null,filepath, out errorText);
+        }
+
+        /// <summary>
+        /// Загрузить из потока не создавая промежуточный файл
+        /// </summary>
+        /// <param name="fsFlowsheet"></param>
+        /// <param name="filepath"></param>
+        /// <param name="errorText"></param>
+        /// <returns></returns>
+        public Interfaces.IFlowsheet LoadFlowsheet(Stream fsFlowsheet, string filepath, out string errorText)
+        {
+            GlobalSettings.Settings.AutomationMode = true;
+            
+            return LoadSimulation(fsFlowsheet, filepath, out errorText);
+
+            //var ext = System.IO.Path.GetExtension(filepath).ToLower();
+            //IFlowsheet fs = null;
+            //if (ext.Contains("dwxmz") || ext.Contains("armgz"))
+            //{
+            //    fs = fm.LoadAndExtractXMLZIP(fsFlowsheet, filepath, null, true, Path.GetDirectoryName(filepath)/*for exclude blocking by parallel access*/);
+            //}
+            //else
+            //{
+            //    fs = fm.LoadXML(fsFlowsheet, filepath, null, "", true);
+            //}
+            //errorText = fs == null ? fm.m_LastError : null;
+            //return fs;
         }
 
         public void SaveFlowsheet(IFlowsheet flowsheet, string filepath, bool compressed)
         {
-            Console.WriteLine("Saving the Flowsheet, please wait...");
+            //Console.WriteLine("Saving the Flowsheet, please wait...");
             fm.FlowsheetObject = (Flowsheet)flowsheet;
             fm.SaveSimulation(filepath);
         }
 
-        public void CalculateFlowsheet(IFlowsheet flowsheet, ISimulationObject sender)
+        public List<Exception> CalculateFlowsheet(IFlowsheet flowsheet, ISimulationObject sender)
         {
+            SetupCalculationMode();
+
+            if (sender != null)
+            {
+                return FlowsheetSolver.FlowsheetSolver.CalculateObject(flowsheet, sender.Name);
+            }
+
+            //Console.WriteLine("Solving Flowsheet, please wait...");
+            //fm.FlowsheetObject.SolveFlowsheet2();
+            return FlowsheetSolver.FlowsheetSolver.SolveFlowsheet(flowsheet, GlobalSettings.Settings.SolverMode);
+        }
+
+        public List<Exception> CalculateFlowsheet2(IFlowsheet flowsheet)
+        {
+            SetupCalculationMode();
+            GlobalSettings.Settings.SolverMode = 0;
+            GlobalSettings.Settings.SolverTimeoutSeconds = 360;
+            return FlowsheetSolver.FlowsheetSolver.SolveFlowsheet(flowsheet, GlobalSettings.Settings.SolverMode);
+        }
+
+        private static void SetupCalculationMode()
+        {
+            GlobalSettings.Settings.CalculatorActivated = true;
             GlobalSettings.Settings.SolverBreakOnException = true;
             GlobalSettings.Settings.EnableGPUProcessing = false;
             GlobalSettings.Settings.EnableParallelProcessing = true;
-            Console.WriteLine("Solving Flowsheet, please wait...");
-            fm.FlowsheetObject.SolveFlowsheet2();
         }
 
-        private void LoadSimulation(string path)
+        private IFlowsheet LoadSimulation(Stream fsFlowsheet, string path, out string errorText)
         {
-            if (System.IO.Path.GetExtension(path).ToLower() == ".dwxmz")
+            var ext = System.IO.Path.GetExtension(path).ToLowerInvariant();
+            if (ext == ".dwxmz" || ext == ".armgz")
             {
-                var xdoc = fm.FlowsheetObject.LoadZippedXML(path);
+                var xdoc = fm.FlowsheetObject.LoadZippedXML(fsFlowsheet, path, Path.GetDirectoryName(path)/*for exclude blocking by parallel access*/);
             }
-            else if (System.IO.Path.GetExtension(path).ToLower() == ".dwxml")
+            else if (ext == ".dwxml")
             {
+                if (fsFlowsheet!=null) throw new NotSupportedException();
                 fm.FlowsheetObject.LoadFromXML(XDocument.Load(path));
             }
-            else if (System.IO.Path.GetExtension(path).ToLower() == ".xml")
+            else if (ext == ".xml")
             {
+                if (fsFlowsheet!=null) throw new NotSupportedException();
                 fm.FlowsheetObject.LoadFromMXML(XDocument.Load(path));
             }
+
             fm.FlowsheetObject.FilePath = path;
             fm.FlowsheetObject.FlowsheetOptions.FilePath = path;
+
+            errorText = "";//todo need transfer errorText
+            return fm.FlowsheetObject;
         }
 
         public void SaveFlowsheet2(IFlowsheet flowsheet, string filepath)
         {
             SaveFlowsheet(flowsheet, filepath, true);
+        }
+
+
+        public IFlowsheet CreateFlowsheet()
+        {
+            GlobalSettings.Settings.AutomationMode = true;
+            //Console.WriteLine("Initializing the Flowsheet, please wait...");
+            fm = new UI.Forms.Flowsheet();
+            return fm.FlowsheetObject;
         }
     }
 

@@ -73,6 +73,8 @@
 
             chkVeryHigh.Checked = SimObject.VeryHighAlarmEnabled
 
+            chkDisplayPercent.Checked = SimObject.DisplayInPercent
+
         End With
 
         Loaded = True
@@ -146,7 +148,7 @@
 
         If Not SelectedObject Is Nothing Then
 
-            Dim props = SelectedObject.GetProperties(Enums.PropertyType.WR)
+            Dim props = SelectedObject.GetProperties(Enums.PropertyType.ALL)
 
             For Each p In props
                 If SimObject.FlowSheet.GetTranslatedString(p) = cbSourceProp.SelectedItem.ToString Then
@@ -215,6 +217,14 @@
     Private Sub chkShowAlarms_CheckedChanged(sender As Object, e As EventArgs) Handles chkShowAlarms.CheckedChanged
 
         SimObject.ShowAlarms = chkShowAlarms.Checked
+
+        DirectCast(SimObject.FlowSheet, Interfaces.IFlowsheetGUI).UpdateInterface()
+
+    End Sub
+
+    Private Sub chkDisplayPercent_CheckedChanged(sender As Object, e As EventArgs) Handles chkDisplayPercent.CheckedChanged
+
+        SimObject.DisplayInPercent = chkDisplayPercent.Checked
 
         DirectCast(SimObject.FlowSheet, Interfaces.IFlowsheetGUI).UpdateInterface()
 

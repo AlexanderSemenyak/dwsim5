@@ -381,6 +381,9 @@
   <data name="PROP_HX_28" xml:space="preserve">
     <value>Потеря температуры</value>
   </data>
+  <data name="PROP_HX_29" xml:space="preserve">
+    <value>User-Defined LMTD Correction Factor</value>
+  </data>
   <data name="PROP_HX_3" xml:space="preserve">
     <value>Температура на выходе охлажденного флюида</value>
   </data>
@@ -645,7 +648,7 @@
     <comment>0</comment>
   </data>
   <data name="PROP_MS_160" xml:space="preserve">
-    <value>Gibbs Free Energy (Газ)</value>
+    <value>Gibbs Free Energy (Vapor)</value>
   </data>
   <data name="PROP_MS_161" xml:space="preserve">
     <value>Высвобожденная энергия (Гельмгольц)(Газ)</value>
@@ -815,8 +818,8 @@
     <value>Vapor Phase Тепловая емкость (Cp)</value>
     <comment>0</comment>
   </data>
-  <data name="PROP_MS_2101" xml:space="preserve">
-    <value>Molar Высвобожденная энергия (Гельмгольц)(Смесь)</value>
+  <data name="PROP_MS_210" xml:space="preserve">
+    <value>Molar Helmholtz Free Energy (Mixture)</value>
   </data>
   <data name="PROP_MS_211" xml:space="preserve">
     <value>Molar Внутренняя энергия (Газ)</value>
@@ -935,6 +938,18 @@
   </data>
   <data name="PROP_MS_245" xml:space="preserve">
     <value>Молярность (Твердая фаза)</value>
+  </data>
+  <data name="PROP_MS_246" xml:space="preserve">
+    <value>Osmotic Coefficient (Liquid 1)</value>
+  </data>
+  <data name="PROP_MS_247" xml:space="preserve">
+    <value>Mean Ionic Activity Coefficient (Liquid 1)</value>
+  </data>
+  <data name="PROP_MS_248" xml:space="preserve">
+    <value>Freezing Point (Liquid 1)</value>
+  </data>
+  <data name="PROP_MS_249" xml:space="preserve">
+    <value>Freezing Point Depression (Liquid 1)</value>
   </data>
   <data name="PROP_MS_25" xml:space="preserve">
     <value>Паровая фаза - Объемный поток</value>
@@ -1057,7 +1072,7 @@
     <comment>0</comment>
   </data>
   <data name="PROP_MS_52" xml:space="preserve">
-    <value>Liquid Phase (1) Molar Enthalpy</value>
+    <value>Molar Enthalpy (Liquid 1)</value>
     <comment>0</comment>
   </data>
   <data name="PROP_MS_53" xml:space="preserve">
@@ -1282,7 +1297,7 @@
   </data>
   <data name="PROP_OP_4" xml:space="preserve">
     <value>Отношение д-ра отверстия к д-ру трубы (Бэта) (d/D)</value>
-    <comment>0</comment>
+    <comment>1</comment>
   </data>
   <data name="PROP_OP_5" xml:space="preserve">
     <value>Общее падение давления</value>
@@ -1375,6 +1390,9 @@
   </data>
   <data name="PROP_PU_4" xml:space="preserve">
     <value>Available NPSH</value>
+  </data>
+  <data name="PROP_PU_5" xml:space="preserve">
+    <value>Outlet Pressure</value>
   </data>
   <data name="PROP_RA_0" xml:space="preserve">
     <value>Top Stage Pressure</value>
@@ -1544,7 +1562,6 @@
   </data>
   <data name="PROP_TK_2" xml:space="preserve">
     <value>Время жизни</value>
-    <comment>1</comment>
   </data>
   <data name="PROP_TU_0" xml:space="preserve">
     <value>Падение давления</value>
@@ -1587,5 +1604,8 @@
   </data>
   <data name="PROP_VA_5" xml:space="preserve">
     <value>Открытие</value>
+  </data>
+  <data name="PROP_MS_2101" xml:space="preserve">
+    <value>Molar Высвобожденная энергия (Гельмгольц)(Смесь)</value>
   </data>
 </root>

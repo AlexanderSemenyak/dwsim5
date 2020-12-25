@@ -23,6 +23,8 @@
 
     Property SpecType As Enums.StreamSpec
 
+    Property DefinedFlow As Enums.FlowSpec
+
     Property IsElectrolyteStream As Boolean
 
     Property ReferenceSolvent As String
@@ -64,5 +66,7 @@
     Sub SetCurrentMaterialStream(ms As Object)
 
     Property FloatingTableAmountBasis As Enums.CompositionBasis
+
+    Function GetOverallHeatOfFormation() As Double
 
 End Interface

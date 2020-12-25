@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DWSIM.Automation</RootNamespace>
     <AssemblyName>DWSIM.Automation</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\DWSIM\bin\x64\Debug\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -153,13 +153,11 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if "$(ConfigurationName)"=="Release" (
-
-xcopy "$(SolutionDir)DWSIM.Automation\bin\x64\Release\*" "$(SolutionDir)DistPackages\Windows\" /E /Y /F /D 2&gt;nul 1&gt;nul 4&gt;nul
-xcopy "$(SolutionDir)DWSIM.Automation\bin\x86\Release\*" "$(SolutionDir)DistPackages\Windows_32\" /E /Y /F /D 2&gt;nul 1&gt;nul 4&gt;nul
-xcopy "$(SolutionDir)DWSIM.Automation\bin\x64\Release\*" "$(SolutionDir)DistPackages\macOS\" /E /Y /F /D 2&gt;nul 1&gt;nul 4&gt;nul
-xcopy "$(SolutionDir)DWSIM.Automation\bin\x64\Release\*" "$(SolutionDir)DistPackages\Linux\" /E /Y /F /D 2&gt;nul 1&gt;nul 4&gt;nul
-
+    <PostBuildEvent>if "$(ConfigurationName)"=="Release"  (
+xcopy "$(SolutionDir)DWSIM.Automation\bin\Release\*" "$(SolutionDir)DistPackages\Windows\" /E /Y /F /D 2&gt;nul 1&gt;nul 4&gt;nul
+xcopy "$(SolutionDir)DWSIM.Automation\bin\Release\*" "$(SolutionDir)DistPackages\macOS\" /E /Y /F /D 2&gt;nul 1&gt;nul 4&gt;nul
+xcopy "$(SolutionDir)DWSIM.Automation\bin\Release\*" "$(SolutionDir)DistPackages\Linux\" /E /Y /F /D 2&gt;nul 1&gt;nul 4&gt;nul
+xcopy "$(SolutionDir)DWSIM.Automation\bin\Release\*" "$(SolutionDir)DistPackages\Windows_32\" /E /Y /F /D 2&gt;nul 1&gt;nul 4&gt;nul
 )</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

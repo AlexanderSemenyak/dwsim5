@@ -145,23 +145,17 @@
   <data name="Label11.Text" xml:space="preserve">
     <value>Object</value>
   </data>
+  <data name="GroupBox5.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 4</value>
+  </data>
   <data name="GroupBox5.Size" type="System.Drawing.Size, System.Drawing">
     <value>487, 73</value>
   </data>
   <data name="GroupBox5.Text" xml:space="preserve">
     <value>General Info</value>
   </data>
-  <data name="btnConfigureFlashAlg.Location" type="System.Drawing.Point, System.Drawing">
-    <value>447, 53</value>
-  </data>
-  <data name="btnConfigureFlashAlg.ToolTip" xml:space="preserve">
-    <value>Configure</value>
-  </data>
-  <data name="btnConfigureFlashAlg.ToolTip1" xml:space="preserve">
-    <value />
-  </data>
   <data name="btnConfigurePP.Location" type="System.Drawing.Point, System.Drawing">
-    <value>447, 26</value>
+    <value>450, 22</value>
   </data>
   <data name="btnConfigurePP.ToolTip" xml:space="preserve">
     <value>Configure</value>
@@ -169,14 +163,14 @@
   <data name="btnConfigurePP.ToolTip1" xml:space="preserve">
     <value />
   </data>
-  <data name="cbFlashAlg.Size" type="System.Drawing.Size, System.Drawing">
-    <value>294, 21</value>
-  </data>
-  <data name="Label10.Text" xml:space="preserve">
-    <value>Flash Algorithm</value>
+  <data name="cbPropPack.Location" type="System.Drawing.Point, System.Drawing">
+    <value>147, 22</value>
   </data>
   <data name="cbPropPack.Size" type="System.Drawing.Size, System.Drawing">
-    <value>294, 21</value>
+    <value>297, 21</value>
+  </data>
+  <data name="Label9.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 25</value>
   </data>
   <data name="Label9.Size" type="System.Drawing.Size, System.Drawing">
     <value>92, 13</value>
@@ -185,10 +179,10 @@
     <value>Property Package</value>
   </data>
   <data name="GroupBox3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 855</value>
+    <value>8, 813</value>
   </data>
   <data name="GroupBox3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>482, 88</value>
+    <value>485, 57</value>
   </data>
   <data name="GroupBox3.Text" xml:space="preserve">
     <value>Property Package Settings</value>
@@ -200,10 +194,10 @@
     <value>Value</value>
   </data>
   <data name="dgvinputvars.Size" type="System.Drawing.Size, System.Drawing">
-    <value>464, 280</value>
+    <value>465, 238</value>
   </data>
   <data name="TabPage1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>470, 286</value>
+    <value>471, 244</value>
   </data>
   <data name="TabPage1.Text" xml:space="preserve">
     <value>Input</value>
@@ -215,22 +209,22 @@
     <value>Value</value>
   </data>
   <data name="dgvoutputvars.Size" type="System.Drawing.Size, System.Drawing">
-    <value>434, 280</value>
+    <value>452, 267</value>
   </data>
   <data name="TabPage2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>440, 286</value>
+    <value>458, 273</value>
   </data>
   <data name="TabPage2.Text" xml:space="preserve">
     <value>Output</value>
   </data>
   <data name="TabControl1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>478, 312</value>
+    <value>479, 270</value>
   </data>
   <data name="GroupBox6.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 521</value>
+    <value>8, 521</value>
   </data>
   <data name="GroupBox6.Size" type="System.Drawing.Size, System.Drawing">
-    <value>484, 331</value>
+    <value>485, 289</value>
   </data>
   <data name="GroupBox6.Text" xml:space="preserve">
     <value>CAPE-OPEN Variables</value>
@@ -269,10 +263,10 @@
     <value>Disconnect</value>
   </data>
   <data name="dgoutlets.Size" type="System.Drawing.Size, System.Drawing">
-    <value>435, 144</value>
+    <value>453, 144</value>
   </data>
   <data name="TabPage4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>441, 150</value>
+    <value>459, 150</value>
   </data>
   <data name="TabPage4.Text" xml:space="preserve">
     <value>Outlet</value>
@@ -290,10 +284,10 @@
     <value>Disconnect</value>
   </data>
   <data name="dgenergy.Size" type="System.Drawing.Size, System.Drawing">
-    <value>435, 144</value>
+    <value>453, 144</value>
   </data>
   <data name="TabPage5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>441, 150</value>
+    <value>459, 150</value>
   </data>
   <data name="TabPage5.Text" xml:space="preserve">
     <value>Energy</value>
@@ -302,7 +296,7 @@
     <value>479, 176</value>
   </data>
   <data name="GroupBox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 231</value>
+    <value>8, 231</value>
   </data>
   <data name="GroupBox1.Size" type="System.Drawing.Size, System.Drawing">
     <value>485, 195</value>
@@ -315,6 +309,9 @@
   </data>
   <data name="Button1.Text" xml:space="preserve">
     <value>Open CAPE-OPEN Object Editor</value>
+  </data>
+  <data name="GroupBox2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 184</value>
   </data>
   <data name="GroupBox2.Size" type="System.Drawing.Size, System.Drawing">
     <value>487, 45</value>
@@ -347,7 +344,7 @@
     <value>Name</value>
   </data>
   <data name="GroupBox7.Location" type="System.Drawing.Point, System.Drawing">
-    <value>2, 83</value>
+    <value>6, 83</value>
   </data>
   <data name="GroupBox7.Size" type="System.Drawing.Size, System.Drawing">
     <value>487, 97</value>
@@ -365,7 +362,7 @@
     <value>Use Embedded Image Icon</value>
   </data>
   <data name="GroupBox4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 429</value>
+    <value>8, 429</value>
   </data>
   <data name="GroupBox4.Size" type="System.Drawing.Size, System.Drawing">
     <value>485, 88</value>
@@ -374,6 +371,6 @@
     <value>Flowsheet Object Icon</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>496, 881</value>
+    <value>501, 881</value>
   </data>
 </root>

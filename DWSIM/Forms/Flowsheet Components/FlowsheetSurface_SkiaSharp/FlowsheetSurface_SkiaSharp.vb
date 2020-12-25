@@ -70,9 +70,13 @@ Public Class FlowsheetSurface_SkiaSharp
 
         SimObjPanel = New SimulationObjectsPanel() With {.Dock = DockStyle.Fill, .Flowsheet = Flowsheet}
 
-        SplitContainer1.Panel2.Controls.Add(SimObjPanel)
+        SimObjPanel.ContextMenuStrip = CMS_Palette
 
-        SplitContainer1.Panel2MinSize *= GlobalSettings.Settings.DpiScale
+        SplitContainerHorizontal.Panel2.Controls.Add(SimObjPanel)
+
+        SplitContainerHorizontal.Panel2MinSize *= GlobalSettings.Settings.DpiScale
+
+        SplitContainerVertical.Panel2MinSize *= GlobalSettings.Settings.DpiScale
 
         AddHandler CopyFromTSMI.DropDownItemClicked, AddressOf MaterialStreamClickHandler
 
@@ -1365,7 +1369,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 MessageBox.Show("Cloning is not supported by CAPE-OPEN/Flowsheet Unit Operations.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Select
 
-        SplitContainer1.Panel1.Invalidate()
+        SplitContainerHorizontal.Panel1.Invalidate()
 
         newobj.SetFlowsheet(Flowsheet)
 
@@ -1376,12 +1380,14 @@ Public Class FlowsheetSurface_SkiaSharp
     Private Sub CMS_ItemsToDisconnect_ItemClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ToolStripItemClickedEventArgs) Handles CMS_ItemsToDisconnect.ItemClicked
 
         Me.Flowsheet.DisconnectObject(FlowsheetSurface.SelectedObject, FormFlowsheet.SearchSurfaceObjectsByTag(e.ClickedItem.Text, FlowsheetSurface), True)
+        Flowsheet.UpdateOpenEditForms()
 
     End Sub
 
     Private Sub CMS_ItemsToConnect_ItemClicked(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ToolStripItemClickedEventArgs) Handles CMS_ItemsToConnect.ItemClicked
 
         Call Me.Flowsheet.ConnectObject(FlowsheetSurface.SelectedObject, FormFlowsheet.SearchSurfaceObjectsByTag(e.ClickedItem.Text, FlowsheetSurface))
+        Flowsheet.UpdateOpenEditForms()
 
     End Sub
 
@@ -1554,7 +1560,7 @@ Public Class FlowsheetSurface_SkiaSharp
             Case ObjectType.External
 
                 Dim myNode As New ExternalUnitOperationGraphic(mpx, mpy, 40, 40)
-                myNode.Tag = uoobj.Prefix & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myNode.Tag = uoobj.Prefix & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myNode.Tag = tag
                 gObj = myNode
                 gObj.Name = Guid.NewGuid.ToString
@@ -1568,7 +1574,7 @@ Public Class FlowsheetSurface_SkiaSharp
             Case ObjectType.Switch
 
                 Dim myGobj As New SwitchGraphic(mpx, mpy, 50, 40)
-                myGobj.Tag = "SW-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myGobj.Tag = "SW-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myGobj.Tag = tag
                 gObj = myGobj
                 gObj.Name = "SW-" & Guid.NewGuid.ToString
@@ -1581,7 +1587,7 @@ Public Class FlowsheetSurface_SkiaSharp
             Case ObjectType.Input
 
                 Dim myGobj As New InputGraphic(mpx, mpy, 50, 25)
-                myGobj.Tag = "IN-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myGobj.Tag = "IN-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myGobj.Tag = tag
                 gObj = myGobj
                 gObj.Name = "IN-" & Guid.NewGuid.ToString
@@ -1596,7 +1602,7 @@ Public Class FlowsheetSurface_SkiaSharp
             Case ObjectType.Controller_PID
 
                 Dim myGobj As New PIDControllerGraphic(mpx, mpy, 50, 50)
-                myGobj.Tag = "PID-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myGobj.Tag = "PID-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myGobj.Tag = tag
                 gObj = myGobj
                 gObj.Name = "PID-" & Guid.NewGuid.ToString
@@ -1611,7 +1617,7 @@ Public Class FlowsheetSurface_SkiaSharp
             Case ObjectType.LevelGauge
 
                 Dim myGobj As New LevelGaugeGraphic(mpx, mpy, 40, 70)
-                myGobj.Tag = "LG-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myGobj.Tag = "LG-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myGobj.Tag = tag
                 gObj = myGobj
                 gObj.Name = "LG-" & Guid.NewGuid.ToString
@@ -1624,7 +1630,7 @@ Public Class FlowsheetSurface_SkiaSharp
             Case ObjectType.DigitalGauge
 
                 Dim myGobj As New DigitalGaugeGraphic(mpx, mpy, 40, 20)
-                myGobj.Tag = "DG-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myGobj.Tag = "DG-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myGobj.Tag = tag
                 gObj = myGobj
                 gObj.Name = "DG-" & Guid.NewGuid.ToString
@@ -1637,7 +1643,7 @@ Public Class FlowsheetSurface_SkiaSharp
             Case ObjectType.AnalogGauge
 
                 Dim myGobj As New AnalogGaugeGraphic(mpx, mpy, 50, 50)
-                myGobj.Tag = "AG-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myGobj.Tag = "AG-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myGobj.Tag = tag
                 gObj = myGobj
                 gObj.Name = "AG-" & Guid.NewGuid.ToString
@@ -1654,7 +1660,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 myNode.Fill = True
                 myNode.FillColor = fillclr
                 myNode.LineColor = lineclr
-                myNode.Tag = "œŒƒ—“–-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myNode.Tag = "œŒƒ—“–-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myNode.Tag = tag
                 gObj = myNode
                 gObj.Name = DWSIM.App.GetLocalString("AJ") & Guid.NewGuid.ToString
@@ -1672,7 +1678,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 myNode.Fill = True
                 myNode.FillColor = fillclr
                 myNode.LineColor = lineclr
-                myNode.Tag = "œ–»—¬-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myNode.Tag = "œ–»—¬-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myNode.Tag = tag
                 gObj = myNode
                 gObj.Name = "ES-" & Guid.NewGuid.ToString
@@ -1689,7 +1695,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 myNode.Fill = True
                 myNode.FillColor = fillclr
                 myNode.LineColor = lineclr
-                myNode.Tag = "”“»À-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myNode.Tag = "”“»À-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myNode.Tag = tag
                 gObj = myNode
                 gObj.Name = "REC-" & Guid.NewGuid.ToString
@@ -1708,7 +1714,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 myNode.Fill = True
                 myNode.FillColor = fillclr
                 myNode.LineColor = lineclr
-                myNode.Tag = "›”“»À-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myNode.Tag = "›”“»À-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myNode.Tag = tag
                 gObj = myNode
                 gObj.Name = "EREC-" & Guid.NewGuid.ToString
@@ -1725,7 +1731,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 myNode.Fill = True
                 myNode.FillColor = fillclr
                 myNode.LineColor = lineclr
-                myNode.Tag = "—Ã≈—‹-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myNode.Tag = "—Ã≈—‹-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myNode.Tag = tag
                 gObj = myNode
                 gObj.Name = "MIST-" & Guid.NewGuid.ToString
@@ -1742,7 +1748,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 myNodeo.Fill = True
                 myNodeo.FillColor = fillclr
                 myNodeo.LineColor = lineclr
-                myNodeo.Tag = "–¿—Ÿ≈œ-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myNodeo.Tag = "–¿—Ÿ≈œ-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myNodeo.Tag = tag
                 gObj = myNodeo
                 gObj.Name = "DIV-" & Guid.NewGuid.ToString
@@ -1760,7 +1766,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 myPump.Fill = True
                 myPump.FillColor = fillclr
                 myPump.LineColor = lineclr
-                myPump.Tag = "Õ¿—Œ—-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myPump.Tag = "Õ¿—Œ—-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myPump.Tag = tag
                 gObj = myPump
                 gObj.Name = "BB-" & Guid.NewGuid.ToString
@@ -1778,7 +1784,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 myTank.Fill = True
                 myTank.FillColor = fillclr
                 myTank.LineColor = lineclr
-                myTank.Tag = "≈Ã -" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myTank.Tag = "≈Ã -" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myTank.Tag = tag
                 gObj = myTank
                 gObj.Name = "TQ-" & Guid.NewGuid.ToString
@@ -1796,7 +1802,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 myVessel.Fill = True
                 myVessel.FillColor = fillclr
                 myVessel.LineColor = lineclr
-                myVessel.Tag = "—≈œ-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myVessel.Tag = "—≈œ-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myVessel.Tag = tag
                 gObj = myVessel
                 gObj.Name = "SEP-" & Guid.NewGuid.ToString
@@ -1814,7 +1820,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 myMStr.Fill = True
                 myMStr.FillColor = fillclr
                 myMStr.LineColor = lineclr
-                myMStr.Tag = "ÃœŒ“Œ -" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myMStr.Tag = "ÃœŒ“Œ -" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myMStr.Tag = tag
                 gObj = myMStr
                 gObj.Name = "MAT-" & Guid.NewGuid.ToString
@@ -1834,7 +1840,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 Dim myMStr As New EnergyStreamGraphic(mpx, mpy, 20, 20)
                 myMStr.LineWidth = 2
                 myMStr.Fill = True
-                myMStr.Tag = "›œŒ“Œ -" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myMStr.Tag = "›œŒ“Œ -" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myMStr.Tag = tag
                 gObj = myMStr
                 gObj.Name = "EN-" & Guid.NewGuid.ToString
@@ -1852,7 +1858,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 myComp.Fill = True
                 myComp.FillColor = fillclr
                 myComp.LineColor = lineclr
-                myComp.Tag = " ŒÃœ-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myComp.Tag = " ŒÃœ-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myComp.Tag = tag
                 gObj = myComp
                 gObj.Name = "COMP-" & Guid.NewGuid.ToString
@@ -1870,7 +1876,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 myComp.Fill = True
                 myComp.FillColor = fillclr
                 myComp.LineColor = lineclr
-                myComp.Tag = "–¿—ÿ-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myComp.Tag = "–¿—ÿ-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myComp.Tag = tag
                 gObj = myComp
                 gObj.Name = "TURB-" & Guid.NewGuid.ToString
@@ -1888,7 +1894,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 myCool.Fill = True
                 myCool.FillColor = fillclr
                 myCool.LineColor = lineclr
-                myCool.Tag = "Œ’À-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myCool.Tag = "Œ’À-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myCool.Tag = tag
                 gObj = myCool
                 gObj.Name = "RESF-" & Guid.NewGuid.ToString
@@ -1906,7 +1912,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 myHeat.Fill = True
                 myHeat.FillColor = fillclr
                 myHeat.LineColor = lineclr
-                myHeat.Tag = "Õ¿√–-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myHeat.Tag = "Õ¿√–-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myHeat.Tag = tag
                 gObj = myHeat
                 gObj.Name = "AQ-" & Guid.NewGuid.ToString
@@ -1924,7 +1930,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 myPipe.Fill = True
                 myPipe.FillColor = fillclr
                 myPipe.LineColor = lineclr
-                myPipe.Tag = "—≈√Ã-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myPipe.Tag = "—≈√Ã-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myPipe.Tag = tag
                 gObj = myPipe
                 gObj.Name = "TUB-" & Guid.NewGuid.ToString
@@ -1942,7 +1948,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 myValve.Fill = True
                 myValve.FillColor = fillclr
                 myValve.LineColor = lineclr
-                myValve.Tag = " –¿Õ-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myValve.Tag = " –¿Õ-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myValve.Tag = tag
                 gObj = myValve
                 gObj.Name = "VALV-" & Guid.NewGuid.ToString
@@ -1960,7 +1966,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 myRconv.Fill = True
                 myRconv.FillColor = fillclr
                 myRconv.LineColor = lineclr
-                myRconv.Tag = "RC-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myRconv.Tag = "RC-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myRconv.Tag = tag
                 gObj = myRconv
                 gObj.Name = "RC-" & Guid.NewGuid.ToString
@@ -1980,7 +1986,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 myReq.Fill = True
                 myReq.FillColor = fillclr
                 myReq.LineColor = lineclr
-                myReq.Tag = "RE-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myReq.Tag = "RE-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myReq.Tag = tag
                 gObj = myReq
                 gObj.Name = "RE-" & Guid.NewGuid.ToString
@@ -2000,7 +2006,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 myRgibbs.Fill = True
                 myRgibbs.FillColor = fillclr
                 myRgibbs.LineColor = lineclr
-                myRgibbs.Tag = "RG-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myRgibbs.Tag = "RG-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myRgibbs.Tag = tag
                 gObj = myRgibbs
                 gObj.Name = "RG-" & Guid.NewGuid.ToString
@@ -2020,7 +2026,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 myRcstr.Fill = True
                 myRcstr.FillColor = fillclr
                 myRcstr.LineColor = lineclr
-                myRcstr.Tag = "CSTR-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myRcstr.Tag = "CSTR-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myRcstr.Tag = tag
                 gObj = myRcstr
                 gObj.Name = "CSTR-" & Guid.NewGuid.ToString
@@ -2040,7 +2046,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 myRpfr.Fill = True
                 myRpfr.FillColor = fillclr
                 myRpfr.LineColor = lineclr
-                myRpfr.Tag = "PFR-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myRpfr.Tag = "PFR-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myRpfr.Tag = tag
                 gObj = myRpfr
                 gObj.Name = "PFR-" & Guid.NewGuid.ToString
@@ -2060,7 +2066,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 myHeatExchanger.Fill = True
                 myHeatExchanger.FillColor = fillclr
                 myHeatExchanger.LineColor = lineclr
-                myHeatExchanger.Tag = "HE-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myHeatExchanger.Tag = "HE-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myHeatExchanger.Tag = tag
                 gObj = myHeatExchanger
                 gObj.Name = "HE-" & Guid.NewGuid.ToString
@@ -2078,7 +2084,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 mySC.Fill = True
                 mySC.FillColor = fillclr
                 mySC.LineColor = lineclr
-                mySC.Tag = "SC-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                mySC.Tag = "SC-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then mySC.Tag = tag
                 gObj = mySC
                 gObj.Name = "SC-" & Guid.NewGuid.ToString
@@ -2096,7 +2102,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 mySC.Fill = True
                 mySC.FillColor = fillclr
                 mySC.LineColor = lineclr
-                mySC.Tag = "DC-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                mySC.Tag = "DC-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then mySC.Tag = tag
                 gObj = mySC
                 gObj.Name = "DC-" & Guid.NewGuid.ToString
@@ -2118,7 +2124,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 mySC.Fill = True
                 mySC.FillColor = fillclr
                 mySC.LineColor = lineclr
-                mySC.Tag = "ABS-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                mySC.Tag = "ABS-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then mySC.Tag = tag
                 gObj = mySC
                 gObj.Name = "ABS-" & Guid.NewGuid.ToString
@@ -2140,7 +2146,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 myCSep.Fill = True
                 myCSep.FillColor = fillclr
                 myCSep.LineColor = lineclr
-                myCSep.Tag = " ŒÃœ—≈œ-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myCSep.Tag = " ŒÃœ—≈œ-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myCSep.Tag = tag
                 gObj = myCSep
                 gObj.Name = "CS-" & Guid.NewGuid.ToString
@@ -2158,7 +2164,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 myCSep.Fill = True
                 myCSep.FillColor = fillclr
                 myCSep.LineColor = lineclr
-                myCSep.Tag = "“¬—≈œ-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myCSep.Tag = "“¬—≈œ-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myCSep.Tag = tag
                 gObj = myCSep
                 gObj.Name = "SS-" & Guid.NewGuid.ToString
@@ -2176,7 +2182,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 myCSep.Fill = True
                 myCSep.FillColor = fillclr
                 myCSep.LineColor = lineclr
-                myCSep.Tag = "‘»À‹“–-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myCSep.Tag = "‘»À‹“–-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myCSep.Tag = tag
                 gObj = myCSep
                 gObj.Name = "FT-" & Guid.NewGuid.ToString
@@ -2194,7 +2200,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 myOPL.Fill = True
                 myOPL.FillColor = fillclr
                 myOPL.LineColor = lineclr
-                myOPL.Tag = "ƒ»¿‘–-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myOPL.Tag = "ƒ»¿‘–-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myOPL.Tag = tag
                 gObj = myOPL
                 gObj.Name = "OP-" & Guid.NewGuid.ToString
@@ -2212,7 +2218,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 myCUO.Fill = True
                 myCUO.FillColor = fillclr
                 myCUO.LineColor = lineclr
-                myCUO.Tag = "œŒÀ‹«-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myCUO.Tag = "œŒÀ‹«-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myCUO.Tag = tag
                 gObj = myCUO
                 gObj.Name = "UO-" & Guid.NewGuid.ToString
@@ -2232,7 +2238,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 myEUO.Fill = True
                 myEUO.FillColor = fillclr
                 myEUO.LineColor = lineclr
-                myEUO.Tag = "EXEL-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myEUO.Tag = "EXEL-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myEUO.Tag = tag
                 gObj = myEUO
                 gObj.Name = "EXL-" & Guid.NewGuid.ToString
@@ -2250,7 +2256,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 myEUO.Fill = True
                 myEUO.FillColor = fillclr
                 myEUO.LineColor = lineclr
-                myEUO.Tag = "ÃŒƒ≈À‹-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myEUO.Tag = "ÃŒƒ≈À‹-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myEUO.Tag = tag
                 gObj = myEUO
                 gObj.Name = "FS-" & Guid.NewGuid.ToString
@@ -2268,7 +2274,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 myCUO.Fill = True
                 myCUO.FillColor = fillclr
                 myCUO.LineColor = lineclr
-                myCUO.Tag = "COUO-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                myCUO.Tag = "COUO-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                 If tag <> "" Then myCUO.Tag = tag
                 gObj = myCUO
                 gObj.Name = "COUO-" & Guid.NewGuid.ToString
@@ -2276,7 +2282,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 Flowsheet.Collections.GraphicObjectCollection.Add(gObj.Name, myCUO)
                 'OBJETO DWSIM
                 If chemsep Then
-                    gObj.Tag = "CSCOL-" & Format(Flowsheet.Collections.FlowsheetObjectCollection.Count, "00#")
+                    gObj.Tag = "CSCOL-" & (Flowsheet.SimulationObjects.Where(Function(x0) x0.Value.GraphicObject.ObjectType = type).Count + 1).ToString("0#")
                     DirectCast(gObj, CAPEOPENGraphic).ChemSep = True
                     gObj.Width = 144
                     gObj.Height = 180
@@ -2293,7 +2299,7 @@ Public Class FlowsheetSurface_SkiaSharp
             gObj.Owner = Me.Flowsheet.SimulationObjects(gObj.Name)
             Me.Flowsheet.SimulationObjects(gObj.Name).SetFlowsheet(Flowsheet)
             FlowsheetSurface.DrawingObjects.Add(gObj)
-            SplitContainer1.Panel1.Invalidate()
+            SplitContainerHorizontal.Panel1.Invalidate()
             For Each obj In Me.Flowsheet.SimulationObjects.Values
                 obj.UpdateEditForm()
                 EditorTooltips.Update(obj, Flowsheet)
@@ -2302,6 +2308,7 @@ Public Class FlowsheetSurface_SkiaSharp
                 gObj.CreateConnectors(1, 1)
                 If Flowsheet.Visible Then FlowsheetSolver.FlowsheetSolver.CalculateObject(Me.Flowsheet, gObj.Name)
             End If
+            gObj.PositionConnectors()
             Application.DoEvents()
             If My.Application.PushUndoRedoAction Then Flowsheet.AddUndoRedoAction(New SharedClasses.UndoRedoAction() With {.AType = UndoRedoActionType.ObjectAdded,
                                      .ObjID = gObj.Name,
@@ -2309,7 +2316,8 @@ Public Class FlowsheetSurface_SkiaSharp
                                      .Name = String.Format(DWSIM.App.GetLocalString("UndoRedo_ObjectAdded"), gObj.Tag)})
         End If
 
-        SplitContainer1.Panel1.Cursor = Cursors.Arrow
+        SplitContainerHorizontal.Panel1.Cursor = Cursors.Arrow
+
 
         Return gObj.Name
 
@@ -2429,8 +2437,8 @@ Public Class FlowsheetSurface_SkiaSharp
     End Sub
 
     Private Sub ExibirTudoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExibirTudoToolStripMenuItem.Click
-        FlowsheetSurface.ZoomAll(SplitContainer1.Panel1.Width, SplitContainer1.Panel1.Height)
-        FlowsheetSurface.ZoomAll(SplitContainer1.Panel1.Width, SplitContainer1.Panel1.Height)
+        FlowsheetSurface.ZoomAll(SplitContainerHorizontal.Panel1.Width, SplitContainerHorizontal.Panel1.Height)
+        FlowsheetSurface.ZoomAll(SplitContainerHorizontal.Panel1.Width, SplitContainerHorizontal.Panel1.Height)
         Me.Invalidate()
     End Sub
 
@@ -2574,7 +2582,7 @@ Public Class FlowsheetSurface_SkiaSharp
         If tsbControlPanelMode.Checked Then Exit Sub
         FlowsheetSurface.Zoom += 0.05
         Me.TSTBZoom.Text = Format(Flowsheet.FormSurface.FlowsheetSurface.Zoom, "#%")
-        SplitContainer1.Panel1.Refresh()
+        SplitContainerHorizontal.Panel1.Refresh()
     End Sub
 
     Private Sub ToolStripButton1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ToolStripButton1.Click
@@ -2582,15 +2590,15 @@ Public Class FlowsheetSurface_SkiaSharp
         FlowsheetSurface.Zoom -= 0.05
         If FlowsheetSurface.Zoom < 0.05 Then FlowsheetSurface.Zoom = 0.05
         Me.TSTBZoom.Text = Format(FlowsheetSurface.Zoom, "#%")
-        SplitContainer1.Panel1.Refresh()
+        SplitContainerHorizontal.Panel1.Refresh()
     End Sub
 
     Private Sub ToolStripButton18_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
 
         If Flowsheet.SaveFileDialog1.ShowDialog = Windows.Forms.DialogResult.OK Then
-            Dim rect As Rectangle = New Rectangle(0, 0, SplitContainer1.Panel1.Width - 14, SplitContainer1.Panel1.Height - 14)
+            Dim rect As Rectangle = New Rectangle(0, 0, SplitContainerHorizontal.Panel1.Width - 14, SplitContainerHorizontal.Panel1.Height - 14)
             Dim img As Image = New Bitmap(rect.Width, rect.Height)
-            SplitContainer1.Panel1.DrawToBitmap(img, SplitContainer1.Panel1.Bounds)
+            SplitContainerHorizontal.Panel1.DrawToBitmap(img, SplitContainerHorizontal.Panel1.Bounds)
             img.Save(Flowsheet.SaveFileDialog1.FileName, Imaging.ImageFormat.Png)
             img.Dispose()
         End If
@@ -2604,14 +2612,14 @@ Public Class FlowsheetSurface_SkiaSharp
         FlowsheetSurface.ZoomAll(FControl.Width, FControl.Height)
         Application.DoEvents()
         Me.TSTBZoom.Text = Format(FlowsheetSurface.Zoom, "#%")
-        SplitContainer1.Panel1.Refresh()
+        SplitContainerHorizontal.Panel1.Refresh()
     End Sub
 
     Private Sub ToolStripButton3_Click(sender As System.Object, e As System.EventArgs) Handles ToolStripButton3.Click
         If tsbControlPanelMode.Checked Then Exit Sub
         FlowsheetSurface.Zoom = 1
         Me.TSTBZoom.Text = Format(FlowsheetSurface.Zoom, "#%")
-        SplitContainer1.Panel1.Refresh()
+        SplitContainerHorizontal.Panel1.Refresh()
     End Sub
 
     Private Sub TSTBZoom_KeyPress(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyEventArgs) Handles TSTBZoom.KeyDown
@@ -2619,7 +2627,7 @@ Public Class FlowsheetSurface_SkiaSharp
         If e.KeyCode = Keys.Enter Then
             FlowsheetSurface.Zoom = Convert.ToInt32(Me.TSTBZoom.Text.Replace("%", "")) / 100
             Me.TSTBZoom.Text = Format(FlowsheetSurface.Zoom, "#%")
-            SplitContainer1.Panel1.Refresh()
+            SplitContainerHorizontal.Panel1.Refresh()
         End If
     End Sub
 
@@ -2667,7 +2675,7 @@ Public Class FlowsheetSurface_SkiaSharp
 
     Private Sub FlowsheetSurface_SkiaSharp_Shown(sender As Object, e As EventArgs) Handles Me.Shown
         Try
-            FlowsheetSurface.ZoomAll(SplitContainer1.Panel1.Width, SplitContainer1.Panel1.Height)
+            FlowsheetSurface.ZoomAll(SplitContainerHorizontal.Panel1.Width, SplitContainerHorizontal.Panel1.Height)
             FlowsheetSurface.ShowGrid = Flowsheet.Options.FlowsheetDisplayGrid
             FlowsheetSurface.SnapToGrid = Flowsheet.Options.FlowsheetSnapToGrid
             FlowsheetSurface.MultiSelectMode = Flowsheet.Options.FlowsheetMultiSelectMode
@@ -2676,6 +2684,7 @@ Public Class FlowsheetSurface_SkiaSharp
             tsbMultiSelectMode.Checked = Flowsheet.Options.FlowsheetSnapToGrid
         Catch ex As Exception
         End Try
+        TSTBZoom.Text = Format(Flowsheet.FormSurface.FlowsheetSurface.Zoom, "#%")
     End Sub
 
     Public Sub FlowsheetDesignSurface_SelectionChanged_New(ByVal sender As Object, ByVal e As EventArgs)
@@ -2719,7 +2728,7 @@ Public Class FlowsheetSurface_SkiaSharp
             Else
                 FlowsheetSurface.SelectedObject.Rotation = FlowsheetSurface.SelectedObject.Rotation + 90
             End If
-            SplitContainer1.Panel1.Invalidate()
+            SplitContainerHorizontal.Panel1.Invalidate()
         End If
     End Sub
 
@@ -2732,7 +2741,7 @@ Public Class FlowsheetSurface_SkiaSharp
             Else
                 FlowsheetSurface.SelectedObject.Rotation = FlowsheetSurface.SelectedObject.Rotation + 180
             End If
-            SplitContainer1.Panel1.Invalidate()
+            SplitContainerHorizontal.Panel1.Invalidate()
         End If
     End Sub
 
@@ -2745,7 +2754,7 @@ Public Class FlowsheetSurface_SkiaSharp
             Else
                 FlowsheetSurface.SelectedObject.Rotation = FlowsheetSurface.SelectedObject.Rotation + 270
             End If
-            SplitContainer1.Panel1.Invalidate()
+            SplitContainerHorizontal.Panel1.Invalidate()
         End If
     End Sub
 
@@ -2782,7 +2791,7 @@ Public Class FlowsheetSurface_SkiaSharp
         Else
             FlowsheetSurface.SelectedObject.FlippedH = False
         End If
-        SplitContainer1.Panel1.Invalidate()
+        SplitContainerHorizontal.Panel1.Invalidate()
     End Sub
 
     Private Sub ToolStripMenuItem14_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem14.Click
@@ -2800,7 +2809,7 @@ Public Class FlowsheetSurface_SkiaSharp
 
     Sub CopyAsImage(Zoom As Integer)
 
-        Using bmp As New SKBitmap(SplitContainer1.Panel1.Width * Zoom, SplitContainer1.Panel1.Height * Zoom)
+        Using bmp As New SKBitmap(SplitContainerHorizontal.Panel1.Width * Zoom, SplitContainerHorizontal.Panel1.Height * Zoom)
             Using canvas As New SKCanvas(bmp)
                 canvas.Scale(Zoom)
                 FlowsheetSurface.UpdateCanvas(canvas)
@@ -2865,8 +2874,8 @@ Public Class FlowsheetSurface_SkiaSharp
 
         FlowsheetSurface.AlignSelectedObjects(direction)
 
-        SplitContainer1.Panel1.Invalidate()
-        SplitContainer1.Panel1.Invalidate()
+        SplitContainerHorizontal.Panel1.Invalidate()
+        SplitContainerHorizontal.Panel1.Invalidate()
 
     End Sub
 
@@ -2982,7 +2991,7 @@ Public Class FlowsheetSurface_SkiaSharp
         Dim obj = Flowsheet.GetFlowsheetGraphicObject(tstbSearch.Text)
         If Not obj Is Nothing Then
             Try
-                Dim center As Point = New Point(SplitContainer1.Panel1.Width / 2, SplitContainer1.Panel1.Height / 2)
+                Dim center As Point = New Point(SplitContainerHorizontal.Panel1.Width / 2, SplitContainerHorizontal.Panel1.Height / 2)
                 FlowsheetSurface.OffsetAll(center.X / FlowsheetSurface.Zoom - obj.X, center.Y / FlowsheetSurface.Zoom - obj.Y)
                 FlowsheetSurface.SelectedObject = obj
                 FControl.Invalidate()
@@ -3071,7 +3080,7 @@ Public Class FlowsheetSurface_SkiaSharp
 
     Private Sub btnUp_Click(sender As Object, e As EventArgs) Handles btnUp.Click
 
-        Dim s As Size = SplitContainer1.Panel1.Size
+        Dim s As Size = SplitContainerHorizontal.Panel1.Size
         Dim z = FlowsheetSurface.Zoom
 
         FlowsheetSurface.OffsetAll(0, s.Height / z)
@@ -3081,7 +3090,7 @@ Public Class FlowsheetSurface_SkiaSharp
 
     Private Sub btnDown_Click(sender As Object, e As EventArgs) Handles btnDown.Click
 
-        Dim s As Size = SplitContainer1.Panel1.Size
+        Dim s As Size = SplitContainerHorizontal.Panel1.Size
         Dim z = FlowsheetSurface.Zoom
 
         FlowsheetSurface.OffsetAll(0, -s.Height / z)
@@ -3091,7 +3100,7 @@ Public Class FlowsheetSurface_SkiaSharp
 
     Private Sub btnLeft_Click(sender As Object, e As EventArgs) Handles btnLeft.Click
 
-        Dim s As Size = SplitContainer1.Panel1.Size
+        Dim s As Size = SplitContainerHorizontal.Panel1.Size
         Dim z = FlowsheetSurface.Zoom
 
         FlowsheetSurface.OffsetAll(s.Width / z, 0)
@@ -3101,7 +3110,7 @@ Public Class FlowsheetSurface_SkiaSharp
 
     Private Sub btnRight_Click(sender As Object, e As EventArgs) Handles btnRight.Click
 
-        Dim s As Size = SplitContainer1.Panel1.Size
+        Dim s As Size = SplitContainerHorizontal.Panel1.Size
         Dim z = FlowsheetSurface.Zoom
 
         FlowsheetSurface.OffsetAll(-s.Width / z, 0)
@@ -3120,10 +3129,42 @@ Public Class FlowsheetSurface_SkiaSharp
     Private Sub LayoutAutomaticoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LayoutAutomaticoToolStripMenuItem.Click
 
         FlowsheetSurface.AutoArrange()
-        FlowsheetSurface.ZoomAll(SplitContainer1.Panel1.Width, SplitContainer1.Panel1.Height)
-        FlowsheetSurface.ZoomAll(SplitContainer1.Panel1.Width, SplitContainer1.Panel1.Height)
+        FlowsheetSurface.ZoomAll(SplitContainerHorizontal.Panel1.Width, SplitContainerHorizontal.Panel1.Height)
+        FlowsheetSurface.ZoomAll(SplitContainerHorizontal.Panel1.Width, SplitContainerHorizontal.Panel1.Height)
         FControl.Invalidate()
+        RestaurarLayoutToolStripMenuItem.Enabled = True
 
+    End Sub
+
+    Private Sub RestaurarLayoutToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RestaurarLayoutToolStripMenuItem.Click
+
+        FlowsheetSurface.RestoreLayout()
+        FlowsheetSurface.ZoomAll(SplitContainerHorizontal.Panel1.Width, SplitContainerHorizontal.Panel1.Height)
+        FlowsheetSurface.ZoomAll(SplitContainerHorizontal.Panel1.Width, SplitContainerHorizontal.Panel1.Height)
+        FControl.Invalidate()
+        RestaurarLayoutToolStripMenuItem.Enabled = False
+
+    End Sub
+
+    Private Sub ToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ToolStripMenuItem1.Click
+        If SplitContainerVertical.Panel2Collapsed Then
+            SimObjPanel.TabControl1.Alignment = TabAlignment.Right
+            SimObjPanel.TabControl1.Multiline = True
+            SplitContainerHorizontal.Panel2.Controls.Remove(SimObjPanel)
+            SplitContainerVertical.Panel2.Controls.Add(SimObjPanel)
+            SplitContainerVertical.SplitterDistance = (SplitContainerVertical.Width - 160) * GlobalSettings.Settings.DpiScale
+            SplitContainerVertical.Panel2Collapsed = False
+            SplitContainerHorizontal.Panel2Collapsed = True
+        Else
+            SimObjPanel.TabControl1.Alignment = TabAlignment.Top
+            SimObjPanel.TabControl1.Multiline = False
+            SimObjPanel.TabControl1.Width = SplitContainerHorizontal.Panel2.Width
+            SplitContainerVertical.Panel2.Controls.Remove(SimObjPanel)
+            SplitContainerHorizontal.Panel2.Controls.Add(SimObjPanel)
+            SplitContainerHorizontal.SplitterDistance = (SplitContainerVertical.Height - 100) * GlobalSettings.Settings.DpiScale
+            SplitContainerVertical.Panel2Collapsed = True
+            SplitContainerHorizontal.Panel2Collapsed = False
+        End If
     End Sub
 
     Private Sub tsbControlPanelMode_CheckedChanged(sender As Object, e As EventArgs) Handles tsbControlPanelMode.CheckedChanged
@@ -3141,7 +3182,7 @@ Public Class FlowsheetSurface_SkiaSharp
             GlobalSettings.Settings.DarkMode = True
             Drawing.SkiaSharp.GraphicsSurface.BackgroundColor = SKColors.DimGray
             Drawing.SkiaSharp.GraphicsSurface.ForegroundColor = SKColors.WhiteSmoke
-            SplitContainer1.Panel2Collapsed = True
+            SplitContainerHorizontal.Panel2Collapsed = True
         Else
             btnDown.Visible = False
             btnUp.Visible = False
@@ -3155,7 +3196,7 @@ Public Class FlowsheetSurface_SkiaSharp
             GlobalSettings.Settings.DarkMode = False
             Drawing.SkiaSharp.GraphicsSurface.BackgroundColor = SKColors.White
             Drawing.SkiaSharp.GraphicsSurface.ForegroundColor = SKColors.Black
-            SplitContainer1.Panel2Collapsed = False
+            SplitContainerHorizontal.Panel2Collapsed = False
         End If
         FControl.Invalidate()
 

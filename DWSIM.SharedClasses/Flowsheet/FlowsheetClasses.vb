@@ -62,8 +62,6 @@ Namespace DWSIM.Flowsheet
 
         Implements Interfaces.IFlowsheetOptions
 
-        Public Property FlashAlgorithms As New List(Of Interfaces.IFlashAlgorithm) Implements Interfaces.IFlowsheetOptions.FlashAlgorithms
-
         Public AvailableUnitSystems As New Dictionary(Of String, SystemsOfUnits.Units)(StringComparer.Ordinal)
 
         <Xml.Serialization.XmlIgnore()> Public PropertyPackages As Dictionary(Of String, IPropertyPackage)
@@ -144,12 +142,6 @@ Namespace DWSIM.Flowsheet
                 For Each item2 In item.Value
                     xel2.Add(New XElement("PropertyID", New XAttribute("Value", item2)))
                 Next
-            Next
-
-            elements.Add(New XElement("FlashAlgorithms"))
-
-            For Each fa In FlashAlgorithms
-                elements(elements.Count - 1).Add(New XElement("FlashAlgorithm", {New XElement("ID", fa.Tag), DirectCast(fa, Interfaces.ICustomXMLSerialization).SaveData().ToArray()}))
             Next
 
             Return elements
@@ -238,6 +230,8 @@ Namespace DWSIM.Flowsheet
         Public Property CompoundOrderingMode As Enums.CompoundOrdering = CompoundOrdering.AsAdded Implements IFlowsheetOptions.CompoundOrderingMode
 
         Public Property FlowsheetControlPanelMode As Boolean = False Implements IFlowsheetOptions.FlowsheetControlPanelMode
+
+        Public Property SkipEquilibriumCalculationOnDefinedStreams As Boolean = True Implements IFlowsheetOptions.SkipEquilibriumCalculationOnDefinedStreams
 
     End Class
 

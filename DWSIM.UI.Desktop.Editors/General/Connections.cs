@@ -146,6 +146,7 @@ namespace DWSIM.UI.Desktop.Editors
                                 flowsheet.ShowMessage(ex.Message.ToString(), IFlowsheet.MessageType.GeneralError);
                             }
                             fgui.UpdateInterface();
+                            fgui.UpdateOpenEditForms();
                             return;
                         }
                         else if (connector.Type == ConType.ConOut | connector.Type == ConType.ConEn)
@@ -154,13 +155,14 @@ namespace DWSIM.UI.Desktop.Editors
                             {
                                 var objto = connector.AttachedConnector.AttachedTo;
                                 flowsheet.DisconnectObjects(gobj, objto);
-                                flowsheet.ShowMessage(String.Format("Disconnected {0} from {1}", gobj.Tag, objto.Tag), IFlowsheet.MessageType.Information);
+                                flowsheet.ShowMessage(String.Format("Disconnected {0} from {1}.", gobj.Tag, objto.Tag), IFlowsheet.MessageType.Information);
                             }
                             catch (Exception ex)
                             {
                                 flowsheet.ShowMessage(ex.Message.ToString(), IFlowsheet.MessageType.GeneralError); ;
                             }
                             fgui.UpdateInterface();
+                            fgui.UpdateOpenEditForms();
                             return;
                         }
                     }
@@ -168,7 +170,9 @@ namespace DWSIM.UI.Desktop.Editors
                     if (sel != "")
                     {
 
-                        var gobj2 = flowsheet.GetFlowsheetSimulationObject(sel).GraphicObject;
+                        var gobj2 = flowsheet.GetFlowsheetSimulationObject(sel)?.GraphicObject;
+
+                        if (gobj2 == null) return;
 
                         if (direction == "In" && (connector.Type == ConType.ConIn | connector.Type == ConType.ConEn))
                         {
@@ -236,7 +240,7 @@ namespace DWSIM.UI.Desktop.Editors
                                 {
                                     var objto = connector.AttachedConnector.AttachedTo;
                                     flowsheet.DisconnectObjects(gobj, objto);
-                                    flowsheet.ShowMessage(String.Format("Disconnected {0} from {1}", gobj.Tag, objto.Tag), IFlowsheet.MessageType.Information);
+                                    flowsheet.ShowMessage(String.Format("Disconnected {0} from {1}.", gobj.Tag, objto.Tag), IFlowsheet.MessageType.Information);
                                 }
                                 flowsheet.ConnectObjects(gobj, gobj2, gobj.OutputConnectors.IndexOf(connector), 0);
                                 flowsheet.ShowMessage(String.Format("Connected {0} to {1}.", gobj.Tag, gobj2.Tag), IFlowsheet.MessageType.Information);
@@ -248,6 +252,7 @@ namespace DWSIM.UI.Desktop.Editors
                         }
 
                         fgui.UpdateInterface();
+                        fgui.UpdateOpenEditForms();
 
                     }
                 }
@@ -263,7 +268,7 @@ namespace DWSIM.UI.Desktop.Editors
                     {
                         var gobj = SimObject.GraphicObject;
                         var flowsheet = SimObject.GetFlowsheet();
-                        int posx, posy;
+                        float posx, posy;
                         if (direction == "In")
                         {
                             posx = gobj.X - 100;
@@ -279,11 +284,11 @@ namespace DWSIM.UI.Desktop.Editors
                         {
                             if (connector.Type == ConType.ConEn)
                             {
-                                stream = flowsheet.AddObject(ObjectType.EnergyStream, posx, posy, cbConnection.Text);
+                                stream = flowsheet.AddObject(ObjectType.EnergyStream, (int)posx, (int)posy, cbConnection.Text);
                             }
                             else
                             {
-                                stream = flowsheet.AddObject(ObjectType.MaterialStream, posx, posy, cbConnection.Text);
+                                stream = flowsheet.AddObject(ObjectType.MaterialStream, (int)posx, (int)posy, cbConnection.Text);
                             }
                         }
                         ((Drawing.SkiaSharp.GraphicObjects.GraphicObject)stream.GraphicObject).CreateConnectors(0, 0);

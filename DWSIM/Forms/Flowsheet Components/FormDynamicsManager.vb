@@ -18,6 +18,14 @@ Public Class FormDynamicsManager
 
         Manager = Flowsheet.DynamicsManager
 
+        Dim dpi = Settings.DpiScale
+
+        gridselectedset.ColumnHeadersHeight *= dpi
+        grdiselmatrix.ColumnHeadersHeight *= dpi
+        gridMonitoredVariables.ColumnHeadersHeight *= dpi
+        dgvControllers.ColumnHeadersHeight *= dpi
+        dgvIndicators.ColumnHeadersHeight *= dpi
+
         UpdateSelectables()
 
         UpdateAllPanels()
@@ -311,6 +319,8 @@ Public Class FormDynamicsManager
 
     Private Sub gridselectedset_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles gridselectedset.CellValueChanged
 
+        If Manager Is Nothing Then Exit Sub
+
         If e.RowIndex < 0 Or Adding Then Exit Sub
 
         Dim es = Manager.EventSetList(gridsets.Rows(gridsets.SelectedCells(0).RowIndex).Cells(0).Value)
@@ -360,6 +370,8 @@ Public Class FormDynamicsManager
     End Sub
 
     Private Sub grdiselmatrix_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles grdiselmatrix.CellValueChanged
+
+        If Manager Is Nothing Then Exit Sub
 
         If e.RowIndex < 0 Or Adding Then Exit Sub
 
@@ -416,6 +428,8 @@ Public Class FormDynamicsManager
     End Sub
 
     Private Sub gridsets_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles gridsets.CellValueChanged
+
+        If Manager Is Nothing Then Exit Sub
 
         If e.RowIndex < 0 Then Exit Sub
 
@@ -617,6 +631,7 @@ Public Class FormDynamicsManager
     End Sub
 
     Private Sub dtpIntegrationStep_ValueChanged(sender As Object, e As EventArgs) Handles dtpIntegrationStep.ValueChanged
+        If Manager Is Nothing Then Exit Sub
 
         Try
             Dim i1 = Manager.IntegratorList(gridintegrators.Rows(gridintegrators.SelectedCells(0).RowIndex).Cells(0).Value)
@@ -627,6 +642,7 @@ Public Class FormDynamicsManager
     End Sub
 
     Private Sub dtpIntegratorDuration_ValueChanged(sender As Object, e As EventArgs) Handles dtpIntegratorDuration.ValueChanged
+        If Manager Is Nothing Then Exit Sub
 
         Try
             Dim i1 = Manager.IntegratorList(gridintegrators.Rows(gridintegrators.SelectedCells(0).RowIndex).Cells(0).Value)
@@ -637,6 +653,7 @@ Public Class FormDynamicsManager
     End Sub
 
     Private Sub nupCalcEqFreq_ValueChanged(sender As Object, e As EventArgs) Handles nupCalcEqFreq.ValueChanged
+        If Manager Is Nothing Then Exit Sub
 
         Try
             Dim i1 = Manager.IntegratorList(gridintegrators.Rows(gridintegrators.SelectedCells(0).RowIndex).Cells(0).Value)
@@ -647,6 +664,7 @@ Public Class FormDynamicsManager
     End Sub
 
     Private Sub nupCalcBalFreq_ValueChanged(sender As Object, e As EventArgs) Handles nupCalcBalFreq.ValueChanged
+        If Manager Is Nothing Then Exit Sub
 
         Try
             Dim i1 = Manager.IntegratorList(gridintegrators.Rows(gridintegrators.SelectedCells(0).RowIndex).Cells(0).Value)
@@ -657,6 +675,7 @@ Public Class FormDynamicsManager
     End Sub
 
     Private Sub nupCalcControlFreq_ValueChanged(sender As Object, e As EventArgs) Handles nupCalcControlFreq.ValueChanged
+        If Manager Is Nothing Then Exit Sub
 
         Try
             Dim i1 = Manager.IntegratorList(gridintegrators.Rows(gridintegrators.SelectedCells(0).RowIndex).Cells(0).Value)
@@ -667,6 +686,8 @@ Public Class FormDynamicsManager
     End Sub
 
     Private Sub gridmatrices_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles gridmatrices.CellValueChanged
+
+        If Manager Is Nothing Then Exit Sub
 
         If e.RowIndex < 0 Then Exit Sub
 
@@ -682,6 +703,8 @@ Public Class FormDynamicsManager
 
     Private Sub gridintegrators_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles gridintegrators.CellValueChanged
 
+        If Manager Is Nothing Then Exit Sub
+
         If e.RowIndex < 0 Then Exit Sub
 
         Dim grid = DirectCast(sender, DataGridView)
@@ -696,6 +719,8 @@ Public Class FormDynamicsManager
 
     Private Sub gridschedules_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles gridschedules.CellValueChanged
 
+        If Manager Is Nothing Then Exit Sub
+
         If e.RowIndex < 0 Then Exit Sub
 
         Dim grid = DirectCast(sender, DataGridView)
@@ -709,6 +734,8 @@ Public Class FormDynamicsManager
     End Sub
 
     Private Sub gridschedules_SelectionChanged(sender As Object, e As EventArgs) Handles gridschedules.SelectionChanged
+
+        If Manager Is Nothing Then Exit Sub
 
         If gridschedules.SelectedCells.Count < 1 Then Exit Sub
 
@@ -740,75 +767,81 @@ Public Class FormDynamicsManager
 
         chkSchUseCurrentState.Checked = s1.UseCurrentStateAsInitial
 
+        chkResetAll.Checked = s1.ResetContentsOfAllObjects
+
         panelSelSchedule.Enabled = True
 
     End Sub
 
     Private Sub cbAssociatedIntegrator_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbAssociatedIntegrator.SelectedIndexChanged
-
-        Try
-            Dim s1 = Manager.ScheduleList(gridschedules.Rows(gridschedules.SelectedCells(0).RowIndex).Cells(0).Value)
-            s1.CurrentIntegrator = Manager.IntegratorList.Values.Where(Function(x) x.Description = cbAssociatedIntegrator.SelectedItem).FirstOrDefault.ID
-        Catch ex As Exception
-        End Try
-
+        If Manager IsNot Nothing Then
+            Try
+                Dim s1 = Manager.ScheduleList(gridschedules.Rows(gridschedules.SelectedCells(0).RowIndex).Cells(0).Value)
+                s1.CurrentIntegrator = Manager.IntegratorList.Values.Where(Function(x) x.Description = cbAssociatedIntegrator.SelectedItem).FirstOrDefault.ID
+            Catch ex As Exception
+            End Try
+        End If
     End Sub
 
     Private Sub cbSelectedEventSet_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbSelectedEventSet.SelectedIndexChanged
-
-        Try
-            Dim s1 = Manager.ScheduleList(gridschedules.Rows(gridschedules.SelectedCells(0).RowIndex).Cells(0).Value)
-            s1.CurrentEventList = Manager.EventSetList.Values.Where(Function(x) x.Description = cbSelectedEventSet.SelectedItem).FirstOrDefault.ID
-        Catch ex As Exception
-        End Try
-
+        If Manager IsNot Nothing Then
+            Try
+                Dim s1 = Manager.ScheduleList(gridschedules.Rows(gridschedules.SelectedCells(0).RowIndex).Cells(0).Value)
+                s1.CurrentEventList = Manager.EventSetList.Values.Where(Function(x) x.Description = cbSelectedEventSet.SelectedItem).FirstOrDefault.ID
+            Catch ex As Exception
+            End Try
+        End If
     End Sub
 
     Private Sub cbSelectedCauseAndEffectMatrix_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbSelectedCauseAndEffectMatrix.SelectedIndexChanged
-
-        Try
-            Dim s1 = Manager.ScheduleList(gridschedules.Rows(gridschedules.SelectedCells(0).RowIndex).Cells(0).Value)
-            s1.CurrentCauseAndEffectMatrix = Manager.CauseAndEffectMatrixList.Values.Where(Function(x) x.Description = cbSelectedCauseAndEffectMatrix.SelectedItem).FirstOrDefault.ID
-        Catch ex As Exception
-        End Try
-
+        If Manager IsNot Nothing Then
+            Try
+                Dim s1 = Manager.ScheduleList(gridschedules.Rows(gridschedules.SelectedCells(0).RowIndex).Cells(0).Value)
+                s1.CurrentCauseAndEffectMatrix = Manager.CauseAndEffectMatrixList.Values.Where(Function(x) x.Description = cbSelectedCauseAndEffectMatrix.SelectedItem).FirstOrDefault.ID
+            Catch ex As Exception
+            End Try
+        End If
     End Sub
 
     Private Sub cbScheduleInitialState_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbScheduleInitialState.SelectedIndexChanged
-
-        Try
-            Dim s1 = Manager.ScheduleList(gridschedules.Rows(gridschedules.SelectedCells(0).RowIndex).Cells(0).Value)
-            s1.InitialFlowsheetStateID = cbScheduleInitialState.SelectedItem
-        Catch ex As Exception
-        End Try
-
+        If Manager IsNot Nothing Then
+            Try
+                Dim s1 = Manager.ScheduleList(gridschedules.Rows(gridschedules.SelectedCells(0).RowIndex).Cells(0).Value)
+                s1.InitialFlowsheetStateID = cbScheduleInitialState.SelectedItem
+            Catch ex As Exception
+            End Try
+        End If
     End Sub
 
     Private Sub chkSchUseCurrentState_CheckedChanged(sender As Object, e As EventArgs) Handles chkSchUseCurrentState.CheckedChanged
-
-        cbScheduleInitialState.Enabled = Not chkSchUseCurrentState.Checked
-        Try
-            Dim s1 = Manager.ScheduleList(gridschedules.Rows(gridschedules.SelectedCells(0).RowIndex).Cells(0).Value)
-            s1.UseCurrentStateAsInitial = chkSchUseCurrentState.Checked
-        Catch ex As Exception
-        End Try
-
+        If Manager IsNot Nothing Then
+            cbScheduleInitialState.Enabled = Not chkSchUseCurrentState.Checked
+            Try
+                Dim s1 = Manager.ScheduleList(gridschedules.Rows(gridschedules.SelectedCells(0).RowIndex).Cells(0).Value)
+                s1.UseCurrentStateAsInitial = chkSchUseCurrentState.Checked
+            Catch ex As Exception
+            End Try
+        End If
     End Sub
 
     Private Sub chkIntegratorUseEventSet_CheckedChanged(sender As Object, e As EventArgs) Handles chkIntegratorUseEventSet.CheckedChanged
-        Dim s1 = Manager.ScheduleList(gridschedules.Rows(gridschedules.SelectedCells(0).RowIndex).Cells(0).Value)
-        Try
-            s1.UsesEventList = chkIntegratorUseEventSet.Checked
-        Catch ex As Exception
-        End Try
+        If Manager IsNot Nothing Then
+            Dim s1 = Manager.ScheduleList(gridschedules.Rows(gridschedules.SelectedCells(0).RowIndex).Cells(0).Value)
+            Try
+                s1.UsesEventList = chkIntegratorUseEventSet.Checked
+            Catch ex As Exception
+            End Try
+        End If
     End Sub
 
     Private Sub chkIntegratorUseMatrix_CheckedChanged(sender As Object, e As EventArgs) Handles chkIntegratorUseMatrix.CheckedChanged
-        Dim s1 = Manager.ScheduleList(gridschedules.Rows(gridschedules.SelectedCells(0).RowIndex).Cells(0).Value)
-        Try
-            s1.UsesCauseAndEffectMatrix = chkIntegratorUseMatrix.Checked
-        Catch ex As Exception
-        End Try
+        If Manager IsNot Nothing Then
+            Dim s1 = Manager.ScheduleList(gridschedules.Rows(gridschedules.SelectedCells(0).RowIndex).Cells(0).Value)
+            Try
+                s1.UsesCauseAndEffectMatrix = chkIntegratorUseMatrix.Checked
+            Catch ex As Exception
+            End Try
+        End If
     End Sub
 
     Private Sub dgvControllers_CellValueChanged(sender As Object, e As DataGridViewCellEventArgs) Handles dgvControllers.CellValueChanged
@@ -937,21 +970,25 @@ Public Class FormDynamicsManager
 
     Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
 
-        Try
+        If Manager IsNot Nothing Then
 
-            Dim int = Manager.IntegratorList(gridintegrators.Rows(gridintegrators.SelectedCells(0).RowIndex).Cells(0).Value)
+            Try
 
-            Dim v1 As New MonitoredVariable With {.ID = Guid.NewGuid.ToString}
+                Dim int = Manager.IntegratorList(gridintegrators.Rows(gridintegrators.SelectedCells(0).RowIndex).Cells(0).Value)
 
-            int.MonitoredVariables.Add(v1)
+                Dim v1 As New MonitoredVariable With {.ID = Guid.NewGuid.ToString}
 
-            With v1
-                gridMonitoredVariables.Rows.Add(New Object() { .ID, .Description, "", "", ""})
-            End With
+                int.MonitoredVariables.Add(v1)
 
-        Catch ex As Exception
+                With v1
+                    gridMonitoredVariables.Rows.Add(New Object() { .ID, .Description, "", "", ""})
+                End With
 
-        End Try
+            Catch ex As Exception
+
+            End Try
+
+        End If
 
     End Sub
 
@@ -1102,11 +1139,13 @@ Public Class FormDynamicsManager
 
     Private Sub nupRTStep_ValueChanged(sender As Object, e As EventArgs) Handles nupRTStep.ValueChanged
 
-        Try
-            Dim i1 = Manager.IntegratorList(gridintegrators.Rows(gridintegrators.SelectedCells(0).RowIndex).Cells(0).Value)
-            i1.RealTimeStepMs = nupRTStep.Value
-        Catch ex As Exception
-        End Try
+        If Manager IsNot Nothing Then
+            Try
+                Dim i1 = Manager.IntegratorList(gridintegrators.Rows(gridintegrators.SelectedCells(0).RowIndex).Cells(0).Value)
+                i1.RealTimeStepMs = nupRTStep.Value
+            Catch ex As Exception
+            End Try
+        End If
 
     End Sub
 
@@ -1116,4 +1155,39 @@ Public Class FormDynamicsManager
 
     End Sub
 
+    Private Sub chkResetAll_CheckedChanged(sender As Object, e As EventArgs) Handles chkResetAll.CheckedChanged
+        If Manager IsNot Nothing Then
+            Dim s1 = Manager.ScheduleList(gridschedules.Rows(gridschedules.SelectedCells(0).RowIndex).Cells(0).Value)
+            Try
+                s1.ResetContentsOfAllObjects = chkResetAll.Checked
+            Catch ex As Exception
+            End Try
+        End If
+    End Sub
+
+    Private Sub btnRemoveIntegrator_Click(sender As Object, e As EventArgs) Handles btnRemoveIntegrator.Click
+        If MessageBox.Show(DWSIM.App.GetLocalString("ConfirmOperation"),
+                                           DWSIM.App.GetLocalString("Ateno2"),
+                                           MessageBoxButtons.YesNo,
+                                           MessageBoxIcon.Question) = DialogResult.Yes Then
+
+            Manager.IntegratorList.Remove(gridintegrators.SelectedCells(0).OwningRow.Cells(0).Value)
+
+            gridintegrators.Rows.RemoveAt(gridintegrators.SelectedCells(0).RowIndex)
+            UpdateSelectables()
+        End If
+    End Sub
+
+    Private Sub btnRemoveSchedule_Click(sender As Object, e As EventArgs) Handles btnRemoveSchedule.Click
+        If MessageBox.Show(DWSIM.App.GetLocalString("ConfirmOperation"),
+                                   DWSIM.App.GetLocalString("Ateno2"),
+                                   MessageBoxButtons.YesNo,
+                                   MessageBoxIcon.Question) = DialogResult.Yes Then
+
+            Manager.ScheduleList.Remove(gridschedules.SelectedCells(0).OwningRow.Cells(0).Value)
+
+            gridschedules.Rows.RemoveAt(gridschedules.SelectedCells(0).RowIndex)
+            UpdateSelectables()
+        End If
+    End Sub
 End Class

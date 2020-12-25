@@ -166,7 +166,6 @@ Namespace Reactors
 
         End Function
 
-
         Public Function ODEFunc(ByVal x As Double, ByVal y As Double()) As Double()
 
             _IObj?.SetCurrent
@@ -186,10 +185,10 @@ Namespace Reactors
 
             Dim conv As New SystemsOfUnits.Converter
 
-            Dim i As Integer = 0
-            Dim j As Integer = 0
-            Dim scBC As Double = 0
-            Dim BC As String = ""
+            Dim i As Integer
+            Dim j As Integer
+            Dim scBC As Double
+            Dim BC As String
 
             Dim Qf As Double
 
@@ -208,7 +207,7 @@ Namespace Reactors
             j = 0
             For Each s As String In N00.Keys
                 If y(j) < 0 Then
-                    C(s) = 0.0#
+                    C(s) = 0.0
                 Else
                     C(s) = y(j) / Qf
                 End If
@@ -218,7 +217,7 @@ Namespace Reactors
             IObj2?.Paragraphs.Add(String.Format("Compound Concentrations: {0} mol/m3", C.Values.ToArray.ToMathArrayString))
 
             'conversion factors for different basis other than molar concentrations
-            Dim convfactors As New Dictionary(Of String, Double)
+            Dim convfactors As Dictionary(Of String, Double)
 
             'loop through reactions
             Dim rxn As Reaction
@@ -229,7 +228,7 @@ Namespace Reactors
                 'process reaction i
                 rxn = FlowSheet.Reactions(ar(i))
                 For Each sb As ReactionStoichBase In rxn.Components.Values
-                    Ri(sb.CompName) = 0
+                    Ri(sb.CompName) = 0.0
                 Next
                 i += 1
             Loop Until i = ar.Count
@@ -245,142 +244,178 @@ Namespace Reactors
                 IObj2?.Paragraphs.Add(String.Format("Reaction ID: {0}", rxn.Name))
 
                 Dim T As Double = ims.Phases(0).Properties.temperature.GetValueOrDefault
+                Dim P As Double = ims.Phases(0).Properties.pressure.GetValueOrDefault
 
                 IObj2?.Paragraphs.Add(String.Format("T: {0} K", T))
 
-                Dim rx As Double = 0.0#
+                Dim rx As Double
 
                 convfactors = Me.GetConvFactors(rxn, ims)
 
                 Dim cvar As Double
 
-                If rxn.ReactionType = ReactionType.Kinetic Then
+                If rxn.ReactionKinetics = ReactionKinetics.Expression Then
 
-                    'calculate reaction constants
+                    If rxn.ReactionType = ReactionType.Kinetic Then
 
-                    Dim kxf, kxr As Double
+                        'calculate reaction constants
 
-                    If rxn.ReactionKinFwdType = ReactionKineticType.Arrhenius Then
+                        Dim kxf, kxr As Double
 
-                        kxf = rxn.A_Forward * Exp(-SystemsOfUnits.Converter.Convert(rxn.E_Forward_Unit, "J/mol", rxn.E_Forward) / (8.314 * T))
+                        If rxn.ReactionKinFwdType = ReactionKineticType.Arrhenius Then
 
-                    Else
+                            kxf = rxn.A_Forward * Exp(-SystemsOfUnits.Converter.Convert(rxn.E_Forward_Unit, "J/mol", rxn.E_Forward) / (8.314 * T))
 
-                        rxn.ExpContext = New Ciloci.Flee.ExpressionContext
-                        rxn.ExpContext.Imports.AddType(GetType(System.Math))
+                        Else
 
-                        rxn.ExpContext.Variables.Clear()
-                        rxn.ExpContext.Variables.Add("T", ims.Phases(0).Properties.temperature.GetValueOrDefault)
-                        rxn.ExpContext.Options.ParseCulture = Globalization.CultureInfo.InvariantCulture
+                            rxn.ExpContext = New Ciloci.Flee.ExpressionContext
+                            rxn.ExpContext.Imports.AddType(GetType(System.Math))
 
-                        rxn.Expr = rxn.ExpContext.CompileGeneric(Of Double)(rxn.ReactionKinFwdExpression)
+                            rxn.ExpContext.Variables.Clear()
+                            rxn.ExpContext.Variables.Add("T", ims.Phases(0).Properties.temperature.GetValueOrDefault)
+                            rxn.ExpContext.Options.ParseCulture = Globalization.CultureInfo.InvariantCulture
 
-                        kxf = rxn.Expr.Evaluate
+                            rxn.Expr = rxn.ExpContext.CompileGeneric(Of Double)(rxn.ReactionKinFwdExpression)
 
-                    End If
+                            kxf = rxn.Expr.Evaluate
 
-                    If rxn.ReactionKinRevType = ReactionKineticType.Arrhenius Then
+                        End If
 
-                        kxr = rxn.A_Reverse * Exp(-SystemsOfUnits.Converter.Convert(rxn.E_Reverse_Unit, "J/mol", rxn.E_Reverse) / (8.314 * T))
+                        If rxn.ReactionKinRevType = ReactionKineticType.Arrhenius Then
 
-                    Else
+                            kxr = rxn.A_Reverse * Exp(-SystemsOfUnits.Converter.Convert(rxn.E_Reverse_Unit, "J/mol", rxn.E_Reverse) / (8.314 * T))
 
-                        rxn.ExpContext = New Ciloci.Flee.ExpressionContext
-                        rxn.ExpContext.Imports.AddType(GetType(System.Math))
+                        Else
 
-                        rxn.ExpContext.Variables.Clear()
-                        rxn.ExpContext.Variables.Add("T", ims.Phases(0).Properties.temperature.GetValueOrDefault)
-                        rxn.ExpContext.Options.ParseCulture = Globalization.CultureInfo.InvariantCulture
+                            rxn.ExpContext = New Ciloci.Flee.ExpressionContext
+                            rxn.ExpContext.Imports.AddType(GetType(System.Math))
 
-                        rxn.Expr = rxn.ExpContext.CompileGeneric(Of Double)(rxn.ReactionKinRevExpression)
+                            rxn.ExpContext.Variables.Clear()
+                            rxn.ExpContext.Variables.Add("T", ims.Phases(0).Properties.temperature.GetValueOrDefault)
+                            rxn.ExpContext.Options.ParseCulture = Globalization.CultureInfo.InvariantCulture
 
-                        kxr = rxn.Expr.Evaluate
+                            rxn.Expr = rxn.ExpContext.CompileGeneric(Of Double)(rxn.ReactionKinRevExpression)
 
-                    End If
+                            kxr = rxn.Expr.Evaluate
 
-                    If T < rxn.Tmin Or T > rxn.Tmax Then
-                        kxf = 0.0#
-                        kxr = 0.0#
-                    End If
+                        End If
 
-                    Dim rxf As Double = 1.0#
-                    Dim rxr As Double = 1.0#
+                        If T < rxn.Tmin Or T > rxn.Tmax Then
+                            kxf = 0.0#
+                            kxr = 0.0#
+                        End If
 
-                    'kinetic expression
+                        Dim rxf As Double = 1.0#
+                        Dim rxr As Double = 1.0#
 
-                    For Each sb As ReactionStoichBase In rxn.Components.Values
-                        cvar = C(sb.CompName) * convfactors(sb.CompName)
-                        rxf *= cvar ^ sb.DirectOrder
-                        rxr *= cvar ^ sb.ReverseOrder
-                    Next
-
-                    rx = kxf * rxf - kxr * rxr
-
-                    IObj2?.Paragraphs.Add(String.Format("Reaction Rate: {0} {1}", rx, rxn.VelUnit))
-
-                    Rxi(rxn.ID) = SystemsOfUnits.Converter.ConvertToSI(rxn.VelUnit, rx)
-
-                    Kf(i) = kxf
-                    Kr(i) = kxr
-
-                ElseIf rxn.ReactionType = ReactionType.Heterogeneous_Catalytic Then
-
-                    If T < rxn.Tmin Or T > rxn.Tmax Then
-
-                        rx = 0.0
-
-                    Else
-
-                        Dim numval, denmval As Double
-
-                        rxn.ExpContext = New Ciloci.Flee.ExpressionContext
-                        rxn.ExpContext.Imports.AddType(GetType(System.Math))
-                        rxn.ExpContext.Options.ParseCulture = Globalization.CultureInfo.InvariantCulture
-
-                        rxn.ExpContext.Variables.Clear()
-                        rxn.ExpContext.Variables.Add("T", T)
-
-                        Dim ir As Integer = 1
-                        Dim ip As Integer = 1
-                        Dim ine As Integer = 1
+                        'kinetic expression
 
                         For Each sb As ReactionStoichBase In rxn.Components.Values
                             cvar = C(sb.CompName) * convfactors(sb.CompName)
-                            If sb.StoichCoeff < 0 Then
-                                IObj2?.Paragraphs.Add(String.Format("R{0} ({1}): {2} {3}", ir.ToString, sb.CompName, cvar, rxn.ConcUnit))
-                                rxn.ExpContext.Variables.Add("R" & ir.ToString, cvar)
-                                ir += 1
-                            ElseIf sb.StoichCoeff > 0 Then
-                                IObj2?.Paragraphs.Add(String.Format("P{0} ({1}): {2} {3}", ip.ToString, sb.CompName, cvar, rxn.ConcUnit))
-                                rxn.ExpContext.Variables.Add("P" & ip.ToString, cvar)
-                                ip += 1
-                            Else
-                                IObj2?.Paragraphs.Add(String.Format("N{0} ({1}): {2} {3}", ine.ToString, sb.CompName, cvar, rxn.ConcUnit))
-                                rxn.ExpContext.Variables.Add("N" & ine.ToString, cvar)
-                                ine += 1
-                            End If
+                            rxf *= cvar ^ sb.DirectOrder
+                            rxr *= cvar ^ sb.ReverseOrder
                         Next
 
-                        rxn.Expr = rxn.ExpContext.CompileGeneric(Of Double)(rxn.RateEquationNumerator)
+                        rx = kxf * rxf - kxr * rxr
 
-                        numval = rxn.Expr.Evaluate
+                        IObj2?.Paragraphs.Add(String.Format("Reaction Rate: {0} {1}", rx, rxn.VelUnit))
 
-                        rxn.Expr = rxn.ExpContext.CompileGeneric(Of Double)(rxn.RateEquationDenominator)
+                        Rxi(rxn.ID) = SystemsOfUnits.Converter.ConvertToSI(rxn.VelUnit, rx)
 
-                        denmval = rxn.Expr.Evaluate
+                        Kf(i) = kxf
+                        Kr(i) = kxr
 
-                        IObj2?.Paragraphs.Add(String.Format("Numerator Expression: {0}", rxn.RateEquationNumerator))
-                        IObj2?.Paragraphs.Add(String.Format("Numerator Value: {0}", numval))
-                        IObj2?.Paragraphs.Add(String.Format("Denominator Expression: {0}", rxn.RateEquationDenominator))
-                        IObj2?.Paragraphs.Add(String.Format("Denominator Value: {0}", denmval))
+                    ElseIf rxn.ReactionType = ReactionType.Heterogeneous_Catalytic Then
 
-                        rx = numval / denmval
+                        If T < rxn.Tmin Or T > rxn.Tmax Then
+
+                            rx = 0.0
+
+                        Else
+
+                            Dim numval, denmval As Double
+
+                            rxn.ExpContext = New Ciloci.Flee.ExpressionContext
+                            rxn.ExpContext.Imports.AddType(GetType(System.Math))
+                            rxn.ExpContext.Options.ParseCulture = Globalization.CultureInfo.InvariantCulture
+
+                            rxn.ExpContext.Variables.Clear()
+                            rxn.ExpContext.Variables.Add("T", T)
+
+                            Dim ir As Integer = 1
+                            Dim ip As Integer = 1
+                            Dim ine As Integer = 1
+
+                            For Each sb As ReactionStoichBase In rxn.Components.Values
+                                cvar = C(sb.CompName) * convfactors(sb.CompName)
+                                If sb.StoichCoeff < 0 Then
+                                    IObj2?.Paragraphs.Add(String.Format("R{0} ({1}): {2} {3}", ir.ToString, sb.CompName, cvar, rxn.ConcUnit))
+                                    rxn.ExpContext.Variables.Add("R" & ir.ToString, cvar)
+                                    ir += 1
+                                ElseIf sb.StoichCoeff > 0 Then
+                                    IObj2?.Paragraphs.Add(String.Format("P{0} ({1}): {2} {3}", ip.ToString, sb.CompName, cvar, rxn.ConcUnit))
+                                    rxn.ExpContext.Variables.Add("P" & ip.ToString, cvar)
+                                    ip += 1
+                                Else
+                                    IObj2?.Paragraphs.Add(String.Format("N{0} ({1}): {2} {3}", ine.ToString, sb.CompName, cvar, rxn.ConcUnit))
+                                    rxn.ExpContext.Variables.Add("N" & ine.ToString, cvar)
+                                    ine += 1
+                                End If
+                            Next
+
+                            rxn.Expr = rxn.ExpContext.CompileGeneric(Of Double)(rxn.RateEquationNumerator)
+
+                            numval = rxn.Expr.Evaluate
+
+                            rxn.Expr = rxn.ExpContext.CompileGeneric(Of Double)(rxn.RateEquationDenominator)
+
+                            denmval = rxn.Expr.Evaluate
+
+                            IObj2?.Paragraphs.Add(String.Format("Numerator Expression: {0}", rxn.RateEquationNumerator))
+                            IObj2?.Paragraphs.Add(String.Format("Numerator Value: {0}", numval))
+                            IObj2?.Paragraphs.Add(String.Format("Denominator Expression: {0}", rxn.RateEquationDenominator))
+                            IObj2?.Paragraphs.Add(String.Format("Denominator Value: {0}", denmval))
+
+                            rx = numval / denmval
+
+                        End If
+
+                        IObj2?.Paragraphs.Add(String.Format("Reaction Rate: {0} {1}", rx, rxn.VelUnit))
+
+                        Rxi(rxn.ID) = SystemsOfUnits.Converter.ConvertToSI(rxn.VelUnit, rx)
 
                     End If
 
-                    IObj2?.Paragraphs.Add(String.Format("Reaction Rate: {0} {1}", rx, rxn.VelUnit))
+                Else
 
-                    Rxi(rxn.ID) = SystemsOfUnits.Converter.ConvertToSI(rxn.VelUnit, rx)
+                    ' python script
+                    Dim ir As Integer = 1
+                    Dim ip As Integer = 1
+                    Dim ine As Integer = 1
+
+                    Dim vars As New Dictionary(Of String, Double)
+                    Dim amounts As New Dictionary(Of String, Double)
+
+                    For Each sb As ReactionStoichBase In rxn.Components.Values
+                        If sb.StoichCoeff < 0 Then
+                            vars.Add("R" & ir.ToString, C(sb.CompName) * convfactors(sb.CompName))
+                            ir += 1
+                        ElseIf sb.StoichCoeff > 0 Then
+                            vars.Add("P" & ip.ToString, C(sb.CompName) * convfactors(sb.CompName))
+                            ip += 1
+                        ElseIf sb.StoichCoeff = 0 Then
+                            vars.Add("N" & ine.ToString, C(sb.CompName) * convfactors(sb.CompName))
+                            ine += 1
+                        End If
+                        amounts.Add(sb.CompName, C(sb.CompName) * convfactors(sb.CompName))
+                    Next
+
+                    Dim r = ProcessAdvancedKineticReactionRate(rxn.ScriptTitle, Me, rxn, T, P, vars, amounts)
+
+                    'calculate reaction rate & convert to internal SI units
+                    rx = SystemsOfUnits.Converter.ConvertToSI(rxn.VelUnit, r)
+
+                    Rxi(rxn.ID) = rx
 
                 End If
 
@@ -606,8 +641,23 @@ Namespace Reactors
 
         End Sub
 
-
         Public Overrides Sub Calculate(Optional ByVal args As Object = Nothing)
+
+            'this reduces the volume step once a negative moalr amount is found by the ODE solver
+            If Calculate_Internal(1.0, args) Then
+                'reduce the volume step by a factor of 10
+                If Calculate_Internal(0.1, args) Then
+                    'at this stage, if we still keep getting negative molar amounts, 
+                    'we stop solving the ODE and accept the solution since the error will be very small (hopefully)
+                    Calculate_Internal(0.05, args)
+                End If
+            End If
+
+        End Sub
+
+        Public Function Calculate_Internal(dVF As Double, Optional ByVal args As Object = Nothing) As Boolean
+
+            Dim negative As Boolean = False
 
             Dim dynamics As Boolean = False
 
@@ -621,7 +671,7 @@ Namespace Reactors
             If dynamics Then
                 deltaV = 1.0 / AccumulationStreams.Count
             Else
-                deltaV = dV
+                deltaV = dV * dVF
             End If
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
@@ -886,14 +936,32 @@ Namespace Reactors
                         odesolver.InitializeODEs(AddressOf ODEFunc, N.Count, 0.0, vc0)
                         IObj2?.SetCurrent
                         If dynamics Then
-                            odesolver.Solve(vc0, 0.0#, 0.01 * deltaV * Volume, deltaV * Volume, Sub(x As Double, y As Double()) vc = y)
+                            odesolver.Solve(vc0, 0.0#, 0.01 * deltaV * Volume, deltaV * Volume, Sub(x As Double, y As Double())
+                                                                                                    vc = y
+                                                                                                End Sub)
                         Else
-                            odesolver.Solve(vc0, 0.0#, 0.01 * deltaV * Volume, deltaV * Volume, Sub(x As Double, y As Double()) vc = y)
+                            odesolver.Solve(vc0, 0.0#, 0.01 * deltaV * Volume, deltaV * Volume, Sub(x As Double, y As Double())
+                                                                                                    vc = y
+                                                                                                End Sub)
                         End If
 
                         ODEFunc(0, vc)
 
                         If Double.IsNaN(vc.Sum) Then Throw New Exception(FlowSheet.GetTranslatedString("PFRMassBalanceError"))
+
+                        negative = False
+                        For i = 0 To vc.Count - 1
+                            If vc(i) < 0 Then
+                                ' negative flow detected. raise the flag.
+                                negative = True
+                            End If
+                        Next
+
+                        If negative Then
+                            'use the previous molar amounts.
+                            vc = vc0.Clone
+                            ODEFunc(0, vc)
+                        End If
 
                         C.Clear()
                         i = 0
@@ -1173,13 +1241,22 @@ Namespace Reactors
 
                 Next
 
+                'overall reaction heat
+
+                Dim DHrT As Double = 0
+
+                For Each sb As Compound In ims.Phases(0).Compounds.Values
+                    If N0.ContainsKey(sb.Name) Then
+                        DHrT += sb.ConstantProperties.IG_Enthalpy_of_Formation_25C * sb.ConstantProperties.Molar_Weight * (N(sb.Name) - N00(sb.Name)) / 1000
+                    End If
+                Next
+
                 If Me.ReactorOperationMode = OperationMode.Isothermic Then
 
                     'Products Enthalpy (kJ/kg * kg/s = kW)
                     Hp = ims.Phases(0).Properties.enthalpy.GetValueOrDefault * ims.Phases(0).Properties.massflow.GetValueOrDefault
 
-                    'Me.DeltaQ = DHRT.Sum + Hp - Hr0
-                    Me.DeltaQ = DHRi.Values.Sum + Hp - Hr0
+                    Me.DeltaQ = DHrT + Hp - Hr0
 
                     Me.DeltaT = 0.0#
 
@@ -1191,8 +1268,7 @@ Namespace Reactors
                     Hp = ims.Phases(0).Properties.enthalpy.GetValueOrDefault * ims.Phases(0).Properties.massflow.GetValueOrDefault
 
                     'Heat (kW)
-                    'Me.DeltaQ = DHRT.Sum + Hp - Hr0
-                    Me.DeltaQ = DHRi.Values.Sum + Hp - Hr0
+                    Me.DeltaQ = DHrT + Hp - Hr0
 
                     Me.DeltaT = OutletTemperature - T0
 
@@ -1206,7 +1282,7 @@ Namespace Reactors
 
                 ' comp. conversions
                 For Each sb As Compound In ims.Phases(0).Compounds.Values
-                    If Me.ComponentConversions.ContainsKey(sb.Name) AndAlso N00(sb.Name) > 0 Then
+                    If Me.ComponentConversions.ContainsKey(sb.Name) AndAlso N00(sb.Name) > 0.0000000001 Then
                         Me.ComponentConversions(sb.Name) = Abs(N00(sb.Name) - N(sb.Name)) / N00(sb.Name)
                     End If
                 Next
@@ -1252,7 +1328,9 @@ Namespace Reactors
 
             IObj?.Close()
 
-        End Sub
+            Return negative
+
+        End Function
 
         Public Overrides Sub DeCalculate()
 
@@ -1712,6 +1790,10 @@ Namespace Reactors
         End Function
 
         Public Overrides Function GetChartModel(name As String) As Object
+
+            If points Is Nothing Then Return Nothing
+
+            If points.Count = 0 Then Return Nothing
 
             Dim su = FlowSheet.FlowsheetOptions.SelectedUnitSystem
 

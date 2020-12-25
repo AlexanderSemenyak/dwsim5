@@ -77,7 +77,10 @@ namespace DWSIM.UI.Desktop.Editors
             s.CreateAndAddStringEditorRow(container, "Name", MatStream.GraphicObject.Tag, (TextBox arg3, EventArgs ev) =>
             {
                 MatStream.GraphicObject.Tag = arg3.Text;
-            }, () => CallSolverIfNeeded());
+                MatStream.GetFlowsheet().UpdateInterface();
+            }, () => {
+                MatStream.GetFlowsheet().UpdateOpenEditForms();
+            });
 
             s.CreateAndAddDropDownRow(container, "Compound Amount Basis",
             new List<string>() { "Molar Fractions", "Mass Fractions", "Volumetric Fractions", "Molar Flows", "Mass Flows", "Volumetric Flows", "Default" },
@@ -103,22 +106,6 @@ namespace DWSIM.UI.Desktop.Editors
                     if (proppacks.Count > 0) MatStream.PropertyPackage = (PropertyPackage)MatStream.GetFlowsheet().PropertyPackages.Values.Where((x) => x.Tag == proppacks[arg1.SelectedIndex]).FirstOrDefault();
                 }, () => { if (GlobalSettings.Settings.CallSolverOnEditorPropertyChanged) ((Shared.Flowsheet)MatStream.GetFlowsheet()).HighLevelSolve.Invoke(); });
             }
-
-            var flashalgos = MatStream.GetFlowsheet().FlowsheetOptions.FlashAlgorithms.Select(x => x.Tag).ToList();
-            flashalgos.Insert(0, "Default");
-
-            var cbFlashAlg = s.CreateAndAddDropDownRow(container, "Flash Algorithm", flashalgos, 0, null);
-
-            if (!string.IsNullOrEmpty(MatStream.PreferredFlashAlgorithmTag))
-                cbFlashAlg.SelectedIndex = Array.IndexOf(flashalgos.ToArray(), MatStream.PreferredFlashAlgorithmTag);
-            else
-                cbFlashAlg.SelectedIndex = 0;
-
-            cbFlashAlg.SelectedIndexChanged += (sender, e) =>
-            {
-                MatStream.PreferredFlashAlgorithmTag = cbFlashAlg.SelectedValue.ToString();
-                if (GlobalSettings.Settings.CallSolverOnEditorPropertyChanged) ((Shared.Flowsheet)MatStream.GetFlowsheet()).HighLevelSolve.Invoke();
-            };
 
             container.Add(container2);
 
@@ -228,7 +215,7 @@ namespace DWSIM.UI.Desktop.Editors
                                            }, () => { if (GlobalSettings.Settings.CallSolverOnEditorPropertyChanged) ((Shared.Flowsheet)MatStream.GetFlowsheet()).HighLevelSolve.Invoke(); });
                     s.CreateAndAddDescriptionRow(container2, ms.GetPropertyDescription("Specific Entropy"));
 
-                    s.CreateAndAddTextBoxRow(container2, nf, "Vapor Phase Mole Fraction (spec)", ms.Phases[2].Properties.molarfraction.GetValueOrDefault(),
+                    s.CreateAndAddTextBoxRow(container2, nf, "Vapor Mole Frac (spec)", ms.Phases[2].Properties.molarfraction.GetValueOrDefault(),
                        (TextBox arg3, EventArgs ev) =>
                        {
                            if (arg3.Text.IsValidDoubleExpression())
@@ -255,6 +242,7 @@ namespace DWSIM.UI.Desktop.Editors
                                ms.Phases[0].Properties.volumetric_flow = null;
                                ms.Phases[0].Properties.molarflow = null;
                                ms.Phases[0].Properties.massflow = cv.ConvertToSI(su.massflow, arg3.Text.ToString().ParseExpressionToDouble());
+                               ms.DefinedFlow = FlowSpec.Mass;
                            }
                            else
                            {
@@ -271,6 +259,7 @@ namespace DWSIM.UI.Desktop.Editors
                                                    ms.Phases[0].Properties.massflow = null;
                                                    ms.Phases[0].Properties.volumetric_flow = null;
                                                    ms.Phases[0].Properties.molarflow = cv.ConvertToSI(su.molarflow, arg3.Text.ToString().ParseExpressionToDouble());
+                                                   ms.DefinedFlow = FlowSpec.Mole;
                                                }
                                                else
                                                {
@@ -287,6 +276,7 @@ namespace DWSIM.UI.Desktop.Editors
                                                    ms.Phases[0].Properties.massflow = null;
                                                    ms.Phases[0].Properties.molarflow = null;
                                                    ms.Phases[0].Properties.volumetric_flow = cv.ConvertToSI(su.volumetricFlow, arg3.Text.ToString().ParseExpressionToDouble());
+                                                   ms.DefinedFlow = FlowSpec.Volumetric;
                                                }
                                                else
                                                {
@@ -294,6 +284,28 @@ namespace DWSIM.UI.Desktop.Editors
                                                }
                                            }, () => { if (GlobalSettings.Settings.CallSolverOnEditorPropertyChanged) ((Shared.Flowsheet)MatStream.GetFlowsheet()).HighLevelSolve.Invoke(); });
                     s.CreateAndAddDescriptionRow(container2, ms.GetPropertyDescription("Volumetric Flow"));
+
+                    switch (MatStream.DefinedFlow)
+                    {
+                        case FlowSpec.Mass:
+                            txtW.BackgroundColor = Colors.LightBlue;
+                            txtW.ToolTip = "Defined by the user";
+                            txtQ.ToolTip = "Calculated";
+                            txtV.ToolTip = "Calculated";
+                            break;
+                        case FlowSpec.Mole:
+                            txtQ.BackgroundColor = Colors.LightBlue;
+                            txtW.ToolTip = "Calculated";
+                            txtQ.ToolTip = "Defined by the user";
+                            txtV.ToolTip = "Calculated";
+                            break;
+                        case FlowSpec.Volumetric:
+                            txtV.BackgroundColor = Colors.LightBlue;
+                            txtW.ToolTip = "Calculated";
+                            txtQ.ToolTip = "Calculated";
+                            txtV.ToolTip = "Defined by the user";
+                            break;
+                    }
 
                     s.CreateAndAddLabelRow(container2, "Mixture Composition");
 
