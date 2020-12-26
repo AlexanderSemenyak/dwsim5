@@ -1280,7 +1280,7 @@
     <comment>0</comment>
   </data>
   <data name="PROP_OP_0" xml:space="preserve">
-    <value>Тип диафрагмы</value>
+    <value>Способ отбора давления</value>
     <comment>1</comment>
   </data>
   <data name="PROP_OP_1" xml:space="preserve">

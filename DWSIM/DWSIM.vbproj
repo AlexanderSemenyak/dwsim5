@@ -1744,10 +1744,6 @@
       <Project>{e4e37bfa-063f-4dba-a1bf-294d392c2ca4}</Project>
       <Name>DWSIM.Inspector</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DWSIM.PatronPackages\DWSIM.PatronPackages.csproj">
-      <Project>{4c336f47-d682-4f8f-b5f8-3d996095e466}</Project>
-      <Name>DWSIM.PatronPackages</Name>
-    </ProjectReference>
     <ProjectReference Include="..\DWSIM.Serializers.XML\DWSIM.XMLSerializer.vbproj">
       <Project>{6c232866-a87b-409a-8a02-39f2ff218561}</Project>
       <Name>DWSIM.XMLSerializer</Name>
@@ -3321,7 +3317,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Languages\Properties.de.resx" />
-    <EmbeddedResource Include="Languages\Properties.en.resx" />
+    <EmbeddedResource Include="Languages\Properties.en.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Languages\Properties.es.resx" />
     <EmbeddedResource Include="Languages\Properties.resx">
       <SubType>Designer</SubType>

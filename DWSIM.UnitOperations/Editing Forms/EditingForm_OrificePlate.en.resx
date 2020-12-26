@@ -260,7 +260,7 @@
     <value>95, 13</value>
   </data>
   <data name="Label8.Text" xml:space="preserve">
-    <value>Тип диафрагмы</value>
+    <value>Способ отбора давления</value>
   </data>
   <data name="GroupBox2.Text" xml:space="preserve">
     <value>Настройки расчета</value>

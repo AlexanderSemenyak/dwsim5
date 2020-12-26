@@ -229,10 +229,6 @@
       <Project>{a58eb237-f703-45cf-89f9-e8b91bff76c1}</Project>
       <Name>DWSIM.DrawingTools.SkiaSharp.Extended</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DWSIM.PatronPackages\DWSIM.PatronPackages.csproj">
-      <Project>{4c336f47-d682-4f8f-b5f8-3d996095e466}</Project>
-      <Name>DWSIM.PatronPackages</Name>
-    </ProjectReference>
     <ProjectReference Include="..\DWSIM.DynamicsManager\DWSIM.DynamicsManager.vbproj">
       <Project>{654c0d60-c94b-4a0b-b34d-1d71a6a20420}</Project>
       <Name>DWSIM.DynamicsManager</Name>

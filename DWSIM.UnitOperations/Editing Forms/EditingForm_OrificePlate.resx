@@ -412,7 +412,7 @@
     <value>4</value>
   </data>
   <data name="rbFlange.Text" xml:space="preserve">
-    <value>Flange</value>
+    <value>Фланец</value>
   </data>
   <data name="rbFlange.TabIndex" type="System.Int32, mscorlib">
     <value>47</value>
@@ -727,7 +727,7 @@
     <value>Label6</value>
   </data>
   <data name="rbCorner.Text" xml:space="preserve">
-    <value>Corner</value>
+    <value>Угловой</value>
   </data>
   <data name="&gt;&gt;btnConfigureFlashAlg.Parent" xml:space="preserve">
     <value>GroupBox3</value>
@@ -1426,7 +1426,7 @@
     <value>NoControl</value>
   </data>
   <data name="rbRadius.Text" xml:space="preserve">
-    <value>Radius</value>
+    <value>Трехрадиусный</value>
   </data>
   <data name="cbOrifDiam.Location" type="System.Drawing.Point, System.Drawing">
     <value>249, 49</value>
