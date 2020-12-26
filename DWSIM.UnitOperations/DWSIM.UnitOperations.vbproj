@@ -80,6 +80,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoDiff, Version=1.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoDiff.1.2.2\lib\net461\AutoDiff.dll</HintPath>
+    </Reference>
     <Reference Include="CapeOpen, Version=1.0.0.0, Culture=neutral, PublicKeyToken=90d5303f0e924b64, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\DWSIM\References\CapeOpen.dll</HintPath>
@@ -98,8 +101,8 @@
     <Reference Include="GemBox.Spreadsheet">
       <HintPath>..\packages\GemBox.Spreadsheet.39.3.30.1037\lib\net30\GemBox.Spreadsheet.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=1.1.0.145, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpZipLib.1.1.0\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=1.3.1.9, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpZipLib.1.3.1\lib\net45\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="Interop.CAPEOPEN110">
       <HintPath>..\DWSIM\References\Interop.CAPEOPEN110.dll</HintPath>
@@ -122,6 +125,9 @@
     </Reference>
     <Reference Include="Jolt.Testing.GeneratedTypes">
       <HintPath>..\DWSIM\References\Jolt.Testing.GeneratedTypes.dll</HintPath>
+    </Reference>
+    <Reference Include="LibOptimization, Version=1.12.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\LibOptimization.1.12.4\lib\net46\LibOptimization.dll</HintPath>
     </Reference>
     <Reference Include="Mapack">
       <HintPath>..\DWSIM\References\Mapack.dll</HintPath>
@@ -614,6 +620,7 @@
     <Compile Include="Support Classes\ComboBoxColumnTemplates.vb" />
     <Compile Include="Type Resolver\Resolver.vb" />
     <Compile Include="CAPE-OPEN\CustomUO_CO.vb" />
+    <Compile Include="Unit Operations\DummyUO.vb" />
     <Compile Include="Unit Operations\PythonScriptUO.vb" />
     <Compile Include="Unit Operations\FlowsheetUO.vb" />
     <Compile Include="Unit Operations\OrificePlate.vb" />

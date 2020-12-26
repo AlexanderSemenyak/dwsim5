@@ -67,7 +67,7 @@ Public Class Manager
             ScheduleList = New Dictionary(Of String, IDynamicsSchedule)
             For Each xel2 As XElement In elm.Elements
                 Dim sch = New Schedule()
-                DirectCast(sch, ICustomXMLSerialization).LoadData(xel2.Elements.ToList)
+                DirectCast(sch, ICustomXMLSerialization).LoadData(xel2.Elements)'.ToList)
                 ScheduleList.Add(sch.ID, sch)
             Next
         End If
@@ -76,7 +76,7 @@ Public Class Manager
             EventSetList = New Dictionary(Of String, IDynamicsEventSet)
             For Each xel2 As XElement In elm2.Elements
                 Dim es = New EventSet
-                DirectCast(es, ICustomXMLSerialization).LoadData(xel2.Elements.ToList)
+                DirectCast(es, ICustomXMLSerialization).LoadData(xel2.Elements)'.ToList)
                 EventSetList.Add(es.ID, es)
             Next
         End If
@@ -85,7 +85,7 @@ Public Class Manager
             IntegratorList = New Dictionary(Of String, IDynamicsIntegrator)
             For Each xel2 As XElement In elm3.Elements
                 Dim intg = New Integrator
-                DirectCast(intg, ICustomXMLSerialization).LoadData(xel2.Elements.ToList)
+                DirectCast(intg, ICustomXMLSerialization).LoadData(xel2.Elements)'.ToList)
                 IntegratorList.Add(intg.ID, intg)
             Next
         End If

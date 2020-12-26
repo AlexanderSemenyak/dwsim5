@@ -289,6 +289,7 @@ Public Class FormSimulSettings
     End Sub
 
     Private Sub Button2_Click_1(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+
         Me.FrmChild.FrmPCBulk.ShowDialog(Me)
     End Sub
 
@@ -1011,6 +1012,7 @@ Public Class FormSimulSettings
     End Sub
 
     Private Sub btnConfigPP_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnConfigPP.Click
+
         Dim ppid As String = ""
         If DWSIM.App.IsRunningOnMono Then
             ppid = dgvpp.Rows(dgvpp.SelectedCells(0).RowIndex).Cells(0).Value
@@ -1263,6 +1265,7 @@ Public Class FormSimulSettings
     End Sub
 
     Private Sub Button3_Click_2(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
+
         Dim frmam As New FormAssayManager
         frmam.ShowDialog(Me)
         frmam.Close()
@@ -1325,6 +1328,7 @@ Public Class FormSimulSettings
     End Sub
 
     Private Sub btnInfoLeft_Click(sender As Object, e As EventArgs) Handles btnInfoLeft.Click
+
         Dim compound As Interfaces.ICompoundConstantProperties
         Dim compID As String = ""
         If DWSIM.App.IsRunningOnMono Then
@@ -1358,6 +1362,7 @@ Public Class FormSimulSettings
     End Sub
 
     Private Sub Button1_Click_1(sender As Object, e As EventArgs) Handles Button1.Click
+
         If Me.OpenFileDialog3.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
             For Each fn In Me.OpenFileDialog3.FileNames
                 Try
@@ -1557,6 +1562,7 @@ Public Class FormSimulSettings
     End Sub
 
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles btnConfigFlash.Click
+
         Dim ppid As String = ""
         If DWSIM.App.IsRunningOnMono Then
             ppid = dgvpp.Rows(dgvpp.SelectedCells(0).RowIndex).Cells(0).Value

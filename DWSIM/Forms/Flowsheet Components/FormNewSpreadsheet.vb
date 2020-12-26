@@ -685,6 +685,7 @@ Public Class FormNewSpreadsheet
     Private Sub FormNewSpreadsheet_VisibleChanged(sender As Object, e As EventArgs) Handles Me.VisibleChanged
         If SpreadsheetControl IsNot Nothing Then SpreadsheetControl.SpreadsheetTSMI.Enabled = Me.Visible
     End Sub
+
 #End If
 
 End Class

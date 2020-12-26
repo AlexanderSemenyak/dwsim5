@@ -3621,6 +3621,9 @@
   <data name="UsarCalorFornecido" xml:space="preserve">
     <value>Use Heat Provided</value>
   </data>
+  <data name="UserDefined" xml:space="preserve">
+    <value>User defined</value>
+  </data>
   <data name="UsarDeltaPfornecido" xml:space="preserve">
     <value>Use the provided pressure drop</value>
   </data>
@@ -4590,8 +4593,8 @@ FPROPS is Copyright (C) 2011 - Carnegie Mellon University</value>
   <data name="SADJMaxIterationsReached" xml:space="preserve">
     <value>Simultaneous Adjust Solver: maximum iterations reached</value>
   </data>
-  <data name="IncludeJTEffect" xml:space="preserve">
-    <value>Include Joule-Thomson cooling effect</value>
+  <data name="IncludeEmulsion" xml:space="preserve">
+    <value>Include emulsion effect on viscosity</value>
   </data>
   <data name="ReactionExtents" xml:space="preserve">
     <value>Reaction Extents</value>

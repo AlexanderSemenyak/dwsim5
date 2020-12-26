@@ -1020,7 +1020,7 @@ Imports System.Drawing
             Else
                 Me.GridMalha.Rows(4).Cells(psec.Indice - 1).Value = psec.Material
             End If
-            If psec.Material = PipeOp.FlowSheet.GetTranslatedString("UserDefined") Then
+            If psec.Material = PipeOp.FlowSheet.GetTranslatedString("UserDefined") Or String.Equals(psec.Material, "User defined", StringComparison.InvariantCultureIgnoreCase)  Then
                 Me.GridMalha.Rows(5).Cells(psec.Indice - 1).Value = cv.Convert("m", Me.Units.distance, psec.PipeWallRugosity)
                 Me.GridMalha.Rows(6).Cells(psec.Indice - 1).Value = psec.PipeWallThermalConductivityExpression
                 Me.GridMalha.Rows(5).Cells(psec.Indice - 1).Style.BackColor = Nothing
@@ -1415,7 +1415,7 @@ Imports System.Drawing
             If e.RowIndex = 4 and e.ColumnIndex>=0 Then
                 Dim material = GridMalha.Rows(e.RowIndex).Cells(e.ColumnIndex).Value
                 If material IsNot Nothing Then
-                    If material.ToString <> PipeOp.FlowSheet.GetTranslatedString("UserDefined") Then
+                    If material.ToString <> PipeOp.FlowSheet.GetTranslatedString("UserDefined") and (not string.Equals(material.ToString, "User defined",StringComparison.CurrentCultureIgnoreCase)) Then
                         GridMalha.Rows(e.RowIndex + 1).Cells(e.ColumnIndex).ReadOnly = True
                         GridMalha.Rows(e.RowIndex + 2).Cells(e.ColumnIndex).ReadOnly = True
                         GridMalha.Rows(e.RowIndex + 1).Cells(e.ColumnIndex).Value = PipeOp.rugosidade(material.ToString, Nothing)

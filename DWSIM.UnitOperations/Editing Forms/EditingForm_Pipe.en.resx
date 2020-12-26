@@ -172,11 +172,11 @@
   <data name="Button1.ToolTip1" xml:space="preserve">
     <value />
   </data>
-  <data name="chkIncludeJT.Size" type="System.Drawing.Size, System.Drawing">
-    <value>167, 17</value>
+  <data name="chkincludeEmulsion.Size" type="System.Drawing.Size, System.Drawing">
+    <value>137, 17</value>
   </data>
-  <data name="chkIncludeJT.Text" xml:space="preserve">
-    <value>Включить эффект Джоуля — Томсона</value>
+  <data name="chkincludeEmulsion.Text" xml:space="preserve">
+    <value>Include Emulsion Effect</value>
   </data>
   <data name="btnConfigurePP.ToolTip" xml:space="preserve">
     <value>Настроить</value>
@@ -319,13 +319,19 @@
   <data name="GroupBox6.Text" xml:space="preserve">
     <value>Результаты</value>
   </data>
-  <data name="Label10.Text" xml:space="preserve">
-    <value>Алгоритм</value>
+  <data name="lblStatus.Text" xml:space="preserve">
+    <value>Объект</value>
+  </data>
+  <data name="lblConnectedTo.Text" xml:space="preserve">
+    <value>Объект</value>
   </data>
   <data name="btnConfigureFlashAlg.ToolTip" xml:space="preserve">
     <value>Настроить</value>
   </data>
-  <data name="chkActive.ToolTip1_Duplicate[1]" xml:space="preserve">
-    <value>Активно/неактивно</value>
+  <data name="chkIncludeJT.Text" xml:space="preserve">
+    <value>Включить эффект Джоуля — Томсона</value>
+  </data>
+  <data name="Label10.Text" xml:space="preserve">
+    <value>Алгоритм</value>
   </data>
 </root>

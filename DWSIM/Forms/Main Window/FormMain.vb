@@ -37,11 +37,8 @@ Imports ICSharpCode.SharpZipLib.Zip
 Imports DWSIM.Drawing.SkiaSharp.GraphicObjects.Tables
 Imports DWSIM.Drawing.SkiaSharp.GraphicObjects.Shapes
 Imports DWSIM.Drawing.SkiaSharp.GraphicObjects.Charts
-
-Imports CefSharp.WinForms
+Imports DWSIM.ExtensionMethods
 Imports DWSIM.Interfaces
-Imports DWSIM.Thermodynamics.SpecialEOS
-Imports DWSIM.Thermodynamics.SpecialEOS.PCSAFT
 Imports DWSIM.Thermodynamics.AdvancedEOS
 Imports XMLSerializer
 Imports DWSIM.Thermodynamics.Databases
@@ -767,6 +764,7 @@ Public Class FormMain
             End If
         Else
             'OpenWelcomeScreen()
+
         End If
 
     End Sub
@@ -1202,17 +1200,21 @@ Public Class FormMain
                                 If xel2.@IsAttached = True Then
                                     Dim objToID = pkey & xel2.@AttachedToObjID
                                     If objToID <> "" Then
-                                        Dim objTo As GraphicObject = (From go As GraphicObject In
-                                                                                    form.FormSurface.FlowsheetSurface.DrawingObjects Where go.Name = objToID).SingleOrDefault
-                                        If objTo Is Nothing Then objTo = (From go As GraphicObject In
-                                                                                    form.FormSurface.FlowsheetSurface.DrawingObjects Where go.Name = xel2.@AttachedToObjID).SingleOrDefault
+                                        Dim objTo As GraphicObject = (From go As GraphicObject In form.FormSurface.FlowsheetSurface.DrawingObjects Where go.Name = objToID).SingleOrDefault
+                                        If objTo Is Nothing Then
+                                            objTo = (From go As GraphicObject In form.FormSurface.FlowsheetSurface.DrawingObjects Where go.Name = xel2.@AttachedToObjID).SingleOrDefault
+                                        End If
                                         Dim fromidx As Integer = -1
                                         Dim cp As ConnectionPoint = (From cp2 As ConnectionPoint In objTo.InputConnectors Select cp2 Where cp2.ConnectorName.Split("|")(0) = obj.Name).SingleOrDefault
-                                        If cp Is Nothing Then cp = (From cp2 As ConnectionPoint In objTo.InputConnectors Select cp2 Where cp2.ConnectorName.Split("|")(0) = xel2.@AttachedToObjID).SingleOrDefault
+                                        If cp Is Nothing Then
+                                            cp = (From cp2 As ConnectionPoint In objTo.InputConnectors Select cp2 Where cp2.ConnectorName.Split("|")(0) = xel2.@AttachedToObjID).SingleOrDefault
+                                        End If
                                         If Not cp Is Nothing Then
                                             fromidx = cp.ConnectorName.Split("|")(1)
                                         End If
-                                        If Not obj Is Nothing And Not objTo Is Nothing Then form.ConnectObject(obj, objTo, fromidx, xel2.@AttachedToConnIndex)
+                                        If Not obj Is Nothing And Not objTo Is Nothing Then
+                                            form.ConnectObject(obj, objTo, fromidx, xel2.@AttachedToConnIndex)
+                                        End If
                                     End If
                                 End If
                             Next
@@ -1224,9 +1226,12 @@ Public Class FormMain
                                     If objToID <> "" Then
                                         Dim objTo As GraphicObject = (From go As GraphicObject In
                                                                                     form.FormSurface.FlowsheetSurface.DrawingObjects Where go.Name = objToID).SingleOrDefault
-                                        If objTo Is Nothing Then obj = (From go As GraphicObject In
-                                                                                    form.FormSurface.FlowsheetSurface.DrawingObjects Where go.Name = xel2.@AttachedToObjID).SingleOrDefault
-                                        If Not obj Is Nothing And Not objTo Is Nothing Then form.ConnectObject(obj, objTo, -1, xel2.@AttachedToConnIndex)
+                                        If objTo Is Nothing Then
+                                            obj = (From go As GraphicObject In form.FormSurface.FlowsheetSurface.DrawingObjects Where go.Name = xel2.@AttachedToObjID).SingleOrDefault
+                                        End If
+                                        If Not obj Is Nothing And Not objTo Is Nothing Then
+                                            form.ConnectObject(obj, objTo, -1, xel2.@AttachedToConnIndex)
+                                        End If
                                     End If
                                 End If
                             Next
@@ -1842,7 +1847,7 @@ Public Class FormMain
 
         If simulationDataRootElement.Element("DynamicsManager") IsNot Nothing Then
 
-            data = simulationDataRootElement.Element("DynamicsManager").Elements'.ToList
+            data = simulationDataRootElement.Element("DynamicsManager").Elements.ToArray
 
             Try
                 DirectCast(form.DynamicsManager, ICustomXMLSerialization).LoadData(data)
@@ -3005,13 +3010,15 @@ Public Class FormMain
             If Visible Then
                 Dim mypath As String = simulationfilename
                 If mypath = "" Then mypath = [path]
-                'process recent files list
-                If Not My.Settings.MostRecentFiles.Contains(mypath) Then
-                    My.Settings.MostRecentFiles.Add(mypath)
-                    If Not My.Application.CommandLineArgs.Count > 1 Then Me.UpdateMRUList()
-                End If
-                form.Options.FilePath = Me.filename
-                form.UpdateFormText()
+                form.UIThread(Sub()
+                                  'process recent files list
+                                  If Not My.Settings.MostRecentFiles.Contains(mypath) Then
+                                      My.Settings.MostRecentFiles.Add(mypath)
+                                      If Not My.Application.CommandLineArgs.Count > 1 Then Me.UpdateMRUList()
+                                  End If
+                                  form.Options.FilePath = Me.filename
+                                  form.UpdateFormText()
+                              End Sub)
                 form.WriteToLog(DWSIM.App.GetLocalString("Arquivo") & Me.filename & DWSIM.App.GetLocalString("salvocomsucesso"), Color.Blue, MessageType.Information)
             End If
         End If

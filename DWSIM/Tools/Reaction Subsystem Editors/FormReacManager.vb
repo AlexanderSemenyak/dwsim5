@@ -67,6 +67,7 @@ Public Class FormReacManager
     End Sub
 
     Private Sub KryptonContextMenuItem1_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles ConversaoToolStripMenuItem.Click
+
         Dim frc As New FormReacConv
         Dim result As MsgBoxResult = frc.ShowDialog()
         With Me.GridRxns.Rows
@@ -79,6 +80,7 @@ Public Class FormReacManager
     End Sub
 
     Private Sub KryptonContextMenuItem2_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles EquilibrioToolStripMenuItem.Click
+
         Dim fre As New FormReacEq
         fre.ShowDialog()
         fre.Dispose()
@@ -91,6 +93,7 @@ Public Class FormReacManager
     End Sub
 
     Private Sub KryptonContextMenuItem3_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles CineticaToolStripMenuItem.Click
+
         Dim frk As New FormReacKinetic
         frk.ShowDialog()
         frk.Dispose()

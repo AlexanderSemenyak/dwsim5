@@ -221,7 +221,6 @@ Public Class FormFlowsheet
         End If
 
         Me.COObjTSMI.Checked = Me.Options.FlowsheetShowCOReportsWindow
-        Me.ExibirListaDeItensACalcularToolStripMenuItem.Checked = Me.Options.FlowsheetShowCalculationQueue
         Me.varpaneltsmi.Checked = Me.Options.FlowsheetShowWatchWindow
 
         Dim rand As New Random
@@ -791,11 +790,9 @@ Public Class FormFlowsheet
     End Sub
 
     Private Sub ToolStripButton3_Click(sender As Object, e As EventArgs) Handles tsbAbortCalc.Click
-        If Settings.CalculatorBusy Then
-            Settings.CalculatorStopRequested = True
-            If Settings.TaskCancellationTokenSource IsNot Nothing Then
-                Settings.TaskCancellationTokenSource.Cancel()
-            End If
+        Settings.CalculatorStopRequested = True
+        If Settings.TaskCancellationTokenSource IsNot Nothing Then
+            Settings.TaskCancellationTokenSource.Cancel()
         End If
     End Sub
 
@@ -804,6 +801,7 @@ Public Class FormFlowsheet
     End Sub
 
     Private Sub ConsoleOutputTSMI_Click(sender As Object, e As EventArgs) Handles ConsoleOutputTSMI.Click
+
         If Calculator.ExcelLogForm Is Nothing OrElse Calculator.ExcelLogForm.IsDisposed Then
             Calculator.ExcelLogForm = New LogForm
             Dim txtwriter = New ConsoleRedirection.TextBoxStreamWriter(Calculator.ExcelLogForm.TextBox1)
@@ -832,6 +830,7 @@ Public Class FormFlowsheet
     End Sub
 
     Public Sub RectangleToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles RectangleToolStripMenuItem.Click
+
         Dim myTextObject As New Shapes.RectangleGraphic(New SkiaSharp.SKPoint(10, 10), "TEXT")
         Dim gObj As GraphicObject = Nothing
         gObj = myTextObject
@@ -843,6 +842,7 @@ Public Class FormFlowsheet
     End Sub
 
     Public Sub FiguraToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles FiguraToolStripMenuItem.Click
+
         With Me.OpenFileName
             .CheckFileExists = True
             .CheckPathExists = True
@@ -873,6 +873,7 @@ Public Class FormFlowsheet
     End Sub
 
     Private Sub GraficoToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles GraficoToolStripMenuItem.Click
+
         Dim myobj As New Charts.OxyPlotGraphic(30, 30)
         myobj.Name = "CHART-" & Guid.NewGuid.ToString
         myobj.Tag = "CHART" & ((From t As GraphicObject In Me.FormSurface.FlowsheetSurface.DrawingObjects Select t Where t.ObjectType = ObjectType.GO_Chart).Count + 1).ToString
@@ -922,11 +923,11 @@ Public Class FormFlowsheet
 
     Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles tsbCalc.Click
         If Not DynamicMode Then
-            GlobalSettings.Settings.TaskCancellationTokenSource = Nothing
+            Settings.TaskCancellationTokenSource = Nothing
             My.Application.ActiveSimulation = Me
             If My.Computer.Keyboard.ShiftKeyDown Then GlobalSettings.Settings.CalculatorBusy = False
             Task.Factory.StartNew(Sub()
-                                      FlowsheetSolver.FlowsheetSolver.SolveFlowsheet(Me, My.Settings.SolverMode, Nothing, False, False, Nothing, Nothing,
+                                      FlowsheetSolver.FlowsheetSolver.SolveFlowsheet(Me, My.Settings.SolverMode, Settings.TaskCancellationTokenSource, False, False, Nothing, Nothing,
                                                         Sub()
                                                             If My.Settings.ObjectEditor = 1 Then
                                                                 Me.UIThread(Sub()
@@ -1444,88 +1445,89 @@ Public Class FormFlowsheet
 
                             gobj = SelectedObj
 
-                                If gobj.EnergyConnector.IsAttached = True Then DisconnectObject(gobj, gobj.EnergyConnector.AttachedConnector.AttachedTo, False)
+                            If gobj.EnergyConnector.IsAttached = True Then DisconnectObject(gobj, gobj.EnergyConnector.AttachedConnector.AttachedTo, False)
 
-                                Dim InCon, OutCon As ConnectionPoint
-                                For Each InCon In gobj.InputConnectors
-                                    Try
-                                        If InCon.IsAttached = True Then DisconnectObject(InCon.AttachedConnector.AttachedFrom, gobj, False)
-                                    Catch ex As Exception
+                            Dim InCon, OutCon As ConnectionPoint
+                            For Each InCon In gobj.InputConnectors
+                                Try
+                                    If InCon.IsAttached = True Then DisconnectObject(InCon.AttachedConnector.AttachedFrom, gobj, False)
+                                Catch ex As Exception
 
-                                    End Try
-                                Next
-                                gobj = SelectedObj
-                                For Each OutCon In gobj.OutputConnectors
-                                    Try
-                                        If OutCon.IsAttached = True Then DisconnectObject(gobj, OutCon.AttachedConnector.AttachedTo, False)
-                                    Catch ex As Exception
+                                End Try
+                            Next
+                            gobj = SelectedObj
+                            For Each OutCon In gobj.OutputConnectors
+                                Try
+                                    If OutCon.IsAttached = True Then DisconnectObject(gobj, OutCon.AttachedConnector.AttachedTo, False)
+                                Catch ex As Exception
 
-                                    End Try
-                                Next
+                                End Try
+                            Next
 
-                                gobj = SelectedObj
+                            gobj = SelectedObj
 
                             If gobj.ObjectType = ObjectType.OT_Spec Then
-                                    Dim specobj As Spec = Me.Collections.FlowsheetObjectCollection(namesel)
-                                    If Me.Collections.FlowsheetObjectCollection.ContainsKey(specobj.TargetObjectData.ID) Then
-                                        Me.Collections.FlowsheetObjectCollection(specobj.TargetObjectData.ID).IsSpecAttached = False
-                                        Me.Collections.FlowsheetObjectCollection(specobj.TargetObjectData.ID).AttachedSpecId = ""
-                                    End If
-                                    If Me.Collections.FlowsheetObjectCollection.ContainsKey(specobj.SourceObjectData.ID) Then
-                                        Me.Collections.FlowsheetObjectCollection(specobj.SourceObjectData.ID).IsSpecAttached = False
-                                        Me.Collections.FlowsheetObjectCollection(specobj.SourceObjectData.ID).AttachedSpecId = ""
-                                    End If
-                                ElseIf gobj.ObjectType = ObjectType.OT_Adjust Then
-                                    Dim adjobj As Adjust = Me.Collections.FlowsheetObjectCollection(namesel)
-                                    If Me.Collections.FlowsheetObjectCollection.ContainsKey(adjobj.ManipulatedObjectData.ID) Then
-                                        Me.Collections.FlowsheetObjectCollection(adjobj.ManipulatedObjectData.ID).IsAdjustAttached = False
-                                        Me.Collections.FlowsheetObjectCollection(adjobj.ManipulatedObjectData.ID).AttachedAdjustId = ""
-                                    End If
-                                    If Me.Collections.FlowsheetObjectCollection.ContainsKey(adjobj.ControlledObjectData.ID) Then
-                                        Me.Collections.FlowsheetObjectCollection(adjobj.ControlledObjectData.ID).IsAdjustAttached = False
-                                        Me.Collections.FlowsheetObjectCollection(adjobj.ControlledObjectData.ID).AttachedAdjustId = ""
-                                    End If
-                                    If Me.Collections.FlowsheetObjectCollection.ContainsKey(adjobj.ReferencedObjectData.ID) Then
-                                        Me.Collections.FlowsheetObjectCollection(adjobj.ReferencedObjectData.ID).IsAdjustAttached = False
-                                        Me.Collections.FlowsheetObjectCollection(adjobj.ReferencedObjectData.ID).AttachedAdjustId = ""
-                                    End If
-                                ElseIf gobj.ObjectType = ObjectType.Controller_PID Then
-                                    Dim adjobj As PIDController = Me.Collections.FlowsheetObjectCollection(namesel)
-                                    If Me.Collections.FlowsheetObjectCollection.ContainsKey(adjobj.ManipulatedObjectData.ID) Then
-                                        Me.Collections.FlowsheetObjectCollection(adjobj.ManipulatedObjectData.ID).IsAdjustAttached = False
-                                        Me.Collections.FlowsheetObjectCollection(adjobj.ManipulatedObjectData.ID).AttachedAdjustId = ""
-                                    End If
-                                    If Me.Collections.FlowsheetObjectCollection.ContainsKey(adjobj.ControlledObjectData.ID) Then
-                                        Me.Collections.FlowsheetObjectCollection(adjobj.ControlledObjectData.ID).IsAdjustAttached = False
-                                        Me.Collections.FlowsheetObjectCollection(adjobj.ControlledObjectData.ID).AttachedAdjustId = ""
-                                    End If
-                                    If Me.Collections.FlowsheetObjectCollection.ContainsKey(adjobj.ReferencedObjectData.ID) Then
-                                        Me.Collections.FlowsheetObjectCollection(adjobj.ReferencedObjectData.ID).IsAdjustAttached = False
-                                        Me.Collections.FlowsheetObjectCollection(adjobj.ReferencedObjectData.ID).AttachedAdjustId = ""
-                                    End If
+                                Dim specobj As Spec = Me.Collections.FlowsheetObjectCollection(namesel)
+                                If Me.Collections.FlowsheetObjectCollection.ContainsKey(specobj.TargetObjectData.ID) Then
+                                    Me.Collections.FlowsheetObjectCollection(specobj.TargetObjectData.ID).IsSpecAttached = False
+                                    Me.Collections.FlowsheetObjectCollection(specobj.TargetObjectData.ID).AttachedSpecId = ""
                                 End If
+                                If Me.Collections.FlowsheetObjectCollection.ContainsKey(specobj.SourceObjectData.ID) Then
+                                    Me.Collections.FlowsheetObjectCollection(specobj.SourceObjectData.ID).IsSpecAttached = False
+                                    Me.Collections.FlowsheetObjectCollection(specobj.SourceObjectData.ID).AttachedSpecId = ""
+                                End If
+                            ElseIf gobj.ObjectType = ObjectType.OT_Adjust Then
+                                Dim adjobj As Adjust = Me.Collections.FlowsheetObjectCollection(namesel)
+                                If Me.Collections.FlowsheetObjectCollection.ContainsKey(adjobj.ManipulatedObjectData.ID) Then
+                                    Me.Collections.FlowsheetObjectCollection(adjobj.ManipulatedObjectData.ID).IsAdjustAttached = False
+                                    Me.Collections.FlowsheetObjectCollection(adjobj.ManipulatedObjectData.ID).AttachedAdjustId = ""
+                                End If
+                                If Me.Collections.FlowsheetObjectCollection.ContainsKey(adjobj.ControlledObjectData.ID) Then
+                                    Me.Collections.FlowsheetObjectCollection(adjobj.ControlledObjectData.ID).IsAdjustAttached = False
+                                    Me.Collections.FlowsheetObjectCollection(adjobj.ControlledObjectData.ID).AttachedAdjustId = ""
+                                End If
+                                If Me.Collections.FlowsheetObjectCollection.ContainsKey(adjobj.ReferencedObjectData.ID) Then
+                                    Me.Collections.FlowsheetObjectCollection(adjobj.ReferencedObjectData.ID).IsAdjustAttached = False
+                                    Me.Collections.FlowsheetObjectCollection(adjobj.ReferencedObjectData.ID).AttachedAdjustId = ""
+                                End If
+                            ElseIf gobj.ObjectType = ObjectType.Controller_PID Then
+                                Dim adjobj As PIDController = Me.Collections.FlowsheetObjectCollection(namesel)
+                                If Me.Collections.FlowsheetObjectCollection.ContainsKey(adjobj.ManipulatedObjectData.ID) Then
+                                    Me.Collections.FlowsheetObjectCollection(adjobj.ManipulatedObjectData.ID).IsAdjustAttached = False
+                                    Me.Collections.FlowsheetObjectCollection(adjobj.ManipulatedObjectData.ID).AttachedAdjustId = ""
+                                End If
+                                If Me.Collections.FlowsheetObjectCollection.ContainsKey(adjobj.ControlledObjectData.ID) Then
+                                    Me.Collections.FlowsheetObjectCollection(adjobj.ControlledObjectData.ID).IsAdjustAttached = False
+                                    Me.Collections.FlowsheetObjectCollection(adjobj.ControlledObjectData.ID).AttachedAdjustId = ""
+                                End If
+                                If Me.Collections.FlowsheetObjectCollection.ContainsKey(adjobj.ReferencedObjectData.ID) Then
+                                    Me.Collections.FlowsheetObjectCollection(adjobj.ReferencedObjectData.ID).IsAdjustAttached = False
+                                    Me.Collections.FlowsheetObjectCollection(adjobj.ReferencedObjectData.ID).AttachedAdjustId = ""
+                                End If
+                            End If
 
-                            If SimulationObjects.ContainsKey(namesel) Then
-
+                            Try
                                 If My.Application.PushUndoRedoAction Then AddUndoRedoAction(New UndoRedoAction() With {.AType = UndoRedoActionType.ObjectRemoved,
                                                                          .NewValue = gobj,
                                                                          .OldValue = Me.Collections.FlowsheetObjectCollection(namesel).SaveData(),
                                                                          .Name = String.Format(DWSIM.App.GetLocalString("UndoRedo_ObjectRemoved"), gobj.Tag)})
+                            Catch ex As Exception
+                            End Try
 
-                                Dim obj As SharedClasses.UnitOperations.BaseClass = SimulationObjects(namesel)
-                                obj.CloseEditForm()
-                                obj.Dispose()
-                                SimulationObjects.Remove(namesel)
-
+                            'DWSIM
+                            If Me.Collections.FlowsheetObjectCollection.ContainsKey(namesel) Then
+                                Me.Collections.FlowsheetObjectCollection(namesel).CloseEditForm()
+                                Me.Collections.FlowsheetObjectCollection(namesel).Dispose()
+                                Me.Collections.FlowsheetObjectCollection.Remove(namesel)
                             End If
-
-                            Me.Collections.GraphicObjectCollection.Remove(namesel)
-
+                            If Me.Collections.GraphicObjectCollection.ContainsKey(namesel) Then
+                                Me.Collections.GraphicObjectCollection.Remove(namesel)
+                            End If
                             Me.FormSurface.FlowsheetSurface.DeleteSelectedObject(gobj)
 
                         End If
 
-                        End If
+                    End If
 
                     For Each obj In Me.SimulationObjects.Values
                         obj.UpdateEditForm()
@@ -1659,14 +1661,20 @@ Public Class FormFlowsheet
         Dim myUPlugin As Interfaces.IUtilityPlugin = My.Application.UtilityPlugins.Item(tsmi.Tag)
 
         myUPlugin.SetFlowsheet(Me)
-        Select Case myUPlugin.DisplayMode
-            Case Interfaces.IUtilityPlugin.DispMode.Normal
-                myUPlugin.UtilityForm.Show(Me)
-            Case Interfaces.IUtilityPlugin.DispMode.Modal
-                myUPlugin.UtilityForm.ShowDialog(Me)
-            Case Interfaces.IUtilityPlugin.DispMode.Dockable
-                CType(myUPlugin.UtilityForm, Docking.DockContent).Show(Me.dckPanel)
-        End Select
+
+        If myUPlugin.UtilityForm IsNot Nothing Then
+            Select Case myUPlugin.DisplayMode
+                Case Interfaces.IUtilityPlugin.DispMode.Normal
+                    myUPlugin.UtilityForm.Show(Me)
+                Case Interfaces.IUtilityPlugin.DispMode.Modal
+                    myUPlugin.UtilityForm.ShowDialog(Me)
+                Case Interfaces.IUtilityPlugin.DispMode.Dockable
+                    CType(myUPlugin.UtilityForm, Docking.DockContent).Show(Me.dckPanel)
+            End Select
+        Else
+            Dim myUPlugin5 As IUtilityPlugin5 = TryCast(My.Application.UtilityPlugins.Item(tsmi.Tag), IUtilityPlugin5)
+            myUPlugin5?.Run(Nothing)
+        End If
 
     End Sub
 
@@ -2873,7 +2881,7 @@ Public Class FormFlowsheet
                                                                                          Nothing, Nothing, finishaction)
                                       End Sub)
             End If
-            FormSurface.Invalidate()
+            UpdateInterface()
         End If
 
     End Sub
@@ -3127,7 +3135,11 @@ Public Class FormFlowsheet
     End Sub
 
     Public Sub Reset() Implements IFlowsheet.Reset
-        Throw New NotImplementedException()
+        Collections.GraphicObjectCollection.Clear()
+        Collections.FlowsheetObjectCollection.Clear()
+        FormSurface.FlowsheetSurface.DrawingObjects.Clear()
+        SelectedCompounds.Clear()
+        Options = New SharedClasses.DWSIM.Flowsheet.FlowsheetVariables()
     End Sub
 
     Public Function SaveToXML1() As XDocument Implements IFlowsheet.SaveToXML

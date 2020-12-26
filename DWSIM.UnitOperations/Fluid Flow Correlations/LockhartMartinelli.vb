@@ -22,7 +22,7 @@ Namespace FlowPackages
 
         Inherits FPBaseClass
 
-      Public Overrides Function CalculateDeltaP(ByVal D As Double, ByVal L As Double, ByVal deltaz As Double, ByVal k As Double, ByVal qv As Double, ByVal ql As Double, ByVal muv As Double, ByVal mul As Double, ByVal rhov As Double, ByVal rhol As Double, ByVal surft As Double) As Object
+        Public Overrides Function CalculateDeltaP(ByVal D As Double, ByVal L As Double, ByVal deltaz As Double, ByVal k As Double, ByVal qv As Double, ByVal ql As Double, ByVal muv As Double, ByVal mul As Double, ByVal rhov As Double, ByVal rhol As Double, ByVal surft As Double) As Object
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
@@ -66,62 +66,12 @@ Namespace FlowPackages
 
             If qv = 0.0# Then
 
-                ql = ql / 3600 / 24
-                Dim vlo = ql / (Math.PI * D ^ 2 / 4)
-                mul = 0.001 * mul
-                Dim Re_fit = NRe(rhol, vlo, D, mul)
-                Dim fric = 0.0#
-                If Re_fit > 3250 Then
-                    Dim a1 = Math.Log(((k / D) ^ 1.1096) / 2.8257 + (7.149 / Re_fit) ^ 0.8961) / Math.Log(10.0#)
-                    Dim b1 = -2 * Math.Log((k / D) / 3.7065 - 5.0452 * a1 / Re_fit) / Math.Log(10.0#)
-                    fric = (1 / b1) ^ 2
-                Else
-                    fric = 64 / Re_fit
-                End If
-
-                IObj?.Paragraphs.Add("<mi>Re</mi> = " & Re_fit)
-                IObj?.Paragraphs.Add("<mi>f</mi> = " & fric)
-                IObj?.Paragraphs.Add("<mi>v_L</mi> = " & vlo & " m/s")
-
-                Dim dPl = fric * L / D * vlo ^ 2 / 2 * rhol
-                Dim dPh = rhol * 9.8 * Math.Sin(Math.Asin(deltaz / L)) * L
-
-                resvect(0) = "Liquid Only"
-                resvect(1) = 1
-                resvect(2) = dPl
-                resvect(3) = dPh
-                resvect(4) = dPl + dPh
-
+                resvect = Me.CalculateDeltaPLiquid(D, L, deltaz, k, ql, mul, rhol)
                 CalculateDeltaP = resvect
 
             ElseIf ql = 0.0# Then
 
-                qv = qv / 3600 / 24
-                Dim vgo = qv / (Math.PI * D ^ 2 / 4)
-                muv = 0.001 * muv
-                Dim Re_fit = NRe(rhov, vgo, D, muv)
-                Dim fric = 0.0#
-                If Re_fit > 3250 Then
-                    Dim a1 = Math.Log(((k / D) ^ 1.1096) / 2.8257 + (7.149 / Re_fit) ^ 0.8961) / Math.Log(10.0#)
-                    Dim b1 = -2 * Math.Log((k / D) / 3.7065 - 5.0452 * a1 / Re_fit) / Math.Log(10.0#)
-                    fric = (1 / b1) ^ 2
-                Else
-                    fric = 64 / Re_fit
-                End If
-
-                IObj?.Paragraphs.Add("<mi>Re</mi> = " & Re_fit)
-                IObj?.Paragraphs.Add("<mi>f</mi> = " & fric)
-                IObj?.Paragraphs.Add("<mi>v_V</mi> = " & vgo & " m/s")
-
-                Dim dPl = fric * L / D * vgo ^ 2 / 2 * rhov
-                Dim dPh = rhov * 9.8 * Math.Sin(Math.Asin(deltaz / L)) * L
-
-                resvect(0) = "Vapor Only"
-                resvect(1) = 0
-                resvect(2) = dPl
-                resvect(3) = dPh
-                resvect(4) = dPl + dPh
-
+                resvect = Me.CalculateDeltaPGas(D, L, deltaz, k, qv, muv, rhov)
                 CalculateDeltaP = resvect
 
             Else
@@ -137,7 +87,8 @@ Namespace FlowPackages
                 'LM_DP - Calculo da perda de carga utilizando o metodo de Lockhart-Martinelli (1949)
 
                 Dim g, teta, Cg, Cl, A, Vm, Vsl, Vsg As Double
-                Dim Re_SL, Re_SG, fsl, fsg, a1, b1, dP_SL, dP_SG
+                Dim Re_SL, Re_SG, fsl, fsg, a1, b1, dP_SL, dP_SG As Double
+                Dim X, fi_Ltt, fi_Gtt, dPf, dPg As Double
 
                 g = 9.8
 
@@ -158,47 +109,37 @@ Namespace FlowPackages
                 Re_SL = rhol * Vsl * D / mul
                 Re_SG = rhov * Vsg * D / muv
 
-                If Re_SL > 3250 Then
-                    a1 = Math.Log(((k / D) ^ 1.1096) / 2.8257 + (7.149 / Re_SL) ^ 0.8961) / Math.Log(10.0#)
-                    b1 = -2 * Math.Log((k / D) / 3.7065 - 5.0452 * a1 / Re_SL) / Math.Log(10.0#)
-                    fsl = (1 / b1) ^ 2
-                Else
-                    fsl = 64 / Re_SL
-                End If
-
-                If Re_SG > 3250 Then
-                    a1 = Math.Log(((k / D) ^ 1.1096) / 2.8257 + (7.149 / Re_SG) ^ 0.8961) / Math.Log(10.0#)
-                    b1 = -2 * Math.Log((k / D) / 3.7065 - 5.0452 * a1 / Re_SG) / Math.Log(10.0#)
-                    fsg = (1 / b1) ^ 2
-                Else
-                    fsg = 64 / Re_SG
-                End If
+                fsl = FrictionFactor(Re_SL, D, k)
+                fsg = FrictionFactor(Re_SG, D, k)
 
                 dP_SL = fsl * Vsl ^ 2 * L * rhol / (D * 2) ' em Pa
                 dP_SG = fsg * Vsg ^ 2 * L * rhov / (D * 2) ' em Pa
 
-                Dim Xtt, fi_Ltt, fi_Gtt, dPf, dPg
+                'Xtt = ((1 - Cg) / Cg) ^ 0.9 * (rhov / rhol) ^ 0.5 * (mul / muv) ^ 0.1
+                X = (dP_SL / dP_SG) ^ 0.5
 
-                Xtt = ((1 - Cg) / Cg) ^ 0.9 * (rhov / rhol) ^ 0.5 * (mul / muv) ^ 0.1
 
                 IObj?.Paragraphs.Add("<mi>Re_{sg}</mi> = " & Re_SG)
                 IObj?.Paragraphs.Add("<mi>Re_{sl}</mi> = " & Re_SL)
                 IObj?.Paragraphs.Add("<mi>f_{sg}</mi> = " & fsg)
                 IObj?.Paragraphs.Add("<mi>f_{sl}</mi> = " & fsl)
-                IObj?.Paragraphs.Add("<mi>X</mi> = " & Xtt)
+                IObj?.Paragraphs.Add("<mi>X</mi> = " & X)
 
-                If Vsl > Vsg Then
-                    fi_Ltt = 1 + 20 / Xtt + 1 / Xtt ^ 2
-                    dPf = fi_Ltt * dP_SL
+                fi_Ltt = 1 + 20 / X + 1 / X ^ 2
+                dP_SL = fi_Ltt * dP_SL
+                fi_Gtt = 1 + 20 * X + X ^ 2
+                dP_SG = fi_Gtt * dP_SG
+
+                If dP_SG > dP_SL Then
+                    dPf = dP_SG
                 Else
-                    fi_Gtt = 1 + 20 * Xtt + Xtt ^ 2
-                    dPf = fi_Gtt * dP_SG
+                    dPf = dP_SL
                 End If
 
                 dPg = (Cg * rhov + Cl * rhol) * g * Math.Sin(teta) * L
 
                 resvect(0) = "Homogeneous"
-                resvect(1) = Cl
+                resvect(1) = (1 / (1 + 20 / X + (1 / X ^ 2))) ^ 0.5
                 resvect(2) = dPf
                 resvect(3) = dPg
                 resvect(4) = (dPf + dPg)
@@ -216,13 +157,6 @@ Namespace FlowPackages
             IObj?.Paragraphs.Add("<mi>\Delta P_{total}</mi> = " & resvect(4) & " Pa")
 
             IObj?.Close()
-
-        End Function
-
-        Function NRe(ByVal rho As Double, ByVal v As Double, ByVal D As Double, ByVal mu As Double) As Double
-
-            'mu = mu * 0.001
-            NRe = rho * v * D / mu
 
         End Function
 

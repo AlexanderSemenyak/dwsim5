@@ -4476,8 +4476,8 @@ FPROPS is Copyright (C) 2011 - Carnegie Mellon University</value>
   <data name="SADJMaxIterationsReached" xml:space="preserve">
     <value>Simultaneous Adjust Solver: maximum iterations reached</value>
   </data>
-  <data name="IncludeJTEffect" xml:space="preserve">
-    <value>Include Joule-Thomson cooling effect</value>
+  <data name="IncludeEmulsion" xml:space="preserve">
+    <value>Include emulsion effect</value>
   </data>
   <data name="ReactionExtents" xml:space="preserve">
     <value>Reaction Extents</value>
@@ -5322,7 +5322,7 @@ In this model, chemical and physical equilibria of NH3, CO2, and H2S in sour wat
     <value>Thermal Cond.</value>
   </data>
   <data name="UserDefined" xml:space="preserve">
-    <value>User Defined</value>
+    <value>User defined</value>
   </data>
   <data name="PP_EXP_LIQDENS_PCORRECTION" xml:space="preserve">
     <value>Use Compressed Experimental Liquid Density Correction (0 = Disabled, 1 = Enabled)</value>

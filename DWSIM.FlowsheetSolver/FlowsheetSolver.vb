@@ -388,6 +388,7 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
 
                 Dim myobj = fbag.SimulationObjects(myinfo.Name)
                 Try
+                    myobj.GraphicObject.Status = Status.Calculating
                     myobj.ErrorMessage = ""
                     If myobj.GraphicObject.Active Then
                         If FlowsheetSolverMode Then
@@ -413,7 +414,9 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
                         myobj.UpdateEditForm()
                         If fbag.DynamicMode Then myobj.UpdateDynamicsEditForm()
                     End If
+                    myobj.GraphicObject.Status = Status.Calculated
                 Catch ex As AggregateException
+                    myobj.GraphicObject.Status = Status.ErrorCalculating
                     RaiseEvent CalculationError(myinfo, New EventArgs(), ex)
                     myobj.ErrorMessage = ""
                     For Each iex In ex.InnerExceptions
@@ -447,6 +450,7 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
                     Next
                     If GlobalSettings.Settings.SolverBreakOnException Then Exit While
                 Catch ex As Exception
+                    myobj.GraphicObject.Status = Status.ErrorCalculating
                     RaiseEvent CalculationError(myinfo, New EventArgs(), ex)
                     myobj.ErrorMessage = ex.Message.ToString & vbCrLf
                     CheckExceptionForAdditionalInfo(ex)
@@ -505,6 +509,7 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
             IObj?.Paragraphs.Add("This is the main routine for the calculation of a single object. Check the nested items for model details.")
 
             Try
+                myobj.GraphicObject.Status = Status.Calculating
                 myobj.ErrorMessage = ""
                 If myobj.GraphicObject.Active Then
                     If myinfo.ObjectType = ObjectType.MaterialStream Then
@@ -520,7 +525,9 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
                     myobj.UpdateEditForm()
                     If fbag.DynamicMode Then myobj.UpdateDynamicsEditForm()
                 End If
+                myobj.GraphicObject.Status = Status.Calculated
             Catch ex As AggregateException
+                myobj.GraphicObject.Status = Status.ErrorCalculating
                 RaiseEvent CalculationError(myinfo, New EventArgs(), ex)
                 fgui.ProcessScripts(Scripts.EventType.ObjectCalculationError, Scripts.ObjectType.FlowsheetObject, myobj.Name)
                 myobj.ErrorMessage = ""
@@ -555,6 +562,7 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
                 Next
                 If GlobalSettings.Settings.SolverBreakOnException Then Exit While
             Catch ex As Exception
+                myobj.GraphicObject.Status = Status.ErrorCalculating
                 RaiseEvent CalculationError(myinfo, New EventArgs(), ex)
                 fgui.ProcessScripts(Scripts.EventType.ObjectCalculationError, Scripts.ObjectType.FlowsheetObject, myobj.Name)
                 myobj.ErrorMessage = ex.Message.ToString
@@ -614,6 +622,7 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
                                                      If ct.IsCancellationRequested = True Then ct.ThrowIfCancellationRequested()
                                                      Dim myobj = fbag.SimulationObjects(myinfo.Name)
                                                      myobj.ErrorMessage = ""
+                                                     myobj.GraphicObject.Status = Status.Calculating
                                                      Try
                                                          If myobj.GraphicObject.Active Then
                                                              If myinfo.ObjectType = ObjectType.MaterialStream Then
@@ -629,7 +638,9 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
                                                              myobj.UpdateEditForm()
                                                              If fbag.DynamicMode Then myobj.UpdateDynamicsEditForm()
                                                          End If
+                                                         myobj.GraphicObject.Status = Status.Calculated
                                                      Catch ex As AggregateException
+                                                         myobj.GraphicObject.Status = Status.ErrorCalculating
                                                          RaiseEvent CalculationError(myinfo, New EventArgs(), ex)
                                                          fgui.ProcessScripts(Scripts.EventType.ObjectCalculationError, Scripts.ObjectType.FlowsheetObject, myobj.Name)
                                                          myobj.ErrorMessage = ""
@@ -664,6 +675,7 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
                                                          Next
                                                          If GlobalSettings.Settings.SolverBreakOnException Then state.Break()
                                                      Catch ex As Exception
+                                                         myobj.GraphicObject.Status = Status.ErrorCalculating
                                                          RaiseEvent CalculationError(myinfo, New EventArgs(), ex)
                                                          fgui.ProcessScripts(Scripts.EventType.ObjectCalculationError, Scripts.ObjectType.FlowsheetObject, myobj.Name)
                                                          myobj.ErrorMessage = ex.Message.ToString
@@ -695,7 +707,6 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
     Public Shared Sub CheckCalculatorStatus()
         If Not Settings.CAPEOPENMode Then
             If Settings.CalculatorStopRequested = True Then
-                Settings.CalculatorStopRequested = False
                 If Settings.TaskCancellationTokenSource IsNot Nothing Then
                     If Not Settings.TaskCancellationTokenSource.IsCancellationRequested Then
                         Settings.TaskCancellationTokenSource.Cancel()
@@ -705,6 +716,7 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
                     Throw New Exception("Calculation Aborted")
                 End If
             End If
+            Settings.TaskCancellationTokenSource?.Token.ThrowIfCancellationRequested()
         End If
     End Sub
 
@@ -763,7 +775,7 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
     ''' <param name="frompgrid">Starts the search from the edited object if the propert was changed from the property grid.</param>
     ''' <returns>A list of objects to be calculated in the flowsheet.</returns>
     ''' <remarks></remarks>
-    Private Shared Function GetSolvingList(fobj As Object, frompgrid As Boolean) As Object()
+    Public Shared Function GetSolvingList(fobj As Object, frompgrid As Boolean) As Object()
 
         Dim fgui As IFlowsheet = TryCast(fobj, IFlowsheet)
         Dim fbag As IFlowsheet = TryCast(fobj, IFlowsheet)
@@ -970,14 +982,20 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
                                           Optional ByVal FinishAny As Action = Nothing,
                                           Optional ByVal ChangeCalcOrder As Boolean = False) As List(Of Exception)
 
-        Inspector.Host.CurrentSolutionID = Date.Now.ToBinary
-
-        If GlobalSettings.Settings.InspectorEnabled Then
-            GlobalSettings.Settings.EnableParallelProcessing = False
-            mode = 1
-        End If
-
         If GlobalSettings.Settings.CalculatorActivated Then
+
+            If GlobalSettings.Settings.CalculatorBusy Then Return New List(Of Exception)
+
+            Inspector.Host.CurrentSolutionID = Date.Now.ToBinary
+
+            If GlobalSettings.Settings.InspectorEnabled Then
+                GlobalSettings.Settings.EnableParallelProcessing = False
+                mode = 1
+            End If
+
+            'clears any previous calculation stop request.
+
+            Settings.CalculatorStopRequested = False
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
@@ -1059,7 +1077,7 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
             End If
 
             If objstack.Count = 0 Then
-                GlobalSettings.Settings.CalculatorBusy = False
+                Settings.CalculatorBusy = False
                 FinishAny?.Invoke()
                 Return New List(Of Exception)
             End If
@@ -1213,7 +1231,9 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
 
                                                      'throws exceptions if any
 
-                                                     If Settings.SolverBreakOnException And exlist.Count > 0 Then Throw New AggregateException(exlist)
+                                                     If Settings.SolverBreakOnException And exlist.Count > 0 Then
+                                                         Throw New AggregateException(exlist)
+                                                     End If
 
                                                      'checks for recycle convergence.
 
@@ -1297,10 +1317,15 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
                                                      End If
 
                                                      If frompgrid Then
-                                                         objl = GetSolvingList(fobj, False)
-                                                         lists = objl(1)
-                                                         filteredlist = objl(2)
-                                                         objstack = objl(0)
+                                                         Try
+                                                             objl = GetSolvingList(fobj, False)
+                                                             lists = objl(1)
+                                                             filteredlist = objl(2)
+                                                             objstack = objl(0)
+                                                         Catch ex As Exception
+                                                             GlobalSettings.Settings.CalculatorBusy = False
+                                                             Throw ex
+                                                         End Try
                                                      End If
 
                                                      icount += 1
@@ -1358,12 +1383,6 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
 
                     fqueue.CalculationQueue.Clear()
 
-                    'disposes the cancellation token source.
-
-                    If fs.MasterFlowsheet Is Nothing Then ts.Dispose()
-
-                    GlobalSettings.Settings.TaskCancellationTokenSource = Nothing
-
                     'clears the object lists.
 
                     objstack.Clear()
@@ -1411,6 +1430,10 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
 
             End Select
 
+            'clears any calculation stop request.
+
+            Settings.CalculatorStopRequested = False
+
             'Frees GPU memory if enabled.
 
             If Settings.EnableGPUProcessing Then
@@ -1421,6 +1444,12 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
             'updates the display status of all objects in the calculation list.
 
             UpdateDisplayStatus(fobj, objstack.ToArray)
+
+            'disposes the cancellation token source.
+
+            If fs.MasterFlowsheet Is Nothing Then ts?.Dispose()
+
+            GlobalSettings.Settings.TaskCancellationTokenSource = Nothing
 
             'checks if exceptions were thrown during the calculation and displays them in the log window.
 
@@ -1494,7 +1523,7 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
 
             If age Is Nothing Then
                 FinishSuccess?.Invoke()
-                RaiseEvent FlowsheetCalculationFinished(fobj, New System.EventArgs(), Nothing)
+                RaiseEvent FlowsheetCalculationFinished(fobj, New System.EventArgs(), (Date.Now - d1).TotalSeconds)
                 Return New List(Of Exception)
             Else
                 FinishWithErrors?.Invoke()
@@ -1538,7 +1567,7 @@ Public Delegate Sub CustomEvent2(ByVal objinfo As CalculationArgs)
 
             fqueue.CalculationQueue.Enqueue(objargs)
 
-            Return SolveFlowsheet(fobj, Settings.SolverMode, , True)
+            Return SolveFlowsheet(fobj, Settings.SolverMode, Nothing, True)
 
         Else
 

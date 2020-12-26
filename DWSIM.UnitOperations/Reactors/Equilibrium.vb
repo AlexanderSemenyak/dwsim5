@@ -68,13 +68,13 @@ Namespace Reactors
 
         Public Property ComponentIDs As New List(Of String)
 
-        Public Property UsePreviousReactionExtents As Boolean = False
+        Public Property UsePreviousSolution As Boolean = False
 
-        Public Property InternalLoopTolerance As Double = 0.001
+        Public Property InternalLoopTolerance As Double = 0.000001
 
-        Public Property ExternalLoopTolerance As Double = 0.5
+        Public Property ExternalLoopTolerance As Double = 0.01
 
-        Public Property InternalLoopMaximumIterations As Integer = 10000
+        Public Property InternalLoopMaximumIterations As Integer = 1000
 
         Public Property ExternalLoopMaximumIterations As Integer = 50
 
@@ -171,11 +171,11 @@ Namespace Reactors
             i = 0
             For Each s As Compound In tms.Phases(0).Compounds.Values
                 If s.MoleFraction > 0.0# Then
-                    cpv(i) = (fugv(i) * Vz(i) * P / P0)
-                    cpl(i) = (fugl(i) * Vz(i))
+                    cpv(i) = fugv(i) * Vz(i) * P / P0
+                    cpl(i) = fugl(i) * Vz(i)
                 Else
-                    cpv(i) = (fugv(i) * 0.01 * P / P0)
-                    cpl(i) = (fugl(i) * 0.01)
+                    cpv(i) = fugv(i) * 0.01 * P / P0
+                    cpl(i) = fugl(i) * 0.01
                 End If
                 i += 1
             Next
@@ -194,7 +194,7 @@ Namespace Reactors
                                 Case ReactionBasis.MolarFrac
                                     basis(j) = Vz(j)
                                 Case ReactionBasis.PartialPress
-                                    basis(j) = Vz(j) * fugv(j) * P
+                                    basis(j) = (Vz(j) * fugv(j) * P).ConvertFromSI(.EquilibriumReactionBasisUnits)
                                 Case Else
                                     Throw New Exception("Selected Reaction Basis is not supported.")
                             End Select
@@ -208,7 +208,7 @@ Namespace Reactors
                                 Case ReactionBasis.MolarFrac
                                     basis(j) = Vz(j)
                                 Case ReactionBasis.PartialPress
-                                    basis(j) = Vz(j) * fugl(j) * P
+                                    basis(j) = (Vz(j) * fugl(j) * P).ConvertFromSI(.EquilibriumReactionBasisUnits)
                                 Case Else
                                     Throw New Exception("Selected Reaction Basis is not supported.")
                             End Select
@@ -221,7 +221,7 @@ Namespace Reactors
 
             Dim kr As Double
 
-            Dim penval As Double = If(NoPenVal, 0, ReturnPenaltyValue())
+            Dim penval As Double = ReturnPenaltyValue()
 
             For i = 0 To Me.Reactions.Count - 1
                 With FlowSheet.Reactions(Me.Reactions(i))
@@ -388,7 +388,30 @@ Namespace Reactors
 
         End Sub
 
+        Private Mode As Integer = 1
+
         Public Overrides Sub Calculate(Optional ByVal args As Object = Nothing)
+
+            Dim Success As Boolean = False
+            Dim Exc As Exception = Nothing
+            For i = 1 To 4
+                Try
+                    Calculate_Internal(args)
+                    Success = True
+                    Exit For
+                Catch ex As Exception
+                    Exc = ex
+                End Try
+                Mode = i + 1
+            Next
+            If Not Success Then
+                Mode = 1
+                Throw Exc
+            End If
+
+        End Sub
+
+        Public Sub Calculate_Internal(Optional ByVal args As Object = Nothing)
 
             Dim IObj As InspectorItem = Host.GetNewInspectorItem()
 
@@ -610,7 +633,7 @@ Namespace Reactors
                     If rx.Components.ContainsKey(cname) Then
                         E(j, i) = rx.Components(cname).StoichCoeff
                     Else
-                        E(j, i) = 0
+                        E(j, i) = 0.0
                     End If
                     j += 1
                 Next
@@ -641,28 +664,30 @@ Namespace Reactors
             Dim lbound(Me.ReactionExtents.Count - 1) As Double
             Dim ubound(Me.ReactionExtents.Count - 1) As Double
 
-            Dim nvars As New List(Of Double)
-            Dim pvars As New List(Of Double)
+            Dim bounds As New List(Of Double)
 
             i = 0
             For Each rxid As String In Me.Reactions
-                nvars.Clear()
-                pvars.Clear()
                 rx = FlowSheet.Reactions(rxid)
                 For Each comp As ReactionStoichBase In rx.Components.Values
-                    If comp.StoichCoeff < 0 Then pvars.Add(-N0(comp.CompName) / comp.StoichCoeff)
-                    If comp.StoichCoeff > 0 Then nvars.Add(N0(comp.CompName) / comp.StoichCoeff)
+                    bounds.Add(Math.Abs(N0(comp.CompName) / comp.StoichCoeff))
                 Next
-                lbound(i) = nvars.Max
-                ubound(i) = pvars.Min
                 i += 1
             Next
+
+            i = 0
+            For Each rxid As String In Me.Reactions
+                lbound(i) = -bounds.Max
+                ubound(i) = bounds.Max
+                i += 1
+            Next
+
 
             Dim m As Integer = 0
 
             Dim REx(r) As Double
 
-            If UsePreviousReactionExtents And PreviousReactionExtents.Count > 0 Then
+            If UsePreviousSolution And PreviousReactionExtents.Count > 0 Then
                 REx = PreviousReactionExtents.Values.ToArray()
             End If
 
@@ -682,8 +707,16 @@ Namespace Reactors
 
             Me.InitialGibbsEnergy = g0
 
-            MinVal = Math.Min(lbound.Min, REx.Min) * 10
-            MaxVal = Math.Max(ubound.Max, REx.Max) * 10
+            If Mode < 3 Then
+                MinVal = Math.Min(lbound.Min, REx.Min)
+                MaxVal = Math.Max(ubound.Max, REx.Max)
+            ElseIf Mode = 3 Then
+                MinVal = Math.Min(lbound.Min, REx.Min) * 10
+                MaxVal = Math.Max(ubound.Max, REx.Max) * 10
+            ElseIf Mode = 4 Then
+                MinVal = Math.Min(lbound.Min, REx.Min) * 100
+                MaxVal = Math.Max(ubound.Max, REx.Max) * 100
+            End If
 
             Dim CalcFinished As Boolean = False
 
@@ -694,9 +727,10 @@ Namespace Reactors
             solver2.MaxIterations = InternalLoopMaximumIterations
             solver2.Tolerance = InternalLoopTolerance
 
-            Dim solver3 As New Simplex
-            solver3.MaxFunEvaluations = InternalLoopMaximumIterations
+            Dim solver3 As New Optimization.NewtonSolver
+            solver3.MaxIterations = InternalLoopMaximumIterations
             solver3.Tolerance = InternalLoopTolerance
+            solver3.UseBroydenApproximation = True
 
             ' check equilibrium constants to define objective function form
 
@@ -706,7 +740,15 @@ Namespace Reactors
                 Keq.Add(Math.Abs(FlowSheet.Reactions(Me.Reactions(i)).EvaluateK(T, pp)))
             Next
 
-            If Keq.Max > 1000000.0 Or Keq.Min < 0.000001 Then LogErrorFunction = True Else LogErrorFunction = False
+            If Keq.Max > 1000000.0 Or Keq.Min < 0.000001 Then
+                LogErrorFunction = True
+            Else
+                If Mode < 3 Then
+                    LogErrorFunction = False
+                Else
+                    LogErrorFunction = True
+                End If
+            End If
 
             Do
 
@@ -756,7 +798,7 @@ Namespace Reactors
 
                     Dim VariableValues As New List(Of Double())
                     Dim FunctionValues As New List(Of Double)
-                    Dim result As Double
+                    Dim result As Double, resnewton As Double()
 
                     If UseIPOPTSolver Then
 
@@ -773,13 +815,14 @@ Namespace Reactors
 
                     Else
 
-                        newx = solver3.ComputeMin(Function(x1)
-                                                      FlowSheet.CheckStatus()
-                                                      VariableValues.Add(x1.Clone)
-                                                      result = FunctionValue2N(x1).AbsSqrSumY
-                                                      FunctionValues.Add(result)
-                                                      Return result
-                                                  End Function, variables2.ToArray)
+                        newx = solver3.Solve(Function(x1)
+                                                 FlowSheet.CheckStatus()
+                                                 VariableValues.Add(x1.Clone)
+                                                 resnewton = FunctionValue2N(x1)
+                                                 result = resnewton.AbsSqrSumY
+                                                 FunctionValues.Add(result)
+                                                 Return resnewton
+                                             End Function, variables.ToArray)
 
                         FlowSheet.CheckStatus()
 
@@ -979,10 +1022,12 @@ Namespace Reactors
             IObj?.Paragraphs.Add(String.Format("Final Gibbs Energy: {0}", g1))
 
             Me.ReactionExtents.Clear()
+            Me.PreviousReactionExtents.Clear()
 
             For Each rxid As String In Me.Reactions
                 rx = FlowSheet.Reactions(rxid)
                 ReactionExtents.Add(rx.ID, (N(rx.BaseReactant) - N0(rx.BaseReactant)) / rx.Components(rx.BaseReactant).StoichCoeff)
+                PreviousReactionExtents.Add(rx.ID, ReactionExtents(rx.ID))
             Next
 
             Dim W As Double = ims.Phases(0).Properties.massflow.GetValueOrDefault

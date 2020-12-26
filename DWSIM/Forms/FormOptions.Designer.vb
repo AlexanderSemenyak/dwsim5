@@ -24,9 +24,9 @@ Partial Class FormOptions
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FormOptions))
-        Dim DataGridViewCellStyle4 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle5 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle3 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.FaTabStrip1 = New System.Windows.Forms.TabControl()
         Me.FaTabStripItem1 = New System.Windows.Forms.TabPage()
         Me.GroupBox18 = New System.Windows.Forms.GroupBox()
@@ -40,12 +40,6 @@ Partial Class FormOptions
         Me.Label11 = New System.Windows.Forms.Label()
         Me.cbSolverMode = New System.Windows.Forms.ComboBox()
         Me.Label2 = New System.Windows.Forms.Label()
-        Me.GroupBoxBGThreadConfig = New System.Windows.Forms.GroupBox()
-        Me.Label10 = New System.Windows.Forms.Label()
-        Me.tbMaxThreadMultiplier = New System.Windows.Forms.TextBox()
-        Me.cbTaskScheduler = New System.Windows.Forms.ComboBox()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.Label1 = New System.Windows.Forms.Label()
         Me.GroupBoxAzureConfig = New System.Windows.Forms.GroupBox()
         Me.tbServiceBusNamespace = New System.Windows.Forms.TextBox()
         Me.Label8 = New System.Windows.Forms.Label()
@@ -111,6 +105,8 @@ Partial Class FormOptions
         Me.KryptonLabel1 = New System.Windows.Forms.Label()
         Me.KryptonCheckBox6 = New System.Windows.Forms.CheckBox()
         Me.FaTabStripItem7 = New System.Windows.Forms.TabPage()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.chkShareData = New System.Windows.Forms.CheckBox()
         Me.GroupBox17 = New System.Windows.Forms.GroupBox()
         Me.tbPythonTimeout = New System.Windows.Forms.TextBox()
         Me.Label17 = New System.Windows.Forms.Label()
@@ -136,7 +132,6 @@ Partial Class FormOptions
         Me.FaTabStripItem1.SuspendLayout()
         Me.GroupBox18.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
-        Me.GroupBoxBGThreadConfig.SuspendLayout()
         Me.GroupBoxAzureConfig.SuspendLayout()
         Me.GroupBoxNetworkComputerConfig.SuspendLayout()
         Me.GroupBox7.SuspendLayout()
@@ -155,6 +150,7 @@ Partial Class FormOptions
         Me.GroupBox3.SuspendLayout()
         CType(Me.TrackBar1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.FaTabStripItem7.SuspendLayout()
+        Me.GroupBox1.SuspendLayout()
         Me.GroupBox17.SuspendLayout()
         Me.GroupBox15.SuspendLayout()
         Me.GroupBox14.SuspendLayout()
@@ -210,7 +206,6 @@ Partial Class FormOptions
         Me.GroupBox2.Controls.Add(Me.Label11)
         Me.GroupBox2.Controls.Add(Me.cbSolverMode)
         Me.GroupBox2.Controls.Add(Me.Label2)
-        Me.GroupBox2.Controls.Add(Me.GroupBoxBGThreadConfig)
         Me.GroupBox2.Controls.Add(Me.GroupBoxAzureConfig)
         Me.GroupBox2.Controls.Add(Me.GroupBoxNetworkComputerConfig)
         Me.GroupBox2.Name = "GroupBox2"
@@ -253,45 +248,6 @@ Partial Class FormOptions
         '
         resources.ApplyResources(Me.Label2, "Label2")
         Me.Label2.Name = "Label2"
-        '
-        'GroupBoxBGThreadConfig
-        '
-        resources.ApplyResources(Me.GroupBoxBGThreadConfig, "GroupBoxBGThreadConfig")
-        Me.GroupBoxBGThreadConfig.Controls.Add(Me.Label10)
-        Me.GroupBoxBGThreadConfig.Controls.Add(Me.tbMaxThreadMultiplier)
-        Me.GroupBoxBGThreadConfig.Controls.Add(Me.cbTaskScheduler)
-        Me.GroupBoxBGThreadConfig.Controls.Add(Me.Label9)
-        Me.GroupBoxBGThreadConfig.Controls.Add(Me.Label1)
-        Me.GroupBoxBGThreadConfig.Name = "GroupBoxBGThreadConfig"
-        Me.GroupBoxBGThreadConfig.TabStop = False
-        '
-        'Label10
-        '
-        resources.ApplyResources(Me.Label10, "Label10")
-        Me.Label10.Name = "Label10"
-        '
-        'tbMaxThreadMultiplier
-        '
-        resources.ApplyResources(Me.tbMaxThreadMultiplier, "tbMaxThreadMultiplier")
-        Me.tbMaxThreadMultiplier.Name = "tbMaxThreadMultiplier"
-        '
-        'cbTaskScheduler
-        '
-        resources.ApplyResources(Me.cbTaskScheduler, "cbTaskScheduler")
-        Me.cbTaskScheduler.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cbTaskScheduler.FormattingEnabled = True
-        Me.cbTaskScheduler.Items.AddRange(New Object() {resources.GetString("cbTaskScheduler.Items"), resources.GetString("cbTaskScheduler.Items1"), resources.GetString("cbTaskScheduler.Items2")})
-        Me.cbTaskScheduler.Name = "cbTaskScheduler"
-        '
-        'Label9
-        '
-        resources.ApplyResources(Me.Label9, "Label9")
-        Me.Label9.Name = "Label9"
-        '
-        'Label1
-        '
-        resources.ApplyResources(Me.Label1, "Label1")
-        Me.Label1.Name = "Label1"
         '
         'GroupBoxAzureConfig
         '
@@ -607,10 +563,10 @@ Partial Class FormOptions
         'Column13
         '
         Me.Column13.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
-        DataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        DataGridViewCellStyle4.NullValue = CType(resources.GetObject("DataGridViewCellStyle4.NullValue"), Object)
-        Me.Column13.DefaultCellStyle = DataGridViewCellStyle4
+        DataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        DataGridViewCellStyle1.NullValue = CType(resources.GetObject("DataGridViewCellStyle1.NullValue"), Object)
+        Me.Column13.DefaultCellStyle = DataGridViewCellStyle1
         Me.Column13.FillWeight = 10.0!
         resources.ApplyResources(Me.Column13, "Column13")
         Me.Column13.Name = "Column13"
@@ -620,10 +576,10 @@ Partial Class FormOptions
         'BtnEdit
         '
         Me.BtnEdit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
-        DataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        DataGridViewCellStyle5.NullValue = CType(resources.GetObject("DataGridViewCellStyle5.NullValue"), Object)
-        Me.BtnEdit.DefaultCellStyle = DataGridViewCellStyle5
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        DataGridViewCellStyle2.NullValue = CType(resources.GetObject("DataGridViewCellStyle2.NullValue"), Object)
+        Me.BtnEdit.DefaultCellStyle = DataGridViewCellStyle2
         Me.BtnEdit.FillWeight = 10.0!
         resources.ApplyResources(Me.BtnEdit, "BtnEdit")
         Me.BtnEdit.Name = "BtnEdit"
@@ -703,10 +659,10 @@ Partial Class FormOptions
         'DataGridViewImageColumn1
         '
         Me.DataGridViewImageColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None
-        DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        DataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
-        DataGridViewCellStyle6.NullValue = CType(resources.GetObject("DataGridViewCellStyle6.NullValue"), Object)
-        Me.DataGridViewImageColumn1.DefaultCellStyle = DataGridViewCellStyle6
+        DataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        DataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer), CType(CType(224, Byte), Integer))
+        DataGridViewCellStyle3.NullValue = CType(resources.GetObject("DataGridViewCellStyle3.NullValue"), Object)
+        Me.DataGridViewImageColumn1.DefaultCellStyle = DataGridViewCellStyle3
         Me.DataGridViewImageColumn1.FillWeight = 10.0!
         resources.ApplyResources(Me.DataGridViewImageColumn1, "DataGridViewImageColumn1")
         Me.DataGridViewImageColumn1.Name = "DataGridViewImageColumn1"
@@ -789,6 +745,7 @@ Partial Class FormOptions
         'FaTabStripItem7
         '
         Me.FaTabStripItem7.BackColor = System.Drawing.SystemColors.Window
+        Me.FaTabStripItem7.Controls.Add(Me.GroupBox1)
         Me.FaTabStripItem7.Controls.Add(Me.GroupBox17)
         Me.FaTabStripItem7.Controls.Add(Me.GroupBox15)
         Me.FaTabStripItem7.Controls.Add(Me.GroupBox14)
@@ -796,6 +753,18 @@ Partial Class FormOptions
         Me.FaTabStripItem7.Controls.Add(Me.GroupBox6)
         resources.ApplyResources(Me.FaTabStripItem7, "FaTabStripItem7")
         Me.FaTabStripItem7.Name = "FaTabStripItem7"
+        '
+        'GroupBox1
+        '
+        Me.GroupBox1.Controls.Add(Me.chkShareData)
+        resources.ApplyResources(Me.GroupBox1, "GroupBox1")
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.TabStop = False
+        '
+        'chkShareData
+        '
+        resources.ApplyResources(Me.chkShareData, "chkShareData")
+        Me.chkShareData.Name = "chkShareData"
         '
         'GroupBox17
         '
@@ -950,8 +919,6 @@ Partial Class FormOptions
         Me.GroupBox18.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
-        Me.GroupBoxBGThreadConfig.ResumeLayout(False)
-        Me.GroupBoxBGThreadConfig.PerformLayout()
         Me.GroupBoxAzureConfig.ResumeLayout(False)
         Me.GroupBoxAzureConfig.PerformLayout()
         Me.GroupBoxNetworkComputerConfig.ResumeLayout(False)
@@ -980,6 +947,8 @@ Partial Class FormOptions
         Me.GroupBox3.PerformLayout()
         CType(Me.TrackBar1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.FaTabStripItem7.ResumeLayout(False)
+        Me.GroupBox1.ResumeLayout(False)
+        Me.GroupBox1.PerformLayout()
         Me.GroupBox17.ResumeLayout(False)
         Me.GroupBox17.PerformLayout()
         Me.GroupBox15.ResumeLayout(False)
@@ -1047,12 +1016,6 @@ Partial Class FormOptions
     Public WithEvents chkSolverBreak As System.Windows.Forms.CheckBox
     Public WithEvents chkStorePreviousSolutions As System.Windows.Forms.CheckBox
     Public WithEvents chkSaveBackupFile As System.Windows.Forms.CheckBox
-    Friend WithEvents GroupBoxBGThreadConfig As System.Windows.Forms.GroupBox
-    Friend WithEvents Label10 As System.Windows.Forms.Label
-    Friend WithEvents tbMaxThreadMultiplier As System.Windows.Forms.TextBox
-    Friend WithEvents cbTaskScheduler As System.Windows.Forms.ComboBox
-    Friend WithEvents Label9 As System.Windows.Forms.Label
-    Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents GroupBoxAzureConfig As System.Windows.Forms.GroupBox
     Friend WithEvents tbServiceBusNamespace As System.Windows.Forms.TextBox
     Friend WithEvents Label8 As System.Windows.Forms.Label
@@ -1096,4 +1059,6 @@ Partial Class FormOptions
     Friend WithEvents ComboBoxUILanguage As ComboBox
     Friend WithEvents Label22 As Label
     Public WithEvents chkEditorDoubleClick As CheckBox
+    Public WithEvents GroupBox1 As GroupBox
+    Public WithEvents chkShareData As CheckBox
 End Class

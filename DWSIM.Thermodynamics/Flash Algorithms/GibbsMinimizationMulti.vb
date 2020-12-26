@@ -198,9 +198,16 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
             fczl = PP.DW_CalcFugCoeff(Vz, T, P, State.Liquid)
             fczs = PP.DW_CalcSolidFugCoeff(T, P)
 
-            Gzv = Vz.MultiplyY(fczv.MultiplyY(Vz).LogY).SumY
-            Gzl = Vz.MultiplyY(fczl.MultiplyY(Vz).LogY).SumY
-            Gzs = Vz.MultiplyY(fczs.MultiplyY(Vz).LogY).SumY
+            Gzv = 0.0
+            Gzl = 0.0
+            Gzs = 0.0
+            For i = 0 To n
+                If Vz(i) > 0.0 Then
+                    Gzv += Vz(i) * Log(fczv(i) * Vz(i))
+                    Gzl += Vz(i) * Log(fczl(i) * Vz(i))
+                    Gzs += Vz(i) * Log(fczs(i) * Vz(i))
+                End If
+            Next
 
             Gz0 = {Gzv, Gzl, Gzs}.Min * 1000
 
@@ -223,12 +230,14 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
                 Do
                     Vp(i) = PP.AUX_PVAPi(Vn(i), T)
                     Ki(i) = Vp(i) / P
+                    If Double.IsNaN(Ki(i)) Or Double.IsInfinity(Ki(i)) Then Ki(i) = 1.0E+20
                     i += 1
                 Loop Until i = n + 1
             Else
                 For i = 0 To n
                     Vp(i) = PP.AUX_PVAPi(Vn(i), T)
                     Ki(i) = PrevKi(i)
+                    If Double.IsNaN(Ki(i)) Or Double.IsInfinity(Ki(i)) Then Ki(i) = 1.0E+20
                 Next
             End If
 
@@ -359,11 +368,11 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
                 Vy = rnl(3)
 
                 If L1 = 0.0 Then
-                    L1 = 0.01
-                    V = 0.99
+                    L1 = 0.0001
+                    V = 0.9999
                 End If
 
-                L2 = 0.01
+                L2 = 0.000001
 
                 Dim sum = V + L1 + L2 + Sx
 
@@ -384,7 +393,24 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
                     Dim validsolutions = stresult.Where(Function(s) s.Max > 0.5).ToList()
 
                     If validsolutions.Count > 0 Then
-                        Vx2 = validsolutions(0)
+                        'select the composition which gives the lowest gibbs energy.
+                        Dim Gt0 As Double = 100000.0, Gt As Double, ft() As Double, it As Integer
+                        i = 0
+                        For Each trialcomp In validsolutions
+                            ft = PP.DW_CalcFugCoeff(trialcomp, T, P, State.Liquid)
+                            Gt = 0.0
+                            For j = 0 To n
+                                If Vz(j) > 0.0 Then
+                                    Gt += trialcomp(j) * Log(ft(j) * trialcomp(j))
+                                End If
+                            Next
+                            If Gt < Gt0 Then
+                                Gt0 = Gt
+                                it = i
+                            End If
+                            i += 1
+                        Next
+                        Vx2 = validsolutions(it)
                     Else
                         Vx2 = stresult(0)
                     End If
@@ -583,7 +609,7 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
             End If
 
             If Sx < 1.0 Then Sx = 0.0
-            If L2 < 0.01 Then
+            If L2 < 1.0 Then
                 L2 = 0.0
             Else
                 'check if liquid phases are the same
@@ -779,7 +805,7 @@ out:        Return result
             IObj?.Paragraphs.Add(String.Format("Calculated Liquid Phase 2 composition: {0}", Vx2.ToMathArrayString))
             IObj?.Paragraphs.Add(String.Format("Calculated Solid Phase composition: {0}", Vs.ToMathArrayString))
 
-            pval = (F - L1 - L2 - Sx - V) ^ 2
+            pval = MassBalanceResidual() ^ 2
 
             Gm = Gv + Gl1 + Gl2 + Gs + pval
 

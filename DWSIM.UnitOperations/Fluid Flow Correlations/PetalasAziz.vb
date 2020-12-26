@@ -1,6 +1,5 @@
 Imports System.Runtime.InteropServices
 Imports DWSIM.Interfaces.My.Resources
-Imports DWSIM.UnitOperations.My.Resources
 
 '    Petalas-Aziz Pressure Drop Calculation Routine
 '    Copyright 2012 Daniel Wagner O. de Medeiros
@@ -43,18 +42,12 @@ Namespace FlowPackages
         Protected Region As Integer    'Code designating predicted flow regime
         Public FlowRegime As String 'Text description of predicted flow regime
 
-        <DllImport("PetAz", CallingConvention:=CallingConvention.Cdecl, EntryPoint:="calcpdrop")> _
+        <DllImport("PetAz", CallingConvention:=CallingConvention.Cdecl, EntryPoint:="calcpdrop")>
         Public Shared Sub calcpdrop(ByRef DensL As Single, ByRef DensG As Single, ByRef MuL As Single, ByRef MuG As Single,
                                                                ByRef Sigma As Single, ByRef Dia As Single, ByRef Rough As Single, ByRef Theta As Single,
                                                                ByRef VsL As Single, ByRef VsG As Single, ByRef Region As Integer, ByRef dPfr As Single,
                                                                ByRef dPhh As Single, ByRef eL As Single)
         End Sub
-
-        Function NRe(ByVal rho As Double, ByVal v As Double, ByVal D As Double, ByVal mu As Double) As Double
-
-            NRe = rho * v * D / mu
-
-        End Function
 
         Public Overrides Function CalculateDeltaP(ByVal D As Double, ByVal L As Double, ByVal deltaz As Double, ByVal k As Double, ByVal qv As Double, ByVal ql As Double, ByVal muv As Double, ByVal mul As Double, ByVal rhov As Double, ByVal rhol As Double, ByVal surft As Double) As Object
 
@@ -84,54 +77,12 @@ Namespace FlowPackages
 
             If qv = 0.0# Then
 
-                ql = ql / 3600 / 24
-                Dim vlo = ql / (Math.PI * D ^ 2 / 4)
-                mul = 0.001 * mul
-                Dim Re_fit = NRe(rhol, vlo, D, mul)
-                Dim fric = 0.0#
-                If Re_fit > 3250 Then
-                    Dim a1 = Math.Log(((k / D) ^ 1.1096) / 2.8257 + (7.149 / Re_fit) ^ 0.8961) / Math.Log(10.0#)
-                    Dim b1 = -2 * Math.Log((k / D) / 3.7065 - 5.0452 * a1 / Re_fit) / Math.Log(10.0#)
-                    fric = (1 / b1) ^ 2
-                Else
-                    fric = 64 / Re_fit
-                End If
-
-                Dim dPl = fric * L / D * vlo ^ 2 / 2 * rhol
-                Dim dPh = rhol * 9.8 * Math.Sin(Math.Asin(deltaz / L)) * L
-
-                ResVector(0) = UnitOperationsTranslate.PetalasAziz_FlowRegime_LiquidOnly
-                ResVector(1) = 1
-                ResVector(2) = dPl
-                ResVector(3) = dPh
-                ResVector(4) = dPl + dPh
-
+                ResVector = Me.CalculateDeltaPLiquid(D, L, deltaz, k, ql, mul, rhol)
                 CalculateDeltaP = ResVector
 
             ElseIf ql = 0.0# Then
 
-                qv = qv / 3600 / 24
-                Dim vgo = qv / (Math.PI * D ^ 2 / 4)
-                muv = 0.001 * muv
-                Dim Re_fit = NRe(rhov, vgo, D, muv)
-                Dim fric = 0.0#
-                If Re_fit > 3250 Then
-                    Dim a1 = Math.Log(((k / D) ^ 1.1096) / 2.8257 + (7.149 / Re_fit) ^ 0.8961) / Math.Log(10.0#)
-                    Dim b1 = -2 * Math.Log((k / D) / 3.7065 - 5.0452 * a1 / Re_fit) / Math.Log(10.0#)
-                    fric = (1 / b1) ^ 2
-                Else
-                    fric = 64 / Re_fit
-                End If
-
-                Dim dPl = fric * L / D * vgo ^ 2 / 2 * rhov
-                Dim dPh = rhov * 9.8 * Math.Sin(Math.Asin(deltaz / L)) * L
-
-                ResVector(0) = UnitOperationsTranslate.PetalasAziz_FlowRegime_VaporOnly
-                ResVector(1) = 0
-                ResVector(2) = dPl
-                ResVector(3) = dPh
-                ResVector(4) = dPl + dPh
-
+                ResVector = Me.CalculateDeltaPGas(D, L, deltaz, k, qv, muv, rhov)
                 CalculateDeltaP = ResVector
 
             Else
@@ -167,50 +118,55 @@ Namespace FlowPackages
 
                 Select Case Region
                     Case 1
-                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_ElongatedBubbles
+                        FlowRegime = "Elongated Bubbles"
                     Case 2
-                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_Bubbles
+                        FlowRegime = "Bubbles"
                     Case 3
-                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_StratifiedSmooth
+                        FlowRegime = "Stratified Smooth"
                     Case 4
-                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_StratifiedWaves
+                        FlowRegime = "Stratified Waves"
                     Case 5
-                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_Slug
+                        FlowRegime = "Slug"
                     Case 6
-                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_AnnularMist
+                        FlowRegime = "Annular Mist"
                     Case 7
-                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_DispersedBubbles
+                        FlowRegime = "Dispersed Bubbles"
                     Case 8
-                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_Froth_I_DB_AM_transition
+                        FlowRegime = "Froth I (DB/AM transition)"
                     Case 9
-                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_Homogenous
+                        FlowRegime = "Homogeneous"
                     Case 10
-                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_Froth
+                        FlowRegime = "Froth"
                     Case 11
-                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_Stratified
+                        FlowRegime = "Stratified"
                     Case 12
-                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_Segregated
+                        FlowRegime = "Segregated"
                     Case 13
-                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_Transition
+                        FlowRegime = "Transition"
                     Case 14
-                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_Intermittent
+                        FlowRegime = "Intermittent"
                     Case 15
-                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_Distributed
+                        FlowRegime = "Distributed"
                     Case 16
-                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_Single_Phase
+                        FlowRegime = "Single Phase"
                 End Select
 
-                CalculateDeltaP = New Object() {FlowRegime, eL, dPfr * 6894.76 * 3.28084 * L, dPhh * 6894.76 * 3.28084 * L, (dPfr + dPhh) * 6894.76 * 3.28084 * L}
+                ResVector(0) = FlowRegime
+                ResVector(1) = eL
+                ResVector(2) = dPfr * 6894.76 * 3.28084 * L
+                ResVector(3) = dPhh * 6894.76 * 3.28084 * L
+                ResVector(4) = (dPfr + dPhh) * 6894.76 * 3.28084 * L
 
+                CalculateDeltaP = ResVector
             End If
 
             IObj?.Paragraphs.Add(SolutionInspector.Results)
 
-            IObj?.Paragraphs.Add(SolutionInspector.Flow_Regime & FlowRegime)
-            IObj?.Paragraphs.Add("<mi>e_L</mi> = " & eL)
-            IObj?.Paragraphs.Add("<mi>\Delta P_{friction}</mi> = " & dPfr * 6894.76 * 3.28084 * L & " Pa")
-            IObj?.Paragraphs.Add("<mi>\Delta P_{elevation}</mi> = " & dPhh * 6894.76 * 3.28084 * L & " Pa")
-            IObj?.Paragraphs.Add("<mi>\Delta P_{total}</mi> = " & (dPfr + dPhh) * 6894.76 * 3.28084 * L & " Pa")
+            IObj?.Paragraphs.Add(SolutionInspector.Flow_Regime & ResVector(0))
+            IObj?.Paragraphs.Add("<mi>e_L</mi> = " & ResVector(1))
+            IObj?.Paragraphs.Add("<mi>\Delta P_{friction}</mi> = " & ResVector(2) & " Pa")
+            IObj?.Paragraphs.Add("<mi>\Delta P_{elevation}</mi> = " & ResVector(3) & " Pa")
+            IObj?.Paragraphs.Add("<mi>\Delta P_{total}</mi> = " & ResVector(4) & " Pa")
 
             IObj?.Close()
 

@@ -23,6 +23,7 @@ Public Class FormRecoverFiles
     Inherits System.Windows.Forms.Form
 
     Private Sub FormRecoverFiles_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+
         Dim data, nomearquivo As String
         For Each str As String In My.Settings.BackupFiles
             If File.Exists(str) Then
