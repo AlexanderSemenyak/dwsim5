@@ -1149,7 +1149,7 @@ Namespace UnitOperations
 
         End Function
 
-        Function rugosidade(ByVal material As String, section As PipeSection) As Double
+        Public Function rugosidade(ByVal material As String, section As PipeSection) As Double
 
             Dim epsilon As Double
 
@@ -1458,7 +1458,7 @@ Namespace UnitOperations
 
         Shared Function hint_petukhov(ByVal k, ByVal D, ByVal f, ByVal NRe, ByVal NPr)
 
-            hint_petukhov = k / D * (f / 8) * NRe * NPr / (1.07 + 12.7 * (f / 8) ^ 0.5 * (NPr ^ (2 / 3) - 1))
+            hint_petukhov = k / D * (f / 8) * (NRe - 1000.0) * NPr / (1.0 + 12.7 * (f / 8) ^ 0.5 * (NPr ^ (2 / 3) - 1))
 
         End Function
 

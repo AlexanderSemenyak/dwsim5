@@ -286,7 +286,6 @@ Namespace UnitOperations
             End If
 
             Dim Pout0 As Double = msout.GetPressure()
-            Dim Tout0 As Double = msout.GetTemperature()
 
             If DebugMode Then AppendDebugLine("Calculation mode: " & CalcMode.ToString)
 
@@ -362,9 +361,7 @@ Curves:             Me.PropertyPackage.CurrentMaterialStream = msin
                     Do
 
                         IObj?.SetCurrent()
-                        tmp = Me.PropertyPackage.CalculateEquilibrium2(FlashCalculationType.PressureEntropy, P2i, Si, Tout0)
-
-                        Tout0 = tmp.CalculatedTemperature
+                        tmp = Me.PropertyPackage.CalculateEquilibrium2(FlashCalculationType.PressureEntropy, P2i, Si, Ti)
 
                         If ProcessPath = ProcessPathType.Adiabatic Then
                             Qloop = Wi * (tmp.CalculatedEnthalpy - Hi) / (Me.AdiabaticEfficiency / 100)
@@ -407,7 +404,7 @@ Curves:             Me.PropertyPackage.CurrentMaterialStream = msin
                     If DebugMode Then AppendDebugLine(String.Format("Doing a PS flash to calculate ideal outlet enthalpy... P = {0} Pa, S = {1} kJ/[kg.K]", P2, Si))
 
                     IObj?.SetCurrent()
-                    tmp = Me.PropertyPackage.CalculateEquilibrium2(FlashCalculationType.PressureEntropy, P2, Si, Tout0)
+                    tmp = Me.PropertyPackage.CalculateEquilibrium2(FlashCalculationType.PressureEntropy, P2, Si, Ti)
                     T2s = tmp.CalculatedTemperature
                     H2s = tmp.CalculatedEnthalpy
 
@@ -586,7 +583,7 @@ Curves:             Me.PropertyPackage.CurrentMaterialStream = msin
                     If DebugMode Then AppendDebugLine(String.Format("Doing a PS flash to calculate ideal outlet enthalpy... P = {0} Pa, S = {1} kJ/[kg.K]", P2, Si))
 
                     IObj?.SetCurrent()
-                    Dim tmp = Me.PropertyPackage.CalculateEquilibrium2(FlashCalculationType.PressureEntropy, P2, Si, Tout0)
+                    Dim tmp = Me.PropertyPackage.CalculateEquilibrium2(FlashCalculationType.PressureEntropy, P2, Si, Ti)
                     T2 = tmp.CalculatedTemperature
                     T2s = T2
                     H2 = tmp.CalculatedEnthalpy

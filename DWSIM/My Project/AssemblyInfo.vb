@@ -14,7 +14,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("Симулятор термодинамических и химических процессов")>
 <Assembly: AssemblyCompany("LLC ONIT")>
 <Assembly: AssemblyProduct("Reservoir.Thermodynamics")>
-<Assembly: AssemblyCopyright("© 2008-2020")>
+<Assembly: AssemblyCopyright("© 2008-2021")>
 <Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(True)> 

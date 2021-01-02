@@ -1421,7 +1421,7 @@ Public Class MaterialStreamEditor
         utility.AttachedTo = MatStream
 
         With DirectCast(utility, DockContent)
-            .ShowHint = WeifenLuo.WinFormsUI.Docking.DockState.Float
+            .ShowHint = DockState.Document
         End With
 
         MatStream.AttachedUtilities.Add(utility)
@@ -1440,6 +1440,7 @@ Public Class MaterialStreamEditor
             Dim ts As New ToolStripMenuItem(item.Name)
             AddHandler ts.Click, Sub()
                                      Dim f = DirectCast(item, DockContent)
+                                     f.ShowHint = DockState.Document
                                      If f.Visible Then
                                          f.Select()
                                      Else
