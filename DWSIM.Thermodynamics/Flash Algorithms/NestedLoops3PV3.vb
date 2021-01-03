@@ -732,27 +732,23 @@ out:
 
             T = result(4)
 
-            If result(0) > 0.0 Then
+            IObj?.SetCurrent
+            Dim lps As Object = GetPhaseSplitEstimates(T, P, result(0), result(2), PP)
 
-                IObj?.SetCurrent
-                Dim lps As Object = GetPhaseSplitEstimates(T, P, result(0), result(2), PP)
+            If lps(2) > 0 Then
 
-                If lps(2) > 0 Then
+                If Not prevres Is Nothing Then
 
-                    If Not prevres Is Nothing Then
+                    result = Flash_PV_3P(Vz, prevres.V, prevres.L1, prevres.L2, prevres.Vy, prevres.Vx1, prevres.Vx2, P, V, T, PP)
 
-                        result = Flash_PV_3P(Vz, prevres.V, prevres.L1, prevres.L2, prevres.Vy, prevres.Vx1, prevres.Vx2, P, V, T, PP)
+                Else
 
-                    Else
-
-                        L1 = lps(0)
-                        L2 = lps(2)
-                        Vx1 = lps(1)
-                        Vx2 = lps(3)
-                        IObj?.SetCurrent
-                        result = Flash_PV_3P(Vz, result(1), L1, L2, result(3), Vx1, Vx2, P, V, T, PP)
-
-                    End If
+                    L1 = lps(0)
+                    L2 = lps(2)
+                    Vx1 = lps(1)
+                    Vx2 = lps(3)
+                    IObj?.SetCurrent
+                    result = Flash_PV_3P(Vz, result(1), L1, L2, result(3), Vx1, Vx2, P, V, T, PP)
 
                 End If
 
@@ -870,7 +866,7 @@ out:
 
                 'adjust boiling point by logarithmic interpolation
                 Dim cnt As Integer
-                Dim Pn, P1, P2, lnP, lnP1, lnP2, T1, T2 As Double
+                Dim Pn, P1, P2, lnP, lnP1, lnP2, T1, T2, dTP As Double
 
                 lnP = Log(P)
                 cnt = 0
@@ -887,7 +883,14 @@ out:
                         P2 = P2 + Vx1(i) * gamma1(i) * PP.AUX_PVAPi(i, T2)
                     Next
                     lnP2 = Log(P2)
-                    T = T1 + (T2 - T1) * (lnP - lnP1) / (lnP2 - lnP1)
+                    dTP = (T2 - T1) * (lnP - lnP1) / (lnP2 - lnP1)
+
+                    'limit temperature change to avoid problems near aceotropic point
+                    If Abs(dTP) > 40 Then dTP = 40 * Sign(dTP)
+                    T = T1 + dTP
+                    If T < 200 Then T = 200
+                    If T > 700 Then T = 700
+
                     Pn = 0
                     For i = 0 To n
                         Pn = Pn + Vx1(i) * gamma1(i) * PP.AUX_PVAPi(i, T)
