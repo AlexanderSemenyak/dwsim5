@@ -250,10 +250,10 @@ Imports IronPython.Hosting
             Dim ops As ExceptionOperations = engine.GetService(Of ExceptionOperations)()
             If My.Application.CommandLineMode Then
                 Console.WriteLine()
-                Console.WriteLine("Error running script: " & ops.FormatException(ex).ToString)
+                Console.WriteLine("Ошибка выполнения скрипта: " & ops.FormatException(ex).ToString)
                 Console.WriteLine()
             Else
-                fsheet.WriteToLog("Error running script: " & ops.FormatException(ex).ToString, Color.Red, MessageType.GeneralError)
+                fsheet.WriteToLog("Ошибка выполнения скрипта: " & ops.FormatException(ex).ToString, Color.Red, MessageType.GeneralError)
             End If
         Finally
             engine.Runtime.Shutdown()
@@ -313,10 +313,10 @@ Imports IronPython.Hosting
 
                                                            If My.Application.CommandLineMode Then
                                                                Console.WriteLine()
-                                                               Console.WriteLine("Error running script: " & ex.ToString)
+                                                               Console.WriteLine("Ошибка выполнения скрипта: " & ex.ToString)
                                                                Console.WriteLine()
                                                            Else
-                                                               fsheet.WriteToLog("Error running script: " & ex.Message.ToString, Color.Red, MessageType.GeneralError)
+                                                               fsheet.WriteToLog("Ошибка выполнения скрипта: " & ex.Message.ToString, Color.Red, MessageType.GeneralError)
                                                            End If
 
                                                        Finally
@@ -507,7 +507,7 @@ Imports IronPython.Hosting
             End If
         Next
 
-        fc.WriteToLog("Script Data updated sucessfully.", Color.Blue, MessageType.Information)
+        fc.WriteToLog("Данные скриптов успешно обновлены.", Color.Blue, MessageType.Information)
 
     End Sub
 
@@ -562,7 +562,7 @@ Imports IronPython.Hosting
                 Dim stab As New FATabStripItem()
                 stab.Controls.Add(p)
                 stab.Tag = scriptdata.ID
-                If scriptdata.Title = "" Then stab.Title = "Script" & TabStripScripts.Items.Count + 1 Else stab.Title = scriptdata.Title
+                If scriptdata.Title = "" Then stab.Title = "Скрипт" & TabStripScripts.Items.Count + 1 Else stab.Title = scriptdata.Title
 
                 TabStripScripts.AddTab(stab, True)
 
@@ -639,7 +639,7 @@ Imports IronPython.Hosting
                 Dim stab As New FATabStripItem()
                 stab.Controls.Add(p)
                 stab.Tag = scriptdata.ID
-                If scriptdata.Title = "" Then stab.Title = "Script" & TabStripScripts.Items.Count + 1 Else stab.Title = scriptdata.Title
+                If scriptdata.Title = "" Then stab.Title = "Скрипт" & TabStripScripts.Items.Count + 1 Else stab.Title = scriptdata.Title
 
                 TabStripScripts.AddTab(stab, True)
 
@@ -710,7 +710,7 @@ Imports IronPython.Hosting
     End Sub
 
     Private Sub TabStripScripts_TabStripItemClosing(e As TabStripItemClosingEventArgs) Handles TabStripScripts.TabStripItemClosing
-        If MessageBox.Show(DWSIM.App.GetLocalString("RemoveScriptQuestion"), "DWSIM", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.No Then
+        If MessageBox.Show(DWSIM.App.GetLocalString("RemoveScriptQuestion"), "Reservoir.Thermodynamics", MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.No Then
             e.Cancel = True
         End If
     End Sub
@@ -868,7 +868,7 @@ Imports IronPython.Hosting
                 scripteditor.SplitContainer1.Panel2Collapsed = False
 
                 CurrentlyDebugging = True
-                btnRunDebug.ToolTipText = "Continue Debugging"
+                btnRunDebug.ToolTipText = "Продолжение отладки"
                 btnStopDebug.Enabled = True
 
                 CancelDebugToken = New CancellationTokenSource()
@@ -937,7 +937,7 @@ Imports IronPython.Hosting
                 t.ContinueWith(Sub()
                                    UIThread(Sub()
                                                 CurrentlyDebugging = False
-                                                btnRunDebug.ToolTipText = "Debug Script (Async)"
+                                                btnRunDebug.ToolTipText = "Отладка скрипта (асинхронно)"
                                                 scripteditor.SplitContainer1.Panel2Collapsed = True
                                                 btnStopDebug.Enabled = False
                                             End Sub)
@@ -945,7 +945,7 @@ Imports IronPython.Hosting
 
             Else
 
-                MessageBox.Show("Python.NET script debugging is not supported.")
+                MessageBox.Show("Отладка Python.NET-скриптов не поддерживается.")
 
             End If
 

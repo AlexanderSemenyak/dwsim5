@@ -2818,16 +2818,16 @@
     <value>PP modified</value>
   </data>
   <data name="Presso" xml:space="preserve">
-    <value>Pressure</value>
+    <value>Давление</value>
   </data>
   <data name="Pressoajusante" xml:space="preserve">
     <value>Pressure downstream</value>
   </data>
   <data name="PressoCrtica" xml:space="preserve">
-    <value>Critical Pressure</value>
+    <value>Критическое давление</value>
   </data>
   <data name="PressoCrtica2" xml:space="preserve">
-    <value>Critical Pressure (</value>
+    <value>Критическое давление (</value>
   </data>
   <data name="Pressodacorrente" xml:space="preserve">
     <value>Stream pressure</value>
@@ -2839,7 +2839,7 @@
     <value>Vapor Pressure</value>
   </data>
   <data name="Pressonegativadentro" xml:space="preserve">
-    <value>A negative pressure was calculated inside the pipe segment.</value>
+    <value>Рассчитано отрицательное давление в сегменте трубопровода.</value>
   </data>
   <data name="PressoPa" xml:space="preserve">
     <value>Pressure (Pa)</value>
@@ -2848,10 +2848,10 @@
     <value>Давление к Энтальпии</value>
   </data>
   <data name="PressovsTemperatura" xml:space="preserve">
-    <value>Pressure vs. Temperature</value>
+    <value>Давление к Температуре</value>
   </data>
   <data name="PressovsVolume" xml:space="preserve">
-    <value>Pressure vs. Volume</value>
+    <value>Давление к Объему</value>
   </data>
   <data name="PressureCalculation" xml:space="preserve">
     <value>PressureCalculation</value>
@@ -4978,13 +4978,13 @@ FPROPS is Copyright (C) 2011 - Carnegie Mellon University</value>
     <value>Redirect messages from subflowsheet calculations to the main flowsheet's log window.</value>
   </data>
   <data name="SubFSUpdateFailed" xml:space="preserve">
-    <value>Error updating subflowsheet process data:</value>
+    <value>Ошибка обновление результатов моделирования субмодели:</value>
   </data>
   <data name="SubFSUpdateSuccess" xml:space="preserve">
-    <value>Subflowsheet process data updated successfully.</value>
+    <value>Данные моделирования субмодели успешно обновлены.</value>
   </data>
   <data name="UpdateOnSave" xml:space="preserve">
-    <value>Update process data on saving</value>
+    <value>Обновление результатов моделирования при сохранении</value>
   </data>
   <data name="UpdateOnSaveDesc" xml:space="preserve">
     <value>Updates the sub-flowsheet file with process data from the last calculation run when saving the main flowsheet file (XML only).</value>
@@ -4993,7 +4993,7 @@ FPROPS is Copyright (C) 2011 - Carnegie Mellon University</value>
     <value>Column operation mode</value>
   </data>
   <data name="FSfinishedsolvingerror" xml:space="preserve">
-    <value>Errors occurred during the calculation of the flowsheet, please read the following messages for more details.</value>
+    <value>Обнаружены ошибки при расчете модели, прочитайте следующие сообщения для уточнения причины.</value>
   </data>
   <data name="FSfinishedsolvingok" xml:space="preserve">
     <value>Модель успешно рассчитана.</value>
@@ -5430,31 +5430,31 @@ In this model, chemical and physical equilibria of NH3, CO2, and H2S in sour wat
     <value>Коэффициент теплоемкости (Cp / Cv)</value>
   </data>
   <data name="CommitChangesWarning" xml:space="preserve">
-    <value>There are uncommitted amount changes. Click on 'Accept Changes' to update.</value>
+    <value>Есть неподтвержденные изменения. Щелкните на 'Принять изменения' для обновления.</value>
   </data>
   <data name="CommitChanges" xml:space="preserve">
-    <value>Press ENTER to accept the new value.</value>
+    <value>Нажмите ENTER чтобы принять новое значение.</value>
   </data>
   <data name="DCErrorStillHigh" xml:space="preserve">
     <value>couldn't find a solution within the specified tolerance.</value>
   </data>
   <data name="ObjActivated" xml:space="preserve">
-    <value>object is active</value>
+    <value>объект активен</value>
   </data>
   <data name="ObjDeactivated" xml:space="preserve">
-    <value>object is inactive</value>
+    <value>объект не активен</value>
   </data>
   <data name="Import" xml:space="preserve">
-    <value>Import</value>
+    <value>Импорт</value>
   </data>
   <data name="NextButton" xml:space="preserve">
-    <value>Next &gt;</value>
+    <value>Далее &gt;</value>
   </data>
   <data name="CompoundExists" xml:space="preserve">
     <value>The compound already exists in the simulation. Data import canceled.</value>
   </data>
   <data name="UndoRedo_SpreadsheetCellChanged" xml:space="preserve">
-    <value>Spreadsheet cell value changed: {0}</value>
+    <value>Значение в таблице изменено: {0}</value>
   </data>
   <data name="ChEDLThermoError" xml:space="preserve">
     <value>A valid Python installation is required (set path on 'General Settings &gt;Other &gt;DWSIM/Python bridge settings) with the 'thermo' library already installed (PIP command: 'pip install thermo').</value>
@@ -5472,7 +5472,7 @@ In this model, chemical and physical equilibria of NH3, CO2, and H2S in sour wat
     <value>No solution found - reached a stationary point of the objective function (singular gradient matrix).</value>
   </data>
   <data name="EditUnitSystem" xml:space="preserve">
-    <value>Edit System of Units</value>
+    <value>Редактировать систему единиц измерения</value>
   </data>
   <data name="DiffusionCoefficient" xml:space="preserve">
     <value>Diffusion Coefficient</value>

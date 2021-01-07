@@ -2725,7 +2725,7 @@
     <value>Паровая фаза</value>
   </data>
   <data name="Pressonegativadentro" xml:space="preserve">
-    <value>A negative pressure was calculated inside the pipe segment.</value>
+    <value>Рассчитано отрицательное давление в сегменте трубопровода.</value>
   </data>
   <data name="PressoPa" xml:space="preserve">
     <value>Pressure (Pa)</value>
@@ -4876,7 +4876,7 @@ FPROPS is Copyright (C) 2011 - Carnegie Mellon University</value>
     <value>Column operation mode</value>
   </data>
   <data name="FSfinishedsolvingerror" xml:space="preserve">
-    <value>Errors occurred during the calculation of the flowsheet, please read the following messages for more details.</value>
+    <value>Обнаружены ошибки при расчете модели, прочитайте следующие сообщения для уточнения причины.</value>
   </data>
   <data name="FSfinishedsolvingok" xml:space="preserve">
     <value>The flowsheet was calculated successfully.</value>
@@ -5289,10 +5289,10 @@ In this model, chemical and physical equilibria of NH3, CO2, and H2S in sour wat
     <value>the mass balance did not converge within tolerance.</value>
   </data>
   <data name="ObjActivated" xml:space="preserve">
-    <value>object is active</value>
+    <value>объект активен</value>
   </data>
   <data name="ObjDeactivated" xml:space="preserve">
-    <value>object is inactive</value>
+    <value>объект не активен</value>
   </data>
   <data name="ObjectIsActive" xml:space="preserve">
     <value>Active (click to deactivate)</value>
