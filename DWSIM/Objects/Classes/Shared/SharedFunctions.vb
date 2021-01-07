@@ -199,13 +199,24 @@ Namespace DWSIM
             If id <> "" Then
                 Dim retstr As String
                 retstr = My.Application._ResourceManager.GetString(id, My.Application._CultureInfo)
-                If retstr Is Nothing Then Return id Else Return retstr
+                If retstr Is Nothing Then
+                    Return id
+                Else
+                    If My.Application.ActiveSimulation IsNot Nothing Then
+                        If My.Application.ActiveSimulation._translatefunction IsNot Nothing Then
+                            Return My.Application.ActiveSimulation._translatefunction.Invoke(retstr)
+                        End If
+                    End If
+                    Return retstr
+                End If
             Else
                 Return ""
             End If
+
         End Function
 
         Public Shared Function GetPropertyName(ByVal PropID As String, Optional ByRef fp As FormMain = Nothing) As String
+
 
             If My.Application._ResourceManager Is Nothing Then
 
@@ -235,10 +246,28 @@ Namespace DWSIM
                     pname = My.Application._PropertyNameManager.GetString(prop, My.Application._CultureInfo)
                     If pname = "" Then pname = prop
                     retstr = pname + " / " + sname
-                    If retstr Is Nothing Then Return PropID Else Return retstr
+                    If retstr Is Nothing Then
+                        Return PropID
+                    Else
+                        If My.Application.ActiveSimulation IsNot Nothing Then
+                            If My.Application.ActiveSimulation._translatefunction IsNot Nothing Then
+                                Return My.Application.ActiveSimulation._translatefunction.Invoke(retstr)
+                            End If
+                        End If
+                        Return retstr
+                    End If
                 Else
                     retstr = My.Application._PropertyNameManager.GetString(prop, My.Application._CultureInfo)
-                    If retstr Is Nothing Then Return PropID Else Return retstr
+                    If retstr Is Nothing Then
+                        Return PropID
+                    Else
+                        If My.Application.ActiveSimulation IsNot Nothing Then
+                            If My.Application.ActiveSimulation._translatefunction IsNot Nothing Then
+                                Return My.Application.ActiveSimulation._translatefunction.Invoke(retstr)
+                            End If
+                        End If
+                        Return retstr
+                    End If
                 End If
             Else
                 retstr = ""

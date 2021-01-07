@@ -45,7 +45,16 @@ Imports DWSIM.Thermodynamics.AdvancedEOS
 
     Public OptimizationCollection As New List(Of Optimization.OptimizationCase)
 
-    Public Property AvailablePropertyPackages As New Dictionary(Of String, IPropertyPackage) Implements IFlowsheet.AvailablePropertyPackages
+    Private Shared AvailablePropPacks As New Dictionary(Of String, IPropertyPackage)
+
+    Public Property AvailablePropertyPackages As Dictionary(Of String, IPropertyPackage) Implements IFlowsheet.AvailablePropertyPackages
+        Get
+            Return AvailablePropPacks
+        End Get
+        Set(value As Dictionary(Of String, IPropertyPackage))
+            AvailablePropPacks = value
+        End Set
+    End Property
 
     Public Property AvailableSystemsOfUnits As New List(Of IUnitsOfMeasure) Implements IFlowsheet.AvailableSystemsOfUnits
 
@@ -64,6 +73,8 @@ Imports DWSIM.Thermodynamics.AdvancedEOS
     Public Property ScriptKeywordsF As String = ""
 
     Public Property ScriptKeywordsU As String = ""
+
+    Protected _translatefunction As Func(Of String, String)
 
     Public Sub AddCompoundsToMaterialStream(ms As IMaterialStream) Implements IFlowsheet.AddCompoundsToMaterialStream
         For Each phase As IPhase In ms.Phases.Values
@@ -261,6 +272,10 @@ Imports DWSIM.Thermodynamics.AdvancedEOS
     End Function
 
     Public Function GetTranslatedString(text As String) As String Implements IFlowsheet.GetTranslatedString
+
+        If _translatefunction IsNot Nothing Then
+            Return _translatefunction.Invoke(text)
+        End If
 
         If rm Is Nothing Then
             rm = New Resources.ResourceManager("DWSIM.FlowsheetBase.Strings", MyBase.GetType.GetTypeInfo.BaseType.GetTypeInfo.Assembly)
@@ -1269,15 +1284,19 @@ Imports DWSIM.Thermodynamics.AdvancedEOS
         data = xdoc.Element("DWSIM_Simulation_Data").Element("Compounds").Elements.ToList
 
         For Each xel As XElement In data
-            Try
-                Dim obj As New ConstantProperties
-                obj.LoadData(xel.Elements.ToList)
-                If Not AvailableCompounds.ContainsKey(obj.Name) Then AvailableCompounds.Add(obj.Name, obj)
-                Options.SelectedComponents.Add(obj.Name, obj)
-            Catch ex As Exception
-                excs.Add(New Exception("Error Loading Compound Information", ex))
-            End Try
+            Dim obj As New ConstantProperties
+            obj.Name = xel.Element("Name").Value
+            If Not AvailableCompounds.ContainsKey(obj.Name) Then AvailableCompounds.Add(obj.Name, obj)
+            Options.SelectedComponents.Add(obj.Name, obj)
         Next
+
+        Parallel.ForEach(data, Sub(xel)
+                                   Try
+                                       Options.SelectedComponents(xel.Element("Name").Value).LoadData(xel.Elements.ToList)
+                                   Catch ex As Exception
+                                       excs.Add(New Exception("Error Loading Compound Information", ex))
+                                   End Try
+                               End Sub)
 
         data = xdoc.Element("DWSIM_Simulation_Data").Element("PropertyPackages").Elements.ToList
 
@@ -1332,7 +1351,7 @@ Imports DWSIM.Thermodynamics.AdvancedEOS
                 Dim id As String = xel.<Name>.Value
                 Dim obj As ISimulationObject = Nothing
                 If xel.Element("Type").Value.Contains("Streams.MaterialStream") Then
-                    obj = CType(New RaoultPropertyPackage().ReturnInstance(xel.Element("Type").Value), ISimulationObject)
+                    obj = New MaterialStream()
                 Else
                     Dim uokey As String = xel.Element("ComponentDescription").Value
                     If ExternalUnitOperations.ContainsKey(uokey) Then
@@ -1970,6 +1989,7 @@ Imports DWSIM.Thermodynamics.AdvancedEOS
         AddExternalUOs()
 
         Dim addedcomps As New List(Of String)
+        Dim casnumbers As New List(Of String)
 
         Task.Factory.StartNew(Sub()
                                   Dim csdb As New Databases.ChemSep
@@ -1997,10 +2017,11 @@ Imports DWSIM.Thermodynamics.AdvancedEOS
                                   chedl.Load()
                                   cpa = chedl.Transfer().ToArray()
                                   addedcomps = AvailableCompounds.Keys.Select(Function(x) x.ToLower).ToList()
+                                  casnumbers = AvailableCompounds.Values.Select(Function(x) x.CAS_Number).ToList()
                                   For Each cp As ConstantProperties In cpa
-                                      If Not addedcomps.Contains(cp.Name.ToLower) AndAlso Not AvailableCompounds.ContainsKey(cp.Name) Then
-                                          If AvailableCompounds.Values.Where(Function(x) x.CAS_Number = cp.CAS_Number).Count = 0 Then
-                                              AvailableCompounds.Add(cp.Name, cp)
+                                      If Not addedcomps.Contains(cp.Name.ToLower) And Not addedcomps.Contains(cp.Name) Then
+                                          If Not casnumbers.Contains(cp.CAS_Number) Then
+                                              If Not AvailableCompounds.ContainsKey(cp.Name) Then AvailableCompounds.Add(cp.Name, cp)
                                           End If
                                       End If
                                   Next
@@ -2204,7 +2225,9 @@ Label_00CC:
         End Using
     End Function
 
-    Sub AddPropPacks()
+    Public Shared Sub AddPropPacks()
+
+        If AvailablePropPacks.Count > 0 Then Exit Sub
 
         Dim plist As New Concurrent.BlockingCollection(Of PropertyPackage)
 
@@ -2384,14 +2407,14 @@ Label_00CC:
         Task.WaitAll(t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14)
 
         For Each pp In plist
-            AvailablePropertyPackages.Add(DirectCast(pp, CapeOpen.ICapeIdentification).ComponentName, pp)
+            AvailablePropPacks.Add(DirectCast(pp, CapeOpen.ICapeIdentification).ComponentName, pp)
         Next
 
         Dim otherpps = SharedClasses.Utility.LoadAdditionalPropertyPackages()
 
         For Each pp In otherpps
-            If Not AvailablePropertyPackages.ContainsKey(DirectCast(pp, CapeOpen.ICapeIdentification).ComponentName) Then
-                AvailablePropertyPackages.Add(DirectCast(pp, CapeOpen.ICapeIdentification).ComponentName, pp)
+            If Not AvailablePropPacks.ContainsKey(DirectCast(pp, CapeOpen.ICapeIdentification).ComponentName) Then
+                AvailablePropPacks.Add(DirectCast(pp, CapeOpen.ICapeIdentification).ComponentName, pp)
             End If
         Next
 
@@ -2399,7 +2422,7 @@ Label_00CC:
         If Not GlobalSettings.Settings.IsRunningOnMono Then
             Dim COPP As CAPEOPENPropertyPackage = New CAPEOPENPropertyPackage()
             COPP.ComponentName = "CAPE-OPEN"
-            AvailablePropertyPackages.Add(COPP.ComponentName.ToString, COPP)
+            AvailablePropPacks.Add(COPP.ComponentName.ToString, COPP)
         End If
 
     End Sub
@@ -2767,6 +2790,10 @@ Label_00CC:
 
     Public Sub RefreshInterface() Implements IFlowsheet.RefreshInterface
         UpdateInterface()
+    End Sub
+
+    Public Sub SetTranslateTextExternalFunction(act As Func(Of String, String)) Implements IFlowsheet.SetTranslateTextExternalFunction
+        _translatefunction = act
     End Sub
 End Class
 
