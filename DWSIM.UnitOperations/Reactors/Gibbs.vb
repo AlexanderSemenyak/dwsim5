@@ -1208,7 +1208,7 @@ Namespace Reactors
 
             Select Case Me.ReactorOperationMode
                 Case OperationMode.Adiabatic
-                    T = 1500.0 'initial value only, final value will be calculated by an iterative procedure
+                    T = T0 'initial value only, final value will be calculated by an iterative procedure
                 Case OperationMode.Isothermic
                     T = T0
                 Case OperationMode.OutletTemperature
@@ -1458,6 +1458,38 @@ Namespace Reactors
 
                     xm0 = xm0.NormalizeY
 
+                    'estimate lagrange multipliers
+
+                    For i = 0 To c
+                        IObj?.SetCurrent
+                        igge(i) = pp.AUX_DELGF_T(298.15, T, Me.ComponentIDs(i), False) * FlowSheet.SelectedCompounds(Me.ComponentIDs(i)).Molar_Weight + Log(P / P0) / (8.314 * T)
+                    Next
+
+                    Dim mymat As New Mapack.Matrix(e + 1, e + 1)
+                    Dim mypot As New Mapack.Matrix(e + 1, 1)
+                    Dim mylags As New Mapack.Matrix(e + 1, 1)
+
+                    Dim k As Integer = 0
+
+                    For i = 0 To e
+                        k = 0
+                        For j = 0 To c
+                            If resc(j) > 0.0# Then
+                                mymat(i, k) = Me.ElementMatrix(i, j)
+                                mypot(k, 0) = igge(j)
+                                k += 1
+                            End If
+                        Next
+                    Next
+
+                    Try
+                        mylags = mymat.Solve(mypot.Multiply(-1))
+                        For i = 0 To e
+                            lagrm(i) = mylags(i, 0) / LagrangeFactor
+                        Next
+                    Catch ex As Exception
+                    End Try
+
                 End If
 
                 IObj2?.Paragraphs.Add(String.Format("Initial Estimate for Mixture Molar Composition: {0}", xm0.ToMathArrayString))
@@ -1510,7 +1542,7 @@ Namespace Reactors
 
                 Dim sumerr As Double = 0.0#
 
-                Dim fx(e + 1 + 4), dfdx(e + 1 + 4, e + 1 + 4), dx(e + 1 + 4), x(e + 1 + 4), px(e + 1 + 4), df, fval As Double
+                Dim fx(e + 1 + 4), dfdx(e + 1 + 4, e + 1 + 4), dx(e + 1 + 4), x(e + 1 + 4), px(e + 1 + 4) As Double
 
                 Dim ni_ext As Integer
 
@@ -1735,9 +1767,17 @@ Namespace Reactors
 
                         Me.DeltaQ = 0.0#
 
+                        pp.CurrentMaterialStream = ims
+
+                        ims.SpecType = StreamSpec.Temperature_and_Pressure
+                        ims.Calculate(True, True)
+
+                        'Products Enthalpy (kJ/kg * kg/s = kW)
+                        Dim Hp0 = ims.Phases(0).Properties.enthalpy.GetValueOrDefault * ims.Phases(0).Properties.massflow.GetValueOrDefault
+
                         'Products Enthalpy (kJ/kg * kg/s = kW)
 
-                        Dim Hp = Hr0 - DHr
+                        Dim Hp = Hp0 + Hr0 - DHr
 
                         Hp = Hp / ims.Phases(0).Properties.massflow.GetValueOrDefault
 
@@ -1755,7 +1795,7 @@ Namespace Reactors
 
                         If Abs(T - TLast) < 0.5 Then CalcFinished = True
 
-                        T = TLast * 0.7 + T * 0.3
+                        T = TLast * 0.9 + T * 0.1
 
                         ims.Phases(0).Properties.temperature = T
                         tms.Phases(0).Properties.temperature = T
