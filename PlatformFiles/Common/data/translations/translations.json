@@ -1,5 +1,6 @@
 {
   " - Edit Composition": {
+    "ru": "+",
     "OriginalText": " - Edit Composition",
     "Translations": {
       "fr": " - Modifier la composition",
@@ -7,7 +8,7 @@
       "zh-Hans": "- 编辑构图",
       "de": " - Komposition bearbeiten",
       "es": " - Editar composición",
-      "ru": " - Редактировать композицию",
+      "ru": " - Редактировать состав",
       "it": " - Modifica composizione",
       "ja": "- コンポジションの編集",
       "ko": " - 컴포지션 편집",
@@ -20,6 +21,7 @@
     }
   },
   " Error": {
+    "ru": "+",
     "OriginalText": " Error",
     "Translations": {
       "fr": " Erreur",
@@ -40,6 +42,7 @@
     }
   },
   " Errors": {
+    "ru": "+",
     "OriginalText": " Errors",
     "Translations": {
       "fr": " Erreurs",
@@ -60,6 +63,7 @@
     }
   },
   " loaded successfully.": {
+    "ru": "+",
     "OriginalText": " loaded successfully.",
     "Translations": {
       "fr": " chargé avec succès.",
@@ -67,7 +71,7 @@
       "zh-Hans": "已成功加载。",
       "de": " erfolgreich geladen werden.",
       "es": " cargado con éxito.",
-      "ru": " загружены успешно.",
+      "ru": " загруж. успешно.",
       "it": " caricato correttamente.",
       "ja": "正常に読み込まれました。",
       "ko": " 성공적으로 로드되었습니다.",
@@ -80,6 +84,7 @@
     }
   },
   " Message": {
+    "ru": "+",
     "OriginalText": " Message",
     "Translations": {
       "fr": " Message",
@@ -100,6 +105,7 @@
     }
   },
   " Messages": {
+    "ru": "+",
     "OriginalText": " Messages",
     "Translations": {
       "fr": " Messages",
@@ -120,6 +126,7 @@
     }
   },
   " saved successfully.": {
+    "ru": "+",
     "OriginalText": " saved successfully.",
     "Translations": {
       "fr": " enregistré avec succès.",
@@ -140,6 +147,7 @@
     }
   },
   " Warning": {
+    "ru": "+",
     "OriginalText": " Warning",
     "Translations": {
       "fr": " Avertissement",
@@ -160,6 +168,7 @@
     }
   },
   " Warnings": {
+    "ru": "+",
     "OriginalText": " Warnings",
     "Translations": {
       "fr": " Avertissements",
@@ -180,6 +189,7 @@
     }
   },
   "  -- Control Panel": {
+    "ru": "+",
     "OriginalText": "  -- Control Panel",
     "Translations": {
       "fr": "  -- Panneau de contrôle",
@@ -200,6 +210,7 @@
     }
   },
   "  -- Controlled variable": {
+    "ru": "+",
     "OriginalText": "  -- Controlled variable",
     "Translations": {
       "fr": "  -- Variable contrôlée",
@@ -220,6 +231,7 @@
     }
   },
   "  -- Destination variable": {
+    "ru": "+",
     "OriginalText": "  -- Destination variable",
     "Translations": {
       "fr": "  -- Variable de destination",
@@ -240,6 +252,7 @@
     }
   },
   "  -- Manipulated variable": {
+    "ru": "+",
     "OriginalText": "  -- Manipulated variable",
     "Translations": {
       "fr": "  -- Variable manipulée",
@@ -247,7 +260,7 @@
       "zh-Hans": "-- 操纵变量",
       "de": "  -- Manipulierte Variable",
       "es": "  -- Variable manipulada",
-      "ru": "  -- Манипулируемая переменная",
+      "ru": "  -- Управляемая переменная",
       "it": "  -- Variabile manipolata",
       "ja": "-- 操作された変数",
       "ko": "  -- 조작된 변수",
@@ -260,6 +273,7 @@
     }
   },
   "  -- Maximum number of iterations reached": {
+    "ru": "+",
     "OriginalText": "  -- Maximum number of iterations reached",
     "Translations": {
       "fr": "  -- Nombre maximum d’itérations atteintes",
@@ -267,7 +281,7 @@
       "zh-Hans": "-- 达到的最大迭代次数",
       "de": "  -- Maximale Anzahl der erreichten Iterationen",
       "es": "  -- Número máximo de iteraciones alcanzadas",
-      "ru": "  -- Максимальное количество итераций, достигнутых",
+      "ru": "  -- Достигнуто максимальное количество итераций",
       "it": "  -- Numero massimo di iterazioni raggiunte",
       "ja": "-- 最大反復回数に達しました",
       "ko": "  -- 최대 반복 횟수에 도달",
@@ -280,6 +294,7 @@
     }
   },
   "  -- Object/Variable Reference": {
+    "ru": "+",
     "OriginalText": "  -- Object/Variable Reference",
     "Translations": {
       "fr": "  -- Objet/Référence variable",
@@ -287,7 +302,7 @@
       "zh-Hans": "-- 对象/变量引用",
       "de": "  -- Objekt-/Variablenreferenz",
       "es": "  -- Referencia de objeto/variable",
-      "ru": "  -- Объект/переменная ссылка",
+      "ru": "  -- Ссылка на объект/переменную",
       "it": "  -- Riferimento a oggetti/variabili",
       "ja": "-- オブジェクト/変数参照",
       "ko": "  -- 개체/변수 참조",
@@ -300,6 +315,7 @@
     }
   },
   "  -- Setup Wizard": {
+    "ru": "+",
     "OriginalText": "  -- Setup Wizard",
     "Translations": {
       "fr": "  -- Assistant d’installation",
@@ -320,6 +336,7 @@
     }
   },
   "  -- Simulation Report": {
+    "ru": "+",
     "OriginalText": "  -- Simulation Report",
     "Translations": {
       "fr": "  -- Rapport de simulation",
@@ -327,7 +344,7 @@
       "zh-Hans": "-- 模拟报告",
       "de": "  -- Simulationsbericht",
       "es": "  -- Informe de simulación",
-      "ru": "  -- Отчет о симуляции",
+      "ru": "  -- Отчет по результатам моделирования",
       "it": "  -- Rapporto di simulazione",
       "ja": "-- シミュレーションレポート",
       "ko": "  -- 시뮬레이션 보고서",
@@ -360,6 +377,7 @@
     }
   },
   "  -- View Results (Chart)": {
+    "ru": "+",
     "OriginalText": "  -- View Results (Chart)",
     "Translations": {
       "fr": "  -- Afficher les résultats (Graphique)",
@@ -367,7 +385,7 @@
       "zh-Hans": "-- 查看结果（图表）",
       "de": "  -- Ergebnisse anzeigen (Diagramm)",
       "es": "  -- Ver resultados (gráfico)",
-      "ru": "  -- Просмотр результатов (диаграмма)",
+      "ru": "  -- Просмотр результатов (график)",
       "it": "  -- Visualizza risultati (grafico)",
       "ja": "-- 結果を表示する (チャート)",
       "ko": "  - 결과 보기 (차트)",
@@ -380,6 +398,7 @@
     }
   },
   "  -- View Results (Table)": {
+    "ru": "+",
     "OriginalText": "  -- View Results (Table)",
     "Translations": {
       "fr": "  -- Afficher les résultats (tableau)",
@@ -400,6 +419,7 @@
     }
   },
   "  -- View Results in Table": {
+    "ru": "+",
     "OriginalText": "  -- View Results in Table",
     "Translations": {
       "fr": "  -- Afficher les résultats dans le tableau",
@@ -420,6 +440,7 @@
     }
   },
   " - Edit Composition": {
+    "ru": "+",
     "OriginalText": " - Edit Composition",
     "Translations": {
       "fr": " - Modifier la composition",
@@ -427,7 +448,7 @@
       "zh-Hans": "- 编辑构图",
       "de": " - Komposition bearbeiten",
       "es": " - Editar composición",
-      "ru": " - Редактировать композицию",
+      "ru": " - Редактировать состав",
       "it": " - Modifica composizione",
       "ja": "- コンポジションの編集",
       "ko": " - 컴포지션 편집",
@@ -440,6 +461,7 @@
     }
   },
   ": The volumetric flow rates of each component is calculated based on ideal mixing.": {
+    "ru": "+",
     "OriginalText": ": The volumetric flow rates of each component is calculated based on ideal mixing.",
     "Translations": {
       "fr": ": Les débits volumétriques de chaque composant sont calculés en fonction du mélange idéal.",
@@ -447,7 +469,7 @@
       "zh-Hans": "：每个组件的体积流速基于理想混合计算。",
       "de": ": Die Volumendurchflussraten der einzelnen Komponenten werden auf Der Grundlage der idealen Mischung berechnet.",
       "es": ": Los caudales volumétricos de cada componente se calculan en función de la mezcla ideal.",
-      "ru": ": Скорость потока объема каждого компонента рассчитывается на основе идеального смешивания.",
+      "ru": ": Объемный поток каждого компонента рассчитывается на основе идеального смешивания.",
       "it": ": Le portate volumetriche di ogni componente sono calcolate in base alla miscelazione ideale.",
       "ja": ": 各コンポーネントの体積流量は、理想的な混合に基づいて計算されます。",
       "ko": ": 각 성분의 체적 유량은 이상적인 혼합을 기반으로 계산됩니다.",
@@ -460,6 +482,7 @@
     }
   },
   "[Black Oil] BSW (%)": {
+    "ru": "+",
     "OriginalText": "[Black Oil] BSW (%)",
     "Translations": {
       "fr": "[Huile noire] BSW (%)",
@@ -480,6 +503,7 @@
     }
   },
   "[Black Oil] Gas specific gravity": {
+    "ru": "+",
     "OriginalText": "[Black Oil] Gas specific gravity",
     "Translations": {
       "fr": "[Huile noire] Gravité spécifique au gaz",
@@ -487,7 +511,7 @@
       "zh-Hans": "[黑油]气体比重",
       "de": "[Schwarzes Öl] Gasspezifische Schwerkraft",
       "es": "[Aceite Negro] Gravedad específica del gas",
-      "ru": "(Черная нефть) Газовая специфическая гравитация",
+      "ru": "(Черная нефть) Удельный вес газа",
       "it": "[Olio nero] Gravità specifica del gas",
       "ja": "[ブラックオイル]ガス比重",
       "ko": "【블랙 오일】 가스 별 중력",
@@ -500,6 +524,7 @@
     }
   },
   "[Black Oil] Gas-Oil Ratio @ SC": {
+    "ru": "+",
     "OriginalText": "[Black Oil] Gas-Oil Ratio @ SC",
     "Translations": {
       "fr": "[Huile noire] Ratio gaz-pétrole @ SC",
@@ -507,7 +532,7 @@
       "zh-Hans": "[黑油]气油比 @ SC",
       "de": "[Schwarzes Öl] Gas-Öl-Verhältnis bei SC",
       "es": "[Aceite Negro] Relación gas-aceite - SC",
-      "ru": "(Черная нефть) Коэффициент «Газ-Нефть»",
+      "ru": "(Черная нефть) Соотношение «Газ-Нефть»",
       "it": "[Olio nero] Rapporto gas-petrolio @ SC",
       "ja": "[ブラックオイル]ガスオイル比率 @ SC",
       "ko": "【블랙 오일】 가스-오일 비율 @ SC",
@@ -520,6 +545,7 @@
     }
   },
   "[Black Oil] Oil PNA analysis, Aromatics, %": {
+    "ru": "+",
     "OriginalText": "[Black Oil] Oil PNA analysis, Aromatics, %",
     "Translations": {
       "fr": "[Huile noire] Analyse de l’AN PNA à l’huile, Aromatiques, %",
@@ -527,7 +553,7 @@
       "zh-Hans": "[黑油]石油PNA分析，芳香剂，%",
       "de": "[Schwarzes Öl] Öl PNA-Analyse, Aromaten, %",
       "es": "[Aceite Negro] Análisis de PNA de aceite, Aromáticos, %",
-      "ru": "(Черная нефть) Анализ масла PNA, Ароматика, %",
+      "ru": "(Черная нефть) Анализ нефти (Парафины-Нафтены-Ароматика), Ароматика, %",
       "it": "[Olio nero] Analisi PNA olio, Aromatici, %",
       "ja": "[ブラックオイル]オイルPNA分析、芳香族、%",
       "ko": "【블랙 오일】 오일 PNA 분석, 방향족, %",
@@ -540,6 +566,7 @@
     }
   },
   "[Black Oil] Oil PNA analysis, Naphthenes, %": {
+    "ru": "+",
     "OriginalText": "[Black Oil] Oil PNA analysis, Naphthenes, %",
     "Translations": {
       "fr": "[Huile noire] Analyse de la PNA pétrolière, Naphthenes, %",
@@ -547,7 +574,7 @@
       "zh-Hans": "[黑油]石油PNA分析，纳普海恩斯，%",
       "de": "[Schwarzes Öl] Öl PNA-Analyse, Naphthenes, %",
       "es": "[Aceite Negro] Análisis de ANP de petróleo, Naftanos, %",
-      "ru": "(Черная нефть) Анализ нефти PNA, Naphthenes, %",
+      "ru": "(Черная нефть) Анализ нефти (Парафины-Нафтены-Ароматика), Нафтены, %",
       "it": "[Olio nero] Analisi PNA olio, Naphthenes, %",
       "ja": "[ブラックオイル]オイルPNA分析、ナフテネス、%",
       "ko": "【블랙 오일】 오일 PNA 분석, 나프테네스, %",
@@ -560,6 +587,7 @@
     }
   },
   "[Black Oil] Oil PNA analysis, Paraffins, %": {
+    "ru": "+",
     "OriginalText": "[Black Oil] Oil PNA analysis, Paraffins, %",
     "Translations": {
       "fr": "[Huile noire] Analyse de la PNA pétrolière, Paraffins, %",
@@ -567,7 +595,7 @@
       "zh-Hans": "[黑油]石油PNA分析，石蜡，%",
       "de": "[Schwarzes Öl] Öl PNA-Analyse, Parafine, %",
       "es": "[Aceite Negro] Análisis de ANP de petróleo, Parafinas, %",
-      "ru": "(Черная нефть) Анализ нефти PNA, Парафины, %",
+      "ru": "(Черная нефть) Анализ нефти (Парафины-Нафтены-Ароматика), Парафины, %",
       "it": "[Olio nero] Analisi pna olio, paraffine, %",
       "ja": "[ブラックオイル]油PNA分析、パラフィン、%",
       "ko": "【블랙 오일】 오일 PNA 분석, 파라핀, %",
@@ -580,6 +608,7 @@
     }
   },
   "[Black Oil] Oil specific gravity": {
+    "ru": "+",
     "OriginalText": "[Black Oil] Oil specific gravity",
     "Translations": {
       "fr": "[Huile noire] Gravité spécifique à l’huile",
@@ -587,7 +616,7 @@
       "zh-Hans": "[黑油]油比重力",
       "de": "[Schwarzes Öl] Ölspezifische Schwerkraft",
       "es": "[Aceite Negro] Gravedad específica del aceite",
-      "ru": "(Черная нефть) Специфическая гравитация масла",
+      "ru": "(Черная нефть) Удельный вес нефти",
       "it": "[Olio nero] Gravità specifica dell'olio",
       "ja": "[ブラックオイル]油比重",
       "ko": "【블랙 오일】 오일 별 중력",
@@ -600,6 +629,7 @@
     }
   },
   "[Black Oil] Oil viscosity 1": {
+    "ru": "+",
     "OriginalText": "[Black Oil] Oil viscosity 1",
     "Translations": {
       "fr": "[Huile noire] Viscosité du pétrole 1",
@@ -607,7 +637,7 @@
       "zh-Hans": "[黑油]油粘度 1",
       "de": "[Schwarzes Öl] Ölviskosität 1",
       "es": "[Aceite Negro] Viscosidad del aceite 1",
-      "ru": "(Черная нефть) Вязкость масла 1",
+      "ru": "(Черная нефть) Вязкость нефти 1",
       "it": "[Olio nero] Viscosità dell'olio 1",
       "ja": "[ブラックオイル]オイル粘度 1",
       "ko": "【블랙 오일】 오일 점도 1",
@@ -620,6 +650,7 @@
     }
   },
   "[Black Oil] Oil viscosity 1 temperature": {
+    "ru": "+",
     "OriginalText": "[Black Oil] Oil viscosity 1 temperature",
     "Translations": {
       "fr": "[Huile noire] Viscosité de l’huile 1 température",
@@ -627,7 +658,7 @@
       "zh-Hans": "[黑油]油粘度 1 温度",
       "de": "[Schwarzes Öl] Ölviskosität 1 Temperatur",
       "es": "[Aceite Negro] Viscosidad del aceite 1 temperatura",
-      "ru": "(Черная нефть) Вязкость масла 1 температура",
+      "ru": "(Черная нефть) Вязкость нефти 1 температура",
       "it": "[Olio nero] Viscosità dell'olio 1 temperatura",
       "ja": "[ブラックオイル]オイル粘度 1温度",
       "ko": "【블랙 오일】 오일 점도 1 온도",
@@ -640,6 +671,7 @@
     }
   },
   "[Black Oil] Oil viscosity 2": {
+    "ru": "+",
     "OriginalText": "[Black Oil] Oil viscosity 2",
     "Translations": {
       "fr": "[Huile noire] Viscosité du pétrole 2",
@@ -647,7 +679,7 @@
       "zh-Hans": "[黑油]油粘度 2",
       "de": "[Schwarzes Öl] Ölviskosität 2",
       "es": "[Aceite Negro] Viscosidad del aceite 2",
-      "ru": "(Черная нефть) Вязкость масла 2",
+      "ru": "(Черная нефть) Вязкость нефти 2",
       "it": "[Olio nero] Viscosità dell'olio 2",
       "ja": "[ブラックオイル]オイル粘度 2",
       "ko": "【블랙 오일】 오일 점도 2",
@@ -660,6 +692,7 @@
     }
   },
   "[Black Oil] Oil viscosity 2 temperature": {
+    "ru": "+",
     "OriginalText": "[Black Oil] Oil viscosity 2 temperature",
     "Translations": {
       "fr": "[Huile noire] Viscosité de l’huile 2 température",
@@ -667,7 +700,7 @@
       "zh-Hans": "[黑油]油粘度 2 温度",
       "de": "[Schwarzes Öl] Ölviskosität 2 Temperatur",
       "es": "[Aceite Negro] Viscosidad del aceite 2 temperatura",
-      "ru": "(Черная нефть) Масляная вязкость 2 температура",
+      "ru": "(Черная нефть) Вязкость нефти 2 температура",
       "it": "[Olio nero] Viscosità dell'olio 2 temperatura",
       "ja": "[ブラックオイル]オイル粘度2温度",
       "ko": "【블랙 오일】 오일 점도 2 온도",
@@ -680,6 +713,7 @@
     }
   },
   "[Electrolyte] Charge": {
+    "ru": "+",
     "OriginalText": "[Electrolyte] Charge",
     "Translations": {
       "fr": "[Électrolyte] Frais",
@@ -687,7 +721,7 @@
       "zh-Hans": "[电解质]负责",
       "de": "[Elektrolyt] berechnen",
       "es": "[Electrolito] Cargo",
-      "ru": "(Электролит) Заряда",
+      "ru": "(Электролит) Заряд",
       "it": "[Elettrolita] Carica",
       "ja": "[電解質]充電",
       "ko": "[전해질] 충전",
@@ -700,6 +734,7 @@
     }
   },
   "[Electrolyte] Hydration Number": {
+    "ru": "+",
     "OriginalText": "[Electrolyte] Hydration Number",
     "Translations": {
       "fr": "[Électrolyte] Numéro d’hydratation",
@@ -707,7 +742,7 @@
       "zh-Hans": "[电解质]水化编号",
       "de": "[Elektrolyt] Hydrationsnummer",
       "es": "[Electrolito] Número de hidratación",
-      "ru": "(Электролит) Номер гидратации",
+      "ru": "(Электролит) Число гидратации",
       "it": "[Elettrolita] Numero di idratazione",
       "ja": "[電解質]水和数",
       "ko": "[전해질] 수분 공급 번호",
@@ -720,6 +755,7 @@
     }
   },
   "[Electrolyte] Negative Ion": {
+    "ru": "+",
     "OriginalText": "[Electrolyte] Negative Ion",
     "Translations": {
       "fr": "[Électrolyte] Ion négatif",
@@ -727,7 +763,7 @@
       "zh-Hans": "[电解质]负离子",
       "de": "[Elektrolyt] Negative Sionen",
       "es": "[Electrolito] Ion negativo",
-      "ru": "(Электролит) Отрицательный ион",
+      "ru": "(Электролит) Отричательные ионы",
       "it": "[Elettrolita] Ione negativo",
       "ja": "[電解質]負イオン",
       "ko": "[전해질] 네거티브 이온",
@@ -740,6 +776,7 @@
     }
   },
   "[Electrolyte] Positive Ion": {
+    "ru": "+",
     "OriginalText": "[Electrolyte] Positive Ion",
     "Translations": {
       "fr": "[Électrolyte] Ion positif",
@@ -747,7 +784,7 @@
       "zh-Hans": "[电解质]正离子",
       "de": "[Elektrolyt] Positive Ion",
       "es": "[Electrolito] Ion positivo",
-      "ru": "(Электролит) Положительный Ион",
+      "ru": "(Электролит) Положительные ионы",
       "it": "[Elettrolita] Ione positivo",
       "ja": "[電解質]ポジティブイオン",
       "ko": "[전해질] 포지티브 이온",
@@ -760,6 +797,7 @@
     }
   },
   "[Electrolyte] Solid Density @ Ts": {
+    "ru": "+",
     "OriginalText": "[Electrolyte] Solid Density @ Ts",
     "Translations": {
       "fr": "[Électrolyte] Densité solide @ Ts",
@@ -767,7 +805,7 @@
       "zh-Hans": "[电解质]固体密度 = Ts",
       "de": "[Elektrolyt] Feste Dichte - Ts",
       "es": "[Electrolito] Densidad Sólida - Ts",
-      "ru": "(Электролит) Твердая плотность и Ts",
+      "ru": "(Электролит) Твердая фаза @ Ts",
       "it": "[Elettrolita] Densità solida @ Ts",
       "ja": "[電解質]ソリッド密度 @ Ts",
       "ko": "[전해질] 솔리드 밀도 @ Ts",
@@ -780,6 +818,7 @@
     }
   },
   "[Electrolyte] Solid Density Temperature": {
+    "ru": "+",
     "OriginalText": "[Electrolyte] Solid Density Temperature",
     "Translations": {
       "fr": "[Électrolyte] Température de densité solide",
@@ -787,7 +826,7 @@
       "zh-Hans": "[电解质]固体密度温度",
       "de": "[Elektrolyt] Festdichtetemperatur",
       "es": "[Electrolito] Temperatura de densidad sólida",
-      "ru": "(Электролит) Температура твердой плотности",
+      "ru": "(Электролит) Температура твердой фазы",
       "it": "[Elettrolita] Temperatura di densità solida",
       "ja": "[電解質]固体密度温度",
       "ko": "[전해질] 고체 밀도 온도",
@@ -880,6 +919,7 @@
     }
   },
   "{0} report(s) available.": {
+    "ru": "+",
     "OriginalText": "{0} report(s) available.",
     "Translations": {
       "fr": "{0}(s) disponible.",
@@ -887,7 +927,7 @@
       "zh-Hans": "{0}报告可用。",
       "de": "{0}(n) verfügbaren Berichts.",
       "es": "{0} informe(s) disponible(s).",
-      "ru": "{0} (ы) доступны.",
+      "ru": "{0} отчет(ов) подготовл.",
       "it": "{0} di report disponibili.",
       "ja": "{0}レポートが利用可能です。",
       "ko": "{0} 보고서 사용 가능.",
@@ -900,6 +940,7 @@
     }
   },
   "< Previous tip": {
+    "ru": "+",
     "OriginalText": "< Previous tip",
     "Translations": {
       "fr": "< astuce précédente",
@@ -920,6 +961,7 @@
     }
   },
   "<empty>": {
+    "ru": "+???",
     "OriginalText": "<empty>",
     "Translations": {
       "fr": "<empty>",
@@ -940,6 +982,7 @@
     }
   },
   "<no controlled variables>": {
+    "ru": "+",
     "OriginalText": "<no controlled variables>",
     "Translations": {
       "fr": "< pas de variables contrôlées>",
@@ -947,7 +990,7 @@
       "zh-Hans": "<没有受控变量>",
       "de": "<keine kontrollierten Variablen>",
       "es": "<sones sin variables controladas>",
-      "ru": "< контролируемых переменных>",
+      "ru": "<нет контролируемых переменных>",
       "it": "< variabili controllate>",
       "ja": "<制御変数はありません>",
       "ko": "<제어 변수없음>",
@@ -960,6 +1003,7 @@
     }
   },
   "<no manipulated variables>": {
+    "ru": "+",
     "OriginalText": "<no manipulated variables>",
     "Translations": {
       "fr": "<y a pas de variables manipulées>",
@@ -967,7 +1011,7 @@
       "zh-Hans": "<操纵变量>",
       "de": "<keine manipulierten Variablen>",
       "es": "<sono las variables manipuladas>",
-      "ru": "< манипулировать переменными>",
+      "ru": "<нет управляемых переменных>",
       "it": "< variabili manipolate>",
       "ja": "<操作された変数はありません>",
       "ko": "<조작된 변수없음>",
@@ -980,6 +1024,7 @@
     }
   },
   "<no variables>": {
+    "ru": "+",
     "OriginalText": "<no variables>",
     "Translations": {
       "fr": "< pas de variables>",
@@ -987,7 +1032,7 @@
       "zh-Hans": "<没有变量>",
       "de": "<keine Variablen>",
       "es": "<son>",
-      "ru": "< переменных>",
+      "ru": "<нет переменных>",
       "it": "<no variabili>",
       "ja": "<変数はありません>",
       "ko": "< 변수가 없습니다>",
@@ -1000,6 +1045,7 @@
     }
   },
   "<title>": {
+    "ru": "+",
     "OriginalText": "<title>",
     "Translations": {
       "fr": "<title>",
@@ -1020,6 +1066,7 @@
     }
   },
   "« Details": {
+    "ru": "+",
     "OriginalText": "« Details",
     "Translations": {
       "fr": "« Détails",
@@ -1027,7 +1074,7 @@
       "zh-Hans": "• 详情",
       "de": "• Details",
       "es": "« Detalles",
-      "ru": "« Подробная информация",
+      "ru": "« Подробно",
       "it": "« Dettagli",
       "ja": "« 詳細",
       "ko": "« 세부 사항",
@@ -1040,6 +1087,7 @@
     }
   },
   "« Hide Profile": {
+    "ru": "+",
     "OriginalText": "« Hide Profile",
     "Translations": {
       "fr": "« Masquer le profil",
@@ -1060,6 +1108,7 @@
     }
   },
   "1 minute": {
+    "ru": "+",
     "OriginalText": "1 minute",
     "Translations": {
       "fr": "1 minute",
@@ -1080,6 +1129,7 @@
     }
   },
   "1,2-Propanediol": {
+    "ru": "+",
     "OriginalText": "1,2-Propanediol",
     "Translations": {
       "fr": "1,2-Propanediol",
@@ -1087,7 +1137,7 @@
       "zh-Hans": "1，2-丙烷二醇",
       "de": "1,2-Propanediol",
       "es": "1,2-Propanediol",
-      "ru": "1,2-Пропанедиол",
+      "ru": "1,2-Пропандиол",
       "it": "1,2-propanodiolo",
       "ja": "1,2-プロパンジオール",
       "ko": "프로판디올 1,2-프로판디올",
@@ -1100,6 +1150,7 @@
     }
   },
   "1. Column Properties": {
+    "ru": "+",
     "OriginalText": "1. Column Properties",
     "Translations": {
       "fr": "1. Propriétés de colonne",
@@ -1120,6 +1171,7 @@
     }
   },
   "1. Conditions": {
+    "ru": "+",
     "OriginalText": "1. Conditions",
     "Translations": {
       "fr": "1. Conditions",
@@ -1140,6 +1192,7 @@
     }
   },
   "1. Connections": {
+    "ru": "+",
     "OriginalText": "1. Connections",
     "Translations": {
       "fr": "1. Connexions",
@@ -1160,6 +1213,7 @@
     }
   },
   "1. Description": {
+    "ru": "+",
     "OriginalText": "1. Description",
     "Translations": {
       "fr": "1. Description",
@@ -1180,6 +1234,7 @@
     }
   },
   "1. Settings": {
+    "ru": "+",
     "OriginalText": "1. Settings",
     "Translations": {
       "fr": "1. Paramètres",
@@ -1200,6 +1255,7 @@
     }
   },
   "1. Text Formatting": {
+    "ru": "+",
     "OriginalText": "1. Text Formatting",
     "Translations": {
       "fr": "1. Formatage de texte",
@@ -1220,6 +1276,7 @@
     }
   },
   "1-Decanol": {
+    "ru": "+",
     "OriginalText": "1-Decanol",
     "Translations": {
       "fr": "1-Decanol",
@@ -1227,7 +1284,7 @@
       "zh-Hans": "1-德卡诺尔",
       "de": "1-Decanol",
       "es": "1-Decanol",
-      "ru": "1-деканол",
+      "ru": "1-Деканол",
       "it": "1-decanolo",
       "ja": "1-デカノール",
       "ko": "1-데카놀",
@@ -1240,6 +1297,7 @@
     }
   },
   "1-Heptanol": {
+    "ru": "+",
     "OriginalText": "1-Heptanol",
     "Translations": {
       "fr": "1-Heptanol",
@@ -1247,7 +1305,7 @@
       "zh-Hans": "1-赫普塔诺",
       "de": "1-Heptanol",
       "es": "1-Heptanol",
-      "ru": "1 гептанол",
+      "ru": "1-Гептанол",
       "it": "1-eptanolo",
       "ja": "1-ヘプタノール",
       "ko": "1-헵타놀",
@@ -1260,6 +1318,7 @@
     }
   },
   "1-Hexanol": {
+    "ru": "+",
     "OriginalText": "1-Hexanol",
     "Translations": {
       "fr": "1-Hexanol",
@@ -1280,6 +1339,7 @@
     }
   },
   "1-Octanol": {
+    "ru": "+",
     "OriginalText": "1-Octanol",
     "Translations": {
       "fr": "1-Octanol",
@@ -1300,6 +1360,7 @@
     }
   },
   "1-Pentanol": {
+    "ru": "+",
     "OriginalText": "1-Pentanol",
     "Translations": {
       "fr": "1-Pentanol",
@@ -1307,7 +1368,7 @@
       "zh-Hans": "1-彭塔诺",
       "de": "1-Pentanol",
       "es": "1-Pentanol",
-      "ru": "1-пентанол",
+      "ru": "1-Пентанол",
       "it": "1-Pentanolo",
       "ja": "1-ペンタノール",
       "ko": "1-펜타놀",
@@ -1320,6 +1381,7 @@
     }
   },
   "2. Appearance": {
+    "ru": "+",
     "OriginalText": "2. Appearance",
     "Translations": {
       "fr": "2. Apparence",
@@ -1327,7 +1389,7 @@
       "zh-Hans": "2. 外观",
       "de": "2. Aussehen",
       "es": "2. Apariencia",
-      "ru": "2. Внешний вид",
+      "ru": "2. Оформление",
       "it": "2. Aspetto",
       "ja": "2. 外観",
       "ko": "2. 외관",
@@ -1340,6 +1402,7 @@
     }
   },
   "2. Calculation parameters": {
+    "ru": "+",
     "OriginalText": "2. Calculation parameters",
     "Translations": {
       "fr": "2. Paramètres de calcul",
@@ -1360,6 +1423,7 @@
     }
   },
   "2. Mass Composition": {
+    "ru": "+",
     "OriginalText": "2. Mass Composition",
     "Translations": {
       "fr": "2. Composition de masse",
@@ -1367,7 +1431,7 @@
       "zh-Hans": "2. 质量组成",
       "de": "2. Massenkomposition",
       "es": "2. Composición masiva",
-      "ru": "2. Массовая композиция",
+      "ru": "2. Массовый состав",
       "it": "2. Composizione di massa",
       "ja": "2. マスコンポジション",
       "ko": "2. 질량 조성",
@@ -1380,6 +1444,7 @@
     }
   },
   "2. Miscellanea": {
+    "ru": "+",
     "OriginalText": "2. Miscellanea",
     "Translations": {
       "fr": "2. Divers",
@@ -1400,6 +1465,7 @@
     }
   },
   "2. Molar Composition": {
+    "ru": "+",
     "OriginalText": "2. Molar Composition",
     "Translations": {
       "fr": "2. Composition molaire",
@@ -1407,7 +1473,7 @@
       "zh-Hans": "2. 摩尔成分",
       "de": "2. Molaren-Komposition",
       "es": "2. Composición molar",
-      "ru": "2. Молярная композиция",
+      "ru": "2. Молярный состав",
       "it": "2. Composizione molare",
       "ja": "2. モル構成",
       "ko": "2. 몰 컴포지션",
@@ -1420,6 +1486,7 @@
     }
   },
   "2. Parameters": {
+    "ru": "+",
     "OriginalText": "2. Parameters",
     "Translations": {
       "fr": "2. Paramètres",
@@ -1440,6 +1507,7 @@
     }
   },
   "2. Profiles": {
+    "ru": "+",
     "OriginalText": "2. Profiles",
     "Translations": {
       "fr": "2. Profils",
@@ -1460,6 +1528,7 @@
     }
   },
   "2. Properties": {
+    "ru": "+",
     "OriginalText": "2. Properties",
     "Translations": {
       "fr": "2. Propriétés",
@@ -1480,6 +1549,7 @@
     }
   },
   "2. Settings": {
+    "ru": "+",
     "OriginalText": "2. Settings",
     "Translations": {
       "fr": "2. Paramètres",
@@ -1500,6 +1570,7 @@
     }
   },
   "2. Stages": {
+    "ru": "+",
     "OriginalText": "2. Stages",
     "Translations": {
       "fr": "2. Étapes",
@@ -1507,7 +1578,7 @@
       "zh-Hans": "2. 阶段",
       "de": "2. Stufen",
       "es": "2. Etapas",
-      "ru": "2. Этапы",
+      "ru": "2. Стадии",
       "it": "2. Fasi",
       "ja": "2. ステージ",
       "ko": "2. 단계",
@@ -1520,6 +1591,7 @@
     }
   },
   "2. Stream Fractions": {
+    "ru": "+",
     "OriginalText": "2. Stream Fractions",
     "Translations": {
       "fr": "2. Fractions de flux",
@@ -1540,6 +1612,7 @@
     }
   },
   "2. Volumetric Composition": {
+    "ru": "+",
     "OriginalText": "2. Volumetric Composition",
     "Translations": {
       "fr": "2. Composition volumétrique",
@@ -1547,7 +1620,7 @@
       "zh-Hans": "2. 体积组合",
       "de": "2. Volumetrische Zusammensetzung",
       "es": "2. Composición volumétrica",
-      "ru": "2. Объемная композиция",
+      "ru": "2. Объемный состав",
       "it": "2. Composizione volumetrica",
       "ja": "2. 容積成分",
       "ko": "2. 체적 조성",
@@ -1560,6 +1633,7 @@
     }
   },
   "3. Background": {
+    "ru": "+",
     "OriginalText": "3. Background",
     "Translations": {
       "fr": "3. Contexte",
@@ -1567,7 +1641,7 @@
       "zh-Hans": "3. 背景",
       "de": "3. Hintergrund",
       "es": "3. Antecedentes",
-      "ru": "3. Справочная информация",
+      "ru": "3. Задний фон",
       "it": "3. Antefatti",
       "ja": "3. 背景",
       "ko": "3. 배경",
@@ -1580,6 +1654,7 @@
     }
   },
   "3. Bottom": {
+    "ru": "+",
     "OriginalText": "3. Bottom",
     "Translations": {
       "fr": "3. En bas",
@@ -1587,7 +1662,7 @@
       "zh-Hans": "3. 底部",
       "de": "3. Unten",
       "es": "3. Parte inferior",
-      "ru": "3. Внизу",
+      "ru": "3. Снизу",
       "it": "3. In basso",
       "ja": "3. 下",
       "ko": "3. 바닥",
@@ -1600,6 +1675,7 @@
     }
   },
   "3. Connections": {
+    "ru": "+",
     "OriginalText": "3. Connections",
     "Translations": {
       "fr": "3. Connexions",
@@ -1620,6 +1696,7 @@
     }
   },
   "3. Convergence parameters": {
+    "ru": "+",
     "OriginalText": "3. Convergence parameters",
     "Translations": {
       "fr": "3. Paramètres de convergence",
@@ -1627,7 +1704,7 @@
       "zh-Hans": "3. 收敛参数",
       "de": "3. Konvergenzparameter",
       "es": "3. Parámetros de convergencia",
-      "ru": "3. Параметры конвергенции",
+      "ru": "3. Параметры сходимости",
       "it": "3. Parametri di convergenza",
       "ja": "3. 収束パラメータ",
       "ko": "3. 수렴 매개 변수",
@@ -1640,6 +1717,7 @@
     }
   },
   "3. Linked input parameters": {
+    "ru": "+",
     "OriginalText": "3. Linked input parameters",
     "Translations": {
       "fr": "3. Paramètres d’entrée liés",
@@ -1647,7 +1725,7 @@
       "zh-Hans": "3. 链接输入参数",
       "de": "3. Verknüpfte Eingabeparameter",
       "es": "3. Parámetros de entrada vinculados",
-      "ru": "3. Связанные параметры ввода",
+      "ru": "3. Связанные входные параметры",
       "it": "3. Parametri di input collegati",
       "ja": "3. リンクされた入力パラメータ",
       "ko": "3. 연결된 입력 매개 변수",
@@ -1660,6 +1738,7 @@
     }
   },
   "3. Miscellanea": {
+    "ru": "+",
     "OriginalText": "3. Miscellanea",
     "Translations": {
       "fr": "3. Divers",
@@ -1680,6 +1759,7 @@
     }
   },
   "3. Output Variables": {
+    "ru": "+",
     "OriginalText": "3. Output Variables",
     "Translations": {
       "fr": "3. Variables de sortie",
@@ -1700,6 +1780,7 @@
     }
   },
   "3. Parameters": {
+    "ru": "+",
     "OriginalText": "3. Parameters",
     "Translations": {
       "fr": "3. Paramètres",
@@ -1720,6 +1801,7 @@
     }
   },
   "3. Properties": {
+    "ru": "+",
     "OriginalText": "3. Properties",
     "Translations": {
       "fr": "3. Propriétés",
@@ -1740,6 +1822,7 @@
     }
   },
   "3. Results": {
+    "ru": "+",
     "OriginalText": "3. Results",
     "Translations": {
       "fr": "3. Résultats",
@@ -1760,6 +1843,7 @@
     }
   },
   "3. Size": {
+    "ru": "+",
     "OriginalText": "3. Size",
     "Translations": {
       "fr": "3. Taille",
@@ -1780,6 +1864,7 @@
     }
   },
   "3-Methyl-1-Butanol": {
+    "ru": "+",
     "OriginalText": "3-Methyl-1-Butanol",
     "Translations": {
       "fr": "3-Méthyle-1-Butanol",
@@ -1787,7 +1872,7 @@
       "zh-Hans": "3-甲基-1-巴诺醇",
       "de": "3-Methyl-1-Butanol",
       "es": "3-Metil-1-Butanol",
-      "ru": "3-метил-1-бутанол",
+      "ru": "3-Метил-1-Бутанол",
       "it": "3-metil-1-butanolo",
       "ja": "3-メチル-1-ブタナノール",
       "ko": "3-메틸-1-부타놀",
@@ -1800,6 +1885,7 @@
     }
   },
   "4. Coordinates": {
+    "ru": "+",
     "OriginalText": "4. Coordinates",
     "Translations": {
       "fr": "4. Coordonnées",
@@ -1820,6 +1906,7 @@
     }
   },
   "4. Linked output parameters": {
+    "ru": "+",
     "OriginalText": "4. Linked output parameters",
     "Translations": {
       "fr": "4. Paramètres de sortie liés",
@@ -1827,7 +1914,7 @@
       "zh-Hans": "4. 链接输出参数",
       "de": "4. Verknüpfte Ausgangsparameter",
       "es": "4. Parámetros de salida vinculados",
-      "ru": "4. Связанные параметры вывода",
+      "ru": "4. Связанные исходящие параметры",
       "it": "4. Parametri di uscita collegati",
       "ja": "4. リンクされた出力パラメータ",
       "ko": "4. 연결된 출력 매개 변수",
@@ -1840,6 +1927,7 @@
     }
   },
   "4. Miscellanea": {
+    "ru": "+",
     "OriginalText": "4. Miscellanea",
     "Translations": {
       "fr": "4. Divers",
@@ -1860,6 +1948,7 @@
     }
   },
   "4. Results": {
+    "ru": "+",
     "OriginalText": "4. Results",
     "Translations": {
       "fr": "4. Résultats",
@@ -1900,6 +1989,7 @@
     }
   },
   "5. Initial Estimates": {
+    "ru": "+",
     "OriginalText": "5. Initial Estimates",
     "Translations": {
       "fr": "5. Estimations initiales",
@@ -1940,6 +2030,7 @@
     }
   },
   "6. Tolerances": {
+    "ru": "+",
     "OriginalText": "6. Tolerances",
     "Translations": {
       "fr": "6. Tolérances",
@@ -1947,7 +2038,7 @@
       "zh-Hans": "6. 公差",
       "de": "6. Toleranzen",
       "es": "6. Tolerancias",
-      "ru": "6. Толерантности",
+      "ru": "6. Допустимые отклонения",
       "it": "6. Tolleranze",
       "ja": "6. 許容範囲",
       "ko": "6. 공차",
@@ -1960,6 +2051,7 @@
     }
   },
   "7. Solving Method": {
+    "ru": "+",
     "OriginalText": "7. Solving Method",
     "Translations": {
       "fr": "7. Méthode de résolution",
@@ -1967,7 +2059,7 @@
       "zh-Hans": "7. 求解方法",
       "de": "7. Lösungsmethode",
       "es": "7. Método de resolución",
-      "ru": "7. Метод решения",
+      "ru": "7. Метод расчета",
       "it": "7. Metodo di risoluzione",
       "ja": "7. 解決方法",
       "ko": "7. 해결 방법",
@@ -1980,6 +2072,7 @@
     }
   },
   "8. Results": {
+    "ru": "+",
     "OriginalText": "8. Results",
     "Translations": {
       "fr": "8. Résultats",
@@ -2000,6 +2093,7 @@
     }
   },
   "A CAPE-OPEN Property Package is a complete, consistent, reusable, ready-to-use collection of methods, Compounds and model parameters for calculating any of a set of known Physical Properties for the Phases of a Material. It includes all the pure Compound methods and data, together with the relevant mixing rules and interaction parameters. A Property Package normally covers only a small subset of the Compounds and methods accessible through a Physical Properties System.": {
+    "ru": "+",
     "OriginalText": "A CAPE-OPEN Property Package is a complete, consistent, reusable, ready-to-use collection of methods, Compounds and model parameters for calculating any of a set of known Physical Properties for the Phases of a Material. It includes all the pure Compound methods and data, together with the relevant mixing rules and interaction parameters. A Property Package normally covers only a small subset of the Compounds and methods accessible through a Physical Properties System.",
     "Translations": {
       "fr": "Un ensemble de propriétés CAPE-OPEN est une collection complète, cohérente, réutilisable et prête à l’emploi de méthodes, de composés et de paramètres de modèle pour calculer l’une ou l’autre des propriétés physiques connues pour les phases d’un matériau. Il comprend toutes les méthodes et données composées pures, ainsi que les règles de mélange et les paramètres d’interaction pertinents. Un ensemble de propriétés ne couvre normalement qu’un petit sous-ensemble des composés et des méthodes accessibles par l’intermédiaire d’un système de propriétés physiques.",
@@ -2007,7 +2101,7 @@
       "zh-Hans": "CAPE-OPEN 属性包是一个完整的、一致的、可重用的、随时可以使用的方法、化合物和模型参数集合，用于计算材料相位的任何一组已知物理属性。它包括所有纯化合物方法和数据，以及相关的混合规则和交互参数。属性包通常只包含可通过物理属性系统访问的化合物和方法的一小部分。",
       "de": "Ein CAPE-OPEN-Eigenschaftspaket ist eine vollständige, konsistente, wiederverwendbare, gebrauchsfertige Sammlung von Methoden, Verbindungen und Modellparametern zur Berechnung eines Satzes bekannter physikalischer Eigenschaften für die Phasen eines Materials. Es enthält alle reinen Compound-Methoden und -Daten sowie die entsprechenden Mischregeln und Interaktionsparameter. Ein Eigenschaftenpaket deckt normalerweise nur eine kleine Teilmenge der Verbindungen und Methoden ab, auf die über ein Physikalisches Eigenschaftensystem zugegriffen werden kann.",
       "es": "Un paquete de propiedades CAPE-OPEN es una colección completa, coherente, reutilizable y lista para usar de métodos, compuestos y parámetros de modelo para calcular cualquiera de un conjunto de propiedades físicas conocidas para las fases de un material. Incluye todos los métodos y datos compuestos puros, junto con las reglas de mezcla relevantes y los parámetros de interacción. Un paquete de propiedades normalmente cubre solo un pequeño subconjunto de los compuestos y métodos accesibles a través de un sistema de propiedades físicas.",
-      "ru": "Пакет свойств CAPE-OPEN представляет собой полную, последовательную, многоразовую, готовую к использованию коллекцию методов, соединений и параметров модели для расчета любого из набора известных физических свойств для фаз материала. Она включает в себя все чистые методы соединения и данные, а также соответствующие правила смешивания и параметры взаимодействия. Пакет свойств обычно охватывает лишь небольшое подмножество соединений и методов, доступных через систему физических свойств.",
+      "ru": "Пакет свойств CAPE-OPEN представляет собой полную, последовательную, многоразовую, готовую к использованию коллекцию методов, соединений (компонентов, смесей) и параметров модели для расчета любого из известных физических параметров для разных фаз флюида. Он включает в себя все чистые компоненты (соотношения, алгоритмы и данные), а также соответствующие правила смешивания и параметры взаимодействия. Пакет свойств обычно охватывает лишь небольшое подмножество соединений и методов, доступных через систему физических свойств.",
       "it": "Un pacchetto di proprietà CAPE-OPEN è una raccolta completa, coerente, riutilizzabile e pronta all'uso di metodi, composti e parametri del modello per il calcolo di qualsiasi insieme di proprietà fisiche note per le fasi di un materiale. Include tutti i metodi e i dati composti puri, insieme alle regole di miscelazione e ai parametri di interazione pertinenti. Un pacchetto di proprietà copre normalmente solo un piccolo sottoinsieme dei composti e dei metodi accessibili tramite un sistema di proprietà fisiche.",
       "ja": "CAPE-OPEN プロパティ パッケージは、材料のフェーズの既知の物理プロパティのセットのいずれかを計算するためのメソッド、コンパウンド、モデル パラメータの完全で一貫性のある、再利用可能な、すぐに使用できるコレクションです。これには、純粋な複合メソッドとデータ、および関連する混合ルールと相互作用パラメータが含まれます。プロパティ パッケージは、通常、物理プロパティ システムを介してアクセスできる化合物とメソッドの小さなサブセットのみをカバーします。",
       "ko": "CAPE-OPEN 속성 패키지는 재료의 위상에 대해 알려진 물리적 특성 집합중 일부를 계산하기 위한 방법, 화합물 및 모델 매개 변수의 완전하고 일관되고 재사용 가능하며 즉시 사용할 수 있는 컬렉션입니다. 관련 혼합 규칙 및 상호 작용 매개 변수와 함께 모든 순수 화합물 방법 및 데이터를 포함합니다. 속성 패키지는 일반적으로 물리적 특성 시스템을 통해 액세스할 수 있는 화합물 및 메서드의 작은 하위 집합만 포함합니다.",
