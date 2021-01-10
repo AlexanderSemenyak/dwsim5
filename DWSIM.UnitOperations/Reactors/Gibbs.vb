@@ -4,16 +4,16 @@
 '    This file is part of DWSIM.
 '
 '    DWSIM is free software: you can redistribute it and/or modify
-'    it under the terms of the GNU General Public License as published by
+'    it under the terms of the GNU Lesser General Public License as published by
 '    the Free Software Foundation, either version 3 of the License, or
 '    (at your option) any later version.
 '
 '    DWSIM is distributed in the hope that it will be useful,
 '    but WITHOUT ANY WARRANTY; without even the implied warranty of
 '    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'    GNU General Public License for more details.
+'    GNU Lesser General Public License for more details.
 '
-'    You should have received a copy of the GNU General Public License
+'    You should have received a copy of the GNU Lesser General Public License
 '    along with DWSIM.  If not, see <http://www.gnu.org/licenses/>.
 
 
@@ -423,9 +423,17 @@ Namespace Reactors
             Dim xv = tms.GetOverallComposition()
             Dim fugv = tms.PropertyPackage.DW_CalcFugCoeff(xv, T, P, PropertyPackages.State.Vapor)
 
+            Dim gibbsf As New List(Of Double)
+            Dim mw As Double
+
+            For Each s As Compound In tms.Phases(0).Compounds.Values
+                mw = s.ConstantProperties.Molar_Weight
+                gibbsf.Add(s.ConstantProperties.IG_Enthalpy_of_Formation_25C * mw - T * s.ConstantProperties.IG_Entropy_of_Formation_25C * mw)
+            Next
+
             Dim gval As Double = 0.0
             For i = 0 To xv.Length - 1
-                If xv(i) > 0.0 Then gval = xv(i) * Log(xv(i) * fugv(i))
+                If xv(i) > 0.0 Then gval = xv(i) * (Log(xv(i) * fugv(i)) + gibbsf(i) / (8.314 * T))
             Next
 
             Return gval
@@ -633,22 +641,23 @@ Namespace Reactors
 
         Public Overrides Sub Calculate(Optional ByVal args As Object = Nothing)
 
-            Dim Success As Boolean = False
-            Dim Exc As Exception = Nothing
-            For i = 1 To 4
-                Try
-                    Calculate_Internal(args)
-                    Success = True
-                    Exit For
-                Catch ex As Exception
-                    Exc = ex
-                End Try
-                LagrangeFactor /= 10.0
-            Next
-            If Not Success Then
-                LagrangeFactor = 1000.0
-                Calculate_GibbsMin()
-            End If
+            Calculate_GibbsMin()
+            'Dim Success As Boolean = False
+            'Dim Exc As Exception = Nothing
+            'For i = 1 To 4
+            '    Try
+            '        Calculate_Internal(args)
+            '        Success = True
+            '        Exit For
+            '    Catch ex As Exception
+            '        Exc = ex
+            '    End Try
+            '    LagrangeFactor /= 10.0
+            'Next
+            'If Not Success Then
+            '    LagrangeFactor = 1000.0
+            '    Calculate_GibbsMin()
+            'End If
 
         End Sub
 
@@ -814,7 +823,7 @@ Namespace Reactors
 
                 NFv = solv.ComputeMin(Function(xn)
                                           If ebal < 0.0000001 And icount > 1000 Then Return errval
-                                          Dim gval = FunctionValue2G(xn)
+                                          Dim gval = FunctionValue2G2(xn)
                                           Dim ebal_i As Double
                                           ebal = 0.0
                                           For i = 0 To els

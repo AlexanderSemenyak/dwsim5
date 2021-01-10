@@ -4,16 +4,16 @@
 '    This file is part of DWSIM.
 '
 '    DWSIM is free software: you can redistribute it and/or modify
-'    it under the terms of the GNU General Public License as published by
+'    it under the terms of the GNU Lesser General Public License as published by
 '    the Free Software Foundation, either version 3 of the License, or
 '    (at your option) any later version.
 '
 '    DWSIM is distributed in the hope that it will be useful,
 '    but WITHOUT ANY WARRANTY; without even the implied warranty of
 '    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'    GNU General Public License for more details.
+'    GNU Lesser General Public License for more details.
 '
-'    You should have received a copy of the GNU General Public License
+'    You should have received a copy of the GNU Lesser General Public License
 '    along with DWSIM.  If not, see <http://www.gnu.org/licenses/>.
 
 Imports DWSIM.Thermodynamics.BaseClasses
@@ -4644,6 +4644,10 @@ Namespace Streams
                                 res.Add(Me.Phases(f).Compounds(c).MassFlow.GetValueOrDefault)
                             Next
                     End Select
+                Case "partialpressure"
+                    For Each c As String In comps
+                        res.Add(Me.Phases(f).Compounds(c).PartialPressure.GetValueOrDefault)
+                    Next
                 Case "fraction", "massfraction", "molarfraction"
                     Select Case basis
                         Case "Molar", "molar", "mole", "Mole"
@@ -5252,6 +5256,12 @@ Namespace Streams
                                 i += 1
                             Next
                     End Select
+                Case "partialpressure"
+                    Dim i As Integer = 0
+                    For Each c As String In comps
+                        Me.Phases(f).Compounds(c).PartialPressure = values(comps.IndexOf(c))
+                        i += 1
+                    Next
                 Case "phasefraction"
                     Select Case basis
                         Case "Molar", "molar", "mole", "Mole"
