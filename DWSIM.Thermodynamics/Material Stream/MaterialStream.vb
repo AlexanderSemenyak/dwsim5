@@ -4512,6 +4512,14 @@ Namespace Streams
                     For Each c As String In comps
                         res.Add(Me.Phases(f).Compounds(c).ActivityCoeff.GetValueOrDefault * Me.Phases(f).Compounds(c).MoleFraction.GetValueOrDefault)
                     Next
+                Case "enthalpyf.dmoles"
+                    For Each c As String In comps
+                        res.Add(Me.Phases(f).Compounds(c).EnthalpyF_Dmol.GetValueOrDefault)
+                    Next
+                Case "entropyf.dmoles"
+                    For Each c As String In comps
+                        res.Add(Me.Phases(f).Compounds(c).EntropyF_Dmol.GetValueOrDefault)
+                    Next
                 Case "fugacitycoefficient"
                     For Each c As String In comps
                         res.Add(Me.Phases(f).Compounds(c).FugacityCoeff.GetValueOrDefault)
@@ -4588,7 +4596,7 @@ Namespace Streams
                                 res.Add(Me.Phases(f).Properties.entropyF.GetValueOrDefault * val)
                             End If
                         Case "Mass", "mass"
-                            res.Add(Me.Phases(f).Properties.entropy.GetValueOrDefault * 1000)
+                            res.Add(Me.Phases(f).Properties.entropyF.GetValueOrDefault * 1000)
                     End Select
                 Case "internalenergy"
                     If basis.Equals("mole") Then
@@ -5132,10 +5140,22 @@ Namespace Streams
                         Me.Phases(f).Compounds(c).FugacityCoeff = Math.Exp(values(comps.IndexOf(c)))
                         i += 1
                     Next
+                Case "enthalpyf.dmoles"
+                    Dim i As Integer = 0
+                    For Each c As String In comps
+                        Me.Phases(f).Compounds(c).EnthalpyF_Dmol = values(comps.IndexOf(c))
+                        i += 1
+                    Next
+                Case "entropyf.dmoles"
+                    Dim i As Integer = 0
+                    For Each c As String In comps
+                        Me.Phases(f).Compounds(c).EntropyF_Dmol = values(comps.IndexOf(c))
+                        i += 1
+                    Next
                 Case "density"
                     Select Case basis
                         Case "Molar", "molar", "mole", "Mole"
-                            Me.Phases(f).Properties.density = values(0) / 1000 * Me.PropertyPackage.AUX_MMM(phs)
+                            Me.Phases(f).Properties.density = values(0) / 1000
                         Case "Mass", "mass"
                             Me.Phases(f).Properties.density = values(0)
                     End Select

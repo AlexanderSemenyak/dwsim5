@@ -81,6 +81,51 @@ namespace DWSIM.UI.Forms
 
         public bool m_overrideCloseQuestion;
 
+        private Timer BackupTimer;
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (!DynManagerControl.IsDisposed)
+                {
+                    DynManagerControl?.Dispose();
+                    DynManagerControl = null;
+                }
+                if (!DynIntegratorControl.IsDisposed)
+                {
+                    DynIntegratorControl?.Dispose();
+                    DynIntegratorControl = null;
+                }
+                if (!MaterialStreamListControl.IsDisposed)
+                {
+                    MaterialStreamListControl?.Dispose();
+                    MaterialStreamListControl = null;
+                }
+                if (!SpreadsheetControl.IsDisposed)
+                {
+                    SpreadsheetControl?.Dispose();
+                    SpreadsheetControl = null;
+                }
+                if (!ChartsControl.IsDisposed) {
+                    ChartsControl?.Dispose();
+                    ChartsControl = null;
+                }
+                if (!FlowsheetControl.IsDisposed) { 
+                    FlowsheetControl?.Dispose();
+                    FlowsheetControl = null;
+                }
+                BackupTimer?.Stop();
+                BackupTimer?.Dispose();
+                FlowsheetObject.Reset();
+                FlowsheetObject.AvailableCompounds.Clear();
+                FlowsheetObject.AvailablePropertyPackages.Clear();
+                FlowsheetObject.AvailableSystemsOfUnits.Clear();
+                FlowsheetObject = null;
+            }
+            base.Dispose(disposing);
+        }
+
         void InitializeComponent()
         {
 
@@ -95,7 +140,7 @@ namespace DWSIM.UI.Forms
 
             backupfilename = DateTime.Now.ToString().Replace('-', '_').Replace(':', '_').Replace(' ', '_').Replace('/', '_') + ".armgz";
 
-            var BackupTimer = new Timer(GlobalSettings.Settings.BackupInterval * 60 * 1000);
+            BackupTimer = new Timer(GlobalSettings.Settings.BackupInterval * 60 * 1000);
             BackupTimer.Elapsed += (sender, e) =>
             {
                 Task.Factory.StartNew(() => SaveBackupCopy());
@@ -109,8 +154,6 @@ namespace DWSIM.UI.Forms
             FlowsheetObject.Initialize();
 
             Title = "New Flowsheet";
-
-            Icon = Eto.Drawing.Icon.FromResource(imgprefix + "DWSIM_ico.ico", this.GetType().Assembly);
 
             if (s.FlowsheetRenderer == s.SkiaCanvasRenderer.CPU)
             {
@@ -231,6 +274,8 @@ namespace DWSIM.UI.Forms
             // if automation then stop loadning UI controls
 
             if (GlobalSettings.Settings.AutomationMode) return;
+
+            Icon = Eto.Drawing.Icon.FromResource(imgprefix + "DWSIM_ico.ico", this.GetType().Assembly);
 
             LoadObjects();
 
@@ -790,7 +835,8 @@ namespace DWSIM.UI.Forms
                 Split1.Panel1.Visible = !Split1.Panel1.Visible;
             };
 
-            btnCloseAllEditors.Click += (sender, e) => {
+            btnCloseAllEditors.Click += (sender, e) =>
+            {
                 EditorHolder.Pages.Clear();
             };
 

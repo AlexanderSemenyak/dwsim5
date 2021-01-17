@@ -110,16 +110,6 @@ Namespace DWSIM.Thermodynamics.AdvancedEOS
                 End If
             Next
 
-            'foreach (var x in GergComponentNamesForGetVz)
-            '{
-            '    var indexFromRetVNames = Array.IndexOf(list, x.Name)/*SpeedUp version of IndexOf*/;
-            '//var indexFromRetVNames = list.IndexOf(x.Name)/*SpeedUp version of IndexOf*/;
-            'if (indexFromRetVNames >= 0)
-            '    {
-            '        numArray[x.Index] = Vz0[indexFromRetVNames];
-            '                    }
-            '}
-
             'If compounds.Contains("Methane") Then vector(1) = Vz0(compounds.IndexOf("Methane"))
             'If compounds.Contains("Nitrogen") Then vector(2) = Vz0(compounds.IndexOf("Nitrogen"))
             'If compounds.Contains("Carbon dioxide") Then vector(3) = Vz0(compounds.IndexOf("Carbon dioxide"))

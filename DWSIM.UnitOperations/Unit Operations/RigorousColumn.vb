@@ -30,7 +30,6 @@ Imports DWSIM.Interfaces.Enums
 Imports DWSIM.UnitOperations.UnitOperations.Auxiliary.SepOps
 Imports DWSIM.MathOps
 Imports DWSIM.DrawingTools
-Imports DWSIM.Interfaces.My.Resources
 Imports OxyPlot
 Imports OxyPlot.Axes
 Imports DotNumerics.Optimization
@@ -349,6 +348,13 @@ Namespace UnitOperations.Auxiliary.SepOps
         End Function
 
         Public Function ValidateCompositions() As Boolean
+
+            If _liqcompositions.Select(Function(x) x.Values.Select(Function(x2) x2.Value).Sum).Sum = 0.0 Then
+                Return False
+            End If
+            If _vapcompositions.Select(Function(x) x.Values.Select(Function(x2) x2.Value).Sum).Sum = 0.0 Then
+                Return False
+            End If
 
             If _liqcompositions.Count = 0 Then Return False
             If _vapcompositions.Count = 0 Then Return False
@@ -1638,6 +1644,100 @@ Namespace UnitOperations
         Private _ie As New InitialEstimates
         Private _autoupdie As Boolean = False
 
+        ''' <summary>
+        ''' Set the number of stages (n > 3)
+        ''' </summary>
+        ''' <param name="n"></param>
+        Public Sub SetNumberOfStages(n As Integer)
+
+            If n <= 3 Then Throw New Exception("Invalid number of stages")
+
+            NumberOfStages = n
+
+            Dim ne As Integer = NumberOfStages
+
+            Dim nep As Integer = Stages.Count
+
+            Dim dif As Integer = ne - nep
+
+            If dif < 0 Then
+                Stages.RemoveRange(nep + dif - 1, -dif)
+                With InitialEstimates
+                    .LiqCompositions.RemoveRange(nep + dif - 1, -dif)
+                    .VapCompositions.RemoveRange(nep + dif - 1, -dif)
+                    .LiqMolarFlows.RemoveRange(nep + dif - 1, -dif)
+                    .VapMolarFlows.RemoveRange(nep + dif - 1, -dif)
+                    .StageTemps.RemoveRange(nep + dif - 1, -dif)
+                End With
+            ElseIf dif > 0 Then
+                Dim i As Integer
+                For i = 1 To dif
+                    Stages.Insert(Stages.Count - 1, New Stage(Guid.NewGuid().ToString))
+                    Stages(Stages.Count - 2).Name = "Stage_" & Stages.Count - 2
+                    With InitialEstimates
+                        Dim d As New Dictionary(Of String, Parameter)
+                        For Each cp In FlowSheet.SelectedCompounds.Values
+                            d.Add(cp.Name, New Parameter)
+                        Next
+                        .LiqCompositions.Insert(.LiqCompositions.Count - 1, d)
+                        .VapCompositions.Insert(.VapCompositions.Count - 1, d)
+                        .LiqMolarFlows.Insert(.LiqMolarFlows.Count - 1, New Parameter)
+                        .VapMolarFlows.Insert(.VapMolarFlows.Count - 1, New Parameter)
+                        .StageTemps.Insert(.StageTemps.Count - 1, New Parameter)
+                    End With
+                Next
+            End If
+
+        End Sub
+
+        ''' <summary>
+        ''' Sets the Stream feed stage.
+        ''' </summary>
+        ''' <param name="streamName">Material Stream ID ('Name') property.</param>
+        ''' <param name="stageIndex">Stage Index (0 = condenser)</param>
+        Public Sub SetStreamFeedStage(streamName As String, stageIndex As Integer)
+
+            Dim si = MaterialStreams.Where(Function(s) s.Value.StreamID = streamName).FirstOrDefault()
+            si.Value.AssociatedStage = Stages(stageIndex).ID
+
+        End Sub
+
+        ''' <summary>
+        ''' Sets the Stream feed stage.
+        ''' </summary>
+        ''' <param name="streamName">Material Stream ID ('Name') property.</param>
+        ''' <param name="stageID">Stage ID (unique ID)</param>
+        Public Sub SetStreamFeedStage(streamName As String, stageID As String)
+
+            Dim si = MaterialStreams.Where(Function(s) s.Value.StreamID = streamName).FirstOrDefault()
+            si.Value.AssociatedStage = stageID
+
+        End Sub
+
+        ''' <summary>
+        ''' Sets the Stream feed stage.
+        ''' </summary>
+        ''' <param name="stream"></param>
+        ''' <param name="stageIndex">Stage Index (0 = condenser)</param>
+        Public Sub SetStreamFeedStage(stream As MaterialStream, stageIndex As Integer)
+
+            Dim si = MaterialStreams.Where(Function(s) s.Value.StreamID = stream.Name).FirstOrDefault()
+            si.Value.AssociatedStage = Stages(stageIndex).ID
+
+        End Sub
+
+        ''' <summary>
+        ''' Sets the Stream feed stage.
+        ''' </summary>
+        ''' <param name="stream"></param>
+        ''' <param name="stageID">Stage ID (unique ID)</param>
+        Public Sub SetStreamFeedStage(stream As MaterialStream, stageID As String)
+
+            Dim si = MaterialStreams.Where(Function(s) s.Value.StreamID = stream.Name).FirstOrDefault()
+            si.Value.AssociatedStage = stageID
+
+        End Sub
+
         Public Overrides Function LoadData(data As ICollection(Of XElement)) As Boolean
 
             MyBase.LoadData(data)
@@ -2254,7 +2354,7 @@ Namespace UnitOperations
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
-            Inspector.Host.CheckAndAdd(IObj, "", "Calculate", If(GraphicObject IsNot Nothing, GraphicObject.Tag, SolutionInspector.Temporary_Object) & " (" & GetDisplayName() & ")", GetDisplayName() & SolutionInspector.Calculation_Routine, True)
+            Inspector.Host.CheckAndAdd(IObj, "", "Calculate", If(GraphicObject IsNot Nothing, GraphicObject.Tag, "Temporary Object") & " (" & GetDisplayName() & ")", GetDisplayName() & " Calculation Routine", True)
 
             IObj?.SetCurrent()
 

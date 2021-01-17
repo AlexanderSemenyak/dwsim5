@@ -773,10 +773,9 @@ Public Class FormMain
         Exit Sub
         ' check for updates
         Task.Factory.StartNew(Function()
-                                  Dim updfile = AppDomain.CurrentDomain.BaseDirectory + Path.DirectorySeparatorChar + "version.info"
-                                  Dim uinfo = "0"
-                                  If (File.Exists(updfile)) Then uinfo = File.ReadAllText(updfile)
-                                  GlobalSettings.Settings.CurrentRunningVersion = Assembly.GetExecutingAssembly().GetName().Version.Major.ToString() + "." + Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString() + "." + uinfo
+                                  GlobalSettings.Settings.CurrentRunningVersion = Assembly.GetExecutingAssembly().GetName().Version.Major.ToString() + "." +
+                                  Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString() + "." +
+                                  Assembly.GetExecutingAssembly().GetName().Version.Build.ToString()
                                   Return SharedClasses.UpdateCheck.CheckForUpdates()
                               End Function).ContinueWith(Sub(t)
                                                              If (t.Result) Then
@@ -973,6 +972,7 @@ Public Class FormMain
             End If
         Next
         loadedCSDB = True
+        csdb.Dispose()
     End Sub
 
     Public Sub LoadDWSIMDB()
@@ -983,6 +983,7 @@ Public Class FormMain
         For Each cp As BaseClasses.ConstantProperties In cpa
             If Not Me.AvailableComponents.ContainsKey(cp.Name) Then Me.AvailableComponents.Add(cp.Name, cp)
         Next
+        dwdb.Dispose()
     End Sub
 
     Public Sub LoadAdditionalCompounds()
@@ -1029,6 +1030,7 @@ Public Class FormMain
             Next
         Catch ex As Exception
         End Try
+        cpdb.Dispose()
     End Sub
 
     Public Sub LoadCheDLDB()
@@ -1045,6 +1047,7 @@ Public Class FormMain
                 End If
             End If
         Next
+        chedl.Dispose()
 
     End Sub
 

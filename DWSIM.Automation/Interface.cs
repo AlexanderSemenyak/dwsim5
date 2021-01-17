@@ -232,6 +232,12 @@ namespace DWSIM.Automation
             return LoadSimulation(null,filepath, out errorText);
         }
 
+        public void ReleaseResources()
+        {
+            fm?.Dispose();
+            fm = null;
+        }
+
         /// <summary>
         /// Загрузить из потока не создавая промежуточный файл
         /// </summary>
@@ -302,6 +308,7 @@ namespace DWSIM.Automation
             if (ext == ".dwxmz" || ext == ".armgz")
             {
                 var xdoc = fm.FlowsheetObject.LoadZippedXML(fsFlowsheet, path, Path.GetDirectoryName(path)/*for exclude blocking by parallel access*/);
+                xdoc = null;
             }
             else if (ext == ".dwxml")
             {

@@ -390,6 +390,14 @@ Namespace PropertyPackages
                 Me.CurrentMaterialStream.Phases(phaseID).Properties.molar_entropy = s * mw
 
                 IObj?.SetCurrent
+                Me.CurrentMaterialStream.Phases(phaseID).Properties.enthalpyF = h + AUX_HFm25(Phase)
+                Me.CurrentMaterialStream.Phases(phaseID).Properties.molar_enthalpyF = (h + AUX_HFm25(Phase)) * mw
+
+                IObj?.SetCurrent
+                Me.CurrentMaterialStream.Phases(phaseID).Properties.entropyF = s + AUX_SFm25(Phase)
+                Me.CurrentMaterialStream.Phases(phaseID).Properties.molar_entropyF = (s + AUX_SFm25(Phase)) * mw
+
+                IObj?.SetCurrent
                 z = Me.m_pr.Z_PR(T, P, RET_VMOL(Phase.Vapor), RET_VKij, RET_VTC, RET_VPC, RET_VW, "V")
                 If LiquidDensity_UsePenelouxVolumeTranslation Then
                     z -= Me.AUX_CM(Phase.Vapor) / 8.314 / T * P
