@@ -18,8 +18,8 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <DefineDebug>false</DefineDebug>
-    <DefineTrace>false</DefineTrace>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
     <DocumentationFile>DWSIM.SharedClasses.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
@@ -71,6 +71,11 @@
     <PlatformTarget>x64</PlatformTarget>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <Reference Include="nunit.framework">
+      <HintPath>..\PlatformFiles\Common\UnitTests\nunit.framework.dll</HintPath>
+    </Reference>
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="CapeOpen">
       <HintPath>..\DWSIM\References\CapeOpen.dll</HintPath>
@@ -193,6 +198,7 @@
     <Compile Include="Patrons\Patrons.vb" />
     <Compile Include="SimulationCharts\Charts.vb" />
     <Compile Include="UnitsOfMeasure\SystemsOfUnits.vb" />
+    <Compile Include="UnitTestsOnit\SystemOfUnits_PerformanceTest.vb" />
     <Compile Include="UpdateCheck\UpdateCheck.vb" />
   </ItemGroup>
   <ItemGroup>
@@ -276,6 +282,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Patrons\activepatrons.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

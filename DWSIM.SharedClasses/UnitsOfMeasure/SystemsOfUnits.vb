@@ -1283,8 +1283,6 @@ Namespace SystemsOfUnits
                     Return value / 132.277
                 Case "lb/s"
                     Return value / 2.20462
-
-
                 Case "g"
                     Return value / 1000
                 Case "lb", "lbm"

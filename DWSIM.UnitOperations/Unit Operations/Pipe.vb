@@ -54,6 +54,16 @@ Namespace UnitOperations
         Public const WallKlProfile as String = "Профиль термопереноса стенки трубы"
         Public const InsulationKlProfile as String = "Профиль термоизолящии стенки"
         Public const ExternalHtcProfile as String = "Профиль внешнего термопереноса"
+
+        Private const Constant_HydraulicSegmentWithComma as String = "HydraulicSegment,"
+        Private const Constant_HydraulicSegment as String = "HydraulicSegment"
+        Private const Constant_CommaWithLength as String = ",Length"
+        Private const Constant_CommaWithElevation as String = ",Elevation"
+        Private const Constant_CommaWithInternalDiameter as String = ",InternalDiameter"
+        Private const Constant_CommaWithExternalDiameter as String = ",ExternalDiameter"
+        Private const Constant_CommaWithSections as String = ",Sections"
+        Private const Constant_Results as String = "Results"
+
         Public Overrides Property ObjectClass As SimulationObjectClass = SimulationObjectClass.PressureChangers
 
         <NonSerialized> <Xml.Serialization.XmlIgnore> Public f As EditingForm_Pipe
@@ -1709,7 +1719,7 @@ Final3:     T = bbb
                 Return value
             Else
                 Try
-                    If prop.Contains("Results") Then
+                    If prop.Contains(Constant_Results) or prop.Contains("Результаты")  Then
                         Dim skey As Integer = prop.Split(",")(1)
                         Dim sindex As Integer = prop.Split(",")(3) - 1
                         Dim sprop As String = prop.Split(",")(4)
@@ -1771,19 +1781,19 @@ Final3:     T = bbb
                             Case Else
                                 Return 0.0
                         End Select
-                    ElseIf prop.Contains("HydraulicSegment") Then
+                    ElseIf prop.Contains(Constant_HydraulicSegment) or prop.Contains("ГидравлическийСегмент") Then
                         Dim skey As Integer = prop.Split(",")(1)
                         Dim sprop As String = prop.Split(",")(2)
                         Select Case sprop
-                            Case "Length"
+                            Case "Length","Длина"
                                 Return cv.ConvertFromSI(su.distance, Profile.Sections(skey).Comprimento)
-                            Case "Elevation"
+                            Case "Elevation","Подъем"
                                 Return cv.ConvertFromSI(su.distance, Profile.Sections(skey).Elevacao)
-                            Case "InternalDiameter"
+                            Case "InternalDiameter","ВнутреннийДиаметр"
                                 Return cv.Convert("in", su.diameter, Profile.Sections(skey).DI)
-                            Case "ExternalDiameter"
+                            Case "ExternalDiameter","ВнешнийДиаметр"
                                 Return cv.Convert("in", su.diameter, Profile.Sections(skey).DE)
-                            Case "Sections"
+                            Case "Sections","Сегменты"
                                 Return Profile.Sections(skey).Incrementos
                             Case Else
                                 Return 0.0
@@ -1847,42 +1857,42 @@ Final3:     T = bbb
                 proplist.Add("PROP_PS_" + CStr(i))
             Next
             For Each ps In Profile.Sections
-                proplist.Add("HydraulicSegment," + ps.Key.ToString + ",Length")
-                proplist.Add("HydraulicSegment," + ps.Key.ToString + ",Elevation")
-                proplist.Add("HydraulicSegment," + ps.Key.ToString + ",InternalDiameter")
-                proplist.Add("HydraulicSegment," + ps.Key.ToString + ",ExternalDiameter")
-                proplist.Add("HydraulicSegment," + ps.Key.ToString + ",Sections")
+                proplist.Add(Constant_HydraulicSegmentWithComma + ps.Key.ToString + Constant_CommaWithLength)
+                proplist.Add(Constant_HydraulicSegmentWithComma + ps.Key.ToString + Constant_CommaWithElevation)
+                proplist.Add(Constant_HydraulicSegmentWithComma + ps.Key.ToString + Constant_CommaWithInternalDiameter)
+                proplist.Add(Constant_HydraulicSegmentWithComma + ps.Key.ToString + Constant_CommaWithExternalDiameter)
+                proplist.Add(Constant_HydraulicSegmentWithComma + ps.Key.ToString + Constant_CommaWithSections)
             Next
             For Each ps In Profile.Sections
                 Dim j As Integer = 1
                 For Each res In ps.Value.Resultados
-                    proplist.Add("HydraulicSegment," + ps.Key.ToString + ",Results," + j.ToString + ",HeatTransfer")
-                    proplist.Add("HydraulicSegment," + ps.Key.ToString + ",Results," + j.ToString + ",HeatCapacityLiquid")
-                    proplist.Add("HydraulicSegment," + ps.Key.ToString + ",Results," + j.ToString + ",HeatCapacityVapor")
-                    proplist.Add("HydraulicSegment," + ps.Key.ToString + ",Results," + j.ToString + ",PressureDropFriction")
-                    proplist.Add("HydraulicSegment," + ps.Key.ToString + ",Results," + j.ToString + ",PressureDropHydrostatic")
-                    proplist.Add("HydraulicSegment," + ps.Key.ToString + ",Results," + j.ToString + ",PressureDropTotal")
-                    proplist.Add("HydraulicSegment," + ps.Key.ToString + ",Results," + j.ToString + ",LiquidHoldup")
-                    proplist.Add("HydraulicSegment," + ps.Key.ToString + ",Results," + j.ToString + ",HTCoverall")
-                    proplist.Add("HydraulicSegment," + ps.Key.ToString + ",Results," + j.ToString + ",HTCexternal")
-                    proplist.Add("HydraulicSegment," + ps.Key.ToString + ",Results," + j.ToString + ",HTCinternal")
-                    proplist.Add("HydraulicSegment," + ps.Key.ToString + ",Results," + j.ToString + ",HTCinsulation")
-                    proplist.Add("HydraulicSegment," + ps.Key.ToString + ",Results," + j.ToString + ",HTCpipewall")
-                    proplist.Add("HydraulicSegment," + ps.Key.ToString + ",Results," + j.ToString + ",ThermalConductivityLiquid")
-                    proplist.Add("HydraulicSegment," + ps.Key.ToString + ",Results," + j.ToString + ",ThermalConductivityVapor")
-                    proplist.Add("HydraulicSegment," + ps.Key.ToString + ",Results," + j.ToString + ",ReynoldsNumberLiquid")
-                    proplist.Add("HydraulicSegment," + ps.Key.ToString + ",Results," + j.ToString + ",ReynoldsNumberVapor")
-                    proplist.Add("HydraulicSegment," + ps.Key.ToString + ",Results," + j.ToString + ",ViscosityLiquid")
-                    proplist.Add("HydraulicSegment," + ps.Key.ToString + ",Results," + j.ToString + ",ViscosityVapor")
-                    proplist.Add("HydraulicSegment," + ps.Key.ToString + ",Results," + j.ToString + ",VolumetricFlowLiquid")
-                    proplist.Add("HydraulicSegment," + ps.Key.ToString + ",Results," + j.ToString + ",VolumetricFlowVapor")
-                    proplist.Add("HydraulicSegment," + ps.Key.ToString + ",Results," + j.ToString + ",DensityLiquid")
-                    proplist.Add("HydraulicSegment," + ps.Key.ToString + ",Results," + j.ToString + ",DensityVapor")
-                    proplist.Add("HydraulicSegment," + ps.Key.ToString + ",Results," + j.ToString + ",SurfaceTension")
-                    proplist.Add("HydraulicSegment," + ps.Key.ToString + ",Results," + j.ToString + ",InitialTemperature")
-                    proplist.Add("HydraulicSegment," + ps.Key.ToString + ",Results," + j.ToString + ",FlowRegime")
-                    proplist.Add("HydraulicSegment," + ps.Key.ToString + ",Results," + j.ToString + ",VelocityLiquid")
-                    proplist.Add("HydraulicSegment," + ps.Key.ToString + ",Results," + j.ToString + ",VelocityVapor")
+                    proplist.Add(Constant_HydraulicSegmentWithComma + ps.Key.ToString + ",Results," + j.ToString + ",HeatTransfer")
+                    proplist.Add(Constant_HydraulicSegmentWithComma + ps.Key.ToString + ",Results," + j.ToString + ",HeatCapacityLiquid")
+                    proplist.Add(Constant_HydraulicSegmentWithComma + ps.Key.ToString + ",Results," + j.ToString + ",HeatCapacityVapor")
+                    proplist.Add(Constant_HydraulicSegmentWithComma + ps.Key.ToString + ",Results," + j.ToString + ",PressureDropFriction")
+                    proplist.Add(Constant_HydraulicSegmentWithComma + ps.Key.ToString + ",Results," + j.ToString + ",PressureDropHydrostatic")
+                    proplist.Add(Constant_HydraulicSegmentWithComma + ps.Key.ToString + ",Results," + j.ToString + ",PressureDropTotal")
+                    proplist.Add(Constant_HydraulicSegmentWithComma + ps.Key.ToString + ",Results," + j.ToString + ",LiquidHoldup")
+                    proplist.Add(Constant_HydraulicSegmentWithComma + ps.Key.ToString + ",Results," + j.ToString + ",HTCoverall")
+                    proplist.Add(Constant_HydraulicSegmentWithComma + ps.Key.ToString + ",Results," + j.ToString + ",HTCexternal")
+                    proplist.Add(Constant_HydraulicSegmentWithComma + ps.Key.ToString + ",Results," + j.ToString + ",HTCinternal")
+                    proplist.Add(Constant_HydraulicSegmentWithComma + ps.Key.ToString + ",Results," + j.ToString + ",HTCinsulation")
+                    proplist.Add(Constant_HydraulicSegmentWithComma + ps.Key.ToString + ",Results," + j.ToString + ",HTCpipewall")
+                    proplist.Add(Constant_HydraulicSegmentWithComma + ps.Key.ToString + ",Results," + j.ToString + ",ThermalConductivityLiquid")
+                    proplist.Add(Constant_HydraulicSegmentWithComma + ps.Key.ToString + ",Results," + j.ToString + ",ThermalConductivityVapor")
+                    proplist.Add(Constant_HydraulicSegmentWithComma + ps.Key.ToString + ",Results," + j.ToString + ",ReynoldsNumberLiquid")
+                    proplist.Add(Constant_HydraulicSegmentWithComma + ps.Key.ToString + ",Results," + j.ToString + ",ReynoldsNumberVapor")
+                    proplist.Add(Constant_HydraulicSegmentWithComma + ps.Key.ToString + ",Results," + j.ToString + ",ViscosityLiquid")
+                    proplist.Add(Constant_HydraulicSegmentWithComma + ps.Key.ToString + ",Results," + j.ToString + ",ViscosityVapor")
+                    proplist.Add(Constant_HydraulicSegmentWithComma + ps.Key.ToString + ",Results," + j.ToString + ",VolumetricFlowLiquid")
+                    proplist.Add(Constant_HydraulicSegmentWithComma + ps.Key.ToString + ",Results," + j.ToString + ",VolumetricFlowVapor")
+                    proplist.Add(Constant_HydraulicSegmentWithComma + ps.Key.ToString + ",Results," + j.ToString + ",DensityLiquid")
+                    proplist.Add(Constant_HydraulicSegmentWithComma + ps.Key.ToString + ",Results," + j.ToString + ",DensityVapor")
+                    proplist.Add(Constant_HydraulicSegmentWithComma + ps.Key.ToString + ",Results," + j.ToString + ",SurfaceTension")
+                    proplist.Add(Constant_HydraulicSegmentWithComma + ps.Key.ToString + ",Results," + j.ToString + ",InitialTemperature")
+                    proplist.Add(Constant_HydraulicSegmentWithComma + ps.Key.ToString + ",Results," + j.ToString + ",FlowRegime")
+                    proplist.Add(Constant_HydraulicSegmentWithComma + ps.Key.ToString + ",Results," + j.ToString + ",VelocityLiquid")
+                    proplist.Add(Constant_HydraulicSegmentWithComma + ps.Key.ToString + ",Results," + j.ToString + ",VelocityVapor")
                     j += 1
                 Next
             Next
@@ -1932,19 +1942,19 @@ Final3:     T = bbb
                 End Select
             Else
                 Try
-                    If prop.Contains("HydraulicSegment") Then
+                    If prop.Contains(Constant_HydraulicSegment) or prop.Contains("ГидравлическийСегмент") Then
                         Dim skey As Integer = prop.Split(",")(1)
                         Dim sprop As String = prop.Split(",")(2)
                         Select Case sprop
-                            Case "Length"
+                            Case "Length", "Длина"
                                 Profile.Sections(skey).Comprimento = cv.ConvertToSI(su.distance, propval)
-                            Case "Elevation"
+                            Case "Elevation", "Подъем"
                                 Profile.Sections(skey).Elevacao = cv.ConvertToSI(su.distance, propval)
-                            Case "InternalDiameter"
+                            Case "InternalDiameter", "ВнутреннийДиаметр"
                                 Profile.Sections(skey).DI = cv.Convert(su.diameter, "in", propval)
-                            Case "ExternalDiameter"
+                            Case "ExternalDiameter", "ВнешнийДиаметр"
                                 Profile.Sections(skey).DE = cv.Convert(su.diameter, "in", propval)
-                            Case "Sections"
+                            Case "Sections", "Сегменты"
                                 Profile.Sections(skey).Incrementos = propval
                         End Select
                     ElseIf prop.Contains("ThermalProfile") Then
@@ -2025,7 +2035,7 @@ Final3:     T = bbb
                 End Select
                 Return value
             Else
-                If prop.Contains("Results") Then
+                If prop.Contains(Constant_Results) or prop.Contains("Результаты")  Then
                     Dim sprop As String = prop.Split(",")(4)
                     Select Case sprop
                         Case "HeatTransfer"
@@ -2085,19 +2095,19 @@ Final3:     T = bbb
                         Case Else
                             Return 0.0
                     End Select
-                ElseIf prop.Contains("HydraulicSegment") Then
+                ElseIf prop.Contains(Constant_HydraulicSegment) or prop.Contains("ГидравлическийСегмент")Then
                     Dim skey As Integer = prop.Split(",")(1)
                     Dim sprop As String = prop.Split(",")(2)
                     Select Case sprop
-                        Case "Length"
+                        Case "Length", "Длина"
                             Return su.distance
-                        Case "Elevation"
+                        Case "Elevation", "Подъем"
                             Return su.distance
-                        Case "InternalDiameter"
+                        Case "InternalDiameter", "ВнутреннийДиаметр"
                             Return su.diameter
-                        Case "ExternalDiameter"
+                        Case "ExternalDiameter", "ВнешнийДиаметр"
                             Return su.diameter
-                        Case "Sections"
+                        Case "Sections", "Сегменты"
                             Return ""
                         Case Else
                             Return 0.0

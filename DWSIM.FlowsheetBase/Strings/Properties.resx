@@ -552,7 +552,7 @@
     <comment>0</comment>
   </data>
   <data name="PROP_MS_130" xml:space="preserve">
-    <value>Phases</value>
+    <value>Фазы</value>
   </data>
   <data name="PROP_MS_131" xml:space="preserve">
     <value>Твердая фаза Density</value>
