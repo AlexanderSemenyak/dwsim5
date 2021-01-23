@@ -24,7 +24,7 @@ Imports Cudafy
 
 Namespace PropertyPackages.Auxiliary
 
-    <DelimitedRecord(";")> <IgnoreFirst()> <System.Serializable()> _
+    <DelimitedRecord(";")> <IgnoreFirst()> <System.Serializable()>
     Public Class PR_IPData
 
         Implements ICloneable
@@ -506,24 +506,14 @@ Namespace PropertyPackages.Auxiliary
 
             Dim MMm As Double = Vz.MultiplyY(VMM).SumY
 
-            If Settings.EnableParallelProcessing Then
-                Dim poptions As New ParallelOptions() With {.MaxDegreeOfParallelism = Settings.MaxDegreeOfParallelism, .TaskScheduler = Settings.AppTaskScheduler}
-                Parallel.For(0, n + 1, poptions, Sub(ii)
-                                                     alpha(ii) = (1 + (0.37464 + 1.54226 * w(ii) - 0.26992 * w(ii) ^ 2) * (1 - (T / Tc(ii)) ^ 0.5)) ^ 2
-                                                     ai(ii) = 0.45724 * alpha(ii) * R ^ 2 * Tc(ii) ^ 2 / Pc(ii)
-                                                     bi(ii) = 0.0778 * R * Tc(ii) / Pc(ii)
-                                                     ci(ii) = 0.37464 + 1.54226 * w(ii) - 0.26992 * w(ii) ^ 2
-                                                 End Sub)
-            Else
-                i = 0
-                Do
-                    alpha(i) = (1 + (0.37464 + 1.54226 * w(i) - 0.26992 * w(i) ^ 2) * (1 - (T / Tc(i)) ^ 0.5)) ^ 2
-                    ai(i) = 0.45724 * alpha(i) * R ^ 2 * Tc(i) ^ 2 / Pc(i)
-                    bi(i) = 0.0778 * R * Tc(i) / Pc(i)
-                    ci(i) = 0.37464 + 1.54226 * w(i) - 0.26992 * w(i) ^ 2
-                    i = i + 1
-                Loop Until i = n + 1
-            End If
+            i = 0
+            Do
+                alpha(i) = (1 + (0.37464 + 1.54226 * w(i) - 0.26992 * w(i) ^ 2) * (1 - (T / Tc(i)) ^ 0.5)) ^ 2
+                ai(i) = 0.45724 * alpha(i) * R ^ 2 * Tc(i) ^ 2 / Pc(i)
+                bi(i) = 0.0778 * R * Tc(i) / Pc(i)
+                ci(i) = 0.37464 + 1.54226 * w(i) - 0.26992 * w(i) ^ 2
+                i = i + 1
+            Loop Until i = n + 1
 
             a = Calc_SUM1(n, ai, VKij)
 
@@ -869,9 +859,9 @@ Namespace PropertyPackages.Auxiliary
         Function OF_Rho(ByVal rho As Double, ByVal aml As Double, ByVal bml As Double, ByVal T As Double) As Double
 
             Dim R As Double = 8.314
-            Return 0.1 * 8.314 * T - _
-                        bml * rho * R * T * (1 - bml * rho) ^ -2 + R * T * (1 - bml * rho) ^ -1 + _
-                        aml * rho ^ 2 * (1 + 2 * bml * rho - (bml * rho) ^ 2) ^ -2 * (2 * bml - 2 * bml ^ 2 * rho) + _
+            Return 0.1 * 8.314 * T -
+                        bml * rho * R * T * (1 - bml * rho) ^ -2 + R * T * (1 - bml * rho) ^ -1 +
+                        aml * rho ^ 2 * (1 + 2 * bml * rho - (bml * rho) ^ 2) ^ -2 * (2 * bml - 2 * bml ^ 2 * rho) +
                         2 * aml * rho * (1 + 2 * bml * rho - (bml * rho) ^ 2) ^ -1
 
         End Function
@@ -924,11 +914,11 @@ Namespace PropertyPackages.ThermoPlugs
             Dim a(n, n) As Double
 
             Dim i, j As Integer
-                i = 0
+            i = 0
             Do
                 j = 0
                 Do
-                    a(i, j) = (ai(i) * ai(j)) ^ 0.5 * (1 - vkij(i, j))
+                    a(i, j) = Math.Sqrt(ai(i) * ai(j)) * (1 - vkij(i, j))
                     j = j + 1
                 Loop Until j = n + 1
                 i = i + 1
@@ -943,7 +933,7 @@ Namespace PropertyPackages.ThermoPlugs
             Dim saml, aml(n), aml2(n) As Double
 
             Dim i, j As Integer
-                i = 0
+            i = 0
             Do
                 j = 0
                 Do
@@ -1161,7 +1151,8 @@ Namespace PropertyPackages.ThermoPlugs
 
         End Function
 
-        Public Overrides Function CalcLnFug(ByVal T As Double, ByVal P As Double, ByVal Vx As Array, ByVal VKij As Object, ByVal VTc As Array, ByVal VPc As Array, ByVal Vw As Array, Optional ByVal otherargs As Object = Nothing, Optional ByVal forcephase As String = "") As Double()
+        Public Overrides Function CalcLnFug(ByVal T As Double, ByVal P As Double, ByVal Vx As Double(), ByVal VKij As Double(,), ByVal VTc As Double(),
+                                            ByVal VPc As Double(), ByVal Vw As Double(), Optional ByVal otherargs As Object = Nothing, Optional ByVal forcephase As String = "") As Double()
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
@@ -1321,17 +1312,17 @@ Namespace PropertyPackages.ThermoPlugs
             'Pcorr = ZP(1)
 
             Dim t1, t2, t3, t4, t5 As Double
-                i = 0
-                Do
-                    t1 = bi(i) * (Z - 1) / bml
-                    t2 = -Math.Log(Z - BG)
-                    t3 = AG * (2 * aml2(i) / aml - bi(i) / bml)
-                    t4 = Math.Log((Z + (1 + 2 ^ 0.5) * BG) / (Z + (1 - 2 ^ 0.5) * BG))
-                    t5 = 2 * 2 ^ 0.5 * BG
-                    LN_CF(i) = t1 + t2 - (t3 * t4 / t5)
-                    LN_CF(i) = LN_CF(i) + Math.Log(Pcorr / P)
-                    i = i + 1
-                Loop Until i = n + 1
+            i = 0
+            Do
+                t1 = bi(i) * (Z - 1) / bml
+                t2 = -Math.Log(Z - BG)
+                t3 = AG * (2 * aml2(i) / aml - bi(i) / bml)
+                t4 = Math.Log((Z + (1 + 2 ^ 0.5) * BG) / (Z + (1 - 2 ^ 0.5) * BG))
+                t5 = 2 * 2 ^ 0.5 * BG
+                LN_CF(i) = t1 + t2 - (t3 * t4 / t5)
+                LN_CF(i) = LN_CF(i) + Math.Log(Pcorr / P)
+                i = i + 1
+            Loop Until i = n + 1
 
             IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
 

@@ -37,7 +37,7 @@ Namespace PropertyPackages
 
         Public CompoundAliases As New Dictionary(Of String, List(Of String))(StringComparer.Ordinal)
 
-        Private _IObj As InspectorItem
+        <NonSerialized> Private _IObj As InspectorItem
 
         Public Sub New(ByVal comode As Boolean)
             MyBase.New(comode)
