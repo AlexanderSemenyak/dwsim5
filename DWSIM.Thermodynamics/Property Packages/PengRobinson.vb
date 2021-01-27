@@ -1099,6 +1099,7 @@ Namespace PropertyPackages
                     Return 0.0#
             End Select
         End Function
+
     End Class
 
 End Namespace
