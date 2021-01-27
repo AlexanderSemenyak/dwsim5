@@ -4,16 +4,16 @@
 '    This file is part of DWSIM.
 '
 '    DWSIM is free software: you can redistribute it and/or modify
-'    it under the terms of the GNU Lesser General Public License as published by
+'    it under the terms of the GNU General Public License as published by
 '    the Free Software Foundation, either version 3 of the License, or
 '    (at your option) any later version.
 '
 '    DWSIM is distributed in the hope that it will be useful,
 '    but WITHOUT ANY WARRANTY; without even the implied warranty of
 '    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'    GNU Lesser General Public License for more details.
+'    GNU General Public License for more details.
 '
-'    You should have received a copy of the GNU Lesser General Public License
+'    You should have received a copy of the GNU General Public License
 '    along with DWSIM.  If not, see <http://www.gnu.org/licenses/>.
 Imports System.Globalization
 
@@ -1277,7 +1277,7 @@ Namespace SystemsOfUnits
                     Return value / 60 / 60 / 24
                 Case "kg/min"
                     Return value / 60
-                Case "lb/h", "lbm/h"
+                Case "lb/h", "lbm/h", "lb/hr", "lbm/hr"
                     Return value / 7936.64
                 Case "lb/min"
                     Return value / 132.277
@@ -1341,15 +1341,15 @@ Namespace SystemsOfUnits
                 Case "m3/d"
                     Return value / 3600 / 24
 
-                Case "BTU/h"
+                Case "BTU/h", "BTU/hr", "btu/hr"
                     Return value / 3412.14
                 Case "BTU/s"
                     Return value / 0.947817
                 Case "cal/s"
                     Return value / 238.846
-                Case "HP"
+                Case "HP", "hp"
                     Return value / 1.35962
-                Case "kcal/h"
+                Case "kcal/h", "kcal/hr"
                     Return value / 859.845
                 Case "kJ/h"
                     Return value / 3600
@@ -1514,14 +1514,12 @@ Namespace SystemsOfUnits
                     Return value / 3600 * 1000000.0
                 Case "lbmol/[ft3.h]"
                     Return value / 3600 * 35.3147 * 1000 / 2.20462
-                Case "°C"                               'temperatura e demais
+
+                Case "C", "°C"                                 'temperatura e demais
                     Return value + 273.15
-                Case "C"                               'temperatura e demais
-                    Return value + 273.15
-                Case "°C."
+                Case "°C.", "C."
                     Return value
-                Case "C."
-                    Return value
+
                 Case "atm"
                     Return value * 101325
                 Case "g/s"
@@ -1592,6 +1590,7 @@ Namespace SystemsOfUnits
                     Return value / 3412.14
                 Case "ft"
                     Return value / 3.28084
+
                     'Personalizados
                 Case "kgf/cm2_a"
                     Return value * 101325 / 1.033
@@ -1728,6 +1727,8 @@ Namespace SystemsOfUnits
                 Case "in/s"
                     Return value * 39.3701
 
+                Case "atm"
+                    Return value / 101325
                 Case "kPa"
                     Return value * 0.001
                 Case "ftH2O"
@@ -1765,7 +1766,7 @@ Namespace SystemsOfUnits
                     Return value * 60 * 60 * 24
                 Case "kg/min"
                     Return value * 60
-                Case "lb/h"
+                Case "lb/h", "lb/hr"
                     Return value * 7936.64
                 Case "lb/min"
                     Return value * 132.277
@@ -1831,15 +1832,15 @@ Namespace SystemsOfUnits
                 Case "lbmol/[lbm.h]"
                     Return value * 453.59237 * 2.20462 * 60 * 60
 
-                Case "BTU/h"
+                Case "BTU/h", "BTU/hr", "btu/hr"
                     Return value * 3412.14
                 Case "BTU/s"
                     Return value * 0.947817
                 Case "cal/s"
                     Return value * 238.846
-                Case "HP"
+                Case "HP", "hp"
                     Return value * 1.35962
-                Case "kcal/h"
+                Case "kcal/h", "kcal/hr"
                     Return value * 859.845
                 Case "kJ/h"
                     Return value * 3600
@@ -1900,12 +1901,14 @@ Namespace SystemsOfUnits
                     Return value * 10000.0
                 Case "ft2"
                     Return value * 10.7639
+
                 Case "h"                                'tempo
                     Return value / 3600
                 Case "s"
                     Return value
                 Case "min."
                     Return value / 60
+
                 Case "ft3"                              'volume
                     Return value * 35.3147
                 Case "m3"
@@ -1914,6 +1917,7 @@ Namespace SystemsOfUnits
                     Return value * 1000000.0
                 Case "L"
                     Return value * 1000.0
+
                 Case "cm3/mol"                          'volume molar'
                     Return value * 1000.0
                 Case "m3/kmol"
@@ -1958,12 +1962,14 @@ Namespace SystemsOfUnits
                     Return value / 1000000.0 * 1000
                 Case "lbm/ft3"
                     Return value * 0.062428
+
                 Case "m2/s"                              'k.visc
                     Return value
                 Case "ft/s2"
                     Return value * 3.28084
                 Case "cm2/s"
                     Return value * 10000.0
+
                 Case "W/[m2.K]"                              'HTC
                     Return value
                 Case "BTU/[ft2.h.R]"
@@ -1972,12 +1978,14 @@ Namespace SystemsOfUnits
                     Return value * 0.0000238846
                 Case "cal/[cm.s.C]"
                     Return value * 0.0000238846
+
                 Case "m3/kg"                                'vol especif
                     Return value
                 Case "ft3/lbm"
                     Return value / 0.062428
                 Case "cm3/g"
                     Return value * 1000
+
                 Case "kmol/[m3.s]"
                     Return value / 1000                            'taxa reacao
                 Case "kmol/[m3.min.]"
@@ -2004,16 +2012,11 @@ Namespace SystemsOfUnits
                     Return value * 3600 / 1000000.0
                 Case "lbmol/[ft3.h]"
                     Return value * 3600 / 35.3147 / 1000 * 2.20462
-                Case "°C"                               'temperatura e demais
+
+                Case "C", "°C"
                     Return value - 273.15
-                Case "C"                               'temperatura e demais
-                    Return value - 273.15
-                Case "°C."
+                Case "C.", "°C."
                     Return value
-                Case "C."
-                    Return value
-                Case "atm"
-                    Return value / 101325
                 Case "g/s"
                     Return value * 1000
                 Case "mol/s"
@@ -2076,7 +2079,7 @@ Namespace SystemsOfUnits
                     Return value * 3412.14
                 Case "ft"
                     Return value * 3.28084
-                    'Personalizados
+
                 Case "kgf/cm2_a"
                     Return value / 101325 * 1.033
                 Case "kgf/cm2"
@@ -2105,11 +2108,9 @@ Namespace SystemsOfUnits
                     Return value * (22.71 * 3600 * 24 / 1000) * 35.3147
                 Case "°F"
                     Return (value - 273.15) * 9 / 5 + 32
-                Case "°F."
-                    Return value * 1.8
                 Case "F"
                     Return (value - 273.15) * 9 / 5 + 32
-                Case "F."
+                Case "F.", "°F."
                     Return value * 1.8
                 Case "cm"
                     Return value * 100

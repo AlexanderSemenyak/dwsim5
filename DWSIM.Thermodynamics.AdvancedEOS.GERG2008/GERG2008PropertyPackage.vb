@@ -940,7 +940,7 @@ Namespace DWSIM.Thermodynamics.AdvancedEOS
 
             Dim Temperature, Pressure As Double
             Temperature = CurrentMaterialStream.Phases(0).Properties.temperature.GetValueOrDefault
-            Pressure = CurrentMaterialStream.Phases(0).Properties.temperature.GetValueOrDefault
+            Pressure = CurrentMaterialStream.Phases(0).Properties.pressure.GetValueOrDefault
 
             GERGBase.FillPredefinedValuesToNewGERGBase(gerg)
             'gerg.SetupGERG()
@@ -989,7 +989,7 @@ Namespace DWSIM.Thermodynamics.AdvancedEOS
 
             Dim Temperature, Pressure As Double
             Temperature = CurrentMaterialStream.Phases(0).Properties.temperature.GetValueOrDefault
-            Pressure = CurrentMaterialStream.Phases(0).Properties.temperature.GetValueOrDefault
+            Pressure = CurrentMaterialStream.Phases(0).Properties.pressure.GetValueOrDefault
 
             GERGBase.FillPredefinedValuesToNewGERGBase(gerg)
             'gerg.SetupGERG()

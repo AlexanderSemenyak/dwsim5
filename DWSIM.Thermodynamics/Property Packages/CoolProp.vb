@@ -4,16 +4,16 @@
 '    This file is part of DWSIM.
 '
 '    DWSIM is free software: you can redistribute it and/or modify
-'    it under the terms of the GNU Lesser General Public License as published by
+'    it under the terms of the GNU General Public License as published by
 '    the Free Software Foundation, either version 3 of the License, or
 '    (at your option) any later version.
 '
 '    DWSIM is distributed in the hope that it will be useful,
 '    but WITHOUT ANY WARRANTY; without even the implied warranty of
 '    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-'    GNU Lesser General Public License for more details.
+'    GNU General Public License for more details.
 '
-'    You should have received a copy of the GNU Lesser General Public License
+'    You should have received a copy of the GNU General Public License
 '    along with DWSIM.  If not, see <http://www.gnu.org/licenses/>.
 
 Imports DWSIM.Thermodynamics.PropertyPackages
@@ -57,15 +57,18 @@ Namespace PropertyPackages
 
         Sub GetListOfSupportedCompounds()
 
-            Dim comps() As String = CoolProp.get_global_param_string("FluidsList").Split(",")
+            Dim comps As List(Of String) = CoolProp.get_global_param_string("FluidsList").Split(",").ToList()
+            comps = comps.Select(Function(a) a.Trim()).ToList()
 
             CompoundAliases.Clear()
             SupportedComponents.Clear()
 
-            Dim aliases(), cas As String
+            Dim aliases As New List(Of String), cas As String
 
             For Each c In comps
-                aliases = CoolProp.get_fluid_param_string(c, "aliases").Split(",")
+                aliases = CoolProp.get_fluid_param_string(c, "aliases").Split(",").ToList()
+                aliases = aliases.Select(Function(a) a.Trim()).Where(Function(a2) a2 <> "" And a2 <> " ").ToList()
+                aliases.Add(c)
                 SupportedComponents.AddRange(aliases)
                 cas = CoolProp.get_fluid_param_string(c, "CAS")
                 CompoundAliases.Add(cas, aliases.ToList)
