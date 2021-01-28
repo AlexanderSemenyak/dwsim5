@@ -1146,7 +1146,7 @@ Namespace PropertyPackages.ThermoPlugs
         End Function
 
         Public Overrides Function CalcLnFug(ByVal T As Double, ByVal P As Double, ByVal Vx As Double(), ByVal VKij As Double(,), ByVal VTc As Double(),
-                                            ByVal VPc As Double(), ByVal Vw As Double(), Optional ByVal otherargs As Object = Nothing, Optional ByVal forcephase As String = "") As Double()
+                                            ByVal VPc As Double(), ByVal Vw As Double(), Optional ByVal otherargs As Object = Nothing, Optional ByVal phase As Integer = -1) As Double()
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
@@ -1158,10 +1158,10 @@ Namespace PropertyPackages.ThermoPlugs
 
             If Settings.EnableGPUProcessing Then
                 IObj?.Paragraphs.Add("DWSIM will calculate PR EOS Fugacity Coefficient using the GPU.")
-                result = CalcLnFugGPU(T, P, Vx, VKij, VTc, VPc, Vw, otherargs, forcephase)
+                result = CalcLnFugGPU(T, P, Vx, VKij, VTc, VPc, Vw, otherargs, phase)
             Else
                 IObj?.Paragraphs.Add("DWSIM will calculate PR EOS Fugacity Coefficient using the CPU.")
-                result = CalcLnFugCPU(T, P, Vx, VKij, VTc, VPc, Vw, otherargs, forcephase)
+                result = CalcLnFugCPU(T, P, Vx, VKij, VTc, VPc, Vw, otherargs, phase)
             End If
 
             IObj?.Close()
@@ -1170,7 +1170,7 @@ Namespace PropertyPackages.ThermoPlugs
 
         End Function
 
-        Private Function CalcLnFugCPU(ByVal T As Double, ByVal P As Double, ByVal Vx As Double(), ByVal VKij As Double(,), ByVal Tc As Double(), ByVal Pc As Double(), ByVal w As Double(), Optional ByVal otherargs As Object = Nothing, Optional ByVal forcephase As String = "")
+        Private Function CalcLnFugCPU(ByVal T As Double, ByVal P As Double, ByVal Vx As Double(), ByVal VKij As Double(,), ByVal Tc As Double(), ByVal Pc As Double(), ByVal w As Double(), Optional ByVal otherargs As Object = Nothing, Optional ByVal phase As Integer = -1)
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
@@ -1220,7 +1220,6 @@ Namespace PropertyPackages.ThermoPlugs
             IObj?.Paragraphs.Add(String.Format("Critical Temperatures: {0} K", Tc.ToMathArrayString))
             IObj?.Paragraphs.Add(String.Format("Critical Pressures: {0} Pa", Pc.ToMathArrayString))
             IObj?.Paragraphs.Add(String.Format("Acentric Factors: {0} ", w.ToMathArrayString))
-            IObj?.Paragraphs.Add(String.Format("State: {0}", forcephase))
 
             IObj?.Paragraphs.Add(String.Format("<h2>Calculated Intermediate Parameters</h2>"))
 
@@ -1279,15 +1278,12 @@ Namespace PropertyPackages.ThermoPlugs
                 ex.Data.Add("UserAction", "Check if the parameters are valid (T, P, composition). If this error keeps occuring, try another Property Package or check the Material Stream / Unit Operation properties.")
                 Throw ex
             End If
-            If forcephase <> "" Then
-                If forcephase = "L" Then
-                    Z = _zarray.Min
-                ElseIf forcephase = "V" Then
-                    Z = _zarray.Max
-                End If
+            If phase = 0 Then
+                Z = _zarray.Min
+            ElseIf phase = 1 Then
+                Z = _zarray.Max
             Else
-                IObj?.SetCurrent()
-                _mingz = ZtoMinG(_zarray.ToArray(), T, P, Vx, VKij, Tc, Pc, w)
+                _mingz = ZtoMinG(_zarray.ToArray, T, P, Vx, VKij, Tc, Pc, w)
                 Z = _zarray(_mingz(0))
             End If
 
@@ -1316,7 +1312,7 @@ Namespace PropertyPackages.ThermoPlugs
 
         End Function
 
-        Private Function CalcLnFugGPU(ByVal T As Double, ByVal P As Double, ByVal Vx As Array, ByVal VKij As Double(,), ByVal VTc As Array, ByVal VPc As Array, ByVal Vw As Array, Optional ByVal otherargs As Object = Nothing, Optional ByVal forcephase As String = "")
+        Private Function CalcLnFugGPU(ByVal T As Double, ByVal P As Double, ByVal Vx As Array, ByVal VKij As Double(,), ByVal VTc As Array, ByVal VPc As Array, ByVal Vw As Array, Optional ByVal otherargs As Object = Nothing, Optional ByVal phase As Integer = -1)
 
             Dim n, R, coeff(3) As Double
             Dim Vant(0, 4) As Double
@@ -1356,21 +1352,14 @@ Namespace PropertyPackages.ThermoPlugs
             Dim _zarray As List(Of Double), _mingz As Double(), Z As Double
 
             _zarray = CalcZ2(AG, BG)
-            If forcephase <> "" Then
-                If forcephase = "L" Then
-                    Z = _zarray.Min
-                ElseIf forcephase = "V" Then
-                    Z = _zarray.Max
-                End If
+            If phase = 0 Then
+                Z = _zarray.Min
+            ElseIf phase = 1 Then
+                Z = _zarray.Max
             Else
-                _mingz = ZtoMinG(_zarray.ToArray(), T, P, Vx, VKij, VTc, VPc, Vw)
+                _mingz = ZtoMinG(_zarray.ToArray, T, P, Vx, VKij, Tc, Pc, W)
                 Z = _zarray(_mingz(0))
             End If
-
-            Dim Pcorr As Double = P
-            Dim ZP As Double() = CheckRoot(Z, aml, bml, P, T, forcephase)
-            Z = ZP(0)
-            Pcorr = ZP(1)
 
             i = 0
             Do
@@ -1380,7 +1369,6 @@ Namespace PropertyPackages.ThermoPlugs
                 t4 = Math.Log((Z + (1 + 2 ^ 0.5) * BG) / (Z + (1 - 2 ^ 0.5) * BG))
                 t5 = 2 * 2 ^ 0.5 * BG
                 LN_CF(i) = t1 + t2 - (t3 * t4 / t5)
-                LN_CF(i) = LN_CF(i) + Math.Log(Pcorr / P)
                 i = i + 1
             Loop Until i = n + 1
 
@@ -2535,7 +2523,7 @@ Namespace PropertyPackages.ThermoPlugs
 
         End Function
 
-        Public Overrides Function CalcLnFugTV(ByVal T As Double, ByVal V As Double, ByVal Vx As System.Array, ByVal VKij As Object, ByVal VTc As System.Array, ByVal VPc As System.Array, ByVal Vw As System.Array, Optional ByVal otherargs As Object = Nothing, Optional ByVal forcephase As String = "") As Double()
+        Public Overrides Function CalcLnFugTV(ByVal T As Double, ByVal V As Double, ByVal Vx As System.Array, ByVal VKij As Object, ByVal VTc As System.Array, ByVal VPc As System.Array, ByVal Vw As System.Array, Optional ByVal otherargs As Object = Nothing, Optional ByVal phase As Integer = -1) As Double()
 
             Dim P As Double = Me.CalcP(V, T, Vx, VKij, VTc, VPc, Vw, otherargs)
 

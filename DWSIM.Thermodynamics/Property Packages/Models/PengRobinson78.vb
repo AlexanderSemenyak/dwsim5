@@ -19,7 +19,7 @@
 '   Reference: https://www.sciencedirect.com/science/article/abs/pii/S0378381206000835
 
 Imports FileHelpers
-Imports DWSIM.Thermodynamics.PropertyPackages.ThermoPlugs.PR
+Imports DWSIM.Thermodynamics.PropertyPackages.ThermoPlugs.PR78
 Imports DWSIM.MathOps.MathEx.PolySolve
 Imports Cudafy.Host
 Imports Cudafy
@@ -1016,7 +1016,7 @@ Namespace PropertyPackages.ThermoPlugs
         End Function
 
         Public Overrides Function CalcLnFug(ByVal T As Double, ByVal P As Double, ByVal Vx As Double(), ByVal VKij As Double(,), ByVal VTc As Double(),
-                                            ByVal VPc As Double(), ByVal Vw As Double(), Optional ByVal otherargs As Object = Nothing, Optional ByVal forcephase As String = "") As Double()
+                                            ByVal VPc As Double(), ByVal Vw As Double(), Optional ByVal otherargs As Object = Nothing, Optional ByVal phase As Integer = -1) As Double()
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
@@ -1028,10 +1028,10 @@ Namespace PropertyPackages.ThermoPlugs
 
             If Settings.EnableGPUProcessing Then
                 IObj?.Paragraphs.Add("DWSIM will calculate PR EOS Fugacity Coefficient using the GPU.")
-                result = CalcLnFugGPU(T, P, Vx, VKij, VTc, VPc, Vw, otherargs, forcephase)
+                result = CalcLnFugGPU(T, P, Vx, VKij, VTc, VPc, Vw, otherargs, phase)
             Else
                 IObj?.Paragraphs.Add(SolutionInspector.DWSIM_will_calculate_PR_EOS_Fugacity_Coefficient_using_the_CPU)
-                result = CalcLnFugCPU(T, P, Vx, VKij, VTc, VPc, Vw, otherargs, forcephase)
+                result = CalcLnFugCPU(T, P, Vx, VKij, VTc, VPc, Vw, otherargs, phase)
             End If
 
             IObj?.Close()
@@ -2493,7 +2493,7 @@ Namespace PropertyPackages.ThermoPlugs
 
         End Function
 
-        Public Overrides Function CalcLnFugTV(ByVal T As Double, ByVal V As Double, ByVal Vx As System.Array, ByVal VKij As Object, ByVal VTc As System.Array, ByVal VPc As System.Array, ByVal Vw As System.Array, Optional ByVal otherargs As Object = Nothing, Optional ByVal forcephase As String = "") As Double()
+        Public Overrides Function CalcLnFugTV(ByVal T As Double, ByVal V As Double, ByVal Vx As System.Array, ByVal VKij As Object, ByVal VTc As System.Array, ByVal VPc As System.Array, ByVal Vw As System.Array, Optional ByVal otherargs As Object = Nothing, Optional ByVal phase As Integer = -1) As Double()
 
             Dim P As Double = Me.CalcP(V, T, Vx, VKij, VTc, VPc, Vw, otherargs)
 
