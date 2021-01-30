@@ -1,6 +1,6 @@
 '    DWSIM Three-Phase Nested Loops Flash Algorithms
 '    Copyright 2014 Daniel Wagner O. de Medeiros
-'    Copyright 2015 Gregor Reichert
+'    Copyright 2015, 2021 Gregor Reichert
 '
 '    This file is part of DWSIM.
 '
@@ -109,7 +109,7 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
 
             Dim result As Object = Nothing
 
-            If Not prevres Is Nothing AndAlso prevres.L2 = 0.0 Then
+            If prevres IsNot Nothing AndAlso prevres.L2 = 0.0 Then
 
                 V = prevres.V
                 L = prevres.L1
@@ -118,7 +118,7 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
 
             Else
 
-                If Not prevres Is Nothing Then
+                If prevres IsNot Nothing Then
 
                     'jump to 3pflash
 
@@ -127,6 +127,7 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
                 Else
 
                     result = _nl.Flash_PT(Vz, P, T, PP, ReuseKI, PrevKi)
+
                     L = result(0)
                     V = result(1)
                     Vx = result(2)
@@ -1169,8 +1170,6 @@ out:
         Function Serror(Type As String, X As Double, S As Double, P As Double, T As Double, Vz() As Double) As Object
             Return OBJ_FUNC_PS_FLASH(Type, X, S, P, T, Vz)
         End Function
-
-        'Function OBJ_FUNC_PS_FLASH(Type As String, ByVal T As Double, ByVal S As Double, ByVal P As Double, ByVal Vz As Object) As Object
 
         Public Overrides Function Flash_TV(ByVal Vz As Double(), ByVal T As Double, ByVal V As Double, ByVal Pref As Double, ByVal PP As PropertyPackages.PropertyPackage, Optional ByVal ReuseKI As Boolean = False, Optional ByVal PrevKi As Double() = Nothing) As Object
 
