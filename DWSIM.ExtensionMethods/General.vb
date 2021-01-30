@@ -550,6 +550,23 @@ Public Module General
 
     End Function
 
+    ''' <summary>
+    ''' Alexander => ToDouble InvariantCulture or current
+    ''' </summary>
+    ''' <param name="s"></param>
+    ''' <returns></returns>
+    <MethodImpl(MethodImplOptions.AggressiveInlining)>
+    <System.Runtime.CompilerServices.Extension()>
+    Public Function ToDoubleUniversal(s As String) As Double
+
+        Dim d As double
+        if Not s.IsValidDouble(d) Then
+            return 0.0
+        else
+            Return d
+        End If
+    End Function
+
     <System.Runtime.CompilerServices.Extension()>
     Public Function ToArrayString(vector As Double(), ByVal ci As System.Globalization.CultureInfo, ByVal nf As String) As String
 

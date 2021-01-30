@@ -141,8 +141,8 @@ Public Class FormLLEDiagram
             G.FillPolygon(MyBrush, MiscGap)
 
         End If
-
-
+        MyBrush.Dispose()
+        
         '=================
         'Draw border+grid
         '=================
@@ -222,6 +222,8 @@ Public Class FormLLEDiagram
             G.DrawEllipse(MyPen, pt1.X - 2, pt1.Y - 2, 5, 5)
         Next
 
+        MyPen.Dispose()
+        MyBrush.Dispose()
     End Sub
     Private Sub PanelDiag_Paint(sender As System.Object, e As System.Windows.Forms.PaintEventArgs) Handles PanelDiag.Paint
         DrawDiagram(e.Graphics)
@@ -398,8 +400,8 @@ Public Class FormLLEDiagram
 
         mat.SetFlowsheet(Frm)
         pp.CurrentMaterialStream = mat
-        P = SystemsOfUnits.Converter.ConvertToSI(su.pressure, tbP.Text)
-        T = SystemsOfUnits.Converter.ConvertToSI(su.temperature, tbT.Text)
+        P = SystemsOfUnits.Converter.ConvertToSI(su.pressure, tbP.Text.ToDoubleUniversal())
+        T = SystemsOfUnits.Converter.ConvertToSI(su.temperature, tbT.Text.ToDoubleUniversal())
         mat.Phases(0).Properties.pressure = P
         mat.Phases(0).Properties.temperature = T
 
@@ -640,9 +642,9 @@ Public Class FormLLEDiagram
             Case "AutoUpdate"
                 Return AutoUpdate
             Case "P"
-                Return Double.Parse(tbP.Text)
+                Return tbP.Text.ToDoubleUniversal()
             Case "T"
-                Return Double.Parse(tbT.Text)
+                Return tbT.Text.ToDoubleUniversal()
             Case "Comp1"
                 Return cbComp1.SelectedItem.ToString
             Case "Comp2"
