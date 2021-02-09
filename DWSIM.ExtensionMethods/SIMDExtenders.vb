@@ -49,6 +49,24 @@ Public Module SIMDExtenders
     End Function
 
     ''' <summary>
+    ''' Computes the absolute value of each vector element.
+    ''' </summary>
+    ''' <param name="vector"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    <System.Runtime.CompilerServices.Extension()> Public Function AbsY(vector As Double()) As Double()
+
+        Dim vector2(vector.Length - 1) As Double
+
+        For i As Integer = 0 To vector.Length - 1
+            vector2(i) = Math.Abs(vector(i))
+        Next
+
+        Return vector2
+
+    End Function
+
+    ''' <summary>
     ''' Returns the smallest element in the vector.
     ''' </summary>
     ''' <param name="vector"></param>
@@ -59,8 +77,23 @@ Public Module SIMDExtenders
         If Settings.UseSIMDExtensions Then
             Return Yeppp.Core.Min_V64f_S64f(vector, 0, vector.Length)
         Else
-            Return Convert.ToDouble(MathEx.Common.Min(vector))
+            Return vector.Min
         End If
+
+    End Function
+
+
+    ''' <summary>
+    ''' Returns the smallest non-zero element in the vector.
+    ''' </summary>
+    ''' <param name="vector"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    <System.Runtime.CompilerServices.Extension()> Public Function MinY_NonZero(vector As Double()) As Double
+
+        Dim vector2 = vector.Where(Function(x) x > 0).ToArray()
+
+        Return vector2.Min
 
     End Function
 
@@ -75,7 +108,7 @@ Public Module SIMDExtenders
         If Settings.UseSIMDExtensions Then
             Return Yeppp.Core.Max_V64f_S64f(vector, 0, vector.Length)
         Else
-            Return Convert.ToDouble(MathEx.Common.Max(vector))
+            Return vector.Max
         End If
 
     End Function
@@ -93,7 +126,7 @@ Public Module SIMDExtenders
         If Settings.UseSIMDExtensions Then
             Return Yeppp.Core.Sum_V64f_S64f(vector, 0, vector.Length)
         Else
-            Return MathEx.Common.Sum(vector)
+            Return vector.Sum
         End If
 
     End Function

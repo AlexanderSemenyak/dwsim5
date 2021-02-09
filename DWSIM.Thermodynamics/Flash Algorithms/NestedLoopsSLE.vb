@@ -1188,41 +1188,37 @@ out2:           If (Math.Abs(GL_old - L) < 0.0000005) And (Math.Abs(GV_old - V) 
                         stmp4_ant = stmp4
 
                         If V = 0 Then
-                            stmp4 = Ki.MultiplyY(Vx).SumY
-                            'i = 0
-                            'stmp4 = 0
-                            'Do
-                            '    stmp4 = stmp4 + Ki(i) * Vx(i)
-                            '    i = i + 1
-                            'Loop Until i = n + 1
+                            i = 0
+                            stmp4 = 0
+                            Do
+                                stmp4 = stmp4 + Ki(i) * Vx(i)
+                                i = i + 1
+                            Loop Until i = n + 1
                         Else
-                            stmp4 = Vy.DivideY(Ki).SumY
-                            'i = 0
-                            'stmp4 = 0
-                            'Do
-                            '    stmp4 = stmp4 + Vy(i) / Ki(i)
-                            '    i = i + 1
-                            'Loop Until i = n + 1
+                            i = 0
+                            stmp4 = 0
+                            Do
+                                stmp4 = stmp4 + Vy(i) / Ki(i)
+                                i = i + 1
+                            Loop Until i = n + 1
                         End If
 
                         If V = 0 Then
                             Vy_ant = Vy.Clone
-                            Vy = Ki.MultiplyY(Vx).MultiplyConstY(1 / stmp4)
-                            'i = 0
-                            'Do
-                            '    Vy_ant(i) = Vy(i)
-                            '    Vy(i) = Ki(i) * Vx(i) / stmp4
-                            '    i = i + 1
-                            'Loop Until i = n + 1
+                            i = 0
+                            Do
+                                Vy_ant(i) = Vy(i)
+                                Vy(i) = Ki(i) * Vx(i) / stmp4
+                                i = i + 1
+                            Loop Until i = n + 1
                         Else
                             Vx_ant = Vx.Clone
-                            Vx = Vy.DivideY(Ki).MultiplyConstY(1 / stmp4)
-                            'i = 0
-                            'Do
-                            '    Vx_ant(i) = Vx(i)
-                            '    Vx(i) = (Vy(i) / Ki(i)) / stmp4
-                            '    i = i + 1
-                            'Loop Until i = n + 1
+                            i = 0
+                            Do
+                                Vx_ant(i) = Vx(i)
+                                Vx(i) = (Vy(i) / Ki(i)) / stmp4
+                                i = i + 1
+                            Loop Until i = n + 1
                         End If
 
                         marcador2 = 0
@@ -1245,12 +1241,11 @@ out2:           If (Math.Abs(GL_old - L) < 0.0000005) And (Math.Abs(GV_old - V) 
                     Dim K1(n), K2(n), dKdT(n) As Double
 
                     K1 = PP.DW_CalcKvalue(Vx, Vy, T, P)
-                    K2 = PP.DW_CalcKvalue(Vx, Vy, T + 0.01, P)
+                    K2 = PP.DW_CalcKvalue(Vx, Vy, T + 1, P)
 
-                    dKdT = K2.SubtractY(K1).MultiplyConstY(1 / 0.01)
-                    'For i = 0 To n
-                    '    dKdT(i) = (K2(i) - K1(i)) / 0.01
-                    'Next
+                    For i = 0 To n
+                        dKdT(i) = (K2(i) - K1(i))
+                    Next
 
                     fval = stmp4 - 1
 
@@ -1260,11 +1255,9 @@ out2:           If (Math.Abs(GL_old - L) < 0.0000005) And (Math.Abs(GV_old - V) 
                     dFdT = 0
                     Do
                         If V = 0 Then
-                            dFdT = Vx.MultiplyY(dKdT).SumY
-                            'dFdT = dFdT + Vx(i) * dKdT(i)
+                            dFdT = dFdT + Vx(i) * dKdT(i)
                         Else
-                            dFdT = -Vy.DivideY(Ki).DivideY(Ki).MultiplyY(dKdT).SumY
-                            'dFdT = dFdT - Vy(i) / (Ki(i) ^ 2) * dKdT(i)
+                            dFdT = dFdT - Vy(i) / (Ki(i) ^ 2) * dKdT(i)
                         End If
                         i = i + 1
                     Loop Until i = n + 1
@@ -1285,6 +1278,7 @@ out2:           If (Math.Abs(GL_old - L) < 0.0000005) And (Math.Abs(GV_old - V) 
                 Loop Until Math.Abs(fval) < etol Or Double.IsNaN(T) = True Or ecount > maxit_e
 
             Else
+
                 Do
                     ecount = 0
 
@@ -1296,6 +1290,7 @@ out2:           If (Math.Abs(GL_old - L) < 0.0000005) And (Math.Abs(GV_old - V) 
                     Vz = Vmix.NormalizeY
 
                     Do
+
                         Ki = PP.DW_CalcKvalue(Vx, Vy, T, P)
 
                         i = 0
@@ -1319,59 +1314,53 @@ out2:           If (Math.Abs(GL_old - L) < 0.0000005) And (Math.Abs(GV_old - V) 
 
                         If Vint <= 0.5 Then
 
-                            stmp4 = Ki.MultiplyY(Vx).SumY
-                            'i = 0
-                            'stmp4 = 0
-                            'Do
-                            '    stmp4 = stmp4 + Ki(i) * Vx(i)
-                            '    i = i + 1
-                            'Loop Until i = n + 1
+                            i = 0
+                            stmp4 = 0
+                            Do
+                                stmp4 = stmp4 + Ki(i) * Vx(i)
+                                i = i + 1
+                            Loop Until i = n + 1
 
                             Dim K1(n), K2(n), dKdT(n) As Double
 
                             K1 = PP.DW_CalcKvalue(Vx, Vy, T, P)
-                            K2 = PP.DW_CalcKvalue(Vx, Vy, T + 0.1, P)
+                            K2 = PP.DW_CalcKvalue(Vx, Vy, T + 0.01, P)
 
-                            dKdT = K2.SubtractY(K1).MultiplyConstY(1 / 0.1)
-                            'For i = 0 To n
-                            '    dKdT(i) = (K2(i) - K1(i)) / (0.1)
-                            'Next
+                            For i = 0 To n
+                                dKdT(i) = (K2(i) - K1(i)) / (0.01)
+                            Next
 
-                            dFdT = Vx.MultiplyY(dKdT).SumY
-                            'i = 0
-                            'dFdT = 0
-                            'Do
-                            '    dFdT = dFdT + Vx(i) * dKdT(i)
-                            '    i = i + 1
-                            'Loop Until i = n + 1
+                            i = 0
+                            dFdT = 0
+                            Do
+                                dFdT = dFdT + Vx(i) * dKdT(i)
+                                i = i + 1
+                            Loop Until i = n + 1
 
                         Else
 
-                            stmp4 = Vy.DivideY(Ki).SumY
-                            'i = 0
-                            'stmp4 = 0
-                            'Do
-                            '    stmp4 = stmp4 + Vy(i) / Ki(i)
-                            '    i = i + 1
-                            'Loop Until i = n + 1
+                            i = 0
+                            stmp4 = 0
+                            Do
+                                stmp4 = stmp4 + Vy(i) / Ki(i)
+                                i = i + 1
+                            Loop Until i = n + 1
 
                             Dim K1(n), K2(n), dKdT(n) As Double
 
                             K1 = PP.DW_CalcKvalue(Vx, Vy, T, P)
-                            K2 = PP.DW_CalcKvalue(Vx, Vy, T + 1, P)
+                            K2 = PP.DW_CalcKvalue(Vx, Vy, T + 0.01, P)
 
-                            dKdT = K2.SubtractY(K1)
-                            'For i = 0 To n
-                            '    dKdT(i) = (K2(i) - K1(i)) / (1)
-                            'Next
+                            For i = 0 To n
+                                dKdT(i) = (K2(i) - K1(i)) / (0.01)
+                            Next
 
-                            dFdT = -Vy.DivideY(Ki).DivideY(Ki).MultiplyY(dKdT).SumY
-                            'i = 0
-                            'dFdT = 0
-                            'Do
-                            '    dFdT = dFdT - Vy(i) / (Ki(i) ^ 2) * dKdT(i)
-                            '    i = i + 1
-                            'Loop Until i = n + 1
+                            i = 0
+                            dFdT = 0
+                            Do
+                                dFdT = dFdT - Vy(i) / (Ki(i) ^ 2) * dKdT(i)
+                                i = i + 1
+                            Loop Until i = n + 1
 
                         End If
 
@@ -1380,13 +1369,10 @@ out2:           If (Math.Abs(GL_old - L) < 0.0000005) And (Math.Abs(GV_old - V) 
                         fval = stmp4 - 1
 
                         Tant = T
-                        deltaT = -fval / dFdT * AF
-                        AF *= 1.01
-                        If Abs(deltaT) > 0.1 * T Then
-                            T = T + Sign(deltaT) * 0.1 * T
-                        Else
-                            T = T + deltaT
-                        End If
+
+                        deltaT = -fval / dFdT
+
+                        T = T + deltaT
 
                         e1 = Vx.SubtractY(Vx_ant).AbsSumY + Vy.SubtractY(Vy_ant).AbsSumY + Math.Abs(T - Tant)
 
@@ -1430,8 +1416,11 @@ out2:           If (Math.Abs(GL_old - L) < 0.0000005) And (Math.Abs(GV_old - V) 
                     End If
 
                     e1 = 1000 * (Abs(GL_old - L) + Abs(GS_old - S))
+
                     gcount += 1
+
                 Loop Until e1 < etol Or gcount > maxit_e
+
             End If
 
 

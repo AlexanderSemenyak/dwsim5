@@ -275,11 +275,9 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
 
             r1 = ConvergeVF(IObj, V, Vz, Vx, Vy, Ki, P, T, PP)
 
-            If r1(6) = True Then
+            If r1(6) = True And Math.Abs(Vmax - Vmin) > 0.01 And P > 15 * 101325 Then
                 r2 = ConvergeVF2(Vmin, Vmax, V, Vz, Vx, Vy, Ki, P, T, PP)
-                If Math.Abs(r2(4)) < etol Then
-                    r1 = r2
-                End If
+                If Math.Abs(r2(4)) < etol Then r1 = r2
             End If
 
             V = r1(0)
@@ -347,6 +345,11 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
 
                 Ki_ant = Ki.Clone
                 Ki = PP.DW_CalcKvalue(Vx, Vy, T, P)
+
+                For i = 0 To n
+                    If Ki(i) < 0.0000000001 Then Ki(i) = 0.0000000001
+                    If Ki(i) > 1.0E+20 Then Ki(i) = 1.0E+20
+                Next
 
                 IObj2?.Paragraphs.Add(String.Format("K values where updated. Current values: {0}", Ki.ToMathArrayString))
 
@@ -472,7 +475,11 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
             Dim bt As New BrentOpt.Brent
 
             V = bt.BrentOpt2(Vmin, Vmax, 50, 0.000001, 100, Function(x)
-                                                                Return EvalF.Invoke(x)
+                                                                If x >= 0 And x <= 1 Then
+                                                                    Return EvalF.Invoke(x)
+                                                                Else
+                                                                    Return 10000000000.0
+                                                                End If
                                                             End Function)
 
             Return New Object() {V, Vx, Vy, Ki, F, 0.0}
@@ -490,15 +497,17 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
             IObj?.SetCurrent()
 
             Dim FlashType As String = FlashSettings(Interfaces.Enums.FlashSetting.ForceEquilibriumCalculationType)
-            Dim hassolids As Boolean = False
+            Dim trigger As Boolean = False
 
             If FlashType = "Default" Or FlashType = "SVLE" Or FlashType = "SVLLE" Then
                 Dim hres = PerformHeuristicsTest(Vz, Tref, P, PP)
-                hassolids = hres.SolidPhase
+                trigger = hres.SolidPhase
             End If
 
+            If PP.ForcedSolids.Count > 0 Then trigger = False
+
             If Me.FlashSettings(Interfaces.Enums.FlashSetting.NL_FastMode) = False Or
-                PP.AUX_IS_SINGLECOMP(Phase.Mixture) Or hassolids Then
+                PP.AUX_IS_SINGLECOMP(Phase.Mixture) Or trigger Then
 
                 IObj?.Paragraphs.Add("Using the normal version of the PH Flash Algorithm.")
                 IObj?.Close()
@@ -526,9 +535,18 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
 
             IObj?.SetCurrent()
 
-            Dim hres = PerformHeuristicsTest(Vz, Tref, P, PP)
+            Dim FlashType As String = FlashSettings(Interfaces.Enums.FlashSetting.ForceEquilibriumCalculationType)
+            Dim trigger As Boolean = False
 
-            If Me.FlashSettings(Interfaces.Enums.FlashSetting.NL_FastMode) = False Or PP.AUX_IS_SINGLECOMP(Phase.Mixture) Then
+            If FlashType = "Default" Or FlashType = "SVLE" Or FlashType = "SVLLE" Then
+                Dim hres = PerformHeuristicsTest(Vz, Tref, P, PP)
+                trigger = hres.SolidPhase
+            End If
+
+            If PP.ForcedSolids.Count > 0 Then trigger = False
+
+            If Me.FlashSettings(Interfaces.Enums.FlashSetting.NL_FastMode) = False Or
+                PP.AUX_IS_SINGLECOMP(Phase.Mixture) Or trigger Then
                 IObj?.Paragraphs.Add("Using the normal version of the PS Flash Algorithm.")
                 IObj?.Close()
                 Return Flash_PS_2(Vz, P, S, Tref, PP, ReuseKI, PrevKi)
@@ -585,7 +603,7 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
             epsilon(1) = 0.1
             epsilon(2) = 0.01
 
-            Dim fx, fx2, fx_ant, dfdx, x1, x0, dx As Double
+            Dim fx, fx1, fx2, fx_ant, dfdx, x1, x0, dx As Double
 
             Dim cnt As Integer
 
@@ -620,65 +638,48 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
                     If cnt > 20 Then xvals.Add(x1)
                     fx_ant = fx
 
-                    Ki = PP.RET_VPVAP(x1).MultiplyConstY(1 / P)
                     Dim herrobj As Object
 
-                    If cnt < 2 Then
+                    If Settings.EnableParallelProcessing And Not DisableParallelCalcs Then
 
-                        If Settings.EnableParallelProcessing And Not DisableParallelCalcs Then
-
-                            Dim task1 = Task.Factory.StartNew(Sub()
-                                                                  herrobj = Herror("PT", x1, P, Vz, PP, True, Ki)
-                                                                  fx = herrobj(0)
-                                                                  Vy = herrobj(4)
-                                                                  Vx1 = herrobj(5)
-                                                                  Ki = PP.DW_CalcKvalue(Vx1, Vy, x1, P)
-                                                              End Sub,
-                                                                Settings.TaskCancellationTokenSource.Token,
-                                                                TaskCreationOptions.None,
-                                                               Settings.AppTaskScheduler)
-                            Dim task2 = Task.Factory.StartNew(Sub()
-                                                                  fx2 = Herror("PT", x1 + epsilon(j), P, Vz, PP, True, Ki)(0)
-                                                              End Sub,
-                                                                Settings.TaskCancellationTokenSource.Token,
-                                                                TaskCreationOptions.None,
-                                                               Settings.AppTaskScheduler)
-                            Task.WaitAll(task1, task2)
-
-                        Else
-
-                            IObj2?.SetCurrent()
-                            herrobj = Herror("PT", x1, P, Vz, PP, True, Ki)
-                            fx = herrobj(0)
-                            Vy = herrobj(4)
-                            Vx1 = herrobj(5)
-                            Ki = PP.DW_CalcKvalue(Vx1, Vy, x1, P)
-                            Ki = Ki.ReplaceInvalidsWithZeroes()
-                            IObj2?.SetCurrent()
-                            herrobj = Herror("PT", x1 + epsilon(j), P, Vz, PP, True, Ki)
-
-                        End If
-
-                        IObj2?.Paragraphs.Add(String.Format("Current Enthalpy error: {0}", fx2))
-
-                        dfdx = (fx2 - fx) / epsilon(j)
+                        Dim task0 = Task.Factory.StartNew(Sub()
+                                                              herrobj = Herror("PT", x1, P, Vz, PP, False, Nothing)
+                                                              fx = herrobj(0)
+                                                          End Sub,
+                                                            Settings.TaskCancellationTokenSource.Token,
+                                                            TaskCreationOptions.None,
+                                                           Settings.AppTaskScheduler)
+                        Dim task1 = Task.Factory.StartNew(Sub()
+                                                              fx1 = Herror("PT", x1 - epsilon(j), P, Vz, PP, False, Nothing)(0)
+                                                          End Sub,
+                                                            Settings.TaskCancellationTokenSource.Token,
+                                                            TaskCreationOptions.None,
+                                                           Settings.AppTaskScheduler)
+                        Dim task2 = Task.Factory.StartNew(Sub()
+                                                              fx2 = Herror("PT", x1 + epsilon(j), P, Vz, PP, False, Nothing)(0)
+                                                          End Sub,
+                                                            Settings.TaskCancellationTokenSource.Token,
+                                                            TaskCreationOptions.None,
+                                                           Settings.AppTaskScheduler)
+                        Task.WaitAll(task0, task1, task2)
 
                     Else
 
-                        fx2 = fx
                         IObj2?.SetCurrent()
-                        herrobj = Herror("PT", x1, P, Vz, PP, True, Ki)
+                        herrobj = Herror("PT", x1, P, Vz, PP, False, Nothing)
                         fx = herrobj(0)
-                        Vy = herrobj(4)
-                        Vx1 = herrobj(5)
-                        Ki = PP.DW_CalcKvalue(Vx1, Vy, x1, P)
-                        Ki = Ki.ReplaceInvalidsWithZeroes()
-
-                        IObj2?.Paragraphs.Add(String.Format("Current Enthalpy error: {0}", fx))
-
-                        dfdx = (fx - fx2) / (x1 - x0)
+                        IObj2?.SetCurrent()
+                        herrobj = Herror("PT", x1 - epsilon(j), P, Vz, PP, False, Nothing)
+                        fx1 = herrobj(0)
+                        IObj2?.SetCurrent()
+                        herrobj = Herror("PT", x1 + epsilon(j), P, Vz, PP, False, Nothing)
+                        fx2 = herrobj(0)
 
                     End If
+
+                    IObj2?.Paragraphs.Add(String.Format("Current Enthalpy error: {0}", fx2))
+
+                    dfdx = (fx2 - fx1) / (2 * epsilon(j))
 
                     If Double.IsNaN(fx) Then
                         Dim ex As New Exception("PH Flash [NL]: Invalid result: Temperature did not converge." & String.Format(" (T = {0} K, P = {1} Pa, MoleFracs = {2})", T.ToString("N2"), P.ToString("N2"), Vz.ToArrayString()))
@@ -1125,7 +1126,7 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
             epsilon(1) = 0.1
             epsilon(2) = 0.01
 
-            Dim fx, fx2, fx_ant, dfdx, x1, x0, dx As Double
+            Dim fx, fx1, fx2, fx_ant, dfdx, x1, x0, dx As Double
 
             Dim cnt As Integer
 
@@ -1146,7 +1147,6 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
 
                 Dim fxvals, xvals As New List(Of Double)
 
-                Ki = PP.RET_VPVAP(x1).MultiplyConstY(1 / P)
                 Dim serrobj As Object
 
                 Do
@@ -1162,63 +1162,47 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
                     If cnt > 20 Then xvals.Add(x1)
                     fx_ant = fx
 
-                    If cnt < 2 Then
+                    If Settings.EnableParallelProcessing And Not DisableParallelCalcs Then
 
-                        If Settings.EnableParallelProcessing And Not DisableParallelCalcs Then
-
-                            Dim task1 = Task.Factory.StartNew(Sub()
-                                                                  serrobj = Serror("PT", x1, P, Vz, PP, True, Ki)
-                                                                  fx = serrobj(0)
-                                                                  Vy = serrobj(4)
-                                                                  Vx1 = serrobj(5)
-                                                                  Ki = PP.DW_CalcKvalue(Vx1, Vy, x1, P)
-                                                              End Sub,
-                                                                  Settings.TaskCancellationTokenSource.Token,
-                                                                  TaskCreationOptions.None,
-                                                                 Settings.AppTaskScheduler)
-                            Dim task2 = Task.Factory.StartNew(Sub()
-                                                                  fx2 = Serror("PT", x1 + epsilon(j), P, Vz, PP, True, Ki)(0)
-                                                              End Sub,
-                                                              Settings.TaskCancellationTokenSource.Token,
-                                                              TaskCreationOptions.None,
-                                                             Settings.AppTaskScheduler)
-                            Task.WaitAll(task1, task2)
-
-                        Else
-
-                            IObj2?.SetCurrent()
-                            serrobj = Serror("PT", x1, P, Vz, PP, True, Ki)
-                            fx = serrobj(0)
-                            Vy = serrobj(4)
-                            Vx1 = serrobj(5)
-                            Vx1 = serrobj(5)
-                            Ki = PP.DW_CalcKvalue(Vx1, Vy, x1, P)
-                            IObj2?.SetCurrent()
-                            fx2 = Serror("PT", x1 + epsilon(j), P, Vz, PP, True, Ki)(0)
-
-                        End If
-
-                        IObj2?.Paragraphs.Add(String.Format("Current Entropy error: {0}", fx2))
-
-                        dfdx = (fx2 - fx) / epsilon(j)
+                        Dim task0 = Task.Factory.StartNew(Sub()
+                                                              serrobj = Serror("PT", x1, P, Vz, PP, False, Nothing)
+                                                              fx = serrobj(0)
+                                                          End Sub,
+                                                            Settings.TaskCancellationTokenSource.Token,
+                                                            TaskCreationOptions.None,
+                                                           Settings.AppTaskScheduler)
+                        Dim task1 = Task.Factory.StartNew(Sub()
+                                                              fx1 = Serror("PT", x1 - epsilon(j), P, Vz, PP, False, Nothing)(0)
+                                                          End Sub,
+                                                            Settings.TaskCancellationTokenSource.Token,
+                                                            TaskCreationOptions.None,
+                                                           Settings.AppTaskScheduler)
+                        Dim task2 = Task.Factory.StartNew(Sub()
+                                                              fx2 = Serror("PT", x1 + epsilon(j), P, Vz, PP, False, Nothing)(0)
+                                                          End Sub,
+                                                            Settings.TaskCancellationTokenSource.Token,
+                                                            TaskCreationOptions.None,
+                                                           Settings.AppTaskScheduler)
+                        Task.WaitAll(task0, task1, task2)
 
                     Else
 
-                        fx2 = fx
                         IObj2?.SetCurrent()
-                        serrobj = Serror("PT", x1, P, Vz, PP, True, Ki)
+                        serrobj = Serror("PT", x1, P, Vz, PP, False, Nothing)
                         fx = serrobj(0)
-                        Vy = serrobj(4)
-                        Vx1 = serrobj(5)
-                        Ki = PP.DW_CalcKvalue(Vx1, Vy, x1, P)
-                        Ki = Ki.ReplaceInvalidsWithZeroes()
-
-
-                        IObj2?.Paragraphs.Add(String.Format("Current Entropy error: {0}", fx))
-
-                        dfdx = (fx - fx2) / (x1 - x0)
+                        IObj2?.SetCurrent()
+                        serrobj = Serror("PT", x1 - epsilon(j), P, Vz, PP, False, Nothing)
+                        fx1 = serrobj(0)
+                        IObj2?.SetCurrent()
+                        serrobj = Serror("PT", x1 + epsilon(j), P, Vz, PP, False, Nothing)
+                        fx2 = serrobj(0)
 
                     End If
+
+                    IObj2?.Paragraphs.Add(String.Format("Current Entropy error: {0}", fx2))
+
+                    dfdx = (fx2 - fx1) / (2 * epsilon(j))
+
 
                     If Double.IsNaN(fx) Then
                         Dim ex As New Exception("PS Flash [NL]: Invalid result: Temperature did not converge." & String.Format(" (T = {0} K, P = {1} Pa, MoleFracs = {2})", T.ToString("N2"), P.ToString("N2"), Vz.ToArrayString()))
@@ -2107,20 +2091,17 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
 
         Public Overrides Function Flash_PV(ByVal Vz As Double(), ByVal P As Double, ByVal V As Double, ByVal Tref As Double, ByVal PP As PropertyPackages.PropertyPackage, Optional ByVal ReuseKI As Boolean = False, Optional ByVal PrevKi As Double() = Nothing) As Object
 
-            Dim eflag As Boolean = True
-            Dim result As Object = Nothing
-            Try
-                result = Flash_PV_1(Vz, P, V, Tref, PP, ReuseKI, PrevKi)
-                eflag = False
-            Catch ex As Exception
+            Dim result As Object()
 
-            End Try
-
-            If eflag Then
-                Return Flash_PV_2(Vz, P, V, Tref, PP, ReuseKI, PrevKi)
-            Else
-                Return result
+            result = Flash_PV_1(Vz, P, V, Tref, PP, ReuseKI, PrevKi)
+            If result.Count = 1 Then
+                result = Flash_PV_2(Vz, P, V, Tref, PP, ReuseKI, PrevKi)
             End If
+            If result.Count = 1 Then
+                result = Flash_PV_3(Vz, P, V, Tref, PP, ReuseKI, PrevKi)
+            End If
+
+            Return result
 
         End Function
 
@@ -2365,6 +2346,8 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
                     fval_ant = fval
                     fval = stmp4 - 1
 
+                    If Math.Abs(fval) < etol Then Exit Do
+
                     ecount += 1
 
                     i = 0
@@ -2381,6 +2364,10 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
                     Tant = T
                     deltaT_ant = deltaT
                     deltaT = -df * fval / dFdT
+
+                    'If Math.Abs(deltaT) > T * 0.1 Then
+                    '    deltaT = Math.Sign(deltaT) * 10.0
+                    'End If
 
                     IObj2?.Paragraphs.Add(String.Format("Temperature error: {0} K", deltaT))
 
@@ -2400,8 +2387,8 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
                         End If
                         Exit Do
                     Else
-                        If Abs(deltaT) > maxdT Then
-                            T = T + Sign(deltaT) * maxdT
+                        If Math.Sign(fval * fval_ant) = -1 Then
+                            T = T + deltaT / 2
                         Else
                             T = T + deltaT
                         End If
@@ -2415,7 +2402,12 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
 
                     IObj2?.Close()
 
-                Loop Until Math.Abs(fval) < etol Or Double.IsNaN(T) = True Or ecount > maxit_e
+                    If T < 0 Then
+                        IObj?.Close()
+                        Return New Object() {-1}
+                    End If
+
+                Loop Until Double.IsNaN(T) = True Or ecount > maxit_e
 
             Else
 
@@ -2535,6 +2527,11 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
 
                     IObj2?.Close()
 
+                    If T < 0 Then
+                        IObj?.Close()
+                        Return New Object() {-1}
+                    End If
+
                 Loop Until (Math.Abs(fval) < etol And e1 < etol) Or Double.IsNaN(T) = True Or ecount > maxit_e
 
             End If
@@ -2543,13 +2540,14 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
 
             dt = d2 - d1
 
-            If ecount > maxit_e Then Throw New Exception(Calculator.GetLocalString("PVF Flash: maximum iterations reached.") & String.Format(" (T = {0} K, P = {1} Pa, MoleFracs = {2})", T.ToString("N2"), P.ToString("N2"), Vz.ToArrayString()))
+            If ecount > maxit_e Then
+                IObj?.Close()
+                Return New Object() {-1}
+            End If
 
             If PP.AUX_CheckTrivial(Ki) Then
-                Dim ex As New Exception("PVF Flash [NL]: Invalid result: converged to the trivial solution (T = " & T & " ).")
-                ex.Data.Add("DetailedDescription", "The Flash Algorithm was unable to converge to a solution.")
-                ex.Data.Add("UserAction", "Try another Property Package and/or Flash Algorithm.")
-                Throw ex
+                IObj?.Close()
+                Return New Object() {-1}
             End If
 
             WriteDebugInfo("PV Flash [NL]: Converged in " & ecount & " iterations. Time taken: " & dt.TotalMilliseconds & " ms.")
@@ -2591,7 +2589,9 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
             Lf = 1 - Vf
 
             Dim Vx(n), Vy(n), Vx_ant(n), Vy_ant(n), Vp(n), Ki(n), fi(n), dVxy(n) As Double
-            Dim Vt(n), Tsat(n), PsatKey, PsatKey0 As Double
+            Dim Vt(n), Vtb(n), Tsat(n), PsatKey, PsatKey0 As Double
+
+            Vtb = PP.RET_VTB()
 
             fi = Vz.Clone
 
@@ -2603,11 +2603,6 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
                     i += 1
                 Loop Until i = n + 1
             End If
-
-            'find key compound
-            For i = 0 To n
-                If Vz(i) > 1.0 / n Then key = i
-            Next
 
             T = Tref
 
@@ -2637,6 +2632,25 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
                     Loop Until i = n + 1
                 End If
             End If
+
+            'find key compound
+            Dim keys As New List(Of Integer)
+
+            For i = 0 To n
+                If Vz(i) > 0.01 Then
+                    keys.Add(i)
+                End If
+            Next
+
+            key = keys.OrderBy(Function(k) Math.Abs(Vtb(k) - 300.0)).First()
+
+            key = 0
+
+            For i = 0 To n
+                If Vz(i) > 0.001 And Vtb(i) < Vtb(key) Then
+                    key = i
+                End If
+            Next
 
             PsatKey = Vp(key)
 
@@ -2733,7 +2747,13 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
 
                 WriteDebugInfo("PV Flash [NL]: Iteration #" & ecount & ", T = " & T & ", VF = " & V)
 
-                'If Not PP.CurrentMaterialStream.Flowsheet Is Nothing Then PP.CurrentMaterialStream.Flowsheet.CheckStatus()
+                ecount += 1
+
+                If Not PP.CurrentMaterialStream.Flowsheet Is Nothing Then PP.CurrentMaterialStream.Flowsheet.CheckStatus()
+
+                If T <= 1 Then
+                    Return New Object() {-1}
+                End If
 
             Loop Until Math.Abs(T - Tant) < etol Or Double.IsNaN(T) = True Or ecount > maxit_e
 
@@ -2741,7 +2761,158 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
 
             dt = d2 - d1
 
-            If ecount > maxit_e Then Throw New Exception(Calculator.GetLocalString("PVF Flash: maximum iterations reached.") & String.Format(" (T = {0} K, P = {1} Pa, MoleFracs = {2})", T.ToString("N2"), P.ToString("N2"), Vz.ToArrayString()))
+            If ecount > maxit_e Then
+                Return New Object() {-1}
+            End If
+
+            If PP.AUX_CheckTrivial(Ki) Then
+                Return New Object() {-1}
+            End If
+
+            WriteDebugInfo("PV Flash [NL]: Converged in " & ecount & " iterations. Time taken: " & dt.TotalMilliseconds & " ms.")
+
+            Return New Object() {L, V, Vx, Vy, T, ecount, Ki, 0.0#, PP.RET_NullVector, 0.0#, PP.RET_NullVector}
+
+        End Function
+
+        Public Function Flash_PV_3(ByVal Vz As Double(), ByVal P As Double, ByVal V As Double, ByVal Tref As Double, ByVal PP As PropertyPackages.PropertyPackage, Optional ByVal ReuseKI As Boolean = False, Optional ByVal PrevKi As Double() = Nothing) As Object
+
+            Dim cdata = PP.DW_GetConstantProperties()
+
+            Dim i, n, ecount As Integer
+            Dim d1, d2 As Date, dt As TimeSpan
+            Dim L, Lf, Vf, T As Double
+
+            d1 = Date.Now
+
+            n = Vz.Length - 1
+
+            PP = PP
+            Vf = V
+            L = 1 - V
+            Lf = 1 - Vf
+
+            Dim Vx(n), Vy(n), Vp(n), Ki(n), fi(n), dVxy(n) As Double
+
+            fi = Vz.Clone
+
+            If Tref = 0.0# Then
+                i = 0
+                Tref = 0.0#
+                Do
+                    Tref += Vz(i) * PP.AUX_TSATi(P, i)
+                    i += 1
+                Loop Until i = n + 1
+            End If
+
+            T = Tref
+
+            Vp = PP.RET_VPVAP(T)
+
+            'Calculate Ki`s
+
+            If Not ReuseKI Then
+                i = 0
+                Do
+                    Ki(i) = Vp(i) / P
+                    If Double.IsNaN(Ki(i)) Or Double.IsInfinity(Ki(i)) Then Ki(i) = 1.0E+20
+                    i += 1
+                Loop Until i = n + 1
+            Else
+                If Not PP.AUX_CheckTrivial(PrevKi) And Not Double.IsNaN(PrevKi(0)) Then
+                    For i = 0 To n
+                        Ki(i) = PrevKi(i)
+                        If Double.IsNaN(Ki(i)) Or Double.IsInfinity(Ki(i)) Then Ki(i) = 1.0E+20
+                    Next
+                Else
+                    i = 0
+                    Do
+                        Ki(i) = Vp(i) / P
+                        If Double.IsNaN(Ki(i)) Or Double.IsInfinity(Ki(i)) Then Ki(i) = 1.0E+20
+                        i += 1
+                    Loop Until i = n + 1
+                End If
+            End If
+
+            i = 0
+            Do
+                If Vz(i) <> 0 Then
+                    Vy(i) = Vz(i) * Ki(i) / ((Ki(i) - 1) * V + 1)
+                    If Double.IsInfinity(Vy(i)) Then Vy(i) = 0.0#
+                    Vx(i) = Vy(i) / Ki(i)
+                Else
+                    Vy(i) = 0
+                    Vx(i) = 0
+                End If
+                i += 1
+            Loop Until i = n + 1
+
+            Vx = Vx.NormalizeY()
+            Vy = Vy.NormalizeY()
+
+            If PP.AUX_IS_SINGLECOMP(Vz) Then
+                WriteDebugInfo("PV Flash [NL]: Converged in 1 iteration.")
+                T = 0
+                For i = 0 To n
+                    T += Vz(i) * PP.AUX_TSATi(P, i)
+                Next
+                If Vz.Count = 1 Then
+                    Vx = New Double() {1.0}
+                    Vy = New Double() {1.0}
+                    Ki = New Double() {1.0}
+                End If
+                Return New Object() {L, V, Vx, Vy, T, 0, Ki, 0.0#, PP.RET_NullVector, 0.0#, PP.RET_NullVector}
+            End If
+
+            Dim splx As New Simplex
+            splx.MaxFunEvaluations = 1000
+            splx.Tolerance = 0.00000001
+
+            Dim errfunc As Double = 0.0
+
+            Dim var As New OptSimplexBoundVariable(Tref, 10, 2000)
+
+            Dim result = splx.ComputeMin(Function(Tx)
+
+                                             T = Tx(0)
+
+                                             Ki = PP.DW_CalcKvalue(Vx, Vy, T, P)
+
+                                             If V = 0 Then
+                                                 Vy = Ki.MultiplyY(Vx).NormalizeY()
+                                             ElseIf V = 1.0 Then
+                                                 Vx = Vy.DivideY(Ki).NormalizeY()
+                                             Else
+                                                 For i = 0 To n
+                                                     If Vz(i) <> 0 Then
+                                                         Vy(i) = Vz(i) * Ki(i) / ((Ki(i) - 1) * V + 1)
+                                                         If Double.IsInfinity(Vy(i)) Then Vy(i) = 0.0#
+                                                         Vx(i) = Vy(i) / Ki(i)
+                                                     Else
+                                                         Vy(i) = 0
+                                                         Vx(i) = 0
+                                                     End If
+                                                 Next
+                                             End If
+
+                                             If V = 0 Then
+                                                 errfunc = Ki.MultiplyY(Vx).Sum - 1
+                                             Else
+                                                 errfunc = Vy.DivideY(Ki).Sum - 1
+                                             End If
+
+                                             Return errfunc ^ 2
+
+                                         End Function, {var})
+
+            T = result(0)
+
+            Vx = Vx.NormalizeY()
+            Vy = Vy.NormalizeY()
+
+            d2 = Date.Now
+
+            dt = d2 - d1
 
             If PP.AUX_CheckTrivial(Ki) Then
                 Dim ex As New Exception("PVF Flash [NL]: Invalid result: converged to the trivial solution (T = " & T & " ).")
@@ -2823,11 +2994,11 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
                     T = X
                 End If
             Else
-                Dim tmp = Me.Flash_PV(Vz, P, X, 0.0#, PP, ReuseKi, Ki)
+                Dim tmp As Object() = Me.Flash_PV(Vz, P, X, 0.0#, PP, ReuseKi, Ki)
                 T = tmp(4)
                 Dim hres = PerformHeuristicsTest(Vz, T, P, PP)
-                If hres.SolidPhase Then
-                    tmp = New NestedLoopsSLE().Flash_PV(Vz, P, X, T, PP, ReuseKi, Ki)
+                If hres.SolidPhase And Not PP.ForcedSolids.Count > 0 Then
+                    tmp = New NestedLoopsSLE().Flash_PV(Vz, P, X, T, PP, False, Nothing)
                 End If
                 L1 = tmp(0)
                 V = tmp(1)
@@ -2918,7 +3089,7 @@ out:        WriteDebugInfo("PT Flash [NL]: Converged in " & ecount & " iteration
                 Dim tmp = Me.Flash_PV(Vz, P, X, 0.0#, PP, ReuseKi, Ki)
                 T = tmp(4)
                 Dim hres = PerformHeuristicsTest(Vz, T, P, PP)
-                If hres.SolidPhase Then
+                If hres.SolidPhase And Not PP.ForcedSolids.Count > 0 Then
                     tmp = New NestedLoopsSLE().Flash_PV(Vz, P, X, T, PP, ReuseKi, Ki)
                 End If
                 L1 = tmp(0)

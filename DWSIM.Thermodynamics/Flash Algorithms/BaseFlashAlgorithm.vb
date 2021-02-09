@@ -131,6 +131,8 @@ Namespace PropertyPackages.Auxiliary.FlashAlgorithms
 
             settings(Interfaces.Enums.FlashSetting.ImmiscibleWaterOption) = False
 
+            settings(Interfaces.Enums.FlashSetting.HandleSolidsInDefaultEqCalcMode) = False
+
             Return settings
 
         End Function
@@ -856,7 +858,7 @@ will converge to this solution.")
             Vtrials.Add(Vz.Clone)
 
 
-            Dim random As New Random(1000)
+            Dim random As New Random(0)
 
             For i = 0 To n
                 Dim vnew = pp.RET_NullVector()
@@ -1177,26 +1179,9 @@ will converge to this solution.")
                 Dim fcl(n), fcv(n) As Double
 
                 If validsolutions.Count > 1 Then
-                    ' select the solution which gives the lowest gibbs energy.
+                    ' select the solution which has the highest amount of a single compound.
                     ' Take this solution as composition of phase 2
-
-                    Dim Gt0 As Double = 100000.0, Gt As Double, ft() As Double, it As Integer
-                    i = 0
-                    For Each trialcomp In validsolutions
-                        ft = pp.DW_CalcFugCoeff(trialcomp, T, P, State.Liquid)
-                        Gt = 0.0
-                        For j = 0 To n
-                            If Vx(j) > 0.0 Then
-                                Gt += trialcomp(j) * Log(ft(j) * trialcomp(j))
-                            End If
-                        Next
-                        If Gt < Gt0 Then
-                            Gt0 = Gt
-                            it = i
-                        End If
-                        i += 1
-                    Next
-                    Vx2 = validsolutions(it)
+                    Vx2 = validsolutions.OrderByDescending(Function(vec) vec.Max).First()
                 Else
                     Vx2 = stresult(0)
                 End If
@@ -1385,17 +1370,17 @@ will converge to this solution.")
             Dim names = pp.RET_VNAMES().Select(Function(x) x.ToLower()).ToList()
             Dim props = pp.DW_GetConstantProperties()
 
-            If T = 0 Then T = 298.15
-            If P = 0 Then P = 101325
+            If T = 0.0 Then T = 298.15
+            If P = 0.0 Then P = 101325
 
             'solids check
 
             Dim Tf = pp.RET_VTF
 
             For i = 0 To n - 1
-                If Tf(i) > T And Tf(i) > 1 And Vz(i) > 0.001 Then
+                If Tf(i) > T And Tf(i) > 1.0 And Vz(i) > 0.000001 Then
                     hres.SolidPhase = True
-                    Exit For
+                    hres.SolidFraction += Vz(i)
                 End If
             Next
 
@@ -1404,7 +1389,7 @@ will converge to this solution.")
                 For Each solid In pp.ForcedSolids
                     If Vz(names.IndexOf(solid.ToLower())) > 0 Then
                         hres.SolidPhase = True
-                        Exit For
+                        hres.SolidFraction += Vz(names.IndexOf(solid.ToLower()))
                     End If
                 Next
             End If
@@ -1415,9 +1400,6 @@ will converge to this solution.")
                 Return hres
 
             End If
-
-            'check activity coefficients
-            'Dim act = pp.DW_CalcFugCoeff(Vz, T, P, State.Liquid).MultiplyConstY(P).DivideY(pp.RET_VPVAP(T))
 
             'liquid phase split check
 
@@ -1475,6 +1457,15 @@ will converge to this solution.")
                 End If
             End If
 
+            Dim FlashType As String = FlashSettings(Interfaces.Enums.FlashSetting.ForceEquilibriumCalculationType)
+            Dim HandleSolids As Boolean = FlashSettings(Interfaces.Enums.FlashSetting.HandleSolidsInDefaultEqCalcMode)
+
+            If FlashType = "Default" And hres.SolidPhase And Not HandleSolids And pp.ForcedSolids.Count = 0 Then
+                'pp.Flowsheet.ShowMessage(String.Format(pp.Flowsheet.GetTranslatedString("FoundSolidsWarning") + " (P = {0:N2} Pa, T = {1:N2} K)", P, T), Interfaces.IFlowsheet.MessageType.Warning)
+                hres.SolidPhase = False
+                hres.SolidFraction = 0.0
+            End If
+
             Return hres
 
         End Function
@@ -1527,6 +1518,9 @@ will converge to this solution.")
                 If Not FlashSettings.ContainsKey(Interfaces.Enums.FlashSetting.ImmiscibleWaterOption) Then
                     FlashSettings.Add(Interfaces.Enums.FlashSetting.ImmiscibleWaterOption, False)
                 End If
+                If Not FlashSettings.ContainsKey(Interfaces.Enums.FlashSetting.HandleSolidsInDefaultEqCalcMode) Then
+                    FlashSettings.Add(Interfaces.Enums.FlashSetting.HandleSolidsInDefaultEqCalcMode, False)
+            End If
             End If
 
             Return XMLSerializer.XMLSerializer.Deserialize(Me, data)
@@ -1582,6 +1576,7 @@ will converge to this solution.")
 
         Public Property LiquidPhaseSplit As Boolean = False
         Public Property SolidPhase As Boolean = False
+        Public Property SolidFraction As Double = 0.0
 
     End Class
 

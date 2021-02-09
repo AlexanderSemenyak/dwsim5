@@ -1376,10 +1376,10 @@ Namespace PropertyPackages
 
             End If
 
-            For i = 0 To n
-                If K(i) < 0.0000000001 Then K(i) = 0.0000000001
-                If K(i) > 1.0E+20 Then K(i) = 1.0E+20
-            Next
+            'For i = 0 To n
+            '    If K(i) < 0.0000000001 Then K(i) = 0.0000000001
+            '    If K(i) > 1.0E+20 Then K(i) = 1.0E+20
+            'Next
 
             IObj?.Paragraphs.Add(String.Format("<h2>Results</h2>"))
 
@@ -5851,7 +5851,7 @@ redirect2:                      result = Me.FlashBase.Flash_PS(RET_VMOL(Phase.Mi
                     If result = 0.0 Then
                         'try estimating from LK method
                         With CompoundPropCache(ID)
-                            Dim sg60 = AUX_LIQDENSi(CompoundPropCache(ID), T) / 1000.0
+                            Dim sg60 = AUX_LIQDENSi(CompoundPropCache(ID), 288.7) / 1000.0
                             result = Auxiliary.PROPS.Cpig_lk(.Normal_Boiling_Point ^ 0.33 / sg60, .Acentric_Factor, T)
                         End With
                         If Double.IsNaN(result) Or Double.IsInfinity(result) Then
@@ -6648,7 +6648,7 @@ Final3:
 
             Return MathNet.Numerics.RootFinding.Brent.FindRoot(Function(T)
                                                                    Return AUX_PVAPi(comp, T) - PVAP
-                                                               End Function, Tguess - 100, Tguess + 100)
+                                                               End Function, 1.0, 2000.0)
 
         End Function
 
@@ -7544,7 +7544,7 @@ Final3:
                 End If
                 If cprop.OriginalDB <> "CoolProp" And cprop.OriginalDB <> "User" And cprop.OriginalDB <> "ChEDL Thermo" Then val = cprop.Molar_Weight * val
             Else
-                val = Auxiliary.PROPS.liq_dens_rackett(T, cprop.Critical_Temperature, cprop.Critical_Pressure, cprop.Acentric_Factor, cprop.Molar_Weight, cprop.Z_Rackett, 101325, Me.AUX_PVAPi(cprop.Name, T))
+                val = Auxiliary.PROPS.liq_dens_rackett(T, cprop.Critical_Temperature, cprop.Critical_Pressure, cprop.Acentric_Factor, cprop.Molar_Weight, cprop.Z_Rackett)
             End If
 
             Return val 'kg/m3
@@ -12295,6 +12295,9 @@ Final3:
                 End If
                 If Not FlashSettings.ContainsKey(Interfaces.Enums.FlashSetting.ImmiscibleWaterOption) Then
                     FlashSettings.Add(Interfaces.Enums.FlashSetting.ImmiscibleWaterOption, False)
+                End If
+                If Not FlashSettings.ContainsKey(Interfaces.Enums.FlashSetting.HandleSolidsInDefaultEqCalcMode) Then
+                    FlashSettings.Add(Interfaces.Enums.FlashSetting.HandleSolidsInDefaultEqCalcMode, False)
                 End If
             End If
 
