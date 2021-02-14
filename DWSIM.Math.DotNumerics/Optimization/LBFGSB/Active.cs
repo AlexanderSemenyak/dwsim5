@@ -1,5 +1,3 @@
-#region Translated by Jose Antonio De Santiago-Castillo.
-
 //Translated by Jose Antonio De Santiago-Castillo.
 //E-mail:JAntonioDeSantiago@gmail.com
 //Website: www.DotNumerics.com
@@ -9,7 +7,6 @@
 //F2CSharp Version 0.72 (Dicember 7, 2009)
 //Code Optimizations: , assignment operator, for-loop: array indexes
 //
-#endregion
 
 using System;
 using DotNumerics.FortranLibrary;
@@ -18,13 +15,7 @@ namespace DotNumerics.Optimization.LBFGSB
 {
     public class ACTIVE
     {
-    
-
-        #region Variables
-        
-        const double ZERO = 0.0E0; 
-
-        #endregion
+        const double ZERO = 0.0E0;
 
         public ACTIVE()
         {
@@ -45,27 +36,14 @@ namespace DotNumerics.Optimization.LBFGSB
         public void Run(int N, double[] L, int offset_l, double[] U, int offset_u, int[] NBD, int offset_nbd, ref double[] X, int offset_x, ref int[] IWHERE, int offset_iwhere
                          , int IPRINT, ref bool PRJCTD, ref bool CNSTND, ref bool BOXED)
         {
-
-            #region Variables
-            
-            int NBDD = 0; int I = 0; 
-
-            #endregion
+            int NBDD = 0; int I = 0;
 
 
-            #region Array Index Correction
-            
-             int o_l = -1 + offset_l;  int o_u = -1 + offset_u;  int o_nbd = -1 + offset_nbd;  int o_x = -1 + offset_x; 
+            int o_l = -1 + offset_l;  int o_u = -1 + offset_u;  int o_nbd = -1 + offset_nbd;  int o_x = -1 + offset_x; 
              int o_iwhere = -1 + offset_iwhere;
 
-            #endregion
 
-
-            #region Prolog
-            
-            
-            
-            // c     ************
+             // c     ************
             // c
             // c     Subroutine active
             // c
@@ -94,13 +72,8 @@ namespace DotNumerics.Optimization.LBFGSB
             
             
             // c     Initialize nbdd, prjctd, cnstnd and boxed.
-            
-
-            #endregion
 
 
-            #region Body
-            
             NBDD = 0;
             PRJCTD = false;
             CNSTND = false;
@@ -173,10 +146,6 @@ namespace DotNumerics.Optimization.LBFGSB
             
             
             return;
-            
-
-            #endregion
-
         }
     }
     

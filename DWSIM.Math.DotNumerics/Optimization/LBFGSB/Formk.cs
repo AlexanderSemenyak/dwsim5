@@ -1,5 +1,3 @@
-#region Translated by Jose Antonio De Santiago-Castillo.
-
 //Translated by Jose Antonio De Santiago-Castillo.
 //E-mail:JAntonioDeSantiago@gmail.com
 //Website: www.DotNumerics.com
@@ -9,7 +7,6 @@
 //F2CSharp Version 0.72 (Dicember 7, 2009)
 //Code Optimizations: , assignment operator, for-loop: array indexes
 //
-#endregion
 
 using System;
 using DotNumerics.FortranLibrary;
@@ -18,54 +15,26 @@ namespace DotNumerics.Optimization.LBFGSB
 {
     public class FORMK
     {
-    
-
-        #region Dependencies
-        
-        DCOPY _dcopy; DPOFA _dpofa; DTRSL _dtrsl; DDOT _ddot; 
-
-        #endregion
+        DCOPY _dcopy; DPOFA _dpofa; DTRSL _dtrsl; DDOT _ddot;
 
 
-        #region Variables
-        
-        const double ONE = 1.0E0; const double ZERO = 0.0E0; 
-
-        #endregion
+        const double ONE = 1.0E0; const double ZERO = 0.0E0;
 
         public FORMK(DCOPY dcopy, DPOFA dpofa, DTRSL dtrsl, DDOT ddot)
         {
-    
-
-            #region Set Dependencies
-            
-            this._dcopy = dcopy; this._dpofa = dpofa; this._dtrsl = dtrsl; this._ddot = ddot; 
-
-            #endregion
-
+            this._dcopy = dcopy; this._dpofa = dpofa; this._dtrsl = dtrsl; this._ddot = ddot;
         }
     
         public FORMK()
         {
-    
-
-            #region Dependencies (Initialization)
-            
             DCOPY dcopy = new DCOPY();
             DDOT ddot = new DDOT();
             DAXPY daxpy = new DAXPY();
             DPOFA dpofa = new DPOFA(ddot);
             DTRSL dtrsl = new DTRSL(ddot, daxpy);
 
-            #endregion
 
-
-            #region Set Dependencies
-            
-            this._dcopy = dcopy; this._dpofa = dpofa; this._dtrsl = dtrsl; this._ddot = ddot; 
-
-            #endregion
-
+            this._dcopy = dcopy; this._dpofa = dpofa; this._dtrsl = dtrsl; this._ddot = ddot;
         }
         /// <param name="N">
         /// is an integer variable.
@@ -166,37 +135,20 @@ namespace DotNumerics.Optimization.LBFGSB
                          , int IUPDAT, bool UPDATD, ref double[] WN, int offset_wn, ref double[] WN1, int offset_wn1, int M, double[] WS, int offset_ws
                          , double[] WY, int offset_wy, double[] SY, int offset_sy, double THETA, int COL, int HEAD, ref int INFO)
         {
-
-            #region Variables
-            
             int M2 = 0; int IPNTR = 0; int JPNTR = 0; int IY = 0; int IS = 0; int JY = 0; int JS = 0; int IS1 = 0; int JS1 = 0; 
             int K1 = 0;int I = 0; int K = 0; int COL2 = 0; int PBEGIN = 0; int PEND = 0; int DBEGIN = 0; int DEND = 0; 
-            int UPCL = 0;double TEMP1 = 0; double TEMP2 = 0; double TEMP3 = 0; double TEMP4 = 0; 
-
-            #endregion
+            int UPCL = 0;double TEMP1 = 0; double TEMP2 = 0; double TEMP3 = 0; double TEMP4 = 0;
 
 
-            #region Implicit Variables
-            
-            int WN_IY = 0; int WN_IS = 0; 
-
-            #endregion
+            int WN_IY = 0; int WN_IS = 0;
 
 
-            #region Array Index Correction
-            
-             int o_ind = -1 + offset_ind;  int o_indx2 = -1 + offset_indx2;  int o_wn = -1 - (2*M) + offset_wn; 
+            int o_ind = -1 + offset_ind;  int o_indx2 = -1 + offset_indx2;  int o_wn = -1 - (2*M) + offset_wn; 
              int o_wn1 = -1 - (2*M) + offset_wn1; int o_ws = -1 - N + offset_ws;  int o_wy = -1 - N + offset_wy; 
              int o_sy = -1 - M + offset_sy;
 
-            #endregion
 
-
-            #region Prolog
-            
-            
-            
-            // c     ************
+             // c     ************
             // c
             // c     Subroutine formk 
             // c
@@ -327,13 +279,8 @@ namespace DotNumerics.Optimization.LBFGSB
             // c                     [L_a+R_z   S'AA'S   ]
             // c        where L_a is the strictly lower triangular part of S'AA'Y
             // c              R_z is the upper triangular part of S'ZZ'Y.
-            
-
-            #endregion
 
 
-            #region Body
-            
             if (UPDATD)
             {
                 if (IUPDAT > M)
@@ -542,10 +489,6 @@ namespace DotNumerics.Optimization.LBFGSB
             }
             
             return;
-            
-
-            #endregion
-
         }
     }
     

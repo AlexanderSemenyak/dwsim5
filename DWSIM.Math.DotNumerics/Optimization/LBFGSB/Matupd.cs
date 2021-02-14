@@ -1,5 +1,3 @@
-#region Translated by Jose Antonio De Santiago-Castillo.
-
 //Translated by Jose Antonio De Santiago-Castillo.
 //E-mail:JAntonioDeSantiago@gmail.com
 //Website: www.DotNumerics.com
@@ -9,7 +7,6 @@
 //F2CSharp Version 0.72 (Dicember 7, 2009)
 //Code Optimizations: , assignment operator, for-loop: array indexes
 //
-#endregion
 
 using System;
 using DotNumerics.FortranLibrary;
@@ -18,84 +15,39 @@ namespace DotNumerics.Optimization.LBFGSB
 {
     public class MATUPD
     {
-    
-
-        #region Dependencies
-        
-        DCOPY _dcopy; DDOT _ddot; 
-
-        #endregion
+        DCOPY _dcopy; DDOT _ddot;
 
 
-        #region Variables
-        
-        const double ONE = 1.0E0; 
-
-        #endregion
+        const double ONE = 1.0E0;
 
         public MATUPD(DCOPY dcopy, DDOT ddot)
         {
-    
-
-            #region Set Dependencies
-            
-            this._dcopy = dcopy; this._ddot = ddot; 
-
-            #endregion
-
+            this._dcopy = dcopy; this._ddot = ddot;
         }
     
         public MATUPD()
         {
-    
-
-            #region Dependencies (Initialization)
-            
             DCOPY dcopy = new DCOPY();
             DDOT ddot = new DDOT();
 
-            #endregion
 
-
-            #region Set Dependencies
-            
-            this._dcopy = dcopy; this._ddot = ddot; 
-
-            #endregion
-
+            this._dcopy = dcopy; this._ddot = ddot;
         }
         public void Run(int N, int M, ref double[] WS, int offset_ws, ref double[] WY, int offset_wy, ref double[] SY, int offset_sy, ref double[] SS, int offset_ss
                          , double[] D, int offset_d, double[] R, int offset_r, ref int ITAIL, int IUPDAT, ref int COL, ref int HEAD
                          , ref double THETA, double RR, double DR, double STP, double DTD)
         {
-
-            #region Variables
-            
-            int J = 0; int POINTR = 0; double DDOT = 0; 
-
-            #endregion
+            int J = 0; int POINTR = 0; double DDOT = 0;
 
 
-            #region Implicit Variables
-            
-            int SS_COL = 0; 
-
-            #endregion
+            int SS_COL = 0;
 
 
-            #region Array Index Correction
-            
-             int o_ws = -1 - N + offset_ws;  int o_wy = -1 - N + offset_wy;  int o_sy = -1 - M + offset_sy; 
-             int o_ss = -1 - M + offset_ss; int o_d = -1 + offset_d;  int o_r = -1 + offset_r; 
-
-            #endregion
+            int o_ws = -1 - N + offset_ws;  int o_wy = -1 - N + offset_wy;  int o_sy = -1 - M + offset_sy; 
+             int o_ss = -1 - M + offset_ss; int o_d = -1 + offset_d;  int o_r = -1 + offset_r;
 
 
-            #region Prolog
-            
-            
-            
-            // c     ************
+             // c     ************
             // c
             // c     Subroutine matupd
             // c
@@ -123,13 +75,8 @@ namespace DotNumerics.Optimization.LBFGSB
             
             
             // c     Set pointers for matrices WS and WY.
-            
-
-            #endregion
 
 
-            #region Body
-            
             if (IUPDAT <= M)
             {
                 COL = IUPDAT;
@@ -184,10 +131,6 @@ namespace DotNumerics.Optimization.LBFGSB
             SY[COL+COL * M + o_sy] = DR;
             
             return;
-            
-
-            #endregion
-
         }
     }
     

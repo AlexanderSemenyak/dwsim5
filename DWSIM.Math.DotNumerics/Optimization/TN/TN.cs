@@ -1,5 +1,3 @@
-#region Translated by Jose Antonio De Santiago-Castillo.
-
 //Translated by Jose Antonio De Santiago-Castillo.
 //E-mail:JAntonioDeSantiago@gmail.com
 //Website: www.DotNumerics.com
@@ -9,29 +7,12 @@
 //F2CSharp Version 0.72 (Dicember 7, 2009)
 //Code Optimizations: , assignment operator, for-loop: array indexes
 //
-#endregion
 
 using System;
 using DotNumerics.FortranLibrary;
 
 namespace DotNumerics.Optimization.TN
 {
-
-    #region The Class: TN
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     // C# to unbundle, sh this file (in an empty directory)
     // Cecho README 1>&2
     // Csed >README <<'//GO.SYSIN DD README' 's/^-//'
@@ -76,29 +57,17 @@ namespace DotNumerics.Optimization.TN
     // C******************************************************************
     public class TN
     {
-    
-        #region Dependencies
-        
-        MCHPR1 _mchpr1; LMQN _lmqn; 
-        #endregion
+        MCHPR1 _mchpr1; LMQN _lmqn;
+
         public TN(MCHPR1 mchpr1, LMQN lmqn)
         {
-    
-            #region Set Dependencies
-            
-            this._mchpr1 = mchpr1; this._lmqn = lmqn; 
-            #endregion
+            this._mchpr1 = mchpr1; this._lmqn = lmqn;
         }
     
         public TN()
         {
-    
-            #region Initialization Common Blocks
-            
             CommonBlock SUBSCR = new CommonBlock(0, 15, 0, 0);
-            #endregion
-            #region Dependencies (Initialization)
-            
+
             MCHPR1 mchpr1 = new MCHPR1();
             DNRM2 dnrm2 = new DNRM2();
             DDOT ddot = new DDOT();
@@ -124,11 +93,8 @@ namespace DotNumerics.Optimization.TN
             LINDER linder = new LINDER(ddot, getptc, lsout, dcopy);
             LMQN lmqn = new LMQN(dnrm2, step1, ddot, setpar, chkucp, setucr, modlnp, dcopy, linder, dxpy
                                  , SUBSCR);
-            #endregion
-            #region Set Dependencies
-            
-            this._mchpr1 = mchpr1; this._lmqn = lmqn; 
-            #endregion
+
+            this._mchpr1 = mchpr1; this._lmqn = lmqn;
         }
         /// <param name="IERROR">
         /// - (INTEGER) ERROR CODE
@@ -171,20 +137,12 @@ namespace DotNumerics.Optimization.TN
         public void Run(ref int IERROR, int N, ref double[] X, int offset_x, ref double F, ref double[] G, int offset_g, ref double[] W, int offset_w
                          , int LW, ISFUN SFUN)
         {
-            #region Variables
-            
-            double ETA = 0; double ACCRCY = 0; double XTOL = 0; double STEPMX = 0; double DSQRT = 0; 
-            #endregion
-            #region Implicit Variables
-            
-            int MAXIT = 0; int MSGLVL = 0; int MAXFUN = 0; int NMAX = 0; 
-            #endregion
-            #region Array Index Correction
-            
-             int o_x = -1 + offset_x;  int o_g = -1 + offset_g;  int o_w = -1 + offset_w; 
-            #endregion
-            #region Prolog
-            
+            double ETA = 0; double ACCRCY = 0; double XTOL = 0; double STEPMX = 0; double DSQRT = 0;
+
+            int MAXIT = 0; int MSGLVL = 0; int MAXFUN = 0; int NMAX = 0;
+
+            int o_x = -1 + offset_x;  int o_g = -1 + offset_g;  int o_w = -1 + offset_w;
+
             // C
             // C THIS ROUTINE SOLVES THE OPTIMIZATION PROBLEM
             // C
@@ -245,9 +203,7 @@ namespace DotNumerics.Optimization.TN
             // C
             // C SET UP PARAMETERS FOR THE OPTIMIZATION ROUTINE
             // C
-            #endregion
-            #region Body
-            
+
             MAXIT = N / 2;
             if (MAXIT > 50) MAXIT = 50;
             if (MAXIT <= 0) MAXIT = 1;
@@ -274,42 +230,25 @@ namespace DotNumerics.Optimization.TN
             if (N < NMAX) NMAX = N;
             //ERROR-ERROR      WRITE(*,830) (I,X(I),I=1,NMAX);
             return;
-            #endregion
         }
     }
 
-    #endregion
 
-
-    #region The Class: TNBC
-    
     // C
     // C
     public class TNBC
     {
-    
-        #region Dependencies
-        
-        MCHPR1 _mchpr1; LMQNBC _lmqnbc; 
-        #endregion
+        MCHPR1 _mchpr1; LMQNBC _lmqnbc;
+
         public TNBC(MCHPR1 mchpr1, LMQNBC lmqnbc)
         {
-    
-            #region Set Dependencies
-            
-            this._mchpr1 = mchpr1; this._lmqnbc = lmqnbc; 
-            #endregion
+            this._mchpr1 = mchpr1; this._lmqnbc = lmqnbc;
         }
     
         public TNBC()
         {
-    
-            #region Initialization Common Blocks
-            
             CommonBlock SUBSCR = new CommonBlock(0, 15, 0, 0);
-            #endregion
-            #region Dependencies (Initialization)
-            
+
             MCHPR1 mchpr1 = new MCHPR1();
             DDOT ddot = new DDOT();
             DNRM2 dnrm2 = new DNRM2();
@@ -340,11 +279,8 @@ namespace DotNumerics.Optimization.TN
             LINDER linder = new LINDER(ddot, getptc, lsout, dcopy);
             LMQNBC lmqnbc = new LMQNBC(ddot, dnrm2, step1, crash, setpar, chkucp, setucr, ztime, monit, modlnp
                                        , dcopy, stpmax, linder, modz, cnvtst, dxpy, SUBSCR);
-            #endregion
-            #region Set Dependencies
-            
-            this._mchpr1 = mchpr1; this._lmqnbc = lmqnbc; 
-            #endregion
+
+            this._mchpr1 = mchpr1; this._lmqnbc = lmqnbc;
         }
         /// <param name="IERROR">
         /// - (INTEGER) ERROR CODE
@@ -391,22 +327,14 @@ namespace DotNumerics.Optimization.TN
         public void Run(ref int IERROR, int N, ref double[] X, int offset_x, ref double F, ref double[] G, int offset_g, ref double[] W, int offset_w
                          , int LW, ISFUN SFUN, double[] LOW, int offset_low, double[] UP, int offset_up, ref int[] IPIVOT, int offset_ipivot)
         {
-            #region Variables
-            
-            double ETA = 0; double ACCRCY = 0; double XTOL = 0; double STEPMX = 0; double DSQRT = 0; 
-            #endregion
-            #region Implicit Variables
-            
-            int MAXIT = 0; int MSGLVL = 0; int MAXFUN = 0; int NMAX = 0; 
-            #endregion
-            #region Array Index Correction
-            
-             int o_x = -1 + offset_x;  int o_g = -1 + offset_g;  int o_w = -1 + offset_w;  int o_low = -1 + offset_low; 
-             int o_up = -1 + offset_up; int o_ipivot = -1 + offset_ipivot; 
-            #endregion
-            #region Prolog
-            
-            // C
+            double ETA = 0; double ACCRCY = 0; double XTOL = 0; double STEPMX = 0; double DSQRT = 0;
+
+            int MAXIT = 0; int MSGLVL = 0; int MAXFUN = 0; int NMAX = 0;
+
+            int o_x = -1 + offset_x;  int o_g = -1 + offset_g;  int o_w = -1 + offset_w;  int o_low = -1 + offset_low; 
+             int o_up = -1 + offset_up; int o_ipivot = -1 + offset_ipivot;
+
+             // C
             // C THIS ROUTINE SOLVES THE OPTIMIZATION PROBLEM
             // C
             // C   MINIMIZE     F(X)
@@ -474,9 +402,7 @@ namespace DotNumerics.Optimization.TN
             // C
             // C SET PARAMETERS FOR THE OPTIMIZATION ROUTINE
             // C
-            #endregion
-            #region Body
-            
+
             MAXIT = N / 2;
             if (MAXIT > 50) MAXIT = 50;
             if (MAXIT <= 0) MAXIT = 1;
@@ -503,51 +429,29 @@ namespace DotNumerics.Optimization.TN
             if (N < NMAX) NMAX = N;
             //ERROR-ERROR      WRITE(*,830) (I,X(I),I=1,NMAX);
             return;
-            #endregion
         }
     }
 
-    #endregion
 
-
-    #region The Class: LMQN
-    
     // C
     // C
     public class LMQN
     {
-    
-        #region Dependencies
-        
         DNRM2 _dnrm2; STEP1 _step1; DDOT _ddot; SETPAR _setpar; CHKUCP _chkucp; SETUCR _setucr; MODLNP _modlnp; DCOPY _dcopy; 
-        LINDER _linder;DXPY _dxpy; 
-        #endregion
-        #region Common variables
-        
-        #region Common Block: SUBSCR Declaration
-        
+        LINDER _linder;DXPY _dxpy;
+
         CommonBlock _subscr;
         Oint LGV; Oint LZ1; Oint LZK; Oint LV; Oint LSK; Oint LYK; Oint LDIAGB; Oint LSR; Oint LYR; Oint LOLDG; Oint LHG; 
-        Oint LHYK;Oint LPK; Oint LEMAT; Oint LWTEST; 
-        #endregion
-        #endregion
-        #region Variables
-        
-        int[] IPIVOT = new int[1]; 
-        #endregion
+        Oint LHYK;Oint LPK; Oint LEMAT; Oint LWTEST;
+
+        int[] IPIVOT = new int[1];
+
         public LMQN(DNRM2 dnrm2, STEP1 step1, DDOT ddot, SETPAR setpar, CHKUCP chkucp, SETUCR setucr, MODLNP modlnp, DCOPY dcopy, LINDER linder, DXPY dxpy
                     , CommonBlock SUBSCR)
         {
-    
-            #region Set Dependencies
-            
             this._dnrm2 = dnrm2; this._step1 = step1; this._ddot = ddot; this._setpar = setpar; this._chkucp = chkucp; 
-            this._setucr = setucr;this._modlnp = modlnp; this._dcopy = dcopy; this._linder = linder; this._dxpy = dxpy; 
-            #endregion
-            #region Common varaible Initialization
-            
-            #region Common Block: SUBSCR Initialization
-            
+            this._setucr = setucr;this._modlnp = modlnp; this._dcopy = dcopy; this._linder = linder; this._dxpy = dxpy;
+
             this._subscr = SUBSCR;
             LGV = SUBSCR.intData[0];
             LZ1 = SUBSCR.intData[1];
@@ -564,19 +468,12 @@ namespace DotNumerics.Optimization.TN
             LPK = SUBSCR.intData[12];
             LEMAT = SUBSCR.intData[13];
             LWTEST = SUBSCR.intData[14];
-            #endregion
-            #endregion
         }
     
         public LMQN()
         {
-    
-            #region Initialization Common Blocks
-            
             CommonBlock SUBSCR = new CommonBlock(0, 15, 0, 0);
-            #endregion
-            #region Dependencies (Initialization)
-            
+
             DNRM2 dnrm2 = new DNRM2();
             MCHPR1 mchpr1 = new MCHPR1();
             DDOT ddot = new DDOT();
@@ -600,16 +497,10 @@ namespace DotNumerics.Optimization.TN
             NDIA3 ndia3 = new NDIA3(ddot);
             MODLNP modlnp = new MODLNP(ddot, initpc, ztime, msolve, gtims, ndia3, daxpy, negvec, dcopy);
             LINDER linder = new LINDER(ddot, getptc, lsout, dcopy);
-            #endregion
-            #region Set Dependencies
-            
+
             this._dnrm2 = dnrm2; this._step1 = step1; this._ddot = ddot; this._setpar = setpar; this._chkucp = chkucp; 
-            this._setucr = setucr;this._modlnp = modlnp; this._dcopy = dcopy; this._linder = linder; this._dxpy = dxpy; 
-            #endregion
-            #region Common varaible Initialization
-            
-            #region Common Block: SUBSCR Initialization
-            
+            this._setucr = setucr;this._modlnp = modlnp; this._dcopy = dcopy; this._linder = linder; this._dxpy = dxpy;
+
             this._subscr = SUBSCR;
             LGV = SUBSCR.intData[0];
             LZ1 = SUBSCR.intData[1];
@@ -626,15 +517,11 @@ namespace DotNumerics.Optimization.TN
             LPK = SUBSCR.intData[12];
             LEMAT = SUBSCR.intData[13];
             LWTEST = SUBSCR.intData[14];
-            #endregion
-            #endregion
         }
         public void Run(ref int IFAIL, int N, ref double[] X, int offset_x, ref double F, ref double[] G, int offset_g, ref double[] W, int offset_w
                          , int LW, ISFUN SFUN, int MSGLVL, int MAXIT, int MAXFUN, double ETA
                          , double STEPMX, double ACCRCY, double XTOL)
         {
-            #region Variables
-            
             int offset_ipivot = 0; int o_ipivot = -1; int I = 0; int ICYCLE = 0; int IOLDG = 0; int IPK = 0; int IYK = 0; 
             int NFTOTL = 0;int NITER = 0; int NM1 = 0; int NUMF = 0; int NWHY = 0; double ABSTOL = 0; double ALPHA = 0; 
             double DIFNEW = 0;double DIFOLD = 0; double EPSMCH = 0; double EPSRED = 0; double FKEEP = 0; double FM = 0; 
@@ -644,20 +531,13 @@ namespace DotNumerics.Optimization.TN
             double SMALL = 0;double SPE = 0; double TINY = 0; double TNYTOL = 0; double TOLEPS = 0; double XNORM = 0; 
             double YKSK = 0;double YRSR = 0; double ZERO = 0; bool LRESET = false; bool UPD1 = false; double DABS = 0; 
             double DSQRT = 0;
-            #endregion
-            #region Implicit Variables
-            
+
             int IRESET = 0; int NFEVAL = 0; int NMODIF = 0; int NLINCG = 0; int LHYR = 0; int IDIAGB = 0; int MODET = 0; 
             int ISK = 0;
-            #endregion
-            #region Array Index Correction
-            
-             int o_x = -1 + offset_x;  int o_g = -1 + offset_g;  int o_w = -1 + offset_w; 
-            #endregion
-            #region Prolog
-            
-            
-            
+
+            int o_x = -1 + offset_x;  int o_g = -1 + offset_g;  int o_w = -1 + offset_w;
+
+
             // C     ********Mi Modificacio EN LMQN*******	
             // C
             // C     Se define IPIVOT(1) pues tal y como esta la subrutina pasa un valor sin especificar 
@@ -683,9 +563,7 @@ namespace DotNumerics.Optimization.TN
             // C
             // C INITIALIZE PARAMETERS AND CONSTANTS
             // C
-            #endregion
-            #region Body
-            
+
             if (MSGLVL >=  - 2) ;//ERROR-ERRORWRITE(*,800)
             this._setpar.Run(N);
             UPD1 = true;
@@ -913,49 +791,29 @@ namespace DotNumerics.Optimization.TN
             // C
         LABEL120:  IFAIL = NWHY;
             return;
-            #endregion
         }
     }
 
-    #endregion
 
-
-    #region The Class: LMQNBC
-    
     // C
     // C
     public class LMQNBC
     {
-    
-        #region Dependencies
-        
         DDOT _ddot; DNRM2 _dnrm2; STEP1 _step1; CRASH _crash; SETPAR _setpar; CHKUCP _chkucp; SETUCR _setucr; ZTIME _ztime; 
-        MONIT _monit;MODLNP _modlnp; DCOPY _dcopy; STPMAX _stpmax; LINDER _linder; MODZ _modz; CNVTST _cnvtst; DXPY _dxpy; 
-        #endregion
-        #region Common variables
-        
-        #region Common Block: SUBSCR Declaration
-        
+        MONIT _monit;MODLNP _modlnp; DCOPY _dcopy; STPMAX _stpmax; LINDER _linder; MODZ _modz; CNVTST _cnvtst; DXPY _dxpy;
+
         CommonBlock _subscr;
         Oint LGV; Oint LZ1; Oint LZK; Oint LV; Oint LSK; Oint LYK; Oint LDIAGB; Oint LSR; Oint LYR; Oint LOLDG; Oint LHG; 
-        Oint LHYK;Oint LPK; Oint LEMAT; Oint LWTEST; 
-        #endregion
-        #endregion
+        Oint LHYK;Oint LPK; Oint LEMAT; Oint LWTEST;
+
         public LMQNBC(DDOT ddot, DNRM2 dnrm2, STEP1 step1, CRASH crash, SETPAR setpar, CHKUCP chkucp, SETUCR setucr, ZTIME ztime, MONIT monit, MODLNP modlnp
                       , DCOPY dcopy, STPMAX stpmax, LINDER linder, MODZ modz, CNVTST cnvtst, DXPY dxpy, CommonBlock SUBSCR)
         {
-    
-            #region Set Dependencies
-            
             this._ddot = ddot; this._dnrm2 = dnrm2; this._step1 = step1; this._crash = crash; this._setpar = setpar; 
             this._chkucp = chkucp;this._setucr = setucr; this._ztime = ztime; this._monit = monit; this._modlnp = modlnp; 
             this._dcopy = dcopy;this._stpmax = stpmax; this._linder = linder; this._modz = modz; this._cnvtst = cnvtst; 
             this._dxpy = dxpy;
-            #endregion
-            #region Common varaible Initialization
-            
-            #region Common Block: SUBSCR Initialization
-            
+
             this._subscr = SUBSCR;
             LGV = SUBSCR.intData[0];
             LZ1 = SUBSCR.intData[1];
@@ -972,19 +830,12 @@ namespace DotNumerics.Optimization.TN
             LPK = SUBSCR.intData[12];
             LEMAT = SUBSCR.intData[13];
             LWTEST = SUBSCR.intData[14];
-            #endregion
-            #endregion
         }
     
         public LMQNBC()
         {
-    
-            #region Initialization Common Blocks
-            
             CommonBlock SUBSCR = new CommonBlock(0, 15, 0, 0);
-            #endregion
-            #region Dependencies (Initialization)
-            
+
             DDOT ddot = new DDOT();
             DNRM2 dnrm2 = new DNRM2();
             MCHPR1 mchpr1 = new MCHPR1();
@@ -1013,18 +864,12 @@ namespace DotNumerics.Optimization.TN
             NDIA3 ndia3 = new NDIA3(ddot);
             MODLNP modlnp = new MODLNP(ddot, initpc, ztime, msolve, gtims, ndia3, daxpy, negvec, dcopy);
             LINDER linder = new LINDER(ddot, getptc, lsout, dcopy);
-            #endregion
-            #region Set Dependencies
-            
+
             this._ddot = ddot; this._dnrm2 = dnrm2; this._step1 = step1; this._crash = crash; this._setpar = setpar; 
             this._chkucp = chkucp;this._setucr = setucr; this._ztime = ztime; this._monit = monit; this._modlnp = modlnp; 
             this._dcopy = dcopy;this._stpmax = stpmax; this._linder = linder; this._modz = modz; this._cnvtst = cnvtst; 
             this._dxpy = dxpy;
-            #endregion
-            #region Common varaible Initialization
-            
-            #region Common Block: SUBSCR Initialization
-            
+
             this._subscr = SUBSCR;
             LGV = SUBSCR.intData[0];
             LZ1 = SUBSCR.intData[1];
@@ -1041,15 +886,11 @@ namespace DotNumerics.Optimization.TN
             LPK = SUBSCR.intData[12];
             LEMAT = SUBSCR.intData[13];
             LWTEST = SUBSCR.intData[14];
-            #endregion
-            #endregion
         }
         public void Run(ref int IFAIL, int N, ref double[] X, int offset_x, ref double F, ref double[] G, int offset_g, ref double[] W, int offset_w
                          , int LW, ISFUN SFUN, double[] LOW, int offset_low, double[] UP, int offset_up, ref int[] IPIVOT, int offset_ipivot, int MSGLVL
                          , int MAXIT, int MAXFUN, double ETA, double STEPMX, double ACCRCY, double XTOL)
         {
-            #region Variables
-            
             int I = 0; int ICYCLE = 0; int IOLDG = 0; int IPK = 0; int IYK = 0; int NFTOTL = 0; int NITER = 0; int NM1 = 0; 
             int NUMF = 0;int NWHY = 0; double ABSTOL = 0; double ALPHA = 0; double DIFNEW = 0; double DIFOLD = 0; 
             double EPSMCH = 0;double EPSRED = 0; double FKEEP = 0; double FLAST = 0; double FM = 0; double FNEW = 0; 
@@ -1058,21 +899,15 @@ namespace DotNumerics.Optimization.TN
             double PNORM = 0;double RELTOL = 0; double RTEPS = 0; double RTLEPS = 0; double RTOL = 0; double RTOLSQ = 0; 
             double SMALL = 0;double SPE = 0; double TINY = 0; double TNYTOL = 0; double TOLEPS = 0; double XNORM = 0; 
             double YKSK = 0;double YRSR = 0; double ZERO = 0; bool CONV = false; bool LRESET = false; bool UPD1 = false; 
-            bool NEWCON = false;double DABS = 0; double DSQRT = 0; 
-            #endregion
-            #region Implicit Variables
-            
+            bool NEWCON = false;double DABS = 0; double DSQRT = 0;
+
             int IER = 0; int IRESET = 0; int NFEVAL = 0; int NMODIF = 0; int NLINCG = 0; int LHYR = 0; int IDIAGB = 0; 
-            int MODET = 0;int ISK = 0; 
-            #endregion
-            #region Array Index Correction
-            
-             int o_x = -1 + offset_x;  int o_g = -1 + offset_g;  int o_w = -1 + offset_w;  int o_low = -1 + offset_low; 
-             int o_up = -1 + offset_up; int o_ipivot = -1 + offset_ipivot; 
-            #endregion
-            #region Prolog
-            
-            // C
+            int MODET = 0;int ISK = 0;
+
+            int o_x = -1 + offset_x;  int o_g = -1 + offset_g;  int o_w = -1 + offset_w;  int o_low = -1 + offset_low; 
+             int o_up = -1 + offset_up; int o_ipivot = -1 + offset_ipivot;
+
+             // C
             // C THIS ROUTINE IS A BOUNDS-CONSTRAINED TRUNCATED-NEWTON METHOD.
             // C THE TRUNCATED-NEWTON METHOD IS PRECONDITIONED BY A LIMITED-MEMORY
             // C QUASI-NEWTON METHOD (THIS PRECONDITIONING STRATEGY IS DEVELOPED
@@ -1085,9 +920,7 @@ namespace DotNumerics.Optimization.TN
             // C
             // C CHECK THAT INITIAL X IS FEASIBLE AND THAT THE BOUNDS ARE CONSISTENT
             // C
-            #endregion
-            #region Body
-            
+
             this._crash.Run(N, ref X, offset_x, ref IPIVOT, offset_ipivot, LOW, offset_low, UP, offset_up, ref IER);
             if (IER != 0) ;//ERROR-ERRORWRITE(*,800)
             if (IER != 0) return;
@@ -1357,15 +1190,10 @@ namespace DotNumerics.Optimization.TN
             // C
         LABEL160:  IFAIL = NWHY;
             return;
-            #endregion
         }
     }
 
-    #endregion
 
-
-    #region The Class: MONIT
-    
     // C
     // C
     public class MONIT
@@ -1379,18 +1207,11 @@ namespace DotNumerics.Optimization.TN
         public void Run(int N, double[] X, int offset_x, double F, double[] G, int offset_g, int NITER, int NFTOTL
                          , int NFEVAL, int IRESET, int[] IPIVOT, int offset_ipivot)
         {
-            #region Variables
-            
-            double GTG = 0; 
-            #endregion
-            #region Implicit Variables
-            
-            int I = 0; 
-            #endregion
-            #region Array Index Correction
-            
-             int o_x = -1 + offset_x;  int o_g = -1 + offset_g;  int o_ipivot = -1 + offset_ipivot; 
-            #endregion
+            double GTG = 0;
+
+            int I = 0;
+
+            int o_x = -1 + offset_x;  int o_g = -1 + offset_g;  int o_ipivot = -1 + offset_ipivot;
             // C
             // C PRINT RESULTS OF CURRENT ITERATION
             // C
@@ -1407,11 +1228,7 @@ namespace DotNumerics.Optimization.TN
         }
     }
 
-    #endregion
 
-
-    #region The Class: ZTIME
-    
     // C
     // C
     public class ZTIME
@@ -1424,14 +1241,9 @@ namespace DotNumerics.Optimization.TN
     
         public void Run(int N, ref double[] X, int offset_x, int[] IPIVOT, int offset_ipivot)
         {
-            #region Implicit Variables
-            
-            int I = 0; 
-            #endregion
-            #region Array Index Correction
-            
-             int o_x = -1 + offset_x;  int o_ipivot = -1 + offset_ipivot; 
-            #endregion
+            int I = 0;
+
+            int o_x = -1 + offset_x;  int o_ipivot = -1 + offset_ipivot;
             // C
             // C THIS ROUTINE MULTIPLIES THE VECTOR X BY THE CONSTRAINT MATRIX Z
             // C
@@ -1443,11 +1255,7 @@ namespace DotNumerics.Optimization.TN
         }
     }
 
-    #endregion
 
-
-    #region The Class: STPMAX
-    
     // C
     // C
     public class STPMAX
@@ -1461,20 +1269,13 @@ namespace DotNumerics.Optimization.TN
         public void Run(double STEPMX, double PE, ref double SPE, int N, double[] X, int offset_x, double[] P, int offset_p
                          , int[] IPIVOT, int offset_ipivot, double[] LOW, int offset_low, double[] UP, int offset_up)
         {
-            #region Variables
-            
-            double T = 0; 
-            #endregion
-            #region Implicit Variables
-            
-            int I = 0; 
-            #endregion
-            #region Array Index Correction
-            
-             int o_x = -1 + offset_x;  int o_p = -1 + offset_p;  int o_ipivot = -1 + offset_ipivot;  int o_low = -1 + offset_low; 
+            double T = 0;
+
+            int I = 0;
+
+            int o_x = -1 + offset_x;  int o_p = -1 + offset_p;  int o_ipivot = -1 + offset_ipivot;  int o_low = -1 + offset_low; 
              int o_up = -1 + offset_up;
-            #endregion
-            // C
+             // C
             // C COMPUTE THE MAXIMUM ALLOWABLE STEP LENGTH
             // C
             SPE = STEPMX / PE;
@@ -1495,11 +1296,7 @@ namespace DotNumerics.Optimization.TN
         }
     }
 
-    #endregion
 
-
-    #region The Class: MODZ
-    
     // C
     // C
     public class MODZ
@@ -1513,20 +1310,13 @@ namespace DotNumerics.Optimization.TN
         public void Run(int N, ref double[] X, int offset_x, double[] P, int offset_p, ref int[] IPIVOT, int offset_ipivot, double EPSMCH, double[] LOW, int offset_low
                          , double[] UP, int offset_up, ref double FLAST, double FNEW)
         {
-            #region Variables
-            
-            double DABS = 0; double TOL = 0; 
-            #endregion
-            #region Implicit Variables
-            
-            int I = 0; 
-            #endregion
-            #region Array Index Correction
-            
-             int o_x = -1 + offset_x;  int o_p = -1 + offset_p;  int o_ipivot = -1 + offset_ipivot;  int o_low = -1 + offset_low; 
+            double DABS = 0; double TOL = 0;
+
+            int I = 0;
+
+            int o_x = -1 + offset_x;  int o_p = -1 + offset_p;  int o_ipivot = -1 + offset_ipivot;  int o_low = -1 + offset_low; 
              int o_up = -1 + offset_up;
-            #endregion
-            // C
+             // C
             // C UPDATE THE CONSTRAINT MATRIX IF A NEW CONSTRAINT IS ENCOUNTERED
             // C
             for (I = 1; I <= N; I++)
@@ -1551,11 +1341,7 @@ namespace DotNumerics.Optimization.TN
         }
     }
 
-    #endregion
 
-
-    #region The Class: CNVTST
-    
     // C
     // C
     public class CNVTST
@@ -1570,23 +1356,15 @@ namespace DotNumerics.Optimization.TN
                          , double RTLEPS, double FTEST, double GTG, double PEPS, double EPSMCH, double GTPNEW
                          , double FNEW, ref double FLAST, double[] G, int offset_g, ref int[] IPIVOT, int offset_ipivot, int N, double ACCRCY)
         {
-            #region Variables
-            
-            bool LTEST = false; double ONE = 0; double CMAX = 0; double T = 0; 
-            #endregion
-            #region Implicit Variables
-            
-            int IMAX = 0; int I = 0; 
-            #endregion
-            #region Array Index Correction
-            
-             int o_g = -1 + offset_g;  int o_ipivot = -1 + offset_ipivot; 
-            #endregion
+            bool LTEST = false; double ONE = 0; double CMAX = 0; double T = 0;
+
+            int IMAX = 0; int I = 0;
+
+            int o_g = -1 + offset_g;  int o_ipivot = -1 + offset_ipivot;
             // C
             // C TEST FOR CONVERGENCE
             // C
-            #region Body
-            
+
             IMAX = 0;
             CMAX = 0.0E0;
             LTEST = FLAST - FNEW <=  - 5.0E-1;
@@ -1618,15 +1396,10 @@ namespace DotNumerics.Optimization.TN
             // C MODIFIED TO INCORPORATE TOLERANCES FOR ZERO.
             // C
             return;
-            #endregion
         }
     }
 
-    #endregion
 
-
-    #region The Class: CRASH
-    
     // C
     // C
     public class CRASH
@@ -1639,16 +1412,11 @@ namespace DotNumerics.Optimization.TN
     
         public void Run(int N, ref double[] X, int offset_x, ref int[] IPIVOT, int offset_ipivot, double[] LOW, int offset_low, double[] UP, int offset_up, ref int IER)
         {
-            #region Implicit Variables
-            
-            int I = 0; 
-            #endregion
-            #region Array Index Correction
-            
-             int o_x = -1 + offset_x;  int o_ipivot = -1 + offset_ipivot;  int o_low = -1 + offset_low; 
+            int I = 0;
+
+            int o_x = -1 + offset_x;  int o_ipivot = -1 + offset_ipivot;  int o_low = -1 + offset_low; 
              int o_up = -1 + offset_up;
-            #endregion
-            // C
+             // C
             // C THIS INITIALIZES THE CONSTRAINT INFORMATION, AND ENSURES THAT THE
             // C INITIAL POINT SATISFIES  LOW <= X <= UP.
             // C THE CONSTRAINTS ARE CHECKED FOR CONSISTENCY.
@@ -1668,42 +1436,26 @@ namespace DotNumerics.Optimization.TN
         }
     }
 
-    #endregion
 
-
-    #region The Class: MODLNP
-    
     // C
     // C THE VECTORS SK AND YK, ALTHOUGH NOT IN THE CALL,
     // C ARE USED (VIA THEIR POSITION IN W) BY THE ROUTINE MSOLVE.
     // C
     public class MODLNP
     {
-    
-        #region Dependencies
-        
         DDOT _ddot; INITPC _initpc; ZTIME _ztime; MSOLVE _msolve; GTIMS _gtims; NDIA3 _ndia3; DAXPY _daxpy; NEGVEC _negvec; 
         DCOPY _dcopy;
-        #endregion
+
         public MODLNP(DDOT ddot, INITPC initpc, ZTIME ztime, MSOLVE msolve, GTIMS gtims, NDIA3 ndia3, DAXPY daxpy, NEGVEC negvec, DCOPY dcopy)
         {
-    
-            #region Set Dependencies
-            
             this._ddot = ddot; this._initpc = initpc; this._ztime = ztime; this._msolve = msolve; this._gtims = gtims; 
-            this._ndia3 = ndia3;this._daxpy = daxpy; this._negvec = negvec; this._dcopy = dcopy; 
-            #endregion
+            this._ndia3 = ndia3;this._daxpy = daxpy; this._negvec = negvec; this._dcopy = dcopy;
         }
     
         public MODLNP()
         {
-    
-            #region Initialization Common Blocks
-            
             CommonBlock SUBSCR = new CommonBlock(0, 15, 0, 0);
-            #endregion
-            #region Dependencies (Initialization)
-            
+
             DDOT ddot = new DDOT();
             DCOPY dcopy = new DCOPY();
             ZTIME ztime = new ZTIME();
@@ -1716,12 +1468,9 @@ namespace DotNumerics.Optimization.TN
             MSLV mslv = new MSLV(ddot, ssbfgs);
             MSOLVE msolve = new MSOLVE(mslv, SUBSCR);
             NDIA3 ndia3 = new NDIA3(ddot);
-            #endregion
-            #region Set Dependencies
-            
+
             this._ddot = ddot; this._initpc = initpc; this._ztime = ztime; this._msolve = msolve; this._gtims = gtims; 
-            this._ndia3 = ndia3;this._daxpy = daxpy; this._negvec = negvec; this._dcopy = dcopy; 
-            #endregion
+            this._ndia3 = ndia3;this._daxpy = daxpy; this._negvec = negvec; this._dcopy = dcopy;
         }
         /// <param name="MODET">
         /// - INTEGER WHICH CONTROLS AMOUNT OF OUTPUT
@@ -1744,25 +1493,17 @@ namespace DotNumerics.Optimization.TN
                          , bool UPD1, double YKSK, ref double GSK, double YRSR, bool LRESET, ISFUN SFUN
                          , bool BOUNDS, int[] IPIVOT, int offset_ipivot, double ACCRCY, ref double GTP, double GNORM, double XNORM)
         {
-            #region Variables
-            
             double ALPHA = 0; double BETA = 0; double DELTA = 0; double PR = 0; double QOLD = 0; double QNEW = 0; 
             double QTEST = 0;double RHSNRM = 0; double RNORM = 0; double RZ = 0; double RZOLD = 0; double TOL = 0; double VGV = 0; 
-            double DNRM2 = 0;bool FIRST = false; 
-            #endregion
-            #region Implicit Variables
-            
-            int I = 0; int K = 0; 
-            #endregion
-            #region Array Index Correction
-            
-             int o_zsol = -1 + offset_zsol;  int o_gv = -1 + offset_gv;  int o_r = -1 + offset_r;  int o_v = -1 + offset_v; 
+            double DNRM2 = 0;bool FIRST = false;
+
+            int I = 0; int K = 0;
+
+            int o_zsol = -1 + offset_zsol;  int o_gv = -1 + offset_gv;  int o_r = -1 + offset_r;  int o_v = -1 + offset_v; 
              int o_diagb = -1 + offset_diagb; int o_emat = -1 + offset_emat;  int o_x = -1 + offset_x;  int o_g = -1 + offset_g; 
-             int o_zk = -1 + offset_zk; int o_w = -1 + offset_w;  int o_ipivot = -1 + offset_ipivot; 
-            #endregion
-            #region Prolog
-            
-            // C
+             int o_zk = -1 + offset_zk; int o_w = -1 + offset_w;  int o_ipivot = -1 + offset_ipivot;
+
+             // C
             // C THIS ROUTINE PERFORMS A PRECONDITIONED CONJUGATE-GRADIENT
             // C ITERATION IN ORDER TO SOLVE THE NEWTON EQUATIONS FOR A SEARCH
             // C DIRECTION FOR A TRUNCATED-NEWTON ALGORITHM.  WHEN THE VALUE OF THE
@@ -1786,9 +1527,7 @@ namespace DotNumerics.Optimization.TN
             // C
             // C GENERAL INITIALIZATION
             // C
-            #endregion
-            #region Body
-            
+
             if (MODET > 0) ;//ERROR-ERRORWRITE(*,800)
             if (MAXIT == 0) return;
             FIRST = true;
@@ -1904,60 +1643,35 @@ namespace DotNumerics.Optimization.TN
         LABEL90:;
             this._dcopy.Run(N, EMAT, offset_emat, 1, ref DIAGB, offset_diagb, 1);
             return;
-            #endregion
         }
     }
 
-    #endregion
 
-
-    #region The Class: NDIA3
-    
     // C
     // C
     public class NDIA3
     {
-    
-        #region Dependencies
-        
-        DDOT _ddot; 
-        #endregion
+        DDOT _ddot;
+
         public NDIA3(DDOT ddot)
         {
-    
-            #region Set Dependencies
-            
-            this._ddot = ddot; 
-            #endregion
+            this._ddot = ddot;
         }
     
         public NDIA3()
         {
-    
-            #region Dependencies (Initialization)
-            
             DDOT ddot = new DDOT();
-            #endregion
-            #region Set Dependencies
-            
-            this._ddot = ddot; 
-            #endregion
+
+            this._ddot = ddot;
         }
         public void Run(int N, ref double[] E, int offset_e, double[] V, int offset_v, double[] GV, int offset_gv, double[] R, int offset_r, double VGV
                          , int MODET)
         {
-            #region Variables
-            
-            double VR = 0; 
-            #endregion
-            #region Implicit Variables
-            
-            int I = 0; 
-            #endregion
-            #region Array Index Correction
-            
-             int o_e = -1 + offset_e;  int o_v = -1 + offset_v;  int o_gv = -1 + offset_gv;  int o_r = -1 + offset_r; 
-            #endregion
+            double VR = 0;
+
+            int I = 0;
+
+            int o_e = -1 + offset_e;  int o_v = -1 + offset_v;  int o_gv = -1 + offset_gv;  int o_r = -1 + offset_r;
             // C
             // C UPDATE THE PRECONDITIOING MATRIX BASED ON A DIAGONAL VERSION
             // C OF THE BFGS QUASI-NEWTON UPDATE.
@@ -1975,11 +1689,7 @@ namespace DotNumerics.Optimization.TN
         }
     }
 
-    #endregion
 
-
-    #region The Class: NEGVEC
-    
     // C
     // C      SERVICE ROUTINES FOR OPTIMIZATION
     // C
@@ -1993,14 +1703,9 @@ namespace DotNumerics.Optimization.TN
     
         public void Run(int N, ref double[] V, int offset_v)
         {
-            #region Variables
-            
-            int I = 0; 
-            #endregion
-            #region Array Index Correction
-            
-             int o_v = -1 + offset_v; 
-            #endregion
+            int I = 0;
+
+            int o_v = -1 + offset_v;
             // C
             // C NEGATIVE OF THE VECTOR V
             // C
@@ -2012,11 +1717,7 @@ namespace DotNumerics.Optimization.TN
         }
     }
 
-    #endregion
 
-
-    #region The Class: LSOUT
-    
     // C
     // C
     public class LSOUT
@@ -2031,10 +1732,7 @@ namespace DotNumerics.Optimization.TN
                          , double FW, double GW, double U, double A, double B, double TOL
                          , double EPS, double SCXBD, double XLAMDA)
         {
-            #region Variables
-            
-            double YA = 0; double YB = 0; double YBND = 0; double YW = 0; double YU = 0; 
-            #endregion
+            double YA = 0; double YB = 0; double YBND = 0; double YW = 0; double YU = 0;
             // C
             // C ERROR PRINTOUTS FOR GETPTC
             // C
@@ -2055,49 +1753,30 @@ namespace DotNumerics.Optimization.TN
         }
     }
 
-    #endregion
 
-
-    #region The Class: STEP1
-    
     // C
     // C
     public class STEP1
     {
-    
-        #region Dependencies
-        
-        MCHPR1 _mchpr1; 
-        #endregion
+        MCHPR1 _mchpr1;
+
         public STEP1(MCHPR1 mchpr1)
         {
-    
-            #region Set Dependencies
-            
-            this._mchpr1 = mchpr1; 
-            #endregion
+            this._mchpr1 = mchpr1;
         }
     
         public STEP1()
         {
-    
-            #region Dependencies (Initialization)
-            
             MCHPR1 mchpr1 = new MCHPR1();
-            #endregion
-            #region Set Dependencies
-            
-            this._mchpr1 = mchpr1; 
-            #endregion
+
+            this._mchpr1 = mchpr1;
         }
         public double Run(double FNEW, double FM, double GTP, double SMAX)
         {
         double step1 = 0;
-            #region Variables
-            
-            double ALPHA = 0; double D = 0; double EPSMCH = 0; double DABS = 0; 
-            #endregion
-            // C
+
+        double ALPHA = 0; double D = 0; double EPSMCH = 0; double DABS = 0;
+        // C
             // C ********************************************************
             // C STEP1 RETURNS THE LENGTH OF THE INITIAL STEP TO BE TAKEN ALONG THE
             // C VECTOR P IN THE NEXT LINEAR SEARCH.
@@ -2113,11 +1792,7 @@ namespace DotNumerics.Optimization.TN
         }
     }
 
-    #endregion
 
-
-    #region The Class: MCHPR1
-    
     // C
     // C
     public class MCHPR1
@@ -2131,11 +1806,9 @@ namespace DotNumerics.Optimization.TN
         public double Run()
         {
         double mchpr1 = 0;
-            #region Variables
-            
-            double X = 0; 
-            #endregion
-            // C
+
+        double X = 0;
+        // C
             // C RETURNS THE VALUE OF EPSMCH, WHERE EPSMCH IS THE SMALLEST POSSIBLE
             // C REAL NUMBER SUCH THAT 1.0 + EPSMCH .GT. 1.0
             // C
@@ -2150,61 +1823,38 @@ namespace DotNumerics.Optimization.TN
         }
     }
 
-    #endregion
 
-
-    #region The Class: CHKUCP
-    
     // C
     // C
     public class CHKUCP
     {
-    
-        #region Dependencies
-        
-        MCHPR1 _mchpr1; DNRM2 _dnrm2; 
-        #endregion
+        MCHPR1 _mchpr1; DNRM2 _dnrm2;
+
         public CHKUCP(MCHPR1 mchpr1, DNRM2 dnrm2)
         {
-    
-            #region Set Dependencies
-            
-            this._mchpr1 = mchpr1; this._dnrm2 = dnrm2; 
-            #endregion
+            this._mchpr1 = mchpr1; this._dnrm2 = dnrm2;
         }
     
         public CHKUCP()
         {
-    
-            #region Dependencies (Initialization)
-            
             MCHPR1 mchpr1 = new MCHPR1();
             DNRM2 dnrm2 = new DNRM2();
-            #endregion
-            #region Set Dependencies
-            
-            this._mchpr1 = mchpr1; this._dnrm2 = dnrm2; 
-            #endregion
+
+            this._mchpr1 = mchpr1; this._dnrm2 = dnrm2;
         }
         public void Run(int LWTEST, int MAXFUN, ref int NWHY, int N, ref double ALPHA, ref double EPSMCH
                          , double ETA, ref double PEPS, ref double RTEPS, ref double RTOL, ref double RTOLSQ, double STEPMX
                          , ref double TEST, double XTOL, ref double XNORM, double[] X, int offset_x, int LW, ref double SMALL
                          , ref double TINY, double ACCRCY)
         {
-            #region Variables
-            
-            double DABS = 0; double DSQRT = 0; 
-            #endregion
-            #region Array Index Correction
-            
-             int o_x = -1 + offset_x; 
-            #endregion
+            double DABS = 0; double DSQRT = 0;
+
+            int o_x = -1 + offset_x;
             // C
             // C CHECKS PARAMETERS AND SETS CONSTANTS WHICH ARE COMMON TO BOTH
             // C DERIVATIVE AND NON-DERIVATIVE ALGORITHMS
             // C
-            #region Body
-            
+
             EPSMCH = this._mchpr1.Run();
             SMALL = EPSMCH * EPSMCH;
             TINY = SMALL;
@@ -2226,52 +1876,31 @@ namespace DotNumerics.Optimization.TN
             ALPHA = 0.0E0;
             TEST = 0.0E0;
             return;
-            #endregion
         }
     }
 
-    #endregion
 
-
-    #region The Class: SETUCR
-    
     // C
     // C
     public class SETUCR
     {
-    
-        #region Dependencies
-        
-        DDOT _ddot; 
-        #endregion
+        DDOT _ddot;
+
         public SETUCR(DDOT ddot)
         {
-    
-            #region Set Dependencies
-            
-            this._ddot = ddot; 
-            #endregion
+            this._ddot = ddot;
         }
     
         public SETUCR()
         {
-    
-            #region Dependencies (Initialization)
-            
             DDOT ddot = new DDOT();
-            #endregion
-            #region Set Dependencies
-            
-            this._ddot = ddot; 
-            #endregion
+
+            this._ddot = ddot;
         }
         public void Run(double SMALL, ref int NFTOTL, ref int NITER, int N, double F, ref double FNEW
                          , ref double FM, ref double GTG, ref double OLDF, ISFUN SFUN, ref double[] G, int offset_g, double[] X, int offset_x)
         {
-            #region Array Index Correction
-            
-             int o_g = -1 + offset_g;  int o_x = -1 + offset_x; 
-            #endregion
+            int o_g = -1 + offset_g;  int o_x = -1 + offset_x;
             // C
             // C CHECK INPUT PARAMETERS, COMPUTE THE INITIAL FUNCTION VALUE, SET
             // C CONSTANTS FOR THE SUBSEQUENT MINIMIZATION
@@ -2292,32 +1921,17 @@ namespace DotNumerics.Optimization.TN
         }
     }
 
-    #endregion
 
-
-    #region The Class: GTIMS
-    
     // C
     // C
     public class GTIMS
     {
-    
-        #region Common variables
-        
-        #region Common Block: SUBSCR Declaration
-        
         CommonBlock _subscr;
         Oint LGV; Oint LZ1; Oint LZK; Oint LV; Oint LSK; Oint LYK; Oint LDIAGB; Oint LSR; Oint LYR; Oint LHYR; Oint LHG; 
-        Oint LHYK;Oint LPK; Oint LEMAT; Oint LWTEST; 
-        #endregion
-        #endregion
+        Oint LHYK;Oint LPK; Oint LEMAT; Oint LWTEST;
+
         public GTIMS(CommonBlock SUBSCR)
         {
-    
-            #region Common varaible Initialization
-            
-            #region Common Block: SUBSCR Initialization
-            
             this._subscr = SUBSCR;
             LGV = SUBSCR.intData[0];
             LZ1 = SUBSCR.intData[1];
@@ -2334,21 +1948,12 @@ namespace DotNumerics.Optimization.TN
             LPK = SUBSCR.intData[12];
             LEMAT = SUBSCR.intData[13];
             LWTEST = SUBSCR.intData[14];
-            #endregion
-            #endregion
         }
     
         public GTIMS()
         {
-    
-            #region Initialization Common Blocks
-            
             CommonBlock SUBSCR = new CommonBlock(0, 15, 0, 0);
-            #endregion
-            #region Common varaible Initialization
-            
-            #region Common Block: SUBSCR Initialization
-            
+
             this._subscr = SUBSCR;
             LGV = SUBSCR.intData[0];
             LZ1 = SUBSCR.intData[1];
@@ -2365,8 +1970,6 @@ namespace DotNumerics.Optimization.TN
             LPK = SUBSCR.intData[12];
             LEMAT = SUBSCR.intData[13];
             LWTEST = SUBSCR.intData[14];
-            #endregion
-            #endregion
         }
         /// <param name="V">
         /// AND STORES THE RESULT IN THE VECTOR GV (FINITE-DIFFERENCE VERSION)
@@ -2374,20 +1977,13 @@ namespace DotNumerics.Optimization.TN
         public void Run(double[] V, int offset_v, ref double[] GV, int offset_gv, int N, double[] X, int offset_x, double[] G, int offset_g, ref double[] W, int offset_w
                          , int LW, ISFUN SFUN, ref bool FIRST, ref double DELTA, double ACCRCY, double XNORM)
         {
-            #region Variables
-            
-            double DINV = 0; double F = 0; double DSQRT = 0; 
-            #endregion
-            #region Implicit Variables
-            
-            int IHG = 0; int I = 0; 
-            #endregion
-            #region Array Index Correction
-            
-             int o_v = -1 + offset_v;  int o_gv = -1 + offset_gv;  int o_x = -1 + offset_x;  int o_g = -1 + offset_g; 
+            double DINV = 0; double F = 0; double DSQRT = 0;
+
+            int IHG = 0; int I = 0;
+
+            int o_v = -1 + offset_v;  int o_gv = -1 + offset_gv;  int o_x = -1 + offset_x;  int o_g = -1 + offset_g; 
              int o_w = -1 + offset_w;
-            #endregion
-            // C
+             // C
             // C THIS ROUTINE COMPUTES THE PRODUCT OF THE MATRIX G TIMES THE VECTOR
             // C V AND STORES THE RESULT IN THE VECTOR GV (FINITE-DIFFERENCE VERSION)
             // C
@@ -2411,40 +2007,21 @@ namespace DotNumerics.Optimization.TN
         }
     }
 
-    #endregion
 
-
-    #region The Class: MSOLVE
-    
     // C
     // C
     public class MSOLVE
     {
-    
-        #region Dependencies
-        
-        MSLV _mslv; 
-        #endregion
-        #region Common variables
-        
-        #region Common Block: SUBSCR Declaration
-        
+        MSLV _mslv;
+
         CommonBlock _subscr;
         Oint LGV; Oint LZ1; Oint LZK; Oint LV; Oint LSK; Oint LYK; Oint LDIAGB; Oint LSR; Oint LYR; Oint LHYR; Oint LHG; 
-        Oint LHYK;Oint LPK; Oint LEMAT; Oint LWTEST; 
-        #endregion
-        #endregion
+        Oint LHYK;Oint LPK; Oint LEMAT; Oint LWTEST;
+
         public MSOLVE(MSLV mslv, CommonBlock SUBSCR)
         {
-    
-            #region Set Dependencies
-            
-            this._mslv = mslv; 
-            #endregion
-            #region Common varaible Initialization
-            
-            #region Common Block: SUBSCR Initialization
-            
+            this._mslv = mslv;
+
             this._subscr = SUBSCR;
             LGV = SUBSCR.intData[0];
             LZ1 = SUBSCR.intData[1];
@@ -2461,31 +2038,18 @@ namespace DotNumerics.Optimization.TN
             LPK = SUBSCR.intData[12];
             LEMAT = SUBSCR.intData[13];
             LWTEST = SUBSCR.intData[14];
-            #endregion
-            #endregion
         }
     
         public MSOLVE()
         {
-    
-            #region Initialization Common Blocks
-            
             CommonBlock SUBSCR = new CommonBlock(0, 15, 0, 0);
-            #endregion
-            #region Dependencies (Initialization)
-            
+
             DDOT ddot = new DDOT();
             SSBFGS ssbfgs = new SSBFGS();
             MSLV mslv = new MSLV(ddot, ssbfgs);
-            #endregion
-            #region Set Dependencies
-            
-            this._mslv = mslv; 
-            #endregion
-            #region Common varaible Initialization
-            
-            #region Common Block: SUBSCR Initialization
-            
+
+            this._mslv = mslv;
+
             this._subscr = SUBSCR;
             LGV = SUBSCR.intData[0];
             LZ1 = SUBSCR.intData[1];
@@ -2502,16 +2066,11 @@ namespace DotNumerics.Optimization.TN
             LPK = SUBSCR.intData[12];
             LEMAT = SUBSCR.intData[13];
             LWTEST = SUBSCR.intData[14];
-            #endregion
-            #endregion
         }
         public void Run(double[] G, int offset_g, ref double[] Y, int offset_y, int N, ref double[] W, int offset_w, int LW, bool UPD1
                          , double YKSK, ref double GSK, double YRSR, bool LRESET, bool FIRST)
         {
-            #region Array Index Correction
-            
-             int o_g = -1 + offset_g;  int o_y = -1 + offset_y;  int o_w = -1 + offset_w; 
-            #endregion
+            int o_g = -1 + offset_g;  int o_y = -1 + offset_y;  int o_w = -1 + offset_w;
             // C
             // C THIS ROUTINE SETS UPT THE ARRAYS FOR MSLV
             // C
@@ -2522,70 +2081,43 @@ namespace DotNumerics.Optimization.TN
         }
     }
 
-    #endregion
 
-
-    #region The Class: MSLV
-    
     public class MSLV
     {
-
-        #region Variables
-
         double RDIAGB = 0; double YKHYK = 0; double GHYK = 0; double YKSR = 0; double YKHYR = 0; double YRHYR = 0;
         double GSR = 0; double GHYR = 0; double ONE = 0;
-        #endregion
-    
-        #region Dependencies
-        
-        DDOT _ddot; SSBFGS _ssbfgs; 
-        #endregion
+
+        DDOT _ddot; SSBFGS _ssbfgs;
+
         public MSLV(DDOT ddot, SSBFGS ssbfgs)
         {
-    
-            #region Set Dependencies
-            
-            this._ddot = ddot; this._ssbfgs = ssbfgs; 
-            #endregion
+            this._ddot = ddot; this._ssbfgs = ssbfgs;
         }
     
         public MSLV()
         {
-    
-            #region Dependencies (Initialization)
-            
             DDOT ddot = new DDOT();
             SSBFGS ssbfgs = new SSBFGS();
-            #endregion
-            #region Set Dependencies
-            
-            this._ddot = ddot; this._ssbfgs = ssbfgs; 
-            #endregion
+
+            this._ddot = ddot; this._ssbfgs = ssbfgs;
         }
         public void Run(double[] G, int offset_g, ref double[] Y, int offset_y, int N, double[] SK, int offset_sk, double[] YK, int offset_yk, double[] DIAGB, int offset_diagb
                          , double[] SR, int offset_sr, double[] YR, int offset_yr, ref double[] HYR, int offset_hyr, ref double[] HG, int offset_hg, ref double[] HYK, int offset_hyk, bool UPD1
                          , double YKSK, ref double GSK, double YRSR, bool LRESET, bool FIRST)
         {
+            int I = 0;
 
-            #region Implicit Variables
-            
-            int I = 0; 
-            #endregion
-            #region Array Index Correction
-            
-             int o_g = -1 + offset_g;  int o_y = -1 + offset_y;  int o_sk = -1 + offset_sk;  int o_yk = -1 + offset_yk; 
+            int o_g = -1 + offset_g;  int o_y = -1 + offset_y;  int o_sk = -1 + offset_sk;  int o_yk = -1 + offset_yk; 
              int o_diagb = -1 + offset_diagb; int o_sr = -1 + offset_sr;  int o_yr = -1 + offset_yr;  int o_hyr = -1 + offset_hyr; 
-             int o_hg = -1 + offset_hg; int o_hyk = -1 + offset_hyk; 
-            #endregion
-            // C
+             int o_hg = -1 + offset_hg; int o_hyk = -1 + offset_hyk;
+             // C
             // C THIS ROUTINE ACTS AS A PRECONDITIONING STEP FOR THE
             // C LINEAR CONJUGATE-GRADIENT ROUTINE.  IT IS ALSO THE
             // C METHOD OF COMPUTING THE SEARCH DIRECTION FROM THE
             // C GRADIENT FOR THE NON-LINEAR CONJUGATE-GRADIENT CODE.
             // C IT REPRESENTS A TWO-STEP SELF-SCALED BFGS FORMULA.
             // C
-            #region Body
-            
+
             if (UPD1) goto LABEL100;
             ONE = 1.0E0;
             GSK = this._ddot.Run(N, G, offset_g, 1, SK, offset_sk, 1);
@@ -2638,15 +2170,10 @@ namespace DotNumerics.Optimization.TN
                 Y[I + o_y] = G[I + o_g] / DIAGB[I + o_diagb];
             }
             return;
-            #endregion
         }
     }
 
-    #endregion
 
-
-    #region The Class: SSBFGS
-    
     // C
     // C
     public class SSBFGS
@@ -2660,16 +2187,11 @@ namespace DotNumerics.Optimization.TN
         public void Run(int N, double GAMMA, double[] SJ, int offset_sj, double[] YJ, int offset_yj, double[] HJV, int offset_hjv, double[] HJYJ, int offset_hjyj
                          , double YJSJ, double YJHYJ, double VSJ, double VHYJ, ref double[] HJP1V, int offset_hjp1v)
         {
-            #region Variables
-            
-            int I = 0; double BETA = 0; double DELTA = 0; 
-            #endregion
-            #region Array Index Correction
-            
-             int o_sj = -1 + offset_sj;  int o_yj = -1 + offset_yj;  int o_hjv = -1 + offset_hjv;  int o_hjyj = -1 + offset_hjyj; 
+            int I = 0; double BETA = 0; double DELTA = 0;
+
+            int o_sj = -1 + offset_sj;  int o_yj = -1 + offset_yj;  int o_hjv = -1 + offset_hjv;  int o_hjyj = -1 + offset_hjyj; 
              int o_hjp1v = -1 + offset_hjp1v;
-            #endregion
-            // C
+             // C
             // C SELF-SCALED BFGS
             // C
             DELTA = (1.0E0 + GAMMA * YJHYJ / YJSJ) * VSJ / YJSJ - GAMMA * VHYJ / YJSJ;
@@ -2682,41 +2204,22 @@ namespace DotNumerics.Optimization.TN
         }
     }
 
-    #endregion
 
-
-    #region The Class: INITPC
-    
     // C
     // C ROUTINES TO INITIALIZE PRECONDITIONER
     // C
     public class INITPC
     {
-    
-        #region Dependencies
-        
-        INITP3 _initp3; 
-        #endregion
-        #region Common variables
-        
-        #region Common Block: SUBSCR Declaration
-        
+        INITP3 _initp3;
+
         CommonBlock _subscr;
         Oint LGV; Oint LZ1; Oint LZK; Oint LV; Oint LSK; Oint LYK; Oint LDIAGB; Oint LSR; Oint LYR; Oint LHYR; Oint LHG; 
-        Oint LHYK;Oint LPK; Oint LEMAT; Oint LWTEST; 
-        #endregion
-        #endregion
+        Oint LHYK;Oint LPK; Oint LEMAT; Oint LWTEST;
+
         public INITPC(INITP3 initp3, CommonBlock SUBSCR)
         {
-    
-            #region Set Dependencies
-            
-            this._initp3 = initp3; 
-            #endregion
-            #region Common varaible Initialization
-            
-            #region Common Block: SUBSCR Initialization
-            
+            this._initp3 = initp3;
+
             this._subscr = SUBSCR;
             LGV = SUBSCR.intData[0];
             LZ1 = SUBSCR.intData[1];
@@ -2733,31 +2236,18 @@ namespace DotNumerics.Optimization.TN
             LPK = SUBSCR.intData[12];
             LEMAT = SUBSCR.intData[13];
             LWTEST = SUBSCR.intData[14];
-            #endregion
-            #endregion
         }
     
         public INITPC()
         {
-    
-            #region Initialization Common Blocks
-            
             CommonBlock SUBSCR = new CommonBlock(0, 15, 0, 0);
-            #endregion
-            #region Dependencies (Initialization)
-            
+
             DDOT ddot = new DDOT();
             DCOPY dcopy = new DCOPY();
             INITP3 initp3 = new INITP3(ddot, dcopy);
-            #endregion
-            #region Set Dependencies
-            
-            this._initp3 = initp3; 
-            #endregion
-            #region Common varaible Initialization
-            
-            #region Common Block: SUBSCR Initialization
-            
+
+            this._initp3 = initp3;
+
             this._subscr = SUBSCR;
             LGV = SUBSCR.intData[0];
             LZ1 = SUBSCR.intData[1];
@@ -2774,16 +2264,11 @@ namespace DotNumerics.Optimization.TN
             LPK = SUBSCR.intData[12];
             LEMAT = SUBSCR.intData[13];
             LWTEST = SUBSCR.intData[14];
-            #endregion
-            #endregion
         }
         public void Run(double[] DIAGB, int offset_diagb, ref double[] EMAT, int offset_emat, int N, ref double[] W, int offset_w, int LW, int MODET
                          , bool UPD1, double YKSK, double GSK, double YRSR, bool LRESET)
         {
-            #region Array Index Correction
-            
-             int o_diagb = -1 + offset_diagb;  int o_emat = -1 + offset_emat;  int o_w = -1 + offset_w; 
-            #endregion
+            int o_diagb = -1 + offset_diagb;  int o_emat = -1 + offset_emat;  int o_w = -1 + offset_w;
             this._initp3.Run(DIAGB, offset_diagb, ref EMAT, offset_emat, N, LRESET, YKSK, YRSR
                              , ref W, LHYK.v + o_w, W, LSK.v + o_w, W, LYK.v + o_w, W, LSR.v + o_w, W, LYR.v + o_w, MODET
                              , UPD1);
@@ -2791,60 +2276,35 @@ namespace DotNumerics.Optimization.TN
         }
     }
 
-    #endregion
 
-
-    #region The Class: INITP3
-    
     public class INITP3
     {
-    
-        #region Dependencies
-        
-        DDOT _ddot; DCOPY _dcopy; 
-        #endregion
+        DDOT _ddot; DCOPY _dcopy;
+
         public INITP3(DDOT ddot, DCOPY dcopy)
         {
-    
-            #region Set Dependencies
-            
-            this._ddot = ddot; this._dcopy = dcopy; 
-            #endregion
+            this._ddot = ddot; this._dcopy = dcopy;
         }
     
         public INITP3()
         {
-    
-            #region Dependencies (Initialization)
-            
             DDOT ddot = new DDOT();
             DCOPY dcopy = new DCOPY();
-            #endregion
-            #region Set Dependencies
-            
-            this._ddot = ddot; this._dcopy = dcopy; 
-            #endregion
+
+            this._ddot = ddot; this._dcopy = dcopy;
         }
         public void Run(double[] DIAGB, int offset_diagb, ref double[] EMAT, int offset_emat, int N, bool LRESET, double YKSK, double YRSR
                          , ref double[] BSK, int offset_bsk, double[] SK, int offset_sk, double[] YK, int offset_yk, double[] SR, int offset_sr, double[] YR, int offset_yr, int MODET
                          , bool UPD1)
         {
-            #region Variables
-            
-            double COND = 0; double SDS = 0; double SRDS = 0; double YRSK = 0; double TD = 0; double D1 = 0; double DN = 0; 
-            #endregion
-            #region Implicit Variables
-            
-            int I = 0; 
-            #endregion
-            #region Array Index Correction
-            
-             int o_diagb = -1 + offset_diagb;  int o_emat = -1 + offset_emat;  int o_bsk = -1 + offset_bsk; 
-             int o_sk = -1 + offset_sk; int o_yk = -1 + offset_yk;  int o_sr = -1 + offset_sr;  int o_yr = -1 + offset_yr; 
-            #endregion
-            #region Body
-            
-            if (UPD1) goto LABEL90;
+            double COND = 0; double SDS = 0; double SRDS = 0; double YRSK = 0; double TD = 0; double D1 = 0; double DN = 0;
+
+            int I = 0;
+
+            int o_diagb = -1 + offset_diagb;  int o_emat = -1 + offset_emat;  int o_bsk = -1 + offset_bsk; 
+             int o_sk = -1 + offset_sk; int o_yk = -1 + offset_yk;  int o_sr = -1 + offset_sr;  int o_yr = -1 + offset_yr;
+
+             if (UPD1) goto LABEL90;
             if (LRESET) goto LABEL60;
             for (I = 1; I <= N; I++)
             {
@@ -2891,71 +2351,41 @@ namespace DotNumerics.Optimization.TN
             COND = DN / D1;
             //ERROR-ERROR      WRITE(*,800) D1,DN,COND;
             return;
-            #endregion
         }
     }
 
-    #endregion
 
-
-    #region The Class: SETPAR
-    
     // C
     // C
     public class SETPAR
     {
-    
-        #region Common variables
-        
-        #region Common Block: SUBSCR Declaration
-        
         CommonBlock _subscr;
-        Oint[] LSUB; int o_lsub; Oint LWTEST; 
-        #endregion
-        #endregion
+        Oint[] LSUB; int o_lsub; Oint LWTEST;
+
         public SETPAR(CommonBlock SUBSCR)
         {
-    
-            #region Common varaible Initialization
-            
-            #region Common Block: SUBSCR Initialization
-            
             this._subscr = SUBSCR;
             //Start Array: LSUB  StartIndex: 0  LastIndex: 13
             LSUB = SUBSCR.intData;
             o_lsub = -1;  //o_ = StartIndex-1
             //End Array: LSUB
             LWTEST = SUBSCR.intData[14];
-            #endregion
-            #endregion
         }
     
         public SETPAR()
         {
-    
-            #region Initialization Common Blocks
-            
             CommonBlock SUBSCR = new CommonBlock(0, 15, 0, 0);
-            #endregion
-            #region Common varaible Initialization
-            
-            #region Common Block: SUBSCR Initialization
-            
+
             this._subscr = SUBSCR;
             //Start Array: LSUB  StartIndex: 0  LastIndex: 13
             LSUB = SUBSCR.intData;
             o_lsub = -1;  //o_ = StartIndex-1
             //End Array: LSUB
             LWTEST = SUBSCR.intData[14];
-            #endregion
-            #endregion
         }
         public void Run(int N)
         {
-            #region Implicit Variables
-            
-            int I = 0; 
-            #endregion
+            int I = 0;
             // C
             // C SET UP PARAMETERS FOR THE OPTIMIZATION ROUTINE
             // C
@@ -2968,66 +2398,42 @@ namespace DotNumerics.Optimization.TN
         }
     }
 
-    #endregion
 
-
-    #region The Class: LINDER
-    
     // C
     // C      LINE SEARCH ALGORITHMS OF GILL AND MURRAY
     // C
     public class LINDER
     {
-    
-        #region Dependencies
-        
-        DDOT _ddot; GETPTC _getptc; LSOUT _lsout; DCOPY _dcopy; 
-        #endregion
+        DDOT _ddot; GETPTC _getptc; LSOUT _lsout; DCOPY _dcopy;
+
         public LINDER(DDOT ddot, GETPTC getptc, LSOUT lsout, DCOPY dcopy)
         {
-    
-            #region Set Dependencies
-            
-            this._ddot = ddot; this._getptc = getptc; this._lsout = lsout; this._dcopy = dcopy; 
-            #endregion
+            this._ddot = ddot; this._getptc = getptc; this._lsout = lsout; this._dcopy = dcopy;
         }
     
         public LINDER()
         {
-    
-            #region Dependencies (Initialization)
-            
             DDOT ddot = new DDOT();
             GETPTC getptc = new GETPTC();
             LSOUT lsout = new LSOUT();
             DCOPY dcopy = new DCOPY();
-            #endregion
-            #region Set Dependencies
-            
-            this._ddot = ddot; this._getptc = getptc; this._lsout = lsout; this._dcopy = dcopy; 
-            #endregion
+
+            this._ddot = ddot; this._getptc = getptc; this._lsout = lsout; this._dcopy = dcopy;
         }
         public void Run(int N, ISFUN SFUN, double SMALL, double EPSMCH, ref double RELTOL, ref double ABSTOL
                          , double TNYTOL, double ETA, double SFTBND, double XBND, double[] P, int offset_p, double GTP
                          , ref double[] X, int offset_x, ref double F, ref double ALPHA, ref double[] G, int offset_g, ref int NFTOTL, ref int IFLAG
                          , ref double[] W, int offset_w, int LW)
         {
-            #region Variables
-            
             int I = 0; int IENTRY = 0; int ITEST = 0; int L = 0; int LG = 0; int LX = 0; int NUMF = 0; int ITCNT = 0; 
             double A = 0;double B = 0; double B1 = 0; double BIG = 0; double E = 0; double FACTOR = 0; double FMIN = 0; 
             double FPRESN = 0;double FU = 0; double FW = 0; double GMIN = 0; double GTEST1 = 0; double GTEST2 = 0; double GU = 0; 
             double GW = 0;double OLDF = 0; double SCXBND = 0; double STEP = 0; double TOL = 0; double U = 0; double XMIN = 0; 
-            double XW = 0;double RMU = 0; double RTSMLL = 0; double UALPHA = 0; bool BRAKTD = false; double DSQRT = 0; 
-            #endregion
-            #region Implicit Variables
-            
-            int LSPRNT = 0; int NPRNT = 0; 
-            #endregion
-            #region Array Index Correction
-            
-             int o_p = -1 + offset_p;  int o_x = -1 + offset_x;  int o_g = -1 + offset_g;  int o_w = -1 + offset_w; 
-            #endregion
+            double XW = 0;double RMU = 0; double RTSMLL = 0; double UALPHA = 0; bool BRAKTD = false; double DSQRT = 0;
+
+            int LSPRNT = 0; int NPRNT = 0;
+
+            int o_p = -1 + offset_p;  int o_x = -1 + offset_x;  int o_g = -1 + offset_g;  int o_w = -1 + offset_w;
             // C
             // C
             // C
@@ -3037,8 +2443,7 @@ namespace DotNumerics.Optimization.TN
             // C
             // C      ALLOCATE THE ADDRESSES FOR LOCAL WORKSPACE
             // C
-            #region Body
-            
+
             LX = 1;
             LG = LX + N;
             LSPRNT = 0;
@@ -3121,15 +2526,10 @@ namespace DotNumerics.Optimization.TN
                 X[I + o_x] += ALPHA * P[I + o_p];
             }
         LABEL50:  return;
-            #endregion
         }
     }
 
-    #endregion
 
-
-    #region The Class: GETPTC
-    
     // C
     // C
     public class GETPTC
@@ -3147,16 +2547,12 @@ namespace DotNumerics.Optimization.TN
                          , ref double E, ref double STEP, ref double FACTOR, ref bool BRAKTD, ref double GTEST1, ref double GTEST2
                          , ref double TOL, ref int IENTRY, ref int ITEST)
         {
-            #region Variables
-            
             double DENOM = 0; bool CONVRG = false; double ABGMIN = 0; double ABGW = 0; double ABSR = 0; double A1 = 0; 
             double CHORDM = 0;double CHORDU = 0; double D1 = 0; double D2 = 0; double P = 0; double Q = 0; double R = 0; 
             double S = 0;double SCALE = 0; double SUMSQ = 0; double TWOTOL = 0; double XMIDPT = 0; double ZERO = 0; 
             double POINT1 = 0;double HALF = 0; double ONE = 0; double THREE = 0; double FIVE = 0; double ELEVEN = 0; 
-            double DABS = 0;double DSQRT = 0; 
-            #endregion
-            #region Prolog
-            
+            double DABS = 0;double DSQRT = 0;
+
             // C
             // C ************************************************************
             // C GETPTC, AN ALGORITHM FOR FINDING A STEPLENGTH, CALLED REPEATEDLY BY
@@ -3173,9 +2569,7 @@ namespace DotNumerics.Optimization.TN
             // C WITHIN GETPTC
             // C
             // C
-            #endregion
-            #region Body
-            
+
             ZERO = 0.0E0;
             POINT1 = 1.0E-1;
             HALF = 5.0E-1;
@@ -3458,15 +2852,10 @@ namespace DotNumerics.Optimization.TN
             if (Math.Abs(STEP) < TOL && STEP >= ZERO) U = TOL;
             ITEST = 1;
             return;
-            #endregion
         }
     }
 
-    #endregion
 
-
-    #region The Class: DDOT
-    
     // C//GO.SYSIN DD tn.f
     // Cecho blas.f 1>&2
     // Csed >blas.f <<'//GO.SYSIN DD blas.f' 's/^-//'
@@ -3489,22 +2878,17 @@ namespace DotNumerics.Optimization.TN
         public double Run(int N, double[] DX, int offset_dx, int INCX, double[] DY, int offset_dy, int INCY)
         {
         double ddot = 0;
-            #region Variables
-            
-            double DTEMP = 0; int I = 0; int IX = 0; int IY = 0; int M = 0; int MP1 = 0; 
-            #endregion
-            #region Array Index Correction
-            
-             int o_dx = -1 + offset_dx;  int o_dy = -1 + offset_dy; 
-            #endregion
-            // C
+
+        double DTEMP = 0; int I = 0; int IX = 0; int IY = 0; int M = 0; int MP1 = 0;
+
+        int o_dx = -1 + offset_dx;  int o_dy = -1 + offset_dy;
+        // C
             // C     FORMS THE DOT PRODUCT OF TWO VECTORS.
             // C     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO ONE.
             // C     JACK DONGARRA, LINPACK, 3/11/78.
             // C
             // C
-            #region Body
-            
+
             ddot = 0.0E0;
             DTEMP = 0.0E0;
             if (N <= 0) return ddot;
@@ -3545,15 +2929,10 @@ namespace DotNumerics.Optimization.TN
             }
         LABEL60:  ddot = DTEMP;
             return ddot;
-            #endregion
         }
     }
 
-    #endregion
 
-
-    #region The Class: DAXPY
-    
     public class DAXPY
     {
     
@@ -3564,22 +2943,16 @@ namespace DotNumerics.Optimization.TN
     
         public void Run(int N, double DA, double[] DX, int offset_dx, int INCX, ref double[] DY, int offset_dy, int INCY)
         {
-            #region Variables
-            
-            int I = 0; int IX = 0; int IY = 0; int M = 0; int MP1 = 0; 
-            #endregion
-            #region Array Index Correction
-            
-             int o_dx = -1 + offset_dx;  int o_dy = -1 + offset_dy; 
-            #endregion
+            int I = 0; int IX = 0; int IY = 0; int M = 0; int MP1 = 0;
+
+            int o_dx = -1 + offset_dx;  int o_dy = -1 + offset_dy;
             // C
             // C     CONSTANT TIMES A VECTOR PLUS A VECTOR.
             // C     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO ONE.
             // C     JACK DONGARRA, LINPACK, 3/11/78.
             // C
             // C
-            #region Body
-            
+
             if (N <= 0) return;
             if (DA == 0.0E0) return;
             if (INCX == 1 && INCY == 1) goto LABEL20;
@@ -3620,54 +2993,35 @@ namespace DotNumerics.Optimization.TN
                 DY[I + 3 + o_dy] += DA * DX[I + 3 + o_dx];
             }
             return;
-            #endregion
         }
     }
 
-    #endregion
 
-
-    #region The Class: DNRM2
-    
     public class DNRM2
     {
-    
-        #region Variables
-        
-        double CUTLO = 0; double CUTHI = 0; double ZERO = 0; double ONE = 0; 
-        #endregion
+        double CUTLO = 0; double CUTHI = 0; double ZERO = 0; double ONE = 0;
+
         public DNRM2()
         {
-    
-            #region Data Initialization
-            
             //ZERO,ONE/0.0D0,1.0D0
             ZERO = 0.0E0;
             ONE = 1.0E0;
             //CUTLO,CUTHI/8.232D-11,1.304D19
             CUTLO = 8.232E-11;
             CUTHI = 1.304E19;
-            #endregion
         }
     
         public double Run(int N, double[] DX, int offset_dx, int INCX)
         {
         double dnrm2 = 0;
-            #region Variables
-            
-            int NEXT = 0; double HITEST = 0; double SUM = 0; double XMAX = 0; 
-            #endregion
-            #region Implicit Variables
-            
-            int NN = 0; int I = 0; int J = 0; 
-            #endregion
-            #region Array Index Correction
-            
-             int o_dx = -1 + offset_dx; 
-            #endregion
-            #region Prolog
-            
-            // C
+
+        int NEXT = 0; double HITEST = 0; double SUM = 0; double XMAX = 0;
+
+        int NN = 0; int I = 0; int J = 0;
+
+        int o_dx = -1 + offset_dx;
+
+        // C
             // C     EUCLIDEAN NORM OF THE N-VECTOR STORED IN DX() WITH STORAGE
             // C     INCREMENT INCX .
             // C     IF    N .LE. 0 RETURN WITH RESULT = 0.
@@ -3706,9 +3060,7 @@ namespace DotNumerics.Optimization.TN
             // C     DATA CUTLO, CUTHI / 8.232D-11,  1.304D19 /
             // C     DATA CUTLO, CUTHI / 4.441E-16,  1.304E19 /
             // C
-            #endregion
-            #region Body
-            
+
             if (N > 0) goto LABEL10;
             dnrm2 = ZERO;
             goto LABEL300;
@@ -3799,15 +3151,10 @@ namespace DotNumerics.Optimization.TN
             dnrm2 = XMAX * Math.Sqrt(SUM);
         LABEL300:;
             return dnrm2;
-            #endregion
         }
     }
 
-    #endregion
 
-
-    #region The Class: DCOPY
-    
     public class DCOPY
     {
     
@@ -3818,22 +3165,16 @@ namespace DotNumerics.Optimization.TN
     
         public void Run(int N, double[] DX, int offset_dx, int INCX, ref double[] DY, int offset_dy, int INCY)
         {
-            #region Variables
-            
-            int I = 0; int IX = 0; int IY = 0; int M = 0; int MP1 = 0; 
-            #endregion
-            #region Array Index Correction
-            
-             int o_dx = -1 + offset_dx;  int o_dy = -1 + offset_dy; 
-            #endregion
+            int I = 0; int IX = 0; int IY = 0; int M = 0; int MP1 = 0;
+
+            int o_dx = -1 + offset_dx;  int o_dy = -1 + offset_dy;
             // C
             // C     COPIES A VECTOR, X, TO A VECTOR, Y.
             // C     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO ONE.
             // C     JACK DONGARRA, LINPACK, 3/11/78.
             // C
             // C
-            #region Body
-            
+
             if (N <= 0) return;
             if (INCX == 1 && INCY == 1) goto LABEL20;
             // C
@@ -3876,15 +3217,10 @@ namespace DotNumerics.Optimization.TN
                 DY[I + 6 + o_dy] = DX[I + 6 + o_dx];
             }
             return;
-            #endregion
         }
     }
 
-    #endregion
 
-
-    #region The Class: DXPY
-    
     // C******************************************************************
     // C SPECIAL BLAS FOR Y = X+Y
     // C******************************************************************
@@ -3898,22 +3234,16 @@ namespace DotNumerics.Optimization.TN
     
         public void Run(int N, double[] DX, int offset_dx, int INCX, ref double[] DY, int offset_dy, int INCY)
         {
-            #region Variables
-            
-            int I = 0; int IX = 0; int IY = 0; int M = 0; int MP1 = 0; 
-            #endregion
-            #region Array Index Correction
-            
-             int o_dx = -1 + offset_dx;  int o_dy = -1 + offset_dy; 
-            #endregion
+            int I = 0; int IX = 0; int IY = 0; int M = 0; int MP1 = 0;
+
+            int o_dx = -1 + offset_dx;  int o_dy = -1 + offset_dy;
             // C
             // C     VECTOR PLUS A VECTOR.
             // C     USES UNROLLED LOOPS FOR INCREMENTS EQUAL TO ONE.
             // C     STEPHEN G. NASH 5/30/89.
             // C
             // C
-            #region Body
-            
+
             if (N <= 0) return;
             if (INCX == 1 && INCY == 1) goto LABEL20;
             // C
@@ -3953,11 +3283,6 @@ namespace DotNumerics.Optimization.TN
                 DY[I + 3 + o_dy] += DX[I + 3 + o_dx];
             }
             return;
-            #endregion
         }
     }
-
-    #endregion
-
-    
 }

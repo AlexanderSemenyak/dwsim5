@@ -7,9 +7,6 @@ namespace DotNumerics.Optimization.TN
 {
     internal class TNDriver
     {
-
-        #region Fields
-
         LMQNBC MeLMQNBC;
         LMQN MeLMQN;
 
@@ -73,19 +70,11 @@ namespace DotNumerics.Optimization.TN
         ///// </summary>
         //private int MeFunEvaluations = 0;
 
-        #endregion
-
-        #region Constructor
-
         public TNDriver()
         {
 
         }
 
-        #endregion
-
-
-        #region
 
         /// <summary>
         /// SEVERITY OF THE LINESEARCH
@@ -114,11 +103,6 @@ namespace DotNumerics.Optimization.TN
         //    get { return MeFunEvaluations; }
         //    set { MeFunEvaluations = value; }
         //}
-
-        #endregion
-
-
-        #region Public Methods
 
 
         public double[] ComputeMin(OptMultivariateFunction function, OptMultivariateGradient gradient, OptVariable[] variables, double tolerance, double ACCRCY, ref int nMax)
@@ -185,12 +169,6 @@ namespace DotNumerics.Optimization.TN
             return this.MeExternalVariables;
 
         }
-
-
-        #endregion
-
-
-        #region Private Methods
 
 
         private void Initialize(OptMultivariateFunction function, OptMultivariateGradient gradient, OptVariable[] variables)
@@ -345,9 +323,6 @@ namespace DotNumerics.Optimization.TN
             }
 
         }
-
-        #endregion
-
     }
 
 
@@ -360,9 +335,6 @@ namespace DotNumerics.Optimization.TN
 
     public class SFUN : ISFUN
     {
-
-        #region Fields
-
         private OptMultivariateFunction MeFunction;
         private OptMultivariateGradient MeGradient;
 
@@ -377,8 +349,6 @@ namespace DotNumerics.Optimization.TN
         /// The number of function evaluations used to compute the minimum.
         /// </summary>
         private int MeFunEvaluations = 1; //en la inicializacion ya se se realizo una llamada, asi que inicia en 1
-
-        #endregion
 
 
         /// <summary>
@@ -434,15 +404,11 @@ namespace DotNumerics.Optimization.TN
 
         public void Run(int N, double[] X, int o_x, ref double F, ref double[] G, int o_g)
         {
-
-            #region                                         Array Index Correction
             //--------------------------------------------------------------------------------------------------------------------
             //                                              Array Index Correction
             //--------------------------------------------------------------------------------------------------------------------
 
             //int c_x = -1 + o_x; int c_g = -1 + o_g;
-
-            #endregion
 
             this.MeFunEvaluations++;
 
@@ -457,9 +423,6 @@ namespace DotNumerics.Optimization.TN
             return;
         }
 
-
-
-        #region Update External Variables
 
         private void UpdateExternalVariables(double[] X, int o_x)
         {
@@ -501,11 +464,6 @@ namespace DotNumerics.Optimization.TN
         }
 
 
-        #endregion
-
-
-        #region Update Internal Gradient
-
         private void UpdateInternalGradient(double[] G, int o_g)
         {
             if (this.MeOptVariable != null)
@@ -544,13 +502,6 @@ namespace DotNumerics.Optimization.TN
                 }
             }
         }
-
-
-        #endregion
-
-
-
-
     }
 
 

@@ -1,5 +1,3 @@
-#region Translated by Jose Antonio De Santiago-Castillo.
-
 //Translated by Jose Antonio De Santiago-Castillo.
 //E-mail:JAntonioDeSantiago@gmail.com
 //Website: www.DotNumerics.com
@@ -9,7 +7,6 @@
 //F2CSharp Version 0.72 (Dicember 7, 2009)
 //Code Optimizations: , assignment operator, for-loop: array indexes
 //
-#endregion
 
 using System;
 using DotNumerics.FortranLibrary;
@@ -18,43 +15,19 @@ namespace DotNumerics.Optimization.LBFGSB
 {
     public class DPOFA
     {
-    
-
-        #region Dependencies
-        
-        DDOT _ddot; 
-
-        #endregion
+        DDOT _ddot;
 
         public DPOFA(DDOT ddot)
         {
-    
-
-            #region Set Dependencies
-            
-            this._ddot = ddot; 
-
-            #endregion
-
+            this._ddot = ddot;
         }
     
         public DPOFA()
         {
-    
-
-            #region Dependencies (Initialization)
-            
             DDOT ddot = new DDOT();
 
-            #endregion
 
-
-            #region Set Dependencies
-            
-            this._ddot = ddot; 
-
-            #endregion
-
+            this._ddot = ddot;
         }
         /// <param name="A">
         /// double precision(lda, n)
@@ -77,30 +50,15 @@ namespace DotNumerics.Optimization.LBFGSB
         ///</param>
         public void Run(ref double[] A, int offset_a, int LDA, int N, ref int INFO)
         {
-
-            #region Variables
-            
-            double T = 0; double S = 0; int J = 0; int JM1 = 0; int K = 0; 
-
-            #endregion
+            double T = 0; double S = 0; int J = 0; int JM1 = 0; int K = 0;
 
 
-            #region Implicit Variables
-            
-            int A_J = 0; 
-
-            #endregion
+            int A_J = 0;
 
 
-            #region Array Index Correction
-            
-             int o_a = -1 - LDA + offset_a; 
-
-            #endregion
+            int o_a = -1 - LDA + offset_a;
 
 
-            #region Prolog
-            
             // c
             // c     dpofa factors a double precision symmetric positive definite
             // c     matrix.
@@ -149,11 +107,7 @@ namespace DotNumerics.Optimization.LBFGSB
             // c
             // c
 
-            #endregion
 
-
-            #region Body
-            
             for (J = 1; J <= N; J++)
             {
                 INFO = J;
@@ -177,9 +131,6 @@ namespace DotNumerics.Optimization.LBFGSB
             INFO = 0;
         LABEL40:;
             return;
-
-            #endregion
-
         }
     }
     

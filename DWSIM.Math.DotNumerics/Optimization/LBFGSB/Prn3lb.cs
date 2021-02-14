@@ -1,5 +1,3 @@
-#region Translated by Jose Antonio De Santiago-Castillo.
-
 //Translated by Jose Antonio De Santiago-Castillo.
 //E-mail:JAntonioDeSantiago@gmail.com
 //Website: www.DotNumerics.com
@@ -9,7 +7,6 @@
 //F2CSharp Version 0.72 (Dicember 7, 2009)
 //Code Optimizations: , assignment operator, for-loop: array indexes
 //
-#endregion
 
 using System;
 using DotNumerics.FortranLibrary;
@@ -29,25 +26,12 @@ namespace DotNumerics.Optimization.LBFGSB
                          , double SBGNRM, double TIME, int NINT, BFGSWord WORD, int IBACK, double STP
                          , double XSTEP, int K, double CACHYT, double SBTIME, double LNSCHT)
         {
-
-            #region Variables
-            
-            int I = 0; 
-
-            #endregion
+            int I = 0;
 
 
-            #region Array Index Correction
-            
-             int o_x = -1 + offset_x; 
-
-            #endregion
+            int o_x = -1 + offset_x;
 
 
-            #region Prolog
-            
-            
-            
             // c     ************
             // c
             // c     Subroutine prn3lb
@@ -68,13 +52,7 @@ namespace DotNumerics.Optimization.LBFGSB
             // c
             // c
             // c     ************
-            
-            
 
-            #endregion
-
-
-            #region Body
 
             if (TASK == BFGSTask.ERROR) goto LABEL999;
             
@@ -130,10 +108,6 @@ namespace DotNumerics.Optimization.LBFGSB
             
             
             return;
-            
-
-            #endregion
-
         }
     }
     

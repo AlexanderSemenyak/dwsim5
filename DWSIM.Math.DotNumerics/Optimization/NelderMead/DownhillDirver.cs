@@ -6,9 +6,6 @@ namespace DotNumerics.Optimization.NelderMead
 {
     internal class DownhillDirver
     {
-
-        #region Fields
-
         Downhill _downhill = new Downhill();
 
         private OptMultivariateFunction _Function;
@@ -17,12 +14,6 @@ namespace DotNumerics.Optimization.NelderMead
         private double[] _ExternalVariables;
 
         private int _FunEvaluations = 0;
-
-
-        #endregion
-
-
-        #region Methods
 
 
         public double[] ComputeMin(OptMultivariateFunction function, OptSimplexVariable[] variables, double initialStep, double ftol, ref int nMax)
@@ -80,9 +71,6 @@ namespace DotNumerics.Optimization.NelderMead
 
         private void Initialize(OptMultivariateFunction funk, double initialStep, out double[,] p, out double[] y)
         {
-            #region Valores Iniciales
-
-
             int ndim = this._SimplexVariableList.Length;
             int mpts = ndim + 1;
             p = new double[mpts, ndim];
@@ -109,8 +97,6 @@ namespace DotNumerics.Optimization.NelderMead
                 this._FunEvaluations++;
                 y[i + 1] = funk(Variables);
             }
-
-            #endregion
         }
 
 
@@ -136,11 +122,5 @@ namespace DotNumerics.Optimization.NelderMead
 
             return F;
         }
-
-
-
-
-        #endregion
-
     }
 }

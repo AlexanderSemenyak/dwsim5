@@ -1,5 +1,3 @@
-#region Translated by Jose Antonio De Santiago-Castillo.
-
 //Translated by Jose Antonio De Santiago-Castillo.
 //E-mail:JAntonioDeSantiago@gmail.com
 //Website: www.DotNumerics.com
@@ -9,7 +7,6 @@
 //F2CSharp Version 0.72 (Dicember 7, 2009)
 //Code Optimizations: , assignment operator, for-loop: array indexes
 //
-#endregion
 
 using System;
 using DotNumerics.FortranLibrary;
@@ -18,45 +15,21 @@ namespace DotNumerics.Optimization.LBFGSB
 {
     public class BMV
     {
-    
-
-        #region Dependencies
-        
-        DTRSL _dtrsl; 
-
-        #endregion
+        DTRSL _dtrsl;
 
         public BMV(DTRSL dtrsl)
         {
-    
-
-            #region Set Dependencies
-            
-            this._dtrsl = dtrsl; 
-
-            #endregion
-
+            this._dtrsl = dtrsl;
         }
     
         public BMV()
         {
-    
-
-            #region Dependencies (Initialization)
-            
             DDOT ddot = new DDOT();
             DAXPY daxpy = new DAXPY();
             DTRSL dtrsl = new DTRSL(ddot, daxpy);
 
-            #endregion
 
-
-            #region Set Dependencies
-            
-            this._dtrsl = dtrsl; 
-
-            #endregion
-
+            this._dtrsl = dtrsl;
         }
         /// <param name="M">
         /// is an integer variable.
@@ -101,32 +74,15 @@ namespace DotNumerics.Optimization.LBFGSB
         public void Run(int M, double[] SY, int offset_sy, double[] WT, int offset_wt, int COL, double[] V, int offset_v, ref double[] P, int offset_p
                          , ref int INFO)
         {
-
-            #region Variables
-            
-            int I = 0; int K = 0; int I2 = 0; double SUM = 0; 
-
-            #endregion
+            int I = 0; int K = 0; int I2 = 0; double SUM = 0;
 
 
-            #region Implicit Variables
-            
-            int SY_I = 0; 
-
-            #endregion
+            int SY_I = 0;
 
 
-            #region Array Index Correction
-            
-             int o_sy = -1 - M + offset_sy;  int o_wt = -1 - M + offset_wt;  int o_v = -1 + offset_v;  int o_p = -1 + offset_p; 
-
-            #endregion
+            int o_sy = -1 - M + offset_sy;  int o_wt = -1 - M + offset_wt;  int o_v = -1 + offset_v;  int o_p = -1 + offset_p;
 
 
-            #region Prolog
-            
-            
-            
             // c     ************
             // c
             // c     Subroutine bmv
@@ -184,15 +140,8 @@ namespace DotNumerics.Optimization.LBFGSB
             // c
             // c
             // c     ************
-            
-            
-            
-
-            #endregion
 
 
-            #region Body
-            
             if (COL == 0) return;
             
             // c     PART I: solve [  D^(1/2)      O ] [ p1 ] = [ v1 ]
@@ -245,10 +194,6 @@ namespace DotNumerics.Optimization.LBFGSB
             }
             
             return;
-            
-
-            #endregion
-
         }
     }
     

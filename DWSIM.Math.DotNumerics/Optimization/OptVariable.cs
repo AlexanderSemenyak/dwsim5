@@ -9,8 +9,6 @@ namespace DotNumerics.Optimization
     /// </summary>
     public class OptVariable
     {
-        #region Fields
-
         /// <summary>
         /// The variable name.
         /// </summary>
@@ -25,10 +23,6 @@ namespace DotNumerics.Optimization
         /// Value that indicates if the variable is fixed.
         /// </summary>
         protected bool _Fixed = false;
-
-        #endregion
-
-        #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the OptVariable class.
@@ -82,10 +76,6 @@ namespace DotNumerics.Optimization
             this._Fixed = isFixed;
         }
 
-        #endregion
-
-
-        #region Properties
 
         /// <summary>
         /// The variable name.
@@ -113,8 +103,6 @@ namespace DotNumerics.Optimization
             get { return _Fixed; }
             set { _Fixed = value; }
         }
-
-        #endregion
 
         public override string ToString()
         {

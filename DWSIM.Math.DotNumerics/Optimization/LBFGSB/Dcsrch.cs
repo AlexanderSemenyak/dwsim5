@@ -1,5 +1,3 @@
-#region Translated by Jose Antonio De Santiago-Castillo.
-
 //Translated by Jose Antonio De Santiago-Castillo.
 //E-mail:JAntonioDeSantiago@gmail.com
 //Website: www.DotNumerics.com
@@ -9,7 +7,6 @@
 //F2CSharp Version 0.72 (Dicember 7, 2009)
 //Code Optimizations: , assignment operator, for-loop: array indexes
 //
-#endregion
 
 using System;
 using DotNumerics.FortranLibrary;
@@ -18,51 +15,23 @@ namespace DotNumerics.Optimization.LBFGSB
 {
     public class DCSRCH
     {
-    
-
-        #region Dependencies
-        
-        DCSTEP _dcstep; 
-
-        #endregion
+        DCSTEP _dcstep;
 
 
-        #region Variables
-        
         const double ZERO = 0.0E0; const double P5 = 0.5E0; const double P66 = 0.66E0; const double XTRAPL = 1.1E0; 
         const double XTRAPU = 4.0E0;
 
-        #endregion
-
         public DCSRCH(DCSTEP dcstep)
         {
-    
-
-            #region Set Dependencies
-            
-            this._dcstep = dcstep; 
-
-            #endregion
-
+            this._dcstep = dcstep;
         }
     
         public DCSRCH()
         {
-    
-
-            #region Dependencies (Initialization)
-            
             DCSTEP dcstep = new DCSTEP();
 
-            #endregion
 
-
-            #region Set Dependencies
-            
-            this._dcstep = dcstep; 
-
-            #endregion
-
+            this._dcstep = dcstep;
         }
         /// <param name="F">
         /// is a double precision variable.
@@ -409,26 +378,15 @@ namespace DotNumerics.Optimization.LBFGSB
         public void Run(double F, double G, ref double STP, double FTOL, double GTOL, double XTOL
                          , double STPMIN, double STPMAX, ref BFGSTask TASK, ref int[] ISAVE, int offset_isave, ref double[] DSAVE, int offset_dsave)
         {
-
-            #region Variables
-            
             bool BRACKT = false; int STAGE = 0; double FINIT = 0; double FTEST = 0; double FM = 0; double FX = 0; double FXM = 0; 
             double FY = 0;double FYM = 0; double GINIT = 0; double GTEST = 0; double GM = 0; double GX = 0; double GXM = 0; 
             double GY = 0;double GYM = 0; double STX = 0; double STY = 0; double STMIN = 0; double STMAX = 0; double WIDTH = 0; 
             double WIDTH1 = 0;
 
-            #endregion
+
+            int o_isave = -1 + offset_isave;  int o_dsave = -1 + offset_dsave;
 
 
-            #region Array Index Correction
-            
-             int o_isave = -1 + offset_isave;  int o_dsave = -1 + offset_dsave; 
-
-            #endregion
-
-
-            #region Prolog
-            
             // c     **********
             // c
             // c     Subroutine dcsrch
@@ -566,14 +524,9 @@ namespace DotNumerics.Optimization.LBFGSB
             
             
             // c     Initialization block.
-            
-
-            #endregion
 
 
-            #region Body
-
-             if (TASK == BFGSTask.START)
+            if (TASK == BFGSTask.START)
             {
                 
                 // c        Check the input arguments for errors.
@@ -820,10 +773,6 @@ namespace DotNumerics.Optimization.LBFGSB
             DSAVE[11 + o_dsave] = STMAX;
             DSAVE[12 + o_dsave] = WIDTH;
             DSAVE[13 + o_dsave] = WIDTH1;
-            
-
-            #endregion
-
         }
     }
     

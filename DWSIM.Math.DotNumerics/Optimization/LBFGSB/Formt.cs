@@ -1,5 +1,3 @@
-#region Translated by Jose Antonio De Santiago-Castillo.
-
 //Translated by Jose Antonio De Santiago-Castillo.
 //E-mail:JAntonioDeSantiago@gmail.com
 //Website: www.DotNumerics.com
@@ -9,7 +7,6 @@
 //F2CSharp Version 0.72 (Dicember 7, 2009)
 //Code Optimizations: , assignment operator, for-loop: array indexes
 //
-#endregion
 
 using System;
 using DotNumerics.FortranLibrary;
@@ -18,74 +15,33 @@ namespace DotNumerics.Optimization.LBFGSB
 {
     public class FORMT
     {
-    
-
-        #region Dependencies
-        
-        DPOFA _dpofa; 
-
-        #endregion
+        DPOFA _dpofa;
 
 
-        #region Variables
-        
-        const double ZERO = 0.0E0; 
-
-        #endregion
+        const double ZERO = 0.0E0;
 
         public FORMT(DPOFA dpofa)
         {
-    
-
-            #region Set Dependencies
-            
-            this._dpofa = dpofa; 
-
-            #endregion
-
+            this._dpofa = dpofa;
         }
     
         public FORMT()
         {
-    
-
-            #region Dependencies (Initialization)
-            
             DDOT ddot = new DDOT();
             DPOFA dpofa = new DPOFA(ddot);
 
-            #endregion
 
-
-            #region Set Dependencies
-            
-            this._dpofa = dpofa; 
-
-            #endregion
-
+            this._dpofa = dpofa;
         }
         public void Run(int M, ref double[] WT, int offset_wt, double[] SY, int offset_sy, double[] SS, int offset_ss, int COL, double THETA
                          , ref int INFO)
         {
-
-            #region Variables
-            
-            int I = 0; int J = 0; int K = 0; int K1 = 0; double DDUM = 0; 
-
-            #endregion
+            int I = 0; int J = 0; int K = 0; int K1 = 0; double DDUM = 0;
 
 
-            #region Array Index Correction
-            
-             int o_wt = -1 - M + offset_wt;  int o_sy = -1 - M + offset_sy;  int o_ss = -1 - M + offset_ss; 
-
-            #endregion
+            int o_wt = -1 - M + offset_wt;  int o_sy = -1 - M + offset_sy;  int o_ss = -1 - M + offset_ss;
 
 
-            #region Prolog
-            
-            
-            
             // c     ************
             // c
             // c     Subroutine formt
@@ -118,13 +74,8 @@ namespace DotNumerics.Optimization.LBFGSB
             
             // c     Form the upper half of  T = theta*SS + L*D^(-1)*L',
             // c        store T in the upper triangle of the array wt.
-            
-
-            #endregion
 
 
-            #region Body
-            
             for (J = 1; J <= COL; J++)
             {
                 WT[1+J * M + o_wt] = THETA * SS[1+J * M + o_ss];
@@ -153,10 +104,6 @@ namespace DotNumerics.Optimization.LBFGSB
             }
             
             return;
-            
-
-            #endregion
-
         }
     }
     

@@ -1,10 +1,7 @@
-﻿#region Copyright © 2009, De Santiago-Castillo JA. All rights reserved.
-
-//Copyright © 2009 Jose Antonio De Santiago-Castillo 
+﻿//Copyright © 2009 Jose Antonio De Santiago-Castillo 
 //E-mail:JAntonioDeSantiago@gmail.com
 //Web: www.DotNumerics.com
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -19,9 +16,6 @@ namespace DotNumerics.Optimization
     /// </summary>
     public abstract class xMinimizationBase 
     {
-
-        #region Fields
-
         /// <summary>
         /// All the variables.
         /// </summary>
@@ -56,10 +50,6 @@ namespace DotNumerics.Optimization
         //protected bool MeAreOptVariables = false;
         //protected bool MeAreBoundVariables = false;
 
-        #endregion
-
-        #region Properties
-
         /// <summary>
         /// Maximum number of function evaluations.
         /// </summary>
@@ -90,15 +80,7 @@ namespace DotNumerics.Optimization
             }
         }
 
-        #endregion
-
-
-        #region Methods
 
         //internal 
-
-
-        #endregion
-
     }
 }

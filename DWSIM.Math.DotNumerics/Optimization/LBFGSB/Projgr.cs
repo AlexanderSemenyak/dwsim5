@@ -1,5 +1,3 @@
-#region Translated by Jose Antonio De Santiago-Castillo.
-
 //Translated by Jose Antonio De Santiago-Castillo.
 //E-mail:JAntonioDeSantiago@gmail.com
 //Website: www.DotNumerics.com
@@ -9,7 +7,6 @@
 //F2CSharp Version 0.72 (Dicember 7, 2009)
 //Code Optimizations: , assignment operator, for-loop: array indexes
 //
-#endregion
 
 using System;
 using DotNumerics.FortranLibrary;
@@ -18,13 +15,7 @@ namespace DotNumerics.Optimization.LBFGSB
 {
     public class PROJGR
     {
-    
-
-        #region Variables
-        
-        const double ONE = 1.0E0; const double ZERO = 0.0E0; 
-
-        #endregion
+        const double ONE = 1.0E0; const double ZERO = 0.0E0;
 
         public PROJGR()
         {
@@ -34,27 +25,14 @@ namespace DotNumerics.Optimization.LBFGSB
         public void Run(int N, double[] L, int offset_l, double[] U, int offset_u, int[] NBD, int offset_nbd, double[] X, int offset_x, double[] G, int offset_g
                          , ref double SBGNRM)
         {
-
-            #region Variables
-            
-            int I = 0; double GI = 0; 
-
-            #endregion
+            int I = 0; double GI = 0;
 
 
-            #region Array Index Correction
-            
-             int o_l = -1 + offset_l;  int o_u = -1 + offset_u;  int o_nbd = -1 + offset_nbd;  int o_x = -1 + offset_x; 
+            int o_l = -1 + offset_l;  int o_u = -1 + offset_u;  int o_nbd = -1 + offset_nbd;  int o_x = -1 + offset_x; 
              int o_g = -1 + offset_g;
 
-            #endregion
 
-
-            #region Prolog
-            
-            
-            
-            // c     ************
+             // c     ************
             // c
             // c     Subroutine projgr
             // c
@@ -73,10 +51,7 @@ namespace DotNumerics.Optimization.LBFGSB
             // c
             // c
             // c     ************
-            
-            
 
-            #endregion
 
             SBGNRM = ZERO;
             for (I = 1; I <= N; I++)

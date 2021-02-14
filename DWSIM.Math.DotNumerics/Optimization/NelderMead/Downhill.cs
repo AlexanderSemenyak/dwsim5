@@ -6,21 +6,16 @@ namespace DotNumerics.Optimization.NelderMead
 {
     internal class Downhill
     {
-        #region Fields
         private double _alpha = -1.0d; 
         private double _beta = 0.5;
         private double _gamma = 2.0;
         private double _tiny = 1.0e-10;
         private int _nmax = 3000;
         private int _nfun;
-        #endregion
 
-        #region Constructor
         public Downhill()
         {
         }
-        #endregion
-
 
 
         //public void Run(double[] start, double Step, double ftol, ref bool Stop, OptMultivariateFunction funk)
@@ -68,7 +63,6 @@ namespace DotNumerics.Optimization.NelderMead
             bool conti = true;
             while (conti)
             {
-                #region Maximo, segundo maximo y Minimo de F  (ihi, inhi, ilo)
                 indexFMin = 0;
                 if (y[0] > y[1])
                 {
@@ -90,11 +84,10 @@ namespace DotNumerics.Optimization.NelderMead
                     }
                     else if ((y[i] > y[indexFMax2]) && (i != indexFMax)) indexFMax2 = i;
                 }
-                #endregion
+
                 rtol = 2.0 * Math.Abs(y[indexFMax] - y[indexFMin]) / (Math.Abs(y[indexFMax]) + Math.Abs(y[indexFMin]) + _tiny);
                 if (rtol < ftol || Stop == true || nfun >= _nmax)
                 {
-                    #region Mejor valor en Y[0] y P[0,i]
                     //Se pone en Y[0] y p[0,i] el mejor valor
                     swap = y[0];
                     y[0] = y[indexFMin];
@@ -106,7 +99,7 @@ namespace DotNumerics.Optimization.NelderMead
                         p[indexFMin, i] = swap;
                         Point[i] = p[indexFMin, i];
                     }
-                    #endregion
+
                     //if (nfunk >= NMAX)
                     //{
                     //    nfunk = 0;

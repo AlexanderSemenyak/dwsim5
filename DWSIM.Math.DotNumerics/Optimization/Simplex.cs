@@ -1,10 +1,7 @@
-﻿#region Copyright © 2009, De Santiago-Castillo JA. All rights reserved.
-
-//Copyright © 2009 Jose Antonio De Santiago-Castillo 
+﻿//Copyright © 2009 Jose Antonio De Santiago-Castillo 
 //E-mail:JAntonioDeSantiago@gmail.com
 //Web: www.DotNumerics.com
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -20,9 +17,6 @@ namespace DotNumerics.Optimization
     /// </summary>
     public class Simplex : xMinimizationBase
     {
-
-        #region Fields
-
         CobylaDriver _CobylaDriver;
         DownhillDirver _AmoebaDirver;
 
@@ -38,10 +32,6 @@ namespace DotNumerics.Optimization
         //double[] W;
         //int[] IACT;
 
-        #endregion
-
-
-        #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the Simplex class.
@@ -51,13 +41,6 @@ namespace DotNumerics.Optimization
 
         }
 
-
-        #endregion
-
-
-        #region Public methods
-
-        #region double
 
         /// <summary>
         /// Computes the minimum point of a function of several variables.
@@ -101,10 +84,6 @@ namespace DotNumerics.Optimization
         }
 
 
-        #endregion
-
-        #region OptSimplexVariable
-
         /// <summary>
         /// Computes the minimum point of a function of several variables.
         /// </summary>
@@ -140,10 +119,6 @@ namespace DotNumerics.Optimization
 
             return this.GetMinimum(function, variables, initialStep, this._Tolerance, ref maxFunc);
         }
-
-        #endregion
-
-        #region OptVariable
 
         /// <summary>
         /// Computes the minimum point of a function of several variables.
@@ -186,10 +161,6 @@ namespace DotNumerics.Optimization
             return this.GetMinimum(function, simplexVariables, initialStep, this._Tolerance, ref maxFunc);
         }
 
-        #endregion
-
-        #region OptSimplexBoundVariable
-
         /// <summary>
         /// Computes the minimum point of a function of several variables.
         /// </summary>
@@ -226,10 +197,6 @@ namespace DotNumerics.Optimization
 
             return this.GetMinimum(function, variables, initialStep, this._Tolerance, ref maxFunc);
         }
-
-        #endregion
-
-        #region OptBoundVariable
 
         /// <summary>
         /// Computes the minimum point of a function of several variables.
@@ -270,15 +237,6 @@ namespace DotNumerics.Optimization
 
             return this.GetMinimum(function, simplexVariables, initialStep, this._Tolerance, ref maxFunc);
         }
-
-        #endregion
-
-
-        #endregion
-
-
-
-        #region Private Methods
 
 
         private double[] GetMinimum(OptMultivariateFunction function, OptSimplexVariable[] variables, double initialStep, double ftol, ref int nMax)
@@ -431,10 +389,5 @@ namespace DotNumerics.Optimization
 
             return numFreeVariables;
         }
-
-
-        #endregion
-
-
     }
 }

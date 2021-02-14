@@ -1,10 +1,7 @@
-﻿#region Copyright © 2009, De Santiago-Castillo JA. All rights reserved.
-
-//Copyright © 2009 Jose Antonio De Santiago-Castillo 
+﻿//Copyright © 2009 Jose Antonio De Santiago-Castillo 
 //E-mail:JAntonioDeSantiago@gmail.com
 //Web: www.DotNumerics.com
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -19,9 +16,6 @@ namespace DotNumerics.Optimization
     /// </summary>
     public class L_BFGS_B : xMinimizationBase
     {
-
-        #region Fields
-
         LBFGSBDriver _Driver = new LBFGSBDriver();
 
         /// <summary>
@@ -30,10 +24,6 @@ namespace DotNumerics.Optimization
         private double _AccuracyFactor = 1E7;
 
 
-        #endregion
-
-
-        #region Constructor
         /// <summary>
         /// Initializes a new instance of the L_BFG_S class.
         /// </summary>
@@ -41,10 +31,6 @@ namespace DotNumerics.Optimization
         {
         }
 
-        #endregion
-
-
-        #region Properties
 
         /// <summary>
         /// Accuracy factor. The iteration will stop when (f^k - f^{k+1})/max{|f^k|,|f^{k+1}|,1} is least than AccuracyFactor*epsmch
@@ -57,10 +43,6 @@ namespace DotNumerics.Optimization
             set { _AccuracyFactor = value; }
         }
 
-        #endregion
-
-
-        #region Public methods
 
         /// <summary>
         /// Computes the minimum point of a function of several variables.
@@ -126,10 +108,6 @@ namespace DotNumerics.Optimization
             return minimum;
         }
 
-        #endregion
-
-
-        #region private Methods
 
         private OptVariable[] GetVariables(double[] variablesArray)
         {
@@ -142,11 +120,5 @@ namespace DotNumerics.Optimization
 
             return vars;
         }
-
-        #endregion
-
-
-
-
     }
 }

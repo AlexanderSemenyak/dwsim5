@@ -1,5 +1,3 @@
-#region Translated by Jose Antonio De Santiago-Castillo.
-
 //Translated by Jose Antonio De Santiago-Castillo.
 //E-mail:JAntonioDeSantiago@gmail.com
 //Website: www.DotNumerics.com
@@ -9,7 +7,6 @@
 //F2CSharp Version 0.72 (Dicember 7, 2009)
 //Code Optimizations: , assignment operator, for-loop: array indexes
 //
-#endregion
 
 using System;
 using DotNumerics.FortranLibrary;
@@ -51,24 +48,12 @@ namespace DotNumerics.Optimization.LBFGSB
         ///</param>
         public void Run(int N, ref double[] T, int offset_t, ref int[] IORDER, int offset_iorder, int IHEAP)
         {
-
-            #region Variables
-            
-            int I = 0; int J = 0; int K = 0; int INDXIN = 0; int INDXOU = 0; double DDUM = 0; double OUT = 0; 
-
-            #endregion
+            int I = 0; int J = 0; int K = 0; int INDXIN = 0; int INDXOU = 0; double DDUM = 0; double OUT = 0;
 
 
-            #region Array Index Correction
-            
-             int o_t = -1 + offset_t;  int o_iorder = -1 + offset_iorder; 
-
-            #endregion
+            int o_t = -1 + offset_t;  int o_iorder = -1 + offset_iorder;
 
 
-            #region Prolog
-            
-            
             // c     ************
             // c
             // c     Subroutine hpsolb 
@@ -110,14 +95,8 @@ namespace DotNumerics.Optimization.LBFGSB
             // c     in collaboration with R.H. Byrd, P. Lu-Chen and J. Nocedal.
             // c
             // c     ************
-            
-            
-
-            #endregion
 
 
-            #region Body
-            
             if (IHEAP == 0)
             {
                 
@@ -183,10 +162,6 @@ namespace DotNumerics.Optimization.LBFGSB
             }
             
             return;
-            
-
-            #endregion
-
         }
     }
     

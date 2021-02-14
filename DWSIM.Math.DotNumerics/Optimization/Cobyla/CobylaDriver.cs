@@ -6,9 +6,6 @@ namespace DotNumerics.Optimization.Cobyla
 {
     internal class CobylaDriver
     {
-
-        #region Fields
-
         COBYLA MeCOBYLA;
 
         private OptMultivariateFunction Function;
@@ -25,10 +22,6 @@ namespace DotNumerics.Optimization.Cobyla
         double[] W;
         int[] IACT;
 
-        #endregion
-
-
-        #region Constructor
 
         public CobylaDriver()
         {
@@ -39,11 +32,6 @@ namespace DotNumerics.Optimization.Cobyla
 
         }
 
-
-        #endregion
-
-
-        #region Methods
 
         public double[] ComputeMin(OptMultivariateFunction function, OptSimplexBoundVariable[] variables, double initialStep, double tolerance, ref int MAXFUN)
         {
@@ -155,9 +143,6 @@ namespace DotNumerics.Optimization.Cobyla
             this.IACT = new int[M + 1];
 
         }
-
-
-        #endregion
 
 
         private void InternalFunction(int N, int M, double[] X, int o_x, ref double F, ref double[] CON, int o_con)

@@ -1,5 +1,3 @@
-#region Translated by Jose Antonio De Santiago-Castillo.
-
 //Translated by Jose Antonio De Santiago-Castillo.
 //E-mail:JAntonioDeSantiago@gmail.com
 //Website: www.DotNumerics.com
@@ -9,7 +7,6 @@
 //F2CSharp Version 0.72 (Dicember 7, 2009)
 //Code Optimizations: , assignment operator, for-loop: array indexes
 //
-#endregion
 
 using System;
 using DotNumerics.FortranLibrary;
@@ -19,32 +16,15 @@ namespace DotNumerics.Optimization.LBFGSB
     // c================    L-BFGS-B (version 2.1)   ==========================
     public class SETULB
     {
-    
-
-        #region Dependencies
-        
-        MAINLB _mainlb; 
-
-        #endregion
+        MAINLB _mainlb;
 
         public SETULB(MAINLB mainlb)
         {
-    
-
-            #region Set Dependencies
-            
-            this._mainlb = mainlb; 
-
-            #endregion
-
+            this._mainlb = mainlb;
         }
     
         public SETULB()
         {
-    
-
-            #region Dependencies (Initialization)
-            
             HPSOLB hpsolb = new HPSOLB();
             DDOT ddot = new DDOT();
             DAXPY daxpy = new DAXPY();
@@ -74,15 +54,8 @@ namespace DotNumerics.Optimization.LBFGSB
             MAINLB mainlb = new MAINLB(cauchy, subsm, lnsrlb, formk, errclb, prn1lb, prn2lb, prn3lb, active, projgr
                                        , freev, cmprlb, matupd, formt, timer, dpmeps, dcopy, ddot, dscal);
 
-            #endregion
 
-
-            #region Set Dependencies
-            
-            this._mainlb = mainlb; 
-
-            #endregion
-
+            this._mainlb = mainlb;
         }
         /// <param name="N">
         /// is an integer variable.
@@ -246,30 +219,17 @@ namespace DotNumerics.Optimization.LBFGSB
                          , ref double F, ref double[] G, int offset_g, double FACTR, double PGTOL, ref double[] WA, int offset_wa, ref int[] IWA, int offset_iwa
                          , ref BFGSTask TASK, int IPRINT, ref BFGSTask CSAVE, ref bool[] LSAVE, int offset_lsave, ref int[] ISAVE, int offset_isave, ref double[] DSAVE, int offset_dsave)
         {
-
-            #region Variables
-            
             int L1 = 0; int L2 = 0; int L3 = 0; int LWS = 0; int LR = 0; int LZ = 0; int LT = 0; int LD = 0; int LSG = 0; 
             int LWA = 0;int LYG = 0; int LSGO = 0; int LWY = 0; int LSY = 0; int LSS = 0; int LYY = 0; int LWT = 0; int LWN = 0; 
-            int LSND = 0;int LYGO = 0; 
-
-            #endregion
+            int LSND = 0;int LYGO = 0;
 
 
-            #region Array Index Correction
-            
-             int o_x = -1 + offset_x;  int o_l = -1 + offset_l;  int o_u = -1 + offset_u;  int o_nbd = -1 + offset_nbd; 
+            int o_x = -1 + offset_x;  int o_l = -1 + offset_l;  int o_u = -1 + offset_u;  int o_nbd = -1 + offset_nbd; 
              int o_g = -1 + offset_g; int o_wa = -1 + offset_wa;  int o_iwa = -1 + offset_iwa;  int o_lsave = -1 + offset_lsave; 
-             int o_isave = -1 + offset_isave; int o_dsave = -1 + offset_dsave; 
-
-            #endregion
+             int o_isave = -1 + offset_isave; int o_dsave = -1 + offset_dsave;
 
 
-            #region Prolog
-            
-            
-            
-            // c     ************
+             // c     ************
             // c
             // c     Subroutine setulb
             // c
@@ -448,17 +408,9 @@ namespace DotNumerics.Optimization.LBFGSB
             // c
             // c
             // c     ************
-            
-            
-            
-            
-
-            #endregion
 
 
-            #region Body
-
-             if (TASK == BFGSTask.START)
+            if (TASK == BFGSTask.START)
             {
                 ISAVE[1 + o_isave] = M * N;
                 ISAVE[2 + o_isave] = (int)Math.Pow(M,2);
@@ -510,10 +462,6 @@ namespace DotNumerics.Optimization.LBFGSB
                              , ref TASK, IPRINT, ref CSAVE, ref LSAVE, offset_lsave, ref ISAVE, 22 + o_isave, ref DSAVE, offset_dsave);
             
             return;
-            
-
-            #endregion
-
         }
     }
     

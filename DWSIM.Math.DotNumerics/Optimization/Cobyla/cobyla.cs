@@ -1,5 +1,3 @@
-#region Translated by Jose Antonio De Santiago-Castillo.
-
 //Translated by Jose Antonio De Santiago-Castillo.
 //E-mail:JAntonioDeSantiago@gmail.com
 //Website: www.DotNumerics.com
@@ -9,7 +7,6 @@
 //F2CSharp Version 0.72 (Dicember 7, 2009)
 //Code Optimizations: , assignment operator, for-loop: array indexes
 //
-#endregion
 
 using System;
 using DotNumerics.FortranLibrary;
@@ -19,43 +16,26 @@ namespace DotNumerics.Optimization.Cobyla
 
     public delegate void CALCFC(int N, int M, double[] X, int o_x, ref double F, ref double[] CON, int o_con);
 
-    #region The Class: COBYLA
-    
     // C------------------------------------------------------------------------ 
     // C
     public class COBYLA
     {
-    
-        #region Dependencies
-        
-        COBYLB _cobylb; 
-        #endregion
+        COBYLB _cobylb;
+
         public COBYLA(COBYLB cobylb)
         {
-    
-            #region Set Dependencies
-            
-            this._cobylb = cobylb; 
-            #endregion
+            this._cobylb = cobylb;
         }
 
         public COBYLA(CALCFC calcfc)
         {
-    
-            #region Initialization Common Blocks
-            
             CommonBlock Default = new CommonBlock(0, 1, 0, 0);
-            #endregion
-            #region Dependencies (Initialization)
-            
+
             TRSTLP trstlp = new TRSTLP();
             //CALCFC calcfc = new CALCFC(Default);
             COBYLB cobylb = new COBYLB(calcfc, trstlp);
-            #endregion
-            #region Set Dependencies
-            
-            this._cobylb = cobylb; 
-            #endregion
+
+            this._cobylb = cobylb;
         }
         /// <param name="N">
         /// components. The algorithm employs linear approximations to the
@@ -72,17 +52,11 @@ namespace DotNumerics.Optimization.Cobyla
         public void Run(int N, int M, ref double[] X, int offset_x, double RHOBEG, double RHOEND, int IPRINT
                          , ref int MAXFUN, ref double[] W, int offset_w, ref int[] IACT, int offset_iact)
         {
-            #region Implicit Variables
-            
             int MPP = 0; int ICON = 0; int ISIM = 0; int ISIMI = 0; int IDATM = 0; int IA = 0; int IVSIG = 0; int IVETA = 0; 
-            int ISIGB = 0;int IDX = 0; int IWORK = 0; 
-            #endregion
-            #region Array Index Correction
-            
-             int o_x = -1 + offset_x;  int o_w = -1 + offset_w;  int o_iact = -1 + offset_iact; 
-            #endregion
-            #region Prolog
-            
+            int ISIGB = 0;int IDX = 0; int IWORK = 0;
+
+            int o_x = -1 + offset_x;  int o_w = -1 + offset_w;  int o_iact = -1 + offset_iact;
+
             // C
             // C     This subroutine minimizes an objective function F(X) subject to M
             // C     inequality constraints on X, where X is a vector of variables that has
@@ -139,7 +113,6 @@ namespace DotNumerics.Optimization.Cobyla
             // C     Partition the working space array W to provide the storage that is needed
             // C     for the main calculation.
             // C
-            #endregion
             MPP = M + 2;
             ICON = 1;
             ISIM = ICON + MPP;
@@ -159,26 +132,15 @@ namespace DotNumerics.Optimization.Cobyla
         }
     }
 
-    #endregion
 
-
-    #region The Class: COBYLB
-    
     // C------------------------------------------------------------------------------
     public class COBYLB
     {
-    
-        #region Dependencies
-        
-        CALCFC _calcfc; TRSTLP _trstlp; 
-        #endregion
+        CALCFC _calcfc; TRSTLP _trstlp;
+
         public COBYLB(CALCFC calcfc, TRSTLP trstlp)
         {
-    
-            #region Set Dependencies
-            
-            this._calcfc = calcfc; this._trstlp = trstlp; 
-            #endregion
+            this._calcfc = calcfc; this._trstlp = trstlp;
         }
 
 
@@ -187,8 +149,6 @@ namespace DotNumerics.Optimization.Cobyla
                          , ref double[] A, int offset_a, ref double[] VSIG, int offset_vsig, ref double[] VETA, int offset_veta, ref double[] SIGBAR, int offset_sigbar, ref double[] DX, int offset_dx, ref double[] W, int offset_w
                          , ref int[] IACT, int offset_iact)
         {
-            #region Implicit Variables
-            
             int IPTEM = 0; int IPTEMP = 0; int NP = 0; int MP = 0; double ALPHA = 0; double BETA = 0; double GAMMA = 0; 
             double DELTA = 0;double RHO = 0; double PARMU = 0; int NFVALS = 0; double TEMP = 0; int I = 0; int SIM_NP = 0; 
             int J = 0;int JDROP = 0; int IBRNCH = 0; double RESMAX = 0; int K = 0; double F = 0; int DATMAT_JDROP = 0; 
@@ -197,24 +157,20 @@ namespace DotNumerics.Optimization.Cobyla
             double CVMAXP = 0;double CVMAXM = 0; double SUM = 0; double DXSIGN = 0; int SIM_JDROP = 0; int IZ = 0; int IZDOTA = 0; 
             int IVMC = 0;int ISDIRN = 0; int IDXNEW = 0; int IVMD = 0; int IFULL = 0; double RESNEW = 0; double BARMU = 0; 
             double PREREC = 0;double PHI = 0; double PREREM = 0; double VMOLD = 0; double VMNEW = 0; double TRURED = 0; 
-            double RATIO = 0;double EDGMAX = 0; int L = 0; double DENOM = 0; double CMIN = 0; double CMAX = 0; 
-            #endregion
-            #region Array Index Correction
-            
-             int o_x = -1 + offset_x;  int o_con = -1 + offset_con;  int o_sim = -1 - N + offset_sim; 
+            double RATIO = 0;double EDGMAX = 0; int L = 0; double DENOM = 0; double CMIN = 0; double CMAX = 0;
+
+            int o_x = -1 + offset_x;  int o_con = -1 + offset_con;  int o_sim = -1 - N + offset_sim; 
              int o_simi = -1 - N + offset_simi; int o_datmat = -1 - MPP + offset_datmat;  int o_a = -1 - N + offset_a; 
              int o_vsig = -1 + offset_vsig; int o_veta = -1 + offset_veta;  int o_sigbar = -1 + offset_sigbar; 
-             int o_dx = -1 + offset_dx; int o_w = -1 + offset_w;  int o_iact = -1 + offset_iact; 
-            #endregion
-            // C
+             int o_dx = -1 + offset_dx; int o_w = -1 + offset_w;  int o_iact = -1 + offset_iact;
+             // C
             // C     Set the initial values of some parameters. The last column of SIM holds
             // C     the optimal vertex of the current simplex, and the preceding N columns
             // C     hold the displacements from the optimal vertex to the other vertices.
             // C     Further, SIMI holds the inverse of the matrix that is contained in the
             // C     first N columns of SIM.
             // C
-            #region Body
-            
+
             IPTEM = Math.Min(N, 5);
             IPTEMP = IPTEM + 1;
             NP = N + 1;
@@ -777,15 +733,10 @@ namespace DotNumerics.Optimization.Cobyla
             }
             MAXFUN = NFVALS;
             return;
-            #endregion
         }
     }
 
-    #endregion
 
-
-    #region The Class: TRSTLP
-    
     // C------------------------------------------------------------------------------
     public class TRSTLP
     {
@@ -799,8 +750,6 @@ namespace DotNumerics.Optimization.Cobyla
                          , ref int IFULL, ref int[] IACT, int offset_iact, ref double[] Z, int offset_z, ref double[] ZDOTA, int offset_zdota, ref double[] VMULTC, int offset_vmultc, ref double[] SDIRN, int offset_sdirn
                          , ref double[] DXNEW, int offset_dxnew, ref double[] VMULTD, int offset_vmultd)
         {
-            #region Implicit Variables
-            
             int MCON = 0; int NACT = 0; double RESMAX = 0; int I = 0; int J = 0; int K = 0; int ICON = 0; double OPTOLD = 0; 
             int ICOUNT = 0;double OPTNEW = 0; int NACTX = 0; int KK = 0; double TOT = 0; double SP = 0; double SPABS = 0; 
             double TEMP = 0;int Z_K = 0; double ACCA = 0; double ACCB = 0; int KP = 0; double ALPHA = 0; double BETA = 0; 
@@ -808,16 +757,12 @@ namespace DotNumerics.Optimization.Cobyla
             int ISAVE = 0;double VSAVE = 0; int Z_NACT = 0; double DD = 0; double SD = 0; double SS = 0; double STPFUL = 0; 
             double STEP = 0;double RESOLD = 0; double ZDOTW = 0; double ZDWABS = 0; int KL = 0; double SUM = 0; double SUMABS = 0; 
             int A_KK = 0;
-            #endregion
-            #region Array Index Correction
-            
-             int o_a = -1 - N + offset_a;  int o_b = -1 + offset_b;  int o_dx = -1 + offset_dx;  int o_iact = -1 + offset_iact; 
+
+            int o_a = -1 - N + offset_a;  int o_b = -1 + offset_b;  int o_dx = -1 + offset_dx;  int o_iact = -1 + offset_iact; 
              int o_z = -1 - N + offset_z; int o_zdota = -1 + offset_zdota;  int o_vmultc = -1 + offset_vmultc; 
-             int o_sdirn = -1 + offset_sdirn; int o_dxnew = -1 + offset_dxnew;  int o_vmultd = -1 + offset_vmultd; 
-            #endregion
-            #region Prolog
-            
-            // C
+             int o_sdirn = -1 + offset_sdirn; int o_dxnew = -1 + offset_dxnew;  int o_vmultd = -1 + offset_vmultd;
+
+             // C
             // C     This subroutine calculates an N-component vector DX by applying the
             // C     following two stages. In the first stage, DX is set to the shortest
             // C     vector that minimizes the greatest violation of the constraints
@@ -855,9 +800,7 @@ namespace DotNumerics.Optimization.Cobyla
             // C     vector SDIRN gives a search direction that reduces all the active
             // C     constraint violations by one simultaneously.
             // C
-            #endregion
-            #region Body
-            
+
             IFULL = 1;
             MCON = M;
             NACT = 0;
@@ -1370,13 +1313,6 @@ namespace DotNumerics.Optimization.Cobyla
             if (MCON == M) goto LABEL480;
             IFULL = 0;
         LABEL500:  return;
-            #endregion
         }
     }
-
-    #endregion
-
-    
-    
-    
 }

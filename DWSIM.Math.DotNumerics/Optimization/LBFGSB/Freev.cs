@@ -1,5 +1,3 @@
-#region Translated by Jose Antonio De Santiago-Castillo.
-
 //Translated by Jose Antonio De Santiago-Castillo.
 //E-mail:JAntonioDeSantiago@gmail.com
 //Website: www.DotNumerics.com
@@ -9,7 +7,6 @@
 //F2CSharp Version 0.72 (Dicember 7, 2009)
 //Code Optimizations: , assignment operator, for-loop: array indexes
 //
-#endregion
 
 using System;
 using DotNumerics.FortranLibrary;
@@ -53,25 +50,12 @@ namespace DotNumerics.Optimization.LBFGSB
         public void Run(int N, ref int NFREE, ref int[] INDEX, int offset_index, ref int NENTER, ref int ILEAVE, ref int[] INDX2, int offset_indx2
                          , int[] IWHERE, int offset_iwhere, ref bool WRK, bool UPDATD, bool CNSTND, int IPRINT, int ITER)
         {
-
-            #region Variables
-            
-            int IACT = 0; int I = 0; int K = 0; 
-
-            #endregion
+            int IACT = 0; int I = 0; int K = 0;
 
 
-            #region Array Index Correction
-            
-             int o_index = -1 + offset_index;  int o_indx2 = -1 + offset_indx2;  int o_iwhere = -1 + offset_iwhere; 
-
-            #endregion
+            int o_index = -1 + offset_index;  int o_indx2 = -1 + offset_indx2;  int o_iwhere = -1 + offset_iwhere;
 
 
-            #region Prolog
-            
-            
-            
             // c     ************
             // c
             // c     Subroutine freev 
@@ -109,14 +93,8 @@ namespace DotNumerics.Optimization.LBFGSB
             // c
             // c
             // c     ************
-            
-            
-
-            #endregion
 
 
-            #region Body
-            
             NENTER = 0;
             ILEAVE = N + 1;
             if (ITER > 0 && CNSTND)
@@ -166,10 +144,6 @@ namespace DotNumerics.Optimization.LBFGSB
             if (IPRINT >= 99) ;//ERROR-ERRORWRITE(6,*)NFREE,' variables are free at GCP ',ITER+1
             
             return;
-            
-
-            #endregion
-
         }
     }
     

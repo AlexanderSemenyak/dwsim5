@@ -6,9 +6,6 @@ namespace DotNumerics.Optimization.LBFGSB
 {
     public class LBFGSBDriver
     {
-
-        #region Fields
-
         SETULB _SETULB;
 
         //OptMultivariateFunction MeFunction;
@@ -34,10 +31,6 @@ namespace DotNumerics.Optimization.LBFGSB
         protected OptVariable[] _OptVariable = null;
         protected OptBoundVariable[] _OptBoundVariable = null;
 
-        #endregion
-
-
-        #region Constructor
 
         public LBFGSBDriver()
         {
@@ -45,11 +38,6 @@ namespace DotNumerics.Optimization.LBFGSB
             this._SETULB = new SETULB();
 
         }
-
-        #endregion
-
-
-        #region Methods
 
 
         public double[] ComputeMin(OptMultivariateFunction function, OptMultivariateGradient gradient, OptVariable[] variables, double tolerance, double factr, ref int nMax)
@@ -149,8 +137,6 @@ namespace DotNumerics.Optimization.LBFGSB
 
         }
 
-        #region Update External Variables
-
         private void UpdateExternalVariables()
         {
             if (this._OptVariable != null)
@@ -191,11 +177,6 @@ namespace DotNumerics.Optimization.LBFGSB
         }
 
 
-        #endregion
-
-
-        #region Update Internal Gradient
-
         private void UpdateInternalGradient()
         {
             if (this._OptVariable != null)
@@ -234,9 +215,6 @@ namespace DotNumerics.Optimization.LBFGSB
                 }
             }
         }
-
-
-        #endregion
 
 
         private void Initialize(OptVariable[] variables)
@@ -399,13 +377,5 @@ namespace DotNumerics.Optimization.LBFGSB
             }
 
         }
-
-
-        #endregion
-
-
-
-
-
     }
 }

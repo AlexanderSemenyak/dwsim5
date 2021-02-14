@@ -1,5 +1,3 @@
-#region Translated by Jose Antonio De Santiago-Castillo.
-
 //Translated by Jose Antonio De Santiago-Castillo.
 //E-mail:JAntonioDeSantiago@gmail.com
 //Website: www.DotNumerics.com
@@ -9,7 +7,6 @@
 //F2CSharp Version 0.72 (Dicember 7, 2009)
 //Code Optimizations: , assignment operator, for-loop: array indexes
 //
-#endregion
 
 using System;
 using DotNumerics.FortranLibrary;
@@ -18,45 +15,24 @@ namespace DotNumerics.Optimization.LBFGSB
 {
     public class MAINLB
     {
-    
-
-        #region Dependencies
-        
         CAUCHY _cauchy; SUBSM _subsm; LNSRLB _lnsrlb; FORMK _formk; ERRCLB _errclb; PRN1LB _prn1lb; PRN2LB _prn2lb; 
         PRN3LB _prn3lb;ACTIVE _active; PROJGR _projgr; FREEV _freev; CMPRLB _cmprlb; MATUPD _matupd; FORMT _formt; TIMER _timer; 
-        DPMEPS _dpmeps;DCOPY _dcopy; DDOT _ddot; DSCAL _dscal; 
-
-        #endregion
+        DPMEPS _dpmeps;DCOPY _dcopy; DDOT _ddot; DSCAL _dscal;
 
 
-        #region Variables
-        
-        const double ONE = 1.0E0; const double ZERO = 0.0E0; 
-
-        #endregion
+        const double ONE = 1.0E0; const double ZERO = 0.0E0;
 
         public MAINLB(CAUCHY cauchy, SUBSM subsm, LNSRLB lnsrlb, FORMK formk, ERRCLB errclb, PRN1LB prn1lb, PRN2LB prn2lb, PRN3LB prn3lb, ACTIVE active, PROJGR projgr
                       , FREEV freev, CMPRLB cmprlb, MATUPD matupd, FORMT formt, TIMER timer, DPMEPS dpmeps, DCOPY dcopy, DDOT ddot, DSCAL dscal)
         {
-    
-
-            #region Set Dependencies
-            
             this._cauchy = cauchy; this._subsm = subsm; this._lnsrlb = lnsrlb; this._formk = formk; this._errclb = errclb; 
             this._prn1lb = prn1lb;this._prn2lb = prn2lb; this._prn3lb = prn3lb; this._active = active; this._projgr = projgr; 
             this._freev = freev;this._cmprlb = cmprlb; this._matupd = matupd; this._formt = formt; this._timer = timer; 
-            this._dpmeps = dpmeps;this._dcopy = dcopy; this._ddot = ddot; this._dscal = dscal; 
-
-            #endregion
-
+            this._dpmeps = dpmeps;this._dcopy = dcopy; this._ddot = ddot; this._dscal = dscal;
         }
     
         public MAINLB()
         {
-    
-
-            #region Dependencies (Initialization)
-            
             HPSOLB hpsolb = new HPSOLB();
             DDOT ddot = new DDOT();
             DAXPY daxpy = new DAXPY();
@@ -84,18 +60,11 @@ namespace DotNumerics.Optimization.LBFGSB
             MATUPD matupd = new MATUPD(dcopy, ddot);
             FORMT formt = new FORMT(dpofa);
 
-            #endregion
 
-
-            #region Set Dependencies
-            
             this._cauchy = cauchy; this._subsm = subsm; this._lnsrlb = lnsrlb; this._formk = formk; this._errclb = errclb; 
             this._prn1lb = prn1lb;this._prn2lb = prn2lb; this._prn3lb = prn3lb; this._active = active; this._projgr = projgr; 
             this._freev = freev;this._cmprlb = cmprlb; this._matupd = matupd; this._formt = formt; this._timer = timer; 
-            this._dpmeps = dpmeps;this._dcopy = dcopy; this._ddot = ddot; this._dscal = dscal; 
-
-            #endregion
-
+            this._dpmeps = dpmeps;this._dcopy = dcopy; this._ddot = ddot; this._dscal = dscal;
         }
         /// <param name="N">
         /// is an integer variable.
@@ -239,9 +208,6 @@ namespace DotNumerics.Optimization.LBFGSB
                          , double[] SGO, int offset_sgo, double[] YG, int offset_yg, double[] YGO, int offset_ygo, ref int[] INDEX, int offset_index, ref int[] IWHERE, int offset_iwhere, ref int[] INDX2, int offset_indx2
                          , ref BFGSTask TASK, int IPRINT, ref BFGSTask CSAVE, ref bool[] LSAVE, int offset_lsave, ref int[] ISAVE, int offset_isave, ref double[] DSAVE, int offset_dsave)
         {
-
-            #region Variables
-
             BFGSWord WORD = BFGSWord.aaa;
 
             bool PRJCTD = false; bool CNSTND = false; bool BOXED = false; bool UPDATD = false; bool WRK = false;
@@ -251,14 +217,10 @@ namespace DotNumerics.Optimization.LBFGSB
             double FOLD = 0;double DDOT = 0; double DR = 0; double RR = 0; double TOL = 0; double DPMEPS = 0; double XSTEP = 0; 
             double SBGNRM = 0;double DDUM = 0; double DNORM = 0; double DTD = 0; double EPSMCH = 0; double CPU1 = 0; 
             double CPU2 = 0;double CACHYT = 0; double SBTIME = 0; double LNSCHT = 0; double TIME1 = 0; double TIME2 = 0; 
-            double GD = 0;double GDOLD = 0; double STP = 0; double STPMX = 0; double TIME = 0; 
-
-            #endregion
+            double GD = 0;double GDOLD = 0; double STP = 0; double STPMX = 0; double TIME = 0;
 
 
-            #region Array Index Correction
-            
-             int o_x = -1 + offset_x;  int o_l = -1 + offset_l;  int o_u = -1 + offset_u;  int o_nbd = -1 + offset_nbd; 
+            int o_x = -1 + offset_x;  int o_l = -1 + offset_l;  int o_u = -1 + offset_u;  int o_nbd = -1 + offset_nbd; 
              int o_g = -1 + offset_g; int o_ws = -1 - N + offset_ws;  int o_wy = -1 - N + offset_wy; 
              int o_sy = -1 - M + offset_sy; int o_ss = -1 - M + offset_ss;  int o_yy = -1 - M + offset_yy; 
              int o_wt = -1 - M + offset_wt; int o_wn = -1 - (2*M) + offset_wn;  int o_snd = -1 - (2*M) + offset_snd; 
@@ -268,14 +230,8 @@ namespace DotNumerics.Optimization.LBFGSB
              int o_indx2 = -1 + offset_indx2; int o_lsave = -1 + offset_lsave;  int o_isave = -1 + offset_isave; 
              int o_dsave = -1 + offset_dsave;
 
-            #endregion
 
-
-            #region Prolog
-            
-            
-            
-            // c     ************
+             // c     ************
             // c
             // c     Subroutine mainlb
             // c
@@ -453,18 +409,9 @@ namespace DotNumerics.Optimization.LBFGSB
             // c
             // c
             // c     ************
-            
-            
-            
-            
-            
-
-            #endregion
 
 
-            #region Body
-
-             if (TASK == BFGSTask.START)
+            if (TASK == BFGSTask.START)
             {
                 
                 this._timer.Run(ref TIME1);
@@ -986,10 +933,6 @@ namespace DotNumerics.Optimization.LBFGSB
             
             
             return;
-            
-
-            #endregion
-
         }
     }
     

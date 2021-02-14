@@ -1,5 +1,3 @@
-#region Translated by Jose Antonio De Santiago-Castillo.
-
 //Translated by Jose Antonio De Santiago-Castillo.
 //E-mail:JAntonioDeSantiago@gmail.com
 //Website: www.DotNumerics.com
@@ -9,7 +7,6 @@
 //F2CSharp Version 0.72 (Dicember 7, 2009)
 //Code Optimizations: , assignment operator, for-loop: array indexes
 //
-#endregion
 
 using System;
 using DotNumerics.FortranLibrary;
@@ -18,13 +15,7 @@ namespace DotNumerics.Optimization.LBFGSB
 {
     public class DCSTEP
     {
-    
-
-        #region Variables
-        
-        const double ZERO = 0.0E0; const double P66 = 0.66E0; const double TWO = 2.0E0; const double THREE = 3.0E0; 
-
-        #endregion
+        const double ZERO = 0.0E0; const double P66 = 0.66E0; const double TWO = 2.0E0; const double THREE = 3.0E0;
 
         public DCSTEP()
         {
@@ -103,17 +94,10 @@ namespace DotNumerics.Optimization.LBFGSB
         public void Run(ref double STX, ref double FX, ref double DX, ref double STY, ref double FY, ref double DY
                          , ref double STP, double FP, double DP, ref bool BRACKT, double STPMIN, double STPMAX)
         {
-
-            #region Variables
-            
             double GAMMA = 0; double P = 0; double Q = 0; double R = 0; double S = 0; double SGND = 0; double STPC = 0; 
-            double STPF = 0;double STPQ = 0; double THETA = 0; 
-
-            #endregion
+            double STPF = 0;double STPQ = 0; double THETA = 0;
 
 
-            #region Prolog
-            
             // c     **********
             // c
             // c     Subroutine dcstep
@@ -206,14 +190,8 @@ namespace DotNumerics.Optimization.LBFGSB
             // c     Brett M. Averick and Jorge J. More'.
             // c
             // c     **********
-            
-            
-
-            #endregion
 
 
-            #region Body
-            
             SGND = DP * (DX / Math.Abs(DX));
             
             // c     First case: A higher function value. The minimum is bracketed. 
@@ -415,10 +393,6 @@ namespace DotNumerics.Optimization.LBFGSB
             // c     Compute the new step.
             
             STP = STPF;
-            
-
-            #endregion
-
         }
     }
     

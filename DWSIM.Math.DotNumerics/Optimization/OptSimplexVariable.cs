@@ -1,10 +1,7 @@
-﻿#region Copyright © 2009, De Santiago-Castillo JA. All rights reserved.
-
-//Copyright © 2009 Jose Antonio De Santiago-Castillo 
+﻿//Copyright © 2009 Jose Antonio De Santiago-Castillo 
 //E-mail:JAntonioDeSantiago@gmail.com
 //Web: www.DotNumerics.com
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -17,19 +14,12 @@ namespace DotNumerics.Optimization
     /// </summary>
     public class OptSimplexVariable : OptVariable
     {
-
-        #region Fields
-
         /// <summary>
         /// The scale factor controls the internal variable size. Variable=IntVar*ScaleFactor where IntVar is the internal variable. 
         /// Try to set the ScaleFactor of the same order that the variable, with this value the internal size will be near to 1 . 
         /// The default value is 1. This value modifies the changes and accuracy of this variable. 
         /// </summary>
         private double _ScaleFactor = 1;
-
-        #endregion
-
-        #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the OptSimplexVariable class.
@@ -122,10 +112,6 @@ namespace DotNumerics.Optimization
             this.ScaleFactor = scaleFactor;
         }
 
-        #endregion
-
-
-        #region Properties
 
         /// <summary>
         /// The scale factor controls the internal variable size. Variable=IntVar*ScaleFactor where IntVar is the internal variable. 
@@ -144,8 +130,6 @@ namespace DotNumerics.Optimization
                 _ScaleFactor = value;
             }
         }
-
-        #endregion
 
         public override string ToString()
         {

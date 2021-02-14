@@ -1,5 +1,3 @@
-#region Translated by Jose Antonio De Santiago-Castillo.
-
 //Translated by Jose Antonio De Santiago-Castillo.
 //E-mail:JAntonioDeSantiago@gmail.com
 //Website: www.DotNumerics.com
@@ -9,7 +7,6 @@
 //F2CSharp Version 0.72 (Dicember 7, 2009)
 //Code Optimizations: , assignment operator, for-loop: array indexes
 //
-#endregion
 
 using System;
 using DotNumerics.FortranLibrary;
@@ -18,44 +15,20 @@ namespace DotNumerics.Optimization.LBFGSB
 {
     public class DTRSL
     {
-    
-
-        #region Dependencies
-        
-        DDOT _ddot; DAXPY _daxpy; 
-
-        #endregion
+        DDOT _ddot; DAXPY _daxpy;
 
         public DTRSL(DDOT ddot, DAXPY daxpy)
         {
-    
-
-            #region Set Dependencies
-            
-            this._ddot = ddot; this._daxpy = daxpy; 
-
-            #endregion
-
+            this._ddot = ddot; this._daxpy = daxpy;
         }
     
         public DTRSL()
         {
-    
-
-            #region Dependencies (Initialization)
-            
             DDOT ddot = new DDOT();
             DAXPY daxpy = new DAXPY();
 
-            #endregion
 
-
-            #region Set Dependencies
-            
-            this._ddot = ddot; this._daxpy = daxpy; 
-
-            #endregion
-
+            this._ddot = ddot; this._daxpy = daxpy;
         }
         /// <param name="T">
         /// * x = b
@@ -90,23 +63,12 @@ namespace DotNumerics.Optimization.LBFGSB
         ///</param>
         public void Run(double[] T, int offset_t, int LDT, int N, ref double[] B, int offset_b, int JOB, ref int INFO)
         {
-
-            #region Variables
-            
-            double TEMP = 0; int CASE = 0; int J = 0; int JJ = 0; 
-
-            #endregion
+            double TEMP = 0; int CASE = 0; int J = 0; int JJ = 0;
 
 
-            #region Array Index Correction
-            
-             int o_t = -1 - LDT + offset_t;  int o_b = -1 + offset_b; 
-
-            #endregion
+            int o_t = -1 - LDT + offset_t;  int o_b = -1 + offset_b;
 
 
-            #region Prolog
-            
             // c
             // c
             // c     dtrsl solves systems of the form
@@ -171,11 +133,7 @@ namespace DotNumerics.Optimization.LBFGSB
             // c        check for zero diagonal elements.
             // c
 
-            #endregion
 
-
-            #region Body
-            
             for (INFO = 1; INFO <= N; INFO++)
             {
                 // c     ......exit
@@ -253,9 +211,6 @@ namespace DotNumerics.Optimization.LBFGSB
         LABEL140:;
         LABEL150:;
             return;
-
-            #endregion
-
         }
     }
     

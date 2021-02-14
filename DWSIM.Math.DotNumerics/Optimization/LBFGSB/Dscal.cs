@@ -1,5 +1,3 @@
-#region Translated by Jose Antonio De Santiago-Castillo.
-
 //Translated by Jose Antonio De Santiago-Castillo.
 //E-mail:JAntonioDeSantiago@gmail.com
 //Website: www.DotNumerics.com
@@ -9,7 +7,6 @@
 //F2CSharp Version 0.72 (Dicember 7, 2009)
 //Code Optimizations: , assignment operator, for-loop: array indexes
 //
-#endregion
 
 using System;
 using DotNumerics.FortranLibrary;
@@ -26,19 +23,10 @@ namespace DotNumerics.Optimization.LBFGSB
     
         public void Run(int N, double DA, ref double[] DX, int offset_dx, int INCX)
         {
-
-            #region Variables
-            
-            int I = 0; int M = 0; int MP1 = 0; int NINCX = 0; 
-
-            #endregion
+            int I = 0; int M = 0; int MP1 = 0; int NINCX = 0;
 
 
-            #region Array Index Correction
-            
-             int o_dx = -1 + offset_dx; 
-
-            #endregion
+            int o_dx = -1 + offset_dx;
 
             // c
             // c     scales a vector by a constant.
@@ -48,8 +36,6 @@ namespace DotNumerics.Optimization.LBFGSB
             // c
             // c
 
-            #region Body
-            
             if (N <= 0 || INCX <= 0) return;
             if (INCX == 1) goto LABEL20;
             // c
@@ -84,9 +70,6 @@ namespace DotNumerics.Optimization.LBFGSB
                 DX[I + 4 + o_dx] *= DA;
             }
             return;
-
-            #endregion
-
         }
     }
     

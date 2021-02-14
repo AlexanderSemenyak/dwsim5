@@ -1,5 +1,3 @@
-#region Translated by Jose Antonio De Santiago-Castillo.
-
 //Translated by Jose Antonio De Santiago-Castillo.
 //E-mail:JAntonioDeSantiago@gmail.com
 //Website: www.DotNumerics.com
@@ -9,7 +7,6 @@
 //F2CSharp Version 0.72 (Dicember 7, 2009)
 //Code Optimizations: , assignment operator, for-loop: array indexes
 //
-#endregion
 
 using System;
 using DotNumerics.FortranLibrary;
@@ -18,13 +15,7 @@ namespace DotNumerics.Optimization.LBFGSB
 {
     public class TIMER
     {
-    
-
-        #region Variables
-        
-        double[] TARRAY = new double[2]; 
-
-        #endregion
+        double[] TARRAY = new double[2];
 
         public TIMER()
         {
@@ -36,16 +27,9 @@ namespace DotNumerics.Optimization.LBFGSB
         ///</param>
         public void Run(ref double TTIME)
         {
-
-            #region Variables
-            
-            double TEMP = 0; int offset_tarray = 0; int o_tarray = -1; double ETIME = 0; 
-
-            #endregion
+            double TEMP = 0; int offset_tarray = 0; int o_tarray = -1; double ETIME = 0;
 
 
-            #region Prolog
-            
             // c     *********
             // c
             // c     Subroutine timer
@@ -72,8 +56,6 @@ namespace DotNumerics.Optimization.LBFGSB
             // c     The first element of the array tarray specifies user time
             
             // c      temp = etime(tarray) 
-
-            #endregion
 
             TEMP = 1;
             

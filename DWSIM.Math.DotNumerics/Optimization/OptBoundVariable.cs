@@ -1,10 +1,7 @@
-﻿#region Copyright © 2009, De Santiago-Castillo JA. All rights reserved.
-
-//Copyright © 2009 Jose Antonio De Santiago-Castillo 
+﻿//Copyright © 2009 Jose Antonio De Santiago-Castillo 
 //E-mail:JAntonioDeSantiago@gmail.com
 //Web: www.DotNumerics.com
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -17,9 +14,6 @@ namespace DotNumerics.Optimization
     /// </summary>
     public class OptBoundVariable: OptVariable
     {
-
-        #region Fields
-
         /// <summary>
         /// The lower bound.
         /// </summary>
@@ -32,11 +26,6 @@ namespace DotNumerics.Optimization
 
         private bool _UseBounds = true;
 
-
-        #endregion
-
-
-        #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the OptBoundVariable class.
@@ -148,10 +137,6 @@ namespace DotNumerics.Optimization
             this._UpperBound = upperBound;
         }
 
-        #endregion
-
-
-        #region Properties
 
         /// <summary>
         /// The lower bound.
@@ -171,19 +156,11 @@ namespace DotNumerics.Optimization
             set { _UpperBound = value; }
         }
 
-        #endregion
-
-        #region Internal Properites
-
         internal bool UseBounds
         {
             get { return _UseBounds; }
             set { _UseBounds = value; }
         }
-
-        #endregion
-
-        #region Methods
 
         internal static OptBoundVariable[] GetClon(OptBoundVariable[] variables)
         {
@@ -207,8 +184,5 @@ namespace DotNumerics.Optimization
             string s = "n: " + this._Name + ", ig: " + this.InitialGuess.ToString() + ", f: " + this.Fixed.ToString() + ", l: " + this._LowerBound + ", u:" + this._UpperBound;
             return s;
         }
-
-
-        #endregion
     }
 }

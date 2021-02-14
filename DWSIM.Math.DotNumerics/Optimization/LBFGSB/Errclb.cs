@@ -1,5 +1,3 @@
-#region Translated by Jose Antonio De Santiago-Castillo.
-
 //Translated by Jose Antonio De Santiago-Castillo.
 //E-mail:JAntonioDeSantiago@gmail.com
 //Website: www.DotNumerics.com
@@ -9,7 +7,6 @@
 //F2CSharp Version 0.72 (Dicember 7, 2009)
 //Code Optimizations: , assignment operator, for-loop: array indexes
 //
-#endregion
 
 using System;
 using DotNumerics.FortranLibrary;
@@ -18,13 +15,7 @@ namespace DotNumerics.Optimization.LBFGSB
 {
     public class ERRCLB
     {
-    
-
-        #region Variables
-        
-        const double ONE = 1.0E0; const double ZERO = 0.0E0; 
-
-        #endregion
+        const double ONE = 1.0E0; const double ZERO = 0.0E0;
 
         public ERRCLB()
         {
@@ -34,25 +25,12 @@ namespace DotNumerics.Optimization.LBFGSB
         public void Run(int N, int M, double FACTR, double[] L, int offset_l, double[] U, int offset_u, int[] NBD, int offset_nbd
                          , ref BFGSTask TASK, ref int INFO, ref int K)
         {
-
-            #region Variables
-            
-            int I = 0; 
-
-            #endregion
+            int I = 0;
 
 
-            #region Array Index Correction
-            
-             int o_l = -1 + offset_l;  int o_u = -1 + offset_u;  int o_nbd = -1 + offset_nbd; 
-
-            #endregion
+            int o_l = -1 + offset_l;  int o_u = -1 + offset_u;  int o_nbd = -1 + offset_nbd;
 
 
-            #region Prolog
-            
-            
-            
             // c     ************
             // c
             // c     Subroutine errclb
@@ -74,14 +52,9 @@ namespace DotNumerics.Optimization.LBFGSB
             
             
             // c     Check the input arguments for errors.
-            
-
-            #endregion
 
 
-            #region Body
-
-             if (N <= 0) TASK = BFGSTask.ERROR;
+            if (N <= 0) TASK = BFGSTask.ERROR;
              if (M <= 0) TASK = BFGSTask.ERROR;
              if (FACTR < ZERO) TASK = BFGSTask.ERROR;
             
@@ -111,10 +84,6 @@ namespace DotNumerics.Optimization.LBFGSB
             }
             
             return;
-            
-
-            #endregion
-
         }
     }
     

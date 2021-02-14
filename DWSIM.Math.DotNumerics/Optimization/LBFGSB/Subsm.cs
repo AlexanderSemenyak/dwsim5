@@ -1,5 +1,3 @@
-#region Translated by Jose Antonio De Santiago-Castillo.
-
 //Translated by Jose Antonio De Santiago-Castillo.
 //E-mail:JAntonioDeSantiago@gmail.com
 //Website: www.DotNumerics.com
@@ -9,7 +7,6 @@
 //F2CSharp Version 0.72 (Dicember 7, 2009)
 //Code Optimizations: , assignment operator, for-loop: array indexes
 //
-#endregion
 
 using System;
 using DotNumerics.FortranLibrary;
@@ -18,52 +15,24 @@ namespace DotNumerics.Optimization.LBFGSB
 {
     public class SUBSM
     {
-    
-
-        #region Dependencies
-        
-        DTRSL _dtrsl; 
-
-        #endregion
+        DTRSL _dtrsl;
 
 
-        #region Variables
-        
-        const double ONE = 1.0E0; const double ZERO = 0.0E0; 
-
-        #endregion
+        const double ONE = 1.0E0; const double ZERO = 0.0E0;
 
         public SUBSM(DTRSL dtrsl)
         {
-    
-
-            #region Set Dependencies
-            
-            this._dtrsl = dtrsl; 
-
-            #endregion
-
+            this._dtrsl = dtrsl;
         }
     
         public SUBSM()
         {
-    
-
-            #region Dependencies (Initialization)
-            
             DDOT ddot = new DDOT();
             DAXPY daxpy = new DAXPY();
             DTRSL dtrsl = new DTRSL(ddot, daxpy);
 
-            #endregion
 
-
-            #region Set Dependencies
-            
-            this._dtrsl = dtrsl; 
-
-            #endregion
-
+            this._dtrsl = dtrsl;
         }
         /// <param name="N">
         /// is an integer variable.
@@ -314,29 +283,16 @@ namespace DotNumerics.Optimization.LBFGSB
                          , int COL, int HEAD, ref int IWORD, ref double[] WV, int offset_wv, double[] WN, int offset_wn, int IPRINT
                          , ref int INFO)
         {
-
-            #region Variables
-            
             int POINTR = 0; int M2 = 0; int COL2 = 0; int IBD = 0; int JY = 0; int JS = 0; int I = 0; int J = 0; int K = 0; 
-            double ALPHA = 0;double DK = 0; double TEMP1 = 0; double TEMP2 = 0; 
-
-            #endregion
+            double ALPHA = 0;double DK = 0; double TEMP1 = 0; double TEMP2 = 0;
 
 
-            #region Array Index Correction
-            
-             int o_ind = -1 + offset_ind;  int o_l = -1 + offset_l;  int o_u = -1 + offset_u;  int o_nbd = -1 + offset_nbd; 
+            int o_ind = -1 + offset_ind;  int o_l = -1 + offset_l;  int o_u = -1 + offset_u;  int o_nbd = -1 + offset_nbd; 
              int o_x = -1 + offset_x; int o_d = -1 + offset_d;  int o_ws = -1 - N + offset_ws;  int o_wy = -1 - N + offset_wy; 
-             int o_wv = -1 + offset_wv; int o_wn = -1 - (2*M) + offset_wn; 
-
-            #endregion
+             int o_wv = -1 + offset_wv; int o_wn = -1 - (2*M) + offset_wn;
 
 
-            #region Prolog
-            
-            
-            
-            // c     ************
+             // c     ************
             // c
             // c     Subroutine subsm
             // c
@@ -483,18 +439,8 @@ namespace DotNumerics.Optimization.LBFGSB
             // c
             // c
             // c     ************
-            
-            
-            
-            
-            
-            
-
-            #endregion
 
 
-            #region Body
-            
             if (NSUB <= 0) return;
             if (IPRINT >= 99) ;//ERROR-ERRORWRITE(6,1001)
             
@@ -647,10 +593,6 @@ namespace DotNumerics.Optimization.LBFGSB
             
             
             return;
-            
-
-            #endregion
-
         }
     }
     

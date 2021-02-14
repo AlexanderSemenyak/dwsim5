@@ -1,5 +1,3 @@
-#region Translated by Jose Antonio De Santiago-Castillo.
-
 //Translated by Jose Antonio De Santiago-Castillo.
 //E-mail:JAntonioDeSantiago@gmail.com
 //Website: www.DotNumerics.com
@@ -9,7 +7,6 @@
 //F2CSharp Version 0.72 (Dicember 7, 2009)
 //Code Optimizations: , assignment operator, for-loop: array indexes
 //
-#endregion
 
 using System;
 using DotNumerics.FortranLibrary;
@@ -28,25 +25,12 @@ namespace DotNumerics.Optimization.LBFGSB
                          , int ITER, int NFGV, int NACT, double SBGNRM, int NINT, ref BFGSWord WORD
                          , int IWORD, int IBACK, double STP, double XSTEP)
         {
-
-            #region Variables
-            
-            int I = 0; int IMOD = 0; 
-
-            #endregion
+            int I = 0; int IMOD = 0;
 
 
-            #region Array Index Correction
-            
-             int o_x = -1 + offset_x;  int o_g = -1 + offset_g; 
-
-            #endregion
+            int o_x = -1 + offset_x;  int o_g = -1 + offset_g;
 
 
-            #region Prolog
-            
-            
-            
             // c     ************
             // c
             // c     Subroutine prn2lb
@@ -70,12 +54,8 @@ namespace DotNumerics.Optimization.LBFGSB
             
             // c           'word' records the status of subspace solutions.
 
-            #endregion
 
-
-            #region Body
-
-             if (IWORD == 0)
+            if (IWORD == 0)
              {
                  // c                            the subspace minimization converged.
                  WORD = BFGSWord.con;
@@ -122,10 +102,6 @@ namespace DotNumerics.Optimization.LBFGSB
             
             
             return;
-            
-
-            #endregion
-
         }
     }
     

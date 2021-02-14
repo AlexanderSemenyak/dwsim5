@@ -1,5 +1,3 @@
-#region Translated by Jose Antonio De Santiago-Castillo.
-
 //Translated by Jose Antonio De Santiago-Castillo.
 //E-mail:JAntonioDeSantiago@gmail.com
 //Website: www.DotNumerics.com
@@ -9,7 +7,6 @@
 //F2CSharp Version 0.72 (Dicember 7, 2009)
 //Code Optimizations: , assignment operator, for-loop: array indexes
 //
-#endregion
 
 using System;
 using DotNumerics.FortranLibrary;
@@ -18,43 +15,24 @@ namespace DotNumerics.Optimization.LBFGSB
 {
     public class DPMEPS
     {
-    
-
-        #region Variables
-        
-        double ZERO = 0; double ONE = 0; double TWO = 0; 
-
-        #endregion
+        double ZERO = 0; double ONE = 0; double TWO = 0;
 
         public DPMEPS()
         {
-    
-
-            #region Data Initialization
-            
             //ZERO,ONE,TWO/0.0D0,1.0D0,2.0D0
             ZERO = 0.0E0;
             ONE = 1.0E0;
             TWO = 2.0E0;
-
-            #endregion
-
         }
     
         public double Run()
         {
         double dpmeps = 0;
 
-            #region Variables
-            
-            int I = 0; int IBETA = 0; int IRND = 0; int IT = 0; int ITEMP = 0; int NEGEP = 0; double A = 0; double B = 0; 
-            double BETA = 0;double BETAIN = 0; double BETAH = 0; double TEMP = 0; double TEMPA = 0; double TEMP1 = 0; 
-
-            #endregion
+        int I = 0; int IBETA = 0; int IRND = 0; int IT = 0; int ITEMP = 0; int NEGEP = 0; double A = 0; double B = 0; 
+            double BETA = 0;double BETAIN = 0; double BETAH = 0; double TEMP = 0; double TEMPA = 0; double TEMP1 = 0;
 
 
-            #region Prolog
-            
             // c     **********
             // c
             // c     Subroutine dpeps
@@ -86,13 +64,8 @@ namespace DotNumerics.Optimization.LBFGSB
             // c     *******
             
             // c     determine ibeta, beta ala malcolm.
-            
-
-            #endregion
 
 
-            #region Body
-            
             A = ONE;
             B = ONE;
         LABEL10:;
@@ -150,9 +123,6 @@ namespace DotNumerics.Optimization.LBFGSB
         LABEL70:  return dpmeps;
             
         return dpmeps;
-
-            #endregion
-
         }
     }
     

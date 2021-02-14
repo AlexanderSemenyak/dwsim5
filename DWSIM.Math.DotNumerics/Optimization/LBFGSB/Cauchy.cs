@@ -1,5 +1,3 @@
-#region Translated by Jose Antonio De Santiago-Castillo.
-
 //Translated by Jose Antonio De Santiago-Castillo.
 //E-mail:JAntonioDeSantiago@gmail.com
 //Website: www.DotNumerics.com
@@ -9,7 +7,6 @@
 //F2CSharp Version 0.72 (Dicember 7, 2009)
 //Code Optimizations: , assignment operator, for-loop: array indexes
 //
-#endregion
 
 using System;
 using DotNumerics.FortranLibrary;
@@ -18,40 +15,19 @@ namespace DotNumerics.Optimization.LBFGSB
 {
     public class CAUCHY
     {
-    
-
-        #region Dependencies
-        
-        HPSOLB _hpsolb; BMV _bmv; DSCAL _dscal; DCOPY _dcopy; DAXPY _daxpy; DDOT _ddot; 
-
-        #endregion
+        HPSOLB _hpsolb; BMV _bmv; DSCAL _dscal; DCOPY _dcopy; DAXPY _daxpy; DDOT _ddot;
 
 
-        #region Variables
-        
-        const double ONE = 1.0E0; const double ZERO = 0.0E0; 
-
-        #endregion
+        const double ONE = 1.0E0; const double ZERO = 0.0E0;
 
         public CAUCHY(HPSOLB hpsolb, BMV bmv, DSCAL dscal, DCOPY dcopy, DAXPY daxpy, DDOT ddot)
         {
-    
-
-            #region Set Dependencies
-            
             this._hpsolb = hpsolb; this._bmv = bmv; this._dscal = dscal; this._dcopy = dcopy; this._daxpy = daxpy; 
             this._ddot = ddot;
-
-            #endregion
-
         }
     
         public CAUCHY()
         {
-    
-
-            #region Dependencies (Initialization)
-            
             HPSOLB hpsolb = new HPSOLB();
             DDOT ddot = new DDOT();
             DAXPY daxpy = new DAXPY();
@@ -60,16 +36,9 @@ namespace DotNumerics.Optimization.LBFGSB
             DTRSL dtrsl = new DTRSL(ddot, daxpy);
             BMV bmv = new BMV(dtrsl);
 
-            #endregion
 
-
-            #region Set Dependencies
-            
             this._hpsolb = hpsolb; this._bmv = bmv; this._dscal = dscal; this._dcopy = dcopy; this._daxpy = daxpy; 
             this._ddot = ddot;
-
-            #endregion
-
         }
         /// <param name="N">
         /// is an integer variable.
@@ -220,35 +189,22 @@ namespace DotNumerics.Optimization.LBFGSB
                          , int HEAD, ref double[] P, int offset_p, ref double[] C, int offset_c, ref double[] WBP, int offset_wbp, ref double[] V, int offset_v, ref int NINT
                          , double[] SG, int offset_sg, double[] YG, int offset_yg, int IPRINT, double SBGNRM, ref int INFO, double EPSMCH)
         {
-
-            #region Variables
-            
             bool XLOWER = false; bool XUPPER = false; bool BNDED = false; int I = 0; int J = 0; int COL2 = 0; int NFREE = 0; 
             int NBREAK = 0;int POINTR = 0; int IBP = 0; int NLEFT = 0; int IBKMIN = 0; int ITER = 0; double F1 = 0; double F2 = 0; 
             double DT = 0;double DTM = 0; double TSUM = 0; double DIBP = 0; double ZIBP = 0; double DIBP2 = 0; double BKMIN = 0; 
             double TU = 0;double TL = 0; double WMC = 0; double WMP = 0; double WMW = 0; double TJ = 0; double TJ0 = 0; 
-            double NEGGI = 0;double F2_ORG = 0; 
-
-            #endregion
+            double NEGGI = 0;double F2_ORG = 0;
 
 
-            #region Array Index Correction
-            
-             int o_x = -1 + offset_x;  int o_l = -1 + offset_l;  int o_u = -1 + offset_u;  int o_nbd = -1 + offset_nbd; 
+            int o_x = -1 + offset_x;  int o_l = -1 + offset_l;  int o_u = -1 + offset_u;  int o_nbd = -1 + offset_nbd; 
              int o_g = -1 + offset_g; int o_iorder = -1 + offset_iorder;  int o_iwhere = -1 + offset_iwhere; 
              int o_t = -1 + offset_t; int o_d = -1 + offset_d;  int o_xcp = -1 + offset_xcp;  int o_wy = -1 - N + offset_wy; 
              int o_ws = -1 - N + offset_ws; int o_sy = -1 - M + offset_sy;  int o_wt = -1 - M + offset_wt; 
              int o_p = -1 + offset_p; int o_c = -1 + offset_c;  int o_wbp = -1 + offset_wbp;  int o_v = -1 + offset_v; 
-             int o_sg = -1 + offset_sg; int o_yg = -1 + offset_yg; 
-
-            #endregion
+             int o_sg = -1 + offset_sg; int o_yg = -1 + offset_yg;
 
 
-            #region Prolog
-            
-            
-            
-            // c     ************
+             // c     ************
             // c
             // c     Subroutine cauchy
             // c
@@ -432,13 +388,8 @@ namespace DotNumerics.Optimization.LBFGSB
             // c     Check the status of the variables, reset iwhere(i) if necessary;
             // c       compute the Cauchy direction d and the breakpoints t; initialize
             // c       the derivative f1 and the vector p = W'd (for theta = 1).
-            
-
-            #endregion
 
 
-            #region Body
-            
             if (SBGNRM <= ZERO)
             {
                 if (IPRINT >= 0) ;//ERROR-ERRORWRITE(6,*)'Subgnorm = 0.  GCP = X.'
@@ -774,10 +725,6 @@ namespace DotNumerics.Optimization.LBFGSB
             
             
             return;
-            
-
-            #endregion
-
         }
     }
     

@@ -1,5 +1,3 @@
-#region Translated by Jose Antonio De Santiago-Castillo.
-
 //Translated by Jose Antonio De Santiago-Castillo.
 //E-mail:JAntonioDeSantiago@gmail.com
 //Website: www.DotNumerics.com
@@ -9,7 +7,6 @@
 //F2CSharp Version 0.72 (Dicember 7, 2009)
 //Code Optimizations: , assignment operator, for-loop: array indexes
 //
-#endregion
 
 using System;
 using DotNumerics.FortranLibrary;
@@ -18,40 +15,19 @@ namespace DotNumerics.Optimization.LBFGSB
 {
     public class LNSRLB
     {
-    
-
-        #region Dependencies
-        
-        DTRSL _dtrsl; DDOT _ddot; DCSRCH _dcsrch; DCOPY _dcopy; 
-
-        #endregion
+        DTRSL _dtrsl; DDOT _ddot; DCSRCH _dcsrch; DCOPY _dcopy;
 
 
-        #region Variables
-        
         const double ONE = 1.0E0; const double ZERO = 0.0E0; const double BIG = 1.0E+10; const double FTOL = 1.0E-3; 
-        const double GTOL = 0.9E0;const double XTOL = 0.1E0; 
-
-        #endregion
+        const double GTOL = 0.9E0;const double XTOL = 0.1E0;
 
         public LNSRLB(DTRSL dtrsl, DDOT ddot, DCSRCH dcsrch, DCOPY dcopy)
         {
-    
-
-            #region Set Dependencies
-            
-            this._dtrsl = dtrsl; this._ddot = ddot; this._dcsrch = dcsrch; this._dcopy = dcopy; 
-
-            #endregion
-
+            this._dtrsl = dtrsl; this._ddot = ddot; this._dcsrch = dcsrch; this._dcopy = dcopy;
         }
     
         public LNSRLB()
         {
-    
-
-            #region Dependencies (Initialization)
-            
             DDOT ddot = new DDOT();
             DAXPY daxpy = new DAXPY();
             DCSTEP dcstep = new DCSTEP();
@@ -59,15 +35,8 @@ namespace DotNumerics.Optimization.LBFGSB
             DTRSL dtrsl = new DTRSL(ddot, daxpy);
             DCSRCH dcsrch = new DCSRCH(dcstep);
 
-            #endregion
 
-
-            #region Set Dependencies
-            
-            this._dtrsl = dtrsl; this._ddot = ddot; this._dcsrch = dcsrch; this._dcopy = dcopy; 
-
-            #endregion
-
+            this._dtrsl = dtrsl; this._ddot = ddot; this._dcsrch = dcsrch; this._dcopy = dcopy;
         }
         public void Run(int N, double[] L, int offset_l, double[] U, int offset_u, int[] NBD, int offset_nbd, ref double[] X, int offset_x, double F
                          , ref double FOLD, ref double GD, ref double GDOLD, double[] G, int offset_g, double[] D, int offset_d, ref double[] R, int offset_r
@@ -75,28 +44,15 @@ namespace DotNumerics.Optimization.LBFGSB
                          , ref double STPMX, int ITER, ref int IFUN, ref int IBACK, ref int NFGV, ref int INFO
                          , ref BFGSTask TASK, bool BOXED, bool CNSTND, ref BFGSTask CSAVE, ref int[] ISAVE, int offset_isave, ref double[] DSAVE, int offset_dsave)
         {
-
-            #region Variables
-            
-            int I = 0; double DDOT = 0; double A1 = 0; double A2 = 0; 
-
-            #endregion
+            int I = 0; double DDOT = 0; double A1 = 0; double A2 = 0;
 
 
-            #region Array Index Correction
-            
-             int o_l = -1 + offset_l;  int o_u = -1 + offset_u;  int o_nbd = -1 + offset_nbd;  int o_x = -1 + offset_x; 
+            int o_l = -1 + offset_l;  int o_u = -1 + offset_u;  int o_nbd = -1 + offset_nbd;  int o_x = -1 + offset_x; 
              int o_g = -1 + offset_g; int o_d = -1 + offset_d;  int o_r = -1 + offset_r;  int o_t = -1 + offset_t; 
-             int o_z = -1 + offset_z; int o_isave = -1 + offset_isave;  int o_dsave = -1 + offset_dsave; 
-
-            #endregion
+             int o_z = -1 + offset_z; int o_isave = -1 + offset_isave;  int o_dsave = -1 + offset_dsave;
 
 
-
-            #region Prolog
-            
-            
-            // c     **********
+             // c     **********
             // c
             // c     Subroutine lnsrlb
             // c
@@ -122,16 +78,8 @@ namespace DotNumerics.Optimization.LBFGSB
             // c
             // c
             // c     **********
-            
-            
-            
-            
-
-            #endregion
 
 
-            #region Body
-            
             if (TASK == BFGSTask.FG_LNSRCH) goto LABEL556;
             
             DTD = this._ddot.Run(N, D, offset_d, 1, D, offset_d, 1);
@@ -248,10 +196,6 @@ namespace DotNumerics.Optimization.LBFGSB
             }
             
             return;
-            
-
-            #endregion
-
         }
     }
     

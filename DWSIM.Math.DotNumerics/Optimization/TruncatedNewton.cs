@@ -1,10 +1,7 @@
-﻿#region Copyright © 2009, De Santiago-Castillo JA. All rights reserved.
-
-//Copyright © 2009 Jose Antonio De Santiago-Castillo 
+﻿//Copyright © 2009 Jose Antonio De Santiago-Castillo 
 //E-mail:JAntonioDeSantiago@gmail.com
 //Web: www.DotNumerics.com
 //
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -20,9 +17,6 @@ namespace DotNumerics.Optimization
     /// </summary>
     public sealed class TruncatedNewton : xMinimizationBase
     {
-
-        #region Fields
-
         TNDriver _TNDriver = new TNDriver();
 
         /// <summary>
@@ -41,10 +35,6 @@ namespace DotNumerics.Optimization
         private double _MaximunStep = 10;
 
 
-        #endregion
-
-        #region Constructor
-
         /// <summary>
         /// Initializes a new instance of the MinTruncatedNewton class.
         /// </summary>
@@ -53,11 +43,6 @@ namespace DotNumerics.Optimization
 
         }
 
-
-        #endregion
-
-
-        #region Properties
 
         /// <summary>
         /// The accuracy of the computed function values.
@@ -87,11 +72,6 @@ namespace DotNumerics.Optimization
             set { _MaximunStep = value; }
         }
 
-
-        #endregion
-
-
-        #region Public methods
 
         /// <summary>
         /// Computes the minimum point of a function of several variables.
@@ -167,10 +147,6 @@ namespace DotNumerics.Optimization
             return minimum;
         }
 
-        #endregion
-
-
-        #region private Methods
 
         private OptVariable[] GetVariables(double[] variablesArray)
         {
@@ -183,9 +159,6 @@ namespace DotNumerics.Optimization
 
             return vars;
         }
-
-        #endregion
-
     }
 
 

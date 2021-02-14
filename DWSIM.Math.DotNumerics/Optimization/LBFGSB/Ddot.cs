@@ -1,5 +1,3 @@
-#region Translated by Jose Antonio De Santiago-Castillo.
-
 //Translated by Jose Antonio De Santiago-Castillo.
 //E-mail:JAntonioDeSantiago@gmail.com
 //Website: www.DotNumerics.com
@@ -9,7 +7,6 @@
 //F2CSharp Version 0.72 (Dicember 7, 2009)
 //Code Optimizations: , assignment operator, for-loop: array indexes
 //
-#endregion
 
 using System;
 using DotNumerics.FortranLibrary;
@@ -28,28 +25,18 @@ namespace DotNumerics.Optimization.LBFGSB
         {
         double ddot = 0;
 
-            #region Variables
-            
-            double DTEMP = 0; int I = 0; int IX = 0; int IY = 0; int M = 0; int MP1 = 0; 
-
-            #endregion
+        double DTEMP = 0; int I = 0; int IX = 0; int IY = 0; int M = 0; int MP1 = 0;
 
 
-            #region Array Index Correction
-            
-             int o_dx = -1 + offset_dx;  int o_dy = -1 + offset_dy; 
+        int o_dx = -1 + offset_dx;  int o_dy = -1 + offset_dy;
 
-            #endregion
-
-            // c
+        // c
             // c     forms the dot product of two vectors.
             // c     uses unrolled loops for increments equal to one.
             // c     jack dongarra, linpack, 3/11/78.
             // c
             // c
 
-            #region Body
-            
             ddot = 0.0E0;
             DTEMP = 0.0E0;
             if (N <= 0) return ddot;
@@ -90,9 +77,6 @@ namespace DotNumerics.Optimization.LBFGSB
             }
         LABEL60:  ddot = DTEMP;
             return ddot;
-
-            #endregion
-
         }
     }
     
