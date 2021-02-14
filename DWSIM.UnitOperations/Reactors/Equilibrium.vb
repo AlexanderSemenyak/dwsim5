@@ -818,7 +818,6 @@ Namespace Reactors
 
                                     newx = solver3.Solve(Function(x1)
                                                              FlowSheet.CheckStatus()
-                                                             VariableValues.Add(x1.Clone)
                                                              Return FunctionValue2N(x1)
                                                          End Function, variables.ToArray())
 
@@ -1008,6 +1007,7 @@ Namespace Reactors
                 Dim newton As New Optimization.NewtonSolver
                 newton.MaxIterations = 20
                 newton.Tolerance = 0.01
+                newton.EnableDamping = True
                 newton.Solve(Function(Tx)
                                  Return New Double() {efunc.Invoke(Tx(0))}
                              End Function, New Double() {T})
