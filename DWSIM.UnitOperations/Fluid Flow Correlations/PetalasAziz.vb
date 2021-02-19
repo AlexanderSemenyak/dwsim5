@@ -126,21 +126,21 @@ Namespace FlowPackages
             Else
 
                 'INPUT Variables
-                'Liquid density (lb/ft³)
-                'Gas density (lb/ft³)
-                'Gas/Liquid interfacial tension (dyne/cm)
-                'Liquid superficial velocity (ft/sec)
-                'Gas superficial velocity (ft/sec)
-                'Pipe diameter (inch)
-                'Pipe inclination (degrees)
-                'Absolute pipe roughness (ft)
+                'DensL - Liquid density (lb/ft³)
+                'DensG - Gas density (lb/ft³)
+                'Sigma - Gas/Liquid interfacial tension (dyne/cm)
+                'VsL - Liquid superficial velocity (ft/sec)
+                'VsG - Gas superficial velocity (ft/sec)
+                'Dia - Pipe diameter (inch)
+                'Theta - Pipe inclination (degrees)
+                'Rough - Absolute pipe roughness (ft)
 
                 'OUTPUT Variables
-                'Frictional Pressure Gradient (psi/ft)
-                'Hydrostatic Pressure Gradient (psi/ft)
-                'Volume Fraction Liquid
-                'Code designating predicted flow regime
-                'Text description of predicted flow regime
+                'dPfr - Frictional Pressure Gradient (psi/ft)
+                'dPhh - Hydrostatic Pressure Gradient (psi/ft)
+                'eL - Volume Fraction Liquid
+                'Region - Code designating predicted flow regime
+                'FlowRegime - Text description of predicted flow regime
 
                 DensL = rhol / 16.0185
                 DensG = rhov / 16.0185

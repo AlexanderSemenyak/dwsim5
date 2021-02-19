@@ -231,6 +231,8 @@ Namespace SpecialOps
 
                     .CalcOverallCompMassFractions()
 
+                    .AtEquilibrium = False
+
                 End With
             End If
 
@@ -463,6 +465,7 @@ Namespace SpecialOps
                 msto.Assign(msfrom)
                 msto.AssignProps(msfrom)
                 msto.SpecType = prevspec
+                msto.AtEquilibrium = False
 
             End If
 
