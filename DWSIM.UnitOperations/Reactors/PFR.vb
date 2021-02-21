@@ -1180,7 +1180,7 @@ Namespace Reactors
                     Dim fpp As New FlowPackages.BeggsBrill
                     Dim tipofluxo As String, holdup, dpf, dph, dpt As Double
 
-                    resv = fpp.CalculateDeltaP(diameter * 0.0254, L, 0.0#, 0.000045, Qvin * 24 * 3600, Qlin * 24 * 3600, eta_v * 1000, eta_l * 1000, rho_v, rho_l, tens)
+                    resv = fpp.CalculateDeltaP(diameter * 0.0254, L, 0.0#, 0.000045, Qvin * 24 * 3600, Qlin * 24 * 3600, eta_v * 1000, eta_l * 1000, rho_v, rho_l, tens, P)
 
                     tipofluxo = resv(0)
                     holdup = resv(1)

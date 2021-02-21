@@ -15,6 +15,7 @@
 '
 '    You should have received a copy of the GNU General Public License
 '    along with DWSIM.  If not, see <http://www.gnu.org/licenses/>.
+Imports System.Runtime.CompilerServices
 
 Namespace FlowPackages
 
@@ -24,8 +25,9 @@ Namespace FlowPackages
 
         End Sub
 
-        Public MustOverride Function CalculateDeltaP(ByVal D As Double, ByVal L As Double, ByVal deltaz As Double, ByVal k As Double, ByVal qv As Double, ByVal ql As Double, ByVal muv As Double, ByVal mul As Double, ByVal rhov As Double, ByVal rhol As Double, ByVal surft As Double) As Object
+        Public MustOverride Function CalculateDeltaP(ByVal D As Double, ByVal L As Double, ByVal deltaz As Double, ByVal k As Double, ByVal qv As Double, ByVal ql As Double, ByVal muv As Double, ByVal mul As Double, ByVal rhov As Double, ByVal rhol As Double, ByVal surft As Double, ByVal pressureIn As Double) As Object
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function CalculateDeltaPLiquid(ByVal D As Double, ByVal L As Double, ByVal deltaz As Double, ByVal k As Double, ByVal ql As Double, ByVal mul As Double, ByVal rhol As Double) As Object
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
@@ -61,6 +63,7 @@ Namespace FlowPackages
             CalculateDeltaPLiquid = ResVector
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function CalculateDeltaPGas(ByVal D As Double, ByVal L As Double, ByVal deltaz As Double, ByVal k As Double, ByVal qv As Double, ByVal muv As Double, ByVal rhov As Double) As Object
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
 
@@ -95,7 +98,7 @@ Namespace FlowPackages
             CalculateDeltaPGas = ResVector
         End Function
 
-
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function FrictionFactor(ByVal Re As Double, ByVal D As Double, ByVal k As Double) As Double
             Dim f, a1, b1, a, b, c As Double
             If Re > 4000 Then
@@ -113,6 +116,7 @@ Namespace FlowPackages
             Return f
         End Function
 
+        <MethodImpl(MethodImplOptions.AggressiveInlining)>
         Public Function NRe(ByVal rho As Double, ByVal v As Double, ByVal D As Double, ByVal mu As Double) As Double
             NRe = rho * v * D / mu
         End Function

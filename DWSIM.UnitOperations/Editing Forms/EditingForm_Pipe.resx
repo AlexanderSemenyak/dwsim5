@@ -750,6 +750,9 @@
   <data name="cbPDropModel.Items2" xml:space="preserve">
     <value>Petalas &amp; Aziz</value>
   </data>
+  <data name="cbPDropModel.Items3" xml:space="preserve">
+    <value>Ansari</value>
+  </data>
   <data name="cbPDropModel.Location" type="System.Drawing.Point, System.Drawing">
     <value>148, 94</value>
   </data>

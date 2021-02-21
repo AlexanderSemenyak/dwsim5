@@ -37,6 +37,7 @@ Namespace UnitOperations
         Beggs_Brill
         Lockhart_Martinelli
         Petalas_Aziz
+        Ansari
     End Enum
 
     <System.Serializable()> Public Class Pipe
@@ -324,6 +325,8 @@ Namespace UnitOperations
                     fpp = New FlowPackages.LockhartMartinelli
                 Case FlowPackage.Petalas_Aziz
                     fpp = New FlowPackages.PetalasAziz
+                Case FlowPackage.Ansari
+                    fpp = New FlowPackages.AnsariPressureDropCorrelation
                 Case Else
                     fpp = New FlowPackages.BeggsBrill
             End Select
@@ -547,7 +550,7 @@ Namespace UnitOperations
 
                                         IObj6?.SetCurrent()
                                         If segmento.TipoSegmento = "Tubulaosimples" Or segmento.TipoSegmento = "" Or segmento.TipoSegmento = "Straight Tube Section" Or segmento.TipoSegmento = "Straight Tube" Or segmento.TipoSegmento = "Tubulação Simples" Then
-                                            resv = fpp.CalculateDeltaP(.DI * 0.0254, .Comprimento / .Incrementos, .Elevacao / .Incrementos, Me.rugosidade(.Material, segmento), Qvin * 24 * 3600, Qlin * 24 * 3600, eta_v * 1000, eta_l * 1000, rho_v, rho_l, tens)
+                                            resv = fpp.CalculateDeltaP(.DI * 0.0254, .Comprimento / .Incrementos, .Elevacao / .Incrementos, Me.rugosidade(.Material, segmento), Qvin * 24 * 3600, Qlin * 24 * 3600, eta_v * 1000, eta_l * 1000, rho_v, rho_l, tens, Pin)
                                         Else
                                             segmento.Comprimento = 0.1 '10 cm default
                                             segmento.Incrementos = 1 'only one increment
@@ -556,7 +559,7 @@ Namespace UnitOperations
                                             If resf(1) Then
                                                 Dim L_eq As Double
                                                 L_eq = resf(0) * 0.0254 * .DI
-                                                resv = fpp.CalculateDeltaP(.DI * 0.0254, L_eq, 0, Me.rugosidade(.Material, segmento), Qvin * 24 * 3600, Qlin * 24 * 3600, eta_v * 1000, eta_l * 1000, rho_v, rho_l, tens)
+                                                resv = fpp.CalculateDeltaP(.DI * 0.0254, L_eq, 0, Me.rugosidade(.Material, segmento), Qvin * 24 * 3600, Qlin * 24 * 3600, eta_v * 1000, eta_l * 1000, rho_v, rho_l, tens, Pin)
                                             Else
                                                 mu_mix = Qlin / (Qvin + Qlin) * eta_l + Qvin / (Qvin + Qlin) * eta_v
                                                 rho_mix = Qlin / (Qvin + Qlin) * rho_l + Qvin / (Qvin + Qlin) * rho_v

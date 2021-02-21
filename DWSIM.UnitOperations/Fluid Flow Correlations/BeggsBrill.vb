@@ -23,7 +23,7 @@ Namespace FlowPackages
 
         Inherits FPBaseClass
 
-        Public Overrides Function CalculateDeltaP(ByVal D As Double, ByVal L As Double, ByVal deltaz As Double, ByVal k As Double, ByVal qv As Double, ByVal ql As Double, ByVal muv As Double, ByVal mul As Double, ByVal rhov As Double, ByVal rhol As Double, ByVal surft As Double) As Object
+        Public Overrides Function CalculateDeltaP(ByVal D As Double, ByVal L As Double, ByVal deltaz As Double, ByVal k As Double, ByVal qv As Double, ByVal ql As Double, ByVal muv As Double, ByVal mul As Double, ByVal rhov As Double, ByVal rhol As Double, ByVal surft As Double, ByVal pressureIn As Double) As Object
             'Function PA_DP(ByVal D, ByVal L, ByVal Z, ByVal epsilon, ByVal QG, ByVal QL, ByVal mu_g, ByVal mu_l, ByVal rho_g, ByVal rho_l, ByVal sigma)
 
             Dim IObj As Inspector.InspectorItem = Inspector.Host.GetNewInspectorItem()
@@ -32,35 +32,35 @@ Namespace FlowPackages
 
             IObj?.SetCurrent()
 
-            IObj?.Paragraphs.Add("Beggs and Brill (1973) correlation, is one of the few correlations capable of handling all flow directions encountered in oil and gas operations, namely uphill, downhill, horizontal, inclined and vertical flow for two phase fluid.")
-            IObj?.Paragraphs.Add("Total pressure gradient Is described by following relation.")
+            IObj?.Paragraphs.Add("Корреляция Beggs&Brill (1973) - одна из нескольких корреляций, предназначенная для расчета потока нефти и газа (восходящий. нисходящий, горизонтальный, наклонный и вертикальный) для двухфазного флюида.")
+            IObj?.Paragraphs.Add("Общий градиент давления описывается следующим соотношением")
             IObj?.Paragraphs.Add("<m>\frac{dP}{dZ} = [\frac{dP}{dZ}_{Fric.} + \frac{dP}{dZ}_{Ele.}]/(1-E_k)</m>")
 
-            IObj?.Paragraphs.Add("<p>where, (dP / dZ)<Sub>Fric.</Sub> Is pressure gradient due To friction, (dP / dZ)<Sub>Ele.</Sub> Is hydrostatic pressure difference And E<Sub>k</Sub> estimates pressure loss due To acceleration.</p>
-                                <h3>Flow Pattern Map</h3>
-                                <p>A flow regime Is identified based On the Froude number Of the mixture (Fr<Sub>m</Sub>) And input liquid content (no slip liquid holdup C<Sub>L</Sub>).</p>
+            IObj?.Paragraphs.Add("<p>где, (dP / dZ)<Sub>Fric.</Sub> - это градиент давления к трению, (dP / dZ)<Sub>Ele.</Sub> - это разность гидростатического давления и E<Sub>k</Sub> - представляющего потерю давления к ускорению.</p>
+                                <h3>Карта схемы потока</h3>
+                                <p>Режим потока определяется на основе числа Фруда смеси (Fr<Sub>m</Sub>) и входящего содержания жидкости (no slip liquid holdup C<Sub>L</Sub>).</p>
                                 <m>Fr_m = \frac{v_m^2}{g.D}</m>
-                                <p>where, v<Sub>m</Sub> Is mixture velocity, D Is pipe inside diameter And g Is gravitational constant.</p>
+                                <p>где, v<Sub>m</Sub> - скорость смеси, D - внутренний диаметр трубы и g - гравитационная постоянная.</p>
                                 <pre>C<Sub>L</Sub>= Q<Sub>L</Sub>/ (Q<Sub>L</Sub> + Q<Sub>G</Sub>)</pre>
-                                <p>where, Q<Sub>L</Sub> Is liquid volumetric flow And Q<Sub>G</Sub> Is gas volumetric flow.</p>
-                                <p>The transition lines For correlation are defined As follows:</p>
+                                <p>где, Q<Sub>L</Sub> - объемный расход жидкости и Q<Sub>G</Sub> - объемный расход газа.</p>
+                                <p>Линии перехода для корреляции определяются следующим образом:</p>
                                 <pre>L<Sub>1</Sub>= 316 C<Sub>L</Sub><sup>0.302</sup>
                                 L<Sub>2</Sub>= 0.0009252 C<Sub>L</Sub><sup>-2.4684</sup>
                                 L<Sub>3</Sub>= 0.1 C<Sub>L</Sub><sup>-1.4516</sup>
                                 L<Sub>4</Sub>= 0.5 C<Sub>L</Sub><sup>-6.738</sup></pre>
-                                <h4>Segregated Flow</h4>
-                                <pre>C<Sub>L</Sub> &lt; 0.01 And Fr<Sub>m</Sub> &lt; L<Sub>1</Sub>
-                                OR C<Sub>L</Sub> &gt;= 0.01 And Fr < Sub() > m</Sub> &lt; L<Sub>2</Sub></pre>
-                                <h4>Intermittent Flow</h4>
-                                <pre>0.01 &lt;= C < Sub() > L</Sub> &lt; 0.4 And L<Sub>3</Sub> &lt; Fr<Sub>m</Sub> &lt;= L<Sub>1</Sub>
-                                OR C<Sub>L</Sub> &gt;= 0.4 And L < Sub() > 3</Sub> &lt; Fr<Sub>m</Sub> &lt;= L<Sub>4</Sub></pre>
-                                <h4>Distributed Flow</h4>
-                                <pre><code>C<Sub>L</Sub> &lt; 0.4 And Fr<Sub>m</Sub> &gt;= L<Sub>4</Sub></code>
-                                <code>OR C<Sub>L</Sub> &gt;= 0.4 And Fr < Sub() > m</Sub> &gt; L<Sub>4</Sub></code></pre>
-                                <h4>Transition Flow</h4>
+                                <h4>Раздельный поток</h4>
+                                <pre>C<Sub>L</Sub> &lt; 0.01 И Fr<Sub>m</Sub> &lt; L<Sub>1</Sub>
+                                ИЛИ C<Sub>L</Sub> &gt;= 0.01 И Fr < Sub() > m</Sub> &lt; L<Sub>2</Sub></pre>
+                                <h4>Прерывистый (пульсирующий) поток</h4>
+                                <pre>0.01 &lt;= C < Sub() > L</Sub> &lt; 0.4 И L<Sub>3</Sub> &lt; Fr<Sub>m</Sub> &lt;= L<Sub>1</Sub>
+                                ИЛИ C<Sub>L</Sub> &gt;= 0.4 И L < Sub() > 3</Sub> &lt; Fr<Sub>m</Sub> &lt;= L<Sub>4</Sub></pre>
+                                <h4>Распределенный поток</h4>
+                                <pre><code>C<Sub>L</Sub> &lt; 0.4 И Fr<Sub>m</Sub> &gt;= L<Sub>4</Sub></code>
+                                <code>ИЛИ C<Sub>L</Sub> &gt;= 0.4 И Fr < Sub() > m</Sub> &gt; L<Sub>4</Sub></code></pre>
+                                <h4>Неустановившийся поток (от ламинарного к турбулентному)</h4>
                                 <pre><code>L<Sub>2</Sub> &lt; Fr<Sub>m</Sub> &lt; L<Sub>3</Sub></code></pre>
-                                <h3>Liquid Holdup, E<Sub>L</Sub>(?)</h3>
-                                <p>Once flow type has been determined, liquid holdup For horizontal flow E<Sub>L</Sub>(0) Is calculated.</p>
+                                <h3>Выпадение жидкости, E<Sub>L</Sub>(?)</h3>
+                                <p>После определения типа потока, определяется выпадение жидкости для горизонтального потока E<Sub>L</Sub>(0)</p>
                                 <pre><code>E<Sub>L</Sub>(0) = a C<Sub>L</Sub><sup>b</sup> / Fr<Sub>m</Sub><sup>c</sup></code></pre>
                                 <table Class='table table-bordered'>
                                 <thead>
@@ -73,26 +73,26 @@ Namespace FlowPackages
                                 </thead>
                                 <tbody>
                                                 <tr>
-                                                <td> Segregated</td>
+                                                <td> Раздельный</td>
                                 <td>0.98</td>
                                 <td>0.4846</td>
                                 <td>0.0868</td>
                                 </tr>
                                 <tr>
-                                                <td> Intermittent</td>
+                                                <td> Прерывистый</td>
                                 <td>0.845</td>
                                 <td>0.5351</td>
                                 <td>0.0173</td>
                                 </tr>
                                 <tr>
-                                                <td> Distributed</td>
+                                                <td> Распределенный</td>
                                 <td>1.065</td>
                                 <td>0.5824</td>
                                 <td>0.0609</td>
                                 </tr>
                                 </tbody>
                                 </table>
-                                <p> E<Sub>L</Sub>(0) must be greater than C<Sub>L</Sub>, If E<Sub>L</Sub>(0) Is smaller than C<Sub>L</Sub>, Then E<Sub>L</Sub>(0) Is assigned a value Of C<Sub>L</Sub>. Actual liquid volume fraction Is obtained by multiplying E<Sub>L</Sub>(0) by a correction factor, B(?).</p>
+                                <p> E<Sub>L</Sub>(0) должен быть больше, чем C<Sub>L</Sub>, если E<Sub>L</Sub>(0) меньше чем  C<Sub>L</Sub>, тогда E<Sub>L</Sub>(0) Is assigned a value Of C<Sub>L</Sub>. Actual liquid volume fraction Is obtained by multiplying E<Sub>L</Sub>(0) by a correction factor, B(?).</p>
                                 <pre> <code> E<Sub>L</Sub>(?) = B(?) x E<Sub>L</Sub>(0)</code></pre>
                                 <p> B(?) Is obtained As &#8211;</p>
                                 <pre> <code> B(?) = 1 + ß(sin(1.8?) - (1 / 3)sin³(1.8?))</code></pre>
@@ -111,21 +111,21 @@ Namespace FlowPackages
                                 </thead>
                                 <tbody>
                                                         <tr>
-                                                        <td> Segregated</td>
+                                                        <td> Раздельный</td>
                                 <td>0.011</td>
                                 <td>-3.768</td>
                                 <td>3.539</td>
                                 <td>-1.614</td>
                                 </tr>
                                 <tr>
-                                                        <td> Intermittent</td>
+                                                        <td> Прерывистый</td>
                                 <td>2.96</td>
                                 <td>0.305</td>
                                 <td>-0.4473</td>
                                 <td>0.0978</td>
                                 </tr>
                                 <tr>
-                                                        <td> Distributed</td>
+                                                        <td> Распределенный</td>
                                 <td colspan ='4' align='center'>ß = 0</td>
                                 </tr>
                                                         </tbody>
@@ -138,7 +138,7 @@ Namespace FlowPackages
                                 <th> g</th>
                                 </tr>
                                 <tr>
-                                                            <td> All</td>
+                                                            <td> Все</td>
                                 <td>4.7</td>
                                 <td>-0.3692</td>
                                 <td>0.1244</td>
@@ -337,7 +337,9 @@ Namespace FlowPackages
                 'calculo do numero de Reynolds
                 Dim rho_ns = Cl * rhol + (1 - Cl) * rhov
                 Dim mu_ns = Cl * mul + (1 - Cl) * muv
-                Dim NRe_ns = rho_ns * vm * D / (mu_ns * 0.00067197)
+                
+                'Dim NRe_ns = rho_ns * vm * D / (mu_ns * 0.00067197)
+                Dim NRe_ns = NRe(rho_ns, vm, D,  mu_ns * 0.00067197)
 
                 'Dim k = 0.0018 ' Rugosidade do duto - aco carbono
 

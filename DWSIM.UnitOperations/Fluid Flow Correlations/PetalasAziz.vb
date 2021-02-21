@@ -1,5 +1,6 @@
 Imports System.Runtime.InteropServices
 Imports DWSIM.Interfaces.My.Resources
+Imports DWSIM.UnitOperations.My.Resources
 
 '    Petalas-Aziz Pressure Drop Calculation Routine
 '    Copyright 2012 Daniel Wagner O. de Medeiros
@@ -49,7 +50,7 @@ Namespace FlowPackages
                                                                ByRef dPhh As Single, ByRef eL As Single)
         End Sub
 
-        Public Overrides Function CalculateDeltaP(ByVal D As Double, ByVal L As Double, ByVal deltaz As Double, ByVal k As Double, ByVal qv As Double, ByVal ql As Double, ByVal muv As Double, ByVal mul As Double, ByVal rhov As Double, ByVal rhol As Double, ByVal surft As Double) As Object
+        Public Overrides Function CalculateDeltaP(ByVal D As Double, ByVal L As Double, ByVal deltaz As Double, ByVal k As Double, ByVal qv As Double, ByVal ql As Double, ByVal muv As Double, ByVal mul As Double, ByVal rhov As Double, ByVal rhol As Double, ByVal surft As Double, ByVal pressureIn As Double) As Object
 
             CalculateDeltaP = Nothing
 
@@ -124,10 +125,22 @@ Namespace FlowPackages
                 CalculateDeltaP = ResVector
 
             Else
+                'IObj?.Paragraphs.Add("<mi>D</mi> = " & D & " m")
+                'IObj?.Paragraphs.Add("<mi>L</mi> = " & L & " m")
+                'IObj?.Paragraphs.Add("<mi>H</mi> = " & deltaz & " m")
+                'IObj?.Paragraphs.Add("<mi>k</mi> = " & k & " m")
+                'IObj?.Paragraphs.Add("<mi>Q_V</mi> = " & qv & " m3/d actual")
+                'IObj?.Paragraphs.Add("<mi>Q_L</mi> = " & ql & " m3/d actual")
+                'IObj?.Paragraphs.Add("<mi>\mu _V</mi> = " & muv & " cP")
+                'IObj?.Paragraphs.Add("<mi>\mu _L</mi> = " & mul & " cP")
+                'IObj?.Paragraphs.Add("<mi>\rho _V</mi> = " & rhov & " kg/m3")
+                'IObj?.Paragraphs.Add("<mi>\rho _L</mi> = " & rhol & " kg/m3")
+                'IObj?.Paragraphs.Add("<mi>\sigma</mi> = " & surft & " N/m")
+
 
                 'INPUT Variables
-                'DensL - Liquid density (lb/ft³)
-                'DensG - Gas density (lb/ft³)
+                'DensL - Liquid density (lb/ft3)
+                'DensG - Gas density (lb/ft3)
                 'Sigma - Gas/Liquid interfacial tension (dyne/cm)
                 'VsL - Liquid superficial velocity (ft/sec)
                 'VsG - Gas superficial velocity (ft/sec)
@@ -142,12 +155,16 @@ Namespace FlowPackages
                 'Region - Code designating predicted flow regime
                 'FlowRegime - Text description of predicted flow regime
 
-                DensL = rhol / 16.0185
-                DensG = rhov / 16.0185
-                Sigma = surft / 0.001
-                VsG = qv / 24 / 3600 / (Math.PI * (D ^ 2) / 4) * 3.28084
-                VsL = ql / 24 / 3600 / (Math.PI * (D ^ 2) / 4) * 3.28084
-                Dia = D * 39.37
+                DensL = rhol * 0.062428'/ 16.0185  'kg/m3 to lb/ft3
+                DensG = rhov * 0.062428'/ 16.0185  'kg/m3 to lb/ft3
+                Sigma = surft * 1000'N/m to dyne/cm (old / 0.001)
+
+                'alexander https://en.wikipedia.org/wiki/Superficial_velocity
+                VsG = ((qv / 24 / 3600) / ((Math.PI * (D * D) / 4))) * 3.28084 
+
+                VsL = ((ql / 24 / 3600) / (Math.PI * (D * D) / 4)) * 3.28084
+                Dia = D * 39.3701
+
                 Theta = Math.Atan(deltaz / (L ^ 2 - deltaz ^ 2) ^ 0.5) * 180 / Math.PI
                 Rough = k * 3.28084  
                 FlowRegime = "                    "
@@ -156,37 +173,37 @@ Namespace FlowPackages
 
                 Select Case Region
                     Case 1
-                        FlowRegime = "Elongated Bubbles"
+                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_ElongatedBubbles' "Elongated Bubbles"
                     Case 2
-                        FlowRegime = "Bubbles"
+                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_Bubbles' "Bubbles"
                     Case 3
-                        FlowRegime = "Stratified Smooth"
+                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_StratifiedSmooth' "Stratified Smooth"
                     Case 4
-                        FlowRegime = "Stratified Waves"
+                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_StratifiedWaves' "Stratified Waves"
                     Case 5
-                        FlowRegime = "Slug"
+                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_Slug' "Slug"
                     Case 6
-                        FlowRegime = "Annular Mist"
+                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_AnnularMist' "Annular Mist"
                     Case 7
-                        FlowRegime = "Dispersed Bubbles"
+                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_DispersedBubbles' "Dispersed Bubbles"
                     Case 8
-                        FlowRegime = "Froth I (DB/AM transition)"
+                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_Froth_I_DB_AM_transition' "Froth I (DB/AM transition)"
                     Case 9
-                        FlowRegime = "Homogeneous"
+                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_Homogenous' "Homogeneous"
                     Case 10
-                        FlowRegime = "Froth"
+                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_Froth'"Froth"
                     Case 11
-                        FlowRegime = "Stratified"
+                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_Stratified'"Stratified"
                     Case 12
-                        FlowRegime = "Segregated"
+                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_Segregated'"Segregated"
                     Case 13
-                        FlowRegime = "Transition"
+                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_Transition'"Transition"
                     Case 14
-                        FlowRegime = "Intermittent"
+                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_Intermittent'"Intermittent"
                     Case 15
-                        FlowRegime = "Distributed"
+                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_Distributed'"Distributed"
                     Case 16
-                        FlowRegime = "Single Phase"
+                        FlowRegime = UnitOperationsTranslate.PetalasAziz_FlowRegime_Single_Phase'"Single Phase"
                 End Select
 
                 'aold>
@@ -195,8 +212,8 @@ Namespace FlowPackages
                 'anew>
                 ResVector(0) = FlowRegime
                 ResVector(1) = eL
-                ResVector(2) = dPfr * 6894.76 * 3.28084 * L
-                ResVector(3) = dPhh * 6894.76 * 3.28084 * L
+                ResVector(2) = dPfr * 6894.76 * (3.28084) * L
+                ResVector(3) = dPhh * 6894.76 * (3.28084) * L
                 ResVector(4) = (dPfr + dPhh) * 6894.76 * 3.28084 * L
                 CalculateDeltaP = ResVector
                 '<anew
@@ -205,18 +222,18 @@ Namespace FlowPackages
             IObj?.Paragraphs.Add(SolutionInspector.Results)
 
             'aold>
-            IObj?.Paragraphs.Add("Flow Regime: " & FlowRegime)
-            IObj?.Paragraphs.Add("<mi>e_L</mi> = " & eL)
-            IObj?.Paragraphs.Add("<mi>\Delta P_{friction}</mi> = " & dPfr * 6894.76 * 3.28084 * L & " Pa")
-            IObj?.Paragraphs.Add("<mi>\Delta P_{elevation}</mi> = " & dPhh * 6894.76 * 3.28084 * L & " Pa")
-            IObj?.Paragraphs.Add("<mi>\Delta P_{total}</mi> = " & (dPfr + dPhh) * 6894.76 * 3.28084 * L & " Pa")
+            'IObj?.Paragraphs.Add( SolutionInspector.Flow_Regime &  FlowRegime)
+            'IObj?.Paragraphs.Add("<mi>e_L</mi> = " & eL)
+            'IObj?.Paragraphs.Add("<mi>\Delta P_{friction}</mi> = " & dPfr * 6894.76 * 3.28084 * L & " Pa")
+            'IObj?.Paragraphs.Add("<mi>\Delta P_{elevation}</mi> = " & dPhh * 6894.76 * 3.28084 * L & " Pa")
+            'IObj?.Paragraphs.Add("<mi>\Delta P_{total}</mi> = " & (dPfr + dPhh) * 6894.76 * 3.28084 * L & " Pa")
             '<aold
 
             IObj?.Paragraphs.Add(SolutionInspector.Flow_Regime & ResVector(0))
-            'anew IObj?.Paragraphs.Add("<mi>e_L</mi> = " & ResVector(1))
-            'anew IObj?.Paragraphs.Add("<mi>\Delta P_{friction}</mi> = " & ResVector(2) & " Pa")
-            'anew IObj?.Paragraphs.Add("<mi>\Delta P_{elevation}</mi> = " & ResVector(3) & " Pa")
-            'anew IObj?.Paragraphs.Add("<mi>\Delta P_{total}</mi> = " & ResVector(4) & " Pa")
+            IObj?.Paragraphs.Add("<mi>e_L</mi> = " & ResVector(1))
+            IObj?.Paragraphs.Add("<mi>\Delta P_{friction}</mi> = " & ResVector(2) & " Pa")
+            IObj?.Paragraphs.Add("<mi>\Delta P_{elevation}</mi> = " & ResVector(3) & " Pa")
+            IObj?.Paragraphs.Add("<mi>\Delta P_{total}</mi> = " & ResVector(4) & " Pa")
 
 
             IObj?.Close()

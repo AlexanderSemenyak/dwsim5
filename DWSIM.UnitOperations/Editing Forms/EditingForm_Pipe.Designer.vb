@@ -278,7 +278,7 @@ Partial Class EditingForm_Pipe
         resources.ApplyResources(Me.cbPDropModel, "cbPDropModel")
         Me.cbPDropModel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cbPDropModel.FormattingEnabled = True
-        Me.cbPDropModel.Items.AddRange(New Object() {resources.GetString("cbPDropModel.Items"), resources.GetString("cbPDropModel.Items1"), resources.GetString("cbPDropModel.Items2")})
+        Me.cbPDropModel.Items.AddRange(New Object() {resources.GetString("cbPDropModel.Items"), resources.GetString("cbPDropModel.Items1"), resources.GetString("cbPDropModel.Items2"), resources.GetString("cbPDropModel.Items3")})
         Me.cbPDropModel.Name = "cbPDropModel"
         '
         'Label2
