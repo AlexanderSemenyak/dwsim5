@@ -9,42 +9,6 @@ Namespace DWSIM.Thermodynamics.AdvancedEOS
 
         Inherits PropertyPackage
 
-        public structure TupleComponent
-        
-            public Name as string 
-            public Index as Integer
-
-            Public Sub New(name as string, index as integer)
-               Name = name
-               Index = index
-            end sub
-        end structure
-
-
-        Dim shared GergComponentNamesForGetVz as TupleComponent() = {
-            new TupleComponent("Methane", 1),
-            new TupleComponent("Nitrogen", 2),
-            new TupleComponent("Carbon dioxide", 3),
-            new TupleComponent("Ethane", 4),
-            new TupleComponent("Propane", 5),
-            new TupleComponent("Isobutane", 6),
-            new TupleComponent("N-butane", 7),
-            new TupleComponent("Isobutane", 8),
-            new TupleComponent("N-pentane", 9),
-            new TupleComponent("N-hexane", 10),
-            new TupleComponent("N-heptane", 11),
-            new TupleComponent("N-octane", 12),
-            new TupleComponent("N-nonane", 13),
-            new TupleComponent("N-decane", 14),
-            new TupleComponent("Hydrogen", 15),
-            new TupleComponent("Oxygen", 16),
-            new TupleComponent("Carbon monoxide", 17),
-            new TupleComponent("Water", 18),
-            new TupleComponent("Hydrogen sulfide", 19),
-            new TupleComponent("Helium", 20),
-            new TupleComponent("Argon", 21)
-        }
-
         Dim pr As New PropertyPackages.Auxiliary.PengRobinson
 
         Public Sub New()
@@ -101,36 +65,29 @@ Namespace DWSIM.Thermodynamics.AdvancedEOS
 
             Dim vector(22) As Double
 
-            Dim compounds = RET_VNAMES()
+            Dim compounds = RET_VNAMES().ToList
 
-            For Each x As TupleComponent In GergComponentNamesForGetVz
-                Dim indexFromRetVNames = Array.IndexOf(compounds, x.Name) 'SpeedUp version of IndexOf
-                if indexFromRetVNames >= 0 then 
-                    vector(x.Index) = Vz0(indexFromRetVNames)
-                End If
-            Next
-
-            'If compounds.Contains("Methane") Then vector(1) = Vz0(compounds.IndexOf("Methane"))
-            'If compounds.Contains("Nitrogen") Then vector(2) = Vz0(compounds.IndexOf("Nitrogen"))
-            'If compounds.Contains("Carbon dioxide") Then vector(3) = Vz0(compounds.IndexOf("Carbon dioxide"))
-            'If compounds.Contains("Ethane") Then vector(4) = Vz0(compounds.IndexOf("Ethane"))
-            'If compounds.Contains("Propane") Then vector(5) = Vz0(compounds.IndexOf("Propane"))
-            'If compounds.Contains("Isobutane") Then vector(6) = Vz0(compounds.IndexOf("Isobutane"))
-            'If compounds.Contains("N-butane") Then vector(7) = Vz0(compounds.IndexOf("N-butane"))
-            'If compounds.Contains("Isobutane") Then vector(8) = Vz0(compounds.IndexOf("Isobutane"))
-            'If compounds.Contains("N-pentane") Then vector(9) = Vz0(compounds.IndexOf("N-pentane"))
-            'If compounds.Contains("N-hexane") Then vector(10) = Vz0(compounds.IndexOf("N-hexane"))
-            'If compounds.Contains("N-heptane") Then vector(11) = Vz0(compounds.IndexOf("N-heptane"))
-            'If compounds.Contains("N-octane") Then vector(12) = Vz0(compounds.IndexOf("N-octane"))
-            'If compounds.Contains("N-nonane") Then vector(13) = Vz0(compounds.IndexOf("N-nonane"))
-            'If compounds.Contains("N-decane") Then vector(14) = Vz0(compounds.IndexOf("N-decane"))
-            'If compounds.Contains("Hydrogen") Then vector(15) = Vz0(compounds.IndexOf("Hydrogen"))
-            'If compounds.Contains("Oxygen") Then vector(16) = Vz0(compounds.IndexOf("Oxygen"))
-            'If compounds.Contains("Carbon monoxide") Then vector(17) = Vz0(compounds.IndexOf("Carbon monoxide"))
-            'If compounds.Contains("Water") Then vector(18) = Vz0(compounds.IndexOf("Water"))
-            'If compounds.Contains("Hydrogen sulfide") Then vector(19) = Vz0(compounds.IndexOf("Hydrogen sulfide"))
-            'If compounds.Contains("Helium") Then vector(20) = Vz0(compounds.IndexOf("Helium"))
-            'If compounds.Contains("Argon") Then vector(21) = Vz0(compounds.IndexOf("Argon"))
+            If compounds.Contains("Methane") Then vector(1) = Vz0(compounds.IndexOf("Methane"))
+            If compounds.Contains("Nitrogen") Then vector(2) = Vz0(compounds.IndexOf("Nitrogen"))
+            If compounds.Contains("Carbon dioxide") Then vector(3) = Vz0(compounds.IndexOf("Carbon dioxide"))
+            If compounds.Contains("Ethane") Then vector(4) = Vz0(compounds.IndexOf("Ethane"))
+            If compounds.Contains("Propane") Then vector(5) = Vz0(compounds.IndexOf("Propane"))
+            If compounds.Contains("Isobutane") Then vector(6) = Vz0(compounds.IndexOf("Isobutane"))
+            If compounds.Contains("N-butane") Then vector(7) = Vz0(compounds.IndexOf("N-butane"))
+            If compounds.Contains("Isobutane") Then vector(8) = Vz0(compounds.IndexOf("Isobutane"))
+            If compounds.Contains("N-pentane") Then vector(9) = Vz0(compounds.IndexOf("N-pentane"))
+            If compounds.Contains("N-hexane") Then vector(10) = Vz0(compounds.IndexOf("N-hexane"))
+            If compounds.Contains("N-heptane") Then vector(11) = Vz0(compounds.IndexOf("N-heptane"))
+            If compounds.Contains("N-octane") Then vector(12) = Vz0(compounds.IndexOf("N-octane"))
+            If compounds.Contains("N-nonane") Then vector(13) = Vz0(compounds.IndexOf("N-nonane"))
+            If compounds.Contains("N-decane") Then vector(14) = Vz0(compounds.IndexOf("N-decane"))
+            If compounds.Contains("Hydrogen") Then vector(15) = Vz0(compounds.IndexOf("Hydrogen"))
+            If compounds.Contains("Oxygen") Then vector(16) = Vz0(compounds.IndexOf("Oxygen"))
+            If compounds.Contains("Carbon monoxide") Then vector(17) = Vz0(compounds.IndexOf("Carbon monoxide"))
+            If compounds.Contains("Water") Then vector(18) = Vz0(compounds.IndexOf("Water"))
+            If compounds.Contains("Hydrogen sulfide") Then vector(19) = Vz0(compounds.IndexOf("Hydrogen sulfide"))
+            If compounds.Contains("Helium") Then vector(20) = Vz0(compounds.IndexOf("Helium"))
+            If compounds.Contains("Argon") Then vector(21) = Vz0(compounds.IndexOf("Argon"))
 
             Return vector.NormalizeY
 
@@ -185,8 +142,8 @@ Namespace DWSIM.Thermodynamics.AdvancedEOS
             End Select
 
             Dim gerg As New GERGBase
-            GERGBase.FillPredefinedValuesToNewGERGBase(gerg)
-            'gerg.SetupGERG()
+
+            gerg.SetupGERG()
 
             Dim D As Double, ierr As Integer, herr As String = ""
             Dim Z, dPdD, d2PdD2, d2PdTD, dPdT, U, H, S, Cv, Cp, W, G, JT, Kappa As Double
@@ -346,8 +303,8 @@ Namespace DWSIM.Thermodynamics.AdvancedEOS
             End If
 
             Dim gerg As New GERGBase
-            GERGBase.FillPredefinedValuesToNewGERGBase(gerg)
-            'gerg.SetupGERG()
+
+            gerg.SetupGERG()
 
             Dim D As Double, ierr As Integer, herr As String = ""
             Dim Z, dPdD, d2PdD2, d2PdTD, dPdT, U, H, S, Cv, Cp, W, G, JT, Kappa As Double
@@ -522,8 +479,8 @@ Namespace DWSIM.Thermodynamics.AdvancedEOS
             Dim Hid As Double = 0 'Me.RET_Hid(298.15, T, Vx)
 
             Dim gerg As New GERGBase
-            GERGBase.FillPredefinedValuesToNewGERGBase(gerg)
-            'gerg.SetupGERG()
+
+            gerg.SetupGERG()
 
             Dim D As Double, ierr As Integer, herr As String = ""
             Dim Z, dPdD, d2PdD2, d2PdTD, dPdT, U, H, S, Cv, Cp, W, G, JT, Kappa As Double
@@ -556,8 +513,8 @@ Namespace DWSIM.Thermodynamics.AdvancedEOS
         Public Overrides Function DW_CalcEnthalpyDeparture(Vx As Array, T As Double, P As Double, st As State) As Double
 
             Dim gerg As New GERGBase
-            GERGBase.FillPredefinedValuesToNewGERGBase(gerg)
-            'gerg.SetupGERG()
+
+            gerg.SetupGERG()
 
             Dim D As Double, ierr As Integer, herr As String = ""
             Dim Z, dPdD, d2PdD2, d2PdTD, dPdT, U, H, S, Cv, Cp, W, G, JT, Kappa As Double
@@ -592,8 +549,8 @@ Namespace DWSIM.Thermodynamics.AdvancedEOS
             Dim Sid As Double = 0 'Me.RET_Sid(298.15, T, P, Vx)
 
             Dim gerg As New GERGBase
-            GERGBase.FillPredefinedValuesToNewGERGBase(gerg)
-            'gerg.SetupGERG()
+
+            gerg.SetupGERG()
 
             Dim D As Double, ierr As Integer, herr As String = ""
             Dim Z, dPdD, d2PdD2, d2PdTD, dPdT, U, H, S, Cv, Cp, W, G, JT, Kappa As Double
@@ -626,8 +583,8 @@ Namespace DWSIM.Thermodynamics.AdvancedEOS
         Public Overrides Function DW_CalcEntropyDeparture(Vx As Array, T As Double, P As Double, st As State) As Double
 
             Dim gerg As New GERGBase
-            GERGBase.FillPredefinedValuesToNewGERGBase(gerg)
-            'gerg.SetupGERG()
+
+            gerg.SetupGERG()
 
             Dim D As Double, ierr As Integer, herr As String = ""
             Dim Z, dPdD, d2PdD2, d2PdTD, dPdT, U, H, S, Cv, Cp, W, G, JT, Kappa As Double
@@ -662,8 +619,8 @@ Namespace DWSIM.Thermodynamics.AdvancedEOS
             If DirectCast(Vx, Double()).Sum = 0.0 Then Return RET_UnitaryVector()
 
             Dim gerg As New GERGBase
-            GERGBase.FillPredefinedValuesToNewGERGBase(gerg)
-            'gerg.SetupGERG()
+
+            gerg.SetupGERG()
 
             Dim R As Double = 8.314472
 
@@ -802,8 +759,8 @@ Namespace DWSIM.Thermodynamics.AdvancedEOS
         Public Overrides Function DW_CalcCp_ISOL(Phase1 As Phase, T As Double, P As Double) As Double
 
             Dim gerg As New GERGBase
-            GERGBase.FillPredefinedValuesToNewGERGBase(gerg)
-            'gerg.SetupGERG()
+
+            gerg.SetupGERG()
 
             Dim D As Double, ierr As Integer, herr As String = ""
             Dim Z, dPdD, d2PdD2, d2PdTD, dPdT, U, H, S, Cv, Cp, W, G, JT, Kappa As Double
@@ -830,8 +787,8 @@ Namespace DWSIM.Thermodynamics.AdvancedEOS
         Public Overrides Function DW_CalcCv_ISOL(Phase1 As Phase, T As Double, P As Double) As Double
 
             Dim gerg As New GERGBase
-            GERGBase.FillPredefinedValuesToNewGERGBase(gerg)
-            'gerg.SetupGERG()
+
+            gerg.SetupGERG()
 
             Dim D As Double, ierr As Integer, herr As String = ""
             Dim Z, dPdD, d2PdD2, d2PdTD, dPdT, U, H, S, Cv, Cp, W, G, JT, Kappa As Double
@@ -880,8 +837,8 @@ Namespace DWSIM.Thermodynamics.AdvancedEOS
         Public Overrides Function AUX_Z(Vx() As Double, T As Double, P As Double, state As PhaseName) As Double
 
             Dim gerg As New GERGBase
-            GERGBase.FillPredefinedValuesToNewGERGBase(gerg)
-            'gerg.SetupGERG()
+
+            gerg.SetupGERG()
 
             Dim D As Double, ierr As Integer, herr As String = ""
             Dim Z, dPdD, d2PdD2, d2PdTD, dPdT, U, H, S, Cv, Cp, W, G, JT, Kappa As Double
@@ -942,8 +899,7 @@ Namespace DWSIM.Thermodynamics.AdvancedEOS
             Temperature = CurrentMaterialStream.Phases(0).Properties.temperature.GetValueOrDefault
             Pressure = CurrentMaterialStream.Phases(0).Properties.pressure.GetValueOrDefault
 
-            GERGBase.FillPredefinedValuesToNewGERGBase(gerg)
-            'gerg.SetupGERG()
+            gerg.SetupGERG()
 
             Select Case p.Name
                 Case "Mixture"
@@ -991,8 +947,7 @@ Namespace DWSIM.Thermodynamics.AdvancedEOS
             Temperature = CurrentMaterialStream.Phases(0).Properties.temperature.GetValueOrDefault
             Pressure = CurrentMaterialStream.Phases(0).Properties.pressure.GetValueOrDefault
 
-            GERGBase.FillPredefinedValuesToNewGERGBase(gerg)
-            'gerg.SetupGERG()
+            gerg.SetupGERG()
 
             Select Case p.Name
                 Case "Mixture"

@@ -314,7 +314,7 @@
   </data>
   <data name="Pipe_Calculate_Paragraph_11" xml:space="preserve">
     <value>7. Когда давление и температура сходятся, результаты передаются 
-                           на следующий шаг, где расчет повторяются.</value>
+                           на следующий шаг, где расчеты повторяются.</value>
   </data>
   <data name="External_HTC_0_W_m2_K" xml:space="preserve">
     <value>Коэффициент внешней теплоотдачи (HTC) = {0} Вт/[м2.K]</value>
@@ -338,7 +338,7 @@
     <value>Падение давления по корреляции Petalas and Aziz</value>
   </data>
   <data name="Petalas_and_Aziz_Multiphase_Pressure_Drop_Calculation_Routine" xml:space="preserve">
-    <value>Процедура расчета падения давления по корреляции Petalas and Aziz (механистическая модуль, мультифазный поток, учитывает наклон трубы)</value>
+    <value>Процедура расчета падения давления по корреляции Petalas and Aziz (механистическая модель, мультифазный поток, учитывает наклон трубы)</value>
   </data>
   <data name="Compressibility_Factor_0" xml:space="preserve">
     <value>Коэффициент сжимаемости: {0}</value>

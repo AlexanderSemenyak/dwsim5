@@ -73,194 +73,18 @@ Namespace DWSIM.Thermodynamics.AdvancedEOS
         'Variables containing the common parameters in the GERG-2008 equations
 
         Public RGERG As Double
-        Public shared RGERG_s As Double
-
-        Private Const NcGERG As Integer = 21, 
-                      MaxFlds As Integer = 21, 
-                      MaxMdl As Integer = 10, 
-                      MaxTrmM As Integer = 12, 
-                      MaxTrmP As Integer = 24
-
+        Private Const NcGERG As Integer = 21, MaxFlds As Integer = 21, MaxMdl As Integer = 10, MaxTrmM As Integer = 12, MaxTrmP As Integer = 24
         Private Const Epsilon As Double = 0.000000000000001  '1d-15
-
-        'Private coik(MaxFlds, MaxTrmP) As Integer, doik(MaxFlds, MaxTrmP) As Integer, dijk(MaxMdl, MaxTrmM) As Integer
-        Private coik(, ) As Integer, doik(, ) As Integer, dijk(, ) As Integer
-        Private Shared coik_s(MaxFlds, MaxTrmP) As Integer,doik_s(MaxFlds, MaxTrmP) As Integer, dijk_s(MaxMdl, MaxTrmM) As Integer
-
-        'Private mNumb(MaxFlds, MaxFlds) As Integer, kpol(MaxFlds) As Integer, kexp(MaxFlds) As Integer, kpolij(MaxMdl) As Integer, kexpij(MaxMdl) As Integer
-        Private mNumb(, ) As Integer, kpol() As Integer, kexp() As Integer, kpolij() As Integer, kexpij() As Integer
-        Private shared mNumb_s(MaxFlds, MaxFlds) As Integer, kpol_s(MaxFlds) As Integer,kexp_s(MaxFlds) As Integer,kpolij_s(MaxMdl) As Integer,kexpij_s(MaxMdl) As Integer
-
-        Private Drold As Double, Trold As Double, Told As Double, Trold2 As Double
-        'Private xold(MaxFlds) As Double
-        Private xold() As Double
-        private shared xold_s(MaxFlds) As Double
-
-        'Private Dc(MaxFlds) As Double, Tc(MaxFlds) As Double, MMiGERG(MaxFlds) As Double, Vc3(MaxFlds) As Double, Tc2(MaxFlds) As Double
-        Private Dc() As Double, Tc() As Double, MMiGERG() As Double, Vc3() As Double, Tc2() As Double
-        Private shared Dc_s(MaxFlds) As Double,Tc_s(MaxFlds) As Double,MMiGERG_s(MaxFlds) As Double,Vc3_s(MaxFlds) As Double,Tc2_s(MaxFlds) As Double
-
-'        Private cijk(MaxMdl, MaxTrmM) As Double, noik(MaxFlds, MaxTrmP) As Double, toik(MaxFlds, MaxTrmP) As Double
-        Private cijk(, ) As Double, noik(, ) As Double, toik(, ) As Double
-        Private shared cijk_s(MaxMdl, MaxTrmM) As Double,noik_s(MaxFlds, MaxTrmP) As Double,toik_s(MaxFlds, MaxTrmP) As Double
-
-'        Private eijk(MaxMdl, MaxTrmM) As Double, gijk(MaxMdl, MaxTrmM) As Double, nijk(MaxMdl, MaxTrmM) As Double, tijk(MaxMdl, MaxTrmM) As Double
-        Private eijk(, ) As Double, gijk(, ) As Double, nijk(, ) As Double, tijk(, ) As Double
-        Private shared eijk_s(MaxMdl, MaxTrmM) As Double, gijk_s(MaxMdl, MaxTrmM) As Double,nijk_s(MaxMdl, MaxTrmM) As Double, tijk_s(MaxMdl, MaxTrmM) As Double
-
-        'Private btij(MaxFlds, MaxFlds) As Double, bvij(MaxFlds, MaxFlds) As Double, gtij(MaxFlds, MaxFlds) As Double, gvij(MaxFlds, MaxFlds) As Double
-        Private btij(, ) As Double, bvij(, ) As Double, gtij(, ) As Double, gvij(, ) As Double
-        Private shared btij_s(MaxFlds, MaxFlds) As Double, bvij_s(MaxFlds, MaxFlds) As Double, gtij_s(MaxFlds, MaxFlds) As Double,gvij_s(MaxFlds, MaxFlds) As Double
-
-        'Private fij(MaxFlds, MaxFlds) As Double, th0i(MaxFlds, 7) As Double, n0i(MaxFlds, 7) As Double
-        Private fij(, ) As Double, th0i(, ) As Double, n0i(, ) As Double
-        Private shared fij_s(MaxFlds, MaxFlds) As Double, th0i_s(MaxFlds, 7) As Double, n0i_s(MaxFlds, 7) As Double
-
-        'Private taup(MaxFlds, MaxTrmP) As Double, taupijk(MaxFlds, MaxTrmM) As Double
-        Private taup(, ) As Double, taupijk(, ) As Double
-        Private shared taup_s(MaxFlds, MaxTrmP) As Double, taupijk_s(MaxFlds, MaxTrmM) As Double
-
+        Private coik(MaxFlds, MaxTrmP) As Integer, doik(MaxFlds, MaxTrmP) As Integer, dijk(MaxMdl, MaxTrmM) As Integer
+        Private mNumb(MaxFlds, MaxFlds) As Integer, kpol(MaxFlds) As Integer, kexp(MaxFlds) As Integer, kpolij(MaxMdl) As Integer, kexpij(MaxMdl) As Integer
+        Private Drold As Double, Trold As Double, Told As Double, Trold2 As Double, xold(MaxFlds) As Double
+        Private Dc(MaxFlds) As Double, Tc(MaxFlds) As Double, MMiGERG(MaxFlds) As Double, Vc3(MaxFlds) As Double, Tc2(MaxFlds) As Double
+        Private cijk(MaxMdl, MaxTrmM) As Double, noik(MaxFlds, MaxTrmP) As Double, toik(MaxFlds, MaxTrmP) As Double
+        Private eijk(MaxMdl, MaxTrmM) As Double, gijk(MaxMdl, MaxTrmM) As Double, nijk(MaxMdl, MaxTrmM) As Double, tijk(MaxMdl, MaxTrmM) As Double
+        Private btij(MaxFlds, MaxFlds) As Double, bvij(MaxFlds, MaxFlds) As Double, gtij(MaxFlds, MaxFlds) As Double, gvij(MaxFlds, MaxFlds) As Double
+        Private fij(MaxFlds, MaxFlds) As Double, th0i(MaxFlds, 7) As Double, n0i(MaxFlds, 7) As Double
+        Private taup(MaxFlds, MaxTrmP) As Double, taupijk(MaxFlds, MaxTrmM) As Double
         Private dPdDsave As Double 'Calculated in the PressureGERG subroutine, but not included as an argument since it is only used internally in the density algorithm.
-
-        dim shared initializedStaticFileds as Boolean = false
-        
-        public sub New()
-
-        end sub 
-
-        ''' <summary>
-        ''' Первые инициализации GERGBase этим более быстрым методом можно делать, повторные пока оставляем как есть
-        ''' </summary>
-        ''' <param name="gbForInitialize"></param>
-        Friend shared sub FillPredefinedValuesToNewGERGBase(gbForInitialize as GERGBase)
-            InitializeGERG2Base()
-
-            gbForInitialize.RGERG = GERGBase.RGERG_s
-            gbForInitialize.coik =coik_s.Clone()
-            gbForInitialize.doik=doik_s .Clone()
-            gbForInitialize.dijk=dijk_s.Clone()
-            
-            gbForInitialize.mNumb=mNumb_s.Clone()
-            gbForInitialize.kpol=kpol_s.Clone()
-            gbForInitialize.kexp=kexp_s.Clone()
-            gbForInitialize.kpolij=kpolij_s.Clone()
-            gbForInitialize.kexpij=kexpij_s.Clone()
-
-            gbForInitialize.xold=xold_s.Clone()
-
-            gbForInitialize.Dc=Dc_s.Clone()
-            gbForInitialize.Tc=Tc_s.Clone()
-            gbForInitialize.MMiGERG=MMiGERG_s.Clone()
-            gbForInitialize.Vc3=Vc3_s.Clone()
-            gbForInitialize.Tc2=Tc2_s.Clone()
-
-            gbForInitialize.cijk=cijk_s.Clone()
-            gbForInitialize.noik=noik_s.Clone()
-            gbForInitialize.toik=toik_s.Clone()
-
-            gbForInitialize.eijk=eijk_s.Clone()
-            gbForInitialize.gijk=gijk_s.Clone()
-            gbForInitialize.nijk=nijk_s.Clone()
-            gbForInitialize.tijk=tijk_s.Clone()
-
-            gbForInitialize.btij=btij_s.Clone()
-            gbForInitialize.bvij=bvij_s.Clone()
-            gbForInitialize.gtij=gtij_s.Clone()
-            gbForInitialize.gvij=gvij_s.Clone()
-
-            gbForInitialize.fij=fij_s.Clone()
-            gbForInitialize.th0i=th0i_s.Clone()
-            gbForInitialize.n0i=n0i_s.Clone()
-
-            gbForInitialize.taup=taup_s.Clone()
-            gbForInitialize.taupijk=taupijk_s.Clone()
-
-
-            'Array.Copy(GERGBase.coik_s, gbForInitialize.coik, GERGBase.coik_s.Length)
-            'Array.Copy(GERGBase.doik_s, gbForInitialize.doik, GERGBase.doik_s.Length)
-            'Array.Copy(GERGBase.dijk_s, gbForInitialize.dijk, GERGBase.dijk_s.Length)
-            'Array.Copy(GERGBase.mNumb_s, gbForInitialize.mNumb, GERGBase.mNumb_s.Length)
-            'Array.Copy(GERGBase.kpol_s, gbForInitialize.kpol, GERGBase.kpol_s.Length)
-            'Array.Copy(GERGBase.kexp_s, gbForInitialize.kexp, GERGBase.kexp_s.Length)
-            'Array.Copy(GERGBase.kpolij_s, gbForInitialize.kpolij, GERGBase.kpolij_s.Length)
-            'Array.Copy(GERGBase.kexpij_s, gbForInitialize.kexpij, GERGBase.kexpij_s.Length)
-
-            'Array.Copy(GERGBase.xold_s, gbForInitialize.xold, GERGBase.xold_s.Length)
-            'Array.Copy(GERGBase.Dc_s, gbForInitialize.Dc, GERGBase.Dc_s.Length)
-            'Array.Copy(GERGBase.Tc_s, gbForInitialize.Tc, GERGBase.Tc_s.Length)
-            'Array.Copy(GERGBase.MMiGERG_s, gbForInitialize.MMiGERG, GERGBase.MMiGERG_s.Length)
-            'Array.Copy(GERGBase.Vc3_s, gbForInitialize.Vc3, GERGBase.Vc3_s.Length)
-            'Array.Copy(GERGBase.Tc2_s, gbForInitialize.Tc2, GERGBase.Tc2_s.Length)
-            'Array.Copy(GERGBase.cijk_s, gbForInitialize.cijk, GERGBase.cijk_s.Length)
-            'Array.Copy(GERGBase.noik_s, gbForInitialize.noik, GERGBase.noik_s.Length)
-            'Array.Copy(GERGBase.toik_s, gbForInitialize.toik, GERGBase.toik_s.Length)
-            'Array.Copy(GERGBase.eijk_s, gbForInitialize.eijk, GERGBase.eijk_s.Length)
-            'Array.Copy(GERGBase.gijk_s, gbForInitialize.gijk, GERGBase.gijk_s.Length)
-            'Array.Copy(GERGBase.nijk_s, gbForInitialize.nijk, GERGBase.nijk_s.Length)
-            'Array.Copy(GERGBase.tijk_s, gbForInitialize.tijk, GERGBase.tijk_s.Length)
-            'Array.Copy(GERGBase.btij_s, gbForInitialize.btij, GERGBase.btij_s.Length)
-            'Array.Copy(GERGBase.bvij_s, gbForInitialize.bvij, GERGBase.bvij_s.Length)
-            'Array.Copy(GERGBase.gtij_s, gbForInitialize.gtij, GERGBase.gtij_s.Length)
-            'Array.Copy(GERGBase.gvij_s, gbForInitialize.gvij, GERGBase.gvij_s.Length)
-            'Array.Copy(GERGBase.fij_s, gbForInitialize.fij, GERGBase.fij_s.Length)
-            'Array.Copy(GERGBase.th0i_s, gbForInitialize.th0i, GERGBase.th0i_s.Length)
-            'Array.Copy(GERGBase.n0i_s, gbForInitialize.n0i, GERGBase.n0i_s.Length)
-            'Array.Copy(GERGBase.taup_s, gbForInitialize.taup, GERGBase.taup_s.Length)
-            'Array.Copy(GERGBase.taupijk_s, gbForInitialize.taupijk, GERGBase.taupijk_s.Length)
-
-
-        end sub
-
-        shared sub InitializeGERG2Base()
-            if initializedStaticFileds Then return
-
-            Dim g1 = new GERGBase()
-            g1.SetupGERG()
-
-            'init static copies
-            RGERG_s = g1.RGERG
-            coik_s = g1.coik.Clone()
-            doik_s = g1.doik.Clone()
-            dijk_s = g1.dijk.Clone()
-            
-            mNumb_s = g1.mNumb.Clone()
-            kpol_s = g1.kpol.Clone()
-            kexp_s = g1.kexp.Clone()
-            kpolij_s = g1.kpolij.Clone()
-            kexpij_s = g1.kexpij.Clone()
-
-            xold_s = g1.xold.Clone()
-
-            Dc_s = g1.Dc.Clone()
-            Tc_s = g1.Tc.Clone()
-            MMiGERG_s = g1.MMiGERG.Clone()
-            Vc3_s = g1.Vc3.Clone()
-            Tc2_s = g1.Tc2.Clone()
-
-            cijk_s = g1.cijk.Clone()
-            noik_s = g1.noik.Clone()
-            toik_s = g1.toik.Clone()
-
-            eijk_s = g1.eijk.Clone()
-            gijk_s = g1.gijk.Clone()
-            nijk_s = g1.nijk.Clone()
-            tijk_s = g1.tijk.Clone()
-
-            btij_s = g1.btij.Clone()
-            bvij_s = g1.bvij.Clone()
-            gtij_s = g1.gtij.Clone()
-            gvij_s = g1.gvij.Clone()
-
-            fij_s = g1.fij.Clone()
-            th0i_s = g1.th0i.Clone()
-            n0i_s = g1.n0i.Clone()
-
-            taup_s = g1.taup.Clone()
-            taupijk_s = g1.taupijk.Clone()
-
-            initializedStaticFileds = true
-            
-        end Sub
 
         Sub MolarMassGERG(x() As Double, ByRef Mm As Double)
             'Sub MolarMassGERG(x, Mm)
@@ -788,22 +612,6 @@ Converged:
 
             'Initialize all the constants and parameters in the GERG-2008 model.
             'Some values are modified for calculations that do not depend on T, D, and x in order to speed up the program.
-
-            'ONIT move array creation to SetupGERG from Constructor
-            coik = New integer(MaxFlds, MaxTrmP){}: doik = new Integer(MaxFlds, MaxTrmP){} : dijk = new Integer(MaxMdl, MaxTrmM) {}
-            mNumb = New integer(MaxFlds, MaxFlds) {}: kpol = New integer(MaxFlds){} : kexp = New integer(MaxFlds) {}: kpolij = New integer(MaxMdl) {}: kexpij = New integer(MaxMdl) {}
-            xold= New Double(MaxFlds){}
-
-            Dc= New Double(MaxFlds){} : Tc= New Double(MaxFlds){} : MMiGERG= New Double(MaxFlds) {}: Vc3= New Double(MaxFlds) {} : Tc2= New Double(MaxFlds) {}
-            cijk= New Double(MaxMdl, MaxTrmM){}: noik= New Double(MaxFlds, MaxTrmP){} : toik= New Double(MaxFlds, MaxTrmP) {}
-            eijk= New Double(MaxMdl, MaxTrmM){} : gijk= New Double(MaxMdl, MaxTrmM){} : nijk= New Double(MaxMdl, MaxTrmM){} : tijk= New Double(MaxMdl, MaxTrmM) {}
-            btij= New Double(MaxFlds, MaxFlds) {}: bvij= New Double(MaxFlds, MaxFlds) {}: gtij= New Double(MaxFlds, MaxFlds) {}: gvij= New Double(MaxFlds, MaxFlds) {}
-            btij_s= New Double(MaxFlds, MaxFlds) {}: bvij_s= New Double(MaxFlds, MaxFlds) {}: gtij_s= New Double(MaxFlds, MaxFlds) {}: gvij_s= New Double(MaxFlds, MaxFlds) {}
-
-            fij= New Double(MaxFlds, MaxFlds) {}: th0i= New Double(MaxFlds, 7) {}: n0i= New Double(MaxFlds, 7) {}
-            taup= New Double(MaxFlds, MaxTrmP) {}: taupijk= New Double(MaxFlds, MaxTrmM) {}
-        
-            '^^^ end move
 
             Dim i As Integer, j As Integer, o13 As Double, bijk(MaxMdl, MaxTrmM) As Double, Rs As Double, Rsr As Double
             Dim n1 As Double, n2 As Double, T0 As Double, d0 As Double
